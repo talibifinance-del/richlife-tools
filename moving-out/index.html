@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>הכלים הכלכליים · RichLife</title>
+<title>מחשבון יציאה מהבית · RichLife</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,35 +11,75 @@
 :root{
   --pine:#5f7d6a; --pine-rgb:95,125,106; --pine-deep:#3e5448; --pine-darker:#2f4036;
   --sage:#bcd3bf; --sage-rgb:188,211,191; --paper:#e9f1f2; --sage-tint:#eef4ef;
-  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63;
+  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f;
   --font:'Heebo',system-ui,Arial,sans-serif;
   --card:#fff; --shadow:0 10px 30px rgba(var(--pine-rgb),.10); --shadow-hi:0 18px 44px rgba(var(--pine-rgb),.22);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(16px,4vw,44px) clamp(12px,3vw,28px) 60px}
-.wrap{max-width:640px;margin:0 auto}
-.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:22px}
-.brand .avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
+body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(14px,3vw,40px) clamp(12px,3vw,28px) 60px}
+.wrap{max-width:720px;margin:0 auto}
+.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:20px}
+.brand .avatar{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
 .brand .by-lead{font-weight:900;font-size:16px;color:var(--pine-darker)}
 .brand .by-sub{font-weight:700;font-size:12px;color:var(--pine)}
 .brand .by-sub b{color:var(--pine-deep)}
-.hero{text-align:center;margin-bottom:26px}
-.hero h1{font-size:clamp(26px,6vw,38px);font-weight:900;color:var(--pine-darker);line-height:1.12}
-.hero h1 .em{color:var(--pine)}
-.hero p{font-size:clamp(14px,2.8vw,16px);font-weight:600;color:var(--ink-soft);margin-top:10px;max-width:460px;margin-inline:auto}
-.tools{display:flex;flex-direction:column;gap:13px}
-.tool{display:flex;align-items:center;gap:15px;background:var(--card);border-radius:18px;padding:17px 18px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);text-decoration:none;color:inherit;transition:transform .18s,box-shadow .18s,border-color .18s}
-.tool:hover{transform:translateY(-2px);border-color:var(--pine);box-shadow:var(--shadow-hi)}
-.tool .t-ic{font-size:30px;flex:none;width:54px;height:54px;display:grid;place-items:center;background:var(--sage-tint);border-radius:15px}
-.tool .t-txt{flex:1;min-width:0}
-.tool .t-name{font-size:clamp(16px,3.6vw,18px);font-weight:900;color:var(--pine-darker)}
-.tool .t-desc{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-top:2px;line-height:1.4}
-.tool .t-arrow{flex:none;font-size:20px;color:var(--pine);font-weight:900}
-.tool.soon{opacity:.72;cursor:default;pointer-events:none;box-shadow:none;background:rgba(255,255,255,.6)}
-.tool.soon .t-ic{background:rgba(var(--pine-rgb),.06)}
-.badge{flex:none;font-size:10.5px;font-weight:800;color:var(--pine-deep);background:rgba(var(--pine-rgb),.12);padding:4px 11px;border-radius:100px;white-space:nowrap}
-.socials{display:flex;gap:12px;justify-content:center;margin-top:26px}
+.hero-title{text-align:center;margin-bottom:22px}
+.hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
+.hero-title h1 .em{color:var(--pine)}
+.hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:520px;margin-inline:auto}
+.card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
+.card+.card{margin-top:16px}
+.sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
+.input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
+.input-shell .unit{padding-inline-start:13px;color:var(--ink-soft);font-weight:700;font-size:15px;flex:none}
+.input-shell input{font-family:var(--font);width:100%;border:none;background:transparent;outline:none;font-size:16px;font-weight:700;color:var(--ink);padding:12px 13px;min-width:0}
+.input-shell input:focus,.input-shell input:focus-visible{outline:none !important}
+.house{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.house .h-item label{font-size:12.5px}
+.house .full{grid-column:1/-1}
+.check{margin-top:14px;border-radius:14px;padding:15px 16px;text-align:center}
+.check.ok{background:rgba(var(--pine-rgb),.10);border:1.5px solid rgba(var(--pine-rgb),.3)}
+.check.over{background:rgba(var(--red-rgb),.08);border:1.5px solid rgba(var(--red-rgb),.3)}
+.check .c-top{font-size:13px;font-weight:700;color:var(--ink-soft)}
+.check .c-num{font-size:clamp(22px,5vw,28px);font-weight:900;margin:3px 0 2px}
+.check.ok .c-num{color:var(--pine-deep)} .check.over .c-num{color:#8f3a29}
+.check .c-msg{font-size:13px;font-weight:800;margin-top:4px}
+.check.ok .c-msg{color:var(--pine-deep)} .check.over .c-msg{color:#8f3a29}
+.rec{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin-top:10px}
+.rec b{color:var(--pine-deep)}
+.scen{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.sc{border-radius:16px;padding:15px 14px;border:1.5px solid rgba(var(--pine-rgb),.2)}
+.sc.home{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
+.sc.out{background:#fff}
+.sc-h{font-size:14.5px;font-weight:900;color:var(--pine-darker);text-align:center;margin-bottom:3px}
+.sc-sub{font-size:11px;font-weight:700;color:var(--ink-soft);text-align:center;margin-bottom:11px}
+.sc-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:700;color:var(--ink);padding:6px 0;border-top:1px solid rgba(var(--pine-rgb),.12)}
+.sc-row:first-of-type{border-top:none}
+.sc-row .pc{font-size:11px;font-weight:800;color:var(--ink-soft)}
+.sc-row b{white-space:nowrap}
+.sc-row.invest{background:rgba(var(--pine-rgb),.10);margin:6px -8px 0;padding:8px;border-radius:10px;border-top:none}
+.sc-row.invest b,.sc-row.invest span{color:var(--pine-deep);font-weight:900}
+.insight{margin-top:16px;font-size:clamp(15px,3.4vw,18px);font-weight:800;color:var(--pine-darker);background:var(--sage-tint);border-radius:14px;padding:16px 18px;text-align:center;line-height:1.55}
+.insight b{color:var(--pine);font-size:1.1em;font-weight:900}
+.note-tip{margin-top:12px;font-size:12px;font-weight:600;color:var(--ink-soft);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.15);border-radius:12px;padding:11px 13px;line-height:1.55}
+.cta-card{margin-top:18px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,4vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi)}
+.cta-card .cta-emoji{font-size:30px}
+.cta-card h3{font-size:clamp(17px,3.6vw,20px);font-weight:900;margin:6px 0 8px}
+.cta-card p{font-size:14px;font-weight:600;opacity:.94;max-width:460px;margin:0 auto 16px;line-height:1.55}
+.cta-btn{display:inline-block;font-family:var(--font);font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:15px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22);transition:transform .18s}
+.cta-btn:hover{transform:translateY(-2px)}
+.actions{margin-top:18px;text-align:center}
+.act-btn{font-family:var(--font);cursor:pointer;border:none;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;font-size:15.5px;font-weight:800;padding:15px 22px;border-radius:15px;box-shadow:0 12px 30px rgba(var(--pine-rgb),.30);transition:filter .15s;max-width:480px;width:100%}
+.act-btn:hover{filter:brightness(1.06)}
+.act-note{max-width:480px;margin:10px auto 0;font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.5}
+.act-link{max-width:480px;margin:12px auto 0;display:flex;gap:8px}
+.act-link input{flex:1;min-width:0;font-family:var(--font);font-size:13px;font-weight:600;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:11px;padding:11px 13px;direction:ltr;text-align:left}
+.act-link input:focus{outline:none !important}
+.act-link button{flex:none;font-family:var(--font);cursor:pointer;border:none;background:var(--pine-deep);color:#fff;font-size:14px;font-weight:800;padding:0 16px;border-radius:11px}
+.socials{display:flex;gap:12px;justify-content:center;margin-top:22px}
 .socials a{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);color:var(--pine-deep);box-shadow:var(--shadow);transition:all .18s}
 .socials a:hover{border-color:var(--pine);transform:translateY(-2px)}
 .socials svg{width:20px;height:20px}
@@ -51,49 +91,79 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 
   <div class="brand">
     <img class="avatar" src="data:image/jpeg;base64,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" alt="טלי בנימינוב שרעבי">
-    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · הכלים הכלכליים</div></div>
+    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · יציאה מהבית</div></div>
   </div>
 
-  <div class="hero">
-    <h1>ארגז הכלים <span class="em">הכלכלי</span> שלך</h1>
-    <p>כל המחשבונים במקום אחד - לתכנן, לחשב, ולראות בדיוק לאן אתם הולכים.</p>
+  <div class="hero-title">
+    <h1>מחשבון <span class="em">יציאה מהבית</span></h1>
+    <p>לפני שיוצאים - כמה מותר להוציא על מגורים, ואיך נכון לחלק את המשכורת כדי גם ליהנות וגם לחסוך.</p>
   </div>
 
-  <div class="tools">
-    <a class="tool" href="./matarot/">
-      <span class="t-ic">🎯</span>
-      <span class="t-txt"><span class="t-name">מחשבון יעדים והשקעות</span><span class="t-desc">כמה להפריש כל חודש כדי להגיע לכל מטרה שלך</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="./dream/">
-      <span class="t-ic">🏝️</span>
-      <span class="t-txt"><span class="t-name">מחשבון החלום</span><span class="t-desc">כמה הון צריך כדי לצאת לחופש כלכלי - ואיך מגיעים לשם</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="./ribit/">
-      <span class="t-ic">📈</span>
-      <span class="t-txt"><span class="t-name">מחשבון ריבית דה ריבית</span><span class="t-desc">איך הכסף עובד בשבילך לאורך זמן, ומה דמי הניהול עושים</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="https://talibifinance-del.github.io/richlife-lida/">
-      <span class="t-ic">🤰</span>
-      <span class="t-txt"><span class="t-name">מחשבוני לידה</span><span class="t-desc">כל המחשבונים להיערכות כלכלית ללידה: דמי לידה, החזרים, רשימת קניות ועוד</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="./moving-out/">
-      <span class="t-ic">🏠</span>
-      <span class="t-txt"><span class="t-name">מחשבון יציאה מהבית</span><span class="t-desc">כמה מותר על מגורים, ואיך לחלק את המשכורת - בבית ההורים מול מחוץ לבית</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <div class="tool soon">
-      <span class="t-ic">🏦</span>
-      <span class="t-txt"><span class="t-name">מחשבון הלוואות</span><span class="t-desc">כמה באמת עולה הלוואה, והחזר חודשי</span></span>
-      <span class="badge">בקרוב</span>
+  <div class="card">
+    <span class="sec-lbl">💵 ההכנסה שלך</span>
+    <div class="field">
+      <label>כמה נכנס לך לבנק כל חודש (נטו)?</label>
+      <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="9,000" placeholder="0"></div>
     </div>
-    <div class="tool soon">
-      <span class="t-ic">🔍</span>
-      <span class="t-txt"><span class="t-name">בחינת עסקה</span><span class="t-desc">האם עסקה או השקעה משתלמת - במבט אחד</span></span>
-      <span class="badge">בקרוב</span>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🏠 כמה מותר להוציא על מגורים?</span>
+    <div class="rec">ההמלצה: סך המגורים (שכ"ד + חשבונות) עד <b>35% מהנטו</b> = <b id="recHouse">0 ₪</b> בחודש.</div>
+    <div class="house">
+      <div class="h-item field"><label>שכר דירה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="rent" type="text" inputmode="numeric" value="2,800" placeholder="0"></div></div>
+      <div class="h-item field"><label>ארנונה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="arnona" type="text" inputmode="numeric" value="350" placeholder="0"></div></div>
+      <div class="h-item field"><label>ועד בית</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="vaad" type="text" inputmode="numeric" value="150" placeholder="0"></div></div>
+      <div class="h-item field"><label>חשמל</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="elec" type="text" inputmode="numeric" value="250" placeholder="0"></div></div>
+      <div class="h-item field full"><label>מים</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="water" type="text" inputmode="numeric" value="120" placeholder="0"></div></div>
+    </div>
+    <div class="check" id="houseCheck">
+      <div class="c-top">סך המגורים שלך</div>
+      <div class="c-num" id="houseTotal">0 ₪</div>
+      <div class="c-msg" id="houseMsg"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">📊 החלוקה האידיאלית של המשכורת</span>
+    <div class="rec" style="margin:0 0 12px">אותה משכורת, שני מצבים. תראי כמה משנה איפה גרים - בעיקר כמה נשאר להשקיע.</div>
+    <div class="scen">
+      <div class="sc home">
+        <div class="sc-h">🏠 בבית ההורים</div>
+        <div class="sc-sub">הזמן הכי חזק לחסוך</div>
+        <div class="sc-row"><span>מחייה <span class="pc">5%</span></span><b id="h_liv">0</b></div>
+        <div class="sc-row"><span>הנאות ורצונות <span class="pc">30%</span></span><b id="h_fun">0</b></div>
+        <div class="sc-row"><span>השקעה קצרת טווח <span class="pc">20%</span></span><b id="h_short">0</b></div>
+        <div class="sc-row"><span>השקעה ארוכת טווח <span class="pc">45%</span></span><b id="h_long">0</b></div>
+        <div class="sc-row invest"><span>סה"כ להשקעה <span class="pc">65%</span></span><b id="h_inv">0</b></div>
+      </div>
+      <div class="sc out">
+        <div class="sc-h">🏃 מחוץ לבית</div>
+        <div class="sc-sub">המגורים אוכלים חלק גדול</div>
+        <div class="sc-row"><span>מחייה <span class="pc">50%</span></span><b id="o_liv">0</b></div>
+        <div class="sc-row"><span>הנאות ורצונות <span class="pc">30%</span></span><b id="o_fun">0</b></div>
+        <div class="sc-row"><span>השקעה קצרת טווח <span class="pc">5%</span></span><b id="o_short">0</b></div>
+        <div class="sc-row"><span>השקעה ארוכת טווח <span class="pc">15%</span></span><b id="o_long">0</b></div>
+        <div class="sc-row invest"><span>סה"כ להשקעה <span class="pc">20%</span></span><b id="o_inv">0</b></div>
+      </div>
+    </div>
+    <div class="insight" id="insight"></div>
+    <div class="note-tip">💡 <b>מחייה</b> = הכל: שכ"ד וחשבונות, אוכל, דלק ורכב, ביטוחים, קופת חולים, טלפון ואינטרנט. כלל אצבע: שהמחייה הכוללת לא תעלה על <b>50% מהמשכורת</b>, כדי שיישאר גם ליהנות וגם לחסוך.</div>
+  </div>
+
+  <div class="cta-card">
+    <div class="cta-emoji">🕊️</div>
+    <h3>ההחלטה מתי ואיך יוצאים מהבית שווה הרבה כסף</h3>
+    <p>לתכנן את היציאה נכון - כמה לחסוך לפני, איזו דירה מתאימה לתקציב, ואיך לא לפגוע בהשקעות - זה בדיוק מה שאנחנו בונים יחד.</p>
+    <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצים לתכנן את זה נכון? בואו נבנה את זה יחד ←</a>
+  </div>
+
+  <div class="actions">
+    <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת החישוב</button>
+    <div class="act-note">✓ הקישור מכיל את כל החישוב שלך. שומרים אותו או שולחים בוואטסאפ. הכתובת הרגילה תמיד מתחילה נקי.</div>
+    <div class="act-link" id="actLink" hidden>
+      <input id="linkField" readonly aria-label="קישור החישוב">
+      <button id="copyBtn">העתקה</button>
     </div>
   </div>
 
@@ -243,5 +313,50 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 })();
 </script>
 
+<script>
+const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
+function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
+function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
+const MONEY=['income','rent','arnona','vaad','elec','water'];
+MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
+function sh(id,v){document.getElementById(id).textContent=fmt.format(Math.round(v))+' ₪';}
+
+function calc(){
+  const income=num('income');
+  // Part A - housing
+  const house=num('rent')+num('arnona')+num('vaad')+num('elec')+num('water');
+  const rec=income*0.35;
+  document.getElementById('recHouse').textContent=fmt.format(Math.round(rec))+' ₪';
+  document.getElementById('houseTotal').textContent=fmt.format(Math.round(house))+' ₪';
+  const box=document.getElementById('houseCheck'), msg=document.getElementById('houseMsg');
+  const ok=house<=rec||income===0;
+  box.className='check '+(ok?'ok':'over');
+  if(income===0){msg.textContent='';}
+  else if(ok){const left=rec-house;msg.innerHTML=`✓ בתוך התקציב - יש עוד ${fmt.format(Math.round(left))} ₪ עד התקרה`;}
+  else{const over=house-rec;msg.innerHTML=`חורג ב-${fmt.format(Math.round(over))} ₪ מעל המומלץ (35%)`;}
+  // Part B - split
+  const H={liv:.05,fun:.30,short:.20,long:.45}, O={liv:.50,fun:.30,short:.05,long:.15};
+  sh('h_liv',income*H.liv); sh('h_fun',income*H.fun); sh('h_short',income*H.short); sh('h_long',income*H.long); sh('h_inv',income*(H.short+H.long));
+  sh('o_liv',income*O.liv); sh('o_fun',income*O.fun); sh('o_short',income*O.short); sh('o_long',income*O.long); sh('o_inv',income*(O.short+O.long));
+  const ins=document.getElementById('insight');
+  if(income>0){
+    const hInv=income*.65, oInv=income*.20, diff=hInv-oInv;
+    ins.innerHTML=`בבית ההורים אפשר להשקיע <b>${fmt.format(Math.round(hInv))} ₪</b> בחודש. ברגע שיוצאים נשאר <b>${fmt.format(Math.round(oInv))} ₪</b>. ההפרש - <b>${fmt.format(Math.round(diff))} ₪</b> כל חודש - זה הכוח של הזמן הזה.`;
+    ins.style.display='block';
+  } else ins.style.display='none';
+}
+
+// save / share
+const SKEY='richlife-moveout-v1';
+function enc(){return JSON.stringify(MONEY.map(id=>document.getElementById(id).value));}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;MONEY.forEach((id,k)=>document.getElementById(id).value=grp(a[k]));return true;}catch(e){return false;}}
+function makeLink(){return location.origin+location.pathname+location.search+'#m='+encodeURIComponent(enc());}
+(function(){const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
+  btn.onclick=()=>{const link=makeLink();field.value=link;wrap.hidden=false;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}};
+  copy.onclick=()=>{field.select();try{document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);}catch(e){}flash(copy,'✓ הועתק');};})();
+function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>el.textContent=o,1800);}
+
+(function boot(){try{localStorage.removeItem(SKEY);}catch(e){}const h=(location.hash||'').match(/m=([^&]+)/);if(h)dec(decodeURIComponent(h[1]));calc();})();
+</script>
 </body>
 </html>

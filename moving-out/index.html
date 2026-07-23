@@ -66,6 +66,12 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tr-pc{font-size:11.5px;font-weight:800;color:var(--pine);margin-top:2px}
 .tr-num{font-size:clamp(23px,6.2vw,32px);font-weight:900;color:var(--pine-deep);margin-top:8px}
 .tr-eg{font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-top:7px;line-height:1.45}
+.cmp{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.cmp-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:12.5px;font-weight:700;border-radius:11px;padding:10px 13px;line-height:1.4}
+.cmp-row.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-deep)}
+.cmp-row.over{background:rgba(var(--red-rgb),.08);color:#8f3a29}
+.cmp-row .cr-name{font-weight:900}
+.cmp-row .cr-verdict{margin-inline-start:auto;font-weight:900;white-space:nowrap}
 .scen{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
 .sc{border-radius:16px;padding:15px 14px;border:1.5px solid rgba(var(--pine-rgb),.2)}
 .sc.home{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
@@ -138,6 +144,30 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="tr-num" id="recBills">0 ₪</div>
         <div class="tr-eg">ארנונה, מים, חשמל, אינטרנט, תמי 4, ועד בית...</div>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">✏️ בדקי איפה את ביחס להמלצה</span>
+    <div class="rec" style="margin:0 0 13px">הזיני את המספרים האמיתיים שלך, ותראי כמה את קרובה או רחוקה מההמלצה:</div>
+    <div class="field" style="margin-bottom:12px"><label>שכר דירה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="aRent" type="text" inputmode="numeric" value="2,800" placeholder="0"></div></div>
+    <div class="bills-lbl">התוספות והחשבונות:</div>
+    <div class="house">
+      <div class="h-item field"><label>ארנונה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="aArnona" type="text" inputmode="numeric" value="350" placeholder="0"></div></div>
+      <div class="h-item field"><label>מים</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="aWater" type="text" inputmode="numeric" value="120" placeholder="0"></div></div>
+      <div class="h-item field"><label>חשמל</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="aElec" type="text" inputmode="numeric" value="250" placeholder="0"></div></div>
+      <div class="h-item field"><label>אינטרנט</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="aNet" type="text" inputmode="numeric" value="100" placeholder="0"></div></div>
+      <div class="h-item field"><label>תמי 4</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="aTami" type="text" inputmode="numeric" value="60" placeholder="0"></div></div>
+      <div class="h-item field"><label>ועד בית</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="aVaad" type="text" inputmode="numeric" value="100" placeholder="0"></div></div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-row" id="cmpRent"></div>
+      <div class="cmp-row" id="cmpBills"></div>
+    </div>
+    <div class="check" id="totCheck">
+      <div class="c-top">סך המגורים שלך</div>
+      <div class="c-num" id="totNum">0 ₪</div>
+      <div class="c-msg" id="totMsg"></div>
     </div>
   </div>
 
@@ -334,15 +364,34 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
-const MONEY=['income'];
+const MONEY=['income','aRent','aArnona','aWater','aElec','aNet','aTami','aVaad'];
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
 function sh(id,v){document.getElementById(id).textContent=fmt.format(Math.round(v))+' ₪';}
 
 function calc(){
   const income=num('income');
   // Part A - split recommendation: rent up to 25%, bills up to 10%
-  document.getElementById('recRent').textContent=fmt.format(Math.round(income*0.25))+' ₪';
-  document.getElementById('recBills').textContent=fmt.format(Math.round(income*0.10))+' ₪';
+  const recR=income*0.25, recB=income*0.10, recT=income*0.35;
+  document.getElementById('recRent').textContent=fmt.format(Math.round(recR))+' ₪';
+  document.getElementById('recBills').textContent=fmt.format(Math.round(recB))+' ₪';
+  // Part A2 - self check against the recommendation
+  const rent=num('aRent');
+  const addT=num('aArnona')+num('aWater')+num('aElec')+num('aNet')+num('aTami')+num('aVaad');
+  const tot=rent+addT;
+  function cmp(id,label,val,rec){
+    const el=document.getElementById(id), ok=val<=rec||income===0;
+    el.className='cmp-row '+(income===0?'':(ok?'ok':'over'));
+    const verdict=income===0?'':(ok?'✓ תקין':'חורג ב-'+fmt.format(Math.round(val-rec))+' ₪');
+    el.innerHTML=`<span class="cr-name">${label}</span><span>${fmt.format(Math.round(val))} ₪ · מומלץ עד ${fmt.format(Math.round(rec))}</span><span class="cr-verdict">${verdict}</span>`;
+  }
+  cmp('cmpRent','🔑 שכר דירה',rent,recR);
+  cmp('cmpBills','💡 תוספות',addT,recB);
+  document.getElementById('totNum').textContent=fmt.format(Math.round(tot))+' ₪';
+  const tc=document.getElementById('totCheck'), tm=document.getElementById('totMsg'), okT=tot<=recT||income===0;
+  tc.className='check '+(income===0?'':(okT?'ok':'over'));
+  if(income===0) tm.textContent='';
+  else if(okT) tm.innerHTML=`✓ בתוך ההמלצה (עד 35% = ${fmt.format(Math.round(recT))} ₪)`;
+  else tm.innerHTML=`חורג ב-${fmt.format(Math.round(tot-recT))} ₪ מעל ההמלצה (35%)`;
   // Part B - split
   const H={liv:.05,fun:.30,short:.20,long:.45}, O={liv:.50,fun:.30,short:.05,long:.15};
   sh('h_liv',income*H.liv); sh('h_fun',income*H.fun); sh('h_short',income*H.short); sh('h_long',income*H.long); sh('h_inv',income*(H.short+H.long));

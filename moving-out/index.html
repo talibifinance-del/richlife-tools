@@ -53,7 +53,11 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .rec-house{text-align:center;background:var(--sage-tint);border-radius:14px;padding:15px 16px;margin-bottom:14px;font-size:14.5px;font-weight:700;color:var(--pine-darker);line-height:1.5}
 .rec-house b{color:var(--pine)}
 .rec-house .rh-num{display:block;font-size:clamp(26px,7vw,34px);font-weight:900;color:var(--pine-deep);margin-top:5px}
-.rec-house .rh-sub{font-size:13.5px;font-weight:700;color:var(--ink-soft)}
+.rec-house .rh-sub{font-size:12.5px;font-weight:700;color:var(--ink-soft);display:block;margin-top:3px}
+.incl-tg{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--pine-deep);background:var(--sage-tint);border-radius:12px;padding:12px 14px;margin-bottom:12px;line-height:1.4}
+.incl-tg input{width:19px;height:19px;accent-color:var(--pine);flex:none;cursor:pointer}
+.bills-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:9px}
+#billsBox.hidden{display:none}
 .scen{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
 .sc{border-radius:16px;padding:15px 14px;border:1.5px solid rgba(var(--pine-rgb),.2)}
 .sc.home{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
@@ -112,19 +116,22 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
   </div>
 
   <div class="card">
-    <span class="sec-lbl">🏠 כמה מותר להוציא על מגורים?</span>
-    <div class="rec-house">ההמלצה: סך המגורים (שכ"ד + חשבונות) עד <b>35% מהנטו</b><span class="rh-num" id="recHouse">0 ₪</span><span class="rh-sub">בחודש</span></div>
-    <div class="house">
-      <div class="h-item field"><label>שכר דירה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="rent" type="text" inputmode="numeric" value="2,800" placeholder="0"></div></div>
-      <div class="h-item field"><label>ארנונה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="arnona" type="text" inputmode="numeric" value="350" placeholder="0"></div></div>
-      <div class="h-item field"><label>ועד בית</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="vaad" type="text" inputmode="numeric" value="150" placeholder="0"></div></div>
-      <div class="h-item field"><label>חשמל</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="elec" type="text" inputmode="numeric" value="250" placeholder="0"></div></div>
-      <div class="h-item field full"><label>מים</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="water" type="text" inputmode="numeric" value="120" placeholder="0"></div></div>
+    <span class="sec-lbl">🏠 איזה שכר דירה לחפש?</span>
+    <div class="rec-house">התקציב שלך למגורים (35% מהנטו)<span class="rh-num" id="recHouse">0 ₪</span><span class="rh-sub">זה מה שכל המגורים יחד (שכ"ד + חשבונות) לא אמורים לעבור</span></div>
+    <label class="incl-tg"><input type="checkbox" id="allIncl"><span>הכל כלול בשכר הדירה (יחידת דיור, בלי חשבונות בנפרד)</span></label>
+    <div id="billsBox">
+      <div class="bills-lbl">החשבונות שמעבר לשכר הדירה - הערכה, אפשר לשנות לפי המציאות:</div>
+      <div class="house">
+        <div class="h-item field"><label>ארנונה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="arnona" type="text" inputmode="numeric" value="350" placeholder="0"></div></div>
+        <div class="h-item field"><label>ועד בית</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="vaad" type="text" inputmode="numeric" value="100" placeholder="0"></div></div>
+        <div class="h-item field"><label>חשמל (ממוצע)</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="elec" type="text" inputmode="numeric" value="250" placeholder="0"></div></div>
+        <div class="h-item field"><label>מים (ממוצע)</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="water" type="text" inputmode="numeric" value="120" placeholder="0"></div></div>
+      </div>
     </div>
-    <div class="check" id="houseCheck">
-      <div class="c-top">סך המגורים שלך</div>
-      <div class="c-num" id="houseTotal">0 ₪</div>
-      <div class="c-msg" id="houseMsg"></div>
+    <div class="check ok" id="rentOut">
+      <div class="c-top">שכר הדירה שכדאי לחפש</div>
+      <div class="c-num" id="maxRent">0 ₪</div>
+      <div class="c-msg" id="rentMsg">עד הסכום הזה בחודש</div>
     </div>
   </div>
 
@@ -321,23 +328,25 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
-const MONEY=['income','rent','arnona','vaad','elec','water'];
+const MONEY=['income','arnona','vaad','elec','water'];
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
+document.getElementById('allIncl').addEventListener('change',calc);
 function sh(id,v){document.getElementById(id).textContent=fmt.format(Math.round(v))+' ₪';}
 
 function calc(){
   const income=num('income');
-  // Part A - housing
-  const house=num('rent')+num('arnona')+num('vaad')+num('elec')+num('water');
+  // Part A - max rent to look for = 35% housing budget minus the other bills
   const rec=income*0.35;
   document.getElementById('recHouse').textContent=fmt.format(Math.round(rec))+' ₪';
-  document.getElementById('houseTotal').textContent=fmt.format(Math.round(house))+' ₪';
-  const box=document.getElementById('houseCheck'), msg=document.getElementById('houseMsg');
-  const ok=house<=rec||income===0;
-  box.className='check '+(ok?'ok':'over');
-  if(income===0){msg.textContent='';}
-  else if(ok){const left=rec-house;msg.innerHTML=`✓ בתוך התקציב - יש עוד ${fmt.format(Math.round(left))} ₪ עד התקרה`;}
-  else{const over=house-rec;msg.innerHTML=`חורג ב-${fmt.format(Math.round(over))} ₪ מעל המומלץ (35%)`;}
+  const incl=document.getElementById('allIncl').checked;
+  document.getElementById('billsBox').classList.toggle('hidden',incl);
+  const bills=incl?0:(num('arnona')+num('vaad')+num('elec')+num('water'));
+  const maxRent=Math.max(0,rec-bills);
+  document.getElementById('maxRent').textContent=fmt.format(Math.round(maxRent))+' ₪';
+  const rmsg=document.getElementById('rentMsg');
+  if(income===0) rmsg.textContent='';
+  else if(incl) rmsg.textContent='כי הכל כלול בשכר הדירה (בלי חשבונות בנפרד)';
+  else rmsg.innerHTML=`אחרי שמפחיתים ~${fmt.format(Math.round(bills))} ₪ חשבונות בחודש`;
   // Part B - split
   const H={liv:.05,fun:.30,short:.20,long:.45}, O={liv:.50,fun:.30,short:.05,long:.15};
   sh('h_liv',income*H.liv); sh('h_fun',income*H.fun); sh('h_short',income*H.short); sh('h_long',income*H.long); sh('h_inv',income*(H.short+H.long));
@@ -352,8 +361,8 @@ function calc(){
 
 // save / share
 const SKEY='richlife-moveout-v1';
-function enc(){return JSON.stringify(MONEY.map(id=>document.getElementById(id).value));}
-function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;MONEY.forEach((id,k)=>document.getElementById(id).value=grp(a[k]));return true;}catch(e){return false;}}
+function enc(){return JSON.stringify([...MONEY.map(id=>document.getElementById(id).value),document.getElementById('allIncl').checked?1:0]);}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;MONEY.forEach((id,k)=>document.getElementById(id).value=grp(a[k]));document.getElementById('allIncl').checked=!!a[MONEY.length];return true;}catch(e){return false;}}
 function makeLink(){return location.origin+location.pathname+location.search+'#m='+encodeURIComponent(enc());}
 (function(){const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
   btn.onclick=()=>{const link=makeLink();field.value=link;wrap.hidden=false;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}};

@@ -50,6 +50,10 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .check.ok .c-msg{color:var(--pine-deep)} .check.over .c-msg{color:#8f3a29}
 .rec{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin-top:10px}
 .rec b{color:var(--pine-deep)}
+.rec-house{text-align:center;background:var(--sage-tint);border-radius:14px;padding:15px 16px;margin-bottom:14px;font-size:14.5px;font-weight:700;color:var(--pine-darker);line-height:1.5}
+.rec-house b{color:var(--pine)}
+.rec-house .rh-num{display:block;font-size:clamp(26px,7vw,34px);font-weight:900;color:var(--pine-deep);margin-top:5px}
+.rec-house .rh-sub{font-size:13.5px;font-weight:700;color:var(--ink-soft)}
 .scen{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
 .sc{border-radius:16px;padding:15px 14px;border:1.5px solid rgba(var(--pine-rgb),.2)}
 .sc.home{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
@@ -109,7 +113,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 
   <div class="card">
     <span class="sec-lbl">🏠 כמה מותר להוציא על מגורים?</span>
-    <div class="rec">ההמלצה: סך המגורים (שכ"ד + חשבונות) עד <b>35% מהנטו</b> = <b id="recHouse">0 ₪</b> בחודש.</div>
+    <div class="rec-house">ההמלצה: סך המגורים (שכ"ד + חשבונות) עד <b>35% מהנטו</b><span class="rh-num" id="recHouse">0 ₪</span><span class="rh-sub">בחודש</span></div>
     <div class="house">
       <div class="h-item field"><label>שכר דירה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="rent" type="text" inputmode="numeric" value="2,800" placeholder="0"></div></div>
       <div class="h-item field"><label>ארנונה</label><div class="input-shell"><span class="unit">₪</span><input class="h-in" id="arnona" type="text" inputmode="numeric" value="350" placeholder="0"></div></div>

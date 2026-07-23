@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מחשבון יעדים והשקעות · RichLife</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e9f1f2; --sage-tint:#eef4ef;
+  --ink:#1e2b25; --ink-soft:#51625a;
+  --pine:#5f7d6a; --pine-rgb:95,125,106;
+  --pine-deep:#3e5448; --pine-darker:#2f4036;
+  --sage:#bcd3bf; --sage-rgb:188,211,191;
+  --red:#c1553f; --red-rgb:193,85,63;
+  --card:#ffffff;
+  --font:'Heebo','Assistant',system-ui,'Segoe UI',Arial,sans-serif;
+  --shadow:0 18px 50px rgba(46,64,54,.10),0 3px 10px rgba(46,64,54,.05);
+  --shadow-hi:0 26px 70px rgba(46,64,54,.16),0 6px 16px rgba(46,64,54,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font);
+  background:
+    radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),
+    radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),
+    var(--paper);
+  color:var(--ink); min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  padding:clamp(14px,3vw,40px) clamp(12px,3vw,28px) 96px;
+  line-height:1.5;
+}
+.wrap{max-width:960px;margin:0 auto}
+
+/* ---------- header ---------- */
+.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:22px}
+.brand .avatar{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
+.brand .by{display:flex;flex-direction:column;line-height:1.15;text-align:right}
+.brand .by-lead{font-weight:900;font-size:clamp(17px,4vw,21px);color:var(--pine-darker)}
+.brand .by-sub{font-weight:700;font-size:13px;color:var(--pine);letter-spacing:.01em}
+.brand .by-sub b{color:var(--pine-deep)}
+
+.hero-title{text-align:center;margin-bottom:6px}
+.hero-title h1{font-size:clamp(26px,6vw,42px);font-weight:900;color:var(--pine-darker);letter-spacing:-.01em;line-height:1.12}
+.hero-title h1 .em{color:var(--pine)}
+.hero-title p{color:var(--ink-soft);font-size:clamp(15px,3.4vw,18px);font-weight:500;margin-top:8px;max-width:560px;margin-inline:auto}
+
+/* coaching CTA + socials */
+.livuy-wrap{text-align:center;margin:14px 0 0}
+.livuy-cta{display:inline-flex;align-items:center;gap:7px;justify-content:center;font-family:var(--font);
+  font-size:14px;font-weight:800;color:var(--pine-deep);text-decoration:none;
+  background:linear-gradient(120deg,rgba(var(--sage-rgb),.38),rgba(var(--sage-rgb),.14));
+  border:1.5px solid rgba(var(--pine-rgb),.28);border-radius:100px;padding:9px 18px;transition:all .18s}
+.livuy-cta:hover{border-color:var(--pine);background:#fff;box-shadow:var(--shadow)}
+.socials{display:flex;gap:11px;justify-content:center;margin:15px 0 8px}
+.socials a{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:#fff;border:1.5px solid rgba(var(--pine-rgb),.22);color:var(--pine-deep);box-shadow:var(--shadow);transition:all .18s}
+.socials a:hover{border-color:var(--pine);color:var(--pine);transform:translateY(-2px)}
+.socials svg{width:20px;height:20px}
+.foot-livuy{display:inline-block;margin-top:4px;font-size:13px;font-weight:800;color:var(--pine-deep);text-decoration:none;border-bottom:2px solid rgba(var(--pine-rgb),.3)}
+.foot-livuy:hover{color:var(--pine)}
+
+.disclaimer{
+  display:flex;gap:10px;align-items:flex-start;
+  background:linear-gradient(120deg,rgba(var(--red-rgb),.10),rgba(var(--red-rgb),.05));
+  border:1px solid rgba(var(--red-rgb),.28);
+  color:#8f3a29;border-radius:14px;padding:12px 15px;margin:20px auto 0;max-width:660px;
+  font-size:13.5px;font-weight:600;line-height:1.45;
+}
+.disclaimer .i{flex:none;font-size:16px;line-height:1.3}
+
+/* ---------- summary ---------- */
+.summary{
+  margin:26px 0 12px;
+  background:linear-gradient(135deg,var(--pine-deep),var(--pine-darker) 70%);
+  border-radius:22px;padding:clamp(18px,3.4vw,26px);
+  box-shadow:var(--shadow-hi);position:relative;overflow:hidden;color:#fff;
+}
+.summary::after{content:"";position:absolute;inset:0;background:radial-gradient(500px 240px at 88% 0%,rgba(var(--sage-rgb),.30),transparent 60%);pointer-events:none}
+.summary h2{font-size:14px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.72);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative;z-index:1}
+.sum-cell{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:15px 14px;text-align:center;backdrop-filter:blur(4px)}
+.sum-cell .lbl{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.72);margin-bottom:7px}
+.sum-cell .val{font-size:clamp(19px,4.6vw,29px);font-weight:900;letter-spacing:-.01em;line-height:1}
+.sum-cell .val small{font-size:.62em;font-weight:700;opacity:.75;margin-inline-start:2px}
+.sum-cell.gain .val{color:#bfe6c6}
+.sum-cell.month .val{color:#fff}
+@media(max-width:560px){
+  .sum-grid{grid-template-columns:1fr;gap:9px}
+  .sum-cell{display:flex;align-items:center;justify-content:space-between;text-align:right;padding:13px 16px}
+  .sum-cell .lbl{margin:0}
+}
+
+/* ---------- goal cards ---------- */
+.goals{display:flex;flex-direction:column;gap:16px;margin-top:20px}
+.goal{
+  background:var(--card);border-radius:20px;padding:clamp(16px,3vw,22px);
+  box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);
+  animation:pop .5s cubic-bezier(.2,.8,.2,1) both;position:relative;
+}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.goal-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.goal-num{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:14px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--pine),var(--pine-deep));box-shadow:0 4px 10px rgba(var(--pine-rgb),.30)}
+.goal-emoji{font-size:22px;flex:none}
+.goal-name{
+  flex:1;font-family:var(--font);font-size:clamp(17px,3.8vw,20px);font-weight:800;color:var(--pine-darker);
+  border:none;background:transparent;border-bottom:2px dashed rgba(var(--pine-rgb),.22);padding:3px 2px;min-width:0;
+}
+.goal-name:focus{outline:none;border-bottom-color:var(--pine)}
+.goal-name::placeholder{color:rgba(var(--pine-rgb),.45)}
+.del{flex:none;width:30px;height:30px;border-radius:9px;border:none;cursor:pointer;background:rgba(var(--red-rgb),.10);color:var(--red);font-size:17px;font-weight:700;line-height:1;transition:background .2s,transform .15s}
+.del:hover{background:rgba(var(--red-rgb),.2)}
+.del:active{transform:scale(.9)}
+
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.chip{
+  font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;
+  border:1px solid rgba(var(--pine-rgb),.25);background:var(--sage-tint);color:var(--pine-deep);
+  padding:6px 12px;border-radius:100px;transition:all .18s;white-space:nowrap;
+}
+.chip:hover{border-color:var(--pine);background:#fff}
+
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.fields .full{grid-column:1/-1}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
+.input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
+.input-shell .unit{padding-inline-start:13px;color:var(--ink-soft);font-weight:700;font-size:15px;flex:none}
+.input-shell input{
+  font-family:var(--font);width:100%;border:none;background:transparent;outline:none;
+  font-size:16px;font-weight:700;color:var(--ink);padding:12px 13px;min-width:0;
+}
+.input-shell input::-webkit-outer-spin-button,.input-shell input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.input-shell input[type=number]{-moz-appearance:textfield}
+
+/* track selector */
+.tracks{display:flex;gap:8px;margin-top:2px}
+.track{
+  flex:1;cursor:pointer;font-family:var(--font);text-align:center;
+  border:1.5px solid rgba(var(--pine-rgb),.22);background:var(--sage-tint);border-radius:13px;padding:9px 6px;transition:all .18s;
+}
+.track:hover{border-color:var(--pine)}
+.track.on{background:linear-gradient(135deg,var(--pine),var(--pine-deep));border-color:var(--pine-deep);box-shadow:0 8px 20px rgba(var(--pine-rgb),.30)}
+.track .t-name{font-size:13.5px;font-weight:800;color:var(--pine-deep)}
+.track .t-pct{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:2px}
+.track.on .t-name,.track.on .t-pct{color:#fff}
+
+/* results */
+.results{margin-top:18px;border-top:1px dashed rgba(var(--pine-rgb),.20);padding-top:16px}
+.res-main{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  background:linear-gradient(120deg,rgba(var(--sage-rgb),.35),rgba(var(--sage-rgb),.12));
+  border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.res-main .rl{font-size:14px;font-weight:700;color:var(--pine-deep)}
+.res-main .rv{font-size:clamp(26px,7vw,36px);font-weight:900;color:var(--pine-darker);letter-spacing:-.01em}
+.res-main .rv small{font-size:.55em;font-weight:700;color:var(--ink-soft)}
+.res-sub{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.res-box{background:var(--sage-tint);border-radius:12px;padding:11px 14px}
+.res-box .l{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:4px}
+.res-box .v{font-size:19px;font-weight:900;color:var(--ink)}
+.res-box.gain{background:rgba(var(--pine-rgb),.09)}
+.res-box.gain .v{color:var(--pine)}
+
+/* breakdown bar */
+.bar-wrap{margin-top:14px}
+.bar{height:16px;border-radius:100px;overflow:hidden;display:flex;background:var(--sage-tint);box-shadow:inset 0 1px 3px rgba(0,0,0,.06)}
+.bar .seg{height:100%;transition:width .6s cubic-bezier(.3,.9,.3,1)}
+.bar .seg.oop{background:linear-gradient(90deg,var(--pine-deep),var(--pine))}
+.bar .seg.gn{background:linear-gradient(90deg,var(--sage),#8fc79a)}
+.bar-key{display:flex;gap:16px;margin-top:9px;font-size:12.5px;font-weight:600;color:var(--ink-soft);flex-wrap:wrap}
+.bar-key span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:11px;height:11px;border-radius:4px;display:inline-block}
+.dot.oop{background:var(--pine)}
+.dot.gn{background:#8fc79a}
+
+.note{display:none;margin-top:12px;font-size:13px;font-weight:600;color:#8f3a29;background:rgba(var(--red-rgb),.08);border-radius:10px;padding:9px 12px}
+.note.show{display:block}
+
+/* add + footer */
+.add{
+  width:100%;margin-top:20px;font-family:var(--font);cursor:pointer;
+  border:2px dashed rgba(var(--pine-rgb),.40);background:rgba(255,255,255,.5);color:var(--pine-deep);
+  font-size:16px;font-weight:800;padding:16px;border-radius:16px;transition:all .2s;
+}
+.add:hover{border-color:var(--pine);background:#fff;box-shadow:var(--shadow)}
+.add:active{transform:scale(.99)}
+
+/* ---------- priority arrows (order = importance) ---------- */
+.prio{flex:none;display:flex;flex-direction:column;gap:2px}
+.prio button{width:24px;height:15px;border:none;cursor:pointer;background:rgba(var(--pine-rgb),.10);color:var(--pine-deep);
+  border-radius:5px;font-size:9px;line-height:1;font-weight:900;transition:background .18s,opacity .18s;display:grid;place-items:center}
+.prio button:hover:not(:disabled){background:rgba(var(--pine-rgb),.24)}
+.prio button:disabled{opacity:.25;cursor:default}
+
+/* ---------- monthly capacity ---------- */
+.cap{margin:22px 0 14px;background:var(--card);border-radius:20px;padding:clamp(16px,3vw,22px);
+  box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.cap-txt{flex:1;min-width:210px}
+.cap-txt .h{font-size:16px;font-weight:900;color:var(--pine-darker);display:flex;align-items:center;gap:7px}
+.cap-txt .s{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:4px;line-height:1.45}
+.cap .input-shell{width:190px;flex:none}
+@media(max-width:520px){.cap .input-shell{width:100%}}
+
+/* ---------- timeline ---------- */
+.tl{margin-top:26px;background:var(--card);border-radius:20px;box-shadow:var(--shadow);
+  border:1px solid rgba(var(--pine-rgb),.10);overflow:hidden}
+.tl.empty{display:none}
+.tl-head{padding:18px 18px 14px;background:linear-gradient(120deg,rgba(var(--sage-rgb),.34),rgba(var(--sage-rgb),.10));
+  border-bottom:1px solid rgba(var(--pine-rgb),.14)}
+.tl-head h3{font-size:17px;font-weight:900;color:var(--pine-darker);display:flex;align-items:center;gap:8px}
+.tl-head p{font-size:13.5px;font-weight:600;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+.tl-body{padding:16px clamp(14px,3vw,20px) 20px}
+
+.per{position:relative;padding-inline-start:26px;padding-bottom:6px}
+.per::before{content:"";position:absolute;inset-inline-start:7px;top:9px;bottom:-6px;width:2px;background:rgba(var(--pine-rgb),.22)}
+.per:last-of-type::before{bottom:14px}
+.per-dot{position:absolute;inset-inline-start:0;top:4px;width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pine),var(--pine-deep));border:3px solid #fff;box-shadow:0 0 0 2px rgba(var(--pine-rgb),.25)}
+.per-when{font-size:12.5px;font-weight:800;color:var(--pine);letter-spacing:.01em}
+.per-card{margin-top:7px;border:1.5px solid rgba(var(--pine-rgb),.16);border-radius:15px;overflow:hidden;background:var(--sage-tint)}
+.per-row{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#fff}
+.per-row + .per-row{border-top:1px dashed rgba(var(--pine-rgb),.18)}
+.per-row .pg{flex:1;font-size:14.5px;font-weight:800;color:var(--pine-darker);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.per-row .pm{flex:none;font-size:15px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
+.per-row .pm small{font-size:.7em;font-weight:700;color:var(--ink-soft)}
+.per-row.wait{background:rgba(var(--pine-rgb),.05)}
+.per-row.wait .pg{color:var(--ink-soft);font-weight:700}
+.per-row.wait .pm{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.per-tot{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;
+  background:linear-gradient(120deg,rgba(var(--sage-rgb),.42),rgba(var(--sage-rgb),.16));
+  font-size:13px;font-weight:800;color:var(--pine-deep)}
+.per-tot b{font-size:15.5px;font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums}
+
+.rel{position:relative;padding-inline-start:26px;margin:10px 0 14px}
+.rel::before{content:"";position:absolute;inset-inline-start:7px;top:-8px;bottom:-10px;width:2px;background:rgba(var(--pine-rgb),.22)}
+.rel-box{background:linear-gradient(120deg,rgba(var(--sage-rgb),.50),rgba(var(--sage-rgb),.18));
+  border:1.5px dashed var(--pine);border-radius:14px;padding:11px 14px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.5}
+.rel-box b{font-weight:900}
+.rel-icon{position:absolute;inset-inline-start:-1px;top:10px;width:18px;height:18px;border-radius:50%;background:#fff;
+  border:2px solid var(--pine);display:grid;place-items:center;font-size:9px;z-index:1}
+
+.tl-final{margin-top:16px;border-radius:16px;padding:14px 16px;
+  background:linear-gradient(135deg,var(--pine-deep),var(--pine-darker) 70%);color:#fff}
+.tl-final .k{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.72)}
+.tl-final .v{font-size:clamp(17px,4vw,22px);font-weight:900;margin-top:3px;line-height:1.25}
+.tl-final .v em{font-style:normal;color:#bfe6c6}
+
+.tl-gaps{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.gap-row{display:flex;gap:9px;align-items:flex-start;border-radius:13px;padding:11px 13px;font-size:13px;font-weight:600;line-height:1.5}
+.gap-row.late{background:rgba(var(--red-rgb),.09);border:1px solid rgba(var(--red-rgb),.28);color:#8f3a29}
+.gap-row.early{background:rgba(var(--sage-rgb),.30);border:1px solid rgba(var(--pine-rgb),.26);color:var(--pine-darker)}
+.gap-row .gi{flex:none;font-size:15px;line-height:1.3}
+.gap-row b{font-weight:900}
+
+/* ---------- recap ---------- */
+.recap{margin-top:26px;background:var(--card);border-radius:20px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);overflow:hidden}
+.recap.empty{display:none}
+.recap h3{font-size:16px;font-weight:900;color:var(--pine-darker);padding:16px 18px 12px;display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
+.recap h3 .rsub{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+.recap-scroll{overflow-x:auto}
+.recap-table{width:100%;border-collapse:collapse;min-width:600px;font-variant-numeric:tabular-nums}
+.recap-table td.track-col{font-size:13px;font-weight:800;color:var(--pine-deep);white-space:nowrap}
+.recap-table th{font-size:11.5px;font-weight:700;color:var(--ink-soft);text-align:center;padding:6px 10px;background:var(--sage-tint);white-space:nowrap}
+.recap-table th.name-col,.recap-table td.name-col{text-align:right}
+.recap-table td{padding:12px 10px;text-align:center;border-top:1px solid rgba(var(--pine-rgb),.10);font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap}
+.recap-table .rn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;font-size:12px;font-weight:900;color:#fff;background:var(--pine);margin-inline-start:7px;vertical-align:middle}
+.recap-table .g-name{font-weight:800;color:var(--pine-darker)}
+.recap-table td.m-col{color:var(--pine-darker);font-weight:900;font-size:15px}
+.recap-table td.gn-col{color:var(--pine);font-weight:900}
+.recap-table tr.tot td{border-top:2px solid rgba(var(--pine-rgb),.30);background:rgba(var(--sage-rgb),.20);font-weight:900;color:var(--pine-darker);font-size:15px}
+.recap-table tr.tot .name-col{font-size:14px}
+
+/* ---------- save / share actions ---------- */
+.actions{margin-top:18px;text-align:center}
+.act-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:480px;margin:0 auto}
+.act-btn{flex:1;min-width:180px;font-family:var(--font);cursor:pointer;border:none;
+  background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;font-size:15.5px;font-weight:800;
+  padding:15px 18px;border-radius:15px;box-shadow:0 12px 30px rgba(var(--pine-rgb),.30);transition:transform .15s,filter .15s}
+.act-btn:hover{filter:brightness(1.06)}
+.act-btn:active{transform:scale(.99)}
+.act-btn.ghost{background:#fff;color:var(--pine-deep);border:1.5px solid rgba(var(--pine-rgb),.30);box-shadow:var(--shadow)}
+.act-btn.ghost:hover{border-color:var(--pine);filter:none}
+.act-note{max-width:480px;margin:10px auto 0;font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.5}
+.act-link{max-width:480px;margin:12px auto 0;display:flex;gap:8px}
+.act-link input{flex:1;min-width:0;font-family:var(--font);font-size:13px;font-weight:600;color:var(--pine-deep);
+  background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:11px;padding:11px 13px;direction:ltr;text-align:left}
+.act-link input:focus{outline:none;border-color:var(--pine)}
+.act-link button{flex:none;font-family:var(--font);cursor:pointer;border:none;background:var(--pine-deep);color:#fff;font-size:14px;font-weight:800;padding:0 16px;border-radius:11px}
+.act-link button:hover{filter:brightness(1.1)}
+
+/* ---------- coaching CTA card ---------- */
+.cta-card{margin-top:18px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,4vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi);position:relative;overflow:hidden}
+.cta-card::after{content:"";position:absolute;inset:0;background:radial-gradient(400px 220px at 15% 0%,rgba(var(--sage-rgb),.35),transparent 60%);pointer-events:none}
+.cta-card > *{position:relative;z-index:1}
+.cta-card .cta-emoji{font-size:30px}
+.cta-card h3{font-size:clamp(18px,4.4vw,23px);font-weight:900;margin:8px 0 10px;line-height:1.25}
+.cta-card p{font-size:14.5px;font-weight:500;color:rgba(255,255,255,.92);line-height:1.6;max-width:470px;margin:0 auto 18px}
+.cta-btn{display:inline-block;font-family:var(--font);font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:15px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22);transition:transform .18s,box-shadow .18s}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(0,0,0,.28)}
+
+/* ---------- sticky summary bar ---------- */
+.stickybar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%) translateY(150%);z-index:60;
+  display:flex;align-items:center;gap:14px;cursor:pointer;
+  background:linear-gradient(135deg,var(--pine-deep),var(--pine-darker));color:#fff;
+  border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:10px 16px;
+  box-shadow:0 16px 44px rgba(46,64,54,.38);font-family:var(--font);
+  transition:transform .38s cubic-bezier(.2,.85,.25,1);max-width:calc(100% - 24px);white-space:nowrap}
+.stickybar.show{transform:translateX(-50%) translateY(0)}
+.stickybar:hover{filter:brightness(1.06)}
+.stickybar:focus-visible{outline:3px solid var(--sage);outline-offset:2px}
+.stickybar .sb-item{display:flex;flex-direction:column;line-height:1.12;text-align:center}
+.stickybar .sb-item .k{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.72)}
+.stickybar .sb-item .v{font-size:16px;font-weight:900;letter-spacing:-.01em}
+.stickybar .sb-item.gn .v{color:#bfe6c6}
+.stickybar .sb-sep{width:1px;align-self:stretch;background:rgba(255,255,255,.20)}
+.stickybar .sb-cta{font-size:12.5px;font-weight:800;background:rgba(255,255,255,.15);padding:7px 11px;border-radius:10px}
+@media(prefers-reduced-motion:reduce){.stickybar{transition:none}}
+
+.foot{text-align:center;margin-top:30px;color:var(--ink-soft);font-size:13px;font-weight:500;line-height:1.7}
+.foot b{color:var(--pine-deep)}
+.copyright{margin-top:18px;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:13.5px;font-weight:700;color:var(--pine-deep);line-height:1.6;max-width:480px;margin-inline:auto}
+
+/* ---------- PDF / print view ---------- */
+#printview{display:none}
+#printview .pv-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:2px solid var(--pine)}
+#printview .pv-brand{display:flex;align-items:center;gap:11px}
+#printview .pv-brand img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--pine)}
+#printview .pv-brand .b-lead{font-weight:900;font-size:17px;color:var(--pine-darker)}
+#printview .pv-brand .b-sub{font-weight:700;font-size:12px;color:var(--pine)}
+#printview .pv-date{font-size:12px;font-weight:700;color:var(--ink-soft)}
+#printview h1{text-align:center;font-size:26px;font-weight:900;color:var(--pine-darker);margin:18px 0 4px}
+#printview .pv-tag{text-align:center;font-size:12.5px;color:var(--ink-soft);font-weight:600;margin-bottom:16px}
+#printview .pv-sum{display:flex;gap:10px;margin-bottom:18px}
+#printview .pv-sum .t{flex:1;text-align:center;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:12px;padding:12px}
+#printview .pv-sum .t .k{font-size:11.5px;font-weight:700;color:var(--ink-soft)}
+#printview .pv-sum .t .v{font-size:19px;font-weight:900;color:var(--pine-darker);margin-top:3px}
+#printview .pv-sum .t.gn .v{color:var(--pine)}
+#printview .pv-goal{border:1px solid rgba(var(--pine-rgb),.20);border-radius:12px;padding:13px 15px;margin-bottom:11px;break-inside:avoid}
+#printview .pv-g-top{font-size:16px;font-weight:900;color:var(--pine-darker);display:flex;align-items:center;gap:8px;margin-bottom:5px}
+#printview .pv-num{width:22px;height:22px;border-radius:6px;background:var(--pine);color:#fff;font-size:12px;font-weight:900;display:inline-flex;align-items:center;justify-content:center}
+#printview .pv-g-meta{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:9px}
+#printview .pv-g-nums{display:flex;gap:10px;margin-bottom:9px}
+#printview .pv-g-nums .n{flex:1;background:var(--sage-tint);border-radius:9px;padding:8px 10px}
+#printview .pv-g-nums .n .k{font-size:11px;font-weight:700;color:var(--ink-soft)}
+#printview .pv-g-nums .n .v{font-size:16px;font-weight:900;color:var(--ink)}
+#printview .pv-g-nums .n.mo .v{color:var(--pine-darker)}
+#printview .pv-g-nums .n.gn .v{color:var(--pine)}
+#printview .pv-bar{height:12px;border-radius:100px;overflow:hidden;display:flex;background:var(--sage-tint)}
+#printview .pv-bar .oop{background:var(--pine)}
+#printview .pv-bar .gn{background:#8fc79a}
+#printview .pv-disc{margin-top:14px;font-size:11px;font-weight:600;color:#8f3a29;border:1px solid rgba(var(--red-rgb),.3);border-radius:9px;padding:9px 12px}
+#printview .pv-foot{margin-top:14px;text-align:center;font-size:12px;font-weight:700;color:var(--pine-deep)}
+
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff !important;padding:0 !important}
+  .wrap{display:none !important}
+  #printview{display:block}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+<!-- ═══════════════════════════════════════════════════════════════════
+     ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
+     מדביקים פעם אחת בתוך <head> של כל דף באתר.
+     אחרי הרצת setup.py השתמשו בקובץ output/a11y-snippet-ready.html
+
+     Zero-impact by default (Eden's directive, page-standard.md):
+     - Regular visitors see ONLY a small round a11y button (bottom-left).
+     - Focus outline appears via :focus-visible - keyboard users only.
+     - Skip-link hidden until keyboard-focused.
+     - All visual adjustments (text size / contrast / links / motion /
+       readable font) apply ONLY when chosen; saved in localStorage.
+     - The menu links to the accessibility statement (legal requirement).
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+  /* Keyboard-only focus - mouse users never see this */
+  :focus-visible { outline: 3px solid #4F46E5 !important; outline-offset: 2px !important; border-radius: 4px; }
+  /* Skip link - visible only on keyboard focus */
+  .brain-skip { position: fixed; top: -60px; right: 12px; z-index: 100000; background: #1E1B4B; color: #fff;
+    padding: 10px 18px; border-radius: 10px; font-size: 15px; text-decoration: none; transition: top .15s; }
+  .brain-skip:focus { top: 12px; }
+  /* Opt-in modes */
+  html.a11y-fs1 body { zoom: 1.12; } html.a11y-fs2 body { zoom: 1.25; }
+  html.a11y-contrast { filter: contrast(1.25); }
+  html.a11y-links a { text-decoration: underline !important; font-weight: 700 !important; }
+  html.a11y-nomotion *, html.a11y-nomotion *::before, html.a11y-nomotion *::after {
+    animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  html.a11y-font body, html.a11y-font body * { font-family: Arial, Helvetica, sans-serif !important; }
+  /* The button + menu */
+  #brain-a11y-btn { position: fixed; bottom: 18px; left: 18px; z-index: 99999; width: 44px; height: 44px;
+    border-radius: 50%; border: none; cursor: pointer; background: #1E1B4B; color: #fff;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(30,27,75,.35); padding: 0; }
+  #brain-a11y-btn:hover { background: #4F46E5; }
+  #brain-a11y-menu { position: fixed; bottom: 72px; left: 18px; z-index: 99999; background: #fff; color: #1E1B4B;
+    border-radius: 14px; box-shadow: 0 6px 30px rgba(30,27,75,.25); padding: 14px; width: 230px; display: none;
+    direction: rtl; text-align: right; font-family: Arial, sans-serif; font-size: 14px; }
+  #brain-a11y-menu.open { display: block; }
+  #brain-a11y-menu h2 { font-size: 15px; margin: 0 0 10px; }
+  #brain-a11y-menu button { display: block; width: 100%; margin: 4px 0; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid #E0E7FF; background: #F8FAFC; cursor: pointer; font-size: 13px; text-align: right; color: #1E1B4B; }
+  #brain-a11y-menu button[aria-pressed="true"] { background: #4F46E5; color: #fff; border-color: #4F46E5; }
+  #brain-a11y-menu a { display: block; margin-top: 10px; font-size: 12px; color: #4F46E5; }
+  /* polish: text fields show their OWN green focus ring (keeps ₪ / שנים visible), not the indigo box */
+  .input-shell input:focus, .input-shell input:focus-visible,
+  .goal-name:focus, .goal-name:focus-visible,
+  .act-link input:focus, .act-link input:focus-visible,
+  #linkField:focus, #linkField:focus-visible { outline: none !important; }
+</style>
+<script>
+(function () {
+  var MODES = [
+    ["fs", "הגדלת טקסט", 2],            // cycles: off → fs1 → fs2
+    ["contrast", "ניגודיות מוגברת", 1],
+    ["links", "הדגשת קישורים", 1],
+    ["nomotion", "עצירת אנימציות", 1],
+    ["font", "גופן קריא", 1]
+  ];
+  var KEY = "brain_a11y";
+
+  function state() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+  function apply(s) {
+    var h = document.documentElement;
+    h.classList.toggle("a11y-fs1", s.fs === 1); h.classList.toggle("a11y-fs2", s.fs === 2);
+    ["contrast", "links", "nomotion", "font"].forEach(function (m) { h.classList.toggle("a11y-" + m, !!s[m]); });
+  }
+
+  function build() {
+    if (document.getElementById("brain-a11y-btn")) return; // pasted twice - once is enough
+    // Skip link (target: <main> or first <h1>'s section)
+    if (!document.getElementById("brain-main")) {
+      var m = document.querySelector("main") || document.querySelector("h1");
+      if (m) m.id = m.id || "brain-main";
+    }
+    var skip = document.createElement("a");
+    skip.className = "brain-skip"; skip.href = "#" + ((document.querySelector("main,h1") || {}).id || "brain-main");
+    skip.textContent = "דילוג לתוכן"; document.body.prepend(skip);
+
+    var btn = document.createElement("button");
+    btn.id = "brain-a11y-btn"; btn.setAttribute("aria-label", "פתיחת תפריט נגישות");
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "brain-a11y-menu");
+    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="4.5" r="2.2" fill="currentColor"/><path d="M12 8c-3 0-5.5-.6-7-1l.5 2c1.5.5 3.5.8 5 .9v3.1l-2.3 6.2 1.9.8 2-5.5h-.2 2.2l2 5.5 1.9-.8L15.5 13V9.9c1.5-.1 3.5-.4 5-.9l.5-2c-1.5.4-4 1-7 1h-2z" fill="currentColor"/></svg>';
+
+    var menu = document.createElement("div");
+    menu.id = "brain-a11y-menu"; menu.setAttribute("role", "dialog"); menu.setAttribute("aria-label", "אפשרויות נגישות");
+    menu.innerHTML = "<h2>נגישות</h2>";
+    MODES.forEach(function (mode) {
+      var b = document.createElement("button");
+      b.textContent = mode[1]; b.dataset.mode = mode[0]; b.setAttribute("aria-pressed", "false");
+      b.onclick = function () {
+        var s = state();
+        if (mode[0] === "fs") { s.fs = ((s.fs || 0) + 1) % 3; b.setAttribute("aria-pressed", s.fs ? "true" : "false"); }
+        else { s[mode[0]] = !s[mode[0]]; b.setAttribute("aria-pressed", s[mode[0]] ? "true" : "false"); }
+        localStorage.setItem(KEY, JSON.stringify(s)); apply(s);
+      };
+      menu.appendChild(b);
+    });
+    var reset = document.createElement("button");
+    reset.textContent = "איפוס"; reset.onclick = function () { localStorage.removeItem(KEY); apply({});
+      menu.querySelectorAll("[aria-pressed]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); };
+    menu.appendChild(reset);
+    var link = document.createElement("a");
+    link.href = "https://talibifinance-del.github.io/richlife-lida/negishut.html"; link.textContent = "הצהרת נגישות";
+    menu.appendChild(link);
+
+    // Permanent text link in the page footer (legal best practice: the statement
+    // must be reachable even if this widget fails to load elsewhere). Inherits
+    // the footer's own styling - visually just one more footer word.
+    var foot = document.querySelector("footer");
+    if (foot && !foot.querySelector('a[href*="negishut"]')) {
+      var fl = document.createElement("a");
+      fl.href = "https://talibifinance-del.github.io/richlife-lida/negishut.html"; fl.textContent = "הצהרת נגישות";
+      fl.style.color = "inherit"; fl.style.marginRight = "6px";
+      foot.appendChild(document.createTextNode(" · "));
+      foot.appendChild(fl);
+    }
+
+    btn.onclick = function () {
+      var open = menu.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("open")) { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.focus(); }
+    });
+    document.body.appendChild(btn); document.body.appendChild(menu);
+
+    // Restore saved prefs + reflect on buttons
+    var s = state(); apply(s);
+    menu.querySelectorAll("[data-mode]").forEach(function (b) {
+      var m = b.dataset.mode;
+      b.setAttribute("aria-pressed", (m === "fs" ? !!s.fs : !!s[m]) ? "true" : "false");
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build);
+  else build();
+})();
+</script>
+
+<style id="brain-a11y-extra">@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}</style>
+<script>/* RichLife a11y: keyboard + labels for custom controls */
+(function(){var SEL='.chip,.track,.sec-head,.cat-head,.feed-chip';
+function up(el){if(!el.getAttribute||el.getAttribute('role')||el.tagName==='A'||el.tagName==='BUTTON')return;el.setAttribute('role','button');if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');}
+function lbl(el){try{if(el.getAttribute('aria-label')||el.getAttribute('aria-labelledby'))return;if(el.id&&document.querySelector('label[for="'+el.id+'"]'))return;var ph=el.getAttribute('placeholder');if(ph)el.setAttribute('aria-label',ph);}catch(e){}}
+function scan(r){r=r||document;try{r.querySelectorAll(SEL).forEach(up);r.querySelectorAll('input,textarea,select').forEach(lbl);}catch(e){}}
+document.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var t=e.target;if(t&&t.getAttribute&&t.getAttribute('role')==='button'&&t.tagName!=='BUTTON'&&t.tagName!=='A'){e.preventDefault();t.click();}}});
+function init(){scan(document);try{new MutationObserver(function(ms){ms.forEach(function(m){if(m.addedNodes)m.addedNodes.forEach(function(n){if(n.nodeType===1){up(n);scan(n);}})})}).observe(document.body,{childList:true,subtree:true});}catch(e){}}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script>
+
+</head>
+<body>
+<div class="wrap">
+  <a href="../" class="back-hub" style="display:inline-flex;align-items:center;gap:7px;font-family:var(--font);font-size:13px;font-weight:800;color:var(--pine-deep);text-decoration:none;background:rgba(var(--pine-rgb),.08);border:1.5px solid rgba(var(--pine-rgb),.22);padding:7px 15px;border-radius:100px;margin-bottom:14px">← כל הכלים</a>
+
+  <div class="brand">
+    <img class="avatar" src="data:image/jpeg;base64,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" alt="טלי בנימינוב שרעבי">
+    <div class="by">
+      <span class="by-lead">מאת טלי בנימינוב שרעבי</span>
+      <span class="by-sub"><b>RichLife</b> · ליווי כלכלי</span>
+    </div>
+  </div>
+
+  <div class="hero-title">
+    <h1>מחשבון <span class="em">יעדים והשקעות</span></h1>
+    <p>כתבו לאן אתם רוצים להגיע, וקבלו כמה צריך להפריש כל חודש כדי להגיע לשם - וכמה הכסף עצמו עובד בשבילכם.</p>
+    <div class="livuy-wrap">
+      <a class="livuy-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">✨ לתהליך ליווי אישי עם טלי ←</a>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <span class="i">⚠️</span>
+    <span>אין כאן המלצה להשקעה או התחייבות לתשואה. תשואות העבר אינן מבטיחות תשואות עתידיות. הכלי להמחשה בלבד.</span>
+  </div>
+
+  <section class="summary">
+    <h2>🎯 התמונה המלאה</h2>
+    <div class="sum-grid">
+      <div class="sum-cell month"><div class="lbl">סך הפרשה חודשית</div><div class="val" id="sumMonthly">0<small>₪</small></div></div>
+      <div class="sum-cell"><div class="lbl">סך היעדים</div><div class="val" id="sumTarget">0<small>₪</small></div></div>
+      <div class="sum-cell gain"><div class="lbl">מתוכם הרווח שלכם</div><div class="val" id="sumGain">0<small>₪</small></div></div>
+    </div>
+  </section>
+
+  <div class="goals" id="goals"></div>
+
+  <button class="add" id="addBtn">＋ הוסף מטרה</button>
+
+  <section class="cap">
+    <div class="cap-txt">
+      <div class="h">💪 כמה אני באמת יכולה להפריש בחודש?</div>
+      <div class="s">לא חייב למלא. אם תמלאו, ציר הזמן יסדר את המטרות בתור לפי סדר החשיבות שקבעתם - ויראה מתי כל אחת נכנסת.</div>
+    </div>
+    <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" id="capInput" placeholder="לדוגמה 3,000" aria-label="הפרשה חודשית אפשרית"></div>
+  </section>
+
+  <section class="tl empty" id="timeline"></section>
+
+  <section class="recap" id="recap"></section>
+
+  <div class="cta-card">
+    <div class="cta-emoji">🌱</div>
+    <h3>רואים את המספרים, אבל לא בטוחים איך מגיעים לשם?</h3>
+    <p>להגדיר יעד זה הצעד הראשון. אבל להגיע אליו - עם תוכנית ברורה, מסלול שמתאים לכם, וסדר כלכלי שמאפשר להפריש בלי להרגיש - זה כבר תהליך. זה בדיוק מה שאנחנו בונים יחד, צעד אחר צעד.</p>
+    <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצים להגיע ליעדים שלכם? בואו נבנה את זה יחד ←</a>
+  </div>
+
+  <div class="actions">
+    <div class="act-row">
+      <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת התוכנית</button>
+      <!-- PDF מוסתר בכוונה: המטרה שהלקוחות יחזרו לאתר ויחוו אותו מחדש, לא יורידו קובץ ויעזבו. הקוד (buildPrintView + מאזין pdfBtn) בנוי ומוכן - להדלקה מחדש: בטלו את ההערה סביב הכפתור.
+      <button class="act-btn ghost" id="pdfBtn">📄 הורדה כ-PDF</button> -->
+    </div>
+    <div class="act-note">✓ הקישור שומר את התוכנית שלך - אפשר לשמור או לשלוח בוואטסאפ, ולחזור אליה מתי שרוצים.</div>
+    <div class="act-link" id="actLink" hidden>
+      <input id="linkField" readonly aria-label="קישור התוכנית">
+      <button id="copyBtn">העתקה</button>
+    </div>
+  </div>
+
+  <div class="stickybar" id="stickybar" role="button" tabindex="0" aria-label="קפיצה לסיכום היעדים">
+    <div class="sb-item"><span class="k">סה"כ חודשי</span><span class="v" id="sbMonthly">0 ₪</span></div>
+    <div class="sb-sep"></div>
+    <div class="sb-item gn"><span class="k">רווח</span><span class="v" id="sbGain">0 ₪</span></div>
+    <div class="sb-cta">סיכום ↓</div>
+  </div>
+
+  <div class="foot">
+    <div class="copyright">© 2026 כל הזכויות שמורות ל-RichLife ולטלי בנימינוב שרעבי. אין לשכפל, להפיץ או לעשות שימוש בתוכן זה ללא אישור מראש ובכתב.</div>
+    <div class="socials">
+      <a class="soc" data-net="instagram" href="https://www.instagram.com/tali_finance" target="_blank" rel="noopener" aria-label="אינסטגרם">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a class="soc" data-net="tiktok" href="https://www.tiktok.com/@tali_beniaminov" target="_blank" rel="noopener" aria-label="טיקטוק">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.6 3.4 3.5 3.6v2.4c-1.2 0-2.4-.4-3.4-1v6.3c0 3-2.2 5.2-5.1 5.2-2.7 0-4.9-2-4.9-4.7 0-2.8 2.3-4.8 5.1-4.6v2.5c-.3-.1-.6-.1-.9-.1-1.2 0-2.1.9-2.1 2.1 0 1.3 1 2.2 2.3 2.2 1.4 0 2.3-1 2.3-2.6V3h3.2z"/></svg>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<div id="printview" aria-hidden="true"></div>
+
+<script>
+const TRACKS=[
+  {key:'solid', name:'סולידי', full:'סולידי / קרן כספית', pct:2.5},
+  {key:'general', name:'כללי', full:'כללי (טווח בינוני)', pct:5},
+  {key:'stock', name:'מנייתי', full:'מנייתי / S&P 500', pct:10},
+];
+const PRESETS=[
+  {e:'🏠', n:'רכישת נכס'},
+  {e:'🚗', n:'שדרוג רכב'},
+  {e:'🎓', n:'עזרה לילדים בעתיד'},
+  {e:'✈️', n:'חופשה משפחתית גדולה'},
+  {e:'🌴', n:'פנסיה מוקדמת'},
+  {e:'💍', n:'עזרה בחתונה'},
+  {e:'📈', n:'השקעה גדולה'},
+];
+const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
+let goals=[]; let uid=0; let capacity='';   // capacity = כמה אפשר להפריש בחודש (לא חובה)
+
+function move(i,d){
+  const j=i+d;
+  if(j<0||j>=goals.length)return;
+  const t=goals[i]; goals[i]=goals[j]; goals[j]=t;
+  render();
+}
+
+function calc(g){
+  const target=+g.target||0, initial=+g.initial||0, years=+g.years||0, pct=+g.pct||0;
+  const n=Math.round(years*12), r=pct/100/12;
+  let monthly=0, reached=true;
+  if(n>0){
+    const growth=Math.pow(1+r,n);
+    const fvInit=initial*growth;
+    const af=r>0?(growth-1)/r:n;           // annuity factor (ordinary)
+    monthly=Math.max(0,(target-fvInit)/af);
+    if(fvInit>=target){monthly=0;}          // initial alone already reaches it
+  }
+  monthly=Math.round(monthly);              // match the sheet: round then derive
+  const oop=Math.min(target, initial+monthly*n); // out of pocket, capped at target
+  const gain=Math.max(0, target-oop);
+  return {monthly,oop,gain,target,initial,years,n,covered:monthly===0&&initial>0&&years>0&&target>0};
+}
+
+function render(){
+  const box=document.getElementById('goals');
+  box.innerHTML='';
+  goals.forEach((g,i)=>box.appendChild(card(g,i+1)));
+  updateSummary();
+}
+
+const grp=v=>(v===''||v===null||v===undefined)?'':fmt.format(+v);
+
+function card(g,num){
+  const c=calc(g);
+  const el=document.createElement('div');
+  el.className='goal';
+  const oopPct=c.target>0?Math.round(c.oop/c.target*100):100;
+  const gnPct=100-oopPct;
+  el.innerHTML=`
+    <div class="goal-head">
+      <span class="prio">
+        <button class="up" title="חשוב יותר" aria-label="להעלות בסדר החשיבות" ${num===1?'disabled':''}>▲</button>
+        <button class="dn" title="חשוב פחות" aria-label="להוריד בסדר החשיבות" ${num===goals.length?'disabled':''}>▼</button>
+      </span>
+      <span class="goal-num" title="סדר החשיבות">${num}</span>
+      <span class="goal-emoji">${g.emoji}</span>
+      <input class="goal-name" value="${esc(g.name)}" placeholder="שם המטרה" data-f="name">
+      <button class="del" title="מחק מטרה">✕</button>
+    </div>
+    <div class="chips">${PRESETS.map(p=>`<button class="chip" data-e="${p.e}" data-n="${p.n}">${p.e} ${p.n}</button>`).join('')}</div>
+    <div class="fields">
+      <div class="field">
+        <label>היעד הכספי</label>
+        <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="target" data-money="1" value="${grp(g.target)}" placeholder="0"></div>
+      </div>
+      <div class="field">
+        <label>סכום התחלתי (יש לי כבר)</label>
+        <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="initial" data-money="1" value="${grp(g.initial)}" placeholder="0"></div>
+      </div>
+      <div class="field full">
+        <label>בעוד כמה שנים?</label>
+        <div class="input-shell"><input type="number" inputmode="numeric" data-f="years" value="${g.years}" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">שנים</span></div>
+      </div>
+      <div class="field full">
+        <label>איך משקיעים? (משנה את התשואה המשוערת)</label>
+        <div class="tracks">
+          ${TRACKS.map(t=>`<div class="track ${g.pct===t.pct?'on':''}" data-pct="${t.pct}"><div class="t-name">${t.name}</div><div class="t-pct">${t.pct}% בשנה</div></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="results">
+      <div class="res-main">
+        <span class="rl">💰 כמה להפריש כל חודש</span>
+        <span class="rv">${fmt.format(c.monthly)}<small> ₪</small></span>
+      </div>
+      <div class="res-sub">
+        <div class="res-box"><div class="l">כסף שיצא לי מהכיס</div><div class="v">${fmt.format(c.oop)} ₪</div></div>
+        <div class="res-box gain"><div class="l">🎊 הרווח מהשוק</div><div class="v">${fmt.format(c.gain)} ₪</div></div>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar"><div class="seg oop" style="width:${oopPct}%"></div><div class="seg gn" style="width:${gnPct}%"></div></div>
+        <div class="bar-key">
+          <span><i class="dot oop"></i> הכסף שלי (${oopPct}%)</span>
+          <span><i class="dot gn"></i> הרווח מהשוק (${gnPct}%)</span>
+        </div>
+      </div>
+      <div class="note ${c.covered?'show':''}">✨ הסכום ההתחלתי לבדו כבר צומח מעבר ליעד בטווח הזה - לא צריך הפקדה חודשית.</div>
+    </div>`;
+
+  // events
+  el.querySelector('.del').onclick=()=>{goals=goals.filter(x=>x.id!==g.id);render()};
+  el.querySelector('.prio .up').onclick=()=>move(num-1,-1);
+  el.querySelector('.prio .dn').onclick=()=>move(num-1,1);
+  el.querySelectorAll('[data-f]').forEach(inp=>{
+    inp.addEventListener('input',()=>{
+      if(inp.dataset.money){
+        const raw=inp.value.replace(/[^\d]/g,'');
+        g[inp.dataset.f]= raw===''?'':+raw;
+        inp.value= raw===''?'':fmt.format(+raw); // caret jumps to end (fine for left-to-right entry)
+      }else{
+        g[inp.dataset.f]=inp.value;
+      }
+      softUpdate(g,el);
+    });
+  });
+  el.querySelectorAll('.chip').forEach(ch=>{
+    ch.onclick=()=>{g.emoji=ch.dataset.e; g.name=ch.dataset.n; render();};
+  });
+  el.querySelectorAll('.track').forEach(t=>{
+    t.onclick=()=>{g.pct=+t.dataset.pct; render();};
+  });
+  return el;
+}
+
+// update numbers without re-rendering (keeps focus while typing)
+function softUpdate(g,el){
+  const c=calc(g);
+  const oopPct=c.target>0?Math.round(c.oop/c.target*100):100, gnPct=100-oopPct;
+  el.querySelector('.res-main .rv').innerHTML=`${fmt.format(c.monthly)}<small> ₪</small>`;
+  const boxes=el.querySelectorAll('.res-box .v');
+  boxes[0].textContent=`${fmt.format(c.oop)} ₪`;
+  boxes[1].textContent=`${fmt.format(c.gain)} ₪`;
+  el.querySelector('.seg.oop').style.width=oopPct+'%';
+  el.querySelector('.seg.gn').style.width=gnPct+'%';
+  const key=el.querySelectorAll('.bar-key span');
+  key[0].innerHTML=`<i class="dot oop"></i> הכסף שלי (${oopPct}%)`;
+  key[1].innerHTML=`<i class="dot gn"></i> הרווח מהשוק (${gnPct}%)`;
+  el.querySelector('.note').classList.toggle('show',c.covered);
+  updateSummary();
+}
+
+function updateSummary(){
+  let m=0,t=0,gn=0;
+  goals.forEach(g=>{const c=calc(g);m+=c.monthly;t+=c.target;gn+=c.gain;});
+  setNum('sumMonthly',m); setNum('sumTarget',t); setNum('sumGain',gn);
+  renderRecap(m,t,gn);
+  queueTimeline(m);
+  document.getElementById('sbMonthly').textContent=fmt.format(m)+' ₪';
+  document.getElementById('sbGain').textContent=fmt.format(gn)+' ₪';
+  document.getElementById('stickybar').classList.toggle('show', t>0);
+  saveGoals();
+}
+function setNum(id,v){document.getElementById(id).innerHTML=`${fmt.format(v)}<small>₪</small>`;}
+
+function renderRecap(m,t,gn){
+  const box=document.getElementById('recap');
+  const real=goals.filter(g=>(+g.target||0)>0);
+  if(!real.length){box.className='recap empty';box.innerHTML='';return;}
+  box.className='recap';
+  const rows=goals.map((g,i)=>{
+    const c=calc(g);
+    const nm=(g.name||'מטרה '+(i+1));
+    return `<tr>
+      <td class="name-col"><span class="rn">${i+1}</span><span class="g-name">${g.emoji} ${esc(nm)}</span></td>
+      <td class="track-col">${trackName(g.pct)}</td>
+      <td>${g.years||0}</td>
+      <td class="m-col">${fmt.format(c.monthly)} ₪</td>
+      <td>${fmt.format(c.target)} ₪</td>
+      <td class="gn-col">${fmt.format(c.gain)} ₪</td>
+    </tr>`;
+  }).join('');
+  box.innerHTML=`
+    <h3>📋 סיכום היעדים <span class="rsub">כמה צריך לכל מטרה בנפרד, אם רצים על כולן במקביל</span></h3>
+    <div class="recap-scroll"><table class="recap-table">
+      <thead><tr><th class="name-col">מטרה</th><th>מסלול השקעה</th><th>שנים למטרה</th><th>חיסכון חודשי</th><th>יעד</th><th>רווח</th></tr></thead>
+      <tbody>${rows}
+        <tr class="tot"><td class="name-col">סה"כ</td><td></td><td></td><td class="m-col">${fmt.format(m)} ₪</td><td>${fmt.format(t)} ₪</td><td class="gn-col">${fmt.format(gn)} ₪</td></tr>
+      </tbody>
+    </table></div>`;
+}
+
+/* ==================================================================
+   ציר הזמן - מפל שמכבד תאריכים
+   1. כל מטרה שרשמו לה תאריך מקבלת קודם בדיוק את מה שהיא צריכה כדי לעמוד בו
+      (מחושב מחדש כל חודש, כך שהיא אף פעם לא מפספסת תאריך שאפשר היה לעמוד בו).
+   2. כל מה שנשאר - העודף - זורם במפל למטרה הכי חשובה שעדיין פתוחה, ומקדים אותה.
+   3. ברגע שמטרה נסגרת, ההפרשה שהתפנתה עוברת אוטומטית הלאה בסדר החשיבות.
+   כשאין מספיק לכולן, ההקצאה נעצרת לפי סדר החשיבות - והמטרות שנדחקו מסומנות בכנות.
+   ================================================================== */
+const MAXM=720;                                    // אופק של 60 שנה
+const gname=(g,i)=>g.name||('מטרה '+(i+1));
+
+function durLabel(m){
+  m=Math.round(m);
+  if(m<=0)return'עכשיו';
+  const y=Math.floor(m/12), r=m%12;
+  const ys=y===0?'':y===1?'שנה':y===2?'שנתיים':y+' שנים';
+  const rs=r===0?'':(r===1?'חודש':r+' חודשים');
+  if(ys&&rs)return ys+(r===1?' וחודש':' ו-'+r+' חודשים');
+  return ys||rs;
+}
+function whenLabel(m){
+  try{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+Math.round(m));
+    return d.toLocaleDateString('he-IL',{month:'long',year:'numeric'});}catch(e){return'';}
+}
+
+// כמה צריך להפריש החודש כדי לעמוד בתאריך (מחושב מחדש בכל חודש)
+function needThisMonth(s,t){
+  const k=s.D-t+1;                                   // חודשים שנשארו עד התאריך, כולל החודש הזה
+  const gap=Math.max(0,s.T-s.bal);
+  if(k<=1)return gap;                                // התאריך היום או עבר - לסגור כמה שאפשר
+  const gr=Math.pow(1+s.r,k-1);
+  const af=s.r>0?(Math.pow(1+s.r,k)-1)/s.r:k;
+  return Math.max(0,Math.min(gap,(s.T-s.bal*gr)/af));
+}
+
+// הרצת המפל: list = מטרות לפי סדר חשיבות, B = הפרשה חודשית כוללת
+function simulate(list,B){
+  const st=list.map(g=>({bal:+g.initial||0,r:(+g.pct||0)/100/12,T:+g.target||0,
+                         D:Math.round((+g.years||0)*12),done:false,end:null}));
+  st.forEach(s=>{if(s.bal>=s.T-0.5){s.done=true;s.end=0;}});
+  const alloc=[];
+  for(let t=1;t<=MAXM;t++){
+    if(st.every(s=>s.done))break;
+    st.forEach(s=>{                                   // הכסף ממשיך לעבוד גם בזמן ההמתנה בתור
+      if(s.done)return;
+      s.bal*=(1+s.r);
+      if(s.bal>=s.T-1){s.done=true;s.end=t;}          // לפעמים הריבית לבדה סוגרת את היעד
+    });
+    let left=B; const put=new Array(st.length).fill(0);
+
+    // 1. שריון למטרות עם תאריך - לפי סדר החשיבות, עד גמר התקציב
+    for(let i=0;i<st.length&&left>0.5;i++){
+      const s=st[i];
+      if(s.done||!s.D)continue;
+      const p=Math.min(left,needThisMonth(s,t));
+      put[i]+=p; left-=p;
+    }
+    // 2. העודף זורם במפל למטרה הכי חשובה שעדיין פתוחה
+    for(let i=0;i<st.length&&left>0.5;i++){
+      const s=st[i];
+      if(s.done)continue;
+      const p=Math.min(left,Math.max(0,s.T-s.bal-put[i]));
+      put[i]+=p; left-=p;
+    }
+
+    const row=[];
+    st.forEach((s,i)=>{
+      if(put[i]>0){s.bal+=put[i];}
+      if(put[i]>0.5)row.push({i,amt:put[i]});
+      if(!s.done&&s.bal>=s.T-1){s.done=true;s.end=t;}
+    });
+    alloc.push(row);
+  }
+  return {st,alloc,all:st.every(s=>s.done)};
+}
+
+// חלוקה לתקופות: כל תקופה = רצף חודשים שבהם אותה קבוצת מטרות מקבלת כסף
+function buildPeriods(sim){
+  const per=[];
+  sim.alloc.forEach((row,idx)=>{
+    if(!row.length)return;
+    const t=idx+1;
+    const sig=row.map(x=>x.i).sort((a,b)=>a-b).join(',');
+    const last=per[per.length-1];
+    const sum=row.reduce((a,b)=>a+b.amt,0);
+    if(last&&last.sig===sig){last.to=t;}
+    else{
+      const amt={}; row.forEach(x=>{amt[x.i]=x.amt;});
+      per.push({sig,ids:row.map(x=>x.i),amt,from:t,to:t,sum});
+    }
+  });
+  return per;
+}
+
+// כמה צריך להפריש בחודש כדי שמטרה מסוימת תיסגר עד התאריך שרצו
+function neededBudget(list,idx,deadline,curB){
+  const ok=B=>{const s=simulate(list,B).st[idx];return s.done&&s.end<=deadline;};
+  let hi=Math.max(curB,500), it=0;
+  while(!ok(hi)&&it<24){hi*=2;it++;}
+  if(!ok(hi))return null;
+  let lo=curB;
+  for(let k=0;k<26;k++){const mid=(lo+hi)/2; if(ok(mid))hi=mid; else lo=mid;}
+  return Math.ceil(hi/10)*10;
+}
+
+function renderTimeline(totalMonthly){
+  const box=document.getElementById('timeline');
+  const list=goals.filter(g=>(+g.target||0)>0);
+  if(list.length<1){box.className='tl empty';box.innerHTML='';return;}
+  const idxOf=list.map(g=>goals.indexOf(g));                       // מיפוי חזרה למספור שעל הכרטיסים
+
+  const cap=+capacity||0;
+  const B=cap>0?cap:totalMonthly;
+  if(B<=0){box.className='tl empty';box.innerHTML='';return;}
+
+  const sim=simulate(list,B), per=buildPeriods(sim);
+  const short=cap>0&&totalMonthly>cap;
+
+  let html='';
+  per.forEach((p,pi)=>{
+    let tot=0;
+    const rows=list.map((g,i)=>{
+      const s=sim.st[i];
+      const amt=p.amt[i]||0;
+      if(s.end!==null&&s.end<p.from&&!amt)return'';                 // כבר הושגה - יורדת מהציר
+      const nm=`${g.emoji} ${esc(gname(g,idxOf[i]))}`;
+      if(amt>0.5){
+        tot+=amt;
+        return `<div class="per-row"><span class="pg">${nm}</span><span class="pm">${fmt.format(Math.round(amt))}<small> ₪</small></span></div>`;
+      }
+      return `<div class="per-row wait"><span class="pg">⏳ ${nm}</span><span class="pm">ממתינה בתור</span></div>`;
+    }).join('');
+    html+=`<div class="per">
+      <span class="per-dot"></span>
+      <div class="per-when">${p.from===p.to?'חודש '+p.from:'חודשים '+p.from+'-'+p.to} · ${whenLabel(p.from-1)} עד ${whenLabel(p.to-1)}</div>
+      <div class="per-card">${rows}
+        <div class="per-tot"><span>סך ההפרשה בחודש</span><b>${fmt.format(Math.round(tot))} ₪</b></div>
+      </div>
+    </div>`;
+
+    const nx=per[pi+1];
+    if(nx){
+      // מי נסגרה בסוף התקופה, ולאן הכסף שלה עבר
+      const fin=p.ids.filter(i=>sim.st[i].end!==null&&sim.st[i].end<=p.to&&!(nx.amt[i]>0.5));
+      if(fin.length){
+        const got=nx.ids.filter(i=>!p.ids.includes(i)||((nx.amt[i]||0)-(p.amt[i]||0))>0.5);
+        const freed=fin.reduce((a,i)=>a+(p.amt[i]||0),0);
+        const fm=Math.max.apply(null,fin.map(i=>sim.st[i].end));
+        const nmOf=i=>`${list[i].emoji} ${esc(gname(list[i],idxOf[i]))}`;
+        const who=fin.map(nmOf).join(' ו');
+        const to=got.length?got.map(nmOf).join(' ו'):null;
+        html+=`<div class="rel"><span class="rel-icon">🔓</span><div class="rel-box">
+          <b>${whenLabel(fm-1)} (חודש ${fm}) · ${who} הושגה!</b> ${fmt.format(fin.reduce((a,i)=>a+(+list[i].target||0),0))} ₪ בחשבון.
+          ${to?`ההפרשה של ${fmt.format(Math.round(freed))} ₪ שהתפנתה עוברת עכשיו ל${to} - בלי להוסיף שקל מהכיס.`
+              :`ההפרשה של ${fmt.format(Math.round(freed))} ₪ מתפנה לכם.`}
+        </div></div>`;
+      }
+    }
+  });
+
+  const ends=sim.st.map(s=>s.end).filter(e=>e!==null);
+  const last=ends.length?Math.max.apply(null,ends):0;
+  html+= sim.all
+    ? `<div class="tl-final"><div class="k">בקצב הזה, כל המטרות מושגות</div>
+        <div class="v">עוד <em>${durLabel(last)}</em> · ${whenLabel(last)}</div></div>`
+    : `<div class="tl-final"><div class="k">שימו לב</div>
+        <div class="v">בהפרשה של ${fmt.format(B)} ₪ בחודש <em>לא כל המטרות נסגרות</em> ב-60 השנים הקרובות. אפשר להגדיל את ההפרשה, להקטין יעד, או לוותר על המטרה האחרונה בתור.</div></div>`;
+
+  // האם עמדנו בתאריכים שרצית
+  const gaps=list.map((g,i)=>{
+    const D=Math.round((+g.years||0)*12);
+    const s=sim.st[i];
+    const nm=`${g.emoji} ${esc(gname(g,idxOf[i]))}`;
+    if(s.end===null)                                                // לא נסגרת בכלל באופק הזה
+      return `<div class="gap-row late"><span class="gi">⛔</span><div><b>${nm}</b> - בהפרשה של ${fmt.format(B)} ₪ בחודש המטרה הזאת לא נסגרת בכלל, כי המטרות שמעליה בסדר החשיבות לוקחות את כל הכסף. צריך להעלות אותה בסדר החשיבות, להגדיל את ההפרשה, או להקטין את היעד.</div></div>`;
+    if(!D)return'';
+    const d=s.end-D;
+    if(d>1){
+      const need=neededBudget(list,i,D,B);
+      const fix=need?` כדי לעמוד בזה צריך להפריש בערך <b>${fmt.format(need)} ₪ בחודש</b> במקום ${fmt.format(B)} ₪ - או להעלות את המטרה בסדר החשיבות.`:' גם הפרשה גבוהה בהרבה לא תספיק כאן - שווה לבדוק מחדש את היעד או את התאריך.';
+      return `<div class="gap-row late"><span class="gi">⚠️</span><div><b>${nm}</b> - רצית בעוד ${durLabel(D)}, ובתור הזה זה לוקח ${durLabel(s.end)}.${fix}</div></div>`;
+    }
+    if(d<-1) return `<div class="gap-row early"><span class="gi">🎉</span><div><b>${nm}</b> - מגיעה <b>${durLabel(-d)}</b> מוקדם יותר ממה שתכננת, בזכות סדר החשיבות.</div></div>`;
+    return '';
+  }).filter(Boolean).join('');
+  if(gaps)html+=`<div class="tl-gaps">${gaps}</div>`;
+
+  const sub= cap>0
+    ? (short
+        ? `לפי ${fmt.format(cap)} ₪ בחודש. כדי לעמוד בכל התאריכים שרשמתם צריך ${fmt.format(totalMonthly)} ₪, ולכן לא הכל נכנס עכשיו: מה שיש מחולק לפי סדר החשיבות שקבעתם, והשאר מחכה בתור ונכנס ברגע שמתפנה כסף.`
+        : `לפי ${fmt.format(cap)} ₪ בחודש. כל מטרה מקבלת קודם את מה שהיא צריכה כדי לעמוד בתאריך שלה (סה"כ ${fmt.format(totalMonthly)} ₪), וכל העודף נדחף למטרה הכי חשובה כדי לסגור אותה מוקדם. ברגע שמטרה נסגרת, ההפרשה שלה עוברת הלאה בתור.`)
+    : `לפי סך ההפרשה שחישבנו למעלה - ${fmt.format(totalMonthly)} ₪ בחודש. ברגע שמטרה נסגרת, ההפרשה שלה לא נעלמת: היא עוברת אוטומטית למטרה הבאה בסדר החשיבות ומקדימה אותה. רוצים לראות מה קורה בסכום אחר? מלאו אותו למעלה.`;
+
+  box.className='tl';
+  box.innerHTML=`<div class="tl-head">
+      <h3>🗓️ ציר הזמן - מה קורה בכל חודש</h3>
+      <p>${sub}</p>
+    </div><div class="tl-body">${html}</div>`;
+}
+
+function esc(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function addGoal(seed){
+  uid++;
+  goals.push(Object.assign({id:uid,emoji:'🎯',name:'',target:'',initial:'',years:'',pct:5},seed||{}));
+  render();
+}
+
+document.getElementById('addBtn').onclick=()=>addGoal();
+
+// ציר הזמן מחושב אחרי שהקלדה נרגעת, כדי שהמחשבון יישאר חלק בנייד
+let tlTimer=null;
+function queueTimeline(m){
+  clearTimeout(tlTimer);
+  tlTimer=setTimeout(()=>{try{renderTimeline(m);}catch(e){}},160);
+}
+(function(){
+  const inp=document.getElementById('capInput');
+  if(!inp)return;
+  inp.addEventListener('input',()=>{
+    const raw=inp.value.replace(/[^\d]/g,'');
+    capacity= raw===''?'':+raw;
+    inp.value= raw===''?'':fmt.format(+raw);
+    updateSummary();
+  });
+})();
+
+// sticky bar → jump to the full recap
+(function(){
+  const bar=document.getElementById('stickybar');
+  function goRecap(){
+    const r=document.getElementById('recap');
+    if(r && !r.classList.contains('empty')) r.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  bar.addEventListener('click',goRecap);
+  bar.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goRecap();}});
+})();
+
+// ---------- save / share / load ----------
+const SKEY='richlife-goals-v1';
+// סדר החשיבות נשמר מעצמו (הוא סדר המערך). התקציב החודשי נשמר לצדו.
+function encodeGoals(gs){
+  const rows=gs.map(g=>[g.emoji,g.name,g.target,g.initial,g.years,g.pct]);
+  return JSON.stringify(capacity?{c:capacity,g:rows}:rows);
+}
+function decodeGoals(str){
+  try{
+    let a=JSON.parse(str);
+    if(a&&!Array.isArray(a)&&Array.isArray(a.g)){capacity=+a.c||''; a=a.g;}   // פורמט חדש
+    if(!Array.isArray(a)) return null;                                        // קישורים ישנים ממשיכים לעבוד
+    return a.map(x=>({id:++uid,emoji:x[0]||'🎯',name:x[1]||'',target:x[2]??'',initial:x[3]??'',years:x[4]??'',pct:(x[5]??5)}));
+  }catch(e){return null;}
+}
+function saveGoals(){/* device memory disabled on purpose: the personal share-link is the only saved copy, so the plain URL stays fresh */}
+
+function makeLink(){
+  const base=location.origin+location.pathname+location.search;
+  return base+'#g='+encodeURIComponent(encodeGoals(goals));
+}
+(function(){
+  const btn=document.getElementById('shareBtn');
+  const wrap=document.getElementById('actLink');
+  const field=document.getElementById('linkField');
+  const copy=document.getElementById('copyBtn');
+  if(!btn) return;
+  btn.onclick=()=>{
+    const link=makeLink();
+    field.value=link; wrap.hidden=false;
+    field.focus(); field.select();
+    try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}
+  };
+  copy.onclick=()=>{
+    field.select();
+    let ok=false; try{ok=document.execCommand('copy');}catch(e){}
+    try{navigator.clipboard&&navigator.clipboard.writeText(field.value);ok=true;}catch(e){}
+    flash(copy, ok?'✓ הועתק':'בחר/י והעתק/י');
+  };
+})();
+function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>{el.textContent=o;},1800);}
+
+// ---------- PDF (print) view ----------
+function trackName(pct){const t=TRACKS.find(t=>t.pct===+pct);return t?t.name+' ('+pct+'%)':(pct+'%');}
+function buildPrintView(){
+  const pv=document.getElementById('printview');
+  const avatar=(document.querySelector('.brand .avatar')||{}).src||'';
+  let m=0,t=0,gn=0; goals.forEach(g=>{const c=calc(g);m+=c.monthly;t+=c.target;gn+=c.gain;});
+  let dateStr=''; try{dateStr=new Date().toLocaleDateString('he-IL');}catch(e){}
+  const cards=goals.map((g,i)=>{
+    const c=calc(g);
+    const oopPct=c.target>0?Math.round(c.oop/c.target*100):100, gnPct=100-oopPct;
+    const meta=`יעד ${fmt.format(c.target)} ₪ · יש כבר ${fmt.format(c.initial)} ₪ · בעוד ${g.years||0} שנים · ${trackName(g.pct)}`;
+    return `<div class="pv-goal">
+      <div class="pv-g-top"><span class="pv-num">${i+1}</span>${g.emoji} ${esc(g.name||'מטרה '+(i+1))}</div>
+      <div class="pv-g-meta">${meta}</div>
+      <div class="pv-g-nums">
+        <div class="n mo"><div class="k">הפרשה חודשית</div><div class="v">${fmt.format(c.monthly)} ₪</div></div>
+        <div class="n"><div class="k">מהכיס</div><div class="v">${fmt.format(c.oop)} ₪</div></div>
+        <div class="n gn"><div class="k">הרווח מהשוק</div><div class="v">${fmt.format(c.gain)} ₪</div></div>
+      </div>
+      <div class="pv-bar"><span class="oop" style="width:${oopPct}%"></span><span class="gn" style="width:${gnPct}%"></span></div>
+    </div>`;
+  }).join('');
+  pv.innerHTML=`
+    <div class="pv-head">
+      <div class="pv-brand">${avatar?`<img src="${avatar}" alt="">`:''}<div><div class="b-lead">מאת טלי בנימינוב שרעבי</div><div class="b-sub">RichLife · ליווי כלכלי</div></div></div>
+      <div class="pv-date">${dateStr}</div>
+    </div>
+    <h1>תוכנית יעדים והשקעות</h1>
+    <div class="pv-tag">כמה להפריש כל חודש כדי להגיע לכל מטרה - וכמה הכסף עצמו עובד עבורכם</div>
+    <div class="pv-sum">
+      <div class="t"><div class="k">סך הפרשה חודשית</div><div class="v">${fmt.format(m)} ₪</div></div>
+      <div class="t"><div class="k">סך היעדים</div><div class="v">${fmt.format(t)} ₪</div></div>
+      <div class="t gn"><div class="k">מתוכם הרווח</div><div class="v">${fmt.format(gn)} ₪</div></div>
+    </div>
+    ${cards}
+    <div class="pv-disc">אין כאן המלצה להשקעה או התחייבות לתשואה. תשואות העבר אינן מבטיחות תשואות עתידיות. המסמך להמחשה בלבד.</div>
+    <div class="pv-foot">טלי בנימינוב שרעבי · RichLife · ליווי כלכלי לחיים מאושרים ומעושרים</div>`;
+}
+(function(){
+  const btn=document.getElementById('pdfBtn');
+  if(!btn) return;
+  let framed=false; try{framed=window.self!==window.top;}catch(e){framed=true;} // sandboxed preview iframe blocks print
+  btn.onclick=()=>{
+    if(framed){ flash(btn,'בתצוגה מקדימה ההדפסה חסומה - עובד בדף המלא'); return; }
+    buildPrintView();
+    setTimeout(()=>{try{window.print();}catch(e){alert('לפתיחת ה-PDF: תפריט הדפדפן ← הדפסה ← שמירה כ-PDF');}},60);
+  };
+})();
+
+// placeholder social links: don't jump to top until real handles are wired
+document.querySelectorAll('a.soc[href="#"]').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
+
+// ---------- boot: a personal #g= link restores that plan; the plain URL ALWAYS starts fresh ----------
+(function boot(){
+  try{localStorage.removeItem(SKEY);}catch(e){}                    // no device memory → the plain URL is fresh for everyone (incl. Tali), never shows a previous person's goals
+  const h=(location.hash||'').match(/g=([^&]+)/);
+  const loaded=h?decodeGoals(decodeURIComponent(h[1])):null;
+  if(loaded&&loaded.length){
+    goals=loaded;
+    if(capacity)document.getElementById('capInput').value=fmt.format(capacity);
+    render();                                     // opened via a personal link → restore exactly that plan (hash stays in the URL, so a refresh keeps it)
+  }else{
+    addGoal({emoji:'🏠',name:'רכישת נכס (הון ראשוני)',target:280000,initial:110000,years:5,pct:5}); // plain URL → a clean example to start from
+  }
+})();
+</script>
+</body>
+</html>

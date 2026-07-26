@@ -55,6 +55,25 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .insight{margin-top:13px;background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.55}
 .insight.warn{background:rgba(var(--red-rgb),.09);color:var(--red)}
 
+/* ── detailed breakdown ── */
+.bd-room{padding:12px 0;border-top:1px solid rgba(var(--pine-rgb),.10)}
+.bd-room:first-child{border-top:0;padding-top:2px}
+.bd-rhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+.bd-rname{font-weight:900;font-size:15px;color:var(--pine-darker)}
+.bd-rnums{font-size:12.5px;font-weight:800;color:var(--pine-deep);white-space:nowrap;font-variant-numeric:tabular-nums}
+.bd-rnums .over{color:var(--red)}
+.bd-item{display:flex;justify-content:space-between;gap:12px;padding:4px 12px;font-size:13px}
+.bd-iname{color:var(--ink);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bd-iamt{color:var(--ink-soft);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bd-iamt .paidy{color:var(--pine-deep);font-weight:900}
+.bd-iamt .wait{color:var(--amber)}
+.bd-empty{font-size:13.5px;color:var(--ink-soft);font-weight:600;padding:6px 2px;line-height:1.55}
+.bd-total{margin-top:14px;padding-top:13px;border-top:2px solid rgba(var(--pine-rgb),.18);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bd-total .bd-tlbl{font-size:15px;font-weight:900;color:var(--pine-darker)}
+.bd-total .bd-tnums{font-size:13px;font-weight:800;color:var(--pine-deep);font-variant-numeric:tabular-nums;text-align:left}
+.bd-total .bd-tnums .left{color:var(--pine-darker);font-weight:900}
+.bd-total .bd-tnums .over{color:var(--red)}
+
 /* ── rooms ── */
 .room{margin-top:16px}
 .room-head{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
@@ -302,16 +321,9 @@ footer .copyright{margin-top:12px;font-size:11px;font-weight:600;color:rgba(81,9
   <button class="add-room" id="addRoom">+ הוספת חדר או קטגוריה</button>
 
   <div class="card" style="margin-top:18px">
-    <span class="sec-lbl">📊 סיכום התקציב</span>
-    <div class="sum-grid">
-      <div class="tile main"><span class="t-lbl">התקציב</span><div class="t-val tabular" data-sum="budget">0 ₪</div></div>
-      <div class="tile" data-sum="tilePlan"><span class="t-lbl">תכננו להוציא</span><div class="t-val tabular" data-sum="plan">0 ₪</div></div>
-      <div class="tile"><span class="t-lbl">יצא בפועל</span><div class="t-val tabular" data-sum="paid">0 ₪</div></div>
-      <div class="tile" data-sum="tileLeft"><span class="t-lbl">נשאר מהתקציב</span><div class="t-val tabular" data-sum="left">0 ₪</div></div>
-    </div>
-    <div class="bar" aria-hidden="true"><i data-sum="barFill" style="width:0%"></i></div>
-    <div class="bar-note"><span data-sum="barPct">0% מהתקציב נוצל</span><span data-sum="barBought">נקנו 0 מתוך 0 פריטים</span></div>
-    <div class="insight" data-sum="insight"></div>
+    <span class="sec-lbl">📊 סיכום מפורט - מה יצא בכל חדר</span>
+    <div id="breakdown"></div>
+    <div class="bd-total" id="bdTotal" hidden></div>
   </div>
 
   <div class="cta-card">
@@ -406,6 +418,49 @@ function refreshSummary(){
   else if(t.forecast>b){cls=' warn';msg='⚠️ לפי מה שכבר יצא ומה שעוד מתוכנן, סך הכל צפוי להגיע ל-'+money(t.forecast)+' ₪ - חריגה של '+money(t.forecast-b)+' ₪ מהתקציב. שווה לדייק כמה פריטים, לחפש יד שנייה, או לדחות משהו לשלב הבא.';}
   else{cls='';msg='✅ לפי מה שכבר יצא ומה שעוד מתוכנן, סך הכל צפוי להגיע ל-'+money(t.forecast)+' ₪ - בתוך התקציב, עם מרווח של '+money(b-t.forecast)+' ₪.';}
   document.querySelectorAll('[data-sum="insight"]').forEach(e=>{e.className='insight'+cls;e.textContent=msg;});
+  renderBreakdown();
+}
+
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// detailed recap: per room, and per item that has any amount
+function renderBreakdown(){
+  const host=document.getElementById('breakdown'),totalEl=document.getElementById('bdTotal');
+  if(!host)return;
+  host.innerHTML='';
+  let gPlan=0,gPaid=0;
+  S.rooms.forEach(r=>{
+    const t=roomTotals(r); // plan, paid over non-have items
+    const active=r.items.filter(it=>!it.h&&(num(it.p)>0||num(it.pd)>0));
+    if(t.plan===0&&t.paid===0){return;} // nothing filled in this room yet
+    gPlan+=t.plan;gPaid+=t.paid;
+    const left=t.plan-t.paid;
+    const block=document.createElement('div');block.className='bd-room';
+    const overCls=left<0?' over':'';
+    block.innerHTML='<div class="bd-rhead"><span class="bd-rname">'+esc(r.e)+' '+esc(r.n||'חדר')+'</span>'+
+      '<span class="bd-rnums">יצא '+money(t.paid)+' · <span class="'+ (left<0?'over':'') +'">נשאר '+money(left)+'</span> ₪</span></div>';
+    active.forEach(it=>{
+      const p=num(it.p),pd=num(it.pd);
+      let amt;
+      if(pd>0){amt='<span class="paidy">יצא '+money(pd)+' ₪</span>'+(p>0?' · תוכנן '+money(p):'');}
+      else{amt='<span class="wait">טרם נקנה</span> · תוכנן '+money(p)+' ₪';}
+      const row=document.createElement('div');row.className='bd-item';
+      row.innerHTML='<span class="bd-iname">'+esc(it.n||'פריט')+'</span><span class="bd-iamt">'+amt+'</span>';
+      block.appendChild(row);
+    });
+    host.appendChild(block);
+  });
+  if(host.children.length===0){
+    host.innerHTML='<div class="bd-empty">כשתתחילו למלא כמה תכננתם וכמה יצא בפועל, יופיע כאן פירוט מסודר לפי חדרים ומוצרים - כמה יצא בכל אחד וכמה עוד נשאר.</div>';
+    if(totalEl)totalEl.hidden=true;
+    return;
+  }
+  if(totalEl){
+    const b=num(S.b),leftBudget=b-gPaid;
+    totalEl.hidden=false;
+    totalEl.innerHTML='<span class="bd-tlbl">סה"כ</span>'+
+      '<span class="bd-tnums">יצא בפועל <b>'+money(gPaid)+'</b> ₪ · תוכנן '+money(gPlan)+' ₪'+
+      (b>0?' · <span class="'+(leftBudget<0?'over':'left')+'">נשאר מהתקציב '+money(leftBudget)+' ₪</span>':'')+'</span>';
+  }
 }
 
 function roomTotals(r){

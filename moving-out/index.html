@@ -28,6 +28,10 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
 .hero-title h1 .em{color:var(--pine)}
 .hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:520px;margin-inline:auto}
+.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:var(--sage-tint);border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:14px;padding:11px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s}
+.top-cta:hover{border-color:var(--pine);transform:translateY(-1px)}
+.top-cta .tc-txt{font-size:13px;font-weight:700;color:var(--ink-soft);text-align:center}
+.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-deep);white-space:nowrap}
 .card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
 .card+.card{margin-top:16px}
 .sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
@@ -135,6 +139,11 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <h1>מחשבון <span class="em">יציאה מהבית</span></h1>
     <p>לפני שיוצאים - כמה מותר להוציא על מגורים, ואיך נכון לחלק את המשכורת כדי גם ליהנות וגם לחסוך.</p>
   </div>
+
+  <a class="top-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">
+    <span class="tc-txt">רוצים לעשות את היציאה מהבית נכון, בליווי אישי?</span>
+    <span class="tc-link">לתהליכי הליווי שלי ←</span>
+  </a>
 
   <div class="card">
     <span class="sec-lbl">💵 ההכנסה שלך</span>

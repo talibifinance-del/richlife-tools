@@ -459,13 +459,34 @@ function calc(){
 const SKEY='richlife-moveout-v1';
 function enc(){return JSON.stringify(MONEY.map(id=>document.getElementById(id).value));}
 function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;MONEY.forEach((id,k)=>document.getElementById(id).value=grp(a[k]));return true;}catch(e){return false;}}
+const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#m='+encodeURIComponent(enc());}
+// short link via the share store; falls back to the long self-contained link if the store is down
+async function shortLink(){
+  try{
+    const r=await fetch(SHARE_API,{method:'POST',body:enc()});
+    if(!r.ok)throw 0;
+    const j=await r.json();
+    if(!j||!j.id)throw 0;
+    return location.origin+location.pathname+location.search+'#p='+j.id;
+  }catch(e){return makeLink();}
+}
 (function(){const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
-  btn.onclick=()=>{const link=makeLink();field.value=link;wrap.hidden=false;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}};
+  btn.onclick=async()=>{wrap.hidden=false;field.value='יוצר קישור...';btn.disabled=true;try{const link=await shortLink();field.value=link;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
   copy.onclick=()=>{field.select();try{document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);}catch(e){}flash(copy,'✓ הועתק');};})();
 function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>el.textContent=o,1800);}
 
-(function boot(){try{localStorage.removeItem(SKEY);}catch(e){}const h=(location.hash||'').match(/m=([^&]+)/);if(h)dec(decodeURIComponent(h[1]));calc();})();
+(function boot(){
+  try{localStorage.removeItem(SKEY);}catch(e){}
+  const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);
+  const hm=(location.hash||'').match(/m=([^&]+)/);
+  if(hp){
+    fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(r=>r.ok?r.text():Promise.reject()).then(t=>{dec(t);calc();}).catch(()=>{if(hm)dec(decodeURIComponent(hm[1]));calc();});
+  } else {
+    if(hm)dec(decodeURIComponent(hm[1]));
+    calc();
+  }
+})();
 </script>
 </body>
 </html>

@@ -451,10 +451,10 @@ function refreshSummary(){
   setSum('barBought','נקנו '+t.bought+' מתוך '+t.buyCount+' פריטים');
 
   // reserve buffer (10% of budget) for the unexpected
-  const reserve=b>0?Math.round(b*0.10):0;
+  const reserve=b>0?Math.round(b*0.20):0;
   const rn=document.getElementById('reserveNote');
   if(rn){
-    if(b>0){rn.hidden=false;rn.innerHTML='🛟 כדאי לשמור בצד <b>'+money(reserve)+' ₪</b> לבלת"מ (10% מהתקציב) - במעבר דירה תמיד צצים דברים קטנים.';}
+    if(b>0){rn.hidden=false;rn.innerHTML='🛟 כדאי לשמור בצד <b>'+money(reserve)+' ₪</b> לבלת"מ (20% מהתקציב) - במעבר דירה תמיד צצים דברים קטנים.';}
     else rn.hidden=true;
   }
 

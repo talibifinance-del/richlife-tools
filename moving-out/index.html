@@ -28,10 +28,16 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
 .hero-title h1 .em{color:var(--pine)}
 .hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:520px;margin-inline:auto}
-.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:var(--sage-tint);border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:14px;padding:11px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s}
-.top-cta:hover{border-color:var(--pine);transform:translateY(-1px)}
-.top-cta .tc-txt{font-size:13px;font-weight:700;color:var(--ink-soft);text-align:center}
-.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-deep);white-space:nowrap}
+.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(var(--pine-rgb),.15),rgba(var(--sage-rgb),.34));border:1.5px solid rgba(var(--pine-rgb),.38);border-radius:14px;padding:12px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s,box-shadow .15s}
+.top-cta:hover{border-color:var(--pine);transform:translateY(-1px);box-shadow:0 8px 20px rgba(var(--pine-rgb),.16)}
+.top-cta .tc-txt{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center}
+.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-darker);white-space:nowrap}
+.savecheck{border:1.5px solid rgba(var(--pine-rgb),.28);background:linear-gradient(180deg,#fff, rgba(var(--sage-rgb),.14))}
+.savecheck .sv-body{font-size:14px;font-weight:600;color:var(--ink);line-height:1.7}
+.savecheck .sv-body b{color:var(--pine-darker);font-weight:900}
+.savecheck .sv-num{color:var(--pine);font-weight:900}
+.savecheck .sv-cta{display:inline-block;margin-top:14px;font-family:var(--font);font-weight:900;font-size:14px;color:var(--pine-deep);text-decoration:none;background:var(--sage-tint);padding:11px 20px;border-radius:100px;transition:background .15s,transform .15s}
+.savecheck .sv-cta:hover{background:rgba(var(--pine-rgb),.14);transform:translateY(-1px)}
 .card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
 .card+.card{margin-top:16px}
 .sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
@@ -141,7 +147,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
   </div>
 
   <a class="top-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">
-    <span class="tc-txt">רוצים לעשות את היציאה מהבית נכון, בליווי אישי?</span>
+    <span class="tc-txt">לקראת יציאה מהבית כדאי להתכונן כלכלית נכון, כדי לעשות את הצעד הזה טוב.</span>
     <span class="tc-link">לתהליכי הליווי שלי ←</span>
   </a>
 
@@ -220,6 +226,12 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     </div>
     <div class="insight" id="insight"></div>
     <div class="note-tip">💡 <b>מחייה</b> = הכל: שכ"ד וחשבונות, אוכל, דלק ורכב, ביטוחים, קופת חולים, טלפון ואינטרנט. כלל אצבע: שהמחייה הכוללת לא תעלה על <b>50% מהמשכורת</b>, כדי שיישאר גם ליהנות וגם לחסוך.</div>
+  </div>
+
+  <div class="card savecheck">
+    <span class="sec-lbl">🎯 מבחן המוכנות ליציאה</span>
+    <div class="sv-body" id="svBody"></div>
+    <a class="sv-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצים עזרה להגיע לשם? לתהליכי הליווי שלי ←</a>
   </div>
 
   <div class="cta-card">
@@ -426,6 +438,15 @@ function calc(){
     ins.innerHTML=`בבית ההורים אפשר להשקיע <b>${fmt.format(Math.round(hInv))} ₪</b> בחודש. ברגע שיוצאים נשאר <b>${fmt.format(Math.round(oInv))} ₪</b>. ההפרש - <b>${fmt.format(Math.round(diff))} ₪</b> כל חודש - זה הכוח של הזמן הזה.`;
     ins.style.display='block';
   } else ins.style.display='none';
+  // readiness test - can you already save the recommended housing sum today?
+  const sv=document.getElementById('svBody');
+  if(sv){
+    if(income>0){
+      sv.innerHTML=`הסכום שמומלץ להוציא על מגורים אחרי המעבר הוא <b class="sv-num">${fmt.format(Math.round(recT))} ₪ בחודש</b>. מבחן קטן לפני שיוצאים: נסו לשים את הסכום הזה בצד כל חודש כבר עכשיו, כשעוד גרים בבית.<br><b>אם זה מצליח</b> - אתם מוכנים כלכלית ליציאה. <b>אם לא</b> - סימן שצריך לעשות סדר לפני, כי אם אי אפשר לחסוך את הסכום הזה היום, קשה יהיה לעמוד בו אחרי המעבר. וזה בדיוק מה שאנחנו מסדרים יחד בתהליך הליווי.`;
+    } else {
+      sv.innerHTML='הזינו את ההכנסה למעלה, ותראו כמה כדאי "להתאמן" לשים בצד כל חודש כבר עכשיו - עוד לפני היציאה.';
+    }
+  }
 }
 
 // save / share

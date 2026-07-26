@@ -169,6 +169,9 @@ footer .copyright{margin-top:12px;font-size:11px;font-weight:600;color:rgba(81,9
   #brain-a11y-menu a { display: block; margin-top: 10px; font-size: 12px; color: #4F46E5; }
   /* polish: text fields show their OWN green focus ring (keeps ₪ / שנים visible), not the indigo box */
   .input-shell input:focus, .input-shell input:focus-visible,
+  .mini-shell input:focus, .mini-shell input:focus-visible,
+  .item-name:focus, .item-name:focus-visible,
+  .r-name:focus, .r-name:focus-visible,
   .goal-name:focus, .goal-name:focus-visible,
   .act-link input:focus, .act-link input:focus-visible,
   #linkField:focus, #linkField:focus-visible { outline: none !important; }
@@ -284,19 +287,32 @@ footer .copyright{margin-top:12px;font-size:11px;font-weight:600;color:rgba(81,9
       <div class="input-shell"><span class="unit">₪</span><input id="budget" type="text" inputmode="numeric" placeholder="0" aria-label="תקציב כולל בשקלים"></div>
     </div>
     <div class="sum-grid">
-      <div class="tile main"><span class="t-lbl">התקציב</span><div class="t-val tabular" id="tBudget">0 ₪</div></div>
-      <div class="tile" id="tilePlan"><span class="t-lbl">תכננו להוציא</span><div class="t-val tabular" id="tPlan">0 ₪</div></div>
-      <div class="tile"><span class="t-lbl">יצא בפועל</span><div class="t-val tabular" id="tPaid">0 ₪</div></div>
-      <div class="tile" id="tileLeft"><span class="t-lbl">נשאר מהתקציב</span><div class="t-val tabular" id="tLeft">0 ₪</div></div>
+      <div class="tile main"><span class="t-lbl">התקציב</span><div class="t-val tabular" data-sum="budget">0 ₪</div></div>
+      <div class="tile" data-sum="tilePlan"><span class="t-lbl">תכננו להוציא</span><div class="t-val tabular" data-sum="plan">0 ₪</div></div>
+      <div class="tile"><span class="t-lbl">יצא בפועל</span><div class="t-val tabular" data-sum="paid">0 ₪</div></div>
+      <div class="tile" data-sum="tileLeft"><span class="t-lbl">נשאר מהתקציב</span><div class="t-val tabular" data-sum="left">0 ₪</div></div>
     </div>
-    <div class="bar" aria-hidden="true"><i id="barFill" style="width:0%"></i></div>
-    <div class="bar-note"><span id="barPct">0% מהתקציב נוצל</span><span id="barBought">נקנו 0 מתוך 0 פריטים</span></div>
-    <div class="insight" id="insight"></div>
+    <div class="bar" aria-hidden="true"><i data-sum="barFill" style="width:0%"></i></div>
+    <div class="bar-note"><span data-sum="barPct">0% מהתקציב נוצל</span><span data-sum="barBought">נקנו 0 מתוך 0 פריטים</span></div>
+    <div class="insight" data-sum="insight"></div>
   </div>
 
   <div id="rooms"></div>
 
   <button class="add-room" id="addRoom">+ הוספת חדר או קטגוריה</button>
+
+  <div class="card" style="margin-top:18px">
+    <span class="sec-lbl">📊 סיכום התקציב</span>
+    <div class="sum-grid">
+      <div class="tile main"><span class="t-lbl">התקציב</span><div class="t-val tabular" data-sum="budget">0 ₪</div></div>
+      <div class="tile" data-sum="tilePlan"><span class="t-lbl">תכננו להוציא</span><div class="t-val tabular" data-sum="plan">0 ₪</div></div>
+      <div class="tile"><span class="t-lbl">יצא בפועל</span><div class="t-val tabular" data-sum="paid">0 ₪</div></div>
+      <div class="tile" data-sum="tileLeft"><span class="t-lbl">נשאר מהתקציב</span><div class="t-val tabular" data-sum="left">0 ₪</div></div>
+    </div>
+    <div class="bar" aria-hidden="true"><i data-sum="barFill" style="width:0%"></i></div>
+    <div class="bar-note"><span data-sum="barPct">0% מהתקציב נוצל</span><span data-sum="barBought">נקנו 0 מתוך 0 פריטים</span></div>
+    <div class="insight" data-sum="insight"></div>
+  </div>
 
   <div class="cta-card">
     <div class="cta-emoji">🗝️</div>
@@ -370,25 +386,26 @@ function totals(){
   return {plan,paid,toBuy,bought,buyCount,forecast:paid+toBuy};
 }
 
+function setSum(k,val){document.querySelectorAll('[data-sum="'+k+'"]').forEach(e=>e.textContent=val);}
+function toggleSum(k,cls,on){document.querySelectorAll('[data-sum="'+k+'"]').forEach(e=>e.classList.toggle(cls,on));}
 function refreshSummary(){
   const b=num(S.b),t=totals();
-  document.getElementById('tBudget').textContent=money(b)+' ₪';
-  document.getElementById('tPlan').textContent=money(t.plan)+' ₪';
-  document.getElementById('tPaid').textContent=money(t.paid)+' ₪';
+  setSum('budget',money(b)+' ₪');
+  setSum('plan',money(t.plan)+' ₪');
+  setSum('paid',money(t.paid)+' ₪');
   const left=b-t.paid;
-  document.getElementById('tLeft').textContent=money(left)+' ₪';
-  document.getElementById('tileLeft').classList.toggle('hot',b>0&&left<0);
-  document.getElementById('tilePlan').classList.toggle('hot',b>0&&t.plan>b);
+  setSum('left',money(left)+' ₪');
+  toggleSum('tileLeft','hot',b>0&&left<0);
+  toggleSum('tilePlan','hot',b>0&&t.plan>b);
   const pct=b>0?Math.min(100,Math.round(t.paid/b*100)):0;
-  const fill=document.getElementById('barFill');
-  fill.style.width=(b>0?Math.min(100,t.paid/b*100):0)+'%';
-  fill.classList.toggle('over',b>0&&t.paid>b);
-  document.getElementById('barPct').textContent=(b>0?pct+'% מהתקציב נוצל':'קובעים תקציב כדי לראות התקדמות');
-  document.getElementById('barBought').textContent='נקנו '+t.bought+' מתוך '+t.buyCount+' פריטים';
-  const ins=document.getElementById('insight');
-  if(b<=0){ins.className='insight';ins.textContent='💡 מתחילים מלמעלה: כותבים כמה שמתם בצד, מוחקים מה שלא רלוונטי, ומסמנים "יש כבר" על כל מה שעובר איתכם לדירה.';}
-  else if(t.forecast>b){ins.className='insight warn';ins.textContent='⚠️ לפי מה שכבר יצא ומה שעוד מתוכנן, סך הכל צפוי להגיע ל-'+money(t.forecast)+' ₪ - חריגה של '+money(t.forecast-b)+' ₪ מהתקציב. שווה לדייק כמה פריטים, לחפש יד שנייה, או לדחות משהו לשלב הבא.';}
-  else{ins.className='insight';ins.textContent='✅ לפי מה שכבר יצא ומה שעוד מתוכנן, סך הכל צפוי להגיע ל-'+money(t.forecast)+' ₪ - בתוך התקציב, עם מרווח של '+money(b-t.forecast)+' ₪.';}
+  document.querySelectorAll('[data-sum="barFill"]').forEach(f=>{f.style.width=(b>0?Math.min(100,t.paid/b*100):0)+'%';f.classList.toggle('over',b>0&&t.paid>b);});
+  setSum('barPct',b>0?pct+'% מהתקציב נוצל':'קובעים תקציב כדי לראות התקדמות');
+  setSum('barBought','נקנו '+t.bought+' מתוך '+t.buyCount+' פריטים');
+  let msg,cls;
+  if(b<=0){cls='';msg='💡 מתחילים מלמעלה: כותבים כמה שמתם בצד, מוחקים מה שלא רלוונטי, ומסמנים "יש כבר" על כל מה שעובר איתכם לדירה.';}
+  else if(t.forecast>b){cls=' warn';msg='⚠️ לפי מה שכבר יצא ומה שעוד מתוכנן, סך הכל צפוי להגיע ל-'+money(t.forecast)+' ₪ - חריגה של '+money(t.forecast-b)+' ₪ מהתקציב. שווה לדייק כמה פריטים, לחפש יד שנייה, או לדחות משהו לשלב הבא.';}
+  else{cls='';msg='✅ לפי מה שכבר יצא ומה שעוד מתוכנן, סך הכל צפוי להגיע ל-'+money(t.forecast)+' ₪ - בתוך התקציב, עם מרווח של '+money(b-t.forecast)+' ₪.';}
+  document.querySelectorAll('[data-sum="insight"]').forEach(e=>{e.className='insight'+cls;e.textContent=msg;});
 }
 
 function roomTotals(r){

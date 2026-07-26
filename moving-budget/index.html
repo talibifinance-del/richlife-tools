@@ -391,7 +391,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
   <div class="actions">
     <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת הרשימה</button>
     <button class="act-btn ghost" id="resetBtn">איפוס הכל</button>
-    <div class="act-note">✓ הרשימה נשמרת אוטומטית במכשיר הזה. הקישור מכיל את כל הרשימה - שומרים אותו או שולחים בוואטסאפ לבן או בת הזוג.</div>
+    <div class="act-note">✓ הרשימה נשמרת אוטומטית במכשיר. הכפתור מייצר קישור קצר לשליחה בוואטסאפ לבן או בת הזוג - שנכנסים אליו ורואים בדיוק את אותה רשימה.</div>
     <div class="act-link" id="actLink" hidden>
       <input id="linkField" readonly aria-label="קישור הרשימה">
       <button id="copyBtn">העתקה</button>
@@ -442,7 +442,18 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.rooms)return s;}catch(e){}return null;}
 function enc(){return btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
 function dec(str){try{const s=JSON.parse(decodeURIComponent(escape(atob(str))));if(s&&s.rooms)return s;}catch(e){}return null;}
+const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#s='+encodeURIComponent(enc());}
+// short link via the share store; falls back to the long self-contained link if the store is down
+async function shortLink(){
+  try{
+    const r=await fetch(SHARE_API,{method:'POST',body:enc()});
+    if(!r.ok)throw 0;
+    const j=await r.json();
+    if(!j||!j.id)throw 0;
+    return location.origin+location.pathname+location.search+'#p='+j.id;
+  }catch(e){return makeLink();}
+}
 
 /* ── calc ── */
 function totals(){
@@ -707,10 +718,11 @@ document.getElementById('addRoom').onclick=()=>{
   last.querySelector('.r-name').focus();
 };
 
-document.getElementById('shareBtn').onclick=()=>{
-  const box=document.getElementById('actLink');
-  document.getElementById('linkField').value=makeLink();
-  box.hidden=false;
+document.getElementById('shareBtn').onclick=async()=>{
+  const box=document.getElementById('actLink'),field=document.getElementById('linkField'),btn=document.getElementById('shareBtn');
+  box.hidden=false;field.value='יוצר קישור...';btn.disabled=true;
+  try{field.value=await shortLink();}finally{btn.disabled=false;}
+  field.focus();field.select();
 };
 document.getElementById('copyBtn').onclick=()=>{
   const f=document.getElementById('linkField');f.select();
@@ -728,13 +740,23 @@ document.getElementById('resetBtn').onclick=()=>{
 
 /* ── boot ── */
 (function boot(){
-  const h=(location.hash||'').match(/s=([^&]+)/);
-  const fromLink=h?dec(decodeURIComponent(h[1])):null;
-  S=fromLink||load()||seedState();
-  if(fromLink){save();try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
-  const b=num(S.b);
-  budgetInp.value=b>0?fmt.format(b):'';
-  render();
+  const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);   // short code -> fetch from store
+  const hs=(location.hash||'').match(/s=([^&]+)/);               // legacy self-contained link
+  function start(fromLink){
+    S=fromLink||load()||seedState();
+    if(fromLink){save();try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
+    const b=num(S.b);
+    budgetInp.value=b>0?fmt.format(b):'';
+    render();
+  }
+  if(hp){
+    fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1]))
+      .then(r=>r.ok?r.text():Promise.reject())
+      .then(t=>start(dec(t)||(hs?dec(decodeURIComponent(hs[1])):null)))
+      .catch(()=>start(hs?dec(decodeURIComponent(hs[1])):null));
+  } else {
+    start(hs?dec(decodeURIComponent(hs[1])):null);
+  }
 })();
 </script>
 </body>

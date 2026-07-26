@@ -516,10 +516,12 @@ function short(v){v=Math.round(v);if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+'
 const SKEY='richlife-dream-v1';
 function enc(){return JSON.stringify([document.getElementById('income').value,document.getElementById('wrate').value,document.getElementById('have').value,document.getElementById('yrs').value,document.getElementById('grow').value,document.getElementById('loan').value,document.getElementById('loanRate').value]);}
 function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('income').value=grp(a[0]);document.getElementById('wrate').value=a[1]??'4';document.getElementById('have').value=grp(a[2]);document.getElementById('yrs').value=a[3]??'';document.getElementById('grow').value=a[4]??'6';document.getElementById('loan').value=grp(a[5]??'0');document.getElementById('loanRate').value=a[6]??'7';return true;}catch(e){return false;}}
+const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#d='+encodeURIComponent(enc());}
+async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}
 (function(){
   const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
-  btn.onclick=()=>{const link=makeLink();field.value=link;wrap.hidden=false;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}};
+  btn.onclick=async()=>{wrap.hidden=false;field.value='יוצר קישור...';btn.disabled=true;try{const link=await shortLink();field.value=link;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
   copy.onclick=()=>{field.select();try{document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);}catch(e){}flash(copy,'✓ הועתק');};
 })();
 function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>el.textContent=o,1800);}
@@ -530,6 +532,7 @@ function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>
   if(h) dec(decodeURIComponent(h[1]));
   calc();
 })();
+(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){dec(t);calc();}).catch(function(){});})();
 </script>
 </body>
 </html>

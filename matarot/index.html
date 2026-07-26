@@ -1047,21 +1047,26 @@ function decodeGoals(str){
 }
 function saveGoals(){/* device memory disabled on purpose: the personal share-link is the only saved copy, so the plain URL stays fresh */}
 
+const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){
   const base=location.origin+location.pathname+location.search;
   return base+'#g='+encodeURIComponent(encodeGoals(goals));
 }
+async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:encodeGoals(goals)});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}
 (function(){
   const btn=document.getElementById('shareBtn');
   const wrap=document.getElementById('actLink');
   const field=document.getElementById('linkField');
   const copy=document.getElementById('copyBtn');
   if(!btn) return;
-  btn.onclick=()=>{
-    const link=makeLink();
-    field.value=link; wrap.hidden=false;
-    field.focus(); field.select();
-    try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}
+  btn.onclick=async()=>{
+    wrap.hidden=false; field.value='יוצר קישור...'; btn.disabled=true;
+    try{
+      const link=await shortLink();
+      field.value=link;
+      field.focus(); field.select();
+      try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}
+    }finally{btn.disabled=false;}
   };
   copy.onclick=()=>{
     field.select();
@@ -1137,6 +1142,7 @@ document.querySelectorAll('a.soc[href="#"]').forEach(a=>a.addEventListener('clic
     addGoal({emoji:'🏠',name:'רכישת נכס (הון ראשוני)',target:280000,initial:110000,years:5,pct:5}); // plain URL → a clean example to start from
   }
 })();
+(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){const loaded=decodeGoals(t);if(loaded&&loaded.length){goals=loaded;if(capacity)document.getElementById('capInput').value=fmt.format(capacity);render();}}).catch(function(){});})();
 </script>
 </body>
 </html>

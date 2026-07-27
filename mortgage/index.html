@@ -99,6 +99,7 @@ svg.chart{touch-action:pan-y}
 .chart-sub{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:12px}
 .chart-legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:12.5px;font-weight:800}
 .chart-legend span{display:inline-flex;align-items:center;gap:6px;color:var(--ink-soft)}
+.chart-legend span[hidden]{display:none}
 .chart-legend i{width:14px;height:4px;border-radius:100px;display:inline-block}
 .chart-wrap{width:100%;overflow-x:auto}
 svg.chart{display:block;width:100%;height:auto}
@@ -218,6 +219,18 @@ svg.chart{display:block;width:100%;height:auto}
 .law-note{margin-top:14px;background:rgba(183,121,31,.09);border:1.5px solid rgba(183,121,31,.28);border-radius:14px;padding:13px 15px;font-size:12.5px;font-weight:600;color:#7a5210;line-height:1.6}
 .law-note b{color:#8a5a12;font-weight:800}
 .cmp-head{font-size:16px;font-weight:900;color:var(--pine-darker);margin-bottom:12px;text-align:center}
+.stats-strip{display:flex;gap:10px;flex-wrap:wrap}
+.stats-strip .chip{flex:1;min-width:140px;background:var(--sage-tint);border-radius:12px;padding:11px 13px;text-align:center}
+.stats-strip .chip .k{font-size:11.5px;font-weight:700;color:var(--ink-soft);line-height:1.3}
+.stats-strip .chip .v{font-size:clamp(16px,4.4vw,20px);font-weight:900;color:var(--pine-deep);margin-top:3px}
+.stress{margin-top:14px}
+.stats-strip + .insight{margin-top:14px}
+.stress-head{font-size:15px;font-weight:900;color:var(--pine-darker)}
+.stress-sub{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin:4px 0 12px;line-height:1.55}
+.stress-tg{display:inline-flex}
+.stress-out{margin-top:13px}
+.stress-hint{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;background:var(--sage-tint);border-radius:12px;padding:13px 14px;line-height:1.5}
+.chart-toptg{display:flex;justify-content:center;margin-bottom:14px}
 /* breakdown cards */
 .break-card{margin-top:16px}
 .tb-card{background:var(--sage-tint);border-radius:14px;padding:13px 14px;margin-bottom:10px}
@@ -280,6 +293,10 @@ svg.chart{display:block;width:100%;height:auto}
         <div class="input-shell"><input id="idx" type="text" inputmode="decimal" value="2" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
       </div>
       <div class="field">
+        <label>שווי הדירה (לא חובה - לאחוז מימון)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="propValue" type="text" inputmode="numeric" value="0" placeholder="0"></div>
+      </div>
+      <div class="field">
         <label>הכנסה חודשית נטו (לבדיקת נטל)</label>
         <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="0" placeholder="0"></div>
       </div>
@@ -309,6 +326,17 @@ svg.chart{display:block;width:100%;height:auto}
     </div>
   </div>
 
+  <div class="card">
+    <div class="stats-strip" id="statsStrip"></div>
+    <div class="insight" id="ltv" hidden></div>
+    <div class="stress">
+      <div class="stress-head">🔺 מבחן קיצון - מה אם הריבית תעלה?</div>
+      <div class="stress-sub">מסלולי פריים ומשתנה יכולים לעלות עם הזמן. בדקו איך זה משפיע על ההחזר החודשי - כדי להיכנס בעיניים פקוחות.</div>
+      <div class="unit-tg stress-tg" id="stressTg"><button type="button" class="on" data-s="0">הריבית היום</button><button type="button" data-s="1">+1%</button><button type="button" data-s="2">+2%</button></div>
+      <div class="stress-out" id="stressOut"></div>
+    </div>
+  </div>
+
   <div class="card break-card">
     <div class="chart-head" id="breakHead">🧩 פירוט לפי מסלול</div>
     <div class="chart-sub" id="breakSub">אותו שקל, בשני מסלולים שונים, עולה אחרת לגמרי. ככה רואים איזה מסלול הכי יקר לכם - ולמה.</div>
@@ -316,8 +344,9 @@ svg.chart{display:block;width:100%;height:auto}
   </div>
 
   <div class="chart-card">
-    <div class="chart-head">📉 יתרת המשכנתא לאורך השנים</div>
-    <div class="chart-sub">כמה נשאר לכם לשלם בכל נקודה (סך כל המסלולים יחד). בהתחלה רוב ההחזר הולך לריבית, ולכן היתרה יורדת לאט.</div>
+    <div class="chart-toptg"><div class="unit-tg" id="chartViewTg"><button type="button" class="on" data-v="bal">יתרה</button><button type="button" data-v="pay">החזר חודשי</button></div></div>
+    <div class="chart-head" id="chartHead">📉 יתרת המשכנתא לאורך השנים</div>
+    <div class="chart-sub" id="chartSub">כמה נשאר לכם לשלם בכל נקודה (סך כל המסלולים יחד). בהתחלה רוב ההחזר הולך לריבית, ולכן היתרה יורדת לאט.</div>
     <div class="chart-wrap"><svg class="chart" id="chart" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="גרף יתרת המשכנתא לאורך השנים"></svg></div>
     <div class="chart-tip" id="chartTip"></div>
     <div class="chart-sub" style="text-align:center;margin:8px 0 0;font-size:11.5px">👆 העבירו על הגרף כדי לראות את היתרה בכל חודש</div>
@@ -510,7 +539,9 @@ const TYPES=[
 ];
 function typeByK(k){return TYPES.find(t=>t.k===k)||TYPES[0];}
 
-let MODE='new';
+let MODE='new', STRESS=0, CHARTVIEW='bal', LAST={};
+function isVar(ty){return ty==='prime'||ty==='var_nl'||ty==='var_l';}
+function bumpRates(tracks,add){return tracks.map(t=>({...t,rate:isVar(t.ty)?t.rate+add:t.rate}));}
 
 /* ---------- track rows (per container) ---------- */
 function rowHTML(t){
@@ -559,9 +590,10 @@ function updateDelState(wrapId){const dels=$(wrapId).querySelectorAll('.t-del'),
 document.querySelectorAll('.add-track[data-add]').forEach(btn=>{
   btn.addEventListener('click',()=>{const wid=btn.dataset.add,cur=readTracks(wid),t=typeByK('prime');cur.push({ty:t.k,amt:300000,rate:t.rate,yrs:20,lnk:t.lnk});renderTracks(wid,cur);calc();});
 });
-['idx','income'].forEach(id=>{const el=$(id);
-  if(id==='income'){el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}calc();});}
-  else el.addEventListener('input',calc);});
+$('idx').addEventListener('input',calc);
+['income','propValue'].forEach(id=>{const el=$(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}calc();});});
+$('stressTg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{STRESS=+b.dataset.s;$('stressTg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));calc();}));
+$('chartViewTg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{CHARTVIEW=b.dataset.v;$('chartViewTg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));renderChart();}));
 
 /* mode toggle */
 $('modeTg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.m===MODE)return;MODE=b.dataset.m;applyMode();calc();}));
@@ -599,6 +631,13 @@ function aggregate(tracks,idxA){
 }
 function combined(agg){const c=[];for(let m=0;m<=agg.maxN;m++){let sum=0;agg.sims.forEach(x=>sum+=(m<x.series.length?x.series[m]:0));c.push(sum);}return c;}
 
+function combinedPay(tracks,idxA,maxN){
+  const arr=[];
+  for(let m=0;m<=maxN;m++){const mm=Math.max(1,m);let sum=0;
+    tracks.forEach(t=>{const n=Math.max(1,Math.round(t.yrs*12));if(mm<=n){const base=pmt(t.amt,t.rate,n);const mi=t.lnk?(Math.pow(1+idxA/100,1/12)-1):0;sum+=base*Math.pow(1+mi,mm);}});
+    arr.push(sum);}
+  return arr;
+}
 function affordMsg(el,monthly,totP,linkedAny){
   const income=num('income');
   if(income<=0||totP<=0){el.hidden=true;return;}
@@ -611,8 +650,9 @@ function affordMsg(el,monthly,totP,linkedAny){
 
 function calc(){
   const idxA=num('idx');
+  let actT, actAgg;
   if(MODE==='new'){
-    const tr=readTracks('tracksWrap'), ag=aggregate(tr,idxA);
+    const tr=readTracks('tracksWrap'), ag=aggregate(tr,idxA); actT=tr; actAgg=ag;
     $('rMonthly').innerHTML=fmt.format(Math.round(ag.totInit))+'<small> ₪</small>';
     $('rPrincipal').textContent=fmt.format(Math.round(ag.totP))+' ₪';
     $('rTotal').textContent=fmt.format(Math.round(ag.totPaid))+' ₪';
@@ -626,17 +666,57 @@ function calc(){
     affordMsg($('afford'),ag.totInit,ag.totP,tr.some(t=>t.lnk));
     renderBreak(tr,ag.sims);
     updateRowMonthlies('tracksWrap',ag.sims);
-    drawChart(combined(ag),null);
+    LAST={balMain:combined(ag),payMain:combinedPay(tr,idxA,ag.maxN),balCur:null,payCur:null};
   } else {
     const curT=readTracks('tracksWrapCur'), aftT=readTracks('tracksWrapAft');
-    const cur=aggregate(curT,idxA), aft=aggregate(aftT,idxA);
+    const cur=aggregate(curT,idxA), aft=aggregate(aftT,idxA); actT=aftT; actAgg=aft;
     renderCmp(cur,aft);
     affordMsg($('affordAft'),aft.totInit,aft.totP,aftT.some(t=>t.lnk));
     renderBreak(aftT,aft.sims);
     updateRowMonthlies('tracksWrapCur',cur.sims);
     updateRowMonthlies('tracksWrapAft',aft.sims);
-    drawChart(combined(aft),combined(cur));
+    LAST={balMain:combined(aft),payMain:combinedPay(aftT,idxA,aft.maxN),balCur:combined(cur),payCur:combinedPay(curT,idxA,cur.maxN)};
   }
+  renderShared(actT,actAgg,idxA);
+  renderChart();
+}
+
+function renderShared(tracks,ag,idxA){
+  const strip=$('statsStrip');
+  if(ag.totP>0){
+    const wRate=tracks.reduce((a,t)=>a+t.rate*t.amt,0)/ag.totP, pctAdd=ag.totCost/ag.totP*100;
+    strip.innerHTML=`<div class="chip"><div class="k">ריבית ממוצעת משוקללת</div><div class="v">${wRate.toFixed(2)}%</div></div><div class="chip"><div class="k">תוספת הריבית על הסכום שלוויתם</div><div class="v">+${Math.round(pctAdd)}%</div></div>`;
+    strip.style.display='flex';
+  } else strip.style.display='none';
+  const pv=num('propValue'), ltv=$('ltv');
+  if(pv>0 && ag.totP>0){
+    const r=ag.totP/pv*100; let cls,msg;
+    if(r<=70){cls='insight';msg=`✓ אחוז המימון הוא <b>${Math.round(r)}%</b> משווי הנכס - בתוך התקרות (עד 75% לדירה יחידה, 70% למשפרי דיור / לכל מטרה).`;}
+    else if(r<=75){cls='insight soft';msg=`⚠️ אחוז המימון הוא <b>${Math.round(r)}%</b> - מותר רק לדירה יחידה (תקרה 75%). למשפרי דיור / לכל מטרה התקרה 70%.`;}
+    else{cls='insight warn';msg=`🔴 אחוז המימון הוא <b>${Math.round(r)}%</b> - מעל התקרה החוקית (75% לדירה יחידה). צריך יותר הון עצמי.`;}
+    ltv.className=cls;ltv.innerHTML=msg;ltv.hidden=false;
+  } else ltv.hidden=true;
+  renderStress(tracks,ag,idxA);
+}
+
+function renderStress(tracks,ag,idxA){
+  const out=$('stressOut'), hasVar=tracks.some(t=>isVar(t.ty));
+  if(!hasVar){out.innerHTML=`<div class="stress-hint">✓ אין מסלולי פריים או משתנה - ההחזר לא חשוף לעליית ריבית. יציב לגמרי 👍</div>`;return;}
+  if(STRESS===0){out.innerHTML=`<div class="stress-hint">בחרו +1% או +2% כדי לראות מה קורה להחזר אם הפריים/המשתנה יעלו.</div>`;return;}
+  const b=aggregate(bumpRates(tracks,STRESS),idxA);
+  const dMon=b.totInit-ag.totInit, dCost=b.totCost-ag.totCost;
+  out.innerHTML=`<div class="insight warn">🔺 אם הריבית תעלה ב-<b>${STRESS}%</b>: ההחזר החודשי יעלה מ-<b>${fmt.format(Math.round(ag.totInit))} ₪</b> ל-<b>${fmt.format(Math.round(b.totInit))} ₪</b> (עוד ${fmt.format(Math.round(dMon))} ₪ בחודש), וסך הריבית יגדל ב-<b>${fmt.format(Math.round(dCost))} ₪</b> לאורך חיי המשכנתא.</div>`;
+}
+
+function renderChart(){
+  const bal=CHARTVIEW==='bal', chg=MODE==='change';
+  const main=bal?LAST.balMain:LAST.payMain, cur=bal?LAST.balCur:LAST.payCur;
+  $('chartHead').textContent=bal?'📉 יתרת המשכנתא לאורך השנים':'📈 ההחזר החודשי לאורך השנים';
+  $('chartSub').textContent=bal?'כמה נשאר לכם לשלם בכל נקודה. בהתחלה רוב ההחזר הולך לריבית, ולכן היתרה יורדת לאט.':'איך ההחזר החודשי מתפתח. במסלול צמוד הוא גדל עם האינפלציה, וכשמסלול מסתיים ההחזר יורד.';
+  const mainLbl=chg?'אחרי השינוי':(bal?'יתרת המשכנתא':'החזר חודשי');
+  drawChart(main||[0],cur,{main:mainLbl,cur:'הנוכחית',unit:bal?'יתרה לתשלום':'החזר חודשי'});
+  $('legMain').querySelector('i').nextSibling.textContent=mainLbl;
+  $('legCur').hidden=!chg;
 }
 
 function renderCmp(cur,aft){
@@ -675,7 +755,7 @@ function renderBreak(tr,sims){
 }
 
 let CH=null;
-function drawChart(series,series2){
+function drawChart(series,series2,opts){opts=opts||{};
   const W=720,H=360,padL=64,padR=18,padT=18,padB=34;
   const N=Math.max(1,series.length-1,(series2?series2.length-1:0));
   const at=(a,i)=>i<a.length?a[i]:0;
@@ -689,7 +769,7 @@ function drawChart(series,series2){
   const dot=`<circle cx="${x(N).toFixed(1)}" cy="${yv(at(series,N)).toFixed(1)}" r="4.5" fill="#5f7d6a"/>`;
   const curLine=series2?`<path d="${path(series2)}" fill="none" stroke="#51625a" stroke-width="2.5" stroke-dasharray="6 5" opacity=".85"/>`:'';
   $('chart').innerHTML=`<defs><linearGradient id="gInv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(95,125,106,.28)"/><stop offset="1" stop-color="rgba(95,125,106,.02)"/></linearGradient></defs>${grid}${xl}<path d="${area(series)}" fill="url(#gInv)"/>${curLine}<path d="${path(series)}" fill="none" stroke="#5f7d6a" stroke-width="3"/>${dot}<g id="hoverLayer"></g>`;
-  CH={N,pts:series,pts2:series2,at,x,yv,padL,padR,padT,padB,W,H};
+  CH={N,pts:series,pts2:series2,at,x,yv,padL,padR,padT,padB,W,H,unit:opts.unit||'יתרה לתשלום',mainLabel:opts.main||'יתרת המשכנתא',curLabel:opts.cur||'הנוכחית'};
 }
 (function setupHover(){
   const svg=$('chart'),tip=$('chartTip'),card=svg.closest('.chart-card');
@@ -703,8 +783,8 @@ function drawChart(series,series2){
     if(CH.pts2){const v2=CH.at(CH.pts2,i);extra=`<circle cx="${gx.toFixed(1)}" cy="${CH.yv(v2).toFixed(1)}" r="5" fill="#51625a" stroke="#fff" stroke-width="1.5"/>`;}
     $('hoverLayer').innerHTML=`<line x1="${gx.toFixed(1)}" y1="${CH.padT}" x2="${gx.toFixed(1)}" y2="${CH.H-CH.padB}" stroke="rgba(95,125,106,.4)" stroke-width="1.5" stroke-dasharray="3 3"/>${extra}<circle cx="${gx.toFixed(1)}" cy="${CH.yv(val).toFixed(1)}" r="5.5" fill="#5f7d6a" stroke="#fff" stroke-width="1.5"/>`;
     const yrs=i/12,lbl=Number.isInteger(yrs)&&i>0?`שנה ${yrs}`:`חודש ${i}`;
-    let rows=`<div class="tt-row"><i style="background:#5f7d6a"></i>${CH.pts2?'אחרי השינוי':'יתרה לתשלום'}: <b>${fmt.format(Math.round(val))} ₪</b></div>`;
-    if(CH.pts2)rows+=`<div class="tt-row"><i style="background:#51625a"></i>הנוכחית: <b>${fmt.format(Math.round(CH.at(CH.pts2,i)))} ₪</b></div>`;
+    let rows=`<div class="tt-row"><i style="background:#5f7d6a"></i>${CH.pts2?CH.mainLabel:CH.unit}: <b>${fmt.format(Math.round(val))} ₪</b></div>`;
+    if(CH.pts2)rows+=`<div class="tt-row"><i style="background:#51625a"></i>${CH.curLabel}: <b>${fmt.format(Math.round(CH.at(CH.pts2,i)))} ₪</b></div>`;
     tip.innerHTML=`<div class="tt-yr">${lbl}</div>${rows}`;
     tip.style.display='block';
     const cardRect=card.getBoundingClientRect();
@@ -734,7 +814,7 @@ const DEF_AFT=[
  {ty:'prime',   amt:250000,rate:6.0,yrs:15,lnk:false}
 ];
 function normTracks(a,fb){return (Array.isArray(a)&&a.length)?a.map(t=>({ty:t.ty||'fixed_nl',amt:t.amt||0,rate:(t.rate!=null?t.rate:4.9),yrs:t.yrs||25,lnk:!!t.lnk})):fb.map(t=>({...t}));}
-function enc(){return JSON.stringify({v:2,mode:MODE,idx:$('idx').value,income:$('income').value,tr:readTracks('tracksWrap'),cur:readTracks('tracksWrapCur'),aft:readTracks('tracksWrapAft')});}
+function enc(){return JSON.stringify({v:2,mode:MODE,idx:$('idx').value,income:$('income').value,propValue:$('propValue').value,tr:readTracks('tracksWrap'),cur:readTracks('tracksWrapCur'),aft:readTracks('tracksWrapAft')});}
 function dec(str){try{const o=JSON.parse(str);if(!o)return false;
   MODE=o.mode==='change'?'change':'new';
   renderTracks('tracksWrap',normTracks(o.tr,DEF_NEW));
@@ -742,6 +822,7 @@ function dec(str){try{const o=JSON.parse(str);if(!o)return false;
   renderTracks('tracksWrapAft',normTracks(o.aft,DEF_AFT));
   $('idx').value=(o.idx!=null?o.idx:'2');
   $('income').value=grp(o.income||'0');
+  $('propValue').value=grp(o.propValue||'0');
   applyMode();return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#c='+encodeURIComponent(enc());}

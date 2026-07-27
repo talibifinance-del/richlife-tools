@@ -174,6 +174,12 @@ svg.chart{display:block;width:100%;height:auto}
 .cmp-verdict.bad{background:rgba(var(--red-rgb),.1);color:#8f3a29}
 
 .cmp-loans{margin-top:16px;margin-bottom:18px}
+.cost-cmp{margin-top:12px;background:rgba(var(--red-rgb),.06);border:1.5px solid rgba(var(--red-rgb),.2);border-radius:14px;padding:13px 14px}
+.cost-cmp .cc-title{font-size:13px;font-weight:900;color:#8f3a29;text-align:center;margin-bottom:9px}
+.cost-pair{display:flex;gap:10px}
+.cost-pair .cp{flex:1;text-align:center;background:#fff;border-radius:11px;padding:11px 8px}
+.cost-pair .cp .l{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft)}
+.cost-pair .cp .v{display:block;font-size:clamp(17px,4.6vw,22px);font-weight:900;color:#8f3a29;margin-top:3px}
 </style>
 </head>
 <body>
@@ -557,9 +563,10 @@ function cmpLoans(){
   const row=(k,v)=>`<div class="cc-row"><span>${k}</span><b>${fmt.format(Math.round(v))} ₪</b></div>`;
   const pctRow=(v)=>{if(inc<=0)return '';const p=Math.round(v/inc*100),c=p>40?'#c1553f':(p>30?'#8a5a12':'var(--pine-deep)');return `<div class="cc-row"><span>% מההכנסה</span><b style="color:${c}">${p}%</b></div>`;};
   out.innerHTML=`<div class="cmp-grid">`+
-    `<div class="cmp-col mine"><h4>ההלוואה שלך</h4>${row('החזר חודשי',mM)}${row('סה"כ החזר',mT)}${row('מזה ריבית',mI)}${pctRow(mM)}</div>`+
-    `<div class="cmp-col alt"><h4>ההצעה האחרת</h4>${row('החזר חודשי',mB)}${row('סה"כ החזר',tB)}${row('מזה ריבית',iB)}${pctRow(mB)}</div>`+
+    `<div class="cmp-col mine"><h4>ההלוואה שלך</h4>${row('החזר חודשי',mM)}${row('סה"כ החזר',mT)}${pctRow(mM)}</div>`+
+    `<div class="cmp-col alt"><h4>ההצעה האחרת</h4>${row('החזר חודשי',mB)}${row('סה"כ החזר',tB)}${pctRow(mB)}</div>`+
     `</div>`+
+    `<div class="cost-cmp"><div class="cc-title">💸 עלות הכסף - כמה עלתה לך הריבית</div><div class="cost-pair"><div class="cp"><span class="l">ההלוואה שלך</span><span class="v">${fmt.format(Math.round(mI))} ₪</span></div><div class="cp"><span class="l">ההצעה האחרת</span><span class="v">${fmt.format(Math.round(iB))} ₪</span></div></div></div>`+
     `<div class="cmp-verdict ${diff>=0?'good':'bad'}">${Math.abs(diff)<1?'שתי ההצעות עולות אותו דבר בריבית':(diff>0?`💚 ההצעה האחרת חוסכת לך ${fmt.format(Math.round(diff))} ₪ ריבית`:`⚠️ ההצעה האחרת יקרה ב-${fmt.format(Math.round(-diff))} ₪ ריבית`)}</div>`;
 }
 const SKEY='richlife-loans-v1';

@@ -198,7 +198,10 @@ svg.chart{display:block;width:100%;height:auto}
 .trow-fields .tf label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin-bottom:5px}
 .trow-fields .input-shell input{padding:10px 11px;font-size:15px}
 .trow-fields .input-shell .unit{font-size:12.5px;padding-inline-start:9px}
-.t-linked{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-size:12.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;user-select:none}
+.trow-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.t-monthly{font-size:12.5px;font-weight:800;color:var(--pine-deep);white-space:nowrap}
+.t-monthly b{color:var(--pine-darker);font-size:14.5px}
+.t-linked{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;user-select:none}
 .t-linked input{width:17px;height:17px;accent-color:var(--pine);cursor:pointer}
 .t-linked b{color:#8a5a12}
 .add-track{width:100%;font-family:var(--font);cursor:pointer;background:#fff;border:1.5px dashed rgba(var(--pine-rgb),.45);color:var(--pine-deep);font-size:14.5px;font-weight:800;padding:13px;border-radius:14px;transition:all .15s}
@@ -522,7 +525,10 @@ function rowHTML(t){
       <div class="tf"><label>ריבית</label><div class="input-shell"><input class="t-rate" type="text" inputmode="decimal" value="${t.rate}" placeholder="0" aria-label="ריבית שנתית"><span class="unit" style="padding-inline-start:6px;padding-inline-end:12px">%</span></div></div>
       <div class="tf"><label>שנים</label><div class="input-shell"><input class="t-yrs" type="number" inputmode="numeric" value="${t.yrs}" placeholder="0" aria-label="תקופה בשנים"><span class="unit" style="padding-inline-start:6px;padding-inline-end:12px">ש'</span></div></div>
     </div>
-    <label class="t-linked"><input type="checkbox" class="t-lnk"${t.lnk?' checked':''}> צמוד למדד <b>(היתרה גדלה עם האינפלציה)</b></label>
+    <div class="trow-foot">
+      <label class="t-linked"><input type="checkbox" class="t-lnk"${t.lnk?' checked':''}> צמוד למדד <b>(היתרה גדלה עם האינפלציה)</b></label>
+      <div class="t-monthly">החזר חודשי: <b>—</b></div>
+    </div>
   </div>`;
 }
 function renderTracks(wrapId,arr){const w=$(wrapId);w.innerHTML=arr.map(rowHTML).join('');bindRows(wrapId);}
@@ -619,6 +625,7 @@ function calc(){
     else ins.style.display='none';
     affordMsg($('afford'),ag.totInit,ag.totP,tr.some(t=>t.lnk));
     renderBreak(tr,ag.sims);
+    updateRowMonthlies('tracksWrap',ag.sims);
     drawChart(combined(ag),null);
   } else {
     const curT=readTracks('tracksWrapCur'), aftT=readTracks('tracksWrapAft');
@@ -626,6 +633,8 @@ function calc(){
     renderCmp(cur,aft);
     affordMsg($('affordAft'),aft.totInit,aft.totP,aftT.some(t=>t.lnk));
     renderBreak(aftT,aft.sims);
+    updateRowMonthlies('tracksWrapCur',cur.sims);
+    updateRowMonthlies('tracksWrapAft',aft.sims);
     drawChart(combined(aft),combined(cur));
   }
 }
@@ -648,6 +657,10 @@ function renderCmp(cur,aft){
     <div class="cmp-verdict ${good?'good':'bad'}">${verdict}<div style="font-weight:700;font-size:12.5px;margin-top:6px;opacity:.85">${monTxt}</div></div>`;
 }
 
+function updateRowMonthlies(wrapId,sims){
+  const rows=$(wrapId).querySelectorAll('.trow');
+  rows.forEach((r,i)=>{const b=r.querySelector('.t-monthly b');if(b)b.textContent=(sims[i]?fmt.format(Math.round(sims[i].initPay)):'0')+' ₪';});
+}
 function renderBreak(tr,sims){
   const box=$('trackBreak');
   box.innerHTML=tr.map((t,i)=>{const sm=sims[i],nm=typeByK(t.ty).n,yrs=Math.round(t.yrs);

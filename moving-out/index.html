@@ -51,6 +51,9 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .sv-out.warn{background:rgba(var(--red-rgb),.08);color:var(--red);border:1px solid rgba(var(--red-rgb),.22)}
 .sv-out.warn b{color:var(--red);font-weight:900}
 .sv-empty{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.6}
+/* coaching button (explicit colours so it never falls back to the browser's purple link) */
+.savecheck .sv-cta,.savecheck .sv-cta:link,.savecheck .sv-cta:visited{display:inline-block;margin-top:14px;font-family:var(--font);font-weight:900;font-size:14px;color:var(--pine-deep);text-decoration:none;background:var(--sage-tint);padding:11px 20px;border-radius:100px;transition:background .15s,transform .15s}
+.savecheck .sv-cta:hover{background:rgba(var(--pine-rgb),.14);transform:translateY(-1px)}
 .card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
 .card+.card{margin-top:16px}
 .sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
@@ -463,8 +466,8 @@ function calc(){
         <div class="sv-badge"><span class="sv-lbl">מה שמומלץ להוציא על מגורים אחרי המעבר</span><span class="sv-big">${fmt.format(Math.round(recT))} ₪ <small>לחודש</small></span></div>
         <div class="sv-test"><span class="sv-ic">🧪</span><div><b>המבחן:</b> כבר עכשיו, כשעדיין גרים בבית, נסו לשים בצד את הסכום הזה כל חודש.</div></div>
         <div class="sv-outcomes">
-          <div class="sv-out ok"><span class="sv-ic">✅</span><div><b>הצליח לחודש-חודשיים?</b> אתם מוכנים כלכלית ליציאה.</div></div>
-          <div class="sv-out warn"><span class="sv-ic">🚩</span><div><b>לא הסתדר?</b> זה סימן לעשות סדר לפני המעבר. אם אי אפשר לחסוך את הסכום הזה היום, קשה יהיה לעמוד בו אחר כך - וזה בדיוק מה שאנחנו מסדרים יחד בתהליך הליווי.</div></div>
+          <div class="sv-out ok"><span class="sv-ic">✅</span><div><b>הצליח שלושה חודשים?</b> אתם מוכנים כלכלית ליציאה - וכבר יש לכם קרן ביטחון קטנה בצד.</div></div>
+          <div class="sv-out warn"><span class="sv-ic">🚩</span><div><b>לא הסתדר?</b> זה סימן לעשות סדר לפני המעבר - אם אי אפשר לחסוך את הסכום הזה היום, קשה יהיה לעמוד בו אחר כך.</div></div>
         </div>`;
     } else {
       sv.innerHTML='<div class="sv-empty">הזינו את ההכנסה למעלה, ותראו כמה כדאי "להתאמן" לשים בצד כל חודש כבר עכשיו - עוד לפני היציאה.</div>';

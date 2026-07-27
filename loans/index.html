@@ -172,6 +172,8 @@ svg.chart{display:block;width:100%;height:auto}
 .cmp-verdict{margin-top:12px;text-align:center;font-size:13.5px;font-weight:900;border-radius:12px;padding:12px}
 .cmp-verdict.good{background:rgba(var(--pine-rgb),.12);color:var(--pine-deep)}
 .cmp-verdict.bad{background:rgba(var(--red-rgb),.1);color:#8f3a29}
+
+.cmp-loans{margin-top:16px;margin-bottom:18px}
 </style>
 </head>
 <body>
@@ -551,11 +553,12 @@ function cmpLoans(){
   const P=num('amount'), a=num('rate'), nMine=Math.max(1,Math.round(num('months')*(UNIT==='y'?12:1)));
   const mM=pmt(P,a,nMine), mT=mM*nMine, mI=mT-P;
   const mB=pmt(bA,bR,bN), tB=mB*bN, iB=tB-bA;
-  const diff=mI-iB;
+  const diff=mI-iB, inc=num('income');
   const row=(k,v)=>`<div class="cc-row"><span>${k}</span><b>${fmt.format(Math.round(v))} ₪</b></div>`;
+  const pctRow=(v)=>{if(inc<=0)return '';const p=Math.round(v/inc*100),c=p>40?'#c1553f':(p>30?'#8a5a12':'var(--pine-deep)');return `<div class="cc-row"><span>% מההכנסה</span><b style="color:${c}">${p}%</b></div>`;};
   out.innerHTML=`<div class="cmp-grid">`+
-    `<div class="cmp-col mine"><h4>ההלוואה שלך</h4>${row('החזר חודשי',mM)}${row('סה"כ החזר',mT)}${row('מזה ריבית',mI)}</div>`+
-    `<div class="cmp-col alt"><h4>ההצעה האחרת</h4>${row('החזר חודשי',mB)}${row('סה"כ החזר',tB)}${row('מזה ריבית',iB)}</div>`+
+    `<div class="cmp-col mine"><h4>ההלוואה שלך</h4>${row('החזר חודשי',mM)}${row('סה"כ החזר',mT)}${row('מזה ריבית',mI)}${pctRow(mM)}</div>`+
+    `<div class="cmp-col alt"><h4>ההצעה האחרת</h4>${row('החזר חודשי',mB)}${row('סה"כ החזר',tB)}${row('מזה ריבית',iB)}${pctRow(mB)}</div>`+
     `</div>`+
     `<div class="cmp-verdict ${diff>=0?'good':'bad'}">${Math.abs(diff)<1?'שתי ההצעות עולות אותו דבר בריבית':(diff>0?`💚 ההצעה האחרת חוסכת לך ${fmt.format(Math.round(diff))} ₪ ריבית`:`⚠️ ההצעה האחרת יקרה ב-${fmt.format(Math.round(-diff))} ₪ ריבית`)}</div>`;
 }

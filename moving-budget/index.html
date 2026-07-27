@@ -11,7 +11,7 @@
 :root{
   --pine:#5f7d6a; --pine-rgb:95,125,106; --pine-deep:#3e5448; --pine-darker:#2f4036;
   --sage:#bcd3bf; --sage-rgb:188,211,191; --paper:#e9f1f2; --sage-tint:#eef4ef;
-  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f;
+  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f; --go:#2f9169;
   --font:'Heebo',system-ui,Arial,sans-serif;
   --card:#fff; --shadow:0 10px 30px rgba(var(--pine-rgb),.10); --shadow-hi:0 18px 44px rgba(var(--pine-rgb),.22);
 }
@@ -91,7 +91,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
    .plan / .pend = planned / not-yet-bought → muted grey (calm, not a warning)
    .left = budget still in your pocket → green ;  .over = over budget → red */
 .bd-rnums{font-size:12.5px;font-weight:700;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
-.bd-rnums .paid{color:var(--ink);font-weight:800}
+.bd-rnums .paid{color:var(--red);font-weight:800}
 .bd-rnums .pend{color:var(--ink-soft);font-weight:700}
 .bd-rnums .over{color:var(--red);font-weight:800}
 /* fixed columns so "תוכנן" and "יצא / טרם נקנה" never swap sides: name | תוכנן | סטטוס */
@@ -100,16 +100,16 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .bd-iname{color:var(--ink);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bd-plan{color:var(--ink-soft);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
 .bd-status{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
-.bd-status.paid{color:var(--ink);font-weight:800}
-.bd-status.paid .ok{color:var(--pine);font-weight:900;margin-inline-start:2px}
+.bd-status.paid{color:var(--red);font-weight:800}
+.bd-status.paid .ok{color:var(--go);font-weight:900;margin-inline-start:2px}
 .bd-status.pend{color:var(--ink-soft)}
 .bd-empty{font-size:13.5px;color:var(--ink-soft);font-weight:600;padding:6px 2px;line-height:1.55}
 .bd-total{margin-top:14px;padding-top:13px;border-top:2px solid rgba(var(--pine-rgb),.18);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .bd-total .bd-tlbl{font-size:15px;font-weight:900;color:var(--pine-darker)}
 .bd-total .bd-tnums{font-size:13px;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums;text-align:left}
-.bd-total .bd-tnums .paid{color:var(--ink);font-weight:900}
+.bd-total .bd-tnums .paid{color:var(--red);font-weight:900}
 .bd-total .bd-tnums .plan{color:var(--ink-soft);font-weight:600}
-.bd-total .bd-tnums .left{color:var(--pine);font-weight:900}
+.bd-total .bd-tnums .left{color:var(--go);font-weight:900}
 .bd-total .bd-tnums .over{color:var(--red);font-weight:900}
 
 /* ── rooms ── */

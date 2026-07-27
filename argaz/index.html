@@ -85,7 +85,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <span class="t-txt"><span class="t-name">מחשבון משכנתא</span><span class="t-desc">בונים תמהיל של מסלולים (קבועה, פריים, צמודה) ורואים כמה המשכנתא באמת עולה לאורך השנים</span></span>
       <span class="t-arrow">←</span>
     </a>
-    <a class="tool" href="https://talibifinance-del.github.io/richlife-lida/">
+    <a class="tool" href="/lida/">
       <span class="t-ic">🤰</span>
       <span class="t-txt"><span class="t-name">מחשבוני לידה</span><span class="t-desc">כל המחשבונים להיערכות כלכלית ללידה: דמי לידה, החזרים, רשימת קניות ועוד</span></span>
       <span class="t-arrow">←</span>
@@ -211,7 +211,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       menu.querySelectorAll("[aria-pressed]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); };
     menu.appendChild(reset);
     var link = document.createElement("a");
-    link.href = "https://talibifinance-del.github.io/richlife-lida/negishut.html"; link.textContent = "הצהרת נגישות";
+    link.href = "/lida/negishut.html"; link.textContent = "הצהרת נגישות";
     menu.appendChild(link);
 
     // Permanent text link in the page footer (legal best practice: the statement
@@ -220,7 +220,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     var foot = document.querySelector("footer");
     if (foot && !foot.querySelector('a[href*="negishut"]')) {
       var fl = document.createElement("a");
-      fl.href = "https://talibifinance-del.github.io/richlife-lida/negishut.html"; fl.textContent = "הצהרת נגישות";
+      fl.href = "/lida/negishut.html"; fl.textContent = "הצהרת נגישות";
       fl.style.color = "inherit"; fl.style.marginRight = "6px";
       foot.appendChild(document.createTextNode(" · "));
       foot.appendChild(fl);

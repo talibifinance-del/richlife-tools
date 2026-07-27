@@ -144,6 +144,12 @@ svg.chart{display:block;width:100%;height:auto}
 .early-grid .e{flex:1;text-align:center;background:#fff;border-radius:12px;padding:12px 10px}
 .early-grid .e .k{font-size:11.5px;font-weight:700;color:var(--ink-soft)}
 .early-grid .e .v{font-size:clamp(16px,4.2vw,21px);font-weight:900;color:var(--pine-deep);margin-top:3px}
+
+.unit-tg{display:inline-flex;background:var(--sage-tint);border-radius:100px;padding:3px;gap:2px}
+.unit-tg button{font-family:var(--font);cursor:pointer;border:none;background:transparent;color:var(--pine-deep);font-size:13px;font-weight:800;padding:7px 17px;border-radius:100px;transition:all .15s}
+.unit-tg button.on{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.25)}
+.unit-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.unit-row .ur-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
 </style>
 </head>
 <body>
@@ -171,7 +177,7 @@ svg.chart{display:block;width:100%;height:auto}
       </div>
       <div class="field">
         <label>תקופת ההלוואה</label>
-        <div class="input-shell"><input id="months" type="number" inputmode="numeric" value="60" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div>
+        <div class="input-shell"><input id="months" type="number" inputmode="numeric" value="60" placeholder="0"><span class="unit" id="uTerm" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div>
       </div>
       <div class="field">
         <label>תוספת החזר חודשי (לא חובה)</label>
@@ -179,8 +185,13 @@ svg.chart{display:block;width:100%;height:auto}
       </div>
       <div class="field">
         <label>סגירה מוקדמת אחרי (לא חובה)</label>
-        <div class="input-shell"><input id="closeM" type="number" inputmode="numeric" value="0" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div>
+        <div class="input-shell"><input id="closeM" type="number" inputmode="numeric" value="0" placeholder="0"><span class="unit" id="uClose" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div>
       </div>
+    </div>
+
+    <div class="unit-row">
+      <span class="ur-lbl">להזין תקופה ב:</span>
+      <div class="unit-tg" id="unitTg"><button type="button" class="on" data-u="m">חודשים</button><button type="button" data-u="y">שנים</button></div>
     </div>
 
     <div class="result">
@@ -391,6 +402,9 @@ svg.chart{display:block;width:100%;height:auto}
 const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
+let UNIT='m';
+function syncUnitLabels(){const t=(UNIT==='y'?'שנים':'חודשים');document.getElementById('uTerm').textContent=t;document.getElementById('uClose').textContent=t;document.getElementById('unitTg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.u===UNIT));}
+(function(){document.getElementById('unitTg').querySelectorAll('button').forEach(b=>b.onclick=()=>{const u=b.dataset.u;if(u===UNIT)return;const mo=document.getElementById('months'),cl=document.getElementById('closeM');if(u==='y'){mo.value=Math.round((+mo.value||0)/12)||'';if(+cl.value)cl.value=Math.round((+cl.value)/12);}else{mo.value=Math.round((+mo.value||0)*12)||'';if(+cl.value)cl.value=Math.round((+cl.value)*12);}UNIT=u;syncUnitLabels();calc();});})();
 ['amount','extra'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
 ['rate','months','closeM'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
 
@@ -407,7 +421,7 @@ function sim(P,annual,n,pay){
 }
 
 function calc(){
-  const P=num('amount'), annual=num('rate'), n=Math.max(1,Math.round(num('months'))), extra=num('extra'), closeM=Math.round(num('closeM'));
+  const P=num('amount'), annual=num('rate'), mult=(UNIT==='y'?12:1), n=Math.max(1,Math.round(num('months')*mult)), extra=num('extra'), closeM=Math.round(num('closeM')*mult);
   const base=pmt(P,annual,n);
   const stdTotal=base*n, stdInterest=Math.max(0,stdTotal-P), std=sim(P,annual,n,base);
   document.getElementById('rMonthly').innerHTML=fmt.format(Math.round(base))+'<small> ₪</small>';
@@ -479,8 +493,8 @@ function drawChart(series){
 function short(v){v=Math.round(v);if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+'M';if(v>=1e3)return Math.round(v/1e3)+'K';return v;}
 
 const SKEY='richlife-loans-v1';
-function enc(){return JSON.stringify([document.getElementById('amount').value,document.getElementById('rate').value,document.getElementById('months').value,document.getElementById('extra').value,document.getElementById('closeM').value]);}
-function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('amount').value=grp(a[0]);document.getElementById('rate').value=a[1]??'6';document.getElementById('months').value=a[2]??'';document.getElementById('extra').value=grp(a[3]||'0');document.getElementById('closeM').value=a[4]??'0';return true;}catch(e){return false;}}
+function enc(){return JSON.stringify([document.getElementById('amount').value,document.getElementById('rate').value,document.getElementById('months').value,document.getElementById('extra').value,document.getElementById('closeM').value,UNIT]);}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('amount').value=grp(a[0]);document.getElementById('rate').value=a[1]??'6';document.getElementById('months').value=a[2]??'';document.getElementById('extra').value=grp(a[3]||'0');document.getElementById('closeM').value=a[4]??'0';UNIT=a[5]==='y'?'y':'m';syncUnitLabels();return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#c='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}

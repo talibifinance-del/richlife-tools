@@ -94,12 +94,15 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .bd-rnums .paid{color:var(--ink);font-weight:800}
 .bd-rnums .pend{color:var(--ink-soft);font-weight:700}
 .bd-rnums .over{color:var(--red);font-weight:800}
-.bd-item{display:flex;justify-content:space-between;gap:12px;padding:4px 12px;font-size:13px}
+/* fixed columns so "תוכנן" and "יצא / טרם נקנה" never swap sides: name | תוכנן | סטטוס */
+.bd-item{display:grid;grid-template-columns:minmax(0,1fr) 118px 138px;gap:3px 14px;align-items:baseline;padding:5px 12px;font-size:13px}
+@media(max-width:560px){.bd-item{grid-template-columns:minmax(0,1fr) 92px 104px;gap:2px 8px;font-size:12px}}
 .bd-iname{color:var(--ink);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bd-iamt{color:var(--ink-soft);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
-.bd-iamt .paid{color:var(--ink);font-weight:800}
-.bd-iamt .plan{color:var(--ink-soft);font-weight:600}
-.bd-iamt .pend{color:var(--ink-soft);font-weight:700}
+.bd-plan{color:var(--ink-soft);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+.bd-status{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+.bd-status.paid{color:var(--ink);font-weight:800}
+.bd-status.paid .ok{color:var(--pine);font-weight:900;margin-inline-start:2px}
+.bd-status.pend{color:var(--ink-soft)}
 .bd-empty{font-size:13.5px;color:var(--ink-soft);font-weight:600;padding:6px 2px;line-height:1.55}
 .bd-total{margin-top:14px;padding-top:13px;border-top:2px solid rgba(var(--pine-rgb),.18);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .bd-total .bd-tlbl{font-size:15px;font-weight:900;color:var(--pine-darker)}
@@ -568,11 +571,12 @@ function renderBreakdown(){
       '<span class="bd-rnums">יצא <span class="paid">'+money(t.paid)+' ₪</span> · '+statusHtml+'</span></div>';
     active.forEach(it=>{
       const p=num(it.p),pd=num(it.pd);
-      let amt;
-      if(pd>0){amt='<span class="paid">יצא '+money(pd)+' ₪</span>'+(p>0?' · <span class="plan">תוכנן '+money(p)+'</span>':'');}
-      else{amt='<span class="plan">תוכנן '+money(p)+' ₪</span> · <span class="pend">טרם נקנה</span>';}
+      const planCell='<span class="bd-plan">'+(p>0?'תוכנן '+money(p)+' ₪':'—')+'</span>';
+      const statusCell=pd>0
+        ? '<span class="bd-status paid">יצא '+money(pd)+' ₪ <span class="ok">✓</span></span>'
+        : '<span class="bd-status pend">טרם נקנה</span>';
       const row=document.createElement('div');row.className='bd-item';
-      row.innerHTML='<span class="bd-iname">'+esc(it.n||'פריט')+'</span><span class="bd-iamt">'+amt+'</span>';
+      row.innerHTML='<span class="bd-iname">'+esc(it.n||'פריט')+'</span>'+planCell+statusCell;
       block.appendChild(row);
     });
     host.appendChild(block);

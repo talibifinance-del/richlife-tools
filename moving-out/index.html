@@ -431,6 +431,7 @@ MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('inp
 function sh(id,v){document.getElementById(id).textContent=fmt.format(Math.round(v))+' ₪';}
 
 function calc(){
+  syncLive();
   const income=num('income');
   // Part A - split recommendation: rent up to 25%, bills up to 10%
   const recR=income*0.25, recB=income*0.10, recT=income*0.35;
@@ -498,8 +499,14 @@ async function shortLink(){
     return location.origin+location.pathname+location.search+'#p='+j.id;
   }catch(e){return makeLink();}
 }
+/* live link: attachment follows the URL (open a #p link or create one -> auto-syncs to it) */
+let docId=null,pushT=null;
+function linkFor(id){return location.origin+location.pathname+location.search+'#p='+id;}
+function setHash(id){try{history.replaceState(null,'',location.pathname+location.search+'#p='+id);}catch(e){}}
+function syncLive(){if(!docId)return;clearTimeout(pushT);pushT=setTimeout(function(){fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()}).then(function(r){if(r.status===404){docId=null;refreshShareUI();}}).catch(function(){});},1200);}
+function refreshShareUI(){var btn=document.getElementById('shareBtn');if(!btn)return;var badge=document.getElementById('liveBadge');if(!badge){badge=document.createElement('div');badge.id='liveBadge';badge.hidden=true;badge.style.cssText='background:rgba(47,145,105,.12);border:1.5px solid rgba(47,145,105,.42);color:#2f9169;font-weight:800;font-size:12.5px;border-radius:12px;padding:10px 14px;margin:0 auto 12px;max-width:480px;line-height:1.5;text-align:center';(btn.parentNode||document.body).insertBefore(badge,btn);}var box=document.getElementById('actLink'),field=document.getElementById('linkField');if(docId){btn.textContent='🔗 הצגת הקישור לשליחה';badge.hidden=false;badge.textContent='🟢 קישור חי - כל שינוי שנעשה כאן נשמר אליו אוטומטית. שולחים פעם אחת, והוא תמיד מעודכן.';if(field&&box){field.value=linkFor(docId);box.hidden=false;}}else{btn.textContent='🔗 יצירת קישור לשליחה';badge.hidden=true;}}
 (function(){const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
-  btn.onclick=async()=>{wrap.hidden=false;field.value='יוצר קישור...';btn.disabled=true;try{const link=await shortLink();field.value=link;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
+  btn.onclick=async()=>{wrap.hidden=false;field.value=docId?'מעדכן...':'יוצר קישור...';btn.disabled=true;try{if(docId){try{const _r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()});if(_r.status===404)docId=null;}catch(_e){}}if(!docId){try{const _r=await fetch(SHARE_API,{method:'POST',body:enc()});const _j=_r.ok?await _r.json():null;if(_j&&_j.id){docId=_j.id;setHash(_j.id);}}catch(_e){}}const link=docId?linkFor(docId):makeLink();refreshShareUI();field.value=link;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
   copy.onclick=()=>{field.select();try{document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);}catch(e){}flash(copy,'✓ הועתק');};})();
 function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>el.textContent=o,1800);}
 
@@ -508,11 +515,13 @@ function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>
   const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);
   const hm=(location.hash||'').match(/m=([^&]+)/);
   if(hp){
-    fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(r=>r.ok?r.text():Promise.reject()).then(t=>{dec(t);calc();}).catch(()=>{if(hm)dec(decodeURIComponent(hm[1]));calc();});
+    docId=hp[1];
+    fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(r=>r.ok?r.text():Promise.reject()).then(t=>{dec(t);calc();refreshShareUI();}).catch(()=>{if(hm)dec(decodeURIComponent(hm[1]));calc();refreshShareUI();});
   } else {
     if(hm)dec(decodeURIComponent(hm[1]));
     calc();
   }
+  refreshShareUI();
 })();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון שכירות',content_category:'RichLife כלים'});}catch(e){}});});});</script>

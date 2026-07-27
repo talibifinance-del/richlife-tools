@@ -203,6 +203,18 @@ svg.chart{display:block;width:100%;height:auto}
 .t-linked b{color:#8a5a12}
 .add-track{width:100%;font-family:var(--font);cursor:pointer;background:#fff;border:1.5px dashed rgba(var(--pine-rgb),.45);color:var(--pine-deep);font-size:14.5px;font-weight:800;padding:13px;border-radius:14px;transition:all .15s}
 .add-track:hover{background:var(--sage-tint);border-color:var(--pine)}
+/* mode toggle + change mode */
+.mode-tg{display:flex;background:var(--sage-tint);border-radius:100px;padding:4px;gap:3px;margin-bottom:16px}
+.mode-tg button{flex:1;font-family:var(--font);cursor:pointer;border:none;background:transparent;color:var(--pine-deep);font-size:14px;font-weight:800;padding:11px 8px;border-radius:100px;transition:all .15s}
+.mode-tg button.on{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.28)}
+.build-block{margin-bottom:18px}
+.bb-title{font-size:14.5px;font-weight:900;margin-bottom:12px;padding-inline-start:12px;border-inline-start:4px solid var(--pine);color:var(--pine-darker);line-height:1.35}
+.bb-title small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:3px}
+.bb-title.cur{border-color:var(--ink-soft)}
+.bb-title.aft{border-color:var(--pine)}
+.law-note{margin-top:14px;background:rgba(183,121,31,.09);border:1.5px solid rgba(183,121,31,.28);border-radius:14px;padding:13px 15px;font-size:12.5px;font-weight:600;color:#7a5210;line-height:1.6}
+.law-note b{color:#8a5a12;font-weight:800}
+.cmp-head{font-size:16px;font-weight:900;color:var(--pine-darker);margin-bottom:12px;text-align:center}
 /* breakdown cards */
 .break-card{margin-top:16px}
 .tb-card{background:var(--sage-tint);border-radius:14px;padding:13px 14px;margin-bottom:10px}
@@ -233,10 +245,31 @@ svg.chart{display:block;width:100%;height:auto}
   </div>
 
   <div class="card">
-    <div class="tmix-intro">בונים את התמהיל: מוסיפים מסלול לכל חלק מהמשכנתא. לכל מסלול סכום, ריבית ותקופה משלו. מסלולים <b>צמודי מדד</b> מתייקרים עם האינפלציה - וזו בדיוק הנקודה שחשוב להבין.</div>
+    <div class="mode-tg" id="modeTg">
+      <button type="button" class="on" data-m="new">משכנתא חדשה</button>
+      <button type="button" data-m="change">שינוי משכנתא קיימת</button>
+    </div>
 
-    <div id="tracksWrap"></div>
-    <button type="button" class="add-track" id="addTrack">+ הוספת מסלול</button>
+    <div class="tmix-intro" id="introNew">בונים את התמהיל: מוסיפים מסלול לכל חלק מהמשכנתא. לכל מסלול סכום, ריבית ותקופה משלו. מסלולים <b>צמודי מדד</b> מתייקרים עם האינפלציה - וזו בדיוק הנקודה שחשוב להבין.</div>
+    <div class="tmix-intro" id="introChange" hidden>יש כבר משכנתא ושוקלים <b>מיחזור, הגדלה או הלוואה לכל מטרה</b>? בונים את המשכנתא הנוכחית ואת זו שאחרי השינוי, ורואים כמה חוסכים או מוסיפים - כולל בדיקת החוק החדש של 40%.</div>
+
+    <div id="modeNew">
+      <div id="tracksWrap"></div>
+      <button type="button" class="add-track" data-add="tracksWrap">+ הוספת מסלול</button>
+    </div>
+
+    <div id="modeChange" hidden>
+      <div class="build-block">
+        <div class="bb-title cur">המשכנתא הנוכחית שלי<small>מזינים את היתרה שנשארה בכל מסלול והריבית הנוכחית</small></div>
+        <div id="tracksWrapCur"></div>
+        <button type="button" class="add-track" data-add="tracksWrapCur">+ הוספת מסלול</button>
+      </div>
+      <div class="build-block">
+        <div class="bb-title aft">אחרי השינוי<small>מיחזור, הגדלה, או הוספת מסלול "לכל מטרה" (ריבית גבוהה יותר מדיור)</small></div>
+        <div id="tracksWrapAft"></div>
+        <button type="button" class="add-track" data-add="tracksWrapAft">+ הוספת מסלול</button>
+      </div>
+    </div>
 
     <div class="fields" style="margin-top:16px">
       <div class="field">
@@ -250,24 +283,32 @@ svg.chart{display:block;width:100%;height:auto}
     </div>
     <div class="idx-note">💡 המדד מוסיף לחיסכון? לא - הוא מוסיף לחוב. במסלול צמוד, גם היתרה וגם ההחזר גדלים כל שנה לפי האינפלציה. 2%-3% זו הערכה שמרנית לטווח ארוך.</div>
 
-    <div class="result">
-      <div class="r-lbl">🏠 ההחזר החודשי ההתחלתי</div>
-      <div class="r-num" id="rMonthly">0<small> ₪</small></div>
-      <div class="r-cells">
-        <div class="r-cell"><div class="k">סך המשכנתא</div><div class="v" id="rPrincipal">0 ₪</div></div>
-        <div class="r-cell"><div class="k">סך הכל שתחזירו</div><div class="v" id="rTotal">0 ₪</div></div>
-        <div class="r-cell fee"><div class="k">ריבית + הצמדה</div><div class="v" id="rCost">0 ₪</div></div>
+    <div id="resNew">
+      <div class="result">
+        <div class="r-lbl">🏠 ההחזר החודשי ההתחלתי</div>
+        <div class="r-num" id="rMonthly">0<small> ₪</small></div>
+        <div class="r-cells">
+          <div class="r-cell"><div class="k">סך המשכנתא</div><div class="v" id="rPrincipal">0 ₪</div></div>
+          <div class="r-cell"><div class="k">סך הכל שתחזירו</div><div class="v" id="rTotal">0 ₪</div></div>
+          <div class="r-cell fee"><div class="k">ריבית + הצמדה</div><div class="v" id="rCost">0 ₪</div></div>
+        </div>
+        <div class="pi-bar"><i class="p" id="barP" style="width:0"></i><i class="i" id="barI" style="width:0"></i></div>
+        <div class="pi-lbl" id="barLbl"></div>
       </div>
-      <div class="pi-bar"><i class="p" id="barP" style="width:0"></i><i class="i" id="barI" style="width:0"></i></div>
-      <div class="pi-lbl" id="barLbl"></div>
+      <div class="insight" id="insight"></div>
+      <div class="insight" id="afford" hidden></div>
     </div>
-    <div class="insight" id="insight"></div>
-    <div class="insight" id="afford" hidden></div>
+
+    <div id="resChange" hidden>
+      <div id="cmpOut"></div>
+      <div class="insight" id="affordAft" hidden></div>
+      <div class="law-note">⚖️ <b>חוק חדש (בנק ישראל, 2026):</b> כשמוסיפים הלוואה על נכס שכבר ממושכן (הגדלה / שיפוץ / לכל מטרה), הבנק מחשב את <b>כל</b> ההחזרים המובטחים בנכס יחד - וסך ההחזר לא יעלה על 40% מההכנסה הפנויה. מעל זה המשכנתא נחשבת מסוכנת והריבית מתייקרת (עד כ-2% יותר). לכן בודקים את ההחזר הכולל אחרי השינוי, לא רק את התוספת.</div>
+    </div>
   </div>
 
   <div class="card break-card">
-    <div class="chart-head">🧩 פירוט לפי מסלול</div>
-    <div class="chart-sub">אותו שקל, בשני מסלולים שונים, עולה אחרת לגמרי. ככה רואים איזה מסלול הכי יקר לכם - ולמה.</div>
+    <div class="chart-head" id="breakHead">🧩 פירוט לפי מסלול</div>
+    <div class="chart-sub" id="breakSub">אותו שקל, בשני מסלולים שונים, עולה אחרת לגמרי. ככה רואים איזה מסלול הכי יקר לכם - ולמה.</div>
     <div id="trackBreak"></div>
   </div>
 
@@ -278,7 +319,8 @@ svg.chart{display:block;width:100%;height:auto}
     <div class="chart-tip" id="chartTip"></div>
     <div class="chart-sub" style="text-align:center;margin:8px 0 0;font-size:11.5px">👆 העבירו על הגרף כדי לראות את היתרה בכל חודש</div>
     <div class="chart-legend">
-      <span><i style="background:var(--pine)"></i>יתרת המשכנתא</span>
+      <span id="legMain"><i style="background:var(--pine)"></i>יתרת המשכנתא</span>
+      <span id="legCur" hidden><i style="background:var(--ink-soft)"></i>הנוכחית</span>
     </div>
   </div>
 
@@ -453,18 +495,21 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
 function nRaw(v){return +(''+v).replace(/[^\d.]/g,'')||0;}
 function num(id){return nRaw(document.getElementById(id).value);}
+function $(id){return document.getElementById(id);}
 
 const TYPES=[
  {k:'fixed_nl', n:'קבועה לא צמודה', rate:4.9, lnk:false},
  {k:'fixed_l',  n:'קבועה צמודה',    rate:3.4, lnk:true},
  {k:'prime',    n:'פריים',          rate:6.0, lnk:false},
  {k:'var_nl',   n:'משתנה לא צמודה',  rate:4.6, lnk:false},
- {k:'var_l',    n:'משתנה צמודה',     rate:3.3, lnk:true}
+ {k:'var_l',    n:'משתנה צמודה',     rate:3.3, lnk:true},
+ {k:'purpose',  n:'לכל מטרה',        rate:6.5, lnk:false}
 ];
 function typeByK(k){return TYPES.find(t=>t.k===k)||TYPES[0];}
 
-/* ---------- track rows ---------- */
-const wrap=document.getElementById('tracksWrap');
+let MODE='new';
+
+/* ---------- track rows (per container) ---------- */
 function rowHTML(t){
   const opts=TYPES.map(x=>`<option value="${x.k}"${x.k===t.ty?' selected':''}>${x.n}</option>`).join('');
   return `<div class="trow">
@@ -480,9 +525,10 @@ function rowHTML(t){
     <label class="t-linked"><input type="checkbox" class="t-lnk"${t.lnk?' checked':''}> צמוד למדד <b>(היתרה גדלה עם האינפלציה)</b></label>
   </div>`;
 }
-function renderTracks(arr){ wrap.innerHTML=arr.map(rowHTML).join(''); bindRows(); }
-function readTracks(){
-  return [...wrap.querySelectorAll('.trow')].map(r=>({
+function renderTracks(wrapId,arr){const w=$(wrapId);w.innerHTML=arr.map(rowHTML).join('');bindRows(wrapId);}
+function readTracks(wrapId){
+  const w=$(wrapId); if(!w)return [];
+  return [...w.querySelectorAll('.trow')].map(r=>({
     ty:r.querySelector('.t-type').value,
     amt:nRaw(r.querySelector('.t-amt').value),
     rate:nRaw(r.querySelector('.t-rate').value),
@@ -490,27 +536,43 @@ function readTracks(){
     lnk:r.querySelector('.t-lnk').checked
   }));
 }
-function bindRows(){
-  [...wrap.querySelectorAll('.trow')].forEach(r=>{
+function bindRows(wrapId){
+  const w=$(wrapId);
+  [...w.querySelectorAll('.trow')].forEach(r=>{
     const amt=r.querySelector('.t-amt');
     amt.addEventListener('input',()=>{const p=amt.selectionStart,old=amt.value;amt.value=grp(amt.value);const d=amt.value.length-old.length;try{amt.setSelectionRange(p+d,p+d);}catch(e){}calc();});
     r.querySelector('.t-rate').addEventListener('input',calc);
     r.querySelector('.t-yrs').addEventListener('input',calc);
     r.querySelector('.t-lnk').addEventListener('change',calc);
     r.querySelector('.t-type').addEventListener('change',e=>{const t=typeByK(e.target.value);r.querySelector('.t-rate').value=t.rate;r.querySelector('.t-lnk').checked=t.lnk;calc();});
-    r.querySelector('.t-del').addEventListener('click',()=>{if(wrap.querySelectorAll('.trow').length<=1)return;r.remove();updateDelState();calc();});
+    r.querySelector('.t-del').addEventListener('click',()=>{if(w.querySelectorAll('.trow').length<=1)return;r.remove();updateDelState(wrapId);calc();});
   });
-  updateDelState();
+  updateDelState(wrapId);
 }
-function updateDelState(){const dels=wrap.querySelectorAll('.t-del'),only=dels.length<=1;dels.forEach(d=>d.disabled=only);}
-document.getElementById('addTrack').addEventListener('click',()=>{const cur=readTracks();const t=typeByK('prime');cur.push({ty:t.k,amt:300000,rate:t.rate,yrs:20,lnk:t.lnk});renderTracks(cur);calc();});
-['idx','income'].forEach(id=>{const el=document.getElementById(id);
+function updateDelState(wrapId){const dels=$(wrapId).querySelectorAll('.t-del'),only=dels.length<=1;dels.forEach(d=>d.disabled=only);}
+document.querySelectorAll('.add-track[data-add]').forEach(btn=>{
+  btn.addEventListener('click',()=>{const wid=btn.dataset.add,cur=readTracks(wid),t=typeByK('prime');cur.push({ty:t.k,amt:300000,rate:t.rate,yrs:20,lnk:t.lnk});renderTracks(wid,cur);calc();});
+});
+['idx','income'].forEach(id=>{const el=$(id);
   if(id==='income'){el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}calc();});}
   else el.addEventListener('input',calc);});
 
+/* mode toggle */
+$('modeTg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.m===MODE)return;MODE=b.dataset.m;applyMode();calc();}));
+function applyMode(){
+  $('modeTg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.m===MODE));
+  const chg=MODE==='change';
+  $('modeNew').hidden=chg; $('modeChange').hidden=!chg;
+  $('introNew').hidden=chg; $('introChange').hidden=!chg;
+  $('resNew').hidden=chg; $('resChange').hidden=!chg;
+  $('legCur').hidden=!chg;
+  $('legMain').querySelector('i').nextSibling.textContent = chg?'אחרי השינוי':'יתרת המשכנתא';
+  $('breakHead').textContent = chg?'🧩 פירוט המשכנתא אחרי השינוי':'🧩 פירוט לפי מסלול';
+  $('breakSub').textContent = chg?'המסלולים של המשכנתא החדשה - איזה מהם הכי יקר לכם.':'אותו שקל, בשני מסלולים שונים, עולה אחרת לגמרי. ככה רואים איזה מסלול הכי יקר לכם - ולמה.';
+}
+
 /* ---------- math ---------- */
 function pmt(P,annual,n){const r=annual/100/12;if(n<=0)return P;if(r===0)return P/n;return P*r/(1-Math.pow(1+r,-n));}
-/* simulate one track. linked -> balance & payment grow with monthly index (real payment stays level). */
 function simTrack(P,annual,yrs,idxA,linked){
   const n=Math.max(1,Math.round(yrs*12));
   const mr=annual/100/12, mi=linked?(Math.pow(1+idxA/100,1/12)-1):0;
@@ -524,80 +586,120 @@ function simTrack(P,annual,yrs,idxA,linked){
   }
   return {n,initPay:linked?initPay:pay,totalPaid,cost:Math.max(0,totalPaid-P),series};
 }
+function aggregate(tracks,idxA){
+  let totP=0,totInit=0,totPaid=0,totCost=0,maxN=1; const sims=[];
+  tracks.forEach(t=>{const s=simTrack(t.amt,t.rate,t.yrs,idxA,t.lnk);sims.push(s);totP+=t.amt;totInit+=s.initPay;totPaid+=s.totalPaid;totCost+=s.cost;maxN=Math.max(maxN,s.n);});
+  return {totP,totInit,totPaid,totCost,maxN,sims,tracks};
+}
+function combined(agg){const c=[];for(let m=0;m<=agg.maxN;m++){let sum=0;agg.sims.forEach(x=>sum+=(m<x.series.length?x.series[m]:0));c.push(sum);}return c;}
+
+function affordMsg(el,monthly,totP,linkedAny){
+  const income=num('income');
+  if(income<=0||totP<=0){el.hidden=true;return;}
+  const p=monthly/income*100;let cls,msg;
+  if(p<=30){cls='insight';msg=`✓ ההחזר ${MODE==='change'?'אחרי השינוי ':'ההתחלתי '}הוא <b>${Math.round(p)}%</b> מההכנסה - נטל בריא, נשאר מרווח נשימה.`;}
+  else if(p<=40){cls='insight soft';msg=`⚠️ ההחזר ${MODE==='change'?'אחרי השינוי ':'ההתחלתי '}הוא <b>${Math.round(p)}%</b> מההכנסה - גבולי. בנקים לרוב לא מאשרים מעל 40%${linkedAny?', ובמסלול צמוד ההחזר עוד יגדל עם השנים':''}.`;}
+  else{cls='insight warn';msg=`🔴 ההחזר ${MODE==='change'?'אחרי השינוי ':'ההתחלתי '}הוא <b>${Math.round(p)}%</b> מההכנסה - מעל מה שבנק מאשר (40%). ${MODE==='change'?'הבנק סוכם את כל ההחזרים המובטחים בנכס - שווה להקטין את התוספת או להאריך תקופה.':'שווה להאריך תקופה, להקטין סכום או להגדיל הון עצמי.'}`;}
+  el.className=cls;el.innerHTML=msg;el.hidden=false;
+}
 
 function calc(){
-  const tr=readTracks(), idxA=num('idx');
-  let totP=0,totInit=0,totPaid=0,totCost=0,maxN=1;
-  const sims=tr.map(t=>{const s=simTrack(t.amt,t.rate,t.yrs,idxA,t.lnk);totP+=t.amt;totInit+=s.initPay;totPaid+=s.totalPaid;totCost+=s.cost;maxN=Math.max(maxN,s.n);return s;});
-  document.getElementById('rMonthly').innerHTML=fmt.format(Math.round(totInit))+'<small> ₪</small>';
-  document.getElementById('rPrincipal').textContent=fmt.format(Math.round(totP))+' ₪';
-  document.getElementById('rTotal').textContent=fmt.format(Math.round(totPaid))+' ₪';
-  document.getElementById('rCost').textContent=fmt.format(Math.round(totCost))+' ₪';
-  const pPct=totPaid>0?Math.round(totP/totPaid*100):100;
-  document.getElementById('barP').style.width=pPct+'%';
-  document.getElementById('barI').style.width=(100-pPct)+'%';
-  document.getElementById('barLbl').innerHTML=`מתוך ההחזר: <b>${pPct}% קרן</b> · <b class="int">${100-pPct}% ריבית והצמדה</b>`;
-  const ins=document.getElementById('insight');
-  if(totP>0){const per=totPaid/totP,anyLnk=tr.some(t=>t.lnk);ins.innerHTML=`על משכנתא של <b>${fmt.format(Math.round(totP))} ₪</b> תחזירו בסך הכל <b>${fmt.format(Math.round(totPaid))} ₪</b> - מתוכם <b>${fmt.format(Math.round(totCost))} ₪</b> ריבית${anyLnk?' והצמדה':''}. כלומר על כל ₪1 שלוויתם, תחזירו <b>₪${per.toFixed(2)}</b>.`;ins.style.display='block';}
-  else ins.style.display='none';
-  const income=num('income'), af=document.getElementById('afford');
-  if(income>0 && totP>0){
-    const p=totInit/income*100;let cls,msg;
-    if(p<=30){cls='insight';msg=`✓ ההחזר ההתחלתי הוא <b>${Math.round(p)}%</b> מההכנסה - נטל בריא, נשאר מרווח נשימה.`;}
-    else if(p<=40){cls='insight soft';msg=`⚠️ ההחזר ההתחלתי הוא <b>${Math.round(p)}%</b> מההכנסה - גבולי. בנקים לרוב לא מאשרים מעל 40%, ובמסלול צמוד ההחזר עוד יגדל עם השנים.`;}
-    else{cls='insight warn';msg=`🔴 ההחזר ההתחלתי הוא <b>${Math.round(p)}%</b> מההכנסה - מעל מה שבנק מאשר (40%). שווה להאריך תקופה, להקטין סכום או להגדיל הון עצמי.`;}
-    af.className=cls;af.innerHTML=msg;af.hidden=false;
-  } else af.hidden=true;
-  renderBreak(tr,sims);
-  const comb=[];for(let m=0;m<=maxN;m++){let sum=0;sims.forEach(s=>{sum+=(m<s.series.length?s.series[m]:0);});comb.push(sum);}
-  drawChart(comb);
+  const idxA=num('idx');
+  if(MODE==='new'){
+    const tr=readTracks('tracksWrap'), ag=aggregate(tr,idxA);
+    $('rMonthly').innerHTML=fmt.format(Math.round(ag.totInit))+'<small> ₪</small>';
+    $('rPrincipal').textContent=fmt.format(Math.round(ag.totP))+' ₪';
+    $('rTotal').textContent=fmt.format(Math.round(ag.totPaid))+' ₪';
+    $('rCost').textContent=fmt.format(Math.round(ag.totCost))+' ₪';
+    const pPct=ag.totPaid>0?Math.round(ag.totP/ag.totPaid*100):100;
+    $('barP').style.width=pPct+'%'; $('barI').style.width=(100-pPct)+'%';
+    $('barLbl').innerHTML=`מתוך ההחזר: <b>${pPct}% קרן</b> · <b class="int">${100-pPct}% ריבית והצמדה</b>`;
+    const ins=$('insight');
+    if(ag.totP>0){const per=ag.totPaid/ag.totP,anyLnk=tr.some(t=>t.lnk);ins.innerHTML=`על משכנתא של <b>${fmt.format(Math.round(ag.totP))} ₪</b> תחזירו בסך הכל <b>${fmt.format(Math.round(ag.totPaid))} ₪</b> - מתוכם <b>${fmt.format(Math.round(ag.totCost))} ₪</b> ריבית${anyLnk?' והצמדה':''}. כלומר על כל ₪1 שלוויתם, תחזירו <b>₪${per.toFixed(2)}</b>.`;ins.style.display='block';}
+    else ins.style.display='none';
+    affordMsg($('afford'),ag.totInit,ag.totP,tr.some(t=>t.lnk));
+    renderBreak(tr,ag.sims);
+    drawChart(combined(ag),null);
+  } else {
+    const curT=readTracks('tracksWrapCur'), aftT=readTracks('tracksWrapAft');
+    const cur=aggregate(curT,idxA), aft=aggregate(aftT,idxA);
+    renderCmp(cur,aft);
+    affordMsg($('affordAft'),aft.totInit,aft.totP,aftT.some(t=>t.lnk));
+    renderBreak(aftT,aft.sims);
+    drawChart(combined(aft),combined(cur));
+  }
+}
+
+function renderCmp(cur,aft){
+  const out=$('cmpOut');
+  const row=(k,v)=>`<div class="cc-row"><span>${k}</span><b>${fmt.format(Math.round(v))} ₪</b></div>`;
+  const dMon=aft.totInit-cur.totInit, dCost=aft.totCost-cur.totCost;
+  const monTxt=Math.abs(dMon)<1?'ההחזר החודשי זהה':(dMon<0?`ההחזר החודשי יורד ב-${fmt.format(Math.round(-dMon))} ₪`:`ההחזר החודשי עולה ב-${fmt.format(Math.round(dMon))} ₪`);
+  const good=dCost<=0;
+  const verdict=Math.abs(dCost)<1?'עלות הריבית זהה בשתי האפשרויות':
+    (good?`💚 השינוי חוסך לכם <b>${fmt.format(Math.round(-dCost))} ₪</b> בריבית והצמדה`
+         :`⚠️ השינוי מוסיף <b>${fmt.format(Math.round(dCost))} ₪</b> בריבית והצמדה`);
+  out.innerHTML=`<div class="cmp-head">⚖️ נוכחית מול אחרי השינוי</div>
+    <div class="cmp-grid">
+      <div class="cmp-col alt"><h4>המשכנתא הנוכחית</h4>${row('החזר חודשי',cur.totInit)}${row('נשאר לשלם',cur.totPaid)}${row('ריבית + הצמדה',cur.totCost)}</div>
+      <div class="cmp-col mine"><h4>אחרי השינוי</h4>${row('החזר חודשי',aft.totInit)}${row('סה"כ לתשלום',aft.totPaid)}${row('ריבית + הצמדה',aft.totCost)}</div>
+    </div>
+    <div class="cost-cmp"><div class="cc-title">💸 עלות הכסף - כמה עולה לכם הריבית וההצמדה</div><div class="cost-pair"><div class="cp"><span class="l">היום</span><span class="v">${fmt.format(Math.round(cur.totCost))} ₪</span></div><div class="cp"><span class="l">אחרי השינוי</span><span class="v">${fmt.format(Math.round(aft.totCost))} ₪</span></div></div></div>
+    <div class="cmp-verdict ${good?'good':'bad'}">${verdict}<div style="font-weight:700;font-size:12.5px;margin-top:6px;opacity:.85">${monTxt}</div></div>`;
 }
 
 function renderBreak(tr,sims){
-  const box=document.getElementById('trackBreak');
-  box.innerHTML=tr.map((t,i)=>{const s=sims[i],nm=typeByK(t.ty).n,yrs=Math.round(t.yrs);
+  const box=$('trackBreak');
+  box.innerHTML=tr.map((t,i)=>{const sm=sims[i],nm=typeByK(t.ty).n,yrs=Math.round(t.yrs);
     return `<div class="tb-card">
       <div class="tb-top"><span class="tb-nm">${nm}</span><span class="tb-tag ${t.lnk?'lnk':''}">${t.lnk?'צמוד מדד':'לא צמוד'} · ${t.rate}% · ${yrs} ש'</span></div>
       <div class="tb-stats">
-        <div class="s"><div class="k">החזר התחלתי</div><div class="v">${fmt.format(Math.round(s.initPay))} ₪</div></div>
-        <div class="s"><div class="k">סה"כ החזר</div><div class="v">${fmt.format(Math.round(s.totalPaid))} ₪</div></div>
-        <div class="s cost"><div class="k">ריבית + הצמדה</div><div class="v">${fmt.format(Math.round(s.cost))} ₪</div></div>
+        <div class="s"><div class="k">החזר התחלתי</div><div class="v">${fmt.format(Math.round(sm.initPay))} ₪</div></div>
+        <div class="s"><div class="k">סה"כ החזר</div><div class="v">${fmt.format(Math.round(sm.totalPaid))} ₪</div></div>
+        <div class="s cost"><div class="k">ריבית + הצמדה</div><div class="v">${fmt.format(Math.round(sm.cost))} ₪</div></div>
       </div>
     </div>`;}).join('');
 }
 
 let CH=null;
-function drawChart(series){
+function drawChart(series,series2){
   const W=720,H=360,padL=64,padR=18,padT=18,padB=34;
-  const pts=series, N=Math.max(1,pts.length-1), maxV=Math.max(...pts,1);
+  const N=Math.max(1,series.length-1,(series2?series2.length-1:0));
+  const at=(a,i)=>i<a.length?a[i]:0;
+  const maxV=Math.max(...series,...(series2||[]),1);
   const x=i=>padL+(W-padL-padR)*(i/N);
   const yv=v=>H-padB-(H-padT-padB)*(v/maxV);
-  const line=a=>a.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${yv(v).toFixed(1)}`).join(' ');
-  const area=a=>`${line(a)} L${x(N).toFixed(1)},${H-padB} L${padL},${H-padB} Z`;
+  const path=a=>Array.from({length:N+1},(_,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${yv(at(a,i)).toFixed(1)}`).join(' ');
+  const area=a=>`${path(a)} L${x(N).toFixed(1)},${H-padB} L${padL},${H-padB} Z`;
   let grid='';for(let k=0;k<=4;k++){const v=maxV*k/4,gy=yv(v);grid+=`<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${W-padR}" y2="${gy.toFixed(1)}" stroke="rgba(95,125,106,.13)" stroke-width="1"/><text x="${padL-8}" y="${(gy+4).toFixed(1)}" text-anchor="end" font-size="11" font-weight="700" fill="#51625a">${short(v)}</text>`;}
   let xl='';[0,Math.round(N/2),N].forEach(i=>{const yrs=i/12;const lbl=i===0?'0':(Number.isInteger(yrs)?yrs+" ש'":Math.round(yrs)+" ש'");xl+=`<text x="${x(i).toFixed(1)}" y="${H-12}" text-anchor="middle" font-size="11" font-weight="700" fill="#51625a">${lbl}</text>`;});
-  const dot=`<circle cx="${x(N).toFixed(1)}" cy="${yv(pts[N]).toFixed(1)}" r="4.5" fill="#5f7d6a"/>`;
-  document.getElementById('chart').innerHTML=`<defs><linearGradient id="gInv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(95,125,106,.28)"/><stop offset="1" stop-color="rgba(95,125,106,.02)"/></linearGradient></defs>${grid}${xl}<path d="${area(pts)}" fill="url(#gInv)"/><path d="${line(pts)}" fill="none" stroke="#5f7d6a" stroke-width="3"/>${dot}<g id="hoverLayer"></g>`;
-  CH={N,pts,x,yv,padL,padR,padT,padB,W,H};
+  const dot=`<circle cx="${x(N).toFixed(1)}" cy="${yv(at(series,N)).toFixed(1)}" r="4.5" fill="#5f7d6a"/>`;
+  const curLine=series2?`<path d="${path(series2)}" fill="none" stroke="#51625a" stroke-width="2.5" stroke-dasharray="6 5" opacity=".85"/>`:'';
+  $('chart').innerHTML=`<defs><linearGradient id="gInv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(95,125,106,.28)"/><stop offset="1" stop-color="rgba(95,125,106,.02)"/></linearGradient></defs>${grid}${xl}<path d="${area(series)}" fill="url(#gInv)"/>${curLine}<path d="${path(series)}" fill="none" stroke="#5f7d6a" stroke-width="3"/>${dot}<g id="hoverLayer"></g>`;
+  CH={N,pts:series,pts2:series2,at,x,yv,padL,padR,padT,padB,W,H};
 }
 (function setupHover(){
-  const svg=document.getElementById('chart'),tip=document.getElementById('chartTip'),card=svg.closest('.chart-card');
+  const svg=$('chart'),tip=$('chartTip'),card=svg.closest('.chart-card');
   function move(evt){
     if(!CH)return;
     const rect=svg.getBoundingClientRect(),cx=evt.touches?evt.touches[0].clientX:evt.clientX;
     const vbx=(cx-rect.left)/rect.width*CH.W;
     let i=Math.round((vbx-CH.padL)/((CH.W-CH.padL-CH.padR)/CH.N));i=Math.max(0,Math.min(CH.N,i));
-    const gx=CH.x(i),val=CH.pts[i];
-    document.getElementById('hoverLayer').innerHTML=`<line x1="${gx.toFixed(1)}" y1="${CH.padT}" x2="${gx.toFixed(1)}" y2="${CH.H-CH.padB}" stroke="rgba(95,125,106,.4)" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="${gx.toFixed(1)}" cy="${CH.yv(val).toFixed(1)}" r="5.5" fill="#5f7d6a" stroke="#fff" stroke-width="1.5"/>`;
+    const gx=CH.x(i),val=CH.at(CH.pts,i);
+    let extra='';
+    if(CH.pts2){const v2=CH.at(CH.pts2,i);extra=`<circle cx="${gx.toFixed(1)}" cy="${CH.yv(v2).toFixed(1)}" r="5" fill="#51625a" stroke="#fff" stroke-width="1.5"/>`;}
+    $('hoverLayer').innerHTML=`<line x1="${gx.toFixed(1)}" y1="${CH.padT}" x2="${gx.toFixed(1)}" y2="${CH.H-CH.padB}" stroke="rgba(95,125,106,.4)" stroke-width="1.5" stroke-dasharray="3 3"/>${extra}<circle cx="${gx.toFixed(1)}" cy="${CH.yv(val).toFixed(1)}" r="5.5" fill="#5f7d6a" stroke="#fff" stroke-width="1.5"/>`;
     const yrs=i/12,lbl=Number.isInteger(yrs)&&i>0?`שנה ${yrs}`:`חודש ${i}`;
-    tip.innerHTML=`<div class="tt-yr">${lbl}</div><div class="tt-row"><i style="background:#5f7d6a"></i>יתרה לתשלום: <b>${fmt.format(Math.round(val))} ₪</b></div>`;
+    let rows=`<div class="tt-row"><i style="background:#5f7d6a"></i>${CH.pts2?'אחרי השינוי':'יתרה לתשלום'}: <b>${fmt.format(Math.round(val))} ₪</b></div>`;
+    if(CH.pts2)rows+=`<div class="tt-row"><i style="background:#51625a"></i>הנוכחית: <b>${fmt.format(Math.round(CH.at(CH.pts2,i)))} ₪</b></div>`;
+    tip.innerHTML=`<div class="tt-yr">${lbl}</div>${rows}`;
     tip.style.display='block';
     const cardRect=card.getBoundingClientRect();
     const px=(rect.left-cardRect.left)+gx/CH.W*rect.width, py=(rect.top-cardRect.top)+CH.yv(val)/CH.H*rect.height;
     let left=px-tip.offsetWidth/2;left=Math.max(6,Math.min(left,cardRect.width-tip.offsetWidth-6));
     tip.style.left=left+'px';tip.style.top=Math.max(6,py-tip.offsetHeight-14)+'px';
   }
-  function leave(){document.getElementById('hoverLayer').innerHTML='';tip.style.display='none';}
+  function leave(){$('hoverLayer').innerHTML='';tip.style.display='none';}
   svg.addEventListener('mousemove',move);svg.addEventListener('mouseleave',leave);
   svg.addEventListener('touchstart',move,{passive:true});svg.addEventListener('touchmove',move,{passive:true});svg.addEventListener('touchend',leave);
 })();
@@ -605,18 +707,34 @@ function short(v){v=Math.round(v);if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+'
 
 /* ---------- save / share ---------- */
 const SKEY='richlife-mortgage-v1';
-const DEFAULT_TR=[
+const DEF_NEW=[
  {ty:'fixed_nl',amt:500000,rate:4.9,yrs:25,lnk:false},
  {ty:'prime',   amt:300000,rate:6.0,yrs:20,lnk:false},
  {ty:'var_l',   amt:200000,rate:3.3,yrs:30,lnk:true}
 ];
-function enc(){return JSON.stringify({v:1,idx:document.getElementById('idx').value,income:document.getElementById('income').value,tr:readTracks()});}
-function dec(str){try{const o=JSON.parse(str);if(!o||!Array.isArray(o.tr)||!o.tr.length)return false;renderTracks(o.tr.map(t=>({ty:t.ty||'fixed_nl',amt:t.amt||0,rate:(t.rate!=null?t.rate:4.9),yrs:t.yrs||25,lnk:!!t.lnk})));document.getElementById('idx').value=(o.idx!=null?o.idx:'2');document.getElementById('income').value=grp(o.income||'0');return true;}catch(e){return false;}}
+const DEF_CUR=[
+ {ty:'fixed_nl',amt:400000,rate:4.8,yrs:18,lnk:false},
+ {ty:'prime',   amt:250000,rate:6.0,yrs:18,lnk:false}
+];
+const DEF_AFT=[
+ {ty:'fixed_nl',amt:400000,rate:4.1,yrs:15,lnk:false},
+ {ty:'prime',   amt:250000,rate:6.0,yrs:15,lnk:false}
+];
+function normTracks(a,fb){return (Array.isArray(a)&&a.length)?a.map(t=>({ty:t.ty||'fixed_nl',amt:t.amt||0,rate:(t.rate!=null?t.rate:4.9),yrs:t.yrs||25,lnk:!!t.lnk})):fb.map(t=>({...t}));}
+function enc(){return JSON.stringify({v:2,mode:MODE,idx:$('idx').value,income:$('income').value,tr:readTracks('tracksWrap'),cur:readTracks('tracksWrapCur'),aft:readTracks('tracksWrapAft')});}
+function dec(str){try{const o=JSON.parse(str);if(!o)return false;
+  MODE=o.mode==='change'?'change':'new';
+  renderTracks('tracksWrap',normTracks(o.tr,DEF_NEW));
+  renderTracks('tracksWrapCur',normTracks(o.cur,DEF_CUR));
+  renderTracks('tracksWrapAft',normTracks(o.aft,DEF_AFT));
+  $('idx').value=(o.idx!=null?o.idx:'2');
+  $('income').value=grp(o.income||'0');
+  applyMode();return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#c='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}
 (function(){
-  const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
+  const btn=$('shareBtn'),wrap=$('actLink'),field=$('linkField'),copy=$('copyBtn');
   btn.onclick=async()=>{wrap.hidden=false;field.value='יוצר קישור...';btn.disabled=true;try{const link=await shortLink();field.value=link;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
   copy.onclick=()=>{field.select();try{document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);}catch(e){}flash(copy,'✓ הועתק');};
 })();
@@ -624,14 +742,17 @@ function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>
 
 (function boot(){
   try{localStorage.removeItem(SKEY);}catch(e){}
-  renderTracks(DEFAULT_TR.map(t=>({...t})));
+  renderTracks('tracksWrap',DEF_NEW.map(t=>({...t})));
+  renderTracks('tracksWrapCur',DEF_CUR.map(t=>({...t})));
+  renderTracks('tracksWrapAft',DEF_AFT.map(t=>({...t})));
+  applyMode();
   const h=(location.hash||'').match(/c=([^&]+)/);
   if(h) dec(decodeURIComponent(h[1]));
   calc();
 })();
 (function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){dec(t);calc();}).catch(function(){});})();
 
-(function(){try{var fromA=(document.referrer||'').indexOf('argaz')>-1;if(fromA)sessionStorage.setItem('rlArgaz','1');if(fromA||sessionStorage.getItem('rlArgaz')){var b=document.getElementById('backArgaz');if(b)b.hidden=false;}}catch(e){if((document.referrer||'').indexOf('argaz')>-1){var b2=document.getElementById('backArgaz');if(b2)b2.hidden=false;}}})();
+(function(){try{var fromA=(document.referrer||'').indexOf('argaz')>-1;if(fromA)sessionStorage.setItem('rlArgaz','1');if(fromA||sessionStorage.getItem('rlArgaz')){var b=$('backArgaz');if(b)b.hidden=false;}}catch(e){if((document.referrer||'').indexOf('argaz')>-1){var b2=document.getElementById('backArgaz');if(b2)b2.hidden=false;}}})();
 </script>
 </body>
 </html>

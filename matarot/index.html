@@ -1052,7 +1052,7 @@ function decodeGoals(str){
     return a.map(x=>({id:++uid,emoji:x[0]||'🎯',name:x[1]||'',target:x[2]??'',initial:x[3]??'',years:x[4]??'',pct:(x[5]??5)}));
   }catch(e){return null;}
 }
-function saveGoals(){/* device memory disabled on purpose: the personal share-link is the only saved copy, so the plain URL stays fresh */}
+function saveGoals(){ syncLive(); }  // device memory off; the live link is the saved copy
 
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){
@@ -1060,6 +1060,12 @@ function makeLink(){
   return base+'#g='+encodeURIComponent(encodeGoals(goals));
 }
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:encodeGoals(goals)});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}
+/* live link */
+let docId=null,pushT=null;
+function linkFor(id){return location.origin+location.pathname+location.search+'#p='+id;}
+function setHash(id){try{history.replaceState(null,'',location.pathname+location.search+'#p='+id);}catch(e){}}
+function syncLive(){if(!docId)return;clearTimeout(pushT);pushT=setTimeout(function(){fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:encodeGoals(goals)}).then(function(r){if(r.status===404){docId=null;refreshShareUI();}}).catch(function(){});},1200);}
+function refreshShareUI(){var btn=document.getElementById('shareBtn');if(!btn)return;var badge=document.getElementById('liveBadge');if(!badge){badge=document.createElement('div');badge.id='liveBadge';badge.hidden=true;badge.style.cssText='background:rgba(47,145,105,.12);border:1.5px solid rgba(47,145,105,.42);color:#2f9169;font-weight:800;font-size:12.5px;border-radius:12px;padding:10px 14px;margin:0 auto 12px;max-width:480px;line-height:1.5;text-align:center';(btn.parentNode||document.body).insertBefore(badge,btn);}var box=document.getElementById('actLink'),field=document.getElementById('linkField');if(docId){btn.textContent='🔗 הצגת הקישור לשליחה';badge.hidden=false;badge.textContent='🟢 קישור חי - כל שינוי שנעשה כאן נשמר אליו אוטומטית. שולחים פעם אחת, והוא תמיד מעודכן.';if(field&&box){field.value=linkFor(docId);box.hidden=false;}}else{btn.textContent='🔗 יצירת קישור לשליחה';badge.hidden=true;}}
 (function(){
   const btn=document.getElementById('shareBtn');
   const wrap=document.getElementById('actLink');
@@ -1067,9 +1073,12 @@ async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body
   const copy=document.getElementById('copyBtn');
   if(!btn) return;
   btn.onclick=async()=>{
-    wrap.hidden=false; field.value='יוצר קישור...'; btn.disabled=true;
+    wrap.hidden=false; field.value=docId?'מעדכן...':'יוצר קישור...'; btn.disabled=true;
     try{
-      const link=await shortLink();
+      if(docId){try{const _r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:encodeGoals(goals)});if(_r.status===404)docId=null;}catch(_e){}}
+      if(!docId){try{const _r=await fetch(SHARE_API,{method:'POST',body:encodeGoals(goals)});const _j=_r.ok?await _r.json():null;if(_j&&_j.id){docId=_j.id;setHash(_j.id);}}catch(_e){}}
+      const link=docId?linkFor(docId):makeLink();
+      refreshShareUI();
       field.value=link;
       field.focus(); field.select();
       try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}
@@ -1149,7 +1158,7 @@ document.querySelectorAll('a.soc[href="#"]').forEach(a=>a.addEventListener('clic
     addGoal({emoji:'🏠',name:'רכישת נכס (הון ראשוני)',target:280000,initial:110000,years:5,pct:5}); // plain URL → a clean example to start from
   }
 })();
-(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){const loaded=decodeGoals(t);if(loaded&&loaded.length){goals=loaded;if(capacity)document.getElementById('capInput').value=fmt.format(capacity);render();}}).catch(function(){});})();
+(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);refreshShareUI();if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){const loaded=decodeGoals(t);if(loaded&&loaded.length){goals=loaded;docId=hp[1];if(capacity)document.getElementById('capInput').value=fmt.format(capacity);render();refreshShareUI();}}).catch(function(){});})();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון יעדים',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>

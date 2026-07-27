@@ -540,5 +540,6 @@ document.getElementById('bufferChk').addEventListener('change',e=>{S.buffer=e.ta
 })();
 (function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){if(dec(t)){ORDER.forEach(function(k){var el=document.getElementById('f_'+k);if(el&&S[k]!==''&&typeof S[k]!=='boolean')el.value=money(S[k]);});document.getElementById('bufferChk').checked=!!S.buffer;var nc=document.getElementById('netChk');if(nc)nc.checked=!!S.netConservative;}paint();}).catch(function(){});})();
 </script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון חופשת לידה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>
 </html>

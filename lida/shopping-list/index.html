@@ -639,5 +639,6 @@ function syncFeedChips(){document.querySelectorAll('#feedChips .feed-chip').forE
 // short-link (#p=) loader: fetch the raw payload and apply it with the same dec/render path
 (function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){var loaded=dec(t);if(!loaded||!loaded.items)return;S=loaded;document.getElementById('totalBudget').value=(S.total!=='')?money(S.total):'';syncFeedChips();render();persist();try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}).catch(function(){});})();
 </script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'רשימת קניות ללידה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>
 </html>

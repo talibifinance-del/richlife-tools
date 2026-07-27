@@ -602,5 +602,6 @@ function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>
 
 (function(){try{var fromA=(document.referrer||'').indexOf('argaz')>-1;if(fromA)sessionStorage.setItem('rlArgaz','1');if(fromA||sessionStorage.getItem('rlArgaz')){var b=document.getElementById('backArgaz');if(b)b.hidden=false;}}catch(e){if((document.referrer||'').indexOf('argaz')>-1){var b2=document.getElementById('backArgaz');if(b2)b2.hidden=false;}}})();
 </script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון הלוואות',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>
 </html>

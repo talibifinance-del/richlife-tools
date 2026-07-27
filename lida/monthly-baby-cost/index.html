@@ -382,5 +382,6 @@ async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body
 })();
 (function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){var d=dec(t);if(d&&d.length){items=d;render();persist();try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}}).catch(function(){});})();
 </script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'עלות חודש עם תינוק',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>
 </html>

@@ -152,6 +152,26 @@ svg.chart{display:block;width:100%;height:auto}
 .unit-row .ur-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
 
 .early-grid .e .v.cost{color:#c1553f}
+
+.insight.soft{background:rgba(183,121,31,.10);color:#8a5a12}
+.insight.soft b{color:#8a5a12}
+.insight.warn{background:rgba(193,85,63,.10);color:#8f3a29}
+.insight.warn b{color:#8f3a29}
+.cmp-loans>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px}
+.cmp-loans>summary::-webkit-details-marker{display:none}
+.cmp-loans .fin-chev{margin-inline-start:auto;color:var(--ink-soft);transition:transform .25s;font-size:13px}
+.cmp-loans[open] .fin-chev{transform:rotate(180deg)}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.cmp-col{border-radius:14px;padding:14px 12px;border:1.5px solid rgba(var(--pine-rgb),.2)}
+.cmp-col.mine{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
+.cmp-col.alt{background:#fff}
+.cmp-col h4{font-size:13px;font-weight:900;color:var(--pine-darker);text-align:center;margin-bottom:9px}
+.cmp-col .cc-row{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:700;color:var(--ink);padding:5px 0;border-top:1px solid rgba(var(--pine-rgb),.1)}
+.cmp-col .cc-row:first-of-type{border-top:none}
+.cmp-col .cc-row b{white-space:nowrap}
+.cmp-verdict{margin-top:12px;text-align:center;font-size:13.5px;font-weight:900;border-radius:12px;padding:12px}
+.cmp-verdict.good{background:rgba(var(--pine-rgb),.12);color:var(--pine-deep)}
+.cmp-verdict.bad{background:rgba(var(--red-rgb),.1);color:#8f3a29}
 </style>
 </head>
 <body>
@@ -189,6 +209,10 @@ svg.chart{display:block;width:100%;height:auto}
         <label>סגירה מוקדמת אחרי (לא חובה)</label>
         <div class="input-shell"><input id="closeM" type="number" inputmode="numeric" value="0" placeholder="0"><span class="unit" id="uClose" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div>
       </div>
+      <div class="field">
+        <label>הכנסה חודשית נטו (לבדיקת נטל, לא חובה)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="0" placeholder="0"></div>
+      </div>
     </div>
 
     <div class="unit-row">
@@ -207,6 +231,7 @@ svg.chart{display:block;width:100%;height:auto}
       <div class="pi-lbl" id="barLbl"></div>
     </div>
     <div class="insight" id="insight"></div>
+    <div class="insight" id="afford" hidden></div>
     <div class="early-box" id="earlyBox" hidden>
       <div class="eb-title">⚡ החזר מהיר יותר = חיסכון</div>
       <div class="early-grid">
@@ -235,6 +260,19 @@ svg.chart{display:block;width:100%;height:auto}
       <span><i style="background:var(--pine)"></i>יתרת ההלוואה</span>
     </div>
   </div>
+
+  <details class="card cmp-loans">
+    <summary><span class="sec-lbl" style="margin:0">⚖️ להשוות להצעה אחרת</span><span class="fin-chev">▾</span></summary>
+    <div style="margin-top:14px">
+      <div class="rec" style="margin:0 0 12px;font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center">מזינים הצעת הלוואה אחרת ורואים איזו זולה יותר. שימושי למיחזור או לבחירה בין הצעות. (התקופה באותה יחידה שבחרת למעלה.)</div>
+      <div class="fields">
+        <div class="field"><label>סכום ההלוואה</label><div class="input-shell"><span class="unit">₪</span><input id="bAmount" type="text" inputmode="numeric" value="100,000" placeholder="0"></div></div>
+        <div class="field"><label>ריבית שנתית</label><div class="input-shell"><input id="bRate" type="text" inputmode="decimal" value="5" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div></div>
+        <div class="field"><label>תקופה</label><div class="input-shell"><input id="bMonths" type="number" inputmode="numeric" value="60" placeholder="0"><span class="unit" id="uB" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div></div>
+      </div>
+      <div id="cmpOut"></div>
+    </div>
+  </details>
 
   <div class="cta-card">
     <div class="cta-emoji">🧭</div>
@@ -406,10 +444,10 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
 let UNIT='m';
-function syncUnitLabels(){const t=(UNIT==='y'?'שנים':'חודשים');document.getElementById('uTerm').textContent=t;document.getElementById('uClose').textContent=t;document.getElementById('unitTg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.u===UNIT));}
+function syncUnitLabels(){const t=(UNIT==='y'?'שנים':'חודשים');document.getElementById('uTerm').textContent=t;document.getElementById('uClose').textContent=t;var ub=document.getElementById('uB');if(ub)ub.textContent=t;document.getElementById('unitTg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.u===UNIT));}
 (function(){document.getElementById('unitTg').querySelectorAll('button').forEach(b=>b.onclick=()=>{const u=b.dataset.u;if(u===UNIT)return;const mo=document.getElementById('months'),cl=document.getElementById('closeM');if(u==='y'){mo.value=Math.round((+mo.value||0)/12)||'';if(+cl.value)cl.value=Math.round((+cl.value)/12);}else{mo.value=Math.round((+mo.value||0)*12)||'';if(+cl.value)cl.value=Math.round((+cl.value)*12);}UNIT=u;syncUnitLabels();calc();});})();
-['amount','extra'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
-['rate','months','closeM'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+['amount','extra','income','bAmount'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
+['rate','months','closeM','bRate','bMonths'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
 
 function pmt(P,annual,n){const r=annual/100/12;if(n<=0)return P;if(r===0)return P/n;return P*r/(1-Math.pow(1+r,-n));}
 function sim(P,annual,n,pay){
@@ -455,8 +493,18 @@ function calc(){
     document.getElementById('cNote').innerHTML=`אחרי ${when} ההלוואה עלתה לך <b>${fmt.format(Math.round(paidByThen))} ₪</b> ריבית בפועל. משלמים את היתרה (<b>${fmt.format(Math.round(lump))} ₪</b>) וסוגרים. כך את יודעת בדיוק כמה עלתה ההלוואה - להשוות מול הרווח מהעסקה.`;
   } else cb.hidden=true;
   const ins=document.getElementById('insight');
-  if(P>0){ins.innerHTML=`על הלוואה של <b>${fmt.format(Math.round(P))} ₪</b> תחזירו בסך הכל <b>${fmt.format(Math.round(stdTotal))} ₪</b> - מתוכם <b>${fmt.format(Math.round(stdInterest))} ₪</b> ריבית. זו העלות האמיתית של ההלוואה.`;ins.style.display='block';}
+  if(P>0){const per=(stdTotal/P);ins.innerHTML=`על הלוואה של <b>${fmt.format(Math.round(P))} ₪</b> תחזירו בסך הכל <b>${fmt.format(Math.round(stdTotal))} ₪</b> - מתוכם <b>${fmt.format(Math.round(stdInterest))} ₪</b> ריבית. כלומר על כל ₪1 שלקחת, תחזירי <b>₪${per.toFixed(2)}</b>.`;ins.style.display='block';}
   else ins.style.display='none';
+  // affordability check (payment as % of income)
+  const income=num('income'), af=document.getElementById('afford');
+  if(income>0 && P>0){
+    const pctInc=base/income*100; let cls,msg;
+    if(pctInc<=30){cls='insight';msg=`✓ ההחזר הוא <b>${Math.round(pctInc)}%</b> מההכנסה שלך - נטל בריא, נשאר מרווח נשימה.`;}
+    else if(pctInc<=40){cls='insight soft';msg=`⚠️ ההחזר הוא <b>${Math.round(pctInc)}%</b> מההכנסה - גבולי. שווי לוודא שנשאר מספיק לשאר החיים.`;}
+    else{cls='insight warn';msg=`🔴 ההחזר הוא <b>${Math.round(pctInc)}%</b> מההכנסה - נטל גבוה. שווה לשקול סכום קטן יותר או תקופה ארוכה יותר.`;}
+    af.className=cls;af.innerHTML=msg;af.hidden=false;
+  } else af.hidden=true;
+  cmpLoans();
 }
 
 let CH=null;
@@ -496,9 +544,24 @@ function drawChart(series){
 })();
 function short(v){v=Math.round(v);if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+'M';if(v>=1e3)return Math.round(v/1e3)+'K';return v;}
 
+function cmpLoans(){
+  const out=document.getElementById('cmpOut'); if(!out)return;
+  const bA=num('bAmount'), bR=num('bRate'), bN=Math.max(1,Math.round(num('bMonths')*(UNIT==='y'?12:1)));
+  if(bA<=0){out.innerHTML='';return;}
+  const P=num('amount'), a=num('rate'), nMine=Math.max(1,Math.round(num('months')*(UNIT==='y'?12:1)));
+  const mM=pmt(P,a,nMine), mT=mM*nMine, mI=mT-P;
+  const mB=pmt(bA,bR,bN), tB=mB*bN, iB=tB-bA;
+  const diff=mI-iB;
+  const row=(k,v)=>`<div class="cc-row"><span>${k}</span><b>${fmt.format(Math.round(v))} ₪</b></div>`;
+  out.innerHTML=`<div class="cmp-grid">`+
+    `<div class="cmp-col mine"><h4>ההלוואה שלך</h4>${row('החזר חודשי',mM)}${row('סה"כ החזר',mT)}${row('מזה ריבית',mI)}</div>`+
+    `<div class="cmp-col alt"><h4>ההצעה האחרת</h4>${row('החזר חודשי',mB)}${row('סה"כ החזר',tB)}${row('מזה ריבית',iB)}</div>`+
+    `</div>`+
+    `<div class="cmp-verdict ${diff>=0?'good':'bad'}">${Math.abs(diff)<1?'שתי ההצעות עולות אותו דבר בריבית':(diff>0?`💚 ההצעה האחרת חוסכת לך ${fmt.format(Math.round(diff))} ₪ ריבית`:`⚠️ ההצעה האחרת יקרה ב-${fmt.format(Math.round(-diff))} ₪ ריבית`)}</div>`;
+}
 const SKEY='richlife-loans-v1';
-function enc(){return JSON.stringify([document.getElementById('amount').value,document.getElementById('rate').value,document.getElementById('months').value,document.getElementById('extra').value,document.getElementById('closeM').value,UNIT]);}
-function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('amount').value=grp(a[0]);document.getElementById('rate').value=a[1]??'6';document.getElementById('months').value=a[2]??'';document.getElementById('extra').value=grp(a[3]||'0');document.getElementById('closeM').value=a[4]??'0';UNIT=a[5]==='y'?'y':'m';syncUnitLabels();return true;}catch(e){return false;}}
+function enc(){return JSON.stringify([document.getElementById('amount').value,document.getElementById('rate').value,document.getElementById('months').value,document.getElementById('extra').value,document.getElementById('closeM').value,UNIT,document.getElementById('income').value,document.getElementById('bAmount').value,document.getElementById('bRate').value,document.getElementById('bMonths').value]);}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('amount').value=grp(a[0]);document.getElementById('rate').value=a[1]??'6';document.getElementById('months').value=a[2]??'';document.getElementById('extra').value=grp(a[3]||'0');document.getElementById('closeM').value=a[4]??'0';UNIT=a[5]==='y'?'y':'m';document.getElementById('income').value=grp(a[6]||'0');document.getElementById('bAmount').value=grp(a[7]||'0');document.getElementById('bRate').value=a[8]??'5';document.getElementById('bMonths').value=a[9]??'60';syncUnitLabels();return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#c='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}

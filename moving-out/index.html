@@ -33,13 +33,24 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .top-cta .tc-txt{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center}
 .top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-darker);white-space:nowrap}
 .savecheck{border:1.5px solid rgba(var(--pine-rgb),.28);background:linear-gradient(180deg,#fff, rgba(var(--sage-rgb),.14))}
-.savecheck .sv-body{font-size:14px;font-weight:600;color:var(--ink);line-height:1.7}
-.savecheck .sv-body b{color:var(--pine-darker);font-weight:900}
-.savecheck .sv-body .sv-warn, .savecheck .sv-body .sv-warn b{color:var(--red);font-weight:700}
-.savecheck .sv-body .sv-warn b{font-weight:900}
-.savecheck .sv-num{color:var(--pine);font-weight:900}
-.savecheck .sv-cta{display:inline-block;margin-top:14px;font-family:var(--font);font-weight:900;font-size:14px;color:var(--pine-deep);text-decoration:none;background:var(--sage-tint);padding:11px 20px;border-radius:100px;transition:background .15s,transform .15s}
-.savecheck .sv-cta:hover{background:rgba(var(--pine-rgb),.14);transform:translateY(-1px)}
+/* hero number badge */
+.sv-badge{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);border-radius:16px;padding:15px 18px;color:#fff;box-shadow:0 10px 26px rgba(var(--pine-rgb),.22)}
+.sv-badge .sv-lbl{font-size:12.5px;font-weight:700;opacity:.92}
+.sv-badge .sv-big{font-size:clamp(26px,7vw,34px);font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.sv-badge .sv-big small{font-size:15px;font-weight:800;opacity:.85}
+/* the test step */
+.sv-test{display:flex;gap:10px;align-items:flex-start;margin-top:13px;background:var(--sage-tint);border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.55}
+.sv-test .sv-ic{font-size:19px;flex:none;line-height:1.3}
+.sv-test b{color:var(--pine-darker);font-weight:900}
+/* two outcomes, each its own tinted row */
+.sv-outcomes{display:grid;gap:9px;margin-top:11px}
+.sv-out{display:flex;gap:10px;align-items:flex-start;border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;line-height:1.55}
+.sv-out .sv-ic{font-size:18px;flex:none;line-height:1.35}
+.sv-out.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-darker);border:1px solid rgba(var(--pine-rgb),.22)}
+.sv-out.ok b{color:var(--pine-deep);font-weight:900}
+.sv-out.warn{background:rgba(var(--red-rgb),.08);color:var(--red);border:1px solid rgba(var(--red-rgb),.22)}
+.sv-out.warn b{color:var(--red);font-weight:900}
+.sv-empty{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.6}
 .card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
 .card+.card{margin-top:16px}
 .sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
@@ -448,9 +459,15 @@ function calc(){
   const sv=document.getElementById('svBody');
   if(sv){
     if(income>0){
-      sv.innerHTML=`הסכום שמומלץ להוציא על מגורים אחרי המעבר הוא <b class="sv-num">${fmt.format(Math.round(recT))} ₪ בחודש</b>. מבחן קטן לפני שיוצאים: נסו לשים את הסכום הזה בצד כל חודש כבר עכשיו, כשעוד גרים בבית.<br><b>אם זה מצליח</b> - אתם מוכנים כלכלית ליציאה. <span class="sv-warn"><b>אם לא</b> - סימן שצריך לעשות סדר לפני, כי אם אי אפשר לחסוך את הסכום הזה היום, קשה יהיה לעמוד בו אחרי המעבר. וזה בדיוק מה שאנחנו מסדרים יחד בתהליך הליווי.</span>`;
+      sv.innerHTML=`
+        <div class="sv-badge"><span class="sv-lbl">מה שמומלץ להוציא על מגורים אחרי המעבר</span><span class="sv-big">${fmt.format(Math.round(recT))} ₪ <small>לחודש</small></span></div>
+        <div class="sv-test"><span class="sv-ic">🧪</span><div><b>המבחן:</b> כבר עכשיו, כשעדיין גרים בבית, נסו לשים בצד את הסכום הזה כל חודש.</div></div>
+        <div class="sv-outcomes">
+          <div class="sv-out ok"><span class="sv-ic">✅</span><div><b>הצליח לחודש-חודשיים?</b> אתם מוכנים כלכלית ליציאה.</div></div>
+          <div class="sv-out warn"><span class="sv-ic">🚩</span><div><b>לא הסתדר?</b> זה סימן לעשות סדר לפני המעבר. אם אי אפשר לחסוך את הסכום הזה היום, קשה יהיה לעמוד בו אחר כך - וזה בדיוק מה שאנחנו מסדרים יחד בתהליך הליווי.</div></div>
+        </div>`;
     } else {
-      sv.innerHTML='הזינו את ההכנסה למעלה, ותראו כמה כדאי "להתאמן" לשים בצד כל חודש כבר עכשיו - עוד לפני היציאה.';
+      sv.innerHTML='<div class="sv-empty">הזינו את ההכנסה למעלה, ותראו כמה כדאי "להתאמן" לשים בצד כל חודש כבר עכשיו - עוד לפני היציאה.</div>';
     }
   }
 }

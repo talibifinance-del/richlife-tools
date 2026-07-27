@@ -3,13 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','208911198828875');fbq('track','PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=208911198828875&ev=PageView&noscript=1"/></noscript>
-<!-- End Meta Pixel Code -->
 <title>מחשבון תקציב הצטיידות לדירה · RichLife</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,6 +181,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .act-btn:hover{transform:translateY(-1px)}
 .act-btn.ghost{background:transparent;box-shadow:none;color:var(--ink-soft);font-weight:800;font-size:13px;margin-inline-start:6px}
 .act-note{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:8px}
+.live-badge{background:rgba(47,145,105,.12);border:1.5px solid rgba(47,145,105,.42);color:var(--go);font-weight:800;font-size:12.5px;border-radius:12px;padding:10px 14px;margin-bottom:13px;line-height:1.5;max-width:460px;margin-inline:auto}
 .act-link{display:flex;gap:8px;max-width:460px;margin:10px auto 0}
 .act-link input{flex:1;min-width:0;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:10px;background:#fff;font-family:var(--font);font-size:12.5px;padding:9px 11px;color:var(--ink-soft);direction:ltr;text-align:left}
 .act-link button{border:0;background:var(--pine);color:#fff;font-family:var(--font);font-weight:800;font-size:13px;border-radius:10px;padding:0 16px;cursor:pointer}
@@ -417,9 +411,10 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
   </div>
 
   <div class="actions">
-    <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת הרשימה</button>
-    <button class="act-btn ghost" id="resetBtn">איפוס הכל</button>
-    <div class="act-note">✓ הרשימה נשמרת אוטומטית במכשיר. הכפתור מייצר קישור קצר לשליחה בוואטסאפ לבן או בת הזוג - שנכנסים אליו ורואים בדיוק את אותה רשימה.</div>
+    <div class="live-badge" id="liveBadge" hidden>🟢 קישור חי - כל שינוי שאתם עושים כאן נשמר אליו אוטומטית. שולחים אותו פעם אחת, והוא תמיד מעודכן.</div>
+    <button class="act-btn" id="shareBtn">🔗 יצירת קישור לשליחה</button>
+    <button class="act-btn ghost" id="resetBtn">🆕 התחלה חדשה</button>
+    <div class="act-note" id="shareNote">✓ הרשימה נשמרת אוטומטית במכשיר. הכפתור יוצר קישור קבוע לשליחה בוואטסאפ - שנכנסים אליו רואים את אותה רשימה, וכל עדכון עתידי מופיע בו אוטומטית בלי לשלוח קישור חדש.</div>
     <div class="act-link" id="actLink" hidden>
       <input id="linkField" readonly aria-label="קישור הרשימה">
       <button id="copyBtn">העתקה</button>
@@ -468,21 +463,30 @@ const prOf=it=>it.pr||'mid';
 const inView=it=>filterPr==='all'?true:filterPr==='hi'?prOf(it)==='hi':prOf(it)!=='lo';
 
 /* ── persistence ── */
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}syncLive();}
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.rooms)return s;}catch(e){}return null;}
 function enc(){return btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
 function dec(str){try{const s=JSON.parse(decodeURIComponent(escape(atob(str))));if(s&&s.rooms)return s;}catch(e){}return null;}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#s='+encodeURIComponent(enc());}
-// short link via the share store; falls back to the long self-contained link if the store is down
-async function shortLink(){
-  try{
-    const r=await fetch(SHARE_API,{method:'POST',body:enc()});
-    if(!r.ok)throw 0;
-    const j=await r.json();
-    if(!j||!j.id)throw 0;
-    return location.origin+location.pathname+location.search+'#p='+j.id;
-  }catch(e){return makeLink();}
+
+/* ── live link ──
+   Attachment follows the URL: open a #p= link (or create one) and the page is "live" - every change
+   auto-syncs to that same link. The plain page (no #p) is always a fresh start, so editing here can
+   never overwrite a link you sent before. */
+let docId=null;   // the live-link code we're attached to (null = detached / plain page)
+let pushT=null;
+function linkFor(id){return location.origin+location.pathname+location.search+'#p='+id;}
+function setHash(id){try{history.replaceState(null,'',location.pathname+location.search+'#p='+id);}catch(e){}}
+// push current state to the attached link (debounced); no-op when detached, silent when offline
+function syncLive(){
+  if(!docId)return;
+  clearTimeout(pushT);
+  pushT=setTimeout(()=>{
+    fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()})
+      .then(r=>{if(r.status===404){docId=null;refreshShareUI();}})
+      .catch(()=>{});
+  },1200);
 }
 
 /* ── calc ──
@@ -765,10 +769,38 @@ document.getElementById('addRoom').onclick=()=>{
   last.querySelector('.r-name').focus();
 };
 
+// reflect attached / detached state in the share UI
+function refreshShareUI(){
+  const btn=document.getElementById('shareBtn'),badge=document.getElementById('liveBadge'),
+        note=document.getElementById('shareNote'),box=document.getElementById('actLink'),field=document.getElementById('linkField');
+  if(docId){
+    btn.textContent='🔗 הצגת הקישור לשליחה';
+    if(badge)badge.hidden=false;
+    if(note)note.textContent='✓ זהו קישור חי וקבוע. כל שינוי כאן נשמר אליו אוטומטית - שולחים פעם אחת, ומי שקיבל אותו תמיד רואה את הגרסה העדכנית. לרשימה חדשה לגמרי: "התחלה חדשה".';
+    if(field&&box){field.value=linkFor(docId);box.hidden=false;}
+  }else{
+    btn.textContent='🔗 יצירת קישור לשליחה';
+    if(badge)badge.hidden=true;
+    if(note)note.textContent='✓ הרשימה נשמרת אוטומטית במכשיר. הכפתור יוצר קישור קבוע לשליחה - שנכנסים אליו רואים את אותה רשימה, וכל עדכון עתידי מופיע בו אוטומטית בלי לשלוח קישור חדש.';
+  }
+}
+
 document.getElementById('shareBtn').onclick=async()=>{
   const box=document.getElementById('actLink'),field=document.getElementById('linkField'),btn=document.getElementById('shareBtn');
-  box.hidden=false;field.value='יוצר קישור...';btn.disabled=true;
-  try{field.value=await shortLink();}finally{btn.disabled=false;}
+  box.hidden=false;field.value=docId?'מעדכן...':'יוצר קישור...';btn.disabled=true;
+  try{
+    if(docId){
+      // already live: force an immediate push, keep the same link
+      try{const r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()});if(r.status===404)docId=null;}catch(e){}
+    }
+    if(!docId){
+      // create a fresh permanent link and attach to it
+      try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});const j=r.ok?await r.json():null;if(j&&j.id){docId=j.id;setHash(j.id);}}catch(e){}
+    }
+    field.value=docId?linkFor(docId):makeLink();
+  }finally{btn.disabled=false;}
+  refreshShareUI();
+  field.value=docId?linkFor(docId):field.value; // keep the real link after UI refresh
   field.focus();field.select();
 };
 document.getElementById('copyBtn').onclick=()=>{
@@ -778,34 +810,41 @@ document.getElementById('copyBtn').onclick=()=>{
   setTimeout(()=>document.getElementById('copyBtn').textContent='העתקה',1800);
 };
 document.getElementById('resetBtn').onclick=()=>{
-  if(!confirm('לאפס את כל הרשימה ולחזור לרשימת ברירת המחדל?'))return;
+  if(!confirm('להתחיל מרשימה נקייה? הרשימה הנוכחית תוחלף כאן. (אם כבר יצרתם קישור, הוא נשאר עם מה שנשמר בו - וזו התחלה חדשה, עם קישור חדש בשמירה הבאה.)'))return;
   try{localStorage.removeItem(KEY);}catch(e){}
-  S=seedState();save();
+  S=seedState();docId=null;
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}   // detach: strip #p
   budgetInp.value='';
-  render();
+  document.getElementById('actLink').hidden=true;
+  render();refreshShareUI();
 };
 
 /* ── boot ── */
 (function boot(){
-  const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);   // short code -> fetch from store
-  const hs=(location.hash||'').match(/s=([^&]+)/);               // legacy self-contained link
-  function start(fromLink){
+  const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);   // live link -> fetch from store, stay attached
+  const hs=(location.hash||'').match(/s=([^&]+)/);               // legacy self-contained snapshot
+  function start(fromLink,attachId){
     S=fromLink||load()||seedState();
-    if(fromLink){save();try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
+    if(attachId){                                   // opened a live link: attach, keep the #p hash (bookmarkable)
+      docId=attachId;
+      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+    } else if(fromLink){                             // legacy snapshot: adopt locally, strip the hash
+      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+      try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+    }
     const b=num(S.b);
     budgetInp.value=b>0?fmt.format(b):'';
-    render();
+    render();refreshShareUI();
   }
   if(hp){
     fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1]))
       .then(r=>r.ok?r.text():Promise.reject())
-      .then(t=>start(dec(t)||(hs?dec(decodeURIComponent(hs[1])):null)))
-      .catch(()=>start(hs?dec(decodeURIComponent(hs[1])):null));
+      .then(t=>{const st=dec(t);if(st)start(st,hp[1]);else start(hs?dec(decodeURIComponent(hs[1])):null,null);})
+      .catch(()=>start(hs?dec(decodeURIComponent(hs[1])):null,null));
   } else {
-    start(hs?dec(decodeURIComponent(hs[1])):null);
+    start(hs?dec(decodeURIComponent(hs[1])):null,null);
   }
 })();
 </script>
-<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'תקציב הצטיידות לדירה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>
 </html>

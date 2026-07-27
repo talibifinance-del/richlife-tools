@@ -608,15 +608,21 @@ document.querySelectorAll('#feedChips .feed-chip').forEach(ch=>ch.onclick=()=>{f
 // save / share
 const SKEY='richlife-shopping-v3';
 function enc(){return JSON.stringify({t:S.total,f:feedMode,cb:S.catB,it:S.items.map(it=>[it.cat,it.name,it.pri,it.feed,it.note,it.bought?1:0,it.gift?1:0,it.paid])});}
-function persist(){try{localStorage.setItem(SKEY,enc());}catch(e){}}
+function persist(){try{localStorage.setItem(SKEY,enc());}catch(e){}syncLive();}
 function dec(str){try{const o=JSON.parse(str);if(!o||!Array.isArray(o.it))return null;feedMode=o.f||'all';return {total:o.t??'',catB:o.cb||{},items:o.it.map(x=>({id:++uid,cat:x[0]||'שונות',name:x[1]||'',pri:x[2]||'mid',feed:x[3]||'all',note:x[4]||'',bought:!!x[5],gift:!!x[6],paid:x[7]??''}))};}catch(e){return null;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#s='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}
+let docId=null,pushT=null;
+function linkFor(id){return location.origin+location.pathname+location.search+'#p='+id;}
+function setHash(id){try{history.replaceState(null,'',location.pathname+location.search+'#p='+id);}catch(e){}}
+function syncLive(){if(!docId)return;clearTimeout(pushT);pushT=setTimeout(function(){fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()}).then(function(r){if(r.status===404){docId=null;refreshShareUI();}}).catch(function(){});},1200);}
+function refreshShareUI(){var btn=document.getElementById('shareBtn');if(!btn)return;var badge=document.getElementById('liveBadge');if(!badge){badge=document.createElement('div');badge.id='liveBadge';badge.hidden=true;badge.style.cssText='background:rgba(47,145,105,.12);border:1.5px solid rgba(47,145,105,.42);color:#2f9169;font-weight:800;font-size:12.5px;border-radius:12px;padding:10px 14px;margin:0 auto 12px;max-width:480px;line-height:1.5;text-align:center';(btn.parentNode||document.body).insertBefore(badge,btn);}var box=document.getElementById('actLink'),field=document.getElementById('linkField');if(docId){btn.textContent='🔗 הצגת הקישור לשליחה';badge.hidden=false;badge.textContent='🟢 קישור חי - כל שינוי שנעשה כאן נשמר אליו אוטומטית. שולחים פעם אחת, והוא תמיד מעודכן.';if(field&&box){field.value=linkFor(docId);box.hidden=false;}}else{btn.textContent='🔗 יצירת קישור לשליחה';badge.hidden=true;}}
+
 (function(){
   const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
   const flash=(el,m)=>{const o=el.textContent;el.textContent=m;setTimeout(()=>el.textContent=o,1700);};
-  btn.onclick=async()=>{wrap.hidden=false;field.value='יוצר קישור...';btn.disabled=true;try{const l=await shortLink();field.value=l;field.focus();field.select();try{navigator.clipboard.writeText(l).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
+  btn.onclick=async()=>{wrap.hidden=false;field.value='יוצר קישור...';btn.disabled=true;try{let l;if(docId){try{const _r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()});if(_r.status===404)docId=null;}catch(_e){}}if(!docId){try{const _r=await fetch(SHARE_API,{method:'POST',body:enc()});const _j=_r.ok?await _r.json():null;if(_j&&_j.id){docId=_j.id;setHash(_j.id);}}catch(_e){}}l=docId?linkFor(docId):makeLink();refreshShareUI();field.value=l;field.focus();field.select();try{navigator.clipboard.writeText(l).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
   copy.onclick=()=>{field.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);ok=true;}catch(e){}flash(copy,ok?'✓ הועתק':'בחר/י והעתק/י');};
 })();
 document.getElementById('resetBtn').onclick=()=>{if(confirm('לאפס את הרשימה לברירת המחדל? כל השינויים יימחקו.')){try{localStorage.removeItem(SKEY);}catch(e){}feedMode='all';S=seed();document.getElementById('totalBudget').value='';syncFeedChips();render();}};
@@ -633,11 +639,11 @@ function syncFeedChips(){document.querySelectorAll('#feedChips .feed-chip').forE
   if(S.total!=='')document.getElementById('totalBudget').value=money(S.total);
   syncFeedChips();
   render();
-  if(fromLink){persist();try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
+  if(fromLink){persist();}
 })();
 
 // short-link (#p=) loader: fetch the raw payload and apply it with the same dec/render path
-(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){var loaded=dec(t);if(!loaded||!loaded.items)return;S=loaded;document.getElementById('totalBudget').value=(S.total!=='')?money(S.total):'';syncFeedChips();render();persist();try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}).catch(function(){});})();
+(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp){refreshShareUI();return;}docId=hp[1];refreshShareUI();fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){var loaded=dec(t);if(!loaded||!loaded.items)return;S=loaded;document.getElementById('totalBudget').value=(S.total!=='')?money(S.total):'';syncFeedChips();render();persist();}).catch(function(){});})();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'רשימת קניות ללידה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>

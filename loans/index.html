@@ -150,6 +150,8 @@ svg.chart{display:block;width:100%;height:auto}
 .unit-tg button.on{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.25)}
 .unit-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .unit-row .ur-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+
+.early-grid .e .v.cost{color:#c1553f}
 </style>
 </head>
 <body>
@@ -215,8 +217,9 @@ svg.chart{display:block;width:100%;height:auto}
     <div class="early-box" id="closeBox" hidden>
       <div class="eb-title">🏁 אם סוגרים את ההלוואה מוקדם</div>
       <div class="early-grid">
+        <div class="e"><div class="k">ריבית ששילמת עד הסגירה</div><div class="v cost" id="cPaid">0 ₪</div></div>
         <div class="e"><div class="k">יתרה לתשלום בסגירה</div><div class="v" id="cLump">0 ₪</div></div>
-        <div class="e"><div class="k">תחסכו בריבית</div><div class="v" id="cSaved">0 ₪</div></div>
+        <div class="e"><div class="k">ריבית שנחסכת בהמשך</div><div class="v" id="cSaved">0 ₪</div></div>
       </div>
       <div class="eb-note" id="cNote"></div>
     </div>
@@ -445,10 +448,11 @@ function calc(){
   if(closeM>0 && closeM<std.months && P>0){
     const lump=std.series[closeM]||0, paidByThen=std.cumI[closeM]||0, saved=Math.max(0,stdInterest-paidByThen);
     cb.hidden=false;
+    document.getElementById('cPaid').textContent=fmt.format(Math.round(paidByThen))+' ₪';
     document.getElementById('cLump').textContent=fmt.format(Math.round(lump))+' ₪';
     document.getElementById('cSaved').textContent=fmt.format(Math.round(saved))+' ₪';
     const yrs=closeM/12, when=(Number.isInteger(yrs)&&yrs>0?yrs+' שנים':closeM+' חודשים');
-    document.getElementById('cNote').innerHTML=`אחרי ${when} משלמים את היתרה שנשארה (<b>${fmt.format(Math.round(lump))} ₪</b>) וסוגרים, במקום להמשיך עד הסוף - וכך חוסכים <b>${fmt.format(Math.round(saved))} ₪</b> ריבית.`;
+    document.getElementById('cNote').innerHTML=`אחרי ${when} ההלוואה עלתה לך <b>${fmt.format(Math.round(paidByThen))} ₪</b> ריבית בפועל. משלמים את היתרה (<b>${fmt.format(Math.round(lump))} ₪</b>) וסוגרים. כך את יודעת בדיוק כמה עלתה ההלוואה - להשוות מול הרווח מהעסקה.`;
   } else cb.hidden=true;
   const ins=document.getElementById('insight');
   if(P>0){ins.innerHTML=`על הלוואה של <b>${fmt.format(Math.round(P))} ₪</b> תחזירו בסך הכל <b>${fmt.format(Math.round(stdTotal))} ₪</b> - מתוכם <b>${fmt.format(Math.round(stdInterest))} ₪</b> ריבית. זו העלות האמיתית של ההלוואה.`;ins.style.display='block';}

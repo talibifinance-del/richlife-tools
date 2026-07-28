@@ -144,6 +144,8 @@ body{font-family:var(--font);
 .cmp2 .c2 .c2-v{display:block;font-size:clamp(17px,4.2vw,21px);font-weight:900;color:var(--pine-darker);margin-top:4px;font-variant-numeric:tabular-nums}
 .cmp2 .c2.full .c2-v{color:#fff}
 .mini-hint{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:8px;line-height:1.5}
+/* separate private-savings card */
+.card.priv{background:linear-gradient(120deg,rgba(var(--sage-rgb),.18),#fff);border:1px dashed rgba(var(--pine-rgb),.3)}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -303,32 +305,32 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
   <div class="hero-title">
     <h1>חיסכון <span class="em">לכל ילד</span></h1>
-    <p>המדינה מפקידה לילד/ה כל חודש עד גיל 18 - לבד, או עם תוספת שלכם. כאן רואים כמה זה שווה בגיל 18, וכמה אם משאירים בקופת גמל עד גיל 21.</p>
+    <p>המדינה מפקידה לילד/ה כל חודש עד גיל 18 - לבד, או עם הכפלה מקצבת הילדים. כאן רואים כמה זה שווה בגיל 18, וכמה אם משאירים בקופת גמל עד גיל 21.</p>
     <div class="livuy-wrap"><a class="livuy-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">✨ לתהליך ליווי אישי עם טלי ←</a></div>
   </div>
 
   <div class="hero">
-    <div class="h-lbl">💰 הסכום המשוער בגיל 18</div>
+    <div class="h-lbl">💰 חיסכון לכל ילד - הסכום המשוער בגיל 18</div>
     <div class="h-num" id="heroSum">0<small> ₪</small></div>
     <div class="h-meta" id="heroMeta"></div>
   </div>
 
   <div class="card leave21">
     <div class="l21-row">
-      <div class="l21-txt"><span class="l21-lbl">ואם משאירים בקופת גמל עד גיל 21</span><span class="l21-sub">הכסף ממשיך לצמוח 3 שנים בלי שאף אחד מפקיד עוד, המדינה משלמת דמי ניהול עד 21, ומתווסף מענק מהמדינה</span></div>
+      <div class="l21-txt"><span class="l21-lbl">ואם משאירים בקופת גמל עד גיל 21</span><span class="l21-sub">הכסף ממשיך לצמוח 3 שנים בלי שאף אחד מפקיד עוד, המדינה משלמת דמי ניהול עד 21, ומתווסף מענק ~568 ₪ מהמדינה</span></div>
       <div class="l21-num" id="sum21">0 ₪</div>
     </div>
   </div>
 
   <div class="card">
-    <h2>פרטי החיסכון</h2>
-    <div class="sub">מתחילים מברירות המחדל של התוכנית, ומכוונים לפי מה שמתאים לכם.</div>
+    <h2>פרטי החיסכון של התוכנית</h2>
+    <div class="sub">לחשבון חיסכון לכל ילד נכנסים רק שני אלה: הפקדת המדינה, ואם בוחרים - הכפלה מקצבת הילדים.</div>
     <div class="field-row">
       <div class="fr-lbl">גיל הילד/ה עכשיו<small>0 אם עוד לא נולד/ה</small></div>
       <div class="amt wide suf"><input id="age" inputmode="numeric" value="0" aria-label="גיל הילד בשנים"><span class="u">שנים</span></div>
     </div>
     <div class="field-row">
-      <div class="fr-lbl">יתרה שכבר יש בחיסכון היום<small>0 אם חדש או שעוד לא נולד/ה</small></div>
+      <div class="fr-lbl">יתרה שכבר יש בחשבון היום<small>0 אם חדש או שעוד לא נולד/ה</small></div>
       <div class="amt"><span class="u">₪</span><input id="bal" inputmode="numeric" value="0" aria-label="יתרה קיימת בחיסכון"></div>
     </div>
     <div class="field-row">
@@ -337,11 +339,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     </div>
     <div class="toggle on" id="dblToggle" role="button" tabindex="0" aria-label="הכפלה מקצבת הילדים">
       <div class="tg-box"></div>
-      <div class="tg-txt">להכפיל מקצבת הילדים<small>מוסיפים סכום זהה מקצבת הילדים. כבוי = רק המדינה מפקידה, בלי תוספת שלכם</small></div>
-    </div>
-    <div class="field-row" style="margin-top:12px">
-      <div class="fr-lbl">הפקדה חודשית נוספת משלכם<small>לא חובה, מעבר להכפלה</small></div>
-      <div class="amt"><span class="u">₪</span><input id="extra" inputmode="numeric" value="0" aria-label="הפקדה חודשית נוספת"></div>
+      <div class="tg-txt">להכפיל מקצבת הילדים<small>מוסיפים סכום זהה מקצבת הילדים. כבוי = רק המדינה מפקידה. ההכפלה נעצרת בגיל 18, כי אז נגמרת קצבת הילדים</small></div>
     </div>
     <div style="margin-top:14px">
       <div class="fr-lbl" style="margin-bottom:2px;font-weight:700;font-size:14px;color:var(--ink)">איפה החיסכון מנוהל?</div>
@@ -359,13 +357,30 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   </div>
 
   <div class="card">
-    <h2>מה זה עושה לאורך זמן</h2>
+    <h2>הכוח של ההכפלה</h2>
     <div class="split-note" id="splitNote" hidden></div>
     <div class="cmp2">
-      <div class="c2"><span class="c2-l">רק המדינה, בלי תוספת</span><span class="c2-v" id="cmpState">0 ₪</span></div>
-      <div class="c2 full"><span class="c2-l">עם התוספת שלכם</span><span class="c2-v" id="cmpFull">0 ₪</span></div>
+      <div class="c2"><span class="c2-l">רק הפקדת המדינה</span><span class="c2-v" id="cmpState">0 ₪</span></div>
+      <div class="c2 full"><span class="c2-l">בהכפלה מקצבת הילדים</span><span class="c2-v" id="cmpFull">0 ₪</span></div>
     </div>
-    <div class="mini-hint">אפשר להשאיר רק את הפקדת המדינה בלי להוסיף - זו בחירה לגיטימית. ההכפלה מגיעה מקצבת הילדים, כסף שממילא מגיע לכם. הזמן והתשואה עושים את השאר. שתי ההשוואות הן לגיל 18.</div>
+    <div class="mini-hint">אפשר להשאיר רק את הפקדת המדינה בלי להכפיל - זו בחירה לגיטימית. ההכפלה מגיעה מקצבת הילדים, כסף שממילא מגיע לכם. שתי ההשוואות הן לגיל 18.</div>
+  </div>
+
+  <div class="card">
+    <h2>רוצים לחסוך עוד? חיסכון פרטי נוסף</h2>
+    <div class="sub">מעבר לתוכנית, אפשר לפתוח חיסכון נפרד משלכם (למשל קופת גמל להשקעה על שם הילד/ה). זה לא נכנס לחשבון חיסכון לכל ילד, הוא בשליטתכם המלאה, ואפשר להמשיך להפקיד אליו גם אחרי גיל 18.</div>
+    <div class="field-row">
+      <div class="fr-lbl">כמה תפקידו בחודש לחיסכון הפרטי?<small>0 אם אין, בנפרד מהתוכנית</small></div>
+      <div class="amt"><span class="u">₪</span><input id="extra" inputmode="numeric" value="0" aria-label="הפקדה חודשית לחיסכון פרטי"></div>
+    </div>
+    <div id="privResult" hidden>
+      <div class="cmp2" style="margin-top:12px">
+        <div class="c2"><span class="c2-l">החיסכון הפרטי בגיל 18</span><span class="c2-v" id="priv18">0 ₪</span></div>
+        <div class="c2"><span class="c2-l">בגיל 21 (המשך צמיחה)</span><span class="c2-v" id="priv21">0 ₪</span></div>
+      </div>
+      <div class="split-note" id="totalNote" style="margin-top:12px"></div>
+      <div class="mini-hint">כאן חושב בהנחת הפקדה עד גיל 18 - אבל זה חשבון שלכם, אפשר להמשיך גם אחרי.</div>
+    </div>
   </div>
 
   <div class="cta-card">
@@ -375,7 +390,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">בואו נתכנן את זה יחד ←</a>
   </div>
 
-  <div class="disclaimer"><span>💡</span><span>הערכה להמחשה בלבד, לא ייעוץ, והתשואה אינה מובטחת. עד גיל 21 המדינה משלמת את דמי הניהול, ואחריה הם נגבים מהחיסכון. מלבד ההפקדה החודשית, המדינה מוסיפה מענקים קטנים לאורך הדרך (כ-284 ₪ בגיל 3 וכ-284 ₪ סביב בר/בת מצווה, לילדים שנולדו מ-2017) שלא נכללו בחישוב, ומענק של כ-568 ₪ בגיל 21 שכן נכלל בתחזית ל-21. הסכומים נכונים ל-2026 - כדאי לבדוק באתר הביטוח הלאומי.</span></div>
+  <div class="disclaimer"><span>💡</span><span>הערכה להמחשה בלבד, לא ייעוץ, והתשואה אינה מובטחת. לחשבון חיסכון לכל ילד נכנסים רק הפקדת המדינה וההכפלה מקצבת הילדים - חיסכון נוסף הוא חשבון נפרד. עד גיל 21 המדינה משלמת את דמי הניהול. מלבד ההפקדה החודשית, המדינה מוסיפה מענקים קטנים (כ-284 ₪ בגיל 3 וכ-284 ₪ סביב בר/בת מצווה, לילדים שנולדו מ-2017) שלא נכללו בחישוב, ומענק של כ-568 ₪ בגיל 21 שכן נכלל. הסכומים נכונים ל-2026 - כדאי לבדוק באתר הביטוח הלאומי.</span></div>
 
   <div class="actions">
     <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת החישוב</button>
@@ -401,7 +416,7 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 const money=v=>fmt.format(Math.round(+v||0));
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const SKEY='richlife-childsaving-v1';
-const GRANT21=568;               // state bonus at 21 if left untouched (born 2017+)
+const GRANT21=568;               // state bonus at 21 if left untouched (born 2017+); applies to the program account
 const DEF={age:0,bal:0,state:58,dbl:true,extra:0,rate:5};
 let S=Object.assign({},DEF);
 
@@ -411,24 +426,36 @@ function calc(){
   syncLive();
   const age=Math.min(18,Math.max(0,Math.floor(num(S.age))));
   const yTo18=Math.max(0,18-age),n18=yTo18*12;
-  const st=num(S.state),extra=num(S.extra),bal=num(S.bal),rate=num(S.rate),r=rate/100/12;
-  const monthlyFull=st+(S.dbl?st:0)+extra;
-  // value at 18 (deposits until 18)
-  const v18Full=grow(bal,monthlyFull,n18,r);
-  const v18State=grow(bal,st,n18,r);              // only the state deposits (current balance still counts)
-  // 18 -> 21: no new deposits, 36 more months of growth, + state grant at 21
-  const v21Full=v18Full*Math.pow(1+r,36)+GRANT21;
-  const deposits18=bal+monthlyFull*n18,growth18=Math.max(0,v18Full-deposits18);
-  // render
-  document.getElementById('heroSum').innerHTML=money(v18Full)+'<small> ₪</small>';
+  const st=num(S.state),priv=num(S.extra),bal=num(S.bal),rate=num(S.rate),r=rate/100/12;
+  // ── program account (חיסכון לכל ילד): state + optional doubling only ──
+  const progMonthly=st+(S.dbl?st:0);
+  const v18prog=grow(bal,progMonthly,n18,r);
+  const v18stateOnly=grow(bal,st,n18,r);
+  const v18doubled=grow(bal,st*2,n18,r);
+  const v21prog=v18prog*Math.pow(1+r,36)+GRANT21;   // 3 more years, no deposits, + grant
+  const depProg=bal+progMonthly*n18,growProg=Math.max(0,v18prog-depProg);
+  // ── private savings (separate account you control) ──
+  const v18priv=grow(0,priv,n18,r);
+  const v21priv=v18priv*Math.pow(1+r,36);           // grows untouched, no state grant
+  const total18=v18prog+v18priv,total21=v21prog+v21priv;
+  // render program
+  document.getElementById('heroSum').innerHTML=money(v18prog)+'<small> ₪</small>';
   document.getElementById('heroMeta').innerHTML=yTo18>0?('בעוד <b>'+yTo18+'</b> '+(yTo18===1?'שנה':'שנים')+', בגיל 18'):'הילד/ה כבר בגיל 18';
-  document.getElementById('sum21').textContent=money(v21Full)+' ₪';
+  document.getElementById('sum21').textContent=money(v21prog)+' ₪';
   const sn=document.getElementById('splitNote');
-  if(monthlyFull>0||bal>0){sn.hidden=false;sn.innerHTML='עד גיל 18 יופקדו <b>'+money(deposits18)+' ₪</b>, והחיסכון ירוויח עוד <b>'+money(growth18)+' ₪</b> בזכות הזמן.';}
+  if(progMonthly>0||bal>0){sn.hidden=false;sn.innerHTML='עד גיל 18 יופקדו <b>'+money(depProg)+' ₪</b> לחיסכון לכל ילד, והוא ירוויח עוד <b>'+money(growProg)+' ₪</b> בזכות הזמן.';}
   else sn.hidden=true;
-  document.getElementById('cmpState').textContent=money(v18State)+' ₪';
-  document.getElementById('cmpFull').textContent=money(v18Full)+' ₪';
-  document.getElementById('mLine').textContent='סך ההפקדה החודשית: '+money(monthlyFull)+' ₪ בחודש'+(S.dbl?' (כולל ההכפלה)':' (רק המדינה)');
+  document.getElementById('cmpState').textContent=money(v18stateOnly)+' ₪';
+  document.getElementById('cmpFull').textContent=money(v18doubled)+' ₪';
+  document.getElementById('mLine').textContent='הפקדה חודשית לתוכנית: '+money(progMonthly)+' ₪'+(S.dbl?' (כולל ההכפלה)':' (רק המדינה)')+' - עד גיל 18';
+  // render private
+  const pr=document.getElementById('privResult');
+  if(priv>0){
+    pr.hidden=false;
+    document.getElementById('priv18').textContent=money(v18priv)+' ₪';
+    document.getElementById('priv21').textContent=money(v21priv)+' ₪';
+    document.getElementById('totalNote').innerHTML='סה"כ לילד/ה (תוכנית + פרטי): <b>'+money(total18)+' ₪</b> בגיל 18, <b>'+money(total21)+' ₪</b> בגיל 21.';
+  } else pr.hidden=true;
 }
 
 /* inputs */

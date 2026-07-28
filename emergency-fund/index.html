@@ -211,11 +211,13 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="input-shell"><span class="unit">₪</span><input id="exp" type="text" inputmode="numeric" value="8,000" placeholder="0" aria-label="הוצאות חודשיות חיוניות"></div>
       <div class="hint">רק ההכרחי: שכר דירה או משכנתא, אוכל, חשבונות, ביטוחים, תחבורה. מה שחייבים לשלם גם בחודש בלי הכנסה - בלי מותרות.</div>
     </div>
-    <div class="bills-lbl" style="margin-top:16px;margin-bottom:9px">מה המצב שלכם? זה קובע לכמה חודשים כדאי להיערך:</div>
+    <div class="bills-lbl" style="margin-top:16px;margin-bottom:9px">מה ההרכב בבית? ככל שיש יותר גב ויותר יציבות, צריך כרית קטנה יותר:</div>
     <div class="sit-seg" id="sitSeg">
-      <button class="sit-btn" type="button" data-m="3"><span class="sb-t">שני מפרנסים יציבים</span><span class="sb-m">3 חודשים</span></button>
-      <button class="sit-btn on" type="button" data-m="6"><span class="sb-t">מפרנס יחיד</span><span class="sb-m">6 חודשים</span></button>
-      <button class="sit-btn" type="button" data-m="9"><span class="sb-t">עצמאי או הכנסה משתנה</span><span class="sb-m">9 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="two-emp"><span class="sb-t">שתי הכנסות, שתיהן ממשכורת</span><span class="sb-m">3 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="two-mix"><span class="sb-t">שתי הכנסות, אחת מעסק עצמאי</span><span class="sb-m">6 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="two-self"><span class="sb-t">שתי הכנסות, שתיהן מעסק</span><span class="sb-m">9 חודשים</span></button>
+      <button class="sit-btn on" type="button" data-s="one-emp"><span class="sb-t">הכנסה אחת, ממשכורת</span><span class="sb-m">6 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="one-self"><span class="sb-t">הכנסה אחת, מעסק עצמאי</span><span class="sb-m">9 חודשים</span></button>
     </div>
     <div class="sit-note" id="sitNote"></div>
     <div class="sv-badge" style="margin-top:14px"><span class="sv-lbl" id="goalLbl">היעד שלכם לקרן חירום</span><span class="sv-big tabular" id="goalNum">0 ₪</span></div>
@@ -414,18 +416,23 @@ const money=v=>fmt.format(Math.round(+v||0))+' ₪';
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
 const SKEY='rl_emergency_fund_v1';
-const DEF={exp:8000,months:6,have:0,save:1000};
+const DEF={exp:8000,sit:'one-emp',have:0,save:1000};
 let S=Object.assign({},DEF);
 
-const SIT={
- 3:'מתאים כשיש שתי הכנסות יציבות בבית - אם אחת נופלת, השנייה מחזיקה. שלושה חודשי הוצאה בדרך כלל מספיקים.',
- 6:'כשהבית נשען על הכנסה אחת, כדאי כרית עבה יותר. שישה חודשי הוצאה נותנים מרווח נשימה אמיתי.',
- 9:'להכנסה משתנה או עצמאית אין רשת מהמעסיק, לכן כדאי להיערך רחב יותר - תשעה חודשי הוצאה ומעלה.'
-};
+// household composition → recommended months of essential expenses.
+// two axes: how many incomes (redundancy) × how stable each is (salaried vs self-employed).
+const SCEN=[
+ {s:'two-emp', m:3, note:'יש גב כפול וגם יציבות - אם הכנסה אחת נעצרת, השנייה מחזיקה. שלושה חודשי הוצאה בדרך כלל מספיקים.'},
+ {s:'two-mix', m:6, note:'יש שתי הכנסות, אבל אחת מהן משתנה. שישה חודשי הוצאה מאזנים בין הגב הכפול לחוסר היציבות.'},
+ {s:'two-self',m:9, note:'שתי הכנסות, אבל שתיהן משתנות - ולרוב נחלשות יחד בתקופה חלשה. כדאי כרית עבה של תשעה חודשי הוצאה ומעלה.'},
+ {s:'one-emp', m:6, note:'כל הבית נשען על משכורת אחת יציבה, בלי גב שני. שישה חודשי הוצאה נותנים מרווח נשימה אמיתי אם היא נעצרת.'},
+ {s:'one-self',m:9, note:'הכנסה אחת, משתנה, ובלי רשת מהמעסיק - הסיכון הגבוה ביותר. כדאי להיערך רחב: תשעה חודשי הוצאה ומעלה.'}
+];
+function scenOf(id){return SCEN.find(x=>x.s===id)||SCEN.find(x=>x.s==='one-emp');}
 
 const MONEY=['exp','have','save'];
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}S[id]=num(el.value);save();calc();});});
-document.getElementById('sitSeg').addEventListener('click',e=>{const b=e.target.closest('.sit-btn');if(!b)return;S.months=+b.dataset.m;document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x===b));save();calc();});
+document.getElementById('sitSeg').addEventListener('click',e=>{const b=e.target.closest('.sit-btn');if(!b)return;S.sit=b.dataset.s;document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x===b));save();calc();});
 
 function monthsText(m){return m===1?'חודש אחד':m+' חודשים';}
 function yearsText(m){const y=m/12,r=Math.round(y*10)/10,disp=Number.isInteger(r)?r:r.toFixed(1);return disp+' '+(r===1?'שנה':'שנים');}
@@ -433,13 +440,13 @@ function coverText(c){const r=Math.round(c*10)/10,disp=Number.isInteger(r)?r:r.t
 
 function calc(){
   syncLive();
-  const exp=num(S.exp),months=S.months||6,have=num(S.have),sv=num(S.save);
+  const exp=num(S.exp),scen=scenOf(S.sit),months=scen.m,have=num(S.have),sv=num(S.save);
   const target=exp*months,gap=Math.max(0,target-have),surplus=Math.max(0,have-target);
   const pct=target>0?Math.min(100,have/target*100):0,coverM=exp>0?have/exp:0;
   // goal
   document.getElementById('goalNum').textContent=money(target);
   document.getElementById('goalLbl').textContent='היעד שלכם - '+months+' חודשי הוצאה';
-  document.getElementById('sitNote').textContent=SIT[months]||'';
+  document.getElementById('sitNote').textContent=scen.note;
   // status
   document.getElementById('tGoal').textContent=money(target);
   document.getElementById('tHave').textContent=money(have);
@@ -484,7 +491,7 @@ function applyInputs(){
   document.getElementById('exp').value=grp(S.exp);
   document.getElementById('have').value=grp(S.have);
   document.getElementById('save').value=grp(S.save);
-  document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',+x.dataset.m===(S.months||6)));
+  document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x.dataset.s===(S.sit||'one-emp')));
 }
 (function boot(){
   const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);

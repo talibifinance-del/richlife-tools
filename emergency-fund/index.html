@@ -184,6 +184,23 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .res-line.done{background:rgba(var(--pine-rgb),.12)}
 /* traffic-light insight variants (soft only - never a red scare) */
 .insight.soft{background:rgba(183,121,31,.10);color:var(--amber)}
+/* invest-path input suffix */
+.input-shell .unit-suf{padding-inline-start:0;padding-inline-end:13px;color:var(--ink-soft);font-weight:700;font-size:14px;flex:none}
+.input-shell.mini-w{max-width:230px}
+.input-shell.mini-w input{width:auto;flex:1}
+/* cash vs layered-invest comparison */
+.path-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:520px){.path-wrap{grid-template-columns:1fr}}
+.path{background:var(--sage-tint);border-radius:14px;padding:13px;text-align:center}
+.path .p-lbl{display:block;font-size:12px;font-weight:800;color:var(--ink-soft);line-height:1.3}
+.path .p-num{display:block;font-size:clamp(17px,4vw,21px);font-weight:900;color:var(--pine-darker);margin-top:5px;font-variant-numeric:tabular-nums}
+.path .p-sub{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);margin-top:2px}
+.path.inv{background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%)}
+.path.inv .p-lbl{color:rgba(255,255,255,.9)}
+.path.inv .p-num{color:#fff}
+.path.inv .p-sub{color:rgba(255,255,255,.82)}
+.save-badge{margin-top:11px;text-align:center;background:rgba(var(--pine-rgb),.12);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:900;color:var(--pine-deep);line-height:1.5}
+.res-note{margin-top:12px;background:rgba(183,121,31,.10);border-radius:12px;padding:11px 14px;font-size:12px;font-weight:700;color:var(--amber);line-height:1.55}
 </style>
 </head>
 <body>
@@ -244,7 +261,17 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <label for="save">כמה אפשר להפריש כל חודש?</label>
       <div class="input-shell"><span class="unit">₪</span><input id="save" type="text" inputmode="numeric" value="1,000" placeholder="0" aria-label="הפרשה חודשית"></div>
     </div>
-    <div class="res-line" id="resLine"><span class="rl-lbl">הזינו הפרשה חודשית כדי לראות מתי הקרן מלאה</span></div>
+    <div class="field" style="margin-top:14px">
+      <label for="irate">תשואה שנתית להשקעה - למסלול המושקע</label>
+      <div class="input-shell mini-w"><input id="irate" type="text" inputmode="decimal" value="7" placeholder="7" aria-label="תשואת השקעה שנתית באחוזים"><span class="unit unit-suf">% בשנה</span></div>
+    </div>
+    <div class="res-line" id="resLine" hidden></div>
+    <div class="path-wrap" id="pathWrap" hidden>
+      <div class="path"><span class="p-lbl">💵 הכל במזומן</span><span class="p-num" id="cashN">-</span><span class="p-sub" id="cashSub"></span></div>
+      <div class="path inv"><span class="p-lbl">📈 חודש מזומן + השאר מושקע</span><span class="p-num" id="invN">-</span><span class="p-sub" id="invSub"></span></div>
+    </div>
+    <div class="save-badge" id="saveBadge" hidden></div>
+    <div class="res-note" id="liqNote" hidden></div>
     <div class="insight" id="insight"></div>
   </div>
 
@@ -416,7 +443,7 @@ const money=v=>fmt.format(Math.round(+v||0))+' ₪';
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
 const SKEY='rl_emergency_fund_v1';
-const DEF={exp:8000,sit:'one-emp',have:0,save:1000};
+const DEF={exp:8000,sit:'one-emp',have:0,save:1000,irate:7};
 let S=Object.assign({},DEF);
 
 // household composition → recommended months of essential expenses.
@@ -433,6 +460,7 @@ function scenOf(id){return SCEN.find(x=>x.s===id)||SCEN.find(x=>x.s==='one-emp')
 const MONEY=['exp','have','save'];
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}S[id]=num(el.value);save();calc();});});
 document.getElementById('sitSeg').addEventListener('click',e=>{const b=e.target.closest('.sit-btn');if(!b)return;S.sit=b.dataset.s;document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x===b));save();calc();});
+document.getElementById('irate').addEventListener('input',e=>{S.irate=num(e.target.value);save();calc();});
 
 function monthsText(m){return m===1?'חודש אחד':m+' חודשים';}
 function yearsText(m){const y=m/12,r=Math.round(y*10)/10,disp=Number.isInteger(r)?r:r.toFixed(1);return disp+' '+(r===1?'שנה':'שנים');}
@@ -456,12 +484,32 @@ function calc(){
   const fill=document.getElementById('barFill');fill.style.width=pct+'%';fill.classList.toggle('full',pct>=100);
   document.getElementById('barPct').textContent=target>0?Math.round(pct)+'% מהיעד':'מזינים הוצאות כדי לחשב';
   document.getElementById('barLeft').textContent=target>0?(gap>0?'עוד '+money(gap):'הושלם ✓'):'';
-  // time to goal
-  const rl=document.getElementById('resLine');
-  if(target<=0){rl.className='res-line';rl.innerHTML='<span class="rl-lbl">מזינים הוצאות חודשיות למעלה כדי לראות את היעד</span>';}
-  else if(gap<=0){rl.className='res-line done';rl.innerHTML='<span class="rl-lbl">🎉 הקרן שלכם כבר מלאה</span><span class="rl-num">'+coverText(coverM)+' בצד</span><span class="rl-sub">רשת ביטחון מלאה - כל הכבוד</span>';}
-  else if(sv<=0){rl.className='res-line';rl.innerHTML='<span class="rl-lbl">הזינו הפרשה חודשית כדי לראות מתי הקרן מלאה</span>';}
-  else{const mm=Math.ceil(gap/sv);rl.className='res-line';rl.innerHTML='<span class="rl-lbl">בקצב של '+money(sv)+' בחודש</span><span class="rl-num">עוד '+monthsText(mm)+'</span><span class="rl-sub">עד שהקרן מלאה'+(mm>=12?' (‏'+yearsText(mm)+')':'')+'</span>';}
+  // time to goal - cash-only vs layered (1 month cash + rest invested)
+  const rl=document.getElementById('resLine'),pw=document.getElementById('pathWrap'),sb=document.getElementById('saveBadge'),ln=document.getElementById('liqNote');
+  function hideComp(){pw.hidden=true;sb.hidden=true;ln.hidden=true;}
+  if(target<=0){rl.hidden=false;rl.className='res-line';rl.innerHTML='<span class="rl-lbl">מזינים הוצאות חודשיות למעלה כדי לראות את היעד</span>';hideComp();}
+  else if(gap<=0){rl.hidden=false;rl.className='res-line done';rl.innerHTML='<span class="rl-lbl">🎉 הקרן שלכם כבר מלאה</span><span class="rl-num">'+coverText(coverM)+' בצד</span><span class="rl-sub">רשת ביטחון מלאה - כל הכבוד</span>';hideComp();}
+  else if(sv<=0){rl.hidden=false;rl.className='res-line';rl.innerHTML='<span class="rl-lbl">הזינו הפרשה חודשית כדי לראות מתי הקרן מלאה</span>';hideComp();}
+  else{
+    rl.hidden=true;
+    const nCash=Math.ceil(gap/sv);
+    const irate=num(S.irate),r=irate/100/12,cushion=exp;
+    const cushMonths=Math.ceil(Math.max(0,cushion-have)/sv);
+    const investTarget=Math.max(0,target-cushion),investHave=Math.max(0,have-cushion);
+    let nInvest=0;
+    if(investHave<investTarget){
+      if(r>0){const ratio=(investTarget+sv/r)/(investHave+sv/r);nInvest=Math.ceil(Math.log(ratio)/Math.log(1+r));}
+      else nInvest=Math.ceil((investTarget-investHave)/sv);
+    }
+    const nLayer=cushMonths+nInvest,saved=nCash-nLayer;
+    pw.hidden=false;sb.hidden=false;ln.hidden=false;
+    document.getElementById('cashN').textContent=monthsText(nCash);
+    document.getElementById('cashSub').textContent=nCash>=12?'('+yearsText(nCash)+')':'';
+    document.getElementById('invN').textContent=monthsText(nLayer);
+    document.getElementById('invSub').textContent=nLayer>=12?'('+yearsText(nLayer)+')':'';
+    sb.innerHTML=saved>0?('📈 ההשקעה מקצרת את הזמן '+(saved===1?'בחודש אחד':('בכ-'+saved+' חודשים'))):'בתשואה הזו ההבדל בזמן קטן. העיקר כאן הוא האיזון בין תשואה לנזילות.';
+    ln.innerHTML='חודש הוצאה ראשון נשאר במזומן נגיש; את היתרה משקיעים - כך גם מרוויחים תשואה וגם שומרים כרית לזעזוע קטן. חשוב לזכור: השקעה תנודתית, אז בשנה חלשה הקרן נבנית לאט יותר, ואם צריך למשוך דווקא בזמן ירידה ייתכן הפסד. ההשקעה מזרזת - לא מחליפה את הכרית.';
+  }
   // insight - encouraging, never a red scare (pine / amber only)
   const ins=document.getElementById('insight');
   if(target<=0){ins.className='insight';ins.innerHTML='רשת ביטחון מתחילה בלדעת מה היעד. מזינים הוצאות חודשיות, ורואים כמה צריך.';}
@@ -491,6 +539,7 @@ function applyInputs(){
   document.getElementById('exp').value=grp(S.exp);
   document.getElementById('have').value=grp(S.have);
   document.getElementById('save').value=grp(S.save);
+  document.getElementById('irate').value=(S.irate!=null?S.irate:7);
   document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x.dataset.s===(S.sit||'one-emp')));
 }
 (function boot(){

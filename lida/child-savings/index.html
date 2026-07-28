@@ -155,6 +155,26 @@ body{font-family:var(--font);
 .leave21 .l21-ico{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:23px;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;box-shadow:0 7px 16px rgba(var(--pine-rgb),.32)}
 /* emoji lead on field labels */
 .fr-lbl .fe{margin-inline-end:5px}
+/* deposits-vs-growth stacked bar */
+.gbar{display:flex;height:30px;border-radius:100px;overflow:hidden;margin:2px 0 12px;background:var(--sage-tint)}
+.gbar .gb{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;min-width:0;transition:width .4s;white-space:nowrap;overflow:hidden}
+.gbar .gb-dep{background:linear-gradient(135deg,#9db8a4,#7d9c88)}
+.gbar .gb-grow{background:linear-gradient(135deg,var(--pine),var(--pine-deep))}
+.gbar-legend{display:flex;flex-wrap:wrap;gap:8px}
+.gl{flex:1 1 auto;min-width:130px;background:var(--sage-tint);border-radius:11px;padding:9px 12px}
+.gl .gl-t{display:block;font-size:11.5px;font-weight:800;color:var(--ink-soft)}
+.gl .gl-v{display:block;font-size:15px;font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums;margin-top:1px}
+.gl.grow{background:rgba(var(--pine-rgb),.1)}
+.gl.grow .gl-v{color:var(--pine-deep)}
+/* track comparison bars */
+.track-cmp{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.tc-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--sage-tint);border:1.5px solid transparent}
+.tc-row.on{border-color:var(--pine);background:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.14)}
+.tc-name{flex:none;width:124px;font-size:12.5px;font-weight:800;color:var(--pine-darker);line-height:1.2}
+.tc-name .tc-r{font-size:11px;font-weight:800;color:var(--pine)}
+.tc-mid{flex:1;min-width:0}
+.tc-bar{height:10px;border-radius:100px;background:linear-gradient(90deg,var(--sage),var(--pine));transition:width .45s;min-width:6px}
+.tc-val{flex:none;font-size:14px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -368,12 +388,28 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
   <div class="card">
     <div class="card-h"><div class="ch-ico">✨</div><h2>הכוח של ההכפלה</h2></div>
-    <div class="split-note" id="splitNote" hidden></div>
     <div class="cmp2">
       <div class="c2"><span class="c2-l">🇮🇱 רק הפקדת המדינה</span><span class="c2-v" id="cmpState">0 ₪</span></div>
       <div class="c2 full"><span class="c2-l">✨ בהכפלה מקצבת הילדים</span><span class="c2-v" id="cmpFull">0 ₪</span></div>
     </div>
     <div class="mini-hint">אפשר להשאיר רק את הפקדת המדינה בלי להכפיל - זו בחירה לגיטימית. ההכפלה מגיעה מקצבת הילדים, כסף שממילא מגיע לכם. שתי ההשוואות הן לגיל 18.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="ch-ico">📊</div><h2>כמה מזה הפקדתם, וכמה הזמן הוסיף</h2></div>
+    <div class="gbar" aria-hidden="true"><div class="gb gb-dep" id="gbDep"></div><div class="gb gb-grow" id="gbGrow"></div></div>
+    <div class="gbar-legend">
+      <div class="gl"><span class="gl-t">💰 מה שהפקדתם</span><span class="gl-v" id="glDep">0 ₪</span></div>
+      <div class="gl grow"><span class="gl-t">📈 מה שהשוק הוסיף</span><span class="gl-v" id="glGrow">0 ₪</span></div>
+    </div>
+    <div class="split-note" id="splitNote" hidden style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="ch-ico">⚖️</div><h2>השוואת מסלולים בגיל 18</h2></div>
+    <div class="sub">אותן הפקדות, מסלול אחר. ככה נראה ההבדל לאורך 18 שנה, וזה בדיוק המחיר של לשחק בטוח מדי.</div>
+    <div class="track-cmp" id="trackCmp"></div>
+    <div class="mini-hint" id="trackNote"></div>
   </div>
 
   <div class="card">
@@ -458,6 +494,20 @@ function calc(){
   document.getElementById('cmpState').textContent=money(v18stateOnly)+' ₪';
   document.getElementById('cmpFull').textContent=money(v18doubled)+' ₪';
   document.getElementById('mLine').textContent='הפקדה חודשית לתוכנית: '+money(progMonthly)+' ₪'+(S.dbl?' (כולל ההכפלה)':' (רק המדינה)')+' - עד גיל 18';
+  // deposits-vs-growth bar (program at 18)
+  const totBar=Math.max(1,depProg+growProg),depPct=depProg/totBar*100,growPct=growProg/totBar*100;
+  const gbDep=document.getElementById('gbDep'),gbGrow=document.getElementById('gbGrow');
+  gbDep.style.width=depPct+'%';gbGrow.style.width=growPct+'%';
+  gbDep.textContent=depPct>=14?Math.round(depPct)+'%':'';
+  gbGrow.textContent=growPct>=14?Math.round(growPct)+'%':'';
+  document.getElementById('glDep').textContent=money(depProg)+' ₪';
+  document.getElementById('glGrow').textContent=money(growProg)+' ₪';
+  // track comparison at 18 (same config, vary rate over the three tracks)
+  const TRACKS=[['🏦 בנק',2],['📊 קופת גמל',5],['📈 מוגבר סיכון',7]];
+  const tvals=TRACKS.map(t=>grow(bal,progMonthly,n18,t[1]/100/12));
+  const maxT=Math.max(1,tvals[0],tvals[1],tvals[2]);
+  document.getElementById('trackCmp').innerHTML=TRACKS.map((t,i)=>'<div class="tc-row'+(num(S.rate)===t[1]?' on':'')+'"><div class="tc-name">'+t[0]+' <span class="tc-r">'+t[1]+'%</span></div><div class="tc-mid"><div class="tc-bar" style="width:'+(tvals[i]/maxT*100)+'%"></div></div><div class="tc-val">'+money(tvals[i])+' ₪</div></div>').join('');
+  document.getElementById('trackNote').innerHTML=n18>0?('💡 מעבר מהבנק לקופת גמל שווה כאן כ-<b>'+money(tvals[1]-tvals[0])+' ₪</b> יותר בגיל 18 - זה המחיר של לשחק בטוח מדי לאורך זמן.'):'';
   // render private
   const pr=document.getElementById('privResult');
   if(priv>0){

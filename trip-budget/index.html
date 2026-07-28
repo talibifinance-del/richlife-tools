@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','208911198828875');fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=208911198828875&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
+<title>מחשבון תקציב לחופשה בחו"ל · RichLife</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#5f7d6a; --pine-rgb:95,125,106; --pine-deep:#3e5448; --pine-darker:#2f4036;
+  --sage:#bcd3bf; --sage-rgb:188,211,191; --paper:#e9f1f2; --sage-tint:#eef4ef;
+  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f; --go:#2f9169;
+  --font:'Heebo',system-ui,Arial,sans-serif;
+  --card:#fff; --shadow:0 10px 30px rgba(var(--pine-rgb),.10); --shadow-hi:0 18px 44px rgba(var(--pine-rgb),.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(14px,3vw,40px) clamp(12px,3vw,28px) 60px}
+.wrap{max-width:760px;margin:0 auto}
+.tabular{font-variant-numeric:tabular-nums}
+.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:20px}
+.brand .avatar{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
+.brand .by-lead{font-weight:900;font-size:16px;color:var(--pine-darker)}
+.brand .by-sub{font-weight:700;font-size:12px;color:var(--pine)}
+.brand .by-sub b{color:var(--pine-deep)}
+.hero-title{text-align:center;margin-bottom:22px}
+.hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
+.hero-title h1 .em{color:var(--pine)}
+.hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:560px;margin-inline:auto}
+.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(var(--pine-rgb),.15),rgba(var(--sage-rgb),.34));border:1.5px solid rgba(var(--pine-rgb),.38);border-radius:14px;padding:12px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s,box-shadow .15s}
+.top-cta:hover{border-color:var(--pine);transform:translateY(-1px);box-shadow:0 8px 20px rgba(var(--pine-rgb),.16)}
+.top-cta .tc-txt{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center}
+.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-darker);white-space:nowrap}
+.card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
+.card+.card{margin-top:16px}
+.sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
+.input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
+.input-shell .unit{padding-inline-start:13px;color:var(--ink-soft);font-weight:700;font-size:15px;flex:none}
+.input-shell input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:17px;color:var(--ink);padding:12px 10px 12px 13px;outline:none;text-align:right;font-variant-numeric:tabular-nums}
+.input-shell .unit-suf{padding-inline-start:0;padding-inline-end:13px;color:var(--ink-soft);font-weight:700;font-size:14px;flex:none}
+/* trip details (destination / travellers / days) */
+.trip-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.trip-fields .field.full{grid-column:1/-1}
+@media(max-width:440px){.trip-fields{grid-template-columns:1fr}}
+/* per-day / per-person derived strip */
+.per-line{margin-top:13px;display:flex;flex-wrap:wrap;gap:8px}
+.per-line .pl-chip{flex:1 1 auto;min-width:104px;background:var(--sage-tint);border-radius:12px;padding:9px 12px;text-align:center}
+.per-line .pl-lbl{font-size:11px;font-weight:800;color:var(--ink-soft);display:block}
+.per-line .pl-val{font-size:15px;font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums;margin-top:1px}
+
+/* ── summary ── */
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+@media(max-width:560px){.sum-grid{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--sage-tint);border-radius:14px;padding:12px 12px 11px;text-align:center}
+.tile .t-lbl{font-size:11.5px;font-weight:800;color:var(--ink-soft)}
+.tile .t-val{font-size:clamp(17px,3.6vw,21px);font-weight:900;color:var(--pine-darker);margin-top:2px}
+.tile.hot .t-val{color:var(--red)}
+.tile.main{background:linear-gradient(140deg,var(--pine),var(--pine-deep) 80%)}
+.tile.main .t-lbl{color:rgba(255,255,255,.85)}
+.tile.main .t-val{color:#fff}
+.bar{height:10px;background:var(--sage-tint);border-radius:100px;overflow:hidden;margin-top:14px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px;transition:width .35s}
+.bar>i.over{background:linear-gradient(90deg,#d98a75,var(--red))}
+.bar-note{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:6px}
+.insight{margin-top:13px;background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.55}
+.insight.warn{background:rgba(var(--red-rgb),.09);color:var(--red)}
+.insight.soft{background:rgba(183,121,31,.10);color:var(--amber)}
+.reserve-note{margin-top:13px;display:flex;align-items:center;gap:9px;background:rgba(183,121,31,.09);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:700;color:var(--amber);line-height:1.5}
+.reserve-note b{font-variant-numeric:tabular-nums}
+.ess-line{margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--sage-tint);border-radius:12px;padding:10px 14px}
+.ess-line .el-txt{font-size:13px;font-weight:800;color:var(--pine-darker)}
+.ess-line .el-txt b{font-variant-numeric:tabular-nums;color:var(--pine-deep)}
+.ess-line .el-cta{border:0;background:var(--pine);color:#fff;font-family:var(--font);font-weight:800;font-size:12px;border-radius:100px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.ess-line .el-cta.on{background:var(--pine-deep)}
+
+/* ── priority filter bar ── */
+.filter-bar{display:flex;align-items:center;gap:9px;margin:18px 2px 2px;flex-wrap:wrap}
+.filter-bar .filter-lbl{font-size:12px;font-weight:800;color:var(--ink-soft)}
+.filter-btn{border:1.5px solid rgba(var(--pine-rgb),.22);background:#fff;font-family:var(--font);font-weight:800;font-size:12.5px;color:var(--ink-soft);border-radius:100px;padding:7px 15px;cursor:pointer;transition:all .15s}
+.filter-btn.on{background:var(--pine);border-color:var(--pine);color:#fff}
+.room.pr-empty{display:none}
+/* tier composition line (essLine) - how the budget splits by priority */
+.tier-sum{margin-top:13px;display:flex;flex-wrap:wrap;gap:8px}
+.tier-sum .ts-chip{flex:1 1 auto;min-width:118px;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;padding:9px 12px;text-align:center;transition:border-color .15s}
+.tier-sum .ts-chip.on{border-color:var(--pine);background:#fff;box-shadow:0 3px 10px rgba(var(--pine-rgb),.12)}
+.tier-sum .ts-lbl{font-size:11px;font-weight:800;color:var(--ink-soft);display:block}
+.tier-sum .ts-val{font-size:15px;font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums;margin-top:1px}
+.filter-note{margin-top:12px;background:rgba(var(--pine-rgb),.08);border-radius:12px;padding:9px 14px;font-size:12.5px;font-weight:800;color:var(--pine-deep);line-height:1.5}
+
+/* ── detailed breakdown ── */
+.bd-room{padding:12px 0;border-top:1px solid rgba(var(--pine-rgb),.10)}
+.bd-room:first-child{border-top:0;padding-top:2px}
+.bd-rhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+.bd-rname{font-weight:900;font-size:15px;color:var(--pine-darker)}
+/* breakdown colour code (one meaning per colour):
+   .paid = money actually spent  → dark ink, bold
+   .plan / .pend = planned / not-yet-bought → muted grey (calm, not a warning)
+   .left = budget still in your pocket → green ;  .over = over budget → red */
+.bd-rnums{font-size:12.5px;font-weight:700;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+.bd-rnums .paid{color:var(--red);font-weight:800}
+.bd-rnums .pend{color:var(--ink-soft);font-weight:700}
+.bd-rnums .over{color:var(--red);font-weight:800}
+/* fixed columns so "תוכנן" and "יצא / טרם נקנה" never swap sides: name | תוכנן | סטטוס */
+.bd-item{display:grid;grid-template-columns:minmax(0,1fr) 118px 138px;gap:3px 14px;align-items:baseline;padding:5px 12px;font-size:13px}
+@media(max-width:560px){.bd-item{grid-template-columns:minmax(0,1fr) 92px 104px;gap:2px 8px;font-size:12px}}
+.bd-iname{color:var(--ink);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bd-plan{color:var(--ink-soft);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+.bd-status{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+.bd-status.paid{color:var(--red);font-weight:800}
+.bd-status.paid .ok{color:var(--go);font-weight:900;margin-inline-start:2px}
+.bd-status.pend{color:var(--ink-soft)}
+.bd-empty{font-size:13.5px;color:var(--ink-soft);font-weight:600;padding:6px 2px;line-height:1.55}
+.bd-total{margin-top:14px;padding-top:13px;border-top:2px solid rgba(var(--pine-rgb),.18);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bd-total .bd-tlbl{font-size:15px;font-weight:900;color:var(--pine-darker)}
+.bd-total .bd-tnums{font-size:13px;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums;text-align:left}
+.bd-total .bd-tnums .paid{color:var(--red);font-weight:900}
+.bd-total .bd-tnums .plan{color:var(--ink-soft);font-weight:600}
+.bd-total .bd-tnums .left{color:var(--go);font-weight:900}
+.bd-total .bd-tnums .over{color:var(--red);font-weight:900}
+
+/* ── rooms ── */
+.room{margin-top:16px}
+.room-head{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.room-head .r-emoji{font-size:22px;flex:none}
+.room-head .r-name{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:900;font-size:clamp(15.5px,3.2vw,18px);color:var(--pine-darker);outline:none;padding:2px 0}
+.room-head .r-name:focus{border-bottom:2px solid var(--pine)}
+.room-head .r-sub{flex:none;text-align:left;line-height:1.3}
+.room-head .r-sub .r-count{font-size:11.5px;font-weight:800;color:var(--ink-soft);display:block}
+.room-head .r-sub .r-sums{font-size:12.5px;font-weight:900;color:var(--pine-deep);white-space:nowrap}
+.room-head .chev{flex:none;width:22px;height:22px;border-radius:50%;background:var(--sage-tint);display:flex;align-items:center;justify-content:center;color:var(--pine-deep);font-size:12px;transition:transform .2s}
+.room.closed .chev{transform:rotate(90deg)}
+.room .r-bar{height:6px;background:var(--sage-tint);border-radius:100px;overflow:hidden;margin:9px 0 4px}
+.room .r-bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px;transition:width .3s}
+.room .r-bar>i.over{background:linear-gradient(90deg,#d98a75,var(--red))}
+.room.closed .items,.room.closed .add-item{display:none}
+
+/* ── item rows ── */
+.items{margin-top:6px}
+.item{border-top:1px solid rgba(var(--pine-rgb),.10);padding:10px 0 11px}
+.item-top{display:flex;align-items:center;gap:8px}
+.item-name{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:700;font-size:14.5px;color:var(--ink);outline:none;padding:3px 0}
+.item-name:focus{border-bottom:1.5px solid var(--pine)}
+.item.have .item-name{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:rgba(var(--pine-rgb),.5)}
+.seg{flex:none;display:flex;background:var(--sage-tint);border-radius:100px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:11.5px;color:var(--ink-soft);padding:5px 10px;border-radius:100px;cursor:pointer;white-space:nowrap}
+.seg button.on{background:#fff;color:var(--pine-deep);box-shadow:0 2px 6px rgba(var(--pine-rgb),.18)}
+.del{flex:none;width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:rgba(var(--pine-rgb),.55);font-size:15px;font-weight:900;cursor:pointer;line-height:1}
+.del:hover{background:rgba(var(--red-rgb),.10);color:var(--red)}
+/* priority selector (per item, only while it's "to buy") */
+.item-pr{display:flex;align-items:center;gap:8px;margin-top:9px}
+.item-pr .pr-lbl{font-size:11px;font-weight:800;color:var(--ink-soft);flex:none}
+.pr-seg{display:flex;background:var(--sage-tint);border-radius:100px;padding:3px;gap:2px}
+.pr-seg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:11.5px;color:var(--ink-soft);padding:5px 11px;border-radius:100px;cursor:pointer;white-space:nowrap}
+.pr-seg button.on[data-pr="hi"]{background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(var(--red-rgb),.28)}
+.pr-seg button.on[data-pr="mid"]{background:var(--pine);color:#fff;box-shadow:0 2px 6px rgba(var(--pine-rgb),.28)}
+.pr-seg button.on[data-pr="lo"]{background:#fff;color:var(--ink-soft);box-shadow:0 2px 6px rgba(var(--pine-rgb),.16)}
+.item-amounts{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-top:8px}
+@media(max-width:480px){.item-amounts{grid-template-columns:1fr 1fr;}.item-amounts .chip{grid-column:1/-1;justify-self:start}}
+.mini-field .m-lbl{font-size:10.5px;font-weight:800;color:var(--ink-soft);margin-bottom:3px}
+.mini-shell{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px}
+.mini-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.14)}
+.mini-shell .unit{padding-inline-start:9px;color:var(--ink-soft);font-weight:700;font-size:12.5px;flex:none}
+.mini-shell input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14.5px;color:var(--ink);padding:8px 8px 8px 9px;outline:none;text-align:right;font-variant-numeric:tabular-nums}
+.mini-shell.paid-shell:focus-within{border-color:var(--pine-deep)}
+.chip{font-size:11px;font-weight:900;border-radius:100px;padding:4px 10px;white-space:nowrap}
+.chip.wait{background:var(--sage-tint);color:var(--ink-soft)}
+.chip.done{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep)}
+.chip.save{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep)}
+.chip.over{background:rgba(var(--red-rgb),.12);color:var(--red)}
+.have-note{margin-top:6px;font-size:12px;font-weight:700;color:var(--pine)}
+
+/* ── add buttons ── */
+.add-item{margin-top:10px}
+.add-item button,.add-room{border:1.5px dashed rgba(var(--pine-rgb),.45);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:8px 16px;cursor:pointer;transition:background .15s}
+.add-item button:hover,.add-room:hover{background:var(--sage-tint)}
+.add-room{display:block;margin:18px auto 0;font-size:14px;padding:11px 22px}
+
+/* ── cta + actions + footer ── */
+.cta-card{margin-top:18px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,4vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi)}
+.cta-card .cta-emoji{font-size:30px}
+.cta-card h3{font-size:clamp(17px,3.6vw,20px);font-weight:900;margin:6px 0 8px}
+.cta-card p{font-size:14px;font-weight:600;opacity:.94;max-width:460px;margin:0 auto 16px;line-height:1.55}
+.cta-btn{display:inline-block;font-family:var(--font);font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:15px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22);transition:transform .18s}
+.cta-btn:hover{transform:translateY(-2px)}
+.actions{margin-top:18px;text-align:center}
+.act-btn{border:0;background:#fff;color:var(--pine-darker);font-family:var(--font);font-weight:900;font-size:14.5px;border-radius:100px;padding:13px 22px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s}
+.act-btn:hover{transform:translateY(-1px)}
+.act-btn.ghost{background:transparent;box-shadow:none;color:var(--ink-soft);font-weight:800;font-size:13px;margin-inline-start:6px}
+.act-note{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:8px}
+.live-badge{background:rgba(47,145,105,.12);border:1.5px solid rgba(47,145,105,.42);color:var(--go);font-weight:800;font-size:12.5px;border-radius:12px;padding:10px 14px;margin-bottom:13px;line-height:1.5;max-width:460px;margin-inline:auto}
+.act-link{display:flex;gap:8px;max-width:460px;margin:10px auto 0}
+.act-link input{flex:1;min-width:0;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:10px;background:#fff;font-family:var(--font);font-size:12.5px;padding:9px 11px;color:var(--ink-soft);direction:ltr;text-align:left}
+.act-link button{border:0;background:var(--pine);color:#fff;font-family:var(--font);font-weight:800;font-size:13px;border-radius:10px;padding:0 16px;cursor:pointer}
+footer{text-align:center;margin-top:34px;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+footer .socials{display:flex;justify-content:center;gap:14px;margin:10px 0}
+footer .socials a{color:var(--pine-deep)}
+footer .socials svg{width:20px;height:20px}
+footer .foot-livuy{display:inline-block;color:var(--pine-deep);font-weight:900;text-decoration:none;margin-top:2px}
+footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:14px;font-weight:800;color:var(--pine-darker);max-width:520px;margin-inline:auto;line-height:1.6}
+.guide-nav{margin-bottom:18px;text-align:center}
+.gn-title{display:inline-block;font-family:var(--font);font-weight:900;font-size:12px;color:var(--pine);text-decoration:none;margin-bottom:9px}
+.gn-title.gn-static{color:var(--ink-soft);cursor:default}
+.gn-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
+.gn-tab:hover{border-color:var(--pine)}
+.gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+</style>
+<!-- ═══════════════════════════════════════════════════════════════════
+     ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
+     מדביקים פעם אחת בתוך <head> של כל דף באתר.
+     אחרי הרצת setup.py השתמשו בקובץ output/a11y-snippet-ready.html
+
+     Zero-impact by default (Eden's directive, page-standard.md):
+     - Regular visitors see ONLY a small round a11y button (bottom-left).
+     - Focus outline appears via :focus-visible - keyboard users only.
+     - Skip-link hidden until keyboard-focused.
+     - All visual adjustments (text size / contrast / links / motion /
+       readable font) apply ONLY when chosen; saved in localStorage.
+     - The menu links to the accessibility statement (legal requirement).
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+  /* Keyboard-only focus - mouse users never see this */
+  :focus-visible { outline: 3px solid #4F46E5 !important; outline-offset: 2px !important; border-radius: 4px; }
+  /* Skip link - visible only on keyboard focus */
+  .brain-skip { position: fixed; top: -60px; right: 12px; z-index: 100000; background: #1E1B4B; color: #fff;
+    padding: 10px 18px; border-radius: 10px; font-size: 15px; text-decoration: none; transition: top .15s; }
+  .brain-skip:focus { top: 12px; }
+  /* Opt-in modes */
+  html.a11y-fs1 body { zoom: 1.12; } html.a11y-fs2 body { zoom: 1.25; }
+  html.a11y-contrast { filter: contrast(1.25); }
+  html.a11y-links a { text-decoration: underline !important; font-weight: 700 !important; }
+  html.a11y-nomotion *, html.a11y-nomotion *::before, html.a11y-nomotion *::after {
+    animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  html.a11y-font body, html.a11y-font body * { font-family: Arial, Helvetica, sans-serif !important; }
+  /* The button + menu */
+  #brain-a11y-btn { position: fixed; bottom: 18px; left: 18px; z-index: 99999; width: 44px; height: 44px;
+    border-radius: 50%; border: none; cursor: pointer; background: #1E1B4B; color: #fff;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(30,27,75,.35); padding: 0; }
+  #brain-a11y-btn:hover { background: #4F46E5; }
+  #brain-a11y-menu { position: fixed; bottom: 72px; left: 18px; z-index: 99999; background: #fff; color: #1E1B4B;
+    border-radius: 14px; box-shadow: 0 6px 30px rgba(30,27,75,.25); padding: 14px; width: 230px; display: none;
+    direction: rtl; text-align: right; font-family: Arial, sans-serif; font-size: 14px; }
+  #brain-a11y-menu.open { display: block; }
+  #brain-a11y-menu h2 { font-size: 15px; margin: 0 0 10px; }
+  #brain-a11y-menu button { display: block; width: 100%; margin: 4px 0; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid #E0E7FF; background: #F8FAFC; cursor: pointer; font-size: 13px; text-align: right; color: #1E1B4B; }
+  #brain-a11y-menu button[aria-pressed="true"] { background: #4F46E5; color: #fff; border-color: #4F46E5; }
+  #brain-a11y-menu a { display: block; margin-top: 10px; font-size: 12px; color: #4F46E5; }
+  /* polish: text fields show their OWN green focus ring (keeps ₪ / שנים visible), not the indigo box */
+  .input-shell input:focus, .input-shell input:focus-visible,
+  .mini-shell input:focus, .mini-shell input:focus-visible,
+  .item-name:focus, .item-name:focus-visible,
+  .r-name:focus, .r-name:focus-visible,
+  .goal-name:focus, .goal-name:focus-visible,
+  .act-link input:focus, .act-link input:focus-visible,
+  #linkField:focus, #linkField:focus-visible { outline: none !important; }
+</style>
+<script>
+(function () {
+  var MODES = [
+    ["fs", "הגדלת טקסט", 2],            // cycles: off → fs1 → fs2
+    ["contrast", "ניגודיות מוגברת", 1],
+    ["links", "הדגשת קישורים", 1],
+    ["nomotion", "עצירת אנימציות", 1],
+    ["font", "גופן קריא", 1]
+  ];
+  var KEY = "brain_a11y";
+
+  function state() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+  function apply(s) {
+    var h = document.documentElement;
+    h.classList.toggle("a11y-fs1", s.fs === 1); h.classList.toggle("a11y-fs2", s.fs === 2);
+    ["contrast", "links", "nomotion", "font"].forEach(function (m) { h.classList.toggle("a11y-" + m, !!s[m]); });
+  }
+
+  function build() {
+    if (document.getElementById("brain-a11y-btn")) return; // pasted twice - once is enough
+    // Skip link (target: <main> or first <h1>'s section)
+    if (!document.getElementById("brain-main")) {
+      var m = document.querySelector("main") || document.querySelector("h1");
+      if (m) m.id = m.id || "brain-main";
+    }
+    var skip = document.createElement("a");
+    skip.className = "brain-skip"; skip.href = "#" + ((document.querySelector("main,h1") || {}).id || "brain-main");
+    skip.textContent = "דילוג לתוכן"; document.body.prepend(skip);
+
+    var btn = document.createElement("button");
+    btn.id = "brain-a11y-btn"; btn.setAttribute("aria-label", "פתיחת תפריט נגישות");
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "brain-a11y-menu");
+    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="4.5" r="2.2" fill="currentColor"/><path d="M12 8c-3 0-5.5-.6-7-1l.5 2c1.5.5 3.5.8 5 .9v3.1l-2.3 6.2 1.9.8 2-5.5h-.2 2.2l2 5.5 1.9-.8L15.5 13V9.9c1.5-.1 3.5-.4 5-.9l.5-2c-1.5.4-4 1-7 1h-2z" fill="currentColor"/></svg>';
+
+    var menu = document.createElement("div");
+    menu.id = "brain-a11y-menu"; menu.setAttribute("role", "dialog"); menu.setAttribute("aria-label", "אפשרויות נגישות");
+    menu.innerHTML = "<h2>נגישות</h2>";
+    MODES.forEach(function (mode) {
+      var b = document.createElement("button");
+      b.textContent = mode[1]; b.dataset.mode = mode[0]; b.setAttribute("aria-pressed", "false");
+      b.onclick = function () {
+        var s = state();
+        if (mode[0] === "fs") { s.fs = ((s.fs || 0) + 1) % 3; b.setAttribute("aria-pressed", s.fs ? "true" : "false"); }
+        else { s[mode[0]] = !s[mode[0]]; b.setAttribute("aria-pressed", s[mode[0]] ? "true" : "false"); }
+        localStorage.setItem(KEY, JSON.stringify(s)); apply(s);
+      };
+      menu.appendChild(b);
+    });
+    var reset = document.createElement("button");
+    reset.textContent = "איפוס"; reset.onclick = function () { localStorage.removeItem(KEY); apply({});
+      menu.querySelectorAll("[aria-pressed]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); };
+    menu.appendChild(reset);
+    var link = document.createElement("a");
+    link.href = "https://talibifinance-del.github.io/richlife-lida/negishut.html"; link.textContent = "הצהרת נגישות";
+    menu.appendChild(link);
+
+    // Permanent text link in the page footer (legal best practice: the statement
+    // must be reachable even if this widget fails to load elsewhere). Inherits
+    // the footer's own styling - visually just one more footer word.
+    var foot = document.querySelector("footer");
+    if (foot && !foot.querySelector('a[href*="negishut"]')) {
+      var fl = document.createElement("a");
+      fl.href = "https://talibifinance-del.github.io/richlife-lida/negishut.html"; fl.textContent = "הצהרת נגישות";
+      fl.style.color = "inherit"; fl.style.marginRight = "6px";
+      foot.appendChild(document.createTextNode(" · "));
+      foot.appendChild(fl);
+    }
+
+    btn.onclick = function () {
+      var open = menu.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("open")) { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.focus(); }
+    });
+    document.body.appendChild(btn); document.body.appendChild(menu);
+
+    // Restore saved prefs + reflect on buttons
+    var s = state(); apply(s);
+    menu.querySelectorAll("[data-mode]").forEach(function (b) {
+      var m = b.dataset.mode;
+      b.setAttribute("aria-pressed", (m === "fs" ? !!s.fs : !!s[m]) ? "true" : "false");
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build);
+  else build();
+})();
+</script>
+
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <img class="avatar" src="data:image/jpeg;base64,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" alt="טלי בנימינוב שרעבי">
+    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · חופשה בחו"ל</div></div>
+  </div>
+
+  <div class="hero-title">
+    <h1>תקציב <span class="em">לחופשה בחו"ל</span></h1>
+    <p>קובעים תקציב אחד לחופשה, מחלקים אותו בין קטגוריות ההוצאה, ומעדכנים כמה יצא בפועל - כדי לראות בכל רגע כמה כבר הוצאתם, כמה זה עולה ליום, וכמה עוד נשאר.</p>
+  </div>
+
+  <a class="top-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">
+    <span class="tc-txt">חופשה טובה מתחילה בתכנון - שלא תחזרו ממנה למינוס.</span>
+    <span class="tc-link">לתהליכי הליווי שלי ←</span>
+  </a>
+
+  <div class="card">
+    <span class="sec-lbl">🧳 פרטי החופשה</span>
+    <div class="trip-fields">
+      <div class="field full">
+        <label for="dest">לאן טסים?</label>
+        <div class="input-shell"><input id="dest" type="text" placeholder="למשל: יוון, יפן, ניו יורק" aria-label="יעד החופשה"></div>
+      </div>
+      <div class="field">
+        <label for="trav">כמה נוסעים?</label>
+        <div class="input-shell"><input id="trav" type="text" inputmode="numeric" placeholder="0" aria-label="מספר נוסעים"><span class="unit unit-suf">נפשות</span></div>
+      </div>
+      <div class="field">
+        <label for="days">כמה ימים?</label>
+        <div class="input-shell"><input id="days" type="text" inputmode="numeric" placeholder="0" aria-label="מספר ימי החופשה"><span class="unit unit-suf">ימים</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">💰 תקציב החופשה</span>
+    <div class="field">
+      <label for="budget">כמה תקצבנו לכל החופשה?</label>
+      <div class="input-shell"><span class="unit">₪</span><input id="budget" type="text" inputmode="numeric" placeholder="0" aria-label="תקציב כולל בשקלים"></div>
+    </div>
+    <div class="sum-grid">
+      <div class="tile main"><span class="t-lbl">התקציב</span><div class="t-val tabular" data-sum="budget">0 ₪</div></div>
+      <div class="tile" data-sum="tilePlan"><span class="t-lbl">תכננו להוציא</span><div class="t-val tabular" data-sum="plan">0 ₪</div></div>
+      <div class="tile"><span class="t-lbl">יצא בפועל</span><div class="t-val tabular" data-sum="paid">0 ₪</div></div>
+      <div class="tile" data-sum="tileLeft"><span class="t-lbl">נשאר מהתקציב</span><div class="t-val tabular" data-sum="left">0 ₪</div></div>
+    </div>
+    <div class="bar" aria-hidden="true"><i data-sum="barFill" style="width:0%"></i></div>
+    <div class="bar-note"><span data-sum="barPct">0% מהתקציב נוצל</span><span data-sum="barBought">שולם על 0 מתוך 0 סעיפים</span></div>
+    <div class="per-line" id="perLine" hidden></div>
+    <div class="tier-sum" id="essLine" hidden></div>
+    <div class="reserve-note" id="reserveNote" hidden></div>
+    <div class="filter-note" id="filterNote" hidden></div>
+    <div class="insight" data-sum="insight"></div>
+  </div>
+
+  <div class="filter-bar" id="filterBar">
+    <span class="filter-lbl">תצוגה:</span>
+    <button class="filter-btn on" data-filter="all">הכל</button>
+    <button class="filter-btn" data-filter="himid">הכרחי + כדאי</button>
+    <button class="filter-btn" data-filter="hi">🎯 רק הכרחי</button>
+  </div>
+
+  <div id="rooms"></div>
+
+  <button class="add-room" id="addRoom">+ הוספת קטגוריה</button>
+
+  <div class="card" style="margin-top:18px">
+    <span class="sec-lbl">📊 סיכום מפורט - כמה יצא בכל קטגוריה</span>
+    <div id="breakdown"></div>
+    <div class="bd-total" id="bdTotal" hidden></div>
+  </div>
+
+  <div class="cta-card">
+    <div class="cta-emoji">✈️</div>
+    <h3>חופשה נהדרת בלי חור בתקציב</h3>
+    <p>אפשר לצאת לחופשה מהחלומות ולחזור לחיים מסודרים - בלי מינוס, בלי הלוואה, ובלי לגעת בחיסכון. לבנות תקציב שמאפשר גם ליהנות וגם להישאר בשליטה - זה בדיוק מה שאנחנו עושים יחד.</p>
+    <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצים לצאת לחופשה בראש שקט? בואו נדבר ←</a>
+  </div>
+
+  <div class="actions">
+    <div class="live-badge" id="liveBadge" hidden>🟢 קישור חי - כל שינוי שאתם עושים כאן נשמר אליו אוטומטית. שולחים אותו פעם אחת, והוא תמיד מעודכן.</div>
+    <button class="act-btn" id="shareBtn">🔗 יצירת קישור לשליחה</button>
+    <button class="act-btn ghost" id="resetBtn">🆕 התחלה חדשה</button>
+    <div class="act-note" id="shareNote">✓ התקציב נשמר אוטומטית במכשיר. הכפתור יוצר קישור קבוע לשיתוף בוואטסאפ - שנכנסים אליו רואים את אותו תקציב, וכל עדכון עתידי מופיע בו אוטומטית בלי לשלוח קישור חדש. מושלם לתכנון חופשה משותף.</div>
+    <div class="act-link" id="actLink" hidden>
+      <input id="linkField" readonly aria-label="קישור הרשימה">
+      <button id="copyBtn">העתקה</button>
+    </div>
+  </div>
+
+  <footer>
+    ליווי כלכלי לחיים מאושרים ומעושרים
+    <div class="socials">
+      <a href="https://www.instagram.com/tali_finance" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+      <a href="https://www.tiktok.com/@tali_beniaminov" target="_blank" rel="noopener" aria-label="טיקטוק"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.6 3.4 3.5 3.6v2.4c-1.2 0-2.4-.4-3.4-1v6.3c0 3-2.2 5.2-5.1 5.2-2.7 0-4.9-2-4.9-4.7 0-2.8 2.3-4.8 5.1-4.6v2.5c-.3-.1-.6-.1-.9-.1-1.2 0-2.1.9-2.1 2.1 0 1.3 1 2.2 2.3 2.2 1.4 0 2.3-1 2.3-2.6V3h3.2z"/></svg></a>
+    </div>
+    <a class="foot-livuy" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">לתהליכי הליווי שלי ←</a>
+    <div class="copyright">© 2026 כל הזכויות שמורות ל-RichLife ולטלי בנימינוב שרעבי. אין לשכפל, להפיץ או לעשות שימוש בתוכן זה ללא אישור מראש ובכתב.</div>
+  </footer>
+
+</div>
+
+<script>
+const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
+const money=v=>fmt.format(Math.round(+v||0));
+const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
+const KEY='rl_trip_budget_v1';
+let uid=0;
+const nid=()=>'i'+(++uid);
+
+const PR_LBL={hi:'הכרחי',mid:'כדאי',lo:'מותרות'};
+// each item: [name, priority]  priority: hi=הכרחי, mid=כדאי, lo=מותרות
+const SEED=[
+ ['✈️','טיסות',[['כרטיסי טיסה','hi'],['מזוודות ותוספות','mid'],['בחירת מושב','lo'],['הסעה לשדה התעופה','mid'],['חניה בשדה','lo']]],
+ ['🏨','לינה',[['מלון או דירה','hi'],['מיסי לינה ותיירות','mid'],['חניה בלינה','lo']]],
+ ['🍽️','אוכל ומסעדות',[['ארוחות במסעדות','hi'],['אוכל וקפה ליומיום','hi'],['חטיפים ומים','mid'],['ארוחה מיוחדת או שף','lo']]],
+ ['🚕','תחבורה מקומית',[['השכרת רכב ודלק','mid'],['תחבורה ציבורית','mid'],['מוניות ומוניות אפליקציה','mid'],['כרטיס נסיעות יומי','lo']]],
+ ['🎢','אטרקציות וסיורים',[['כרטיסים לאתרים','hi'],['סיור מודרך','mid'],['פארק שעשועים או חוויה','mid'],['מוזיאונים','lo']]],
+ ['🛍️','קניות ומתנות',[['מתנות למשפחה','mid'],['מזכרות','lo'],['קניות אישיות','lo']]],
+ ['🛡️','ביטוח ומסמכים',[['ביטוח נסיעות','hi'],['ויזה ואגרות כניסה','mid'],['חבילת גלישה או eSIM','mid']]],
+ ['💳','שונות ובלת"מ',[['טיפים','mid'],['המרת מטבע ועמלות','mid'],['תרופות וציוד אישי','mid'],['הוצאות בלתי צפויות','hi']]]
+];
+
+function seedState(){
+  return {b:0,dest:'',trav:'',days:'',rooms:SEED.map(r=>({id:nid(),e:r[0],n:r[1],closed:false,items:r[2].map(x=>({id:nid(),n:x[0],pr:x[1],h:false,p:'',pd:''}))}))};
+}
+let S=null;
+let filterPr='all'; // 'all' | 'himid' (הכרחי+כדאי, no luxuries) | 'hi' (essentials only)
+const prOf=it=>it.pr||'mid';
+// is this item inside the current view? himid = everything except 'lo' (מותרות)
+const inView=it=>filterPr==='all'?true:filterPr==='hi'?prOf(it)==='hi':prOf(it)!=='lo';
+
+/* ── persistence ── */
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}syncLive();}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.rooms)return s;}catch(e){}return null;}
+function enc(){return btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
+function dec(str){try{const s=JSON.parse(decodeURIComponent(escape(atob(str))));if(s&&s.rooms)return s;}catch(e){}return null;}
+const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
+function makeLink(){return location.origin+location.pathname+location.search+'#s='+encodeURIComponent(enc());}
+
+/* ── live link ──
+   Attachment follows the URL: open a #p= link (or create one) and the page is "live" - every change
+   auto-syncs to that same link. The plain page (no #p) is always a fresh start, so editing here can
+   never overwrite a link you sent before. */
+let docId=null;   // the live-link code we're attached to (null = detached / plain page)
+let pushT=null;
+function linkFor(id){return location.origin+location.pathname+location.search+'#p='+id;}
+function setHash(id){try{history.replaceState(null,'',location.pathname+location.search+'#p='+id);}catch(e){}}
+// push current state to the attached link (debounced); no-op when detached, silent when offline
+function syncLive(){
+  if(!docId)return;
+  clearTimeout(pushT);
+  pushT=setTimeout(()=>{
+    fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()})
+      .then(r=>{if(r.status===404){docId=null;refreshShareUI();}})
+      .catch(()=>{});
+  },1200);
+}
+
+/* ── calc ──
+   plan/paid/etc. reflect the ACTIVE view (so "רק הכרחי" shows the essentials budget).
+   tierFc = cumulative forecast per priority tier, always computed for the composition line. */
+function totals(){
+  let plan=0,paid=0,toBuy=0,bought=0,buyCount=0;
+  const tierFc={hi:0,himid:0,all:0};
+  S.rooms.forEach(r=>r.items.forEach(it=>{
+    if(it.h)return;
+    const p=num(it.p),pd=num(it.pd),fc=(pd>0?pd:p),pr=prOf(it);
+    tierFc.all+=fc;
+    if(pr!=='lo')tierFc.himid+=fc;
+    if(pr==='hi')tierFc.hi+=fc;
+    if(!inView(it))return;
+    buyCount++;
+    plan+=p;paid+=pd;
+    if(pd>0)bought++;else toBuy+=p;
+  }));
+  return {plan,paid,toBuy,bought,buyCount,forecast:paid+toBuy,tierFc};
+}
+
+function setSum(k,val){document.querySelectorAll('[data-sum="'+k+'"]').forEach(e=>e.textContent=val);}
+function toggleSum(k,cls,on){document.querySelectorAll('[data-sum="'+k+'"]').forEach(e=>e.classList.toggle(cls,on));}
+function refreshSummary(){
+  const b=num(S.b),t=totals();
+  setSum('budget',money(b)+' ₪');
+  setSum('plan',money(t.plan)+' ₪');
+  setSum('paid',money(t.paid)+' ₪');
+  const left=b-t.paid;
+  setSum('left',money(left)+' ₪');
+  toggleSum('tileLeft','hot',b>0&&left<0);
+  toggleSum('tilePlan','hot',b>0&&t.plan>b);
+  const pct=b>0?Math.min(100,Math.round(t.paid/b*100)):0;
+  document.querySelectorAll('[data-sum="barFill"]').forEach(f=>{f.style.width=(b>0?Math.min(100,t.paid/b*100):0)+'%';f.classList.toggle('over',b>0&&t.paid>b);});
+  setSum('barPct',b>0?pct+'% מהתקציב נוצל':'קובעים תקציב כדי לראות התקדמות');
+  setSum('barBought','שולם על '+t.bought+' מתוך '+t.buyCount+' סעיפים');
+
+  // per-day / per-person - the numbers that make a trip budget real
+  const pl=document.getElementById('perLine');
+  if(pl){
+    const days=Math.floor(num(S.days)),trav=Math.floor(num(S.trav)),base=t.forecast>0?t.forecast:b;
+    if(base>0&&(days>0||trav>0)){
+      pl.hidden=false;
+      let chips='';
+      if(days>0)chips+='<div class="pl-chip"><span class="pl-lbl">💸 ליום</span><span class="pl-val">'+money(base/days)+' ₪</span></div>';
+      if(trav>0)chips+='<div class="pl-chip"><span class="pl-lbl">🧍 לאדם</span><span class="pl-val">'+money(base/trav)+' ₪</span></div>';
+      if(days>0&&trav>0)chips+='<div class="pl-chip"><span class="pl-lbl">🧍 לאדם ליום</span><span class="pl-val">'+money(base/trav/days)+' ₪</span></div>';
+      pl.innerHTML=chips;
+    } else pl.hidden=true;
+  }
+
+  // priority composition - how the spending splits by tier (also a quick filter)
+  const el=document.getElementById('essLine');
+  if(el){
+    if(t.tierFc.all>0){
+      el.hidden=false;
+      const chip=(f,lbl,val)=>'<button class="ts-chip'+(filterPr===f?' on':'')+'" type="button" data-f="'+f+'"><span class="ts-lbl">'+lbl+'</span><span class="ts-val">'+money(val)+' ₪</span></button>';
+      el.innerHTML=chip('hi','🎯 רק הכרחי',t.tierFc.hi)+chip('himid','הכרחי + כדאי',t.tierFc.himid)+chip('all','הכל',t.tierFc.all);
+      el.querySelectorAll('.ts-chip').forEach(c=>c.onclick=()=>{filterPr=c.dataset.f;syncFilterButtons();render();});
+    } else el.hidden=true;
+  }
+
+  // note when the tiles above reflect a filtered (partial) view
+  const fn=document.getElementById('filterNote');
+  if(fn){
+    if(filterPr==='all')fn.hidden=true;
+    else{fn.hidden=false;fn.textContent=(filterPr==='hi'?'👁️ מוצגים רק סעיפים הכרחיים':'👁️ מוצגים סעיפים הכרחיים וכדאיים (בלי מותרות)')+' - המספרים למעלה מתייחסים לתצוגה הזו.';}
+  }
+
+  // reserve buffer (20% of budget) for the unexpected
+  const reserve=b>0?Math.round(b*0.20):0;
+  const rn=document.getElementById('reserveNote');
+  if(rn){
+    if(b>0){rn.hidden=false;rn.innerHTML='🛟 כדאי לשמור בצד <b>'+money(reserve)+' ₪</b> לחירום (20% מהתקציב) - בחו"ל תמיד צצות הוצאות לא צפויות: תרופות, שינוי טיסה, מונית או ארוחה שיצאה יקרה.';}
+    else rn.hidden=true;
+  }
+
+  let msg,cls;
+  if(b<=0){cls='';msg='💡 מתחילים מלמעלה: כותבים כמה תקצבתם לחופשה, מוחקים קטגוריות שלא רלוונטיות, ומעדכנים כמה מתכננים להוציא על כל סעיף.';}
+  else if(t.forecast>b){cls=' warn';msg='⚠️ לפי מה שכבר שולם ומה שעוד מתוכנן, החופשה צפויה להגיע ל-'+money(t.forecast)+' ₪ - חריגה של '+money(t.forecast-b)+' ₪ מהתקציב. שווה לסמן סעיפים כ"מותרות" ולוותר עליהם, לחפש חלופה זולה יותר, או ללחוץ "רק הכרחי" ולראות מה באמת חובה.';}
+  else if(t.forecast>b-reserve){cls=' soft';msg='🟠 כמעט שם: לפי התחזית ('+money(t.forecast)+' ₪) יישארו רק '+money(b-t.forecast)+' ₪ - וזה כבר נוגס בכרית לחירום בחו"ל. אם אפשר, כדאי לגזום קצת כדי לשמור מרווח ביטחון.';}
+  else{cls='';msg='✅ לפי התחזית ('+money(t.forecast)+' ₪) אתם בתוך התקציב, עם מרווח '+money(b-t.forecast)+' ₪ - כולל שמירת ~'+money(reserve)+' ₪ לחירום. אפשר לנשום ולתכנן בנחת.';}
+  document.querySelectorAll('[data-sum="insight"]').forEach(e=>{e.className='insight'+cls;e.textContent=msg;});
+  renderBreakdown();
+}
+
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// detailed recap: per room, and per item that has any amount
+function renderBreakdown(){
+  const host=document.getElementById('breakdown'),totalEl=document.getElementById('bdTotal');
+  if(!host)return;
+  host.innerHTML='';
+  let gPlan=0,gPaid=0;
+  S.rooms.forEach(r=>{
+    const t=roomTotals(r); // plan, paid over non-have items
+    const active=r.items.filter(it=>!it.h&&(num(it.p)>0||num(it.pd)>0));
+    if(t.plan===0&&t.paid===0){return;} // nothing filled in this room yet
+    gPlan+=t.plan;gPaid+=t.paid;
+    const left=t.plan-t.paid; // still planned but not yet spent in this room
+    const block=document.createElement('div');block.className='bd-room';
+    let statusHtml;
+    if(left>0)statusHtml='<span class="pend">עוד '+money(left)+' ₪</span>';
+    else if(left<0)statusHtml='<span class="over">מעל התכנון '+money(-left)+' ₪</span>';
+    else statusHtml='<span class="pend">הושלם ✓</span>';
+    block.innerHTML='<div class="bd-rhead"><span class="bd-rname">'+esc(r.e)+' '+esc(r.n||'קטגוריה')+'</span>'+
+      '<span class="bd-rnums">יצא <span class="paid">'+money(t.paid)+' ₪</span> · '+statusHtml+'</span></div>';
+    active.forEach(it=>{
+      const p=num(it.p),pd=num(it.pd);
+      const planCell='<span class="bd-plan">'+(p>0?'תוכנן '+money(p)+' ₪':'—')+'</span>';
+      const statusCell=pd>0
+        ? '<span class="bd-status paid">יצא '+money(pd)+' ₪ <span class="ok">✓</span></span>'
+        : '<span class="bd-status pend">טרם נקנה</span>';
+      const row=document.createElement('div');row.className='bd-item';
+      row.innerHTML='<span class="bd-iname">'+esc(it.n||'סעיף')+'</span>'+planCell+statusCell;
+      block.appendChild(row);
+    });
+    host.appendChild(block);
+  });
+  if(host.children.length===0){
+    host.innerHTML='<div class="bd-empty">כשתתחילו למלא כמה תכננתם וכמה יצא בפועל, יופיע כאן פירוט מסודר לפי קטגוריות וסעיפים - כמה יצא בכל אחת וכמה עוד נשאר.</div>';
+    if(totalEl)totalEl.hidden=true;
+    return;
+  }
+  if(totalEl){
+    const b=num(S.b),leftBudget=b-gPaid;
+    totalEl.hidden=false;
+    totalEl.innerHTML='<span class="bd-tlbl">סה"כ</span>'+
+      '<span class="bd-tnums">יצא בפועל <span class="paid">'+money(gPaid)+' ₪</span> · <span class="plan">תוכנן '+money(gPlan)+' ₪</span>'+
+      (b>0?' · <span class="'+(leftBudget<0?'over':'left')+'">נשאר מהתקציב '+money(leftBudget)+' ₪</span>':'')+'</span>';
+  }
+}
+
+function roomTotals(r){
+  let plan=0,paid=0,bought=0,buyCount=0;
+  r.items.forEach(it=>{if(it.h)return;buyCount++;plan+=num(it.p);const pd=num(it.pd);paid+=pd;if(pd>0)bought++;});
+  return {plan,paid,bought,buyCount};
+}
+function refreshRoom(rEl,r){
+  const t=roomTotals(r);
+  rEl.querySelector('.r-count').textContent='שולם '+t.bought+'/'+t.buyCount;
+  rEl.querySelector('.r-sums').innerHTML='תוכנן <span class="tabular">'+money(t.plan)+'</span> · יצא <span class="tabular">'+money(t.paid)+'</span> ₪';
+  const bar=rEl.querySelector('.r-bar>i');
+  bar.style.width=(t.plan>0?Math.min(100,t.paid/t.plan*100):0)+'%';
+  bar.classList.toggle('over',t.plan>0&&t.paid>t.plan);
+}
+
+/* ── render ── */
+function fmtField(inp){
+  const n=num(inp.value);
+  inp.value=n>0?fmt.format(n):'';
+}
+// live thousands-separator while typing, keeping the caret in place
+function liveFormat(inp){
+  const raw=inp.value,sel=inp.selectionStart==null?raw.length:inp.selectionStart;
+  let digitsBefore=0;for(let i=0;i<sel;i++){if(raw[i]>='0'&&raw[i]<='9')digitsBefore++;}
+  const n=num(raw),out=n>0?fmt.format(n):'';
+  if(out===raw)return;
+  inp.value=out;
+  if(document.activeElement===inp){
+    let pos=0,c=0;while(pos<out.length&&c<digitsBefore){if(out[pos]>='0'&&out[pos]<='9')c++;pos++;}
+    try{inp.setSelectionRange(pos,pos);}catch(e){}
+  }
+}
+function render(){
+  const host=document.getElementById('rooms');
+  host.innerHTML='';
+  S.rooms.forEach(r=>{
+    const card=document.createElement('div');
+    card.className='card room'+(r.closed?' closed':'');
+    const head=document.createElement('div');head.className='room-head';
+    head.innerHTML='<span class="r-emoji">'+r.e+'</span>';
+    const nameInp=document.createElement('input');nameInp.className='r-name';nameInp.value=r.n;nameInp.setAttribute('aria-label','שם הקטגוריה');
+    nameInp.oninput=()=>{r.n=nameInp.value;save();};
+    nameInp.onclick=e=>e.stopPropagation();
+    head.appendChild(nameInp);
+    const sub=document.createElement('div');sub.className='r-sub';sub.innerHTML='<span class="r-count"></span><span class="r-sums"></span>';
+    head.appendChild(sub);
+    const chev=document.createElement('span');chev.className='chev';chev.textContent='‹';head.appendChild(chev);
+    head.onclick=()=>{r.closed=!r.closed;card.classList.toggle('closed',r.closed);save();};
+    card.appendChild(head);
+    const rbar=document.createElement('div');rbar.className='r-bar';rbar.innerHTML='<i></i>';card.appendChild(rbar);
+
+    const itemsEl=document.createElement('div');itemsEl.className='items';
+    const visItems=filterPr==='all'?r.items:r.items.filter(inView);
+    visItems.forEach(it=>itemsEl.appendChild(itemRow(card,r,it)));
+    if(filterPr!=='all'&&visItems.length===0)card.classList.add('pr-empty');
+    card.appendChild(itemsEl);
+
+    const add=document.createElement('div');add.className='add-item';
+    const addBtn=document.createElement('button');addBtn.textContent='+ הוספת סעיף';
+    addBtn.onclick=()=>{const it={id:nid(),n:'',pr:'mid',h:false,p:'',pd:''};r.items.push(it);const row=itemRow(card,r,it);itemsEl.appendChild(row);row.querySelector('.item-name').focus();save();refreshAll();};
+    add.appendChild(addBtn);card.appendChild(add);
+
+    host.appendChild(card);
+    refreshRoom(card,r);
+  });
+  refreshSummary();
+}
+
+function itemRow(card,r,it){
+  const row=document.createElement('div');
+  row.className='item'+(it.h?' have':'');
+  const top=document.createElement('div');top.className='item-top';
+  const name=document.createElement('input');name.className='item-name';name.value=it.n;name.placeholder='שם הסעיף';name.setAttribute('aria-label','שם הסעיף');
+  name.oninput=()=>{it.n=name.value;save();};
+  top.appendChild(name);
+  const seg=document.createElement('div');seg.className='seg';
+  const bBuy=document.createElement('button');bBuy.textContent='רלוונטי';
+  const bHave=document.createElement('button');bHave.textContent='לא רלוונטי';
+  const setSeg=()=>{bBuy.classList.toggle('on',!it.h);bHave.classList.toggle('on',it.h);};
+  bBuy.onclick=()=>{it.h=false;row.classList.remove('have');setSeg();prLine.style.display='';body.style.display='';haveNote.style.display='none';save();refreshAll(card,r);};
+  bHave.onclick=()=>{it.h=true;row.classList.add('have');setSeg();prLine.style.display='none';body.style.display='none';haveNote.style.display='';save();refreshAll(card,r);};
+  setSeg();
+  seg.append(bBuy,bHave);top.appendChild(seg);
+  const del=document.createElement('button');del.className='del';del.textContent='×';del.setAttribute('aria-label','מחיקת הסעיף');
+  del.onclick=()=>{r.items=r.items.filter(x=>x.id!==it.id);row.remove();save();refreshAll(card,r);};
+  top.appendChild(del);
+  row.appendChild(top);
+
+  const prLine=document.createElement('div');prLine.className='item-pr';
+  prLine.innerHTML='<span class="pr-lbl">עדיפות:</span>';
+  const prSeg=document.createElement('div');prSeg.className='pr-seg';
+  [['hi',PR_LBL.hi],['mid',PR_LBL.mid],['lo',PR_LBL.lo]].forEach(o=>{
+    const pb=document.createElement('button');pb.dataset.pr=o[0];pb.textContent=o[1];pb.type='button';
+    pb.onclick=()=>{
+      it.pr=o[0];save();
+      if(filterPr!=='all'){render();}
+      else{prSeg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.pr===o[0]));refreshSummary();}
+    };
+    prSeg.appendChild(pb);
+  });
+  prSeg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.pr===prOf(it)));
+  prLine.appendChild(prSeg);
+  if(it.h)prLine.style.display='none';
+  row.appendChild(prLine);
+
+  const body=document.createElement('div');body.className='item-amounts';
+  const mkField=(lbl,key,cls)=>{
+    const w=document.createElement('div');w.className='mini-field';
+    w.innerHTML='<div class="m-lbl">'+lbl+'</div>';
+    const shell=document.createElement('div');shell.className='mini-shell '+cls;
+    shell.innerHTML='<span class="unit">₪</span>';
+    const inp=document.createElement('input');inp.type='text';inp.inputMode='numeric';inp.placeholder='0';inp.value=it[key]?fmt.format(num(it[key])):'';inp.setAttribute('aria-label',lbl);
+    inp.oninput=()=>{liveFormat(inp);it[key]=num(inp.value);save();chipRefresh();refreshAll(card,r);};
+    inp.onblur=()=>fmtField(inp);
+    shell.appendChild(inp);w.appendChild(shell);
+    return w;
+  };
+  body.appendChild(mkField('תכננו','p',''));
+  body.appendChild(mkField('יצא בפועל','pd','paid-shell'));
+  const chip=document.createElement('span');chip.className='chip wait';
+  const chipRefresh=()=>{
+    const p=num(it.p),pd=num(it.pd);
+    if(pd<=0){chip.className='chip wait';chip.textContent='עוד לא שולם';}
+    else if(p>0&&pd<p){chip.className='chip save';chip.textContent='✓ שולם · חיסכון '+money(p-pd)+' ₪';}
+    else if(p>0&&pd>p){chip.className='chip over';chip.textContent='✓ שולם · מעל התכנון ב-'+money(pd-p)+' ₪';}
+    else{chip.className='chip done';chip.textContent='✓ שולם';}
+  };
+  chipRefresh();
+  body.appendChild(chip);
+  if(it.h)body.style.display='none';
+  row.appendChild(body);
+
+  const haveNote=document.createElement('div');haveNote.className='have-note';haveNote.textContent='✓ סומן כלא רלוונטי - לא נכנס לתקציב החופשה';
+  if(!it.h)haveNote.style.display='none';
+  row.appendChild(haveNote);
+  return row;
+}
+
+function refreshAll(card,r){
+  if(card&&r)refreshRoom(card,r);
+  else document.querySelectorAll('.room').forEach((el,i)=>{if(S.rooms[i])refreshRoom(el,S.rooms[i]);});
+  refreshSummary();
+}
+
+/* ── top-level wiring ── */
+const budgetInp=document.getElementById('budget');
+budgetInp.addEventListener('input',()=>{liveFormat(budgetInp);S.b=num(budgetInp.value);save();refreshSummary();});
+budgetInp.addEventListener('blur',()=>fmtField(budgetInp));
+
+const destInp=document.getElementById('dest');
+destInp.addEventListener('input',()=>{S.dest=destInp.value;save();});
+const travInp=document.getElementById('trav');
+travInp.addEventListener('input',()=>{S.trav=travInp.value.replace(/[^\d]/g,'');travInp.value=S.trav;save();refreshSummary();});
+const daysInp=document.getElementById('days');
+daysInp.addEventListener('input',()=>{S.days=daysInp.value.replace(/[^\d]/g,'');daysInp.value=S.days;save();refreshSummary();});
+
+function syncFilterButtons(){document.querySelectorAll('#filterBar .filter-btn').forEach(b=>b.classList.toggle('on',b.dataset.filter===filterPr));}
+document.getElementById('filterBar').addEventListener('click',e=>{
+  const btn=e.target.closest('.filter-btn');if(!btn)return;
+  filterPr=btn.dataset.filter;syncFilterButtons();render();
+});
+
+document.getElementById('addRoom').onclick=()=>{
+  S.rooms.push({id:nid(),e:'🧳',n:'',closed:false,items:[{id:nid(),n:'',pr:'mid',h:false,p:'',pd:''}]});
+  save();render();
+  const cards=document.querySelectorAll('.room');
+  const last=cards[cards.length-1];
+  last.scrollIntoView({behavior:'smooth',block:'center'});
+  last.querySelector('.r-name').focus();
+};
+
+// reflect attached / detached state in the share UI
+function refreshShareUI(){
+  const btn=document.getElementById('shareBtn'),badge=document.getElementById('liveBadge'),
+        note=document.getElementById('shareNote'),box=document.getElementById('actLink'),field=document.getElementById('linkField');
+  if(docId){
+    btn.textContent='🔗 הצגת הקישור לשליחה';
+    if(badge)badge.hidden=false;
+    if(note)note.textContent='✓ זהו קישור חי וקבוע. כל שינוי כאן נשמר אליו אוטומטית - שולחים פעם אחת, ומי שקיבל אותו תמיד רואה את הגרסה העדכנית. לרשימה חדשה לגמרי: "התחלה חדשה".';
+    if(field&&box){field.value=linkFor(docId);box.hidden=false;}
+  }else{
+    btn.textContent='🔗 יצירת קישור לשליחה';
+    if(badge)badge.hidden=true;
+    if(note)note.textContent='✓ הרשימה נשמרת אוטומטית במכשיר. הכפתור יוצר קישור קבוע לשליחה - שנכנסים אליו רואים את אותה רשימה, וכל עדכון עתידי מופיע בו אוטומטית בלי לשלוח קישור חדש.';
+  }
+}
+
+document.getElementById('shareBtn').onclick=async()=>{
+  const box=document.getElementById('actLink'),field=document.getElementById('linkField'),btn=document.getElementById('shareBtn');
+  box.hidden=false;field.value=docId?'מעדכן...':'יוצר קישור...';btn.disabled=true;
+  try{
+    if(docId){
+      // already live: force an immediate push, keep the same link
+      try{const r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()});if(r.status===404)docId=null;}catch(e){}
+    }
+    if(!docId){
+      // create a fresh permanent link and attach to it
+      try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});const j=r.ok?await r.json():null;if(j&&j.id){docId=j.id;setHash(j.id);}}catch(e){}
+    }
+    field.value=docId?linkFor(docId):makeLink();
+  }finally{btn.disabled=false;}
+  refreshShareUI();
+  field.value=docId?linkFor(docId):field.value; // keep the real link after UI refresh
+  field.focus();field.select();
+};
+document.getElementById('copyBtn').onclick=()=>{
+  const f=document.getElementById('linkField');f.select();
+  try{navigator.clipboard.writeText(f.value);}catch(e){document.execCommand('copy');}
+  document.getElementById('copyBtn').textContent='הועתק ✓';
+  setTimeout(()=>document.getElementById('copyBtn').textContent='העתקה',1800);
+};
+document.getElementById('resetBtn').onclick=()=>{
+  if(!confirm('להתחיל מתקציב נקי? התקציב הנוכחי יוחלף כאן. (אם כבר יצרתם קישור, הוא נשאר עם מה שנשמר בו - וזו התחלה חדשה, עם קישור חדש בשמירה הבאה.)'))return;
+  try{localStorage.removeItem(KEY);}catch(e){}
+  S=seedState();docId=null;
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}   // detach: strip #p
+  budgetInp.value='';destInp.value='';travInp.value='';daysInp.value='';
+  document.getElementById('actLink').hidden=true;
+  render();refreshShareUI();
+};
+
+/* ── boot ── */
+(function boot(){
+  const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);   // live link -> fetch from store, stay attached
+  const hs=(location.hash||'').match(/s=([^&]+)/);               // legacy self-contained snapshot
+  function start(fromLink,attachId){
+    S=fromLink||load()||seedState();
+    if(attachId){                                   // opened a live link: attach, keep the #p hash (bookmarkable)
+      docId=attachId;
+      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+    } else if(fromLink){                             // legacy snapshot: adopt locally, strip the hash
+      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+      try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+    }
+    const b=num(S.b);
+    budgetInp.value=b>0?fmt.format(b):'';
+    destInp.value=S.dest||'';
+    travInp.value=S.trav||'';
+    daysInp.value=S.days||'';
+    render();refreshShareUI();
+  }
+  if(hp){
+    fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1]))
+      .then(r=>r.ok?r.text():Promise.reject())
+      .then(t=>{const st=dec(t);if(st)start(st,hp[1]);else start(hs?dec(decodeURIComponent(hs[1])):null,null);})
+      .catch(()=>start(hs?dec(decodeURIComponent(hs[1])):null,null));
+  } else {
+    start(hs?dec(decodeURIComponent(hs[1])):null,null);
+  }
+})();
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון תקציב חופשה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
+</body>
+</html>

@@ -146,6 +146,15 @@ body{font-family:var(--font);
 .mini-hint{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:8px;line-height:1.5}
 /* separate private-savings card */
 .card.priv{background:linear-gradient(120deg,rgba(var(--sage-rgb),.18),#fff);border:1px dashed rgba(var(--pine-rgb),.3)}
+/* section headers with sage icon-badges */
+.card-h{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.card-h .ch-ico{flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:linear-gradient(135deg,rgba(var(--sage-rgb),.6),rgba(var(--sage-rgb),.28))}
+.card-h h2{margin:0;font-size:15px;font-weight:900;color:var(--pine-darker)}
+/* warm the age-21 highlight: pine icon + accent border */
+.card.leave21{border-inline-start:4px solid var(--pine)}
+.leave21 .l21-ico{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:23px;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;box-shadow:0 7px 16px rgba(var(--pine-rgb),.32)}
+/* emoji lead on field labels */
+.fr-lbl .fe{margin-inline-end:5px}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -304,7 +313,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   </div>
 
   <div class="hero-title">
-    <h1>חיסכון <span class="em">לכל ילד</span></h1>
+    <h1>חיסכון <span class="em">לכל ילד</span> 🐷</h1>
     <p>המדינה מפקידה לילד/ה כל חודש עד גיל 18 - לבד, או עם הכפלה מקצבת הילדים. כאן רואים כמה זה שווה בגיל 18, וכמה אם משאירים בקופת גמל עד גיל 21.</p>
     <div class="livuy-wrap"><a class="livuy-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">✨ לתהליך ליווי אישי עם טלי ←</a></div>
   </div>
@@ -317,39 +326,40 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
   <div class="card leave21">
     <div class="l21-row">
+      <div class="l21-ico">🎁</div>
       <div class="l21-txt"><span class="l21-lbl">ואם משאירים בקופת גמל עד גיל 21</span><span class="l21-sub">הכסף ממשיך לצמוח 3 שנים בלי שאף אחד מפקיד עוד, המדינה משלמת דמי ניהול עד 21, ומתווסף מענק ~568 ₪ מהמדינה</span></div>
       <div class="l21-num" id="sum21">0 ₪</div>
     </div>
   </div>
 
   <div class="card">
-    <h2>פרטי החיסכון של התוכנית</h2>
+    <div class="card-h"><div class="ch-ico">🏛️</div><h2>פרטי החיסכון של התוכנית</h2></div>
     <div class="sub">לחשבון חיסכון לכל ילד נכנסים רק שני אלה: הפקדת המדינה, ואם בוחרים - הכפלה מקצבת הילדים.</div>
     <div class="field-row">
-      <div class="fr-lbl">גיל הילד/ה עכשיו<small>0 אם עוד לא נולד/ה</small></div>
+      <div class="fr-lbl"><span class="fe">👶</span>גיל הילד/ה עכשיו<small>0 אם עוד לא נולד/ה</small></div>
       <div class="amt wide suf"><input id="age" inputmode="numeric" value="0" aria-label="גיל הילד בשנים"><span class="u">שנים</span></div>
     </div>
     <div class="field-row">
-      <div class="fr-lbl">יתרה שכבר יש בחשבון היום<small>0 אם חדש או שעוד לא נולד/ה</small></div>
+      <div class="fr-lbl"><span class="fe">🏦</span>יתרה שכבר יש בחשבון היום<small>0 אם חדש או שעוד לא נולד/ה</small></div>
       <div class="amt"><span class="u">₪</span><input id="bal" inputmode="numeric" value="0" aria-label="יתרה קיימת בחיסכון"></div>
     </div>
     <div class="field-row">
-      <div class="fr-lbl">מה שהמדינה מפקידה בחודש<small>ברירת מחדל 58 ₪, נכון ל-2026</small></div>
+      <div class="fr-lbl"><span class="fe">🇮🇱</span>מה שהמדינה מפקידה בחודש<small>ברירת מחדל 58 ₪, נכון ל-2026</small></div>
       <div class="amt"><span class="u">₪</span><input id="state" inputmode="numeric" value="58" aria-label="הפקדת המדינה החודשית"></div>
     </div>
     <div class="toggle on" id="dblToggle" role="button" tabindex="0" aria-label="הכפלה מקצבת הילדים">
       <div class="tg-box"></div>
-      <div class="tg-txt">להכפיל מקצבת הילדים<small>מוסיפים סכום זהה מקצבת הילדים. כבוי = רק המדינה מפקידה. ההכפלה נעצרת בגיל 18, כי אז נגמרת קצבת הילדים</small></div>
+      <div class="tg-txt">👨‍👩‍👧 להכפיל מקצבת הילדים<small>מוסיפים סכום זהה מקצבת הילדים. כבוי = רק המדינה מפקידה. ההכפלה נעצרת בגיל 18, כי אז נגמרת קצבת הילדים</small></div>
     </div>
     <div style="margin-top:14px">
-      <div class="fr-lbl" style="margin-bottom:2px;font-weight:700;font-size:14px;color:var(--ink)">איפה החיסכון מנוהל?</div>
+      <div class="fr-lbl" style="margin-bottom:2px;font-weight:700;font-size:14px;color:var(--ink)">🏆 איפה החיסכון מנוהל?</div>
       <div class="chips" id="tracks">
         <div class="chip-t" data-r="2" role="button" tabindex="0"><span class="ct-t">🏦 בנק</span><span class="ct-r">~2%</span></div>
         <div class="chip-t on" data-r="5" role="button" tabindex="0"><span class="ct-t">📊 קופת גמל</span><span class="ct-r">~5%</span></div>
         <div class="chip-t" data-r="7" role="button" tabindex="0"><span class="ct-t">📈 מוגבר סיכון</span><span class="ct-r">~7%</span></div>
       </div>
       <div class="field-row" style="border-top:none;padding-top:11px">
-        <div class="fr-lbl">תשואה שנתית משוערת<small>להמחשה, תלוי במסלול שתבחרו</small></div>
+        <div class="fr-lbl"><span class="fe">📈</span>תשואה שנתית משוערת<small>להמחשה, תלוי במסלול שתבחרו</small></div>
         <div class="amt suf" style="width:104px"><input id="rate" inputmode="decimal" value="5" aria-label="תשואה שנתית באחוזים"><span class="u">%</span></div>
       </div>
       <div class="mini-hint" id="mLine"></div>
@@ -357,26 +367,26 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   </div>
 
   <div class="card">
-    <h2>הכוח של ההכפלה</h2>
+    <div class="card-h"><div class="ch-ico">✨</div><h2>הכוח של ההכפלה</h2></div>
     <div class="split-note" id="splitNote" hidden></div>
     <div class="cmp2">
-      <div class="c2"><span class="c2-l">רק הפקדת המדינה</span><span class="c2-v" id="cmpState">0 ₪</span></div>
-      <div class="c2 full"><span class="c2-l">בהכפלה מקצבת הילדים</span><span class="c2-v" id="cmpFull">0 ₪</span></div>
+      <div class="c2"><span class="c2-l">🇮🇱 רק הפקדת המדינה</span><span class="c2-v" id="cmpState">0 ₪</span></div>
+      <div class="c2 full"><span class="c2-l">✨ בהכפלה מקצבת הילדים</span><span class="c2-v" id="cmpFull">0 ₪</span></div>
     </div>
     <div class="mini-hint">אפשר להשאיר רק את הפקדת המדינה בלי להכפיל - זו בחירה לגיטימית. ההכפלה מגיעה מקצבת הילדים, כסף שממילא מגיע לכם. שתי ההשוואות הן לגיל 18.</div>
   </div>
 
   <div class="card">
-    <h2>רוצים לחסוך עוד? חיסכון פרטי נוסף</h2>
+    <div class="card-h"><div class="ch-ico">💪</div><h2>רוצים לחסוך עוד? חיסכון פרטי נוסף</h2></div>
     <div class="sub">מעבר לתוכנית, אפשר לפתוח חיסכון נפרד משלכם (למשל קופת גמל להשקעה על שם הילד/ה). זה לא נכנס לחשבון חיסכון לכל ילד, הוא בשליטתכם המלאה, ואפשר להמשיך להפקיד אליו גם אחרי גיל 18.</div>
     <div class="field-row">
-      <div class="fr-lbl">כמה תפקידו בחודש לחיסכון הפרטי?<small>0 אם אין, בנפרד מהתוכנית</small></div>
+      <div class="fr-lbl"><span class="fe">💸</span>כמה תפקידו בחודש לחיסכון הפרטי?<small>0 אם אין, בנפרד מהתוכנית</small></div>
       <div class="amt"><span class="u">₪</span><input id="extra" inputmode="numeric" value="0" aria-label="הפקדה חודשית לחיסכון פרטי"></div>
     </div>
     <div id="privResult" hidden>
       <div class="cmp2" style="margin-top:12px">
-        <div class="c2"><span class="c2-l">החיסכון הפרטי בגיל 18</span><span class="c2-v" id="priv18">0 ₪</span></div>
-        <div class="c2"><span class="c2-l">בגיל 21 (המשך צמיחה)</span><span class="c2-v" id="priv21">0 ₪</span></div>
+        <div class="c2"><span class="c2-l">📅 החיסכון הפרטי בגיל 18</span><span class="c2-v" id="priv18">0 ₪</span></div>
+        <div class="c2"><span class="c2-l">🎂 בגיל 21 (המשך צמיחה)</span><span class="c2-v" id="priv21">0 ₪</span></div>
       </div>
       <div class="split-note" id="totalNote" style="margin-top:12px"></div>
       <div class="mini-hint">כאן חושב בהנחת הפקדה עד גיל 18 - אבל זה חשבון שלכם, אפשר להמשיך גם אחרי.</div>
@@ -443,7 +453,7 @@ function calc(){
   document.getElementById('heroMeta').innerHTML=yTo18>0?('בעוד <b>'+yTo18+'</b> '+(yTo18===1?'שנה':'שנים')+', בגיל 18'):'הילד/ה כבר בגיל 18';
   document.getElementById('sum21').textContent=money(v21prog)+' ₪';
   const sn=document.getElementById('splitNote');
-  if(progMonthly>0||bal>0){sn.hidden=false;sn.innerHTML='עד גיל 18 יופקדו <b>'+money(depProg)+' ₪</b> לחיסכון לכל ילד, והוא ירוויח עוד <b>'+money(growProg)+' ₪</b> בזכות הזמן.';}
+  if(progMonthly>0||bal>0){sn.hidden=false;sn.innerHTML='📊 עד גיל 18 יופקדו <b>'+money(depProg)+' ₪</b> לחיסכון לכל ילד, והוא ירוויח עוד <b>'+money(growProg)+' ₪</b> בזכות הזמן.';}
   else sn.hidden=true;
   document.getElementById('cmpState').textContent=money(v18stateOnly)+' ₪';
   document.getElementById('cmpFull').textContent=money(v18doubled)+' ₪';
@@ -454,7 +464,7 @@ function calc(){
     pr.hidden=false;
     document.getElementById('priv18').textContent=money(v18priv)+' ₪';
     document.getElementById('priv21').textContent=money(v21priv)+' ₪';
-    document.getElementById('totalNote').innerHTML='סה"כ לילד/ה (תוכנית + פרטי): <b>'+money(total18)+' ₪</b> בגיל 18, <b>'+money(total21)+' ₪</b> בגיל 21.';
+    document.getElementById('totalNote').innerHTML='🧮 סה"כ לילד/ה (תוכנית + פרטי): <b>'+money(total18)+' ₪</b> בגיל 18, <b>'+money(total21)+' ₪</b> בגיל 21.';
   } else pr.hidden=true;
 }
 

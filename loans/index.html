@@ -250,6 +250,7 @@ svg.chart{display:block;width:100%;height:auto}
     </div>
     <div class="insight" id="insight"></div>
     <div class="insight" id="afford" hidden></div>
+    <div class="insight" id="maxDebt" hidden></div>
     <div class="early-box" id="earlyBox" hidden>
       <div class="eb-title">⚡ החזר מהיר יותר = חיסכון</div>
       <div class="early-grid">
@@ -522,6 +523,17 @@ function calc(){syncLive();
     else{cls='insight warn';msg=`🔴 ההחזר הוא <b>${Math.round(pctInc)}%</b> מההכנסה - נטל גבוה. שווה לשקול סכום קטן יותר או תקופה ארוכה יותר.`;}
     af.className=cls;af.innerHTML=msg;af.hidden=false;
   } else af.hidden=true;
+
+  // max approvable debt - rule of thumb: about 10x the monthly salary
+  const md=document.getElementById('maxDebt');
+  if(income>0){
+    const maxDebt=income*10;
+    let m=`💡 <b>המקסימום להלוואה שאפשר לאשר</b> הוא בדרך כלל בערך פי 10 מהמשכורת החודשית: <b>${fmt.format(Math.round(maxDebt))} ₪</b> (לפי משכורת של ${fmt.format(income)} ₪). זה כלל אצבע - הבנק שוקל גם החזרים קיימים, ותק והיסטוריית אשראי.`;
+    let c='insight';
+    if(P>0 && P>maxDebt){c='insight warn';m+=` הסכום שהזנת (${fmt.format(P)} ₪) גבוה מהתקרה, אז ייתכן שיאשרו פחות.`;}
+    else if(P>0){m+=` הסכום שהזנת (${fmt.format(P)} ₪) בתוך התקרה. ✓`;}
+    md.className=c;md.innerHTML=m;md.hidden=false;
+  } else md.hidden=true;
   cmpLoans();
 }
 

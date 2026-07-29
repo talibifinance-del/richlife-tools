@@ -106,9 +106,14 @@ body{font-family:var(--font);
 .field-row:first-of-type{border-top:none}
 .field-row .fr-lbl{flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--ink);line-height:1.3}
 .field-row .fr-lbl small{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);margin-top:1px}
-.amt.wide{width:132px}
-.amt.suf input{width:auto;flex:1;text-align:center}
-.amt.suf .u{padding-inline-start:0;padding-inline-end:10px}
+/* the kit's .amt box styling is scoped to .row; our fields live in .field-row, so replicate it here */
+.field-row .amt{display:flex;flex-wrap:nowrap;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px;flex:none;width:118px}
+.field-row .amt:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.1)}
+.field-row .amt .u{padding-inline-start:10px;color:var(--ink-soft);font-weight:700;font-size:13.5px}
+.field-row .amt input{width:100%;border:none;background:transparent;outline:none;font-family:var(--font);font-size:15px;font-weight:800;color:var(--ink);padding:8px 9px;min-width:0}
+.field-row .amt.wide{width:132px}
+.field-row .amt.suf input{width:auto;flex:1 1 auto;min-width:0;text-align:center}
+.field-row .amt.suf .u{flex:none;white-space:nowrap;padding-inline-start:0;padding-inline-end:10px}
 /* age-21 "leave it" highlight */
 .card.leave21{padding:14px 16px;margin-top:12px;background:linear-gradient(120deg,rgba(var(--sage-rgb),.4),#fff);border:1px solid rgba(var(--pine-rgb),.2)}
 .l21-row{display:flex;align-items:center;gap:12px}

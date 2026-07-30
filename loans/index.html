@@ -213,6 +213,18 @@ svg.chart{display:block;width:100%;height:auto}
 .ov-tile .v{font-size:clamp(18px,4.4vw,22px);font-weight:900;color:var(--pine-darker);margin-top:4px;font-variant-numeric:tabular-nums}
 .ov-tile.hot{background:rgba(var(--red-rgb),.09)}
 .ov-tile.hot .v{color:#8f3a29}
+/* bank benefits by sector (extensible: one .bank-block per bank) */
+.banks-note{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin:14px 0 13px;line-height:1.55}
+.bank-block+.bank-block{margin-top:18px;padding-top:16px;border-top:1.5px solid rgba(var(--pine-rgb),.16)}
+.bank-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:15.5px;font-weight:900;color:var(--pine-darker);margin-bottom:11px}
+.bank-head .bh-badge{font-size:10.5px;font-weight:800;color:var(--pine-deep);background:var(--sage-tint);border:1px solid rgba(var(--pine-rgb),.2);padding:3px 10px;border-radius:100px}
+.seg-card{background:var(--sage-tint);border-radius:14px;padding:13px 15px}
+.seg-card+.seg-card{margin-top:10px}
+.seg-title{font-size:14px;font-weight:900;color:var(--pine-darker);margin-bottom:8px}
+.seg-list{margin:0;padding-inline-start:17px;display:flex;flex-direction:column;gap:7px}
+.seg-list li{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.5}
+.seg-list li b{color:var(--pine-deep);font-weight:900}
+.seg-catch{margin-top:11px;background:rgba(183,121,31,.10);border-radius:11px;padding:10px 13px;font-size:12px;font-weight:700;color:#8a5a12;line-height:1.55}
 </style>
 </head>
 <body>
@@ -439,6 +451,55 @@ svg.chart{display:block;width:100%;height:auto}
     });
   })();
   </script>
+
+  <details class="card cmp-loans">
+    <summary><span class="sec-lbl" style="margin:0">💼 הטבות בנקאיות למגזרים (מורים · עובדי מדינה · הייטק · צעירים)</span><span class="fin-chev">▾</span></summary>
+    <div style="margin-top:14px">
+      <div class="banks-note">פירוט לפי בנק. מבוסס על עלוני הבנק - התנאים, הסכומים והריביות משתנים כל הזמן, אז תמיד לאמת מול הבנק את ההצעה העדכנית לפני שסוגרים. מידע להתמצאות, לא ייעוץ.</div>
+
+      <div class="bank-block">
+        <div class="bank-head">🏦 הבינלאומי <span class="bh-badge">לפי עלוני 2022-2023 · לאמת עדכני</span></div>
+
+        <div class="seg-card">
+          <div class="seg-title">👩‍🏫 מורים (חברי ארגון המורים)</div>
+          <ul class="seg-list">
+            <li>הלוואה עד ₪30,000 "ללא ריבית והצמדה", החזר עד 30 חודשים (חשבון חדש, מעביר משכורת).</li>
+            <li><b>לרוב הכי משתלם:</b> הלוואה מסובסדת דרך ארגון המורים בריבית החשכ"ל, עד ₪30,000, עד 3 שנים - <b>בלי חובת העברת משכורת</b> (צריך טופס הפניה מהארגון).</li>
+            <li>מסגרת מינוס ללא ריבית עד ₪10,000 לשנה; הלוואה בניכוי מהשכר עד ₪120,000 בריבית פריים פחות 0.5%.</li>
+          </ul>
+        </div>
+
+        <div class="seg-card">
+          <div class="seg-title">🏛️ עובדי מדינה</div>
+          <ul class="seg-list">
+            <li>הטבת הצטרפות (חדש, מעביר משכורת): הלוואה "ללא ריבית" עד ₪50,000 עד 36 חודשים, <b>או</b> מענק הצטרפות עד ₪1,500.</li>
+            <li>מסגרת מינוס ראשית בגובה משכורת ועד ₪40,000, בריבית "החל מפריים בלבד".</li>
+            <li>הלוואות לכל מטרה עד ₪150,000 או 10 משכורות, עד 120 חודשים.</li>
+          </ul>
+        </div>
+
+        <div class="seg-card">
+          <div class="seg-title">💻 הייטק (חשבון HighTech)</div>
+          <ul class="seg-list">
+            <li>הטבת הצטרפות (חדש, מעביר משכורת): הלוואה "ללא ריבית" עד ₪50,000 עד 40 חודשים, <b>או</b> מענק עד ₪1,500.</li>
+            <li>מסגרת אשראי מועדפת עד פי 3 מהמשכורת ועד ₪150,000.</li>
+            <li>הלוואות לכל מטרה עד ₪150,000 או 10 משכורות, עד 144 חודשים; הלוואת רכב עד 100% משווי או ₪150,000.</li>
+          </ul>
+        </div>
+
+        <div class="seg-card">
+          <div class="seg-title">🌱 צעירים / חשבון חדש (START UP)</div>
+          <ul class="seg-list">
+            <li>פטור מעמלות ל-5 שנים.</li>
+            <li>מסגרת מינוס ללא ריבית עד ₪10,000 לתקופה של שנה.</li>
+          </ul>
+        </div>
+
+        <div class="seg-catch">⚠️ המלכוד המשותף: הלוואת ה"ללא ריבית" היא טכנית פריים ועוד כ-4.9%, שהבנק מחזיר לכם כל חודש - אבל רק כל עוד ממשיכים להעביר את המשכורת לאורך כל התקופה. מפסיקים - משלמים את הריבית. אלה הטבות הצטרפות שנועדו למשוך אליהם את כל הבנקאות שלכם, אז שווה להשוות גם את התנאים אחרי ההטבה.</div>
+      </div>
+
+    </div>
+  </details>
 
   <div class="cta-card">
     <div class="cta-emoji">🧭</div>

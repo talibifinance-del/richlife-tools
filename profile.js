@@ -150,6 +150,7 @@
     injectBanner();
     rewriteLinks();
   });
+  function hubLink(id) { return location.origin + '/lida/?u=' + encodeURIComponent(id); }
 
   function injectBanner() {
     if (document.getElementById('rlProfBar')) return;
@@ -171,12 +172,12 @@
         'opacity:0;transition:opacity .3s;min-width:52px;text-align:center';
       right.appendChild(saved);
     }
-    if (!isChecklist) {
-      var back = document.createElement('a');
-      back.href = homeLink(u);
-      back.textContent = '← לצ׳ק-ליסט';
-      back.style.cssText = 'color:#dff0e8;text-decoration:none;font-weight:700;white-space:nowrap';
-      right.appendChild(back);
+    if (!isHub) {                                // one clear button to the page that gathers all the birth tools
+      var tools = document.createElement('a');
+      tools.href = hubLink(u);
+      tools.textContent = 'כל הכלים ←';
+      tools.style.cssText = 'color:#dff0e8;text-decoration:none;font-weight:700;white-space:nowrap';
+      right.appendChild(tools);
     }
     var share = document.createElement('button');
     share.id = 'rlProfShare';

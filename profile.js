@@ -114,7 +114,8 @@
     pushT = setTimeout(function () {
       if (!blob) return;
       fetch(API + '/?id=' + encodeURIComponent(u), { method: 'POST', body: JSON.stringify(blob) })
-        .catch(function () {});
+        .then(function (r) { paintSaved(r && r.ok ? 'saved' : ''); })
+        .catch(function () { paintSaved(''); });
     }, 1200);
   }
   if (SKEY) {
@@ -126,9 +127,21 @@
         blob.slugs[slug] = v;
         if (isChecklist) { var nm = checklistName(v); if (nm) blob.name = nm; }
         setCache(blob);
+        paintSaved('saving');
         schedulePush();
       }
     };
+  }
+
+  // --- subtle auto-save cue in the banner: "שומר…" → "נשמר ✓" (fades) ---
+  var savedT = null;
+  function paintSaved(state) {
+    var el = document.getElementById('rlProfSaved');
+    if (!el) return;
+    clearTimeout(savedT);
+    if (state === 'saving') { el.textContent = 'שומר…'; el.style.opacity = '1'; }
+    else if (state === 'saved') { el.textContent = 'נשמר ✓'; el.style.opacity = '1'; savedT = setTimeout(function () { el.style.opacity = '0'; }, 1900); }
+    else { el.style.opacity = '0'; }
   }
 
   // --- UI: banner + hide per-tool share + carry ?u across internal links ---
@@ -151,6 +164,13 @@
     left.innerHTML = '👶 <b id="rlProfName"></b><span style="opacity:.85"> · מוכנים כלכלית ללידה</span>';
     var right = document.createElement('span');
     right.style.cssText = 'display:flex;align-items:center;gap:10px';
+    if (SKEY) {                                  // auto-save cue (not on the hub, which has no state)
+      var saved = document.createElement('span');
+      saved.id = 'rlProfSaved';
+      saved.style.cssText = 'color:#cdeadd;font-weight:700;font-size:12.5px;white-space:nowrap;' +
+        'opacity:0;transition:opacity .3s;min-width:52px;text-align:center';
+      right.appendChild(saved);
+    }
     if (!isChecklist) {
       var back = document.createElement('a');
       back.href = homeLink(u);

@@ -205,6 +205,14 @@ svg.chart{display:block;width:100%;height:auto}
 .li-what{font-size:13px;font-weight:700;color:var(--ink);line-height:1.5;margin-bottom:6px}
 .li-watch{font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.55;background:#fff;border-radius:10px;padding:9px 11px}
 .li-watch b{color:var(--pine-deep);font-weight:900}
+/* overdraft (minus) cost calculator */
+.ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+@media(max-width:520px){.ov-grid{grid-template-columns:1fr}}
+.ov-tile{background:var(--sage-tint);border-radius:14px;padding:13px 10px;text-align:center}
+.ov-tile .k{font-size:12px;font-weight:800;color:var(--ink-soft)}
+.ov-tile .v{font-size:clamp(18px,4.4vw,22px);font-weight:900;color:var(--pine-darker);margin-top:4px;font-variant-numeric:tabular-nums}
+.ov-tile.hot{background:rgba(var(--red-rgb),.09)}
+.ov-tile.hot .v{color:#8f3a29}
 </style>
 </head>
 <body>
@@ -295,6 +303,48 @@ svg.chart{display:block;width:100%;height:auto}
       <span><i style="background:var(--pine)"></i>יתרת ההלוואה</span>
     </div>
   </div>
+
+  <div class="card">
+    <div class="sec-lbl">🔴 כמה עולה לך המינוס?</div>
+    <div class="rec" style="margin:2px 0 12px;font-size:12.5px;font-weight:700;color:var(--ink-soft);line-height:1.5">המינוס (משיכת יתר) הוא אחת ההלוואות היקרות שיש, והוא מתגלגל בשקט. הזינו כמה אתם במינוס ומה ריבית המינוס, ותראו כמה זה עולה - בשנה, ולאורך שנים.</div>
+    <div class="fields">
+      <div class="field"><label>כמה אתם במינוס?</label><div class="input-shell"><span class="unit">₪</span><input id="ovAmount" type="text" inputmode="numeric" value="10,000" placeholder="0"></div></div>
+      <div class="field"><label>ריבית המינוס השנתית</label><div class="input-shell"><input id="ovRate" type="text" inputmode="decimal" value="11" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div></div>
+    </div>
+    <div class="ov-grid">
+      <div class="ov-tile"><div class="k">עולה לך בשנה</div><div class="v" id="ovYear">0 ₪</div></div>
+      <div class="ov-tile"><div class="k">אם תישארו 5 שנים</div><div class="v" id="ov5">0 ₪</div></div>
+      <div class="ov-tile hot"><div class="k">אם תישארו 10 שנים</div><div class="v" id="ov10">0 ₪</div></div>
+    </div>
+    <div class="insight" id="ovInsight"></div>
+  </div>
+
+  <script>
+  (function(){
+    var fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
+    var money=function(v){return fmt.format(Math.round(+v||0));};
+    var num=function(v){var n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
+    var grp=function(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
+    var amt=document.getElementById('ovAmount'),rate=document.getElementById('ovRate');
+    if(!amt||!rate)return;
+    function calc(){
+      var M=num(amt.value),r=num(rate.value)/100,y=M*r;
+      document.getElementById('ovYear').textContent=money(y)+' ₪';
+      document.getElementById('ov5').textContent=money(y*5)+' ₪';
+      document.getElementById('ov10').textContent=money(y*10)+' ₪';
+      var ins=document.getElementById('ovInsight');
+      if(M>0&&r>0){
+        ins.className='insight warn';
+        ins.innerHTML='🔴 מינוס של <b>'+money(M)+' ₪</b> עולה לך <b>'+money(y)+' ₪ בשנה</b>. אם תישארו בו 10 שנים, שילמתם <b>'+money(y*10)+' ₪</b> בריבית'+(y*10>M?' - יותר מהמינוס עצמו':'')+'. זה כסף שיכול להיות חיסכון שעובד בשבילכם, במקום נגדכם. הצעד הראשון: להפוך מינוס קבוע להלוואה זולה יותר, ולצאת ממנו.';
+      } else { ins.className='insight'; ins.innerHTML='הזינו את סכום המינוס ואת ריבית המינוס (בדרך כלל מהגבוהות שיש - בדקו את הריבית המדויקת בדף הבנק שלכם) כדי לראות כמה זה עולה.'; }
+    }
+    [amt,rate].forEach(function(el){el.addEventListener('input',function(){
+      if(el===amt){var p=el.selectionStart,old=el.value;el.value=grp(el.value);var d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}}
+      calc();
+    });});
+    calc();
+  })();
+  </script>
 
   <details class="card cmp-loans">
     <summary><span class="sec-lbl" style="margin:0">⚖️ להשוות להצעה אחרת</span><span class="fin-chev">▾</span></summary>

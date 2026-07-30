@@ -125,7 +125,7 @@
         if (!blob) blob = getCache() || { slugs: {} };
         if (!blob.slugs) blob.slugs = {};
         blob.slugs[slug] = v;
-        if (isChecklist) { var nm = checklistName(v); if (nm) blob.name = nm; }
+        if (isChecklist) { var nm = checklistName(v); if (nm && nm !== blob.name) { blob.name = nm; paintName(); } }
         setCache(blob);
         paintSaved('saving');
         schedulePush();

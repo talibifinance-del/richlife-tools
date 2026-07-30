@@ -189,6 +189,22 @@ svg.chart{display:block;width:100%;height:auto}
 .cost-pair .cp .v{display:block;font-size:clamp(17px,4.6vw,22px);font-weight:900;color:#8f3a29;margin-top:3px}
 .back-argaz{display:inline-flex;align-items:center;gap:7px;font-family:var(--font);font-size:13px;font-weight:800;color:var(--pine-deep);text-decoration:none;background:rgba(var(--pine-rgb),.08);border:1.5px solid rgba(var(--pine-rgb),.22);padding:7px 15px;border-radius:100px;margin-bottom:14px;transition:all .18s}
 .back-argaz:hover{background:#fff;border-color:var(--pine)}
+/* loan-types info guide */
+.li-note{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin:14px 0 13px;line-height:1.55}
+.li-filter{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+.li-chip{font-family:var(--font);cursor:pointer;border:1.5px solid rgba(var(--pine-rgb),.22);background:#fff;color:var(--ink-soft);font-size:12.5px;font-weight:800;border-radius:100px;padding:7px 14px;transition:all .15s}
+.li-chip:hover{border-color:var(--pine)}
+.li-chip.on{background:var(--pine);border-color:var(--pine);color:#fff}
+.li-list{display:flex;flex-direction:column;gap:11px}
+.li-card{background:var(--sage-tint);border-radius:14px;padding:14px 15px;border:1.5px solid transparent}
+.li-card.li-hide{display:none}
+.li-top{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.li-top .li-emoji{font-size:20px;flex:none}
+.li-top .li-title{font-size:14.5px;font-weight:900;color:var(--pine-darker);flex:1;min-width:0}
+.li-top .li-cat{flex:none;font-size:10.5px;font-weight:800;color:var(--pine-deep);background:rgba(var(--pine-rgb),.12);padding:3px 9px;border-radius:100px;white-space:nowrap}
+.li-what{font-size:13px;font-weight:700;color:var(--ink);line-height:1.5;margin-bottom:6px}
+.li-watch{font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.55;background:#fff;border-radius:10px;padding:9px 11px}
+.li-watch b{color:var(--pine-deep);font-weight:900}
 </style>
 </head>
 <body>
@@ -292,6 +308,80 @@ svg.chart{display:block;width:100%;height:auto}
       <div id="cmpOut"></div>
     </div>
   </details>
+
+  <details class="card cmp-loans">
+    <summary><span class="sec-lbl" style="margin:0">📚 מדריך סוגי הלוואות - על מה לשים לב</span><span class="fin-chev">▾</span></summary>
+    <div style="margin-top:14px">
+      <div class="li-note">מידע כללי להתמצאות, לא ייעוץ. התנאים המדויקים משתנים בין הגופים ולאורך זמן - תמיד לבדוק מול המלווה עצמו.</div>
+      <div class="li-filter" id="liFilter">
+        <button type="button" class="li-chip on" data-f="all">הכל</button>
+        <button type="button" class="li-chip" data-f="bank">🏦 בנקאי</button>
+        <button type="button" class="li-chip" data-f="free">❤️ ללא ריבית</button>
+        <button type="button" class="li-chip" data-f="savings">🏛️ על החיסכון</button>
+        <button type="button" class="li-chip" data-f="careful">⚠️ יקר / להיזהר</button>
+      </div>
+      <div class="li-list" id="liList">
+        <div class="li-card" data-cat="bank">
+          <div class="li-top"><span class="li-emoji">🏦</span><span class="li-title">הלוואה בנקאית רגילה</span><span class="li-cat">בנקאי</span></div>
+          <div class="li-what">הלוואה מהבנק בריבית קבועה או צמודת פריים.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> להשוות ריבית בין כמה בנקים לפני שסוגרים, ולבדוק אם היא צמודת פריים - כי אז ההחזר יכול לעלות אם הפריים עולה.</div>
+        </div>
+        <div class="li-card" data-cat="bank">
+          <div class="li-top"><span class="li-emoji">🎁</span><span class="li-title">הלוואת הצטרפות / "הטבה"</span><span class="li-cat">בנקאי</span></div>
+          <div class="li-what">הבנק מציע ריבית נמוכה או "0%" תמורת העברת המשכורת והבנקאות אליו.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> לרוב זה צמוד פריים (אז לא באמת 0%), מוגבל בסכום ובתקופה, ומותנה בהעברת הכל. השאלה האמיתית: מה הריבית אחרי תקופת ההטבה, והאם המעבר עצמו שווה לכם.</div>
+        </div>
+        <div class="li-card" data-cat="bank">
+          <div class="li-top"><span class="li-emoji">🔗</span><span class="li-title">איחוד הלוואות</span><span class="li-cat">בנקאי</span></div>
+          <div class="li-what">מאחדים כמה הלוואות לאחת, עם החזר חודשי אחד ונמוך יותר.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> החזר חודשי נמוך יותר לרוב מגיע מתקופה ארוכה יותר - ואז בסוף משלמים יותר ריבית. תסתכלו על סך העלות הכולל, לא רק על ההחזר החודשי.</div>
+        </div>
+        <div class="li-card" data-cat="free">
+          <div class="li-top"><span class="li-emoji">❤️</span><span class="li-title">הלוואה ללא ריבית אמיתית</span><span class="li-cat">ללא ריבית</span></div>
+          <div class="li-what">מגופים חברתיים (כמו עמותת עוגן), גמ"חים, או מהמעסיק.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> כאן ה-0% אמיתי, בלי מלכוד. הסכומים מוגבלים ויש תנאי זכאות - אבל אם מתאים, זו האופציה הכי זולה שיש. תמיד כדאי לבדוק אותה קודם.</div>
+        </div>
+        <div class="li-card" data-cat="savings">
+          <div class="li-top"><span class="li-emoji">🏛️</span><span class="li-title">הלוואה על חשבון החיסכון שלכם</span><span class="li-cat">על החיסכון</span></div>
+          <div class="li-what">כנגד קרן השתלמות, קופת גמל, פוליסת חיסכון או פנסיה, בריבית נמוכה יחסית.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> הריבית נמוכה, אבל אם מושכים - הכסף מפסיק לצמוח. שווה לבדוק אם עדיף למשוך, או להשאיר את החיסכון לעבוד ולקחת הלוואה זולה כנגדו.</div>
+        </div>
+        <div class="li-card" data-cat="careful">
+          <div class="li-top"><span class="li-emoji">🚗</span><span class="li-title">הלוואת רכב / בלון</span><span class="li-cat">להיזהר</span></div>
+          <div class="li-what">דרך סוכנות או ליסינג, לפעמים "0%" עם תשלום "בלון" גדול בסוף.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> ה-"0%" לפעמים מגולם במחיר הרכב, ותשלום הבלון בסוף יכול להיות הפתעה גדולה. בדקו את העלות הכוללת מול קנייה במזומן או הלוואה רגילה.</div>
+        </div>
+        <div class="li-card" data-cat="careful">
+          <div class="li-top"><span class="li-emoji">⏸️</span><span class="li-title">גרייס / דחיית תשלומים</span><span class="li-cat">להיזהר</span></div>
+          <div class="li-what">דוחים את החזר הקרן, ומשלמים בהתחלה רק ריבית (או כלום).</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> נחמד בהתחלה, אבל הריבית ממשיכה להצטבר כל הזמן - אז בסוף ההלוואה יוצאת יקרה יותר. מתאים רק כשבאמת אין ברירה בטווח הקצר.</div>
+        </div>
+        <div class="li-card" data-cat="careful">
+          <div class="li-top"><span class="li-emoji">📱</span><span class="li-title">הלוואה חוץ-בנקאית / אונליין</span><span class="li-cat">יקר</span></div>
+          <div class="li-what">הלוואות מהירות מחברות חוץ-בנקאיות.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> מהיר וקל לקבל, אבל לרוב הריבית הכי גבוהה בשוק. כמעט תמיד יש אופציה זולה יותר - שווה לבדוק אותה לפני שחותמים.</div>
+        </div>
+        <div class="li-card" data-cat="careful">
+          <div class="li-top"><span class="li-emoji">🔴</span><span class="li-title">מסגרת / מינוס (משיכת יתר)</span><span class="li-cat">יקר</span></div>
+          <div class="li-what">לא "הלוואה" רשמית, אבל מתנהג בדיוק ככה.</div>
+          <div class="li-watch"><b>על מה לשים לב:</b> הריבית על המינוס היא מהגבוהות שיש, וזה מתגלגל בשקט חודש אחרי חודש. אם יש מינוס קבוע - כדאי להפוך אותו להלוואה זולה יותר ולצאת ממנו ראשון.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+  <script>
+  (function(){
+    var f=document.getElementById('liFilter');if(!f)return;
+    f.addEventListener('click',function(e){
+      var b=e.target.closest('.li-chip');if(!b)return;
+      var cat=b.getAttribute('data-f');
+      f.querySelectorAll('.li-chip').forEach(function(x){x.classList.toggle('on',x===b);});
+      document.querySelectorAll('#liList .li-card').forEach(function(c){
+        c.classList.toggle('li-hide', cat!=='all' && c.getAttribute('data-cat')!==cat);
+      });
+    });
+  })();
+  </script>
 
   <div class="cta-card">
     <div class="cta-emoji">🧭</div>

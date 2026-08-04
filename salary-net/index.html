@@ -211,6 +211,12 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .unit-tg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:12px;color:var(--ink-soft);padding:3px 10px;border-radius:6px;cursor:pointer;min-width:30px}
 .unit-tg button.active{background:var(--pine);color:#fff}
 .mini-hint{font-size:11px;font-weight:700;color:var(--pine-deep);margin-top:5px;min-height:14px}
+.guide-note{background:var(--sage-tint);border-radius:12px;padding:13px 15px;margin-top:12px;font-size:12.5px;font-weight:600;color:var(--pine-darker);line-height:1.6}
+.guide-note .gt{font-size:13.5px;font-weight:900;color:var(--pine-deep);display:block;margin-bottom:7px}
+.guide-note .grow{display:block;margin-top:5px}
+.guide-note b{font-weight:900;color:var(--pine-deep)}
+.guide-note .ok{color:var(--pine)}
+.guide-note .mand{display:block;margin-top:9px;padding-top:8px;border-top:1px solid rgba(var(--pine-rgb),.15);font-size:11.5px;font-weight:600;color:var(--ink-soft)}
 /* credit-points builder */
 .cp-head{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;font-size:10.5px;font-weight:800;color:var(--ink-soft);padding:0 2px 5px}
 .cp-row{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;margin-bottom:7px;align-items:center}
@@ -310,6 +316,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="ded-row" id="dSelfKerenRow" hidden><span class="dr-l">הפרשה לקרן השתלמות (חיסכון שלך)</span><span class="dr-v" id="dSelfKeren">0 ₪</span></div>
     </div>
     <div class="save-note" id="saveNote" hidden></div>
+    <div class="guide-note" id="guideNote" hidden></div>
     <div class="emp-note" id="empNote"></div>
     <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה חודשית יציבה להמחשה, לא תחשיב שכר רשמי. <b>כוללת את זיכוי המס על הפרשות הפנסיה</b> (סעיף 45א, עד ~238 ש"ח בחודש). התלוש בפועל מחושב בשיטה <b>מצטברת</b> לאורך השנה, אז בחודש בודד (למשל בתחילת עבודה) הוא יכול להיראות שונה מההערכה כאן - זה מתאזן על פני שנה. לא כלולים: הטבות מס מיוחדות (עמית מוטב / ניכוי סעיף 47 על שכר לא מבוטח), שווי מס שאינו במזומן (ארוחות), ומרכיבים אישיים (תושב פריפריה). קרן ההשתלמות מחושבת עד תקרת השכר הפטורה (₪15,712). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
   </div>
@@ -571,7 +578,8 @@ const DEF={
   mode:'employee', niRedSelf:2.87, niFullSelf:12.83, niDeduct:52,
   pensSelf:0, kerenSelf:0, pensSelfUnit:'ils', kerenSelfUnit:'ils',
   spNikPct:11, spZikPct:5.5, spZikRate:35, spIncCeil:19400,
-  skDedPct:4.5, skIncCeil:24450
+  skDedPct:4.5, skIncCeil:24450,
+  avgWage:12800, mandT1:4.45, mandT2:12.55
 };
 let S=JSON.parse(JSON.stringify(DEF));
 
@@ -609,6 +617,17 @@ function calc(){
   }
   // helper: income tax after credit + a pension zikuy on a taxable base
   function taxOn(base,zikuy){return Math.max(0,incomeTax(Math.max(0,base))-credit-zikuy);}
+  // helper: total tax+NI for a self-employed scenario with given pension/keren contributions (₪)
+  function scen(pC,kC){
+    const pN=Math.min(pC,(num(S.spNikPct)/100)*Math.min(gross,num(S.spIncCeil)));
+    const pZ=Math.min(Math.max(0,pC-pN),(num(S.spZikPct)/100)*Math.min(gross,num(S.spIncCeil)))*(num(S.spZikRate)/100);
+    const kD=Math.min(kC,(num(S.skDedPct)/100)*Math.min(gross,num(S.skIncCeil)));
+    const ded=pN+kD, nb=Math.max(0,gross-ded), niH=niCalc(nb);
+    const rr=Math.min(nb,num(S.redThresh)),ff=Math.max(0,Math.min(nb,num(S.ceiling))-num(S.redThresh));
+    const niP=rr*(num(S.niRedSelf)/100)+ff*(num(S.niFullSelf)/100);
+    const tx=taxOn(gross-ded-niP*(num(S.niDeduct)/100),pZ);
+    return {tax:tx,niHealth:niH,total:tx+niH};
+  }
   // ── national insurance + health (self: rate + reduced base; employee: gross)
   const niBase=self?Math.max(0,gross-dedFromIncome):gross;
   const niHealth=niCalc(niBase);
@@ -623,9 +642,18 @@ function calc(){
   const kerenBase=Math.min(gross,num(S.kerenCeil));
   const kerenEmp=(self||!S.keren)?0:kerenBase*(num(S.kep)/100);
   const net=gross-tax-niHealth-pensEmp-kerenEmp-pS-kS;
-  // ── self savings on tax+NI from the pension/keren contributions
-  let saveAmt=0;
-  if(self&&(pS>0||kS>0)){const ni0=niCalc(gross);const niForDed0=(function(){const rr=Math.min(gross,num(S.redThresh)),ff=Math.max(0,Math.min(gross,num(S.ceiling))-num(S.redThresh));const niR=num(S.niRedSelf),niF=num(S.niFullSelf);return rr*(niR/100)+ff*(niF/100);})();const tax0=taxOn(gross-niForDed0*(num(S.niDeduct)/100),0);saveAmt=(tax0+ni0)-(tax+niHealth);}
+  // ── self savings + max-out guidance (how much more can be deducted to minimise tax)
+  let saveAmt=0,pMax=0,kMax=0,pRoom=0,kRoom=0,extraSave=0,mand=0;
+  if(self){
+    const base=scen(0,0), cur=scen(pS,kS);
+    saveAmt=(pS>0||kS>0)?(base.total-cur.total):0;
+    pMax=((num(S.spNikPct)+num(S.spZikPct))/100)*Math.min(gross,num(S.spIncCeil));   // 16.5% of income (capped) - full pension tax benefit
+    kMax=(num(S.skDedPct)/100)*Math.min(gross,num(S.skIncCeil));                      // 4.5% of income (capped) - full keren deduction
+    pRoom=Math.max(0,pMax-pS); kRoom=Math.max(0,kMax-kS);
+    extraSave=cur.total-scen(pS+pRoom,kS+kRoom).total;                                // extra tax+NI saved if topped up to max
+    const half=num(S.avgWage)/2;                                                       // mandatory self-employed pension (approx)
+    mand=(num(S.mandT1)/100)*Math.min(gross,half)+(num(S.mandT2)/100)*Math.max(0,Math.min(gross,num(S.avgWage))-half);
+  }
   document.getElementById('netNum').innerHTML=money(net)+'<small> ₪</small>';
   document.getElementById('netSub').textContent=gross>0?('מתוך '+money(gross)+' ₪ '+(self?'הכנסה':'ברוטו')+' · '+Math.round(net/gross*100)+'% ביד'):'';
   document.getElementById('dGross').textContent=money(gross)+' ₪';
@@ -644,11 +672,20 @@ function calc(){
   if(self&&kS>0){skr.hidden=false;document.getElementById('dSelfKeren').textContent='- '+money(kS)+' ₪';}else skr.hidden=true;
   const sn=document.getElementById('saveNote');
   if(self&&saveAmt>0.5){sn.hidden=false;sn.innerHTML='💚 ההפרשות שלך לפנסיה וקרן הקטינו לך מס+ביטוח לאומי ב<b>'+money(saveAmt)+' ₪</b> החודש - זה חיסכון שגם עובד בשבילך וגם מקטין את המס.';}else sn.hidden=true;
+  const gn=document.getElementById('guideNote');
   if(self){
     const eqP=document.getElementById('pensSelfEq'),eqK=document.getElementById('kerenSelfEq');
     if(eqP)eqP.textContent=(pS>0&&gross>0)?('≈ '+(S.pensSelfUnit==='pct'?money(pS)+' ₪ בחודש':(pS/gross*100).toFixed(1)+'% מההכנסה')+' · '+money(pS*12)+' ₪ בשנה'):'';
     if(eqK)eqK.textContent=(kS>0&&gross>0)?('≈ '+(S.kerenSelfUnit==='pct'?money(kS)+' ₪ בחודש':(kS/gross*100).toFixed(1)+'% מההכנסה')+' · '+money(kS*12)+' ₪ בשנה'):'';
-  }
+    if(gross>0){
+      let g='<span class="gt">🎯 מיצוי הטבות המס</span>';
+      g+='<span class="grow"><b>פנסיה:</b> '+(pS>0?'מפריש/ה '+money(pS)+' ₪':'לא מפריש/ה כרגע')+' · מקסימום להטבת מס '+money(pMax)+' ₪. '+(pRoom>5?'אפשר להפריש עוד <b>'+money(pRoom)+' ₪</b> ולהוריד עוד מס':'<span class="ok">✅ כבר ממצה/ה את ההטבה</span>')+'</span>';
+      g+='<span class="grow"><b>קרן השתלמות:</b> '+(kS>0?'מפריש/ה '+money(kS)+' ₪':'לא מפריש/ה כרגע')+' · מקסימום להטבת מס '+money(kMax)+' ₪. '+(kRoom>5?'אפשר להפריש עוד <b>'+money(kRoom)+' ₪</b> ולהוריד עוד מס':'<span class="ok">✅ כבר ממצה/ה את ההטבה</span>')+'</span>';
+      if(extraSave>1)g+='<span class="grow">💰 אם תמצה/י את שניהם, תחסוך/תחסכי עוד <b>~'+money(extraSave)+' ₪</b> מס+ב"ל בחודש.</span>';
+      g+='<span class="mand">פנסיה חובה לעצמאי/ת בהכנסה זו: כ-<b>'+money(mand)+' ₪</b> בחודש (הערכה, לא הטבת מס - חובה חוקית).</span>';
+      gn.innerHTML=g; gn.hidden=false;
+    } else gn.hidden=true;
+  } else gn.hidden=true;
   const dt=document.getElementById('discTxt');
   if(dt){if(EMP_DISC===null)EMP_DISC=dt.innerHTML;dt.innerHTML=self?SELF_DISC:EMP_DISC;}
   const en=document.getElementById('empNote');
@@ -744,7 +781,7 @@ function applyMode(){
   document.getElementById('selfNote').hidden=!self;
   document.getElementById('grossLbl').textContent=self?'הכנסה חודשית (לפני מס)':'שכר ברוטו חודשי';
   const sh=document.getElementById('selfHint');
-  if(sh)sh.innerHTML='פנסיה חובה לעצמאי/ת: לפחות ~4.45% מההכנסה (ועד 12.55% מעל חצי השכר הממוצע). קרן השתלמות: עד 4.5% מוכר לניכוי מס - מעבר לזה ההפקדה עדיין פטורה ממס רווחי הון, אבל בלי הטבת מס הכנסה.';
+  if(sh)sh.innerHTML='💡 מזינים בשקלים (או עוברים ל-%). קרן השתלמות: עד 4.5% מההכנסה מוכר לניכוי מס - מעבר לזה ההפקדה עדיין פטורה ממס רווחי הון, אבל בלי הטבת מס הכנסה.';
 }
 document.getElementById('modeEmployee').onclick=()=>{S.mode='employee';save();applyMode();calc();};
 document.getElementById('modeSelf').onclick=()=>{S.mode='self';save();applyMode();calc();};

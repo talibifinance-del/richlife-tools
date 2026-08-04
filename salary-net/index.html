@@ -273,7 +273,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="ded-row" id="dKerenRow" hidden><span class="dr-l">קרן השתלמות (חלק העובד)</span><span class="dr-v" id="dKeren">0 ₪</span></div>
     </div>
     <div class="emp-note" id="empNote"></div>
-    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה להמחשה בלבד, לא תחשיב שכר רשמי. <b>הכלי לא כולל את הטבת המס על הפרשות הפנסיה</b> - הפרשות לפנסיה מזכות בהקלת מס, ולכן הנטו בתלוש בפועל בדרך כלל <b>גבוה</b> מההערכה כאן, ואצל שכר גבוה עם פנסיה+קרן ההפרש יכול להגיע למאות ואף ~1,500 ש"ח בחודש. גם לא כולל מרכיבים אישיים (תושב פריפריה, שווי מס שאינו במזומן כמו ארוחות, הנחות נוספות). קרן ההשתלמות מחושבת עד תקרת השכר הפטורה (₪15,712). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
+    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה חודשית יציבה להמחשה, לא תחשיב שכר רשמי. <b>כוללת את זיכוי המס על הפרשות הפנסיה</b> (סעיף 45א, עד ~238 ש"ח בחודש). התלוש בפועל מחושב בשיטה <b>מצטברת</b> לאורך השנה, אז בחודש בודד (למשל בתחילת עבודה) הוא יכול להיראות שונה מההערכה כאן - זה מתאזן על פני שנה. לא כלולים: הטבות מס מיוחדות (עמית מוטב / ניכוי סעיף 47 על שכר לא מבוטח), שווי מס שאינו במזומן (ארוחות), ומרכיבים אישיים (תושב פריפריה). קרן ההשתלמות מחושבת עד תקרת השכר הפטורה (₪15,712). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
   </div>
 
   <details class="card tt-wrap">
@@ -307,6 +307,14 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
         <div class="tt-field"><label>קרן השתלמות - עובד (%)</label><div class="tt-cell"><input id="tKep" inputmode="decimal" aria-label="קרן השתלמות עובד"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>קרן השתלמות - מעסיק (%)</label><div class="tt-cell"><input id="tKer" inputmode="decimal" aria-label="קרן השתלמות מעסיק"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>קרן - תקרת שכר פטורה (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tKerCeil" inputmode="numeric" aria-label="תקרת קרן השתלמות"></div></div>
+      </div>
+
+      <div class="tt-sub">זיכוי מס על הפרשות לפנסיה (סעיף 45א)</div>
+      <div class="tt-note" style="margin-bottom:10px">זיכוי של 35% מהפרשת העובד לפנסיה, עד 7% מהשכר ועד תקרת שכר של 9,700 ש"ח. מוריד ממס ההכנסה עד ~238 ש"ח בחודש.</div>
+      <div class="tt-grid">
+        <div class="tt-field"><label>שיעור הזיכוי (%)</label><div class="tt-cell"><input id="tPzRate" inputmode="decimal" aria-label="שיעור זיכוי פנסיה"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>שיעור מוכר מהשכר (%)</label><div class="tt-cell"><input id="tPzPct" inputmode="decimal" aria-label="שיעור מוכר מהשכר"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>תקרת שכר לזיכוי (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tPzCeil" inputmode="numeric" aria-label="תקרת שכר לזיכוי פנסיה"></div></div>
       </div>
 
       <button class="tt-reset" id="ttReset" type="button">↺ איפוס לברירת מחדל 2026</button>
@@ -501,7 +509,8 @@ const DEF={
   brackets:[{to:7010,rate:10},{to:10060,rate:14},{to:19000,rate:20},{to:25100,rate:31},{to:46690,rate:35},{to:60130,rate:47},{to:null,rate:50}],
   pointValue:242,
   niRed:1.04, niFull:7, hRed:3.23, hFull:5.17, redThresh:7703, ceiling:50695,
-  tag:6.5, pit:6
+  tag:6.5, pit:6,
+  pzRate:35, pzPct:7, pzCeil:9700
 };
 let S=JSON.parse(JSON.stringify(DEF));
 
@@ -520,10 +529,11 @@ function calc(){
   syncLive();
   const gross=num(S.gross),pens=num(S.pens),points=cpSum();
   document.getElementById('cpTotal').textContent=(+points.toFixed(2))+'';
-  const grossTax=incomeTax(gross),credit=points*num(S.pointValue),tax=Math.max(0,grossTax-credit);
+  const pensEmp=gross*(pens/100);
+  const pensZikuy=Math.min(pensEmp,(num(S.pzPct)/100)*Math.min(gross,num(S.pzCeil)))*(num(S.pzRate)/100);
+  const grossTax=incomeTax(gross),credit=points*num(S.pointValue),tax=Math.max(0,grossTax-credit-pensZikuy);
   const red=Math.min(gross,num(S.redThresh)),full=Math.max(0,Math.min(gross,num(S.ceiling))-num(S.redThresh));
   const niHealth=red*((num(S.niRed)+num(S.hRed))/100)+full*((num(S.niFull)+num(S.hFull))/100);
-  const pensEmp=gross*(pens/100);
   const kerenBase=Math.min(gross,num(S.kerenCeil));
   const kerenEmp=S.keren?kerenBase*(num(S.kep)/100):0;
   const net=gross-tax-niHealth-pensEmp-kerenEmp;
@@ -532,7 +542,7 @@ function calc(){
   document.getElementById('netSub').textContent=gross>0?('מתוך ברוטו '+money(gross)+' ₪ · '+Math.round(net/gross*100)+'% ביד'):'';
   document.getElementById('dGross').textContent=money(gross)+' ₪';
   document.getElementById('dTax').textContent='- '+money(tax)+' ₪';
-  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(+points.toFixed(2))+' נק\' זיכוי)';
+  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(+points.toFixed(2))+' נק\' זיכוי'+(pensZikuy>0?' ו-'+money(pensZikuy)+' זיכוי פנסיה':'')+')';
   document.getElementById('dNi').textContent='- '+money(niHealth)+' ₪';
   document.getElementById('dPens').textContent='- '+money(pensEmp)+' ₪';
   const kr=document.getElementById('dKerenRow');
@@ -588,6 +598,7 @@ function applyTables(){
   set('tPoint',S.pointValue);set('tNiRed',S.niRed);set('tNiFull',S.niFull);set('tHRed',S.hRed);set('tHFull',S.hFull);
   set('tRedThresh',grp(S.redThresh));set('tCeiling',grp(S.ceiling));set('tTag',S.tag);set('tPit',S.pit);
   set('tKep',S.kep);set('tKer',S.ker);set('tKerCeil',grp(S.kerenCeil));
+  set('tPzRate',S.pzRate);set('tPzPct',S.pzPct);set('tPzCeil',grp(S.pzCeil));
   renderBrackets();renderCP();
 }
 
@@ -598,12 +609,12 @@ grossInp.addEventListener('input',()=>{liveFormat(grossInp);S.gross=num(grossInp
 document.getElementById('pens').addEventListener('input',e=>{S.pens=num(e.target.value);save();calc();});
 document.getElementById('kerenChk').addEventListener('change',e=>{S.keren=e.target.checked;save();calc();});
 document.getElementById('cpAdd').onclick=()=>{S.cp.push({l:'',p:0.5,q:1});save();renderCP();calc();const rows=document.querySelectorAll('#cpList .cp-l');if(rows.length)rows[rows.length-1].focus();};
-[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit'],['tKep','kep'],['tKer','ker'],['tKerCeil','kerenCeil']].forEach(([id,key])=>{
+[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit'],['tKep','kep'],['tKer','ker'],['tKerCeil','kerenCeil'],['tPzRate','pzRate'],['tPzPct','pzPct'],['tPzCeil','pzCeil']].forEach(([id,key])=>{
   const el=document.getElementById(id);
-  el.addEventListener('input',()=>{if(key==='redThresh'||key==='ceiling'||key==='kerenCeil')liveFormat(el);S[key]=num(el.value);save();calc();});
+  el.addEventListener('input',()=>{if(key==='redThresh'||key==='ceiling'||key==='kerenCeil'||key==='pzCeil')liveFormat(el);S[key]=num(el.value);save();calc();});
 });
 document.getElementById('ttReset').onclick=()=>{
-  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit,kep:DEF.kep,ker:DEF.ker,kerenCeil:DEF.kerenCeil})));
+  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit,kep:DEF.kep,ker:DEF.ker,kerenCeil:DEF.kerenCeil,pzRate:DEF.pzRate,pzPct:DEF.pzPct,pzCeil:DEF.pzCeil})));
   save();applyTables();calc();
 };
 

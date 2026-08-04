@@ -193,6 +193,29 @@ details.tt-wrap>summary{list-style:none;cursor:pointer;display:flex;align-items:
 details.tt-wrap>summary::-webkit-details-marker{display:none}
 details.tt-wrap .chev{margin-inline-start:auto;color:var(--ink-soft);transition:transform .25s;font-size:13px}
 details.tt-wrap[open] .chev{transform:rotate(180deg)}
+/* keren hishtalmut toggle */
+.keren-tg{display:flex;align-items:center;gap:11px;background:var(--sage-tint);border-radius:12px;padding:12px 14px;margin-top:12px;cursor:pointer;line-height:1.35}
+.keren-tg input{width:20px;height:20px;accent-color:var(--pine);flex:none;cursor:pointer;margin-top:1px}
+.keren-tg .kt-t{font-size:14px;font-weight:800;color:var(--pine-darker)}
+.keren-tg .kt-t small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+/* credit-points builder */
+.cp-head{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;font-size:10.5px;font-weight:800;color:var(--ink-soft);padding:0 2px 5px}
+.cp-row{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;margin-bottom:7px;align-items:center}
+.cp-l{border:1.5px solid transparent;background:var(--sage-tint);border-radius:10px;font-family:var(--font);font-weight:700;font-size:12.5px;color:var(--ink);padding:9px 10px;min-width:0;outline:none}
+.cp-l:focus{border-color:var(--pine);background:#fff}
+.cp-mini{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px}
+.cp-mini:focus-within{border-color:var(--pine);background:#fff}
+.cp-mini .cp-u{font-size:10.5px;font-weight:700;color:var(--ink-soft);padding-inline:7px;flex:none}
+.cp-mini input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:13px;color:var(--ink);padding:8px 2px;outline:none;text-align:center;font-variant-numeric:tabular-nums}
+.cp-del{border:0;background:transparent;color:rgba(var(--pine-rgb),.5);font-size:17px;font-weight:900;cursor:pointer;line-height:1;padding:0}
+.cp-del:hover{color:var(--red)}
+.cp-add{margin-top:4px;border:1.5px dashed rgba(var(--pine-rgb),.4);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:8px 16px;cursor:pointer}
+.cp-add:hover{background:var(--sage-tint)}
+.cp-total{margin-top:12px;display:flex;justify-content:space-between;align-items:center;background:rgba(var(--pine-rgb),.1);border-radius:12px;padding:11px 15px}
+.cp-total .ct-l{font-size:14px;font-weight:900;color:var(--pine-darker)}
+.cp-total .ct-v{font-size:19px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
+.cp-note{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+.ded-row[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -205,7 +228,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 
   <div class="hero-title">
     <h1>מחשבון שכר <span class="em">נטו</span></h1>
-    <p>מזינים ברוטו ונקודות זיכוי, ורואים כמה נשאר ביד נטו - כמה יורד למס הכנסה, לביטוח לאומי ובריאות, ולפנסיה. הטבלאות ניתנות לעדכון.</p>
+    <p>מזינים ברוטו ובונים את נקודות הזיכוי, ורואים כמה נשאר ביד נטו - כמה יורד למס, לביטוח לאומי, לפנסיה ולקרן השתלמות. כל הטבלאות ניתנות לעדכון.</p>
   </div>
 
   <div class="card">
@@ -214,18 +237,24 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <label for="gross">שכר ברוטו חודשי</label>
       <div class="input-shell"><span class="unit">₪</span><input id="gross" type="text" inputmode="numeric" value="12,000" placeholder="0" aria-label="שכר ברוטו חודשי"></div>
     </div>
-    <div class="fields2" style="margin-top:12px">
-      <div class="field">
-        <label for="points">נקודות זיכוי</label>
-        <div class="input-shell"><input id="points" type="text" inputmode="decimal" value="2.25" placeholder="0" aria-label="נקודות זיכוי"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">נק'</span></div>
-        <div class="hint">בסיס לתושב/ת: 2.25. אישה: 2.75. תוספת על ילדים והורות יחידנית.</div>
-      </div>
-      <div class="field">
-        <label for="pens">הפרשת עובד לפנסיה</label>
-        <div class="input-shell"><input id="pens" type="text" inputmode="decimal" value="6" placeholder="0" aria-label="אחוז הפרשת עובד לפנסיה"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
-        <div class="hint">חובה: 6% מהעובד. אפשר לשנות לפי ההסדר.</div>
-      </div>
+    <div class="field" style="margin-top:12px">
+      <label for="pens">הפרשת עובד לפנסיה</label>
+      <div class="input-shell"><input id="pens" type="text" inputmode="decimal" value="6" placeholder="0" aria-label="אחוז הפרשת עובד לפנסיה"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
     </div>
+    <label class="keren-tg" for="kerenChk">
+      <input type="checkbox" id="kerenChk">
+      <span class="kt-t">🎓 מקבל/ת קרן השתלמות<small>לא כולם מקבלים. אם כן: העובד מפריש 2.5% (יורד מהנטו) והמעסיק 7.5% (מעבר לנטו). השיעורים ניתנים לעדכון בטבלאות.</small></span>
+    </label>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🎯 נקודות זיכוי - מי מקבל כמה</span>
+    <div class="cp-note" style="margin-top:0;margin-bottom:11px">מסמנים כמות מול כל מצב, והסך מתעדכן אוטומטית. אפשר לשנות ערכים, למחוק, ולהוסיף שורות. (ברירת מחדל: אישה תושבת - 2.75.)</div>
+    <div class="cp-head"><span>מצב</span><span>נקודות</span><span>כמות</span><span></span></div>
+    <div id="cpList"></div>
+    <button class="cp-add" id="cpAdd" type="button">+ הוספת שורה</button>
+    <div class="cp-total"><span class="ct-l">סה"כ נקודות זיכוי</span><span class="ct-v" id="cpTotal">0</span></div>
+    <div class="cp-note">⚠️ שווי נקודות ותנאי הזכאות משתנים ותלויים במצב אישי - לאמת מול רשות המסים. חלק מהזיכויים מוגבלים בזמן (חייל משוחרר, תואר, עולה).</div>
   </div>
 
   <div class="card">
@@ -240,13 +269,14 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="ded-row"><span class="dr-l">מס הכנסה<small id="dTaxSub"></small></span><span class="dr-v" id="dTax">0 ₪</span></div>
       <div class="ded-row"><span class="dr-l">ביטוח לאומי + מס בריאות</span><span class="dr-v" id="dNi">0 ₪</span></div>
       <div class="ded-row"><span class="dr-l">פנסיה (חלק העובד)</span><span class="dr-v" id="dPens">0 ₪</span></div>
+      <div class="ded-row" id="dKerenRow" hidden><span class="dr-l">קרן השתלמות (חלק העובד)</span><span class="dr-v" id="dKeren">0 ₪</span></div>
     </div>
     <div class="emp-note" id="empNote"></div>
-    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה להמחשה בלבד, לא תחשיב שכר רשמי. לא כולל את הטבת המס על הפרשות הפנסיה ומרכיבים אישיים (תושב פריפריה, הנחות נוספות). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
+    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה להמחשה בלבד, לא תחשיב שכר רשמי. לא כולל את הטבת המס על הפרשות הפנסיה, ומרכיבים אישיים (תושב פריפריה, הנחות נוספות). קרן השתלמות מעל תקרת השכר הפטורה (₪15,712) עשויה להיות חייבת במס. הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
   </div>
 
   <details class="card tt-wrap">
-    <summary><span class="sec-lbl" style="margin:0">📊 טבלאות מס 2026 (ניתן לעדכן)</span><span class="chev">▾</span></summary>
+    <summary><span class="sec-lbl" style="margin:0">📊 טבלאות מס וקרן 2026 (ניתן לעדכן)</span><span class="chev">▾</span></summary>
     <div style="margin-top:14px">
       <div class="tt-note">⚠️ ברירת מחדל לפי מקורות 2026 - לאמת מול רשות המסים והביטוח הלאומי. כל שינוי כאן מעדכן מיד את החישוב למעלה.</div>
 
@@ -269,10 +299,13 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
         <div class="tt-field"><label>תקרת הכנסה לביטוח (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tCeiling" inputmode="numeric" aria-label="תקרת ביטוח לאומי"></div></div>
       </div>
 
-      <div class="tt-sub">פנסיה - חלק המעסיק</div>
+      <div class="tt-sub">פנסיה + קרן השתלמות</div>
       <div class="tt-grid">
-        <div class="tt-field"><label>תגמולי מעסיק (%)</label><div class="tt-cell"><input id="tTag" inputmode="decimal" aria-label="תגמולי מעסיק"><span class="u suf">%</span></div></div>
-        <div class="tt-field"><label>פיצויים מעסיק (%)</label><div class="tt-cell"><input id="tPit" inputmode="decimal" aria-label="פיצויי מעסיק"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>פנסיה - תגמולי מעסיק (%)</label><div class="tt-cell"><input id="tTag" inputmode="decimal" aria-label="תגמולי מעסיק"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>פנסיה - פיצויים מעסיק (%)</label><div class="tt-cell"><input id="tPit" inputmode="decimal" aria-label="פיצויי מעסיק"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>קרן השתלמות - עובד (%)</label><div class="tt-cell"><input id="tKep" inputmode="decimal" aria-label="קרן השתלמות עובד"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>קרן השתלמות - מעסיק (%)</label><div class="tt-cell"><input id="tKer" inputmode="decimal" aria-label="קרן השתלמות מעסיק"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>קרן - תקרת שכר פטורה (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tKerCeil" inputmode="numeric" aria-label="תקרת קרן השתלמות"></div></div>
       </div>
 
       <button class="tt-reset" id="ttReset" type="button">↺ איפוס לברירת מחדל 2026</button>
@@ -446,10 +479,22 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 const money=v=>fmt.format(Math.round(+v||0));
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const SKEY='rl_salary_net_v1';
-// verified 2026 defaults (editable in the tool)
 const DEF={
-  gross:12000, points:2.25, pens:6,
+  gross:12000, pens:6, keren:false, kep:2.5, ker:7.5, kerenCeil:15712,
+  cp:[
+    {l:'תושב/ת ישראל (בסיס)',p:2.25,q:1},
+    {l:'אישה',p:0.5,q:1},
+    {l:'ילד/ה בשנת הלידה',p:1.5,q:0},
+    {l:'ילד/ה בגיל 1-5',p:2.5,q:0},
+    {l:'ילד/ה בגיל 6-17',p:1,q:0},
+    {l:'ילד/ה בגיל 18',p:1,q:0},
+    {l:'הורה יחיד/ה',p:1,q:0},
+    {l:'חייל/ת משוחרר/ת (עד 3 שנים)',p:2,q:0},
+    {l:'תואר ראשון (שנה)',p:1,q:0},
+    {l:'עולה חדש/ה (שנה ראשונה)',p:3,q:0}
+  ],
   brackets:[{to:7010,rate:10},{to:10060,rate:14},{to:16150,rate:20},{to:22440,rate:31},{to:46690,rate:35},{to:60130,rate:47},{to:null,rate:50}],
   pointValue:242,
   niRed:1.04, niFull:7, hRed:3.23, hFull:5.17, redThresh:7703, ceiling:50695,
@@ -467,23 +512,49 @@ function incomeTax(gross){
   }
   return tax;
 }
+function cpSum(){return S.cp.reduce((s,r)=>s+num(r.p)*num(r.q),0);}
 function calc(){
   syncLive();
-  const gross=num(S.gross),points=num(S.points),pens=num(S.pens);
+  const gross=num(S.gross),pens=num(S.pens),points=cpSum();
+  document.getElementById('cpTotal').textContent=(+points.toFixed(2))+'';
   const grossTax=incomeTax(gross),credit=points*num(S.pointValue),tax=Math.max(0,grossTax-credit);
   const red=Math.min(gross,num(S.redThresh)),full=Math.max(0,Math.min(gross,num(S.ceiling))-num(S.redThresh));
-  const ni=red*(num(S.niRed)/100)+full*(num(S.niFull)/100),health=red*(num(S.hRed)/100)+full*(num(S.hFull)/100),niHealth=ni+health;
-  const pensEmp=gross*(pens/100),net=gross-tax-niHealth-pensEmp,empPens=gross*((num(S.tag)+num(S.pit))/100);
+  const niHealth=red*((num(S.niRed)+num(S.hRed))/100)+full*((num(S.niFull)+num(S.hFull))/100);
+  const pensEmp=gross*(pens/100);
+  const kerenEmp=S.keren?gross*(num(S.kep)/100):0;
+  const net=gross-tax-niHealth-pensEmp-kerenEmp;
+  const empPens=gross*((num(S.tag)+num(S.pit))/100),empKeren=S.keren?gross*(num(S.ker)/100):0;
   document.getElementById('netNum').innerHTML=money(net)+'<small> ₪</small>';
   document.getElementById('netSub').textContent=gross>0?('מתוך ברוטו '+money(gross)+' ₪ · '+Math.round(net/gross*100)+'% ביד'):'';
   document.getElementById('dGross').textContent=money(gross)+' ₪';
   document.getElementById('dTax').textContent='- '+money(tax)+' ₪';
-  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(points||0)+' נק\' זיכוי)';
+  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(+points.toFixed(2))+' נק\' זיכוי)';
   document.getElementById('dNi').textContent='- '+money(niHealth)+' ₪';
   document.getElementById('dPens').textContent='- '+money(pensEmp)+' ₪';
-  document.getElementById('empNote').innerHTML='🏢 בנוסף, המעסיק מפריש לפנסיה שלך <b>'+money(empPens)+' ₪</b> (תגמולים '+num(S.tag)+'% + פיצויים '+num(S.pit)+'%) - זה לא יורד מהנטו, זה מעבר אליו.';
+  const kr=document.getElementById('dKerenRow');
+  if(S.keren){kr.hidden=false;document.getElementById('dKeren').textContent='- '+money(kerenEmp)+' ₪';}else kr.hidden=true;
+  let emp='🏢 בנוסף, המעסיק מפריש לפנסיה שלך <b>'+money(empPens)+' ₪</b> (תגמולים '+num(S.tag)+'% + פיצויים '+num(S.pit)+'%)';
+  if(S.keren)emp+=', ולקרן ההשתלמות <b>'+money(empKeren)+' ₪</b> ('+num(S.ker)+'%)';
+  emp+=' - זה לא יורד מהנטו, זה מעבר אליו.';
+  document.getElementById('empNote').innerHTML=emp;
 }
 
+/* credit-points builder */
+function renderCP(){
+  const host=document.getElementById('cpList');host.innerHTML='';
+  S.cp.forEach((r,i)=>{
+    const row=document.createElement('div');row.className='cp-row';
+    row.innerHTML='<input class="cp-l" data-i="'+i+'" data-k="l" value="'+esc(r.l)+'" aria-label="מצב">'+
+      '<div class="cp-mini"><input data-i="'+i+'" data-k="p" inputmode="decimal" value="'+r.p+'" aria-label="נקודות"><span class="cp-u">נק\'</span></div>'+
+      '<div class="cp-mini"><span class="cp-u">×</span><input data-i="'+i+'" data-k="q" inputmode="numeric" value="'+r.q+'" aria-label="כמות"></div>'+
+      '<button class="cp-del" data-i="'+i+'" type="button" aria-label="מחיקת שורה">×</button>';
+    host.appendChild(row);
+  });
+  host.querySelectorAll('input[data-i]').forEach(inp=>{
+    inp.addEventListener('input',()=>{const i=+inp.dataset.i,k=inp.dataset.k;S.cp[i][k]=(k==='l')?inp.value:num(inp.value);save();calc();});
+  });
+  host.querySelectorAll('.cp-del').forEach(b=>{b.onclick=()=>{S.cp.splice(+b.dataset.i,1);save();renderCP();calc();};});
+}
 /* editable brackets */
 function renderBrackets(){
   const host=document.getElementById('ttBrackets');host.innerHTML='';
@@ -507,33 +578,36 @@ function renderBrackets(){
 }
 function applyTables(){
   document.getElementById('gross').value=grp(S.gross);
-  document.getElementById('points').value=S.points;
   document.getElementById('pens').value=S.pens;
+  document.getElementById('kerenChk').checked=!!S.keren;
   const set=(id,v)=>{document.getElementById(id).value=v;};
   set('tPoint',S.pointValue);set('tNiRed',S.niRed);set('tNiFull',S.niFull);set('tHRed',S.hRed);set('tHFull',S.hFull);
   set('tRedThresh',grp(S.redThresh));set('tCeiling',grp(S.ceiling));set('tTag',S.tag);set('tPit',S.pit);
-  renderBrackets();
+  set('tKep',S.kep);set('tKer',S.ker);set('tKerCeil',grp(S.kerenCeil));
+  renderBrackets();renderCP();
 }
 
 /* inputs */
 function liveFormat(inp){const p=inp.selectionStart,old=inp.value;inp.value=grp(inp.value);const d=inp.value.length-old.length;try{inp.setSelectionRange(p+d,p+d);}catch(e){}}
 const grossInp=document.getElementById('gross');
 grossInp.addEventListener('input',()=>{liveFormat(grossInp);S.gross=num(grossInp.value);save();calc();});
-['points','pens'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{S[id]=num(el.value);save();calc();});});
-[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit']].forEach(([id,key])=>{
+document.getElementById('pens').addEventListener('input',e=>{S.pens=num(e.target.value);save();calc();});
+document.getElementById('kerenChk').addEventListener('change',e=>{S.keren=e.target.checked;save();calc();});
+document.getElementById('cpAdd').onclick=()=>{S.cp.push({l:'',p:0.5,q:1});save();renderCP();calc();const rows=document.querySelectorAll('#cpList .cp-l');if(rows.length)rows[rows.length-1].focus();};
+[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit'],['tKep','kep'],['tKer','ker'],['tKerCeil','kerenCeil']].forEach(([id,key])=>{
   const el=document.getElementById(id);
-  el.addEventListener('input',()=>{if(key==='redThresh'||key==='ceiling')liveFormat(el);S[key]=num(el.value);save();calc();});
+  el.addEventListener('input',()=>{if(key==='redThresh'||key==='ceiling'||key==='kerenCeil')liveFormat(el);S[key]=num(el.value);save();calc();});
 });
 document.getElementById('ttReset').onclick=()=>{
-  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit})));
+  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit,kep:DEF.kep,ker:DEF.ker,kerenCeil:DEF.kerenCeil})));
   save();applyTables();calc();
 };
 
 /* ── save / share ── */
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}syncLive();}
-function loadLocal(){try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&typeof s==='object'&&('brackets'in s))return s;}catch(e){}return null;}
+function loadLocal(){try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&typeof s==='object'&&('cp'in s))return s;}catch(e){}return null;}
 function enc(){return btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
-function dec(str){try{const s=JSON.parse(decodeURIComponent(escape(atob(str))));if(s&&typeof s==='object'&&('brackets'in s))return s;}catch(e){}return null;}
+function dec(str){try{const s=JSON.parse(decodeURIComponent(escape(atob(str))));if(s&&typeof s==='object'&&('cp'in s))return s;}catch(e){}return null;}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#s='+encodeURIComponent(enc());}
 let docId=null,pushT=null;

@@ -273,7 +273,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="ded-row" id="dKerenRow" hidden><span class="dr-l">קרן השתלמות (חלק העובד)</span><span class="dr-v" id="dKeren">0 ₪</span></div>
     </div>
     <div class="emp-note" id="empNote"></div>
-    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה להמחשה בלבד, לא תחשיב שכר רשמי. לא כולל את הטבת המס על הפרשות הפנסיה, ומרכיבים אישיים (תושב פריפריה, הנחות נוספות). קרן השתלמות מעל תקרת השכר הפטורה (₪15,712) עשויה להיות חייבת במס. הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
+    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה להמחשה בלבד, לא תחשיב שכר רשמי. <b>הכלי לא כולל את הטבת המס על הפרשות הפנסיה</b> - הפרשות לפנסיה מזכות בהקלת מס, ולכן הנטו בתלוש בפועל בדרך כלל <b>גבוה</b> מההערכה כאן, ואצל שכר גבוה עם פנסיה+קרן ההפרש יכול להגיע למאות ואף ~1,500 ש"ח בחודש. גם לא כולל מרכיבים אישיים (תושב פריפריה, שווי מס שאינו במזומן כמו ארוחות, הנחות נוספות). קרן ההשתלמות מחושבת עד תקרת השכר הפטורה (₪15,712). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
   </div>
 
   <details class="card tt-wrap">
@@ -524,9 +524,10 @@ function calc(){
   const red=Math.min(gross,num(S.redThresh)),full=Math.max(0,Math.min(gross,num(S.ceiling))-num(S.redThresh));
   const niHealth=red*((num(S.niRed)+num(S.hRed))/100)+full*((num(S.niFull)+num(S.hFull))/100);
   const pensEmp=gross*(pens/100);
-  const kerenEmp=S.keren?gross*(num(S.kep)/100):0;
+  const kerenBase=Math.min(gross,num(S.kerenCeil));
+  const kerenEmp=S.keren?kerenBase*(num(S.kep)/100):0;
   const net=gross-tax-niHealth-pensEmp-kerenEmp;
-  const empPens=gross*((num(S.tag)+num(S.pit))/100),empKeren=S.keren?gross*(num(S.ker)/100):0;
+  const empPens=gross*((num(S.tag)+num(S.pit))/100),empKeren=S.keren?kerenBase*(num(S.ker)/100):0;
   document.getElementById('netNum').innerHTML=money(net)+'<small> ₪</small>';
   document.getElementById('netSub').textContent=gross>0?('מתוך ברוטו '+money(gross)+' ₪ · '+Math.round(net/gross*100)+'% ביד'):'';
   document.getElementById('dGross').textContent=money(gross)+' ₪';

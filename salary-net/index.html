@@ -206,6 +206,11 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .self-note b{font-weight:900}
 .save-note{background:linear-gradient(140deg,rgba(var(--pine-rgb),.14),rgba(var(--pine-rgb),.07));border:1px solid rgba(var(--pine-rgb),.2);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:13px;font-weight:700;color:var(--pine-deep);line-height:1.55}
 .save-note b{font-weight:900}
+.lbl-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.unit-tg{display:flex;gap:2px;background:var(--sage-tint);border-radius:8px;padding:2px}
+.unit-tg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:12px;color:var(--ink-soft);padding:3px 10px;border-radius:6px;cursor:pointer;min-width:30px}
+.unit-tg button.active{background:var(--pine);color:#fff}
+.mini-hint{font-size:11px;font-weight:700;color:var(--pine-deep);margin-top:5px;min-height:14px}
 /* credit-points builder */
 .cp-head{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;font-size:10.5px;font-weight:800;color:var(--ink-soft);padding:0 2px 5px}
 .cp-row{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;margin-bottom:7px;align-items:center}
@@ -262,12 +267,14 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <div id="selfFields" hidden>
       <div class="fields2" style="margin-top:12px">
         <div class="field">
-          <label for="pensSelf">הפרשה לפנסיה</label>
-          <div class="input-shell"><input id="pensSelf" type="text" inputmode="decimal" value="0" placeholder="0" aria-label="אחוז הפרשה לפנסיה"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
+          <div class="lbl-row"><label for="pensSelf">הפרשה לפנסיה (חודשי)</label><div class="unit-tg" id="pensSelfTg"><button type="button" data-u="ils" class="active">₪</button><button type="button" data-u="pct">%</button></div></div>
+          <div class="input-shell"><input id="pensSelf" type="text" inputmode="decimal" value="0" placeholder="0" aria-label="הפרשה לפנסיה"><span class="unit" id="pensSelfU" style="padding-inline-start:0;padding-inline-end:13px">₪</span></div>
+          <div class="mini-hint" id="pensSelfEq"></div>
         </div>
         <div class="field">
-          <label for="kerenSelf">הפרשה לקרן השתלמות</label>
-          <div class="input-shell"><input id="kerenSelf" type="text" inputmode="decimal" value="0" placeholder="0" aria-label="אחוז הפרשה לקרן השתלמות"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
+          <div class="lbl-row"><label for="kerenSelf">הפרשה לקרן השתלמות (חודשי)</label><div class="unit-tg" id="kerenSelfTg"><button type="button" data-u="ils" class="active">₪</button><button type="button" data-u="pct">%</button></div></div>
+          <div class="input-shell"><input id="kerenSelf" type="text" inputmode="decimal" value="0" placeholder="0" aria-label="הפרשה לקרן השתלמות"><span class="unit" id="kerenSelfU" style="padding-inline-start:0;padding-inline-end:13px">₪</span></div>
+          <div class="mini-hint" id="kerenSelfEq"></div>
         </div>
       </div>
       <div class="cp-note" id="selfHint" style="margin-top:8px"></div>
@@ -562,7 +569,7 @@ const DEF={
   tag:6.5, pit:6,
   pzRate:35, pzPct:7, pzCeil:9700,
   mode:'employee', niRedSelf:2.87, niFullSelf:12.83, niDeduct:52,
-  pensSelf:0, kerenSelf:0,
+  pensSelf:0, kerenSelf:0, pensSelfUnit:'ils', kerenSelfUnit:'ils',
   spNikPct:11, spZikPct:5.5, spZikRate:35, spIncCeil:19400,
   skDedPct:4.5, skIncCeil:24450
 };
@@ -588,8 +595,8 @@ function calc(){
   document.getElementById('cpTotal').textContent=(+points.toFixed(2))+'';
   const credit=points*num(S.pointValue);
   // ── self-employed voluntary pension + keren contributions and their recognized (deductible) portions
-  const pS=self?gross*(num(S.pensSelf)/100):0;          // pension contribution (₪)
-  const kS=self?gross*(num(S.kerenSelf)/100):0;         // keren contribution (₪)
+  const pS=self?(S.pensSelfUnit==='pct'?gross*(num(S.pensSelf)/100):num(S.pensSelf)):0;   // pension contribution (₪/mo)
+  const kS=self?(S.kerenSelfUnit==='pct'?gross*(num(S.kerenSelf)/100):num(S.kerenSelf)):0; // keren contribution (₪/mo)
   const pNik=self?Math.min(pS,(num(S.spNikPct)/100)*Math.min(gross,num(S.spIncCeil))):0;               // pension ניכוי (47)
   const pZikBase=self?Math.min(Math.max(0,pS-pNik),(num(S.spZikPct)/100)*Math.min(gross,num(S.spIncCeil))):0;
   const kDed=self?Math.min(kS,(num(S.skDedPct)/100)*Math.min(gross,num(S.skIncCeil))):0;                // keren ניכוי (recognized)
@@ -637,6 +644,11 @@ function calc(){
   if(self&&kS>0){skr.hidden=false;document.getElementById('dSelfKeren').textContent='- '+money(kS)+' ₪';}else skr.hidden=true;
   const sn=document.getElementById('saveNote');
   if(self&&saveAmt>0.5){sn.hidden=false;sn.innerHTML='💚 ההפרשות שלך לפנסיה וקרן הקטינו לך מס+ביטוח לאומי ב<b>'+money(saveAmt)+' ₪</b> החודש - זה חיסכון שגם עובד בשבילך וגם מקטין את המס.';}else sn.hidden=true;
+  if(self){
+    const eqP=document.getElementById('pensSelfEq'),eqK=document.getElementById('kerenSelfEq');
+    if(eqP)eqP.textContent=(pS>0&&gross>0)?('≈ '+(S.pensSelfUnit==='pct'?money(pS)+' ₪ בחודש':(pS/gross*100).toFixed(1)+'% מההכנסה')+' · '+money(pS*12)+' ₪ בשנה'):'';
+    if(eqK)eqK.textContent=(kS>0&&gross>0)?('≈ '+(S.kerenSelfUnit==='pct'?money(kS)+' ₪ בחודש':(kS/gross*100).toFixed(1)+'% מההכנסה')+' · '+money(kS*12)+' ₪ בשנה'):'';
+  }
   const dt=document.getElementById('discTxt');
   if(dt){if(EMP_DISC===null)EMP_DISC=dt.innerHTML;dt.innerHTML=self?SELF_DISC:EMP_DISC;}
   const en=document.getElementById('empNote');
@@ -699,6 +711,7 @@ function applyTables(){
   set('tPzRate',S.pzRate);set('tPzPct',S.pzPct);set('tPzCeil',grp(S.pzCeil));
   set('tNiRedSelf',S.niRedSelf);set('tNiFullSelf',S.niFullSelf);set('tNiDeduct',S.niDeduct);
   set('pensSelf',S.pensSelf);set('kerenSelf',S.kerenSelf);
+  applyUnitToggle('pensSelfTg','pensSelfUnit','pensSelfU');applyUnitToggle('kerenSelfTg','kerenSelfUnit','kerenSelfU');
   set('tSpNikPct',S.spNikPct);set('tSpZikPct',S.spZikPct);set('tSpZikRate',S.spZikRate);set('tSpIncCeil',grp(S.spIncCeil));
   set('tSkDedPct',S.skDedPct);set('tSkIncCeil',grp(S.skIncCeil));
   renderBrackets();renderCP();applyMode();
@@ -712,6 +725,16 @@ document.getElementById('pens').addEventListener('input',e=>{S.pens=num(e.target
 document.getElementById('kerenChk').addEventListener('change',e=>{S.keren=e.target.checked;save();calc();});
 document.getElementById('pensSelf').addEventListener('input',e=>{S.pensSelf=num(e.target.value);save();calc();});
 document.getElementById('kerenSelf').addEventListener('input',e=>{S.kerenSelf=num(e.target.value);save();calc();});
+function applyUnitToggle(tgId,uKey,uSpanId){
+  const tg=document.getElementById(tgId),unit=S[uKey]==='pct'?'pct':'ils';
+  tg.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.u===unit));
+  document.getElementById(uSpanId).textContent=unit==='pct'?'%':'₪';
+}
+[['pensSelfTg','pensSelfUnit','pensSelfU'],['kerenSelfTg','kerenSelfUnit','kerenSelfU']].forEach(([tgId,uKey,uSpanId])=>{
+  document.getElementById(tgId).querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{S[uKey]=b.dataset.u;applyUnitToggle(tgId,uKey,uSpanId);save();calc();};
+  });
+});
 function applyMode(){
   const self=S.mode==='self';
   document.getElementById('modeEmployee').classList.toggle('active',!self);

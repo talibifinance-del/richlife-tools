@@ -198,6 +198,12 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .keren-tg input{width:20px;height:20px;accent-color:var(--pine);flex:none;cursor:pointer;margin-top:1px}
 .keren-tg .kt-t{font-size:14px;font-weight:800;color:var(--pine-darker)}
 .keren-tg .kt-t small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+/* employee / self-employed mode toggle */
+.mode-tg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--sage-tint);border-radius:13px;padding:5px;margin:4px 0 15px}
+.mode-btn{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14.5px;color:var(--ink-soft);padding:11px 8px;border-radius:9px;cursor:pointer;transition:all .15s}
+.mode-btn.active{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
+.self-note{background:rgba(var(--pine-rgb),.08);border-radius:12px;padding:12px 14px;margin-top:13px;font-size:12.5px;font-weight:600;color:var(--pine-deep);line-height:1.55}
+.self-note b{font-weight:900}
 /* credit-points builder */
 .cp-head{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;font-size:10.5px;font-weight:800;color:var(--ink-soft);padding:0 2px 5px}
 .cp-row{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;margin-bottom:7px;align-items:center}
@@ -233,18 +239,25 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 
   <div class="card">
     <span class="sec-lbl">💵 הנתונים שלך</span>
+    <div class="mode-tg" role="tablist">
+      <button type="button" class="mode-btn active" id="modeEmployee" role="tab">👔 שכיר/ה</button>
+      <button type="button" class="mode-btn" id="modeSelf" role="tab">💼 עצמאי/ת</button>
+    </div>
     <div class="field">
-      <label for="gross">שכר ברוטו חודשי</label>
+      <label for="gross" id="grossLbl">שכר ברוטו חודשי</label>
       <div class="input-shell"><span class="unit">₪</span><input id="gross" type="text" inputmode="numeric" value="12,000" placeholder="0" aria-label="שכר ברוטו חודשי"></div>
     </div>
-    <div class="field" style="margin-top:12px">
-      <label for="pens">הפרשת עובד לפנסיה</label>
-      <div class="input-shell"><input id="pens" type="text" inputmode="decimal" value="6" placeholder="0" aria-label="אחוז הפרשת עובד לפנסיה"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
+    <div id="employeeOnly">
+      <div class="field" style="margin-top:12px">
+        <label for="pens">הפרשת עובד לפנסיה</label>
+        <div class="input-shell"><input id="pens" type="text" inputmode="decimal" value="6" placeholder="0" aria-label="אחוז הפרשת עובד לפנסיה"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
+      </div>
+      <label class="keren-tg" for="kerenChk">
+        <input type="checkbox" id="kerenChk">
+        <span class="kt-t">🎓 מקבל/ת קרן השתלמות<small>לא כולם מקבלים. אם כן: העובד מפריש 2.5% (יורד מהנטו) והמעסיק 7.5% (מעבר לנטו). השיעורים ניתנים לעדכון בטבלאות.</small></span>
+      </label>
     </div>
-    <label class="keren-tg" for="kerenChk">
-      <input type="checkbox" id="kerenChk">
-      <span class="kt-t">🎓 מקבל/ת קרן השתלמות<small>לא כולם מקבלים. אם כן: העובד מפריש 2.5% (יורד מהנטו) והמעסיק 7.5% (מעבר לנטו). השיעורים ניתנים לעדכון בטבלאות.</small></span>
-    </label>
+    <div class="self-note" id="selfNote" hidden>💼 עצמאי/ת: מזינים <b>הכנסה חייבת חודשית (הרווח לפני מס)</b>. עצמאי/ת משלמ/ת ביטוח לאומי גבוה יותר (גם "חלק המעסיק"), ומנכה 52% מדמי הב"ל מההכנסה החייבת. אין הפרשות מעסיק. פנסיה של עצמאי היא חיסכון וולונטרי עם הטבת מס - תיווסף בהמשך.</div>
   </div>
 
   <div class="card">
@@ -266,10 +279,10 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="nh-sub" id="netSub"></div>
     </div>
     <div class="ded">
-      <div class="ded-row gross"><span class="dr-l">שכר ברוטו</span><span class="dr-v" id="dGross">0 ₪</span></div>
+      <div class="ded-row gross"><span class="dr-l" id="dGrossLbl">שכר ברוטו</span><span class="dr-v" id="dGross">0 ₪</span></div>
       <div class="ded-row"><span class="dr-l">מס הכנסה<small id="dTaxSub"></small></span><span class="dr-v" id="dTax">0 ₪</span></div>
-      <div class="ded-row"><span class="dr-l">ביטוח לאומי + מס בריאות</span><span class="dr-v" id="dNi">0 ₪</span></div>
-      <div class="ded-row"><span class="dr-l">פנסיה (חלק העובד)</span><span class="dr-v" id="dPens">0 ₪</span></div>
+      <div class="ded-row"><span class="dr-l" id="dNiLbl">ביטוח לאומי + מס בריאות</span><span class="dr-v" id="dNi">0 ₪</span></div>
+      <div class="ded-row" id="dPensRow"><span class="dr-l">פנסיה (חלק העובד)</span><span class="dr-v" id="dPens">0 ₪</span></div>
       <div class="ded-row" id="dKerenRow" hidden><span class="dr-l">קרן השתלמות (חלק העובד)</span><span class="dr-v" id="dKeren">0 ₪</span></div>
     </div>
     <div class="emp-note" id="empNote"></div>
@@ -298,6 +311,14 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
         <div class="tt-field"><label>מס בריאות - מלא (%)</label><div class="tt-cell"><input id="tHFull" inputmode="decimal" aria-label="מס בריאות מלא"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>מדרגה מופחתת עד (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tRedThresh" inputmode="numeric" aria-label="סף מדרגה מופחתת"></div></div>
         <div class="tt-field"><label>תקרת הכנסה לביטוח (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tCeiling" inputmode="numeric" aria-label="תקרת ביטוח לאומי"></div></div>
+      </div>
+
+      <div class="tt-sub">ביטוח לאומי לעצמאי/ת</div>
+      <div class="tt-note" style="margin-bottom:10px">עצמאי/ת משלמ/ת ביטוח לאומי גבוה יותר (כולל "חלק המעסיק"). מס הבריאות זהה. ניתן לנכות 52% מדמי הב"ל מההכנסה החייבת (סעיף 47א).</div>
+      <div class="tt-grid">
+        <div class="tt-field"><label>ביטוח לאומי עצמאי - מופחת (%)</label><div class="tt-cell"><input id="tNiRedSelf" inputmode="decimal" aria-label="ביטוח לאומי עצמאי מופחת"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>ביטוח לאומי עצמאי - מלא (%)</label><div class="tt-cell"><input id="tNiFullSelf" inputmode="decimal" aria-label="ביטוח לאומי עצמאי מלא"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>ניכוי מהב"ל להכנסה חייבת (%)</label><div class="tt-cell"><input id="tNiDeduct" inputmode="decimal" aria-label="ניכוי ביטוח לאומי"><span class="u suf">%</span></div></div>
       </div>
 
       <div class="tt-sub">פנסיה + קרן השתלמות</div>
@@ -489,7 +510,7 @@ const money=v=>fmt.format(Math.round(+v||0));
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const SKEY='rl_salary_net_v1';
+const SKEY='rl_salary_net_v2';
 const DEF={
   gross:12000, pens:6, keren:false, kep:2.5, ker:7.5, kerenCeil:15712,
   cp:[
@@ -510,7 +531,8 @@ const DEF={
   pointValue:242,
   niRed:1.04, niFull:7, hRed:3.23, hFull:5.17, redThresh:7703, ceiling:50695,
   tag:6.5, pit:6,
-  pzRate:35, pzPct:7, pzCeil:9700
+  pzRate:35, pzPct:7, pzCeil:9700,
+  mode:'employee', niRedSelf:2.87, niFullSelf:12.83, niDeduct:52
 };
 let S=JSON.parse(JSON.stringify(DEF));
 
@@ -525,32 +547,53 @@ function incomeTax(gross){
   return tax;
 }
 function cpSum(){return S.cp.reduce((s,r)=>s+num(r.p)*num(r.q),0);}
+let EMP_DISC=null;
+const SELF_DISC='הערכה חודשית להמחשה לעצמאי/ת, לא תחשיב רשמי. כוללת ביטוח לאומי ומס בריאות בשיעורי עצמאי/ת, וניכוי 52% מדמי הב"ל מההכנסה החייבת (סעיף 47א). <b>לא כלולה עדיין הטבת המס על פנסיה של עצמאי/ת</b> (ניכוי סעיף 47 + זיכוי 45א) - תיווסף בהמשך, אז אם מפרישים לפנסיה המס בפועל עשוי להיות נמוך יותר. המקדמות בפועל מחושבות שנתית, אז חודש בודד עשוי להיראות שונה. הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.';
 function calc(){
   syncLive();
+  const self=S.mode==='self';
   const gross=num(S.gross),pens=num(S.pens),points=cpSum();
   document.getElementById('cpTotal').textContent=(+points.toFixed(2))+'';
-  const pensEmp=gross*(pens/100);
-  const pensZikuy=Math.min(pensEmp,(num(S.pzPct)/100)*Math.min(gross,num(S.pzCeil)))*(num(S.pzRate)/100);
-  const grossTax=incomeTax(gross),credit=points*num(S.pointValue),tax=Math.max(0,grossTax-credit-pensZikuy);
+  // national insurance + health (NI rate differs by mode; health is the same)
   const red=Math.min(gross,num(S.redThresh)),full=Math.max(0,Math.min(gross,num(S.ceiling))-num(S.redThresh));
-  const niHealth=red*((num(S.niRed)+num(S.hRed))/100)+full*((num(S.niFull)+num(S.hFull))/100);
+  const niR=self?num(S.niRedSelf):num(S.niRed), niF=self?num(S.niFullSelf):num(S.niFull);
+  const ni=red*(niR/100)+full*(niF/100);
+  const health=red*(num(S.hRed)/100)+full*(num(S.hFull)/100);
+  const niHealth=ni+health;
+  // pension (employee only) + its 45א zikuy
+  const pensEmp=self?0:gross*(pens/100);
+  const pensZikuy=self?0:Math.min(pensEmp,(num(S.pzPct)/100)*Math.min(gross,num(S.pzCeil)))*(num(S.pzRate)/100);
+  // income-tax base: self deducts 52% of NI (סעיף 47א) from taxable income
+  const niDeduction=self?ni*(num(S.niDeduct)/100):0;
+  const taxBase=Math.max(0,gross-niDeduction);
+  const grossTax=incomeTax(taxBase),credit=points*num(S.pointValue),tax=Math.max(0,grossTax-credit-pensZikuy);
   const kerenBase=Math.min(gross,num(S.kerenCeil));
-  const kerenEmp=S.keren?kerenBase*(num(S.kep)/100):0;
+  const kerenEmp=(self||!S.keren)?0:kerenBase*(num(S.kep)/100);
   const net=gross-tax-niHealth-pensEmp-kerenEmp;
-  const empPens=gross*((num(S.tag)+num(S.pit))/100),empKeren=S.keren?kerenBase*(num(S.ker)/100):0;
   document.getElementById('netNum').innerHTML=money(net)+'<small> ₪</small>';
-  document.getElementById('netSub').textContent=gross>0?('מתוך ברוטו '+money(gross)+' ₪ · '+Math.round(net/gross*100)+'% ביד'):'';
+  document.getElementById('netSub').textContent=gross>0?('מתוך '+money(gross)+' ₪ '+(self?'הכנסה':'ברוטו')+' · '+Math.round(net/gross*100)+'% ביד'):'';
   document.getElementById('dGross').textContent=money(gross)+' ₪';
+  document.getElementById('dGrossLbl') && (document.getElementById('dGrossLbl').textContent=self?'הכנסה חייבת':'שכר ברוטו');
   document.getElementById('dTax').textContent='- '+money(tax)+' ₪';
-  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(+points.toFixed(2))+' נק\' זיכוי'+(pensZikuy>0?' ו-'+money(pensZikuy)+' זיכוי פנסיה':'')+')';
+  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(+points.toFixed(2))+' נק\' זיכוי'+(pensZikuy>0?' ו-'+money(pensZikuy)+' זיכוי פנסיה':'')+(self&&niDeduction>0?'; אחרי ניכוי '+money(niDeduction)+' מהב"ל':'')+')';
+  document.getElementById('dNiLbl').textContent=self?'ביטוח לאומי + מס בריאות (עצמאי/ת)':'ביטוח לאומי + מס בריאות';
   document.getElementById('dNi').textContent='- '+money(niHealth)+' ₪';
+  document.getElementById('dPensRow').hidden=self;
   document.getElementById('dPens').textContent='- '+money(pensEmp)+' ₪';
   const kr=document.getElementById('dKerenRow');
-  if(S.keren){kr.hidden=false;document.getElementById('dKeren').textContent='- '+money(kerenEmp)+' ₪';}else kr.hidden=true;
-  let emp='🏢 בנוסף, המעסיק מפריש לפנסיה שלך <b>'+money(empPens)+' ₪</b> (תגמולים '+num(S.tag)+'% + פיצויים '+num(S.pit)+'%)';
-  if(S.keren)emp+=', ולקרן ההשתלמות <b>'+money(empKeren)+' ₪</b> ('+num(S.ker)+'%)';
-  emp+=' - זה לא יורד מהנטו, זה מעבר אליו.';
-  document.getElementById('empNote').innerHTML=emp;
+  if(!self&&S.keren){kr.hidden=false;document.getElementById('dKeren').textContent='- '+money(kerenEmp)+' ₪';}else kr.hidden=true;
+  const dt=document.getElementById('discTxt');
+  if(dt){if(EMP_DISC===null)EMP_DISC=dt.innerHTML;dt.innerHTML=self?SELF_DISC:EMP_DISC;}
+  const en=document.getElementById('empNote');
+  if(self){en.hidden=true;}
+  else{
+    en.hidden=false;
+    const empPens=gross*((num(S.tag)+num(S.pit))/100),empKeren=S.keren?kerenBase*(num(S.ker)/100):0;
+    let emp='🏢 בנוסף, המעסיק מפריש לפנסיה שלך <b>'+money(empPens)+' ₪</b> (תגמולים '+num(S.tag)+'% + פיצויים '+num(S.pit)+'%)';
+    if(S.keren)emp+=', ולקרן ההשתלמות <b>'+money(empKeren)+' ₪</b> ('+num(S.ker)+'%)';
+    emp+=' - זה לא יורד מהנטו, זה מעבר אליו.';
+    en.innerHTML=emp;
+  }
 }
 
 /* credit-points builder */
@@ -599,7 +642,8 @@ function applyTables(){
   set('tRedThresh',grp(S.redThresh));set('tCeiling',grp(S.ceiling));set('tTag',S.tag);set('tPit',S.pit);
   set('tKep',S.kep);set('tKer',S.ker);set('tKerCeil',grp(S.kerenCeil));
   set('tPzRate',S.pzRate);set('tPzPct',S.pzPct);set('tPzCeil',grp(S.pzCeil));
-  renderBrackets();renderCP();
+  set('tNiRedSelf',S.niRedSelf);set('tNiFullSelf',S.niFullSelf);set('tNiDeduct',S.niDeduct);
+  renderBrackets();renderCP();applyMode();
 }
 
 /* inputs */
@@ -608,13 +652,23 @@ const grossInp=document.getElementById('gross');
 grossInp.addEventListener('input',()=>{liveFormat(grossInp);S.gross=num(grossInp.value);save();calc();});
 document.getElementById('pens').addEventListener('input',e=>{S.pens=num(e.target.value);save();calc();});
 document.getElementById('kerenChk').addEventListener('change',e=>{S.keren=e.target.checked;save();calc();});
+function applyMode(){
+  const self=S.mode==='self';
+  document.getElementById('modeEmployee').classList.toggle('active',!self);
+  document.getElementById('modeSelf').classList.toggle('active',self);
+  document.getElementById('employeeOnly').hidden=self;
+  document.getElementById('selfNote').hidden=!self;
+  document.getElementById('grossLbl').textContent=self?'הכנסה חודשית (לפני מס)':'שכר ברוטו חודשי';
+}
+document.getElementById('modeEmployee').onclick=()=>{S.mode='employee';save();applyMode();calc();};
+document.getElementById('modeSelf').onclick=()=>{S.mode='self';save();applyMode();calc();};
 document.getElementById('cpAdd').onclick=()=>{S.cp.push({l:'',p:0.5,q:1});save();renderCP();calc();const rows=document.querySelectorAll('#cpList .cp-l');if(rows.length)rows[rows.length-1].focus();};
-[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit'],['tKep','kep'],['tKer','ker'],['tKerCeil','kerenCeil'],['tPzRate','pzRate'],['tPzPct','pzPct'],['tPzCeil','pzCeil']].forEach(([id,key])=>{
+[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit'],['tKep','kep'],['tKer','ker'],['tKerCeil','kerenCeil'],['tPzRate','pzRate'],['tPzPct','pzPct'],['tPzCeil','pzCeil'],['tNiRedSelf','niRedSelf'],['tNiFullSelf','niFullSelf'],['tNiDeduct','niDeduct']].forEach(([id,key])=>{
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{if(key==='redThresh'||key==='ceiling'||key==='kerenCeil'||key==='pzCeil')liveFormat(el);S[key]=num(el.value);save();calc();});
 });
 document.getElementById('ttReset').onclick=()=>{
-  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit,kep:DEF.kep,ker:DEF.ker,kerenCeil:DEF.kerenCeil,pzRate:DEF.pzRate,pzPct:DEF.pzPct,pzCeil:DEF.pzCeil})));
+  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit,kep:DEF.kep,ker:DEF.ker,kerenCeil:DEF.kerenCeil,pzRate:DEF.pzRate,pzPct:DEF.pzPct,pzCeil:DEF.pzCeil,niRedSelf:DEF.niRedSelf,niFullSelf:DEF.niFullSelf,niDeduct:DEF.niDeduct})));
   save();applyTables();calc();
 };
 

@@ -582,9 +582,9 @@ const DEF={
 let S=JSON.parse(JSON.stringify(DEF));
 const MICON={product:'📦',service:'🕐',hybrid:'🎨'};
 const MODE_HINT={
-  product:'📦 מוצר: העלות בעיקר מהחומרים שאת קונה מראש. ממלאים חומרים, וזמן אם יש הכנה.',
-  service:'🕐 שירות: אין חומרים - העלות היא הזמן שלך. ממלאים כמה שעות ההצעה לוקחת.',
-  hybrid:'🎨 היברידי (סדנה): גם חומרים וגם זמן. הרווח הגולמי יוצא נמוך יותר כי יש חומרים.'
+  product:'📦 מוצר: העלות בעיקר מהחומרים שאת קונה מראש. ממלאים חומרים + זמן אם יש הכנה.',
+  service:'🕐 שירות: העלות בעיקר מהזמן שלך. אבל אם יש חומרים (למשל מחברת שאת נותנת ללקוח) - אפשר להוסיף גם אותם.',
+  hybrid:'🎨 היברידי (סדנה): גם חומרים וגם זמן במשקל דומה. הרווח הגולמי יוצא נמוך יותר כי יש חומרים.'
 };
 // real personal tax (2026): income tax after credit points + self-employed NI+health, with 52% deduction
 function incMonthly(inc){var br=[[7010,10],[10060,14],[19000,20],[25100,31],[46690,35],[60130,47],[Infinity,50]];var t=0,p=0;for(var i=0;i<br.length;i++){var to=br[i][0];if(inc>p)t+=(Math.min(inc,to)-p)*br[i][1]/100;p=to;if(inc<=to)break;}return t;}
@@ -668,10 +668,11 @@ function renderCatList(){
     var card=document.createElement('div');card.className='cat-card';
     card.innerHTML='<div class="cc-top"><span class="cc-name">'+MICON[o.mode]+' '+(esc(o.name)||'ללא שם')+'</span><span class="cc-price">'+money(pr.fin)+' ₪</span></div>'+
       '<div class="cc-sub">רווח גולמי '+Math.round(pr.margin)+'% · עלות ישירה '+money(pr.direct)+' ₪ · '+(+num(o.hours))+' שעות</div>'+
-      '<div class="cc-actions"><button data-i="'+i+'" class="edit" type="button">✎ עריכה</button><button data-i="'+i+'" class="del" type="button">מחיקה</button></div>';
+      '<div class="cc-actions"><button data-i="'+i+'" class="edit" type="button">✎ עריכה</button><button data-i="'+i+'" class="dup" type="button">⧉ שכפול</button><button data-i="'+i+'" class="del" type="button">מחיקה</button></div>';
     host.appendChild(card);
   });
   host.querySelectorAll('.edit').forEach(function(b){b.onclick=function(){S.editIdx=+b.dataset.i;save();renderCatalog();window.scrollTo(0,0);};});
+  host.querySelectorAll('.dup').forEach(function(b){b.onclick=function(){var o=JSON.parse(JSON.stringify(S.offerings[+b.dataset.i]));o.name=(o.name||'הצעה')+' (עותק)';S.offerings.push(o);S.editIdx=S.offerings.length-1;save();renderCatalog();window.scrollTo(0,0);};});
   host.querySelectorAll('.del').forEach(function(b){b.onclick=function(){if(!confirm('למחוק את המוצר?'))return;S.offerings.splice(+b.dataset.i,1);save();renderCatList();};});
 }
 function curOffer(){return S.offerings[S.editIdx];}
@@ -697,7 +698,7 @@ function renderMats(){
 function applyMode(){
   var o=curOffer();if(!o)return;
   [['mProduct','product'],['mService','service'],['mHybrid','hybrid']].forEach(function(a){document.getElementById(a[0]).classList.toggle('active',o.mode===a[1]);});
-  document.getElementById('materialsBlock').hidden=(o.mode==='service');
+  document.getElementById('materialsBlock').hidden=false; // materials available in every mode (e.g. a notebook in a consult)
   document.getElementById('modeHint').textContent=MODE_HINT[o.mode];
 }
 function setRow(id,show){var r=document.getElementById(id);if(r)r.hidden=!show;}

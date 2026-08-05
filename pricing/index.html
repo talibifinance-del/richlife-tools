@@ -244,6 +244,23 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .p-ded .ded-row.sum{background:rgba(var(--pine-rgb),.13)}
 .p-ded .ded-row.sum .dr-v{color:var(--pine-deep)}
 .mode-tg.three{grid-template-columns:1fr 1fr 1fr}
+
+/* pricing v2 - explainers + material cards */
+.explain{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.55;margin:3px 0 13px}
+.explain b{color:var(--pine-deep);font-weight:800}
+.mat-card{background:var(--sage-tint);border-radius:13px;padding:12px 13px;margin-bottom:11px}
+.mat-card .cp-l{width:100%;margin-bottom:9px;background:#fff}
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mat-f{display:flex;flex-direction:column;gap:3px}
+.mat-f label{font-size:10.5px;font-weight:800;color:var(--ink-soft)}
+.mat-f .cp-mini{background:#fff}
+.mat-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12.5px;font-weight:800;color:var(--pine-deep)}
+.mat-foot b{font-variant-numeric:tabular-nums}
+.mat-foot .cp-del{font-size:12px;font-weight:800;color:var(--red);border:0;background:transparent;cursor:pointer;padding:0}
+.exp-row{display:grid;grid-template-columns:1fr 110px 24px;gap:7px;margin-bottom:7px;align-items:center}
+.exp-row .cp-l{background:var(--sage-tint)}
+.val-note{background:linear-gradient(140deg,rgba(183,121,31,.13),rgba(183,121,31,.05));border:1px solid rgba(183,121,31,.25);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:12.5px;font-weight:700;color:#8a5a12;line-height:1.55}
+.val-note b{font-weight:900}
 </style>
 </head>
 <body>
@@ -256,7 +273,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 
   <div class="hero-title">
     <h1>מחשבון <span class="em">תמחור</span></h1>
-    <p>כמה לתמחר מוצר, שירות או סדנה - בלי לנחש. מזינים עלויות וזמן, ומקבלים מחיר מומלץ עם פירוט מלא: מכיסוי העלויות, דרך הרווח הרצוי, ועד המחיר הסופי כולל מע"מ ועמלת סליקה.</p>
+    <p>כמה לתמחר מוצר, שירות או סדנה - בלי לנחש. ממלאים עלויות וזמן, ורואים בדיוק איך נבנה המחיר: מכיסוי כל העלויות, דרך הרווח שאת רוצה, ועד המחיר הסופי כולל מע"מ ועמלת סליקה.</p>
   </div>
 
   <div class="card">
@@ -271,32 +288,40 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 
   <div class="card">
     <span class="sec-lbl">🧮 בסיס העלויות שלך</span>
-    <div class="cp-note" style="margin-top:0;margin-bottom:12px">ממלאים פעם אחת - מכאן נגזרת <b>עלות שעת העבודה</b> שלך (הזמן שלך שווה כסף) והעמסת ההוצאות הקבועות. אפשר לעדכן בכל עת.</div>
+    <div class="explain">ממלאים <b>פעם אחת</b>. הרעיון: <b>הזמן שלך שווה כסף</b>. כדי לדעת כמה "עולה" שעת עבודה שלך, לוקחים את מה שאת רוצה למשוך + ההוצאות הקבועות של העסק, ומחלקים בשעות העבודה בחודש. ככה כל שעה שאת נותנת בהצעה מתומחרת נכון.</div>
+    <div class="tt-sub" style="margin-top:0">כמה את רוצה שהעסק ייתן לך</div>
     <div class="fields2">
       <div class="field"><label>משכורת שאת רוצה למשוך (חודשי)</label><div class="input-shell"><span class="unit">₪</span><input id="ownerNet" type="text" inputmode="numeric" value="0" aria-label="משכורת חודשית"></div></div>
       <div class="field"><label>פנסיה + קרן שאת מפרישה (חודשי)</label><div class="input-shell"><span class="unit">₪</span><input id="ownerSave" type="text" inputmode="numeric" value="0" aria-label="פנסיה וקרן"></div></div>
-      <div class="field"><label>הוצאות קבועות בחודש (שיווק, שכ"ד, הנה"ח...)</label><div class="input-shell"><span class="unit">₪</span><input id="overheadMonthly" type="text" inputmode="numeric" value="0" aria-label="הוצאות קבועות"></div></div>
-      <div class="field"><label>שעות עבודה בחודש</label><div class="input-shell"><input id="workHours" type="text" inputmode="numeric" value="0" aria-label="שעות עבודה בחודש"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שעות</span></div></div>
     </div>
+    <div class="tt-sub">הוצאות קבועות בחודש (עקיפות)</div>
+    <div class="explain">כל מה שאת משלמת בעסק כל חודש בלי קשר להצעה מסוימת. פרטי לשורות - זה עוזר לראות מאיפה מגיע המחיר.</div>
+    <div id="expList"></div>
+    <button class="cp-add" id="expAdd" type="button">+ הוספת הוצאה</button>
+    <div class="cp-total"><span class="ct-l">סה"כ הוצאות קבועות בחודש</span><span class="ct-v" id="expTotal">0 ₪</span></div>
+    <div class="tt-sub">שעות עבודה</div>
+    <div class="field"><label>סך שעות העבודה שלך בחודש (הכל - ייצור, שיווק, ניהול)</label><div class="input-shell"><input id="workHours" type="text" inputmode="numeric" value="0" aria-label="שעות עבודה בחודש"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שעות</span></div></div>
     <div class="rate-line" id="rateLine"><span>עלות שעת עבודה כוללת</span><b id="rateVal">- ₪</b></div>
+    <div class="explain" id="rateExplain"></div>
   </div>
 
   <div class="card">
     <span class="sec-lbl">📋 פרטי ההצעה</span>
     <div class="field"><label>שם ההצעה</label><div class="input-shell"><input id="offerName" type="text" value="" placeholder="לדוגמה: סדנת יצירה" aria-label="שם ההצעה"></div></div>
     <div id="materialsBlock" style="margin-top:14px">
-      <div class="tt-sub" style="margin-top:0">חומרים / תשומות ישירות (למוצר אחד)</div>
-      <div class="cp-head" style="grid-template-columns:1fr 90px 62px 24px"><span>חומר / תשומה</span><span>עלות ליח׳ (₪)</span><span>כמות</span><span></span></div>
+      <div class="tt-sub" style="margin-top:0">חומרים / תשומות (למוצר אחד)</div>
+      <div class="explain">לכל חומר: כמה <b>שילמת בקנייה</b> וכמה יחידות קיבלת (אריזה), אחוז <b>בלאי</b> (מה שהולך לפח), וכמה <b>נכנס למוצר אחד</b>. הכלי מחשב את העלות המדויקת ליחידה.</div>
       <div id="matList"></div>
       <button class="cp-add" id="matAdd" type="button">+ הוספת חומר</button>
       <div class="cp-total"><span class="ct-l">עלות ישירה (חומרים)</span><span class="ct-v" id="matTotal">0 ₪</span></div>
     </div>
     <div class="field" id="timeField" style="margin-top:14px"><label>זמן עבודה להצעה</label><div class="input-shell"><input id="offerHours" type="text" inputmode="decimal" value="0" aria-label="זמן עבודה בשעות"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שעות</span></div></div>
-    <div class="fields2" style="margin-top:14px">
-      <div class="field"><label>בלת"מ / בלאי</label><div class="input-shell"><input id="contPct" type="text" inputmode="decimal" value="5" aria-label="בלתמ"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div></div>
+    <div class="explain">כמה זמן ההצעה לוקחת לך בפועל (הכנה + ביצוע). הזמן הזה מוכפל בעלות השעה שלך מלמעלה.</div>
+    <div class="fields2" style="margin-top:6px">
+      <div class="field"><label>בלת"מ / בלאי כללי</label><div class="input-shell"><input id="contPct" type="text" inputmode="decimal" value="5" aria-label="בלתמ"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div></div>
       <div class="field"><label>% רווח רצוי (על העלות)</label><div class="input-shell"><input id="profitPct" type="text" inputmode="decimal" value="30" aria-label="רווח רצוי"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div></div>
     </div>
-    <div class="field" style="margin-top:12px"><label>מחיר שוק (רפרנס, לא חובה)</label><div class="input-shell"><span class="unit">₪</span><input id="marketPrice" type="text" inputmode="numeric" value="0" aria-label="מחיר שוק"></div></div>
+    <div class="field" style="margin-top:12px"><label>מחיר שוק / מה שמתחרים גובים (רפרנס)</label><div class="input-shell"><span class="unit">₪</span><input id="marketPrice" type="text" inputmode="numeric" value="0" aria-label="מחיר שוק"></div></div>
   </div>
 
   <div class="card">
@@ -306,31 +331,34 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="nh-num" id="finalNum">0<small> ₪</small></div>
       <div class="nh-sub" id="finalSub"></div>
     </div>
+    <div class="explain" style="margin-top:12px;margin-bottom:6px">איך נבנה המחיר, שלב אחרי שלב:</div>
     <div class="ded p-ded">
       <div class="ded-row" id="rDirectRow"><span class="dr-l">עלות ישירה (חומרים)</span><span class="dr-v" id="rDirect">0 ₪</span></div>
       <div class="ded-row" id="rTimeRow"><span class="dr-l">עלות זמן<small id="rTimeSub"></small></span><span class="dr-v" id="rTime">0 ₪</span></div>
       <div class="ded-row" id="rContRow"><span class="dr-l">בלת"מ / בלאי</span><span class="dr-v" id="rCont">0 ₪</span></div>
-      <div class="ded-row sum"><span class="dr-l">= מחיר מינימום (כיסוי מלא)</span><span class="dr-v" id="rMin">0 ₪</span></div>
+      <div class="ded-row sum"><span class="dr-l">= מחיר מינימום<small>מכסה הכל, בלי רווח</small></span><span class="dr-v" id="rMin">0 ₪</span></div>
       <div class="ded-row" id="rProfitRow"><span class="dr-l">+ רווח רצוי<small id="rProfitSub"></small></span><span class="dr-v" id="rProfit">0 ₪</span></div>
-      <div class="ded-row" id="rTaxRow"><span class="dr-l">+ מס (כדי שהרווח יישאר אחרי מס)</span><span class="dr-v" id="rTax">0 ₪</span></div>
+      <div class="ded-row" id="rTaxRow"><span class="dr-l">+ מס<small id="rTaxSub"></small></span><span class="dr-v" id="rTax">0 ₪</span></div>
       <div class="ded-row sum"><span class="dr-l">= מחיר לפני מע"מ</span><span class="dr-v" id="rPreVat">0 ₪</span></div>
       <div class="ded-row" id="rVatRow"><span class="dr-l">+ מע"מ<small id="rVatSub"></small></span><span class="dr-v" id="rVat">0 ₪</span></div>
       <div class="ded-row" id="rFeeRow"><span class="dr-l">+ עמלת סליקה<small id="rFeeSub"></small></span><span class="dr-v" id="rFee">0 ₪</span></div>
     </div>
     <div class="save-note" id="marginNote" hidden></div>
+    <div class="val-note" id="valNote" hidden></div>
     <div class="save-note" id="marketNote" hidden></div>
     <div class="rate-line warn" id="emptyNote" hidden><span id="emptyTxt"></span></div>
-    <div class="disclaimer"><span>💡</span><span>הערכה לתמחור, לא ייעוץ. המחיר מכסה את <b>כל</b> העלויות (חומרים + הזמן שלך + העמסת ההוצאות הקבועות), מוסיף את הרווח שביקשת, מס, מע"מ ועמלת סליקה. תוספת המס היא הערכה לפי שיעור מס שולי (בהגדרות) - עדכני לפי הרווח שלך. תמיד השוו גם למחיר השוק ולערך הנתפס.</span></div>
+    <div class="disclaimer"><span>💡</span><span>הערכה לתמחור, לא ייעוץ. המחיר מכסה את <b>כל</b> העלויות (חומרים + הזמן שלך + ההוצאות הקבועות), מוסיף את הרווח שביקשת, מס, מע"מ ועמלת סליקה. תוספת המס היא הערכה לפי מדרגת המס שלך - עדכני מול רו"ח. תמיד השוו גם למחיר השוק ולערך שהלקוח מקבל.</span></div>
   </div>
 
   <details class="card tt-wrap">
-    <summary><span class="sec-lbl" style="margin:0">⚙️ הגדרות (ניתן לעדכן)</span><span class="chev">▾</span></summary>
+    <summary><span class="sec-lbl" style="margin:0">⚙️ הגדרות מס ומע"מ (ניתן לעדכן)</span><span class="chev">▾</span></summary>
     <div style="margin-top:14px">
-      <div class="tt-note">ברירות מחדל סטנדרטיות - עדכני לפי העסק שלך. כל שינוי מעדכן מיד את המחיר.</div>
+      <div class="tt-note">כדי שהרווח יישאר בידך <b>אחרי מס</b>, המחיר מוסיף את המס על הרווח. מזינים רווח חודשי צפוי מהעסק, והכלי מעריך את מדרגת המס (מס הכנסה + ביטוח לאומי לעצמאי 2026). אפשר גם לשנות ידנית.</div>
       <div class="tt-grid">
+        <div class="tt-field"><label>רווח חודשי צפוי מהעסק (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tProfit" inputmode="numeric" aria-label="רווח חודשי צפוי"></div></div>
+        <div class="tt-field"><label>שיעור מס שולי - מס+ב"ל (%)</label><div class="tt-cell"><input id="tTax" inputmode="decimal" aria-label="מס שולי"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>מע"מ (%)</label><div class="tt-cell"><input id="tVat" inputmode="decimal" aria-label="מעמ"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>עמלת סליקה (%)</label><div class="tt-cell"><input id="tFee" inputmode="decimal" aria-label="עמלת סליקה"><span class="u suf">%</span></div></div>
-        <div class="tt-field"><label>שיעור מס שולי משוער - מס+ב"ל (%)</label><div class="tt-cell"><input id="tTax" inputmode="decimal" aria-label="מס שולי"><span class="u suf">%</span></div></div>
       </div>
       <button class="tt-reset" id="ttReset" type="button">↺ איפוס להגדרות ברירת מחדל</button>
     </div>
@@ -495,34 +523,62 @@ const money=v=>fmt.format(Math.round(+v||0));
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const SKEY='rl_pricing_v1';
+const SKEY='rl_pricing_v2';
 const DEF={
   mode:'product',
-  ownerNet:0, ownerSave:0, overheadMonthly:0, workHours:0,
-  offerName:'', mats:[{l:'',c:0,q:1}], offerHours:0,
+  ownerNet:0, ownerSave:0, workHours:0,
+  expenses:[{l:'שיווק ופרסום',a:0},{l:'שכ"ד / משרד',a:0},{l:'הנהלת חשבונות',a:0},{l:'תוכנות ומנויים',a:0},{l:'טלפון / אינטרנט',a:0}],
+  offerName:'', mats:[{l:'',buy:0,pkg:1,waste:10,q:1}], offerHours:0,
   contPct:5, profitPct:30, marketPrice:0,
-  vat:18, feePct:1.35, taxRate:30
+  vat:18, feePct:1.35, monthlyProfit:0, taxRate:30
 };
 let S=JSON.parse(JSON.stringify(DEF));
 
 const MODE_HINT={
-  product:'📦 מוצר: העלות בעיקר מהחומרים שאת קונה מראש. ממלאים את החומרים, ואת הזמן אם יש עבודה בהכנה.',
+  product:'📦 מוצר: העלות בעיקר מהחומרים שאת קונה מראש. ממלאים את החומרים, ואת הזמן אם יש עבודת הכנה.',
   service:'🕐 שירות: אין חומרים - העלות היא הזמן שלך. ממלאים כמה שעות ההצעה לוקחת, והמחיר נגזר מעלות השעה שלך.',
   hybrid:'🎨 היברידי (למשל סדנת יצירה): גם חומרים וגם זמן. שימי לב - הרווח הגולמי יוצא נמוך יותר, כי חלק מהמחיר הולך על חומרים.'
 };
 
-function renderMats(){
-  const host=document.getElementById('matList');host.innerHTML='';
-  S.mats.forEach((m,i)=>{
-    const row=document.createElement('div');row.className='cp-row';row.style.gridTemplateColumns='1fr 90px 62px 24px';
-    row.innerHTML='<input class="cp-l" data-i="'+i+'" data-k="l" value="'+esc(m.l)+'" placeholder="שם החומר" aria-label="חומר">'+
-      '<div class="cp-mini"><span class="cp-u">₪</span><input data-i="'+i+'" data-k="c" inputmode="decimal" value="'+m.c+'" aria-label="עלות ליחידה"></div>'+
-      '<div class="cp-mini"><input data-i="'+i+'" data-k="q" inputmode="decimal" value="'+m.q+'" aria-label="כמות" style="text-align:center"></div>'+
-      '<button class="cp-del" data-i="'+i+'" type="button" aria-label="מחיקת שורה">×</button>';
+// 2026 self-employed marginal rate (income tax bracket + NI+health) for the tax gross-up
+function marginalPct(p){
+  const br=[[7010,10],[10060,14],[19000,20],[25100,31],[46690,35],[60130,47]];
+  let itx=50; for(var i=0;i<br.length;i++){ if(p<=br[i][0]){itx=br[i][1];break;} }
+  const ni = p>7703 ? 17.83 : 6.10;
+  return Math.round((itx+ni)*10)/10;
+}
+
+function renderExps(){
+  const host=document.getElementById('expList');host.innerHTML='';
+  S.expenses.forEach(function(e,i){
+    const row=document.createElement('div');row.className='exp-row';
+    row.innerHTML='<input class="cp-l" data-i="'+i+'" data-k="l" value="'+esc(e.l)+'" placeholder="שם ההוצאה" aria-label="הוצאה">'+
+      '<div class="cp-mini"><span class="cp-u">₪</span><input data-i="'+i+'" data-k="a" inputmode="numeric" value="'+grp(e.a)+'" aria-label="סכום"></div>'+
+      '<button class="cp-del" data-i="'+i+'" type="button" aria-label="מחיקה">×</button>';
     host.appendChild(row);
   });
-  host.querySelectorAll('input[data-i]').forEach(inp=>inp.addEventListener('input',()=>{const i=+inp.dataset.i,k=inp.dataset.k;S.mats[i][k]=(k==='l')?inp.value:num(inp.value);save();calc();}));
-  host.querySelectorAll('.cp-del').forEach(b=>b.onclick=()=>{S.mats.splice(+b.dataset.i,1);if(!S.mats.length)S.mats.push({l:'',c:0,q:1});save();renderMats();calc();});
+  host.querySelectorAll('input[data-i]').forEach(function(inp){inp.addEventListener('input',function(){var i=+inp.dataset.i,k=inp.dataset.k;if(k==='a'){var pp=inp.selectionStart,old=inp.value;inp.value=grp(inp.value);try{inp.setSelectionRange(pp+(inp.value.length-old.length),pp+(inp.value.length-old.length));}catch(e){}}S.expenses[i][k]=(k==='l')?inp.value:num(inp.value);save();calc();});});
+  host.querySelectorAll('.cp-del').forEach(function(b){b.onclick=function(){S.expenses.splice(+b.dataset.i,1);if(!S.expenses.length)S.expenses.push({l:'',a:0});save();renderExps();calc();};});
+}
+
+function renderMats(){
+  const host=document.getElementById('matList');host.innerHTML='';
+  S.mats.forEach(function(m,i){
+    const unit=(num(m.pkg)>0?num(m.buy)/num(m.pkg):0)*(1+num(m.waste)/100);
+    const line=unit*num(m.q);
+    const c=document.createElement('div');c.className='mat-card';
+    c.innerHTML='<input class="cp-l" data-i="'+i+'" data-k="l" value="'+esc(m.l)+'" placeholder="שם החומר" aria-label="חומר">'+
+      '<div class="mat-grid">'+
+        '<div class="mat-f"><label>עלות קנייה (₪)</label><div class="cp-mini"><span class="cp-u">₪</span><input data-i="'+i+'" data-k="buy" inputmode="decimal" value="'+m.buy+'" aria-label="עלות קנייה"></div></div>'+
+        '<div class="mat-f"><label>כמות שקיבלת (אריזה)</label><div class="cp-mini"><input data-i="'+i+'" data-k="pkg" inputmode="decimal" value="'+m.pkg+'" aria-label="כמות באריזה" style="text-align:center"></div></div>'+
+        '<div class="mat-f"><label>בלאי</label><div class="cp-mini"><input data-i="'+i+'" data-k="waste" inputmode="decimal" value="'+m.waste+'" aria-label="בלאי" style="text-align:center"><span class="cp-u">%</span></div></div>'+
+        '<div class="mat-f"><label>כמות למוצר אחד</label><div class="cp-mini"><input data-i="'+i+'" data-k="q" inputmode="decimal" value="'+m.q+'" aria-label="כמות למוצר" style="text-align:center"></div></div>'+
+      '</div>'+
+      '<div class="mat-foot"><span>עלות לייחוס: <b>'+money(line)+' ₪</b>'+(unit>0?' <span style="font-weight:600;color:var(--ink-soft)">('+(Math.round(unit*100)/100)+' ₪ ליחידה × '+(+num(m.q))+')</span>':'')+'</span><button class="cp-del" data-i="'+i+'" type="button">מחיקה</button></div>';
+    host.appendChild(c);
+  });
+  host.querySelectorAll('input[data-i]').forEach(function(inp){inp.addEventListener('input',function(){var i=+inp.dataset.i,k=inp.dataset.k;S.mats[i][k]=(k==='l')?inp.value:num(inp.value);save();renderMats();calc();});});
+  host.querySelectorAll('.cp-del').forEach(function(b){b.onclick=function(){S.mats.splice(+b.dataset.i,1);if(!S.mats.length)S.mats.push({l:'',buy:0,pkg:1,waste:10,q:1});save();renderMats();calc();};});
 }
 
 function applyMode(){
@@ -530,19 +586,21 @@ function applyMode(){
   document.getElementById('materialsBlock').hidden=(S.mode==='service');
   document.getElementById('modeHint').textContent=MODE_HINT[S.mode];
 }
-
-function setRow(id,show,val){var r=document.getElementById(id);if(r)r.hidden=!show;}
+function setRow(id,show){var r=document.getElementById(id);if(r)r.hidden=!show;}
 
 function calc(){
-  const netMo=num(S.ownerNet),saveMo=num(S.ownerSave),oh=num(S.overheadMonthly),hrs=num(S.workHours);
+  const netMo=num(S.ownerNet),saveMo=num(S.ownerSave),hrs=num(S.workHours);
+  const oh=S.expenses.reduce(function(a,e){return a+num(e.a);},0);
+  document.getElementById('expTotal').textContent=money(oh)+' ₪';
   const ownerRate=hrs>0?(netMo+saveMo)/hrs:0;
   const ohRate=hrs>0?oh/hrs:0;
   const hourCost=ownerRate+ohRate;
   const rl=document.getElementById('rateLine');
-  if(hrs>0&&hourCost>0){rl.classList.remove('warn');document.getElementById('rateVal').textContent=money(hourCost)+' ₪/שעה  (שכר '+money(ownerRate)+' + עקיפות '+money(ohRate)+')';}
-  else{rl.classList.add('warn');document.getElementById('rateVal').textContent='מלאי משכורת + הוצאות + שעות';}
+  if(hrs>0&&hourCost>0){rl.classList.remove('warn');document.getElementById('rateVal').textContent=money(hourCost)+' ₪ לשעה';
+    document.getElementById('rateExplain').innerHTML='= ('+money(netMo+saveMo)+' משכורת+חיסכון + '+money(oh)+' הוצאות) ÷ '+money(hrs)+' שעות. כלומר: <b>שכר '+money(ownerRate)+' + עקיפות '+money(ohRate)+'</b> לכל שעה.';}
+  else{rl.classList.add('warn');document.getElementById('rateVal').textContent='מלאי משכורת + הוצאות + שעות';document.getElementById('rateExplain').textContent='';}
 
-  const direct=S.mats.reduce(function(a,m){return a+num(m.c)*num(m.q);},0);
+  const direct=S.mats.reduce(function(a,m){var unit=(num(m.pkg)>0?num(m.buy)/num(m.pkg):0)*(1+num(m.waste)/100);return a+unit*num(m.q);},0);
   document.getElementById('matTotal').textContent=money(direct)+' ₪';
   const offHrs=num(S.offerHours);
   const timeCost=offHrs*hourCost;
@@ -550,50 +608,54 @@ function calc(){
   const cont=baseCost*num(S.contPct)/100;
   const minPrice=baseCost+cont;
   const profit=minPrice*num(S.profitPct)/100;
-  const taxAdd=profit*num(S.taxRate)/100;
+  const tRate=num(S.taxRate);
+  const taxAdd=profit*tRate/100;
   const preVat=minPrice+profit+taxAdd;
   const vat=preVat*num(S.vat)/100;
   const fee=(preVat+vat)*num(S.feePct)/100;
   const fin=preVat+vat+fee;
   const grossMargin=preVat>0?(preVat-direct)/preVat*100:0;
 
-  // hero
   document.getElementById('finalNum').innerHTML=money(fin)+'<small> ₪</small>';
   document.getElementById('finalSub').textContent=preVat>0?('לפני מע"מ: '+money(preVat)+' ₪ · רווח גולמי '+Math.round(grossMargin)+'%'):'';
-  // breakdown
   document.getElementById('rDirect').textContent=money(direct)+' ₪';
   document.getElementById('rTime').textContent=money(timeCost)+' ₪';
-  document.getElementById('rTimeSub').textContent=offHrs>0&&hourCost>0?(' ('+(''+offHrs)+' שעות × '+money(hourCost)+')'):'';
+  document.getElementById('rTimeSub').textContent=(offHrs>0&&hourCost>0)?(' ('+(+offHrs)+' שעות × '+money(hourCost)+' ₪)'):'';
   document.getElementById('rCont').textContent=money(cont)+' ₪';
   document.getElementById('rMin').textContent=money(minPrice)+' ₪';
   document.getElementById('rProfit').textContent=money(profit)+' ₪';
   document.getElementById('rProfitSub').textContent=' ('+(+num(S.profitPct))+'% מהעלות)';
   document.getElementById('rTax').textContent=money(taxAdd)+' ₪';
+  document.getElementById('rTaxSub').textContent=' (כדי שהרווח יישאר אחרי '+(+tRate)+'% מס)';
   document.getElementById('rPreVat').textContent=money(preVat)+' ₪';
   document.getElementById('rVat').textContent=money(vat)+' ₪';
   document.getElementById('rVatSub').textContent=' ('+(+num(S.vat))+'%)';
   document.getElementById('rFee').textContent=money(fee)+' ₪';
   document.getElementById('rFeeSub').textContent=' ('+(+num(S.feePct))+'%)';
-  // show/hide zero rows
   setRow('rDirectRow',direct>0);
   setRow('rContRow',cont>0);
   setRow('rTaxRow',taxAdd>0);
   setRow('rTimeRow',S.mode!=='product'||timeCost>0||offHrs>0);
 
-  // margin note
   const mn=document.getElementById('marginNote');
   if(preVat>0){mn.hidden=false;var extra=S.mode==='hybrid'?' בהיברידי זה נורמלי שהרווח הגולמי נמוך יותר - יש עלות חומרים.':(S.mode==='service'?' בשירות הרווח הגולמי גבוה כי אין חומרים - אבל הזמן שלך הוא העלות האמיתית.':'');
     mn.innerHTML='📊 <b>רווח גולמי: '+Math.round(grossMargin)+'%</b> (המחיר לפני מע"מ פחות עלות החומרים).'+extra;}
   else mn.hidden=true;
-  // market comparison
-  const mk=document.getElementById('marketNote'),mp=num(S.marketPrice);
-  if(mp>0&&fin>0){mk.hidden=false;
-    if(fin<=mp*1.02){mk.innerHTML='🟢 מחיר השוק (<b>'+money(mp)+' ₪</b>) גבוה מהמחיר לפי העלות שלך - יש לך מקום להעלות מחיר בלי לצאת מהשוק.';}
-    else{mk.innerHTML='🟠 המחיר לפי העלות (<b>'+money(fin)+' ₪</b>) גבוה ממחיר השוק ('+money(mp)+' ₪). או שהעלויות גבוהות מדי, או שצריך ערך נתפס שמצדיק את הפער.';}}
-  else mk.hidden=true;
-  // empty state
+
+  // perceived value / market
+  const mp=num(S.marketPrice);
+  const vn=document.getElementById('valNote'),mk=document.getElementById('marketNote');
+  if(mp>0&&fin>0){
+    mk.hidden=false;
+    if(fin<=mp*1.02){mk.innerHTML='🟢 מחיר השוק (<b>'+money(mp)+' ₪</b>) גבוה מהמחיר לפי העלות שלך - יש מקום להעלות מחיר בלי לצאת מהשוק.';}
+    else{mk.innerHTML='🟠 המחיר לפי העלות (<b>'+money(fin)+' ₪</b>) גבוה ממחיר השוק ('+money(mp)+' ₪). או שהעלויות גבוהות, או שצריך להצדיק את הפער בערך שהלקוח מקבל.';}
+    vn.hidden=false;
+    vn.innerHTML='💎 <b>ערך נתפס:</b> המחיר כאן מבוסס על עלות + רווח. אבל לקוח משלם על <b>הערך שהוא מקבל</b>, לא על העלות שלך. אם התוצאה שווה לו יותר - את יכולה לתמחר גבוה מהמחיר-לפי-עלות ומהשוק. תמיד תמחרי לפי הגבוה מבין השלושה, כשהערך מצדיק.';
+  } else {mk.hidden=true;
+    if(fin>0){vn.hidden=false;vn.innerHTML='💎 <b>ערך נתפס:</b> המחיר כאן הוא <b>רצפה</b> - עלות + רווח. לקוח משלם על הערך שהוא מקבל, לא על העלות שלך. אם התוצאה שווה לו הרבה, שווה לתמחר מעל זה. הזיני מחיר שוק כדי להשוות.';}else vn.hidden=true;}
+
   const en=document.getElementById('emptyNote');
-  if(minPrice<=0){en.hidden=false;document.getElementById('emptyTxt').textContent='כדי לראות מחיר: מלאי בסיס עלויות (משכורת+שעות) ואת פרטי ההצעה (חומרים או זמן).';}
+  if(minPrice<=0){en.hidden=false;document.getElementById('emptyTxt').textContent='כדי לראות מחיר: מלאי בסיס עלויות (משכורת + הוצאות + שעות) ואת פרטי ההצעה (חומרים או זמן).';}
   else if(offHrs>0&&hourCost<=0){en.hidden=false;document.getElementById('emptyTxt').textContent='יש זמן עבודה אבל אין עלות שעה - מלאי את בסיס העלויות למעלה כדי שהזמן יתומחר.';}
   else en.hidden=true;
 }
@@ -601,7 +663,6 @@ function calc(){
 function applyState(){
   document.getElementById('ownerNet').value=grp(S.ownerNet);
   document.getElementById('ownerSave').value=grp(S.ownerSave);
-  document.getElementById('overheadMonthly').value=grp(S.overheadMonthly);
   document.getElementById('workHours').value=grp(S.workHours);
   document.getElementById('offerName').value=S.offerName||'';
   document.getElementById('offerHours').value=S.offerHours;
@@ -611,28 +672,22 @@ function applyState(){
   document.getElementById('tVat').value=S.vat;
   document.getElementById('tFee').value=S.feePct;
   document.getElementById('tTax').value=S.taxRate;
-  renderMats();applyMode();
+  document.getElementById('tProfit').value=grp(S.monthlyProfit);
+  renderExps();renderMats();applyMode();
 }
-
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}}
-function loadLocal(){try{var o=JSON.parse(localStorage.getItem(SKEY));if(o&&typeof o==='object'&&('mats'in o))return o;}catch(e){}return null;}
-
+function loadLocal(){try{var o=JSON.parse(localStorage.getItem(SKEY));if(o&&typeof o==='object'&&('mats'in o)&&('expenses'in o))return o;}catch(e){}return null;}
 function liveFmt(el){var p=el.selectionStart,old=el.value;el.value=grp(el.value);var d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}}
-// money inputs (thousands separators)
-[['ownerNet','ownerNet'],['ownerSave','ownerSave'],['overheadMonthly','overheadMonthly'],['workHours','workHours'],['marketPrice','marketPrice']].forEach(function(a){
-  var el=document.getElementById(a[0]);el.addEventListener('input',function(){liveFmt(el);S[a[1]]=num(el.value);save();calc();});
-});
-// plain numeric / text inputs
-[['offerHours','offerHours'],['contPct','contPct'],['profitPct','profitPct']].forEach(function(a){
-  var el=document.getElementById(a[0]);el.addEventListener('input',function(){S[a[1]]=num(el.value);save();calc();});
-});
+
+[['ownerNet','ownerNet'],['ownerSave','ownerSave'],['workHours','workHours'],['marketPrice','marketPrice']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){liveFmt(el);S[a[1]]=num(el.value);save();calc();});});
+[['offerHours','offerHours'],['contPct','contPct'],['profitPct','profitPct']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){S[a[1]]=num(el.value);save();calc();});});
 document.getElementById('offerName').addEventListener('input',function(e){S.offerName=e.target.value;save();});
-document.getElementById('matAdd').onclick=function(){S.mats.push({l:'',c:0,q:1});save();renderMats();calc();var r=document.querySelectorAll('#matList .cp-l');if(r.length)r[r.length-1].focus();};
+document.getElementById('matAdd').onclick=function(){S.mats.push({l:'',buy:0,pkg:1,waste:10,q:1});save();renderMats();calc();var r=document.querySelectorAll('#matList .cp-l');if(r.length)r[r.length-1].focus();};
+document.getElementById('expAdd').onclick=function(){S.expenses.push({l:'',a:0});save();renderExps();calc();var r=document.querySelectorAll('#expList .cp-l');if(r.length)r[r.length-1].focus();};
 [['mProduct','product'],['mService','service'],['mHybrid','hybrid']].forEach(function(a){document.getElementById(a[0]).onclick=function(){S.mode=a[1];save();applyMode();calc();};});
-[['tVat','vat'],['tFee','feePct'],['tTax','taxRate']].forEach(function(a){
-  var el=document.getElementById(a[0]);el.addEventListener('input',function(){S[a[1]]=num(el.value);save();calc();});
-});
-document.getElementById('ttReset').onclick=function(){S.vat=DEF.vat;S.feePct=DEF.feePct;S.taxRate=DEF.taxRate;document.getElementById('tVat').value=S.vat;document.getElementById('tFee').value=S.feePct;document.getElementById('tTax').value=S.taxRate;save();calc();};
+[['tVat','vat'],['tFee','feePct'],['tTax','taxRate']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){S[a[1]]=num(el.value);save();calc();});});
+document.getElementById('tProfit').addEventListener('input',function(e){liveFmt(e.target);S.monthlyProfit=num(e.target.value);S.taxRate=marginalPct(S.monthlyProfit);document.getElementById('tTax').value=S.taxRate;save();calc();});
+document.getElementById('ttReset').onclick=function(){S.vat=DEF.vat;S.feePct=DEF.feePct;S.taxRate=DEF.taxRate;S.monthlyProfit=DEF.monthlyProfit;document.getElementById('tVat').value=S.vat;document.getElementById('tFee').value=S.feePct;document.getElementById('tTax').value=S.taxRate;document.getElementById('tProfit').value=grp(S.monthlyProfit);save();calc();};
 
 (function boot(){var o=loadLocal();if(o)S=Object.assign(JSON.parse(JSON.stringify(DEF)),o);applyState();calc();})();
 </script>

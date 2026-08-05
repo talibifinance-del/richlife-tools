@@ -330,10 +330,15 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <details class="card tt-wrap">
       <summary><span class="sec-lbl" style="margin:0">⚙️ הגדרות מס ומע"מ</span><span class="chev">▾</span></summary>
       <div style="margin-top:14px">
-        <div class="tt-note">כדי שהרווח יישאר בידך <b>אחרי מס</b>, המחיר מוסיף את המס על הרווח. מזינים רווח חודשי צפוי, והכלי מעריך את מדרגת המס (מס הכנסה + ב"ל לעצמאי 2026). ניתן לשנות ידנית.</div>
+        <div class="tt-note">כאן מחשבים את המס <b>האמיתי</b> שלך, לא הנחה. מזינים <b>נקודות זיכוי</b> ורווח חודשי צפוי, והכלי מחשב כמה מס תשלמי בפועל (מס הכנסה 2026 אחרי נקודות הזיכוי + ביטוח לאומי ובריאות לעצמאי, כולל ניכוי 52%), וכמה יישאר נטו. מזה נגזר שיעור המס שהמחיר מוסיף. משאירים רווח ריק? <b>המחיר לא מוסיף מס בכלל.</b></div>
         <div class="tt-grid">
+          <div class="tt-field"><label>נקודות זיכוי אישיות</label><div class="tt-cell"><input id="tPoints" inputmode="decimal" aria-label="נקודות זיכוי"><span class="u suf">נק'</span></div></div>
           <div class="tt-field"><label>רווח חודשי צפוי מהעסק (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tProfit" inputmode="numeric" aria-label="רווח חודשי"></div></div>
-          <div class="tt-field"><label>שיעור מס שולי - מס+ב"ל (%)</label><div class="tt-cell"><input id="tTax" inputmode="decimal" aria-label="מס שולי"><span class="u suf">%</span></div></div>
+        </div>
+        <div class="explain" style="margin:6px 0 0">נקודות זיכוי נפוצות: תושב/ת 2.25 · אישה 2.75 · לכל ילד/ה קטן/ה עוד 1-4.5. אפשר לחשב מדויק ב<b>מחשבון שכר נטו</b> שבארגז.</div>
+        <div class="rate-line" id="taxSummary" hidden></div>
+        <div class="tt-grid" style="margin-top:11px">
+          <div class="tt-field"><label>שיעור המס שהמחיר מוסיף (מחושב, ניתן לשנות)</label><div class="tt-cell"><input id="tTax" inputmode="decimal" aria-label="שיעור מס"><span class="u suf">%</span></div></div>
           <div class="tt-field"><label>מע"מ (%)</label><div class="tt-cell"><input id="tVat" inputmode="decimal" aria-label="מעמ"><span class="u suf">%</span></div></div>
           <div class="tt-field"><label>עמלת סליקה (%)</label><div class="tt-cell"><input id="tFee" inputmode="decimal" aria-label="סליקה"><span class="u suf">%</span></div></div>
         </div>
@@ -571,7 +576,7 @@ function newOffer(){return {name:'',mode:'product',mats:[{l:'',buy:0,pkg:1,waste
 const DEF={
   biz:{ownerNet:0,ownerSave:0,workHours:0,
     expenses:[{l:'שיווק ופרסום',a:0},{l:'שכ"ד / משרד',a:0},{l:'הנהלת חשבונות',a:0},{l:'תוכנות ומנויים',a:0},{l:'טלפון / אינטרנט',a:0}],
-    vat:18,feePct:1.35,monthlyProfit:0,taxRate:30},
+    vat:18,feePct:1.35,monthlyProfit:0,points:2.75,taxRate:0},
   offerings:[], tab:'setup', editIdx:null
 };
 let S=JSON.parse(JSON.stringify(DEF));
@@ -581,7 +586,26 @@ const MODE_HINT={
   service:'🕐 שירות: אין חומרים - העלות היא הזמן שלך. ממלאים כמה שעות ההצעה לוקחת.',
   hybrid:'🎨 היברידי (סדנה): גם חומרים וגם זמן. הרווח הגולמי יוצא נמוך יותר כי יש חומרים.'
 };
-function marginalPct(p){const br=[[7010,10],[10060,14],[19000,20],[25100,31],[46690,35],[60130,47]];let itx=50;for(var i=0;i<br.length;i++){if(p<=br[i][0]){itx=br[i][1];break;}}const ni=p>7703?17.83:6.10;return Math.round((itx+ni)*10)/10;}
+// real personal tax (2026): income tax after credit points + self-employed NI+health, with 52% deduction
+function incMonthly(inc){var br=[[7010,10],[10060,14],[19000,20],[25100,31],[46690,35],[60130,47],[Infinity,50]];var t=0,p=0;for(var i=0;i<br.length;i++){var to=br[i][0];if(inc>p)t+=(Math.min(inc,to)-p)*br[i][1]/100;p=to;if(inc<=to)break;}return t;}
+function personalTax(profit,points){
+  if(profit<=0)return {tax:0,eff:0,net:0,it:0,ni:0};
+  var red=Math.min(profit,7703),full=Math.max(0,Math.min(profit,50695)-7703);
+  var ni=red*0.0287+full*0.1283, health=red*0.0323+full*0.0517;
+  var niDed=ni*0.52;
+  var it=Math.max(0, incMonthly(Math.max(0,profit-niDed)) - num(points)*242);
+  var tax=it+ni+health;
+  return {tax:tax, eff:Math.round(tax/profit*1000)/10, net:profit-tax, it:it, ni:ni+health};
+}
+function recomputeTax(){
+  var pt=personalTax(num(S.biz.monthlyProfit),num(S.biz.points));
+  S.biz.taxRate=pt.eff;
+  var tf=document.getElementById('tTax');if(tf)tf.value=pt.eff;
+  var ts=document.getElementById('taxSummary');
+  if(ts){if(num(S.biz.monthlyProfit)>0){ts.hidden=false;ts.classList.remove('warn');
+    ts.innerHTML='<span>מס בפועל על '+money(S.biz.monthlyProfit)+' ₪: <b>'+money(pt.tax)+' ₪</b> ('+pt.eff+'% אפקטיבי) · נטו ביד <b>'+money(pt.net)+' ₪</b></span>';}
+  else ts.hidden=true;}
+}
 
 function hourCost(){const b=S.biz;const oh=b.expenses.reduce(function(a,e){return a+num(e.a);},0);const h=num(b.workHours);return h>0?((num(b.ownerNet)+num(b.ownerSave))+oh)/h:0;}
 function matUnit(m){return (num(m.pkg)>0?num(m.buy)/num(m.pkg):0)*(1+num(m.waste)/100);}
@@ -750,8 +774,9 @@ function switchTab(t){
 [['ownerNet','ownerNet'],['ownerSave','ownerSave'],['workHours','workHours']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){liveFmt(el);S.biz[a[1]]=num(el.value);save();renderSetup();});});
 document.getElementById('expAdd').onclick=function(){S.biz.expenses.push({l:'',a:0});save();renderExps();renderSetup();var r=document.querySelectorAll('#expList .cp-l');if(r.length)r[r.length-1].focus();};
 [['tVat','vat'],['tFee','feePct'],['tTax','taxRate']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){S.biz[a[1]]=num(el.value);save();renderSetup();});});
-document.getElementById('tProfit').addEventListener('input',function(e){liveFmt(e.target);S.biz.monthlyProfit=num(e.target.value);S.biz.taxRate=marginalPct(S.biz.monthlyProfit);document.getElementById('tTax').value=S.biz.taxRate;save();});
-document.getElementById('ttReset').onclick=function(){S.biz.vat=DEF.biz.vat;S.biz.feePct=DEF.biz.feePct;S.biz.taxRate=DEF.biz.taxRate;S.biz.monthlyProfit=0;document.getElementById('tVat').value=S.biz.vat;document.getElementById('tFee').value=S.biz.feePct;document.getElementById('tTax').value=S.biz.taxRate;document.getElementById('tProfit').value='';save();renderSetup();};
+document.getElementById('tProfit').addEventListener('input',function(e){liveFmt(e.target);S.biz.monthlyProfit=num(e.target.value);recomputeTax();save();});
+document.getElementById('tPoints').addEventListener('input',function(e){S.biz.points=num(e.target.value);recomputeTax();save();});
+document.getElementById('ttReset').onclick=function(){S.biz.vat=DEF.biz.vat;S.biz.feePct=DEF.biz.feePct;S.biz.monthlyProfit=0;S.biz.points=DEF.biz.points;S.biz.taxRate=0;document.getElementById('tVat').value=S.biz.vat;document.getElementById('tFee').value=S.biz.feePct;document.getElementById('tProfit').value='';document.getElementById('tPoints').value=S.biz.points;recomputeTax();save();renderSetup();};
 
 document.getElementById('addOffer').onclick=function(){S.offerings.push(newOffer());S.editIdx=S.offerings.length-1;save();renderCatalog();window.scrollTo(0,0);};
 function goBack(){S.editIdx=null;save();renderCatalog();window.scrollTo(0,0);}
@@ -768,7 +793,7 @@ document.getElementById('tabList').onclick=function(){switchTab('list');};
 
 (function boot(){var o=loadLocal();if(o)S=Object.assign(JSON.parse(JSON.stringify(DEF)),o);
   document.getElementById('ownerNet').value=grp(S.biz.ownerNet);document.getElementById('ownerSave').value=grp(S.biz.ownerSave);document.getElementById('workHours').value=grp(S.biz.workHours);
-  document.getElementById('tVat').value=S.biz.vat;document.getElementById('tFee').value=S.biz.feePct;document.getElementById('tTax').value=S.biz.taxRate;document.getElementById('tProfit').value=S.biz.monthlyProfit?grp(S.biz.monthlyProfit):'';
+  document.getElementById('tVat').value=S.biz.vat;document.getElementById('tFee').value=S.biz.feePct;document.getElementById('tProfit').value=S.biz.monthlyProfit?grp(S.biz.monthlyProfit):'';document.getElementById('tPoints').value=(S.biz.points!=null?S.biz.points:2.75);recomputeTax();
   renderExps();switchTab(S.tab||'setup');})();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון תמחור',content_category:'RichLife כלים'});}catch(e){}});});});</script>

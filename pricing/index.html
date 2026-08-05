@@ -263,6 +263,8 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .val-note b{font-weight:900}
 
 /* pricing v3 - full system (tabs + catalog + price list) */
+/* brand focus: kill the a11y indigo outline on fields - the green shell border is the focus indicator */
+.wrap input:focus,.wrap input:focus-visible,.wrap textarea:focus,.wrap textarea:focus-visible{outline:none !important;box-shadow:none !important}
 .tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;background:var(--sage-tint);border-radius:14px;padding:5px;margin-bottom:18px}
 .tab{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:13px;color:var(--ink-soft);padding:11px 4px;border-radius:10px;cursor:pointer}
 .tab.active{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
@@ -692,7 +694,11 @@ function renderMats(){
       '<div class="mat-foot"><span>עלות לייחוס: <b>'+money(line)+' ₪</b>'+(unit>0?' <span style="font-weight:600;color:var(--ink-soft)">('+(Math.round(unit*100)/100)+' ₪ ליחידה × '+(+num(m.q))+')</span>':'')+'</span><button class="cp-del" data-i="'+i+'" type="button">מחיקה</button></div>';
     host.appendChild(c);
   });
-  host.querySelectorAll('input[data-i]').forEach(function(inp){inp.addEventListener('input',function(){var i=+inp.dataset.i,k=inp.dataset.k;curOffer().mats[i][k]=(k==='l')?inp.value:num(inp.value);save();renderMats();calcEditor();});});
+  host.querySelectorAll('input[data-i]').forEach(function(inp){inp.addEventListener('input',function(){var i=+inp.dataset.i,k=inp.dataset.k,o=curOffer();o.mats[i][k]=(k==='l')?inp.value:num(inp.value);
+    // update ONLY this row's line total - do NOT rebuild the list (rebuilding kills focus / typing)
+    var m=o.mats[i],unit=matUnit(m),line=unit*num(m.q),card=inp.closest('.mat-card'),foot=card?card.querySelector('.mat-foot span'):null;
+    if(foot)foot.innerHTML='עלות לייחוס: <b>'+money(line)+' ₪</b>'+(unit>0?' <span style="font-weight:600;color:var(--ink-soft)">('+(Math.round(unit*100)/100)+' ₪ ליחידה × '+(+num(m.q))+')</span>':'');
+    save();calcEditor();});});
   host.querySelectorAll('.cp-del').forEach(function(b){b.onclick=function(){var o=curOffer();o.mats.splice(+b.dataset.i,1);if(!o.mats.length)o.mats.push({l:'',buy:0,pkg:1,waste:10,q:1});save();renderMats();calcEditor();};});
 }
 function applyMode(){

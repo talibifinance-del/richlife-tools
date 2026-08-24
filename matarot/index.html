@@ -754,7 +754,16 @@ function card(g,num){
     t.onclick=()=>{g.pct=+t.dataset.pct; render();};
   });
   el.querySelectorAll('.uni').forEach(u=>{
-    u.onclick=()=>{g.unit=u.dataset.u; render();};
+    u.onclick=()=>{
+      const to=u.dataset.u, from=(g.unit==='m'?'m':'y');
+      if(to!==from){
+        const v=+g.dur||0;
+        // המספר עצמו מתורגם, כדי שהתאריך של המטרה לא יזוז: 0.5 שנים -> 6 חודשים
+        if(v>0)g.dur= to==='m' ? Math.max(1,Math.round(v*12)) : +(v/12).toFixed(2);
+        g.unit=to;
+      }
+      render();
+    };
   });
   return el;
 }

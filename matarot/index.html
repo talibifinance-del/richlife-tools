@@ -150,6 +150,12 @@ body{
   border:1.5px solid rgba(var(--pine-rgb),.22);background:var(--sage-tint);border-radius:13px;padding:9px 6px;transition:all .18s;
 }
 .track:hover{border-color:var(--pine)}
+/* מתג יחידת זמן: שנים / חודשים */
+.uni-wrap{display:flex;gap:5px;padding-inline-start:8px;padding-inline-end:6px;flex:none}
+.uni{border:1.5px solid var(--sage);background:#fff;color:var(--pine-deep);font-family:inherit;font-size:13px;font-weight:800;
+     padding:5px 11px;border-radius:9px;cursor:pointer;transition:background .16s,color .16s,border-color .16s;white-space:nowrap}
+.uni:hover{border-color:var(--pine)}
+.uni.on{background:var(--pine);border-color:var(--pine-deep);color:#fff}
 .track.on{background:linear-gradient(135deg,var(--pine),var(--pine-deep));border-color:var(--pine-deep);box-shadow:0 8px 20px rgba(var(--pine-rgb),.30)}
 .track .t-name{font-size:13.5px;font-weight:800;color:var(--pine-deep)}
 .track .t-pct{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:2px}
@@ -508,7 +514,7 @@ body{
 
 <style id="brain-a11y-extra">@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}</style>
 <script>/* RichLife a11y: keyboard + labels for custom controls */
-(function(){var SEL='.chip,.track,.sec-head,.cat-head,.feed-chip';
+(function(){var SEL='.chip,.track,.uni,.sec-head,.cat-head,.feed-chip';
 function up(el){if(!el.getAttribute||el.getAttribute('role')||el.tagName==='A'||el.tagName==='BUTTON')return;el.setAttribute('role','button');if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');}
 function lbl(el){try{if(el.getAttribute('aria-label')||el.getAttribute('aria-labelledby'))return;if(el.id&&document.querySelector('label[for="'+el.id+'"]'))return;var ph=el.getAttribute('placeholder');if(ph)el.setAttribute('aria-label',ph);}catch(e){}}
 function scan(r){r=r||document;try{r.querySelectorAll(SEL).forEach(up);r.querySelectorAll('input,textarea,select').forEach(lbl);}catch(e){}}
@@ -635,8 +641,8 @@ function move(i,d){
 }
 
 function calc(g){
-  const target=+g.target||0, initial=+g.initial||0, years=+g.years||0, pct=+g.pct||0;
-  const n=Math.round(years*12), r=pct/100/12;
+  const target=+g.target||0, initial=+g.initial||0, pct=+g.pct||0;
+  const n=months(g), r=pct/100/12;
   let monthly=0, reached=true;
   if(n>0){
     const growth=Math.pow(1+r,n);
@@ -648,7 +654,7 @@ function calc(g){
   monthly=Math.round(monthly);              // match the sheet: round then derive
   const oop=Math.min(target, initial+monthly*n); // out of pocket, capped at target
   const gain=Math.max(0, target-oop);
-  return {monthly,oop,gain,target,initial,years,n,covered:monthly===0&&initial>0&&years>0&&target>0};
+  return {monthly,oop,gain,target,initial,n,covered:monthly===0&&initial>0&&n>0&&target>0};
 }
 
 function render(){
@@ -659,6 +665,9 @@ function render(){
 }
 
 const grp=v=>(v===''||v===null||v===undefined)?'':fmt.format(+v);
+// יחידת הזמן של המטרה: 'y' שנים (ברירת מחדל) או 'm' חודשים -> תמיד מחזיר חודשים
+const months=g=>Math.round(Math.max(0,(+g.dur||0))*(g.unit==='m'?1:12));
+const durUnitLabel=g=>{const v=+g.dur||0; return g.unit==='m'?(v===1?'חודש':v+' חודשים'):(v===1?'שנה':v===2?'שנתיים':v+' שנים');};
 
 function card(g,num){
   const c=calc(g);
@@ -688,8 +697,13 @@ function card(g,num){
         <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="initial" data-money="1" value="${grp(g.initial)}" placeholder="0"></div>
       </div>
       <div class="field full">
-        <label>בעוד כמה שנים?</label>
-        <div class="input-shell"><input type="number" inputmode="numeric" data-f="years" value="${g.years}" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">שנים</span></div>
+        <label>בעוד כמה זמן?</label>
+        <div class="input-shell"><input type="number" inputmode="numeric" data-f="dur" value="${g.dur}" placeholder="0">
+          <span class="uni-wrap">
+            <button type="button" class="uni ${g.unit==='m'?'':'on'}" data-u="y">שנים</button>
+            <button type="button" class="uni ${g.unit==='m'?'on':''}" data-u="m">חודשים</button>
+          </span>
+        </div>
       </div>
       <div class="field full">
         <label>איך משקיעים? (משנה את התשואה המשוערת)</label>
@@ -739,6 +753,9 @@ function card(g,num){
   el.querySelectorAll('.track').forEach(t=>{
     t.onclick=()=>{g.pct=+t.dataset.pct; render();};
   });
+  el.querySelectorAll('.uni').forEach(u=>{
+    u.onclick=()=>{g.unit=u.dataset.u; render();};
+  });
   return el;
 }
 
@@ -783,7 +800,7 @@ function renderRecap(m,t,gn){
     return `<tr>
       <td class="name-col"><span class="rn">${i+1}</span><span class="g-name">${g.emoji} ${esc(nm)}</span></td>
       <td class="track-col">${trackName(g.pct)}</td>
-      <td>${g.years||0}</td>
+      <td>${durUnitLabel(g)}</td>
       <td class="m-col">${fmt.format(c.monthly)} ₪</td>
       <td>${fmt.format(c.target)} ₪</td>
       <td class="gn-col">${fmt.format(c.gain)} ₪</td>
@@ -792,7 +809,7 @@ function renderRecap(m,t,gn){
   box.innerHTML=`
     <h3>📋 סיכום היעדים <span class="rsub">כמה צריך לכל מטרה בנפרד, אם רצים על כולן במקביל</span></h3>
     <div class="recap-scroll"><table class="recap-table">
-      <thead><tr><th class="name-col">מטרה</th><th>מסלול השקעה</th><th>שנים למטרה</th><th>חיסכון חודשי</th><th>יעד</th><th>רווח</th></tr></thead>
+      <thead><tr><th class="name-col">מטרה</th><th>מסלול השקעה</th><th>זמן למטרה</th><th>חיסכון חודשי</th><th>יעד</th><th>רווח</th></tr></thead>
       <tbody>${rows}
         <tr class="tot"><td class="name-col">סה"כ</td><td></td><td></td><td class="m-col">${fmt.format(m)} ₪</td><td>${fmt.format(t)} ₪</td><td class="gn-col">${fmt.format(gn)} ₪</td></tr>
       </tbody>
@@ -837,7 +854,7 @@ function needThisMonth(s,t){
 // הרצת המפל: list = מטרות לפי סדר חשיבות, B = הפרשה חודשית כוללת
 function simulate(list,B){
   const st=list.map(g=>({bal:+g.initial||0,r:(+g.pct||0)/100/12,T:+g.target||0,
-                         D:Math.round((+g.years||0)*12),done:false,end:null}));
+                         D:months(g),done:false,end:null}));
   st.forEach(s=>{if(s.bal>=s.T-0.5){s.done=true;s.end=0;}});
   const alloc=[];
   for(let t=1;t<=MAXM;t++){
@@ -969,7 +986,7 @@ function renderTimeline(totalMonthly){
 
   // האם עמדנו בתאריכים שרצית
   const gaps=list.map((g,i)=>{
-    const D=Math.round((+g.years||0)*12);
+    const D=months(g);
     const s=sim.st[i];
     const nm=`${g.emoji} ${esc(gname(g,idxOf[i]))}`;
     if(s.end===null)                                                // לא נסגרת בכלל באופק הזה
@@ -1003,7 +1020,7 @@ function esc(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
 function addGoal(seed){
   uid++;
-  goals.push(Object.assign({id:uid,emoji:'🎯',name:'',target:'',initial:'',years:'',pct:5},seed||{}));
+  goals.push(Object.assign({id:uid,emoji:'🎯',name:'',target:'',initial:'',dur:'',unit:'y',pct:5},seed||{}));
   render();
 }
 
@@ -1041,7 +1058,7 @@ function queueTimeline(m){
 const SKEY='richlife-goals-v1';
 // סדר החשיבות נשמר מעצמו (הוא סדר המערך). התקציב החודשי נשמר לצדו.
 function encodeGoals(gs){
-  const rows=gs.map(g=>[g.emoji,g.name,g.target,g.initial,g.years,g.pct]);
+  const rows=gs.map(g=>[g.emoji,g.name,g.target,g.initial,g.dur,g.pct,g.unit==='m'?'m':'y']);
   return JSON.stringify(capacity?{c:capacity,g:rows}:rows);
 }
 function decodeGoals(str){
@@ -1049,7 +1066,7 @@ function decodeGoals(str){
     let a=JSON.parse(str);
     if(a&&!Array.isArray(a)&&Array.isArray(a.g)){capacity=+a.c||''; a=a.g;}   // פורמט חדש
     if(!Array.isArray(a)) return null;                                        // קישורים ישנים ממשיכים לעבוד
-    return a.map(x=>({id:++uid,emoji:x[0]||'🎯',name:x[1]||'',target:x[2]??'',initial:x[3]??'',years:x[4]??'',pct:(x[5]??5)}));
+    return a.map(x=>({id:++uid,emoji:x[0]||'🎯',name:x[1]||'',target:x[2]??'',initial:x[3]??'',dur:x[4]??'',pct:(x[5]??5),unit:(x[6]==='m'?'m':'y')}));
   }catch(e){return null;}
 }
 function saveGoals(){ syncLive(); }  // device memory off; the live link is the saved copy
@@ -1103,7 +1120,7 @@ function buildPrintView(){
   const cards=goals.map((g,i)=>{
     const c=calc(g);
     const oopPct=c.target>0?Math.round(c.oop/c.target*100):100, gnPct=100-oopPct;
-    const meta=`יעד ${fmt.format(c.target)} ₪ · יש כבר ${fmt.format(c.initial)} ₪ · בעוד ${g.years||0} שנים · ${trackName(g.pct)}`;
+    const meta=`יעד ${fmt.format(c.target)} ₪ · יש כבר ${fmt.format(c.initial)} ₪ · בעוד ${durUnitLabel(g)} · ${trackName(g.pct)}`;
     return `<div class="pv-goal">
       <div class="pv-g-top"><span class="pv-num">${i+1}</span>${g.emoji} ${esc(g.name||'מטרה '+(i+1))}</div>
       <div class="pv-g-meta">${meta}</div>
@@ -1155,7 +1172,7 @@ document.querySelectorAll('a.soc[href="#"]').forEach(a=>a.addEventListener('clic
     if(capacity)document.getElementById('capInput').value=fmt.format(capacity);
     render();                                     // opened via a personal link → restore exactly that plan (hash stays in the URL, so a refresh keeps it)
   }else{
-    addGoal({emoji:'🏠',name:'רכישת נכס (הון ראשוני)',target:280000,initial:110000,years:5,pct:5}); // plain URL → a clean example to start from
+    addGoal({emoji:'🏠',name:'רכישת נכס (הון ראשוני)',target:280000,initial:110000,dur:5,unit:'y',pct:5}); // plain URL → a clean example to start from
   }
 })();
 (function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);refreshShareUI();if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){const loaded=decodeGoals(t);if(loaded&&loaded.length){goals=loaded;docId=hp[1];if(capacity)document.getElementById('capInput').value=fmt.format(capacity);render();refreshShareUI();}}).catch(function(){});})();

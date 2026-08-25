@@ -105,9 +105,11 @@ svg.chart{touch-action:pan-y}
 .chart-head{font-size:16px;font-weight:900;color:var(--pine-darker);display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .chart-sub{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:12px}
 .chart-legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:12.5px;font-weight:800}
+.chart-legend[hidden]{display:none}
 .chart-legend span{display:inline-flex;align-items:center;gap:6px;color:var(--ink-soft)}
 .chart-legend i{width:14px;height:4px;border-radius:100px;display:inline-block}
 .chart-wrap{width:100%;overflow-x:auto}
+.chart-msg{background:rgba(193,85,63,.07);border:1.5px solid rgba(193,85,63,.22);border-radius:14px;padding:22px 18px;text-align:center;font-size:13.5px;font-weight:800;color:#8f3a29;line-height:1.6}
 svg.chart{display:block;width:100%;height:auto}
 
 /* CTA */
@@ -238,20 +240,40 @@ svg.chart{display:block;width:100%;height:auto}
 .mini-shell input::-webkit-outer-spin-button,.mini-shell input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .mini-shell.bad{border-color:rgba(var(--red-rgb),.55);background:rgba(var(--red-rgb),.06)}
 .debts{display:flex;flex-direction:column;gap:10px}
-.d-head{display:grid;grid-template-columns:1.5fr 1.1fr .85fr 1.1fr 36px;gap:8px;font-size:11.5px;font-weight:800;color:var(--ink-soft);padding-inline:3px}
-.d-row{display:grid;grid-template-columns:1.5fr 1.1fr .85fr 1.1fr 36px;gap:8px;align-items:center}
+.d-head{display:grid;grid-template-columns:1.45fr 1.05fr 1fr 1.05fr 36px;gap:8px;font-size:11.5px;font-weight:800;color:var(--ink-soft);padding:0 13px}
+.d-item{background:var(--sage-tint);border-radius:15px;padding:11px 13px 10px}
+.d-item .mini-shell{background:#fff}
+.d-row{display:grid;grid-template-columns:1.45fr 1.05fr 1fr 1.05fr 36px;gap:8px;align-items:center}
+.d-row>div{min-width:0}
 .d-row .cl{display:none}
+.d-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1.5px solid rgba(var(--pine-rgb),.13)}
+.dm-modes{display:inline-flex;background:#fff;border-radius:100px;padding:2px;gap:2px;flex:none}
+.dm-chip{font-family:var(--font);cursor:pointer;border:none;background:transparent;color:var(--ink-soft);font-size:11.5px;font-weight:800;padding:5px 12px;border-radius:100px;transition:all .15s}
+.dm-chip.on{background:var(--pine);color:#fff}
+.dm-rev{display:flex;align-items:center;gap:7px;flex:none}
+.dm-rev[hidden]{display:none}
+.dm-rev label{font-size:11.5px;font-weight:800;color:var(--ink-soft);white-space:nowrap}
+.dm-rev .mini-shell{width:118px}
+.dm-rev .mini-shell input{font-size:14px;padding:7px 9px}
+.dm-info{flex:1 1 100%;text-align:start;font-size:12px;font-weight:800;color:var(--pine-deep);line-height:1.45}
+.dm-info:empty{display:none}
+.dm-info.bad{color:#8f3a29}
+.dm-info small{font-weight:700;color:var(--ink-soft)}
+.dm-swap{flex:none;font-family:var(--font);cursor:pointer;border:1.5px solid rgba(var(--pine-rgb),.28);background:#fff;color:var(--pine-deep);font-size:11px;font-weight:800;padding:5px 11px;border-radius:100px;transition:all .15s}
+.dm-swap:hover{border-color:var(--pine)}
 .d-del{width:34px;height:34px;border-radius:10px;border:1.5px solid rgba(var(--red-rgb),.25);background:#fff;color:#8f3a29;font-size:17px;font-weight:900;cursor:pointer;font-family:var(--font);line-height:1;display:grid;place-items:center;transition:all .15s}
 .d-del:hover{background:rgba(var(--red-rgb),.09)}
 .d-add{margin-top:12px;width:100%;font-family:var(--font);cursor:pointer;border:1.5px dashed rgba(var(--pine-rgb),.4);background:rgba(var(--pine-rgb),.05);color:var(--pine-deep);font-size:14px;font-weight:800;padding:12px;border-radius:13px;transition:all .15s}
 .d-add:hover{background:#fff;border-color:var(--pine)}
 @media(max-width:640px){
   .d-head{display:none}
-  .d-row{grid-template-columns:1fr 1fr;gap:9px;background:var(--sage-tint);border-radius:15px;padding:12px 12px 12px 44px;position:relative}
+  .d-item{padding:12px 12px 10px 44px;position:relative}
+  .d-row{grid-template-columns:1fr 1fr;gap:9px}
   .d-row>div:first-child,.d-row>div:last-of-type{grid-column:1/-1}
   .d-row .cl{display:block;font-size:11px;font-weight:800;color:var(--ink-soft);margin-bottom:4px}
-  .d-row .mini-shell{background:#fff}
   .d-del{position:absolute;top:12px;left:10px;width:28px;height:28px;font-size:15px}
+  .dm-rev{flex:1 1 100%}
+  .dm-rev .mini-shell{flex:1;width:auto}
 }
 .tot-row{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
 .tot{flex:1;min-width:120px;text-align:center;background:var(--sage-tint);border-radius:13px;padding:11px 8px}
@@ -311,7 +333,7 @@ svg.chart{display:block;width:100%;height:auto}
 
   <div class="card">
     <div class="sec-lbl">🧾 החובות שלך</div>
-    <div class="sec-note">שורה לכל חוב: יתרה, ריבית שנתית והתשלום החודשי המינימלי. אם לא יודעים את הריבית המדויקת, מזינים הערכה ומתקנים אחר כך.</div>
+    <div class="sec-note">שורה לכל חוב: יתרה, ריבית שנתית והתשלום החודשי. לא יודעים את הריבית? אפשר להזין כמה תשלומים נשארו במקומה. כרטיס אשראי שממשיכים להעמיס עליו הוא לא הלוואה, ולכן יש לו מצב משלו בכל שורה.</div>
 
     <div class="d-head">
       <span>שם החוב</span><span>יתרה</span><span>ריבית שנתית</span><span>תשלום חודשי</span><span></span>
@@ -362,7 +384,8 @@ svg.chart{display:block;width:100%;height:auto}
   <div class="chart-card">
     <div class="chart-head">📉 החוב נמס, שכבה אחרי שכבה</div>
     <div class="chart-sub">כל שכבה היא חוב אחד. רואים איך הם נסגרים בזה אחר זה, והקו האדום המקווקו מראה איפה הייתם נשארים בתשלום מינימום בלבד.</div>
-    <div class="chart-wrap"><svg class="chart" id="chart" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="גרף יתרת החוב הכוללת לאורך הזמן בשלוש שיטות"></svg></div>
+    <div class="chart-msg" id="chartMsg" hidden></div>
+    <div class="chart-wrap" id="chartWrap"><svg class="chart" id="chart" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="גרף יתרת החוב הכוללת לאורך הזמן בשלוש שיטות"></svg></div>
     <div class="chart-tip" id="chartTip"></div>
     <div class="chart-sub" style="text-align:center;margin:8px 0 0;font-size:11.5px">👆 העבירו על הגרף כדי לראות את היתרה בכל חודש</div>
     <div class="chart-legend" id="chartLegend"></div>
@@ -391,6 +414,8 @@ svg.chart{display:block;width:100%;height:auto}
     <details><summary>מה זה התשלום הנוסף?<span class="chev">▾</span></summary><div class="a">הסכום שאפשר להקצות <b>מעבר</b> לסך התשלומים המינימליים של כל החובות. הוא המנוע של כל התוכנית. גם כמה מאות שקלים בחודש מקצרים את הדרך משמעותית, כי כל שקל נוסף הולך ישר לקרן.</div></details>
     <details><summary>מאיפה מביאים את התשלום הנוסף?<span class="chev">▾</span></summary><div class="a">בדרך כלל לא מהעלאת שכר אלא מתוך התקציב הקיים: הוצאה משתנה שהתייתרה, מנוי שלא בשימוש, או סכום שהיה הולך לחיסכון. חשוב לשמור בצד גם כרית ביטחון קטנה, אחרת כל תקלה מחזירה אתכם לחוב חדש.</div></details>
     <details><summary>התשלום המינימלי לא מכסה את הריבית - מה עושים?<span class="chev">▾</span></summary><div class="a">אם התשלום החודשי נמוך מהריבית החודשית, היתרה <b>גדלה</b> במקום לקטון. המחשבון מסמן את החוב באדום. במצב כזה צריך להגדיל את התשלום על אותו חוב, או לבדוק איחוד או הסדר מול הגורם המלווה. זה לא מצב שאפשר לחכות בו.</div></details>
+    <details><summary>איך מזינים אשראי מתגלגל (קרדיט)?<span class="chev">▾</span></summary><div class="a">מסמנים בשורה <b>אשראי מתגלגל</b>, ואז נפתח שדה נוסף: <b>כמה נכנס לכרטיס כל חודש</b>. זה ההבדל הגדול בין כרטיס להלוואה. הלוואה רק קטנה, וכרטיס ממשיכים להאכיל. אם מה שנכנס גדול ממה שמשולם, היתרה גדלה גם כשמשלמים בזמן, והכלי יגיד את זה במפורש במקום להמציא תאריך סיום. חשוב: אין צורך לסגור את הכרטיס או לפרוע אותו במזומן, מספיק שהחיוב החודשי החדש ייסגר במלואו כדי שהיתרה הישנה תהפוך לחוב סגור שאפשר לתכנן מולו.</div></details>
+    <details><summary>לא יודעת מה הריבית, רק כמה תשלומים נשארו<span class="chev">▾</span></summary><div class="a">לוחצים על <b>לפי מספר תשלומים ⇄</b> בשורה, ואז מזינים כמה תשלומים נשארו במקום את הריבית. הכלי מחשב לבד את הריבית השנתית המשוערת מתוך היתרה, התשלום ומספר התשלומים, ומציג אותה. זה גם הרגע שבו רואים כמה באמת עולה הלוואה שנראתה זולה.</div></details>
     <details><summary>ומה עם מינוס בעו"ש?<span class="chev">▾</span></summary><div class="a">המינוס הוא חוב לכל דבר, ולרוב אחד היקרים. מזינים אותו כשורה: היתרה היא גובה המינוס, הריבית היא ריבית משיכת היתר, והתשלום החודשי הוא הסכום שאתם באמת מצליחים להקטין בו כל חודש.</div></details>
     <details><summary>המספרים כאן מדויקים?<span class="chev">▾</span></summary><div class="a">זו הדמיה חודש אחר חודש לפי הנתונים שהזנתם, בהנחת ריבית קבועה ובלי עמלות, קנסות פירעון מוקדם או הצמדה. הכיוון והפער בין השיטות נכונים. המספר המדויק מול הבנק יכול לזוז מעט.</div></details>
   </div>
@@ -584,63 +609,131 @@ const DEFAULTS=[
   {name:'הלוואת בנק',  bal:45000, rate:7.5, min:1000}
 ];
 function addRow(d){
-  d=d||{name:'חוב חדש',bal:0,rate:8,min:0};
-  const id=++UID, w=document.createElement('div'); w.className='d-row';
-  w.innerHTML=
-    '<div><label class="cl" for="dn'+id+'">שם החוב</label><div class="mini-shell"><input id="dn'+id+'" class="dn" type="text" aria-label="שם החוב"></div></div>'+
-    '<div><label class="cl" for="db'+id+'">יתרה</label><div class="mini-shell"><span class="unit">₪</span><input id="db'+id+'" class="db" type="text" inputmode="numeric" aria-label="יתרת החוב בשקלים" placeholder="0"></div></div>'+
-    '<div><label class="cl" for="dr'+id+'">ריבית שנתית</label><div class="mini-shell"><input id="dr'+id+'" class="dr" type="text" inputmode="decimal" aria-label="ריבית שנתית באחוזים" placeholder="0"><span class="unit suf">%</span></div></div>'+
-    '<div><label class="cl" for="dm'+id+'">תשלום חודשי</label><div class="mini-shell"><span class="unit">₪</span><input id="dm'+id+'" class="dm" type="text" inputmode="numeric" aria-label="תשלום חודשי מינימלי בשקלים" placeholder="0"></div></div>'+
-    '<button type="button" class="d-del" aria-label="מחיקת שורת החוב">×</button>';
-  w.querySelector('.dn').value=d.name;
-  w.querySelector('.db').value=grp(d.bal);
-  w.querySelector('.dr').value=d.rate;
-  w.querySelector('.dm').value=grp(d.min);
-  w.querySelector('.d-del').onclick=()=>{
-    if(document.querySelectorAll('#debts .d-row').length<=1) return;
-    w.remove(); calc(); syncLive();
+  d=d||{name:'חוב חדש',bal:0,rate:8,min:0,add:0,rev:false,byn:false};
+  const id=++UID, it=document.createElement('div'); it.className='d-item';
+  it.innerHTML=
+    '<div class="d-row">'+
+      '<div><label class="cl" for="dn'+id+'">שם החוב</label><div class="mini-shell"><input id="dn'+id+'" class="dn" type="text" aria-label="שם החוב"></div></div>'+
+      '<div><label class="cl" for="db'+id+'">יתרה</label><div class="mini-shell"><span class="unit">₪</span><input id="db'+id+'" class="db" type="text" inputmode="numeric" aria-label="יתרת החוב בשקלים" placeholder="0"></div></div>'+
+      '<div><label class="cl rlbl" for="dr'+id+'">ריבית שנתית</label><div class="mini-shell"><input id="dr'+id+'" class="dr" type="text" inputmode="decimal" aria-label="ריבית שנתית באחוזים" placeholder="0"><span class="unit suf rsuf">%</span></div></div>'+
+      '<div><label class="cl mlbl" for="dm'+id+'">תשלום חודשי</label><div class="mini-shell"><span class="unit">₪</span><input id="dm'+id+'" class="dm" type="text" inputmode="numeric" aria-label="תשלום חודשי בשקלים" placeholder="0"></div></div>'+
+      '<button type="button" class="d-del" aria-label="מחיקת שורת החוב">×</button>'+
+    '</div>'+
+    '<div class="d-meta">'+
+      '<div class="dm-modes" role="group" aria-label="סוג החוב">'+
+        '<button type="button" class="dm-chip on" data-mode="loan">הלוואה</button>'+
+        '<button type="button" class="dm-chip" data-mode="rev">אשראי מתגלגל</button>'+
+      '</div>'+
+      '<div class="dm-rev" hidden><label for="da'+id+'">נכנס לכרטיס כל חודש</label><div class="mini-shell"><span class="unit">₪</span><input id="da'+id+'" class="da" type="text" inputmode="numeric" aria-label="הוצאה חדשה שנכנסת לכרטיס כל חודש" placeholder="0"></div></div>'+
+      '<button type="button" class="dm-swap">לפי מספר תשלומים ⇄</button>'+
+      '<div class="dm-info"></div>'+
+    '</div>';
+  it.querySelector('.dn').value=d.name;
+  it.querySelector('.db').value=grp(d.bal);
+  it.querySelector('.dr').value=d.rate;
+  it.querySelector('.dm').value=grp(d.min);
+  it.querySelector('.da').value=grp(d.add||0);
+  it.dataset.rev=d.rev?'1':'0';
+  it.dataset.byn=d.byn?'1':'0';
+  it.querySelector('.d-del').onclick=()=>{
+    if(document.querySelectorAll('#debts .d-item').length<=1) return;
+    it.remove(); calc(); syncLive();
   };
-  document.getElementById('debts').appendChild(w);
-  return w;
+  it.querySelector('.dm-modes').onclick=e=>{
+    const b=e.target.closest('.dm-chip'); if(!b)return;
+    it.dataset.rev = b.dataset.mode==='rev' ? '1':'0';
+    if(it.dataset.rev==='1') it.dataset.byn='0';
+    applyMode(it); calc(); syncLive();
+  };
+  it.querySelector('.dm-swap').onclick=()=>{
+    const r=readRow(it);
+    if(it.dataset.byn==='1'){                    // חזרה לריבית
+      it.dataset.byn='0';
+      it.querySelector('.dr').value=(Math.round(r.rate*10)/10)||0;
+    }else{                                       // מעבר למספר תשלומים
+      const n=soloMonths(r);
+      it.dataset.byn='1';
+      it.querySelector('.dr').value=isFinite(n)&&n>0?n:'';
+    }
+    applyMode(it); calc(); syncLive();
+  };
+  applyMode(it);
+  document.getElementById('debts').appendChild(it);
+  return it;
 }
-function readRows(){
-  return [...document.querySelectorAll('#debts .d-row')].map(r=>({
-    el:r,
-    name:(r.querySelector('.dn').value||'').trim()||'חוב',
-    bal:nv(r.querySelector('.db').value),
-    rate:nv(r.querySelector('.dr').value),
-    min:nv(r.querySelector('.dm').value)
-  }));
+function applyMode(it){
+  const rev=it.dataset.rev==='1', byn=it.dataset.byn==='1';
+  [...it.querySelectorAll('.dm-chip')].forEach(b=>b.classList.toggle('on', (b.dataset.mode==='rev')===rev));
+  it.querySelector('.dm-rev').hidden=!rev;
+  const swap=it.querySelector('.dm-swap');
+  swap.hidden=rev;
+  swap.textContent = byn?'לפי ריבית ⇄':'לפי מספר תשלומים ⇄';
+  it.querySelector('.rlbl').textContent = byn?'תשלומים שנשארו':'ריבית שנתית';
+  it.querySelector('.rsuf').textContent = byn?'תש׳':'%';
+  it.querySelector('.dr').setAttribute('aria-label', byn?'כמה תשלומים נשארו':'ריבית שנתית באחוזים');
+  it.querySelector('.mlbl').textContent = rev?'משולם בפועל':'תשלום חודשי';
+}
+function readRow(r){
+  const rev=r.dataset.rev==='1', byn=r.dataset.byn==='1';
+  const bal=nv(r.querySelector('.db').value), min=nv(r.querySelector('.dm').value);
+  const raw=nv(r.querySelector('.dr').value);
+  const rate = byn ? rateFromN(bal,min,Math.round(raw)) : raw;
+  return {el:r, name:(r.querySelector('.dn').value||'').trim()||'חוב',
+          bal, rate, min, add:rev?nv(r.querySelector('.da').value):0, rev, byn};
+}
+function readRows(){ return [...document.querySelectorAll('#debts .d-item')].map(readRow); }
+
+/* ריבית שנתית משוערת מתוך יתרה, תשלום ומספר תשלומים */
+function rateFromN(P,A,n){
+  if(P<=0||A<=0||n<=0) return 0;
+  if(A*n<=P) return 0;
+  if(A>=P) return 0;
+  const pay=r=> r<=1e-9 ? P/n : P*r/(1-Math.pow(1+r,-n));
+  let lo=0,hi=1;
+  if(pay(hi)<A) return hi*1200;
+  for(let i=0;i<160;i++){const mid=(lo+hi)/2; if(pay(mid)<A) lo=mid; else hi=mid;}
+  return ((lo+hi)/2)*1200;
+}
+/* כמה תשלומים נשארו לחוב הזה לבדו, בקצב הנוכחי */
+function soloMonths(d){
+  let bal=d.bal,m=0;
+  if(bal<=0) return 0;
+  while(bal>.5 && m<MAXM){ m++; bal+=bal*d.rate/1200+(d.add||0); bal-=Math.min(d.min,bal); }
+  return m>=MAXM?Infinity:m;
 }
 
 /* ── ההדמיה ── */
 function sim(debts, extra, method, roll){
-  const ds=debts.map((d,i)=>({i,name:d.name,bal:d.bal,rate:d.rate,min:d.min,paid:0,interest:0,month:0}));
-  const totalMin=ds.reduce((s,d)=>s+d.min,0);
+  const ds=debts.map((d,i)=>({i,name:d.name,bal:d.bal,rate:d.rate,min:d.min,add:d.add||0,paid:0,interest:0,month:0}));
+  let added=0;
   const order=ds.slice().sort((a,b)=> method==='aval'
     ? (b.rate-a.rate)||(a.bal-b.bal)
     : (a.bal-b.bal)||(b.rate-a.rate));
   const tot=()=>ds.reduce((s,d)=>s+d.bal,0);
-  let m=0,totalInt=0,stuck=false;
+  let m=0,totalInt=0,stuck=false,rising=0,prev=tot();
   const series=[tot()], hist=[ds.map(d=>d.bal)];
   while(tot()>.5){
     if(m>=MAXM){stuck=true;break;}
     m++;
-    ds.forEach(d=>{ if(d.bal>.5){const it=d.bal*d.rate/1200; d.bal+=it; d.interest+=it; totalInt+=it;} });
+    ds.forEach(d=>{ if(d.bal>.5){const it=d.bal*d.rate/1200; d.bal+=it+d.add; d.interest+=it; totalInt+=it; added+=d.add;} });
     if(roll){
-      let budget=totalMin+extra;
+      let budget=extra; for(const d of ds) budget += (d.bal>.5 ? d.min : Math.max(0,d.min-d.add));
       for(const d of order){ if(d.bal<=.5)continue; const p=Math.min(d.min,d.bal,budget); d.bal-=p; d.paid+=p; budget-=p; }
       for(const d of order){ if(budget<=.5)break; if(d.bal<=.5)continue; const p=Math.min(budget,d.bal); d.bal-=p; d.paid+=p; budget-=p; }
     }else{
       for(const d of order){ if(d.bal<=.5)continue; const p=Math.min(d.min,d.bal); d.bal-=p; d.paid+=p; }
     }
     ds.forEach(d=>{ if(d.bal<=.5 && !d.month){ d.bal=0; d.month=m; } });
-    series.push(tot());
+    const now=tot();
+    rising = now >= prev-.5 ? rising+1 : 0;
+    prev=now;
+    if(rising>=6){ stuck=true; break; }   // תשלומים קבועים ויתרה שגדלה = מתבדר, אין טעם להמשיך
+    series.push(now);
     hist.push(ds.map(d=>d.bal));
   }
   const paid=ds.reduce((s,d)=>s+d.paid,0);
   const firstWin=order.filter(d=>d.month>0).reduce((a,d)=>a?Math.min(a,d.month):d.month,0);
-  return {months:m, interest:totalInt, paid, series, hist, ds, order, stuck, firstWin};
+  return {months:m, interest:totalInt, paid, added, series, hist, ds, order, stuck, firstWin};
 }
 
 /* ── חישוב ותצוגה ── */
@@ -649,18 +742,38 @@ function calc(){
   const extra=nv(document.getElementById('extra').value);
   const live=rows.filter(d=>d.bal>0);
   const tBal=rows.reduce((s,d)=>s+d.bal,0), tMin=rows.reduce((s,d)=>s+(d.bal>0?d.min:0),0);
+  const tAdd=rows.reduce((s,d)=>s+(d.bal>0?d.add:0),0);
   document.getElementById('tBal').textContent=money(tBal);
   document.getElementById('tMin').textContent=money(tMin);
   document.getElementById('tPay').textContent=money(tMin+extra);
 
   // חוב שהתשלום עליו לא מכסה את הריבית
-  const stalled=[];
+  const stalled=[], growing=[];
   rows.forEach(d=>{
     const shell=d.el.querySelector('.dm').closest('.mini-shell');
     const monthlyInt=d.bal*d.rate/1200;
-    const bad=d.bal>0 && d.min>0 && d.min<=monthlyInt;
+    const need=monthlyInt+d.add;                       // כמה צריך רק כדי לא לשקוע
+    const bad=d.bal>0 && d.min>0 && d.min<=need;
     shell.classList.toggle('bad',bad);
-    if(bad) stalled.push({name:d.name, need:monthlyInt});
+    if(bad){
+      stalled.push({name:d.name, need, rev:d.rev, gap:need-d.min});
+      if(d.rev) growing.push({name:d.name, gap:need-d.min});
+    }
+    // שורת המידע מתחת לשורה
+    const info=d.el.querySelector('.dm-info');
+    if(d.bal<=0 || d.min<=0){ info.className='dm-info'; info.innerHTML=''; return; }
+    if(bad){
+      info.className='dm-info bad';
+      info.innerHTML=(d.rev
+        ? '🔴 היתרה גדלה ב-'+money(need-d.min)+' בחודש'
+        : '🔴 התשלום לא מכסה את הריבית')+' <small>· צריך '+money(need)+' רק כדי לעמוד במקום</small>';
+      return;
+    }
+    const n=soloMonths(d);
+    info.className='dm-info';
+    info.innerHTML= d.byn
+      ? 'ריבית שנתית משוערת: <b>'+(Math.round(d.rate*10)/10)+'%</b>'
+      : 'בקצב הנוכחי נשארו <b>'+n+' תשלומים</b> <small>('+dur(n)+')</small>';
   });
 
   const insMain=document.getElementById('insMain');
@@ -678,7 +791,7 @@ function calc(){
     document.getElementById('insStall').hidden=true;
     document.getElementById('insExtra').hidden=true;
     document.getElementById('cmpVerdict').hidden=true;
-    drawChart(null,null);
+    drawChart(null,null); chartMsg('');
     return;
   }
   document.getElementById('cmpVerdict').hidden=false;
@@ -712,12 +825,21 @@ function calc(){
     const first=sel.order.find(d=>d.month===sel.firstWin);
     insMain.className='insight';
     insMain.innerHTML='בשיטת <b>'+selName+'</b> תסיימו את כל החובות תוך <b>'+dur(sel.months)+'</b> ותשלמו בדרך <b>'+money(sel.interest)+'</b> ריבית.'+
-      (first?' החוב הראשון שנסגר הוא <b>'+first.name+'</b>, כבר אחרי '+dur(first.month)+'.':'');
+      (first?' החוב הראשון שנסגר הוא <b>'+first.name+'</b>, כבר אחרי '+dur(first.month)+'.':'')+
+      (sel.added>0?' <small style="font-weight:700;color:var(--ink-soft)">(מתוך '+money(sel.paid)+' שיצאו מהחשבון, '+money(sel.added)+' הן הוצאות חדשות שנכנסו לכרטיס בדרך ולא פירעון חוב.)</small>':'');
   }
 
   // התראת חוב תקוע
   const st=document.getElementById('insStall');
-  if(stalled.length){
+  if(growing.length){
+    const gap=growing.reduce((a,g)=>a+g.gap,0);
+    st.hidden=false; st.className='insight warn';
+    st.innerHTML='🔴 '+(growing.length===1?'ב<b>'+growing[0].name+'</b> נכנס כל חודש יותר ממה שמשולם':
+      'ב<b>'+growing.map(g=>g.name).join('</b> וב<b>')+'</b> נכנס כל חודש יותר ממה שמשולם')+
+      ', ולכן היתרה <b>גדלה ב-'+money(gap)+' בחודש</b>. בקצב הזה אין תאריך סיום, והכרטיס לא מממן קניות אלא פער חודשי בין ההכנסה להוצאה. ' +
+      'שתי דרכים, ושתיהן קודמות לכל תוכנית פירעון: לסגור את הפער של <b>'+money(gap)+'</b> בתקציב או בהכנסה, או להמיר את היתרה להלוואה בהחזרים קבועים בריבית נמוכה יותר, ' +
+      'שמשחררת את המסגרת בחזרה להוצאה השוטפת.';
+  } else if(stalled.length){
     st.hidden=false; st.className='insight warn';
     st.innerHTML='🔴 '+(stalled.length===1?'החוב <b>'+stalled[0].name+'</b> מסומן באדום: התשלום החודשי עליו לא מכסה אפילו את הריבית'
       :'החובות <b>'+stalled.map(s=>s.name).join('</b>, <b>')+'</b> מסומנים באדום: התשלום החודשי עליהם לא מכסה את הריבית')+
@@ -774,24 +896,38 @@ function calc(){
   else{
     const closed=sel.order.filter(d=>d.month>0).sort((a,b)=>a.month-b.month);
     const maxM=Math.max(1,sel.months);
-    tl.innerHTML=closed.map((d,i)=>
-      '<div class="tl-item"><div class="tl-top"><span>'+(i+1)+'. '+d.name+'</span><b>'+dur(d.month)+'</b></div>'+
+    tl.innerHTML=closed.map((d,i)=>{
+      const solo=soloMonths(live[d.i]);
+      const vs = isFinite(solo)
+        ? (solo>d.month ? 'במקום <b>'+solo+' תשלומים</b> בקצב הנוכחי, נסגר אחרי <b>'+d.month+'</b>'
+                        : 'נסגר אחרי <b>'+d.month+' תשלומים</b>')
+        : 'בקצב הנוכחי הוא לא היה נסגר בכלל, וכאן הוא נסגר אחרי <b>'+d.month+' תשלומים</b>';
+      return '<div class="tl-item"><div class="tl-top"><span>'+(i+1)+'. '+d.name+'</span><b>'+dur(d.month)+'</b></div>'+
       '<div class="tl-bar"><i style="width:'+(d.month/maxM*100).toFixed(1)+'%"></i></div>'+
-      '<div class="tl-sub">נסגר בחודש <b>'+d.month+'</b> · שולם עליו '+money(d.paid)+' (מזה '+money(d.interest)+' ריבית)'+
-      (i<closed.length-1?' · התשלום של <b>'+money(d.min)+'</b> מתגלגל לחוב הבא':' · 🎉 מכאן כל '+money(tMin+extra)+' בחודש חוזרים אליכם')+'</div></div>'
-    ).join('');
+      '<div class="tl-sub">'+vs+' · שולם עליו '+money(d.paid)+' (מזה '+money(d.interest)+' ריבית)'+
+      (i<closed.length-1?' · התשלום של <b>'+money(d.min)+'</b> מתגלגל לחוב הבא':' · 🎉 מכאן כל '+money(tMin+extra-tAdd)+' בחודש חוזרים אליכם')+'</div></div>';
+    }).join('');
   }
 
-  drawChart(sel,base.stuck?null:base);
+  if(sel.stuck){ chartMsg('🔴 אין כאן עקומה לצייר. כל עוד מה שיוצא כל חודש קטן ממה שנצבר, היתרה רק עולה ואין נקודה שבה היא נוגעת באפס.<br>הגרף יחזור ברגע שהתשלום החודשי יכסה לפחות את הריבית וההוצאה החדשה.'); }
+  else drawChart(sel,base.stuck?null:base);
 }
 
 /* ── גרף ── */
 let CH=null;
 const LAYER=['#2f4036','#5f7d6a','#87a692','#a8c2b0','#bcd3bf','#d3e3d6'];
 function short(v){v=Math.round(v);if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+'M';if(v>=1e3)return Math.round(v/1e3)+'K';return v;}
+function chartMsg(txt){
+  document.getElementById('chartWrap').hidden=!!txt;
+  document.getElementById('chartLegend').hidden=!!txt;
+  const m=document.getElementById('chartMsg');
+  m.hidden=!txt; if(txt) m.innerHTML=txt;
+  document.querySelectorAll('.chart-card .chart-sub')[1].hidden=!!txt;
+}
 function drawChart(sel,base){
   const svg=document.getElementById('chart'), lg=document.getElementById('chartLegend');
   if(!sel||!sel.hist||!sel.hist.length){svg.innerHTML='';lg.innerHTML='';CH=null;return;}
+  chartMsg('');
   const W=720,H=360,padL=64,padR=18,padT=18,padB=34;
   const N=Math.max(sel.hist.length, base&&base.series?base.series.length:0)-1;
   const padArr=(a,n)=>{const b=a.slice();while(b.length<n+1)b.push(0);return b;};
@@ -858,7 +994,7 @@ function drawChart(sel,base){
 
 /* ── אירועים ── */
 document.getElementById('debts').addEventListener('input',e=>{
-  if(e.target.classList.contains('db')||e.target.classList.contains('dm')){
+  if(e.target.classList.contains('db')||e.target.classList.contains('dm')||e.target.classList.contains('da')||(e.target.classList.contains('dr')&&e.target.closest('.d-item').dataset.byn==='1')){
     const p=e.target.selectionStart, before=e.target.value.length;
     e.target.value=grp(e.target.value);
     const after=e.target.value.length;
@@ -884,7 +1020,7 @@ document.getElementById('meth').addEventListener('click',e=>{
 /* ── שמירה ושיתוף ── */
 function enc(){
   return JSON.stringify({
-    d:readRows().map(r=>[r.name,r.bal,r.rate,r.min]),
+    d:readRows().map(r=>[r.name,r.bal,nv(r.el.querySelector('.dr').value),r.min,r.add,r.rev?1:0,r.byn?1:0]),
     e:nv(document.getElementById('extra').value),
     m:METHOD
   });
@@ -893,7 +1029,7 @@ function dec(str){
   try{
     const o=JSON.parse(str); if(!o||!Array.isArray(o.d))return false;
     document.getElementById('debts').innerHTML='';
-    (o.d.length?o.d:DEFAULTS.map(d=>[d.name,d.bal,d.rate,d.min])).forEach(a=>addRow({name:a[0],bal:a[1],rate:a[2],min:a[3]}));
+    (o.d.length?o.d:DEFAULTS.map(d=>[d.name,d.bal,d.rate,d.min])).forEach(a=>addRow({name:a[0],bal:a[1],rate:a[2],min:a[3],add:a[4]||0,rev:!!a[5],byn:!!a[6]}));
     document.getElementById('extra').value=grp(o.e||0);
     METHOD=o.m==='aval'?'aval':'snow';
     [...document.querySelectorAll('#meth button')].forEach(x=>x.classList.toggle('on',x.dataset.m===METHOD));

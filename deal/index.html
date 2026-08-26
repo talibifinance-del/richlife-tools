@@ -321,6 +321,9 @@ svg.chart{display:block;width:100%;height:auto}
 .sec-note{font-size:12.5px;font-weight:700;color:var(--ink-soft);line-height:1.55;margin-bottom:14px}
 .card+.card{margin-top:16px}
 .field .hint{font-size:11px;font-weight:700;color:var(--pine);margin-top:4px;min-height:14px}
+.gmode{display:inline-flex;background:var(--sage-tint);border-radius:100px;padding:2px;gap:2px;margin-top:8px}
+.gm-chip{font-family:var(--font);cursor:pointer;border:none;background:transparent;color:var(--ink-soft);font-size:11.5px;font-weight:800;padding:6px 13px;border-radius:100px;transition:all .15s;white-space:nowrap}
+.gm-chip.on{background:var(--pine);color:#fff;box-shadow:0 3px 9px rgba(var(--pine-rgb),.25)}
 .field .hint.warn{color:#8f3a29}
 .fees{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
 @media(min-width:620px){.fees{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -433,6 +436,10 @@ table.grid td.name{text-align:start}
       <div class="field">
         <label for="grow">עליית ערך שנתית ממוצעת</label>
         <div class="input-shell"><input id="grow" type="text" inputmode="decimal" value="8"><span class="unit suf">%</span></div>
+        <div class="gmode" id="gmode" role="group" aria-label="סוג עליית הערך">
+          <button type="button" class="gm-chip on" data-g="c">ריבית דריבית</button>
+          <button type="button" class="gm-chip" data-g="s">עלייה קבועה</button>
+        </div>
         <div class="hint" id="hGrow"></div>
       </div>
       <div class="field">
@@ -455,6 +462,7 @@ table.grid td.name{text-align:start}
       <div class="tot"><div class="k">עלות העסקה הכוללת</div><div class="v" id="tCost">0 ₪</div><div class="s" id="tCostS"></div></div>
       <div class="tot"><div class="k">שווי צפוי במכירה</div><div class="v" id="tVal">0 ₪</div><div class="s" id="tValS"></div></div>
     </div>
+    <div class="insight" id="insGrow" style="margin-top:14px"></div>
   </div>
 
   <div class="card">
@@ -576,6 +584,7 @@ table.grid td.name{text-align:start}
   <div class="card faq" style="margin-top:16px">
     <div class="sec-lbl">❓ שאלות נפוצות</div>
     <details><summary>למה התשואה כאן נמוכה ממה שראיתי במקומות אחרים?<span class="chev">▾</span></summary><div class="a">כי רוב החישובים סופרים רק את ההון העצמי ההתחלתי, ומתעלמים מהכסף שהזרמתם כל חודש. אם שילמתם ₪2,526 בחודש במשך שלוש שנים, הזרמתם עוד <b>₪90,947</b> מעבר להון העצמי. הכלי הזה סופר את זה. הרווח בשקלים לא משתנה, רק היחס שלו לכסף שבאמת יצא.</div></details>
+    <details><summary>עליית ערך "מצטברת" מול "קבועה" - מה ההבדל?<span class="chev">▾</span></summary><div class="a"><b>מצטברת (ריבית דריבית)</b> מחשבת כל שנה על השווי החדש: 22% על ₪300,000 בשנה הראשונה, ואז 22% על ₪366,000 בשנייה. <b>קבועה</b> מחשבת כל שנה 22% מהמחיר המקורי. על שלוש שנים ההבדל הוא ₪46,754 על נכס של ₪300,000.<br><br>זה חשוב כי כשעסקה מבטיחה "25% בשנה", הרבה פעמים הכוונה היא ל-75% סך הכל על פני שלוש שנים, כלומר <b>קבועה</b>, ולא לריבית דריבית. 75% על שלוש שנים שקולים ל-20.5% ריבית דריבית בשנה, לא ל-25%. שווה לשאול את השאלה הזאת מפורשות לפני שחותמים.</div></details>
     <details><summary>איך מחושב המס?<span class="chev">▾</span></summary><div class="a">על <b>הרווח הריאלי</b>: קודם מנטרלים את האינפלציה מהשווי במכירה, ואז מחשבים את המס על מה שנשאר. כך זה עובד בפועל במס שבח בישראל, ולכן זה נכון יותר מלהטיל מס על הרווח הנומינלי. אם יש פטור או שיעור אחר, אפשר לשנות את שדה המס.</div></details>
     <details><summary>מה זה "הוזרם בפועל"?<span class="chev">▾</span></summary><div class="a">כל הכסף שיצא מהכיס: ההון העצמי, כל עלויות הרכישה, וכל ההחזרים החודשיים עד למכירה. זה המכנה של התשואה, וזה גם המספר שאנשים הכי נוטים לשכוח.</div></details>
     <details><summary>מה קורה כשהשכירות לא מכסה את ההחזר?<span class="chev">▾</span></summary><div class="a">אז יש תזרים שלילי, כלומר כל חודש אתם מוסיפים כסף מהכיס. זה לא בהכרח פסול, אבל צריך לדעת את הסכום מראש ולוודא שהוא בר-קיימא לאורך כל התקופה. הכלי מציג כמה זה בחודש וכמה זה מצטבר עד המכירה.</div></details>
@@ -755,11 +764,12 @@ const pctS=v=>(v*100).toFixed(v*100>=100||v*100<=-100?0:1)+'%';
 function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
 function nv(v){const x=parseFloat(String(v).replace(/[^\d.\-]/g,''));return isNaN(x)?0:x;}
 const $=id=>document.getElementById(id);
+let GMODE='c';
 const yearsWord=y=>y===1?'שנה':(y===2?'שנתיים':y+' שנים');
 
 /* ═══ המנוע ═══ */
 function model(o){
-  const {price,fees,years,grow,infl,taxR,rent,equity,months,rate,alt}=o;
+  const {price,fees,years,grow,infl,taxR,rent,equity,months,rate,alt,gmode}=o;
   const cost=price+fees, loan=Math.max(0,cost-equity), r=rate/1200;
   const pmt = loan<=0||months<=0 ? 0 : (r<=1e-9 ? loan/months : loan*r/(1-Math.pow(1+r,-months)));
   const balAt=m=>{ if(loan<=0)return 0; if(m>=months)return 0; if(r<=1e-9)return loan*(1-m/months);
@@ -767,7 +777,7 @@ function model(o){
   const rows=[];
   for(let y=1;y<=years;y++){
     const m=y*12, mp=Math.min(m,months);
-    const val=price*Math.pow(1+grow,y), bal=balAt(m), paid=pmt*mp;
+    const val=price*(gmode==='s'?(1+grow*y):Math.pow(1+grow,y)), bal=balAt(m), paid=pmt*mp;
     let rentCum=0; for(let k=1;k<=y;k++) rentCum+=rent*12*Math.pow(1+infl,k-1);
     const realVal=val/Math.pow(1+infl,y), realGain=realVal-cost;
     const tax=Math.max(0,realGain)*taxR;
@@ -792,7 +802,7 @@ function read(){
     years:Math.max(1,Math.min(30,Math.round(nv($('years').value)||1))),
     grow:nv($('grow').value)/100, infl:nv($('infl').value)/100, taxR:nv($('tax').value)/100,
     rent:nv($('rent').value), equity:nv($('equity').value),
-    months:Math.max(1,Math.round(nv($('months').value)||1)), rate:nv($('rate').value), alt:nv($('alt').value)/100
+    months:Math.max(1,Math.round(nv($('months').value)||1)), rate:nv($('rate').value), alt:nv($('alt').value)/100, gmode:GMODE
   };
 }
 
@@ -807,8 +817,9 @@ function calc(){
   $('tPmt').textContent=money(M.pmt);
   $('hLoan').textContent=M.cost>0?'מינוף של '+Math.round(M.loan/M.cost*100)+'% מעלות העסקה':'';
   $('hMonths').textContent=o.months>=o.years*12?'ההלוואה ארוכה מתקופת ההשקעה, אז היא נסגרת במכירה':'ההלוואה נגמרת לפני המכירה';
-  $('hGrow').textContent=o.grow>=0.15?'⚠️ הנחה אגרסיבית מאוד':(o.grow<=0?'ללא עליית ערך':'');
+  $('hGrow').textContent=(GMODE==='c'?'כל שנה על השווי החדש':'כל שנה על המחיר המקורי')+(o.grow>=0.15?' · ⚠️ הנחה אגרסיבית מאוד':'');
   $('hGrow').className='hint'+(o.grow>=0.15?' warn':'');
+  growInsight(o);
   $('hRent').textContent=(o.rent>0&&M.cost>0)?'תשואה שוטפת של '+(o.rent*12/M.cost*100).toFixed(1)+'% בשנה':'';
   $('rSpan').textContent='אחרי '+yearsWord(o.years);
 
@@ -888,6 +899,28 @@ function calc(){
 
   drawChart(M);
   if(!$('advWrap').hidden) advanced(o,M);
+}
+
+/* ═══ מצטברת מול קבועה ═══ */
+function growInsight(o){
+  const el=$('insGrow'), g=nv($('grow').value), y=o.years;
+  if(o.price<=0||y<=0){el.className='insight soft';el.textContent='';el.hidden=true;return;}
+  el.hidden=false;
+  const vC=o.price*Math.pow(1+o.grow,y), vS=o.price*(1+o.grow*y), gap=vC-vS;
+  const eqSimple=y>0?((Math.pow(1+o.grow,y)-1)/y*100):0;                    // מצטברת → קבועה שקולה
+  const eqComp=(o.grow*y<=-1||y<=0)?0:(Math.pow(1+o.grow*y,1/y)-1)*100;      // קבועה → מצטברת שקולה
+  if(GMODE==='c'){
+    el.className='insight';
+    el.innerHTML='📈 <b>ריבית דריבית:</b> כל שנה מחושבת על השווי החדש. '+g+'% בשנה במשך '+yearsWord(y)+
+      ' מביאים את הנכס ל-<b>'+money(vC)+'</b>, שזה כמו עלייה קבועה של <b>'+eqSimple.toFixed(1)+'%</b> בשנה מהמחיר המקורי.'+
+      (gap>1?' אילו זו הייתה עלייה קבועה של '+g+'%, השווי היה '+money(vS)+' בלבד, פער של <b>'+money(gap)+'</b>.':'')+
+      ' <span style="font-weight:700;color:var(--ink-soft)">כשעסקה מבטיחה "'+g+'% בשנה" כדאי לשאול איזה משניהם היא מתכוונת.</span>';
+  }else{
+    el.className='insight soft';
+    el.innerHTML='📉 <b>עלייה קבועה:</b> כל שנה '+g+'% מהמחיר המקורי, בלי הצטברות. אחרי '+yearsWord(y)+
+      ' השווי <b>'+money(vS)+'</b>, ובריבית דריבית הוא היה <b>'+money(vC)+'</b>.'+
+      ' זה שקול ל-<b>'+eqComp.toFixed(1)+'%</b> ריבית דריבית בשנה. זו בדרך כלל הכוונה כשמישהו אומר "'+g+'% בשנה" על עסקה עם תאריך יציאה.';
+  }
 }
 
 /* ═══ מצב מתקדם ═══ */
@@ -1018,6 +1051,12 @@ document.addEventListener('input',e=>{
   else if(id==='eqPct') syncFromPct();
   calc(); syncLive();
 });
+$('gmode').addEventListener('click',e=>{
+  const b=e.target.closest('.gm-chip'); if(!b)return;
+  GMODE=b.dataset.g;
+  [...document.querySelectorAll('#gmode .gm-chip')].forEach(x=>x.classList.toggle('on',x===b));
+  calc(); syncLive();
+});
 $('advBtn').onclick=()=>{
   const w=$('advWrap'),b=$('advBtn'),on=w.hidden;
   w.hidden=!on; b.classList.toggle('on',on); b.setAttribute('aria-expanded',on?'true':'false');
@@ -1029,13 +1068,15 @@ $('advBtn').onclick=()=>{
 function enc(){const o=read();return JSON.stringify({n:$('dname').value,p:o.price,
   f:[nv($('fLaw').value),nv($('fDev').value),nv($('fAdv').value),nv($('fOth').value)],
   y:o.years,g:nv($('grow').value),i:nv($('infl').value),t:nv($('tax').value),r:o.rent,
-  e:o.equity,m:o.months,rt:nv($('rate').value),a:nv($('alt').value),adv:$('advWrap').hidden?0:1});}
+  e:o.equity,m:o.months,rt:nv($('rate').value),a:nv($('alt').value),gm:GMODE,adv:$('advWrap').hidden?0:1});}
 function dec(str){try{const o=JSON.parse(str);if(!o||typeof o!=='object')return false;
   $('dname').value=o.n||''; $('price').value=grp(o.p||0);
   const f=o.f||[0,0,0,0]; ['fLaw','fDev','fAdv','fOth'].forEach((k,ix)=>$(k).value=grp(f[ix]||0));
   $('years').value=o.y||3; $('grow').value=o.g??8; $('infl').value=o.i??3; $('tax').value=o.t??25;
   $('rent').value=grp(o.r||0); $('equity').value=grp(o.e||0); $('months').value=o.m||120;
   $('rate').value=o.rt??6.25; $('alt').value=o.a??8;
+  GMODE=o.gm==='s'?'s':'c';
+  [...document.querySelectorAll('#gmode .gm-chip')].forEach(x=>x.classList.toggle('on',x.dataset.g===GMODE));
   syncFromEquity();
   if(o.adv){$('advWrap').hidden=false;$('advBtn').classList.add('on');$('advBtn').setAttribute('aria-expanded','true');}
   return true;}catch(e){return false;}}

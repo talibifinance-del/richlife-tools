@@ -998,6 +998,7 @@ function advanced(o,M){
   bb.innerHTML=p1+p2+'<br><span style="font-size:12px;font-weight:700;color:var(--ink-soft)">ההנחה שהזנתם: '+(o.grow*100).toFixed(1)+'% בשנה.</span>';
 
   // לוח סילוקין
+  const mSale=Math.min(o.years*12,M.months);
   let rows='',bal=M.loan;
   for(let m=1;m<=M.months&&m<=600;m++){
     const int=bal*(o.rate/1200), pr=Math.min(M.pmt-int,bal);

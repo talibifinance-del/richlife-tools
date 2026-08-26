@@ -25,7 +25,7 @@ fbq('init','208911198828875');fbq('track','PageView');
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(16px,4vw,44px) clamp(12px,3vw,28px) 60px}
-.wrap{max-width:640px;margin:0 auto}
+.wrap{max-width:720px;margin:0 auto}
 .brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:22px}
 .brand .avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
 .brand .by-lead{font-weight:900;font-size:16px;color:var(--pine-darker)}
@@ -35,17 +35,19 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .hero h1{font-size:clamp(26px,6vw,38px);font-weight:900;color:var(--pine-darker);line-height:1.12}
 .hero h1 .em{color:var(--pine)}
 .hero p{font-size:clamp(14px,2.8vw,16px);font-weight:600;color:var(--ink-soft);margin-top:10px;max-width:460px;margin-inline:auto}
-.tools{display:flex;flex-direction:column;gap:13px}
-.tool{display:flex;align-items:center;gap:15px;background:var(--card);border-radius:18px;padding:17px 18px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);text-decoration:none;color:inherit;transition:transform .18s,box-shadow .18s,border-color .18s}
-.tool:hover{transform:translateY(-2px);border-color:var(--pine);box-shadow:var(--shadow-hi)}
-.tool .t-ic{font-size:30px;flex:none;width:54px;height:54px;display:grid;place-items:center;background:var(--sage-tint);border-radius:15px}
-.tool .t-txt{flex:1;min-width:0}
-.tool .t-name{font-size:clamp(16px,3.6vw,18px);font-weight:900;color:var(--pine-darker)}
-.tool .t-desc{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-top:2px;line-height:1.4}
-.tool .t-arrow{flex:none;font-size:20px;color:var(--pine);font-weight:900}
-.tool.soon{opacity:.72;cursor:default;pointer-events:none;box-shadow:none;background:rgba(255,255,255,.6)}
+.tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+@media(min-width:600px){.tools{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}}
+.tool{display:flex;flex-direction:column;align-items:flex-start;background:var(--card);border-radius:20px;padding:clamp(15px,3vw,19px);min-height:178px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);text-decoration:none;color:inherit;transition:transform .18s,box-shadow .18s,border-color .18s}
+.tool:hover{transform:translateY(-3px);border-color:var(--pine);box-shadow:var(--shadow-hi)}
+.tool:hover .t-arrow{transform:translateX(-4px)}
+.tool .t-ic{font-size:27px;flex:none;width:48px;height:48px;display:grid;place-items:center;background:var(--sage-tint);border-radius:14px;margin-bottom:12px}
+.tool .t-txt{display:block;width:100%;min-width:0}
+.tool .t-name{display:block;font-size:clamp(14.5px,3.3vw,16.5px);font-weight:900;color:var(--pine-darker);line-height:1.3}
+.tool .t-desc{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-top:6px;line-height:1.45}
+.tool .t-arrow{margin-top:auto;padding-top:10px;font-size:18px;color:var(--pine);font-weight:900;transition:transform .18s}
+.tool.soon{opacity:.7;cursor:default;pointer-events:none;box-shadow:none;background:rgba(255,255,255,.6)}
 .tool.soon .t-ic{background:rgba(var(--pine-rgb),.06)}
-.badge{flex:none;font-size:10.5px;font-weight:800;color:var(--pine-deep);background:rgba(var(--pine-rgb),.12);padding:4px 11px;border-radius:100px;white-space:nowrap}
+.badge{margin-top:auto;font-size:10.5px;font-weight:800;color:var(--pine-deep);background:rgba(var(--pine-rgb),.12);padding:4px 11px;border-radius:100px;white-space:nowrap}
 .socials{display:flex;gap:12px;justify-content:center;margin-top:26px}
 .socials a{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);color:var(--pine-deep);box-shadow:var(--shadow);transition:all .18s}
 .socials a:hover{border-color:var(--pine);transform:translateY(-2px)}
@@ -69,82 +71,82 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
   <div class="tools">
     <a class="tool" href="/matarot/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🎯</span>
-      <span class="t-txt"><span class="t-name">מחשבון יעדים והשקעות</span><span class="t-desc">כמה להפריש כל חודש כדי להגיע לכל מטרה שלך</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון יעדים והשקעות</span><span class="t-desc">כמה להפריש כל חודש לכל מטרה</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/dream/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🏝️</span>
-      <span class="t-txt"><span class="t-name">מחשבון החלום</span><span class="t-desc">כמה הון צריך כדי לצאת לחופש כלכלי - ואיך מגיעים לשם</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון החלום</span><span class="t-desc">כמה הון צריך לחופש כלכלי</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/ribit/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">📈</span>
-      <span class="t-txt"><span class="t-name">מחשבון ריבית דה ריבית</span><span class="t-desc">איך הכסף עובד בשבילך לאורך זמן, ומה דמי הניהול עושים</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון ריבית דה ריבית</span><span class="t-desc">איך הכסף עובד לאורך זמן</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/loans/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🏦</span>
-      <span class="t-txt"><span class="t-name">מחשבון הלוואות</span><span class="t-desc">החזר חודשי, כמה תחזירו בסך הכל, וכמה מזה ריבית - העלות האמיתית</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון הלוואות</span><span class="t-desc">העלות האמיתית של ההלוואה</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/debt-snowball/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">❄️</span>
-      <span class="t-txt"><span class="t-name">מחשבון גלגול חובות</span><span class="t-desc">כדור שלג מול מפולת שלג: באיזה סדר לסגור כמה חובות, כמה זמן זה ייקח וכמה ריבית זה חוסך</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון גלגול חובות</span><span class="t-desc">באיזה סדר לסגור כמה חובות</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/salary-net/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🧾</span>
-      <span class="t-txt"><span class="t-name">מחשבון שכר נטו</span><span class="t-desc">ברוטו לנטו: כמה נשאר ביד אחרי מס, ביטוח לאומי ופנסיה - עם טבלאות מס 2026 שאפשר לעדכן</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון שכר נטו</span><span class="t-desc">מברוטו לנטו, עם טבלאות 2026</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/pricing/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🏷️</span>
-      <span class="t-txt"><span class="t-name">מחשבון תמחור</span><span class="t-desc">כמה לתמחר מוצר, שירות או סדנה - מעלות וזמן ועד מחיר סופי כולל מע"מ ועמלת סליקה, עם פירוט מלא</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון תמחור</span><span class="t-desc">כמה לתמחר מוצר או שירות</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/mortgage/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🏘️</span>
-      <span class="t-txt"><span class="t-name">מחשבון משכנתא</span><span class="t-desc">בונים תמהיל של מסלולים (קבועה, פריים, צמודה) ורואים כמה המשכנתא באמת עולה לאורך השנים</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון משכנתא</span><span class="t-desc">בונים תמהיל ורואים כמה זה עולה</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/lida/">
       <span class="t-ic">🤰</span>
-      <span class="t-txt"><span class="t-name">מחשבוני לידה</span><span class="t-desc">כל המחשבונים להיערכות כלכלית ללידה: דמי לידה, החזרים, רשימת קניות ועוד</span></span>
+      <span class="t-txt"><span class="t-name">מחשבוני לידה</span><span class="t-desc">כל ההיערכות הכלכלית ללידה</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/moving-home/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🏡</span>
-      <span class="t-txt"><span class="t-name">יוצאים מהבית לשכירות</span><span class="t-desc">כמה נכון להוציא על שכירות, ותכנון תקציב ומעקב למעבר דירה - שני מחשבונים במקום אחד</span></span>
+      <span class="t-txt"><span class="t-name">יוצאים מהבית לשכירות</span><span class="t-desc">כמה שכירות, ותקציב למעבר</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/trip-budget/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">✈️</span>
-      <span class="t-txt"><span class="t-name">תקציב לחופשה בחו"ל</span><span class="t-desc">כמה תעלה החופשה - תכנון תקציב ומעקב הוצאות לפי קטגוריות, עם עלות ליום ולאדם</span></span>
+      <span class="t-txt"><span class="t-name">תקציב לחופשה בחו"ל</span><span class="t-desc">כמה תעלה החופשה, לפי קטגוריות</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/habit-cost/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">☕</span>
-      <span class="t-txt"><span class="t-name">כמה עולה לי ההרגל הקטן</span><span class="t-desc">הקפה, המשלוחים והמנויים - כמה הם עולים בשנה, ומה הם שווים אם היו מושקעים</span></span>
+      <span class="t-txt"><span class="t-name">כמה עולה לי ההרגל הקטן</span><span class="t-desc">הקפה והמנויים, בשנה ובהשקעה</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/emergency-fund/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🛟</span>
-      <span class="t-txt"><span class="t-name">מחשבון קרן חירום</span><span class="t-desc">כמה כסף צריך ברשת ביטחון, כמה חסר, וכמה זמן ייקח להגיע ליעד</span></span>
+      <span class="t-txt"><span class="t-name">מחשבון קרן חירום</span><span class="t-desc">כמה צריך ברשת ביטחון</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/savings-map/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">🧭</span>
-      <span class="t-txt"><span class="t-name">מפת החיסכון</span><span class="t-desc">עשרות דרכים לשלם פחות על אותם דברים בדיוק, בלי לרדת רמת חיים - עם כמה חוסכים בשנה</span></span>
+      <span class="t-txt"><span class="t-name">מפת החיסכון</span><span class="t-desc">לשלם פחות על אותם דברים בדיוק</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/credit-cards/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">💳</span>
-      <span class="t-txt"><span class="t-name">השוואת כרטיסי אשראי</span><span class="t-desc">דמי כרטיס, קאשבק, ביטוח נסיעות והטבות - ומחשבון כמה כל כרטיס באמת מחזיר</span></span>
+      <span class="t-txt"><span class="t-name">השוואת כרטיסי אשראי</span><span class="t-desc">איזה כרטיס באמת מחזיר יותר</span></span>
       <span class="t-arrow">←</span>
     </a>
     <div class="tool soon">
       <span class="t-ic">🔍</span>
-      <span class="t-txt"><span class="t-name">בחינת עסקה</span><span class="t-desc">האם עסקה או השקעה משתלמת - במבט אחד</span></span>
+      <span class="t-txt"><span class="t-name">בחינת עסקה</span><span class="t-desc">האם עסקה משתלמת, במבט אחד</span></span>
       <span class="badge">בקרוב</span>
     </div>
   </div>

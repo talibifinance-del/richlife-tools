@@ -2,15 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<script src="/profile.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','208911198828875');fbq('track','PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=208911198828875&ev=PageView&noscript=1"/></noscript>
-<!-- End Meta Pixel Code -->
 <title>רשימת קניות ללידה · RichLife</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -268,7 +260,7 @@ body{font-family:var(--font);
       menu.querySelectorAll("[aria-pressed]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); };
     menu.appendChild(reset);
     var link = document.createElement("a");
-    link.href = "/lida/negishut.html"; link.textContent = "הצהרת נגישות";
+    link.href = "https://lida.richlife.co.il/machshevonim/negishut.html"; link.textContent = "הצהרת נגישות";
     menu.appendChild(link);
 
     // Permanent text link in the page footer (legal best practice: the statement
@@ -277,7 +269,7 @@ body{font-family:var(--font);
     var foot = document.querySelector("footer");
     if (foot && !foot.querySelector('a[href*="negishut"]')) {
       var fl = document.createElement("a");
-      fl.href = "/lida/negishut.html"; fl.textContent = "הצהרת נגישות";
+      fl.href = "https://lida.richlife.co.il/machshevonim/negishut.html"; fl.textContent = "הצהרת נגישות";
       fl.style.color = "inherit"; fl.style.marginRight = "6px";
       foot.appendChild(document.createTextNode(" · "));
       foot.appendChild(fl);
@@ -305,6 +297,20 @@ body{font-family:var(--font);
 })();
 </script>
 
+<style>
+.item.bagrow .it-meta{justify-content:flex-start;margin-top:4px}
+.item.bagrow .idel{margin:0}
+.legend span[hidden]{display:none!important}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 18px}
+.mode-tab{display:flex;flex-direction:column;gap:3px;text-align:center;cursor:pointer;user-select:none;background:var(--card);border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:15px;padding:13px 12px;box-shadow:var(--shadow);transition:all .18s}
+.mode-tab .mt-top{font-family:var(--font);font-size:15px;font-weight:900;color:var(--pine-deep)}
+.mode-tab .mt-sub{font-size:11.5px;font-weight:700;color:var(--ink-soft);line-height:1.35}
+.mode-tab.on{background:linear-gradient(130deg,rgba(var(--sage-rgb),.42),rgba(var(--sage-rgb),.16));border-color:rgba(var(--pine-rgb),.5);box-shadow:0 4px 16px rgba(var(--pine-rgb),.14)}
+.mode-tab:hover{border-color:rgba(var(--pine-rgb),.38)}
+.c-spent.packed{color:var(--pine-deep)}
+.bag-note{display:flex;gap:9px;align-items:flex-start;background:linear-gradient(120deg,rgba(var(--sage-rgb),.34),rgba(var(--sage-rgb),.12));border:1px solid rgba(var(--pine-rgb),.22);border-radius:13px;padding:12px 14px;margin-bottom:14px;font-size:12.8px;font-weight:600;line-height:1.5;color:var(--pine-deep)}
+@media(max-width:420px){.modes{grid-template-columns:1fr}}
+</style>
 <style id="brain-a11y-extra">@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}</style>
 <script>/* RichLife a11y: keyboard + labels for custom controls */
 (function(){var SEL='.chip,.track,.sec-head,.cat-head,.feed-chip';
@@ -331,13 +337,22 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="livuy-wrap"><a class="livuy-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">✨ לתהליך ליווי אישי עם טלי ←</a></div>
   </div>
 
-  <div class="card2">
+  <div class="modes" id="modes">
+    <div class="mode-tab on" data-mode="shop"><span class="mt-top">🛒 קניות לתינוק/ת</span><span class="mt-sub">מה קונים לפני הלידה, עם תקציב</span></div>
+    <div class="mode-tab" data-mode="bag"><span class="mt-top">🎒 תיק לחדר לידה</span><span class="mt-sub">מה אורזים לבית החולים</span></div>
+  </div>
+
+  <div id="bagIntro" hidden>
+    <div class="bag-note"><span>🎒</span><span>מומלץ להכין את התיק סביב <b>שבוע 34-36</b> ולהשאיר אותו ליד הדלת. סמנו כל פריט שארזתם - הרשימה נשמרת, ואפשר לשלוח אותה לבן/בת הזוג בקישור למטה.</span></div>
+  </div>
+
+  <div class="card2" id="stepBudget">
     <div class="step">שלב 1</div>
     <label>כמה תקציב יש לכם לכל קניות התינוק/ת?</label>
     <div class="big-input"><span class="u">₪</span><input class="tabular" id="totalBudget" type="text" inputmode="numeric" placeholder="0"></div>
   </div>
 
-  <div class="card2">
+  <div class="card2" id="stepFeed">
     <div class="step">שלב 2</div>
     <label>איך אתם מתכננים להאכיל? (מסנן את הפריטים הרלוונטיים)</label>
     <div class="feed-chips" id="feedChips">
@@ -347,7 +362,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     </div>
   </div>
 
-  <div class="tips">
+  <div class="tips" id="tipsBox">
     <div class="tips-title">💸 לא חייבים לקנות הכל חדש - ככה חוסכים:</div>
     <ul>
       <li><b>קבוצות "אמהות לא אוגרות" בפייסבוק</b> - נכנסים לפייסבוק, <a href="https://www.facebook.com/search/groups/?q=%D7%90%D7%9E%D7%94%D7%95%D7%AA%20%D7%9C%D7%90%20%D7%90%D7%95%D7%92%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">מחפשים "אמהות לא אוגרות" + העיר שלכן</a> ומבקשים להצטרף. לכל עיר יש גם קבוצת וואטסאפ. אמהות מעבירות ציוד שכבר לא צריך, בזול או בחינם.</li>
@@ -358,12 +373,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   </div>
 
   <div class="hero" id="hero">
-    <div class="h-lbl">💰 נשאר לכם מהתקציב</div>
+    <div class="h-lbl" id="heroLbl">💰 נשאר לכם מהתקציב</div>
     <div class="h-num" id="heroRemain">0<small> ₪</small></div>
-    <div class="h-meta">תקציב <b id="heroBudget">0 ₪</b> · הוצאתם בפועל <b id="heroSpent">0 ₪</b></div>
+    <div class="h-meta" id="heroMeta">תקציב <b id="heroBudget">0 ₪</b> · הוצאתם בפועל <b id="heroSpent">0 ₪</b></div>
     <div class="prog"><div class="fill" id="progFill" style="width:0%"></div></div>
     <div class="h-alloc" id="heroAlloc">חלקו את התקציב לקטגוריות למטה</div>
-    <div class="legend"><span><i class="i-hi"></i>הכרחי</span><span><i class="i-mid"></i>מומלץ</span><span><i class="i-lo"></i>כיף שיהיה</span><span><i class="i-no"></i>לא מומלץ</span></div>
+    <div class="legend"><span><i class="i-hi"></i>הכרחי</span><span><i class="i-mid"></i>מומלץ</span><span><i class="i-lo"></i>כיף שיהיה</span><span id="legNo"><i class="i-no"></i>לא מומלץ</span></div>
     <div class="legend-note"><b>הכרחי</b> = חובה · <b>מומלץ</b> = שווה מאוד ומקל על החיים · <b>כיף שיהיה</b> = נחמד, לא תרגישי חוסר בלי · <b>לא מומלץ</b> = לדלג (לא בטוח או בזבוז כסף)</div>
   </div>
 
@@ -374,7 +389,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
   <div id="cats"></div>
 
-  <div class="disclaimer"><span>💡</span><span>הדירוג וההערות הם המלצה מבוססת (הנחיות בטיחות וגופי הורות), אתם מחליטים. הרשימה ניתנת לעריכה - הוסיפו, מחקו ושנו. סמנו "מתנה" על מה שאפשר לבקש מהמשפחה, וכך התקציב שלכם קטן.</span></div>
+  <div class="disclaimer" id="discShop"><span>💡</span><span>הדירוג וההערות הם המלצה מבוססת (הנחיות בטיחות וגופי הורות), אתם מחליטים. הרשימה ניתנת לעריכה - הוסיפו, מחקו ושנו. סמנו "מתנה" על מה שאפשר לבקש מהמשפחה, וכך התקציב שלכם קטן.</span></div>
+
+  <div class="disclaimer" id="discBag" hidden><span>💡</span><span>הרשימה היא נקודת פתיחה מלאה, לא חוק. בתי חולים שונים מספקים דברים שונים - שווה טלפון אחד לחדר הלידה לפני האריזה. הרשימה ניתנת לעריכה: הוסיפו, מחקו ושנו.</span></div>
 
   <div class="actions">
     <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת הרשימה</button>
@@ -407,6 +424,7 @@ const FEED_LBL={bf:'🤱 להנקה',formula:'🍼 לתחליף'};
 // [name, priority, feed, note]  priority: hi/mid/lo/no  feed: all/bf/formula
 const SEED_DATA={
   'שינה':[
+    ['מד לחות / מטהר אוויר לחדר','lo','all','נחמד בחורף יבש או לתינוק/ת עם גודש. לא חובה.'],
     ['מזרן תקני קשיח לעריסה','hi','all','שטוח, קשיח ותואם מידות בדיוק - בסיס לשינה בטוחה.'],
     ['עריסה / מיטת תינוק','hi','all','מקום שינה נפרד; מומלץ באותו חדר עם ההורים ל-6 חודשים.'],
     ['סדינים מותאמים (fitted)','hi','all','רק סדין מתוח על מזרן קשיח, בלי כריות ושמיכות רכות.'],
@@ -421,6 +439,10 @@ const SEED_DATA={
     ['שמיכות רכות/פרוותיות בעריסה','no','all','חפצים רכים ושמיכות רופפות מעלים סיכון ל-SIDS.']
   ],
   'ניידות ובטיחות':[
+    ['כיסוי גשם לעגלה','mid','all','נכנס לתיק העגלה וחוסך יציאה תקועה בחורף.'],
+    ['וילון/כיסוי הצללה לעגלה','mid','all','הגנה מהשמש - חשוב בקיץ הישראלי.'],
+    ['רשת יתושים לעגלה','lo','all','לקיץ ולטיולים בערב.'],
+    ['שמיכת פוך / כיסוי לסלקל','lo','all','לפי עונה; לא לשים שמיכה עבה מתחת לרתמה.'],
     ['מושב בטיחות לרכב / סל-קל','hi','all','חובה חוקית מהיום הראשון. התקנה נכונה קריטית.'],
     ['עגלה (עם שכיבה שטוחה)','hi','all','ביילוד חייבים שכיבה שטוחה מלאה.'],
     ['מנשא ארגונומי','mid','all','ידיים פנויות; לוודא תמיכת ראש וירכיים נכונה.'],
@@ -429,6 +451,10 @@ const SEED_DATA={
     ['הליכון לתינוק','no','all','מסוכן ולא מקדם הליכה. בטרם וה-AAP ממליצים נגד.']
   ],
   'רחצה והיגיינה':[
+    ['מסרק רך לתינוק','lo','all','לעיסוי קרקפת ולטיפול בגזזת חלב.'],
+    ['שמן/קרם לחות לגוף','lo','all','לעור יבש; לא נחוץ בשבועות הראשונים.'],
+    ['שואב אף (מצצ אף)','mid','all','לגודש בחודשים הראשונים - התינוק/ת לא יודע/ת לנשום דרך הפה.'],
+    ['תמיסת מלח (סליין) לאף','mid','all','לניקוי אף סתום, זול ובטוח.'],
     ['אמבטיה + מושב/מעמד לתינוק','mid','all','בטוחה ונוחה יותר לרחצה מהכיור.'],
     ['מגבות עם ברדס (2-3)','mid','all','שומרות על ראש רטוב חמים - אבל אפשר גם מגבת רכה שכבר יש בבית.'],
     ['סבון/שמפו אל-דמע עדין','mid','all','בשבועות הראשונים מספיק מים; פורמולה עדינה כשמתחילים, אחד מספיק.'],
@@ -440,6 +466,8 @@ const SEED_DATA={
     ['מברשת שיער רכה','lo','all','מיותר בשבועות הראשונים (מעט שיער).']
   ],
   'החתלה':[
+    ['שקיות ניילון קטנות לחיתולים','lo','all','נוח ליציאות מהבית ולפח.'],
+    ['משטח החתלה נייד (מתקפל)','mid','all','נכנס לתיק ההחתלה - להחתלה מחוץ לבית.'],
     ['חיתולים (מידה NB)','hi','all','לא לאגור מראש - גדלים מהר וגם מקבלים במתנה.'],
     ['מגבונים לחים','hi','all','עדיף ללא בישום לעור רגיש.'],
     ['משטח החתלה','hi','all','קשיח וקל לניקוי; מספיק על שידה קיימת.'],
@@ -450,6 +478,8 @@ const SEED_DATA={
     ['מחמם מגבונים','no','all','הוצאה מיותרת; מגבון בטמפ׳ חדר בסדר גמור.']
   ],
   'האכלה':[
+    ['ביבים / מגני גיהוק (3-4)','mid','all','גיהוקים זה כל הזמן - חוסך החלפת בגד שלם.'],
+    ['מייבש/מתלה לבקבוקים','lo','formula','נוח, אבל מגבת נקייה עושה את העבודה.'],
     ['טיפות ויטמין D','hi','all','מומלץ לתינוקות מהלידה (בעיקר בהנקה) - לבדוק עם הרופא/טיפת חלב.'],
     ['רפידות הנקה','hi','bf','סופגות דליפות; חד-פעמיות או רב-פעמיות.'],
     ['כרית הנקה','lo','bf','נחמדה לתמיכה בהנקה ממושכת - אבל אפשר גם כרית רגילה.'],
@@ -466,6 +496,8 @@ const SEED_DATA={
     ['מוצץ','lo','all','לא לקנות הרבה מראש - לתינוק יש העדפות.']
   ],
   'ביגוד וטקסטיל':[
+    ['אוברול/סרבל חורף (לפי עונה)','mid','all','רק אם הלידה בעונה קרה; מידה 0-3.'],
+    ['מגן מזרן אטום (2)','mid','all','שכבת הגנה מתחת לסדין - חוסכת החלפת מזרן.'],
     ['בגדי גוף (5-6)','hi','all','שכבת בסיס; מידה 0-3 חודשים.'],
     ['רגליות / אוברולים (5-6)','hi','all','נוחים להחתלה; לפי עונה.'],
     ['כובע רך','hi','all','ראש התינוק מאבד חום.'],
@@ -478,6 +510,10 @@ const SEED_DATA={
     ['כפפות לתינוק','no','all','נופלות ומעצבנות; שרוול מקופל מונע שריטות.']
   ],
   'לאמא (אחרי לידה)':[
+    ['תחתונים חד-פעמיים / גבוהים','hi','all','לימים הראשונים אחרי הלידה, במיוחד אחרי קיסרי.'],
+    ['חגורת בטן / חגורה תומכת','lo','all','נוחות אחרי קיסרי; לשאול את הרופא/ה.'],
+    ['משככי כאבים (לפי הנחיית רופא/ה)','mid','all','להצטייד מראש, לא לרוץ לבית מרקחת ביום השלישי.'],
+    ['בקבוק מים גדול','mid','all','במיוחד בהנקה - הצמא עז ומפתיע.'],
     ['תחבושות לאחר לידה','hi','all','דימום נמשך שבועות - תחבושות סופגות במיוחד.'],
     ['חזיית הנקה נוחה','hi','bf','גישה נוחה להנקה, בלי חוטי ברזל.'],
     ['ביגוד נוח / חלוק','mid','all','פתחים נוחים להנקה ולהחלמה.'],
@@ -491,18 +527,94 @@ const SEED_DATA={
   ]
 };
 
-let S={total:'',catB:{},items:[]};
+// ===== מצב 2: תיק לחדר לידה =====
+const BAG_CAT_ORDER=[['📋','מסמכים וניירת'],['🤰','ליולדת - חדר לידה'],['🛏️','ליולדת - האשפוז'],['👶','לתינוק/ת'],['👨','לבן/בת הזוג ולמלווה']];
+const BAG_SEED={
+  'מסמכים וניירת':[
+    ['תעודות זהות של שני בני הזוג','hi','all','בלי זה לא פותחים תיק בקבלה.'],
+    ['כרטיס קופת חולים / טופס 17','hi','all','לוודא מראש מול הקופה מה נדרש בבית החולים שבחרתם.'],
+    ['גיליון מעקב הריון + בדיקות','hi','all','כולל אולטרסאונד אחרון, סוג דם וסקר גנטי.'],
+    ['תוצאת משטח GBS','hi','all','משפיע על טיפול אנטיביוטי בלידה - חשוב שיהיה בהישג יד.'],
+    ['מכתבי רופא / רגישות לתרופות','mid','all','אם יש מעקב מיוחד, מחלת רקע או אלרגיה.'],
+    ['תוכנית לידה (אם כתבתם)','lo','all','עמוד אחד קצר וברור, לא מסמך ארוך.'],
+    ['פרטי ביטוח פרטי','mid','all','אם יש כיסוי ללידה או לאשפוז - שיהיה מספר הפוליסה.']
+  ],
+  'ליולדת - חדר לידה':[
+    ['בקבוק מים עם קשית','hi','all','שתייה בשכיבה בין צירים - קשית עושה את כל ההבדל.'],
+    ['חלוק / חולצה רחבה לפתיחה מלפנים','mid','all','נוח לצירים ולמגע עור-לעור מיד אחרי.'],
+    ['גומיות וקליפסים לשיער','mid','all','חם ומזיע - שיער אסוף זה רווח מיידי.'],
+    ['גרביים חמות + כפכפים','hi','all','ברצפת חדר הלידה קר, וגם למקלחות.'],
+    ['אוזניות + פלייליסט מוכן מראש','mid','all','מוזיקה מרגיעה או הקלטת נשימות - להכין לפני, לא בצירים.'],
+    ['שפתון לחות','mid','all','נשימות ארוכות מייבשות את השפתיים.'],
+    ['חטיפי אנרגיה / תמרים','mid','all','ללידה ארוכה - לוודא מול הצוות מה מותר לאכול.'],
+    ['מניפה קטנה / מגבונים מרעננים','lo','all','נעים בין צירים.'],
+    ['כדור פיזיו','lo','all','חלק מבתי החולים מספקים - לבדוק מראש ולא לגרור סתם.']
+  ],
+  'ליולדת - האשפוז':[
+    ['פיג׳מות נוחות (2) עם פתח להנקה','hi','all','שוהים 2-3 ימים; כפתורים מלפנים מקלים.'],
+    ['תחתונים חד-פעמיים / גבוהים','hi','all','לדימום שאחרי הלידה, במיוחד אחרי קיסרי.'],
+    ['תחבושות לאחר לידה','hi','all','חלק מבתי החולים נותנים, אבל לא לסמוך על זה.'],
+    ['חזיית הנקה + רפידות','hi','bf','בלי חוטי ברזל, גישה נוחה.'],
+    ['ערכת רחצה אישית','hi','all','מברשת ומשחת שיניים, סבון, דאודורנט, מגבת.'],
+    ['מגבת גדולה משלכם','mid','all','המגבות של בית החולים דקות.'],
+    ['מטען ארוך לטלפון','hi','all','השקע רחוק מהמיטה כמעט תמיד. כבל ארוך = שקט נפשי.'],
+    ['משחת פטמות (לנולין)','mid','bf','הימים הראשונים של ההנקה הם הכואבים.'],
+    ['בגד נוח לחזרה הביתה','mid','all','מידה של סוף הריון, לא מידה שלפני.'],
+    ['אוכל וחטיפים לחדר','mid','all','ארוחות בית החולים בשעות קבועות, והרעב לא.'],
+    ['אטמי אוזניים / מסכת שינה','lo','all','חדר משותף הוא רועש ומואר.']
+  ],
+  'לתינוק/ת':[
+    ['בגדי גוף (3-4)','hi','all','מידה 0-3; בבית החולים מחליפים הרבה יותר ממה שמדמיינים.'],
+    ['רגליות / אוברולים (3-4)','hi','all','נוחים להחתלה בלילה.'],
+    ['כובע רך + גרביים','hi','all','ראש התינוק/ת מאבד/ת חום מהר.'],
+    ['חיתולים (מידה NB)','hi','all','חבילה קטנה מספיקה - חלק מבתי החולים מספקים.'],
+    ['מגבונים לחים ללא בישום','hi','all','לעור של יומיים.'],
+    ['שמיכת קבלה / חיתולי טטרה','mid','all','לעטיפה ולגיהוקים.'],
+    ['בגד ליציאה מבית החולים','hi','all','לפי עונה - זה הבגד של התמונה הראשונה.'],
+    ['מושב בטיחות (סלקל) ברכב','hi','all','לא משחררים בלי זה. להתקין ולתרגל שבועיים לפני.'],
+    ['מוצץ','lo','all','לפי החלטה שלכם ובתיאום עם ההנקה.'],
+    ['פורמולה + בקבוק ראשוני','mid','formula','רק אם לא מניקים; בבית החולים בדרך כלל יש.']
+  ],
+  'לבן/בת הזוג ולמלווה':[
+    ['החלפת בגדים + פיג׳מה','hi','all','לינה בבית החולים היא ארוכה יותר ממה שנדמה.'],
+    ['אוכל, שתייה וכסף קטן','hi','all','המזנון סגור בלילה; מכונות אוטומטיות רוצות מזומן.'],
+    ['מטען ופאוור-בנק','hi','all','הטלפון שלו/ה יהיה המצלמה ומרכז ההודעות.'],
+    ['כרית/שמיכה קטנה','lo','all','הכורסה של המלווה לא בנויה לשינה.'],
+    ['רשימת אנשים לעדכן','lo','all','להכין מראש - אחרי הלידה אף אחד לא זוכר כלום.'],
+    ['מזומן לחניה','mid','all','חניוני בתי חולים לא תמיד עובדים עם אפליקציה.']
+  ]
+};
+
+let MODE='shop';                 // 'shop' | 'bag'
+let S={total:'',catB:{},items:[]};   // רשימת הקניות
+let B={items:[]};                    // תיק חדר הלידה
 let mustOnly=false, feedMode='all';
 const openState={};
+const bagOpenState={};
+const catsOf=()=>MODE==='bag'?BAG_CAT_ORDER:CAT_ORDER;
+const listOf=()=>MODE==='bag'?B.items:S.items;
+const openOf=()=>MODE==='bag'?bagOpenState:openState;
+function setList(arr){if(MODE==='bag')B.items=arr;else S.items=arr;}
 
 function seed(){
   const items=[];
   CAT_ORDER.forEach(([e,cat])=>{(SEED_DATA[cat]||[]).forEach(([name,pri,feed,note])=>items.push({id:++uid,cat,name,pri,feed,note,bought:false,gift:false,paid:''}));});
   return {total:'',catB:{},items};
 }
+function seedBag(){
+  const items=[];
+  BAG_CAT_ORDER.forEach(([e,cat])=>{(BAG_SEED[cat]||[]).forEach(([name,pri,feed,note])=>items.push({id:++uid,cat,name,pri,feed,note,bought:false,gift:false,paid:''}));});
+  return {items};
+}
 function feedOK(it){return feedMode==='all'||it.feed==='all'||it.feed===feedMode;}
 function catSpent(cat){return S.items.filter(it=>it.cat===cat).reduce((s,it)=>s+(+it.paid||0),0);}
+function bagCounts(cat){const all=B.items.filter(it=>it.cat===cat&&it.pri!=='no'&&feedOK(it));return {done:all.filter(it=>it.bought).length,total:all.length};}
 function totals(){
+  if(MODE==='bag'){
+    let bought=0,relevant=0;
+    B.items.forEach(it=>{if(it.pri!=='no'&&feedOK(it)){relevant++;if(it.bought)bought++;}});
+    return {total:0,spent:0,alloc:0,remaining:0,bought,gift:0,relevant};
+  }
   const total=+S.total||0;
   let spent=0,alloc=0,bought=0,gift=0,relevant=0;
   S.items.forEach(it=>{
@@ -516,8 +628,9 @@ function totals(){
 function render(){
   const box=document.getElementById('cats');
   box.innerHTML='';
-  CAT_ORDER.forEach(([emoji,cat])=>{
-    const all=S.items.filter(it=>it.cat===cat);
+  const items=listOf();
+  catsOf().forEach(([emoji,cat])=>{
+    const all=items.filter(it=>it.cat===cat);
     const vis=all.filter(it=>feedOK(it) && (!mustOnly || it.pri==='hi'));
     if((mustOnly||feedMode!=='all') && !vis.length) return;
     box.appendChild(catSection(emoji,cat,vis));
@@ -525,28 +638,37 @@ function render(){
   recompute();
 }
 function catSection(emoji,cat,vis){
+  const bag=MODE==='bag';
+  const st=openOf();
   const sec=document.createElement('div');
-  sec.className='cat'+(openState[cat]?' open':'');
-  const sp=catSpent(cat), cb=+S.catB[cat]||0, over=cb>0 && sp>cb;
-  sec.innerHTML=`<div class="cat-head"><span class="c-emoji">${emoji}</span><span class="c-name">${cat}</span><span class="c-spent ${over?'over':''}"><b>${money(sp)}</b>${cb?' / '+money(cb):''} ₪</span><span class="chev">▾</span></div><div class="cat-body"></div>`;
-  sec.querySelector('.cat-head').onclick=()=>{openState[cat]=!sec.classList.contains('open');sec.classList.toggle('open');};
+  sec.className='cat'+(st[cat]?' open':'');
+  let head;
+  if(bag){const c=bagCounts(cat);head=`<span class="c-spent${c.total&&c.done===c.total?' packed':''}"><b>${c.done}</b> / ${c.total} ארוז</span>`;}
+  else{const sp=catSpent(cat), cb=+S.catB[cat]||0, over=cb>0 && sp>cb;head=`<span class="c-spent ${over?'over':''}"><b>${money(sp)}</b>${cb?' / '+money(cb):''} ₪</span>`;}
+  sec.innerHTML=`<div class="cat-head"><span class="c-emoji">${emoji}</span><span class="c-name">${cat}</span>${head}<span class="chev">▾</span></div><div class="cat-body"></div>`;
+  sec.querySelector('.cat-head').onclick=()=>{st[cat]=!sec.classList.contains('open');sec.classList.toggle('open');};
   const body=sec.querySelector('.cat-body');
-  const bud=document.createElement('div');
-  bud.className='cat-budget';
-  bud.innerHTML=`<label>תקציב לקטגוריה זו</label><div class="amt"><span class="u">₪</span><input class="tabular" type="text" inputmode="numeric" value="${cb?money(cb):''}" placeholder="0"></div>`;
-  bud.querySelector('input').addEventListener('input',e=>{const raw=e.target.value.replace(/[^\d]/g,'');S.catB[cat]=raw===''?'':+raw;e.target.value=raw===''?'':money(raw);updateCatHead(sec,cat);recompute();persist();});
-  body.appendChild(bud);
+  if(!bag){
+    const cb=+S.catB[cat]||0;
+    const bud=document.createElement('div');
+    bud.className='cat-budget';
+    bud.innerHTML=`<label>תקציב לקטגוריה זו</label><div class="amt"><span class="u">₪</span><input class="tabular" type="text" inputmode="numeric" value="${cb?money(cb):''}" placeholder="0"></div>`;
+    bud.querySelector('input').addEventListener('input',e=>{const raw=e.target.value.replace(/[^\d]/g,'');S.catB[cat]=raw===''?'':+raw;e.target.value=raw===''?'':money(raw);updateCatHead(sec,cat);recompute();persist();});
+    body.appendChild(bud);
+  }
   const ORD={hi:0,mid:1,lo:2,no:3};
   vis.slice().sort((a,b)=>(ORD[a.pri]??9)-(ORD[b.pri]??9)).forEach(it=>body.appendChild(it.pri==='no'?warnRow(it):itemRow(it,sec,cat)));
   const add=document.createElement('button');
   add.className='additem'; add.textContent='＋ הוסף פריט';
-  add.onclick=()=>{S.items.push({id:++uid,cat,name:'',pri:'mid',feed:'all',note:'',bought:false,gift:false,paid:''});openState[cat]=true;render();persist();};
+  add.textContent=MODE==='bag'?'＋ הוסף פריט לתיק':'＋ הוסף פריט';
+  add.onclick=()=>{listOf().push({id:++uid,cat,name:'',pri:'mid',feed:'all',note:'',bought:false,gift:false,paid:''});openOf()[cat]=true;render();persist();};
   body.appendChild(add);
   return sec;
 }
 function updateCatHead(sec,cat){
-  const sp=catSpent(cat), cb=+S.catB[cat]||0, over=cb>0&&sp>cb;
   const el=sec.querySelector('.c-spent');
+  if(MODE==='bag'){const c=bagCounts(cat);el.className='c-spent'+(c.total&&c.done===c.total?' packed':'');el.innerHTML=`<b>${c.done}</b> / ${c.total} ארוז`;return;}
+  const sp=catSpent(cat), cb=+S.catB[cat]||0, over=cb>0&&sp>cb;
   el.className='c-spent'+(over?' over':'');
   el.innerHTML=`<b>${money(sp)}</b>${cb?' / '+money(cb):''} ₪`;
 }
@@ -554,12 +676,12 @@ function warnRow(it){
   const el=document.createElement('div');
   el.className='item warn';
   el.innerHTML=`<span class="warn-ico">⚠️</span><div class="it-main"><div class="it-top"><span class="warn-name">${esc(it.name)}</span><span class="imp no">לא מומלץ</span></div><div class="it-note">${esc(it.note)}</div></div><button class="idel" type="button" title="הסר">✕</button>`;
-  el.querySelector('.idel').onclick=()=>{S.items=S.items.filter(x=>x.id!==it.id);render();persist();};
+  el.querySelector('.idel').onclick=()=>{setList(listOf().filter(x=>x.id!==it.id));render();persist();};
   return el;
 }
 function itemRow(it,sec,cat){
   const el=document.createElement('div');
-  el.className='item'+(it.bought?' done':'');
+  el.className='item'+(it.bought?' done':'')+(MODE==='bag'?' bagrow':'');
   const feedPill=(it.feed==='bf'||it.feed==='formula')?`<span class="feed-pill">${FEED_LBL[it.feed]}</span>`:'';
   el.innerHTML=`
     <label class="chk"><input type="checkbox" ${it.bought?'checked':''}><span class="box"></span></label>
@@ -570,8 +692,8 @@ function itemRow(it,sec,cat){
       </div>
       ${it.note?`<div class="it-note">${esc(it.note)}</div>`:''}
       <div class="it-meta">
-        <button class="gift ${it.gift?'on':''}" type="button">🎁 מתנה</button>
-        <span class="paidwrap">שילמתי <span class="amtmini">₪<input class="tabular" inputmode="numeric" value="${it.paid?money(it.paid):''}" placeholder="0"></span></span>
+        ${MODE==='bag'?'':`<button class="gift ${it.gift?'on':''}" type="button">🎁 מתנה</button>
+        <span class="paidwrap">שילמתי <span class="amtmini">₪<input class="tabular" inputmode="numeric" value="${it.paid?money(it.paid):''}" placeholder="0"></span></span>`}
         <button class="idel" type="button" title="מחק">✕</button>
       </div>
     </div>`;
@@ -579,18 +701,33 @@ function itemRow(it,sec,cat){
   chk.onchange=()=>{it.bought=chk.checked;el.classList.toggle('done',chk.checked);updateCatHead(sec,cat);recompute();persist();};
   el.querySelector('.it-name-in').addEventListener('input',e=>{it.name=e.target.value;persist();});
   const gift=el.querySelector('.gift');
-  gift.onclick=()=>{it.gift=!it.gift;gift.classList.toggle('on',it.gift);persist();};
-  el.querySelector('.amtmini input').addEventListener('input',e=>{const raw=e.target.value.replace(/[^\d]/g,'');it.paid=raw===''?'':+raw;e.target.value=raw===''?'':money(raw);updateCatHead(sec,cat);recompute();persist();});
-  el.querySelector('.idel').onclick=()=>{S.items=S.items.filter(x=>x.id!==it.id);render();persist();};
+  if(gift)gift.onclick=()=>{it.gift=!it.gift;gift.classList.toggle('on',it.gift);persist();};
+  const amtIn=el.querySelector('.amtmini input');
+  if(amtIn)amtIn.addEventListener('input',e=>{const raw=e.target.value.replace(/[^\d]/g,'');it.paid=raw===''?'':+raw;e.target.value=raw===''?'':money(raw);updateCatHead(sec,cat);recompute();persist();});
+  el.querySelector('.idel').onclick=()=>{setList(listOf().filter(x=>x.id!==it.id));render();persist();};
   return el;
 }
 function recompute(){
   const t=totals();
   const hero=document.getElementById('hero');
+  if(MODE==='bag'){
+    hero.className='hero';
+    const pctB=t.relevant>0?Math.round(t.bought/t.relevant*100):0;
+    document.getElementById('heroLbl').textContent='🎒 התיק ארוז ב-';
+    document.getElementById('heroRemain').innerHTML=pctB+'<small>%</small>';
+    document.getElementById('heroMeta').innerHTML=`ארזתם <b>${t.bought}</b> מתוך <b>${t.relevant}</b> פריטים`;
+    const fb=document.getElementById('progFill');
+    fb.style.width=pctB+'%'; fb.className='fill';
+    const ab=document.getElementById('heroAlloc');
+    ab.className='h-alloc';
+    ab.textContent = t.relevant===0 ? 'סמנו כל פריט שארזתם' : (t.bought>=t.relevant?'✓ התיק מוכן. אפשר לנשום.':`נשארו ${t.relevant-t.bought} פריטים לארוז`);
+    document.getElementById('progNote').textContent=`${t.bought} מתוך ${t.relevant} ארוזים`;
+    return;
+  }
+  document.getElementById('heroLbl').textContent='💰 נשאר לכם מהתקציב';
   hero.className='hero'+(t.total>0 && t.remaining<0?' neg':'');
   document.getElementById('heroRemain').innerHTML=money(t.remaining)+'<small> ₪</small>';
-  document.getElementById('heroBudget').textContent=money(t.total)+' ₪';
-  document.getElementById('heroSpent').textContent=money(t.spent)+' ₪';
+  document.getElementById('heroMeta').innerHTML=`תקציב <b id="heroBudget">${money(t.total)} ₪</b> · הוצאתם בפועל <b id="heroSpent">${money(t.spent)} ₪</b>`;
   const pct=t.total>0?Math.min(100,Math.round(t.spent/t.total*100)):0;
   const fill=document.getElementById('progFill');
   fill.style.width=pct+'%'; fill.className='fill'+(t.total>0&&t.spent>t.total?' over':'');
@@ -604,13 +741,56 @@ function esc(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
 document.getElementById('totalBudget').addEventListener('input',e=>{const raw=e.target.value.replace(/[^\d]/g,'');S.total=raw===''?'':+raw;e.target.value=raw===''?'':money(raw);recompute();persist();});
 document.getElementById('mustFilter').addEventListener('change',e=>{mustOnly=e.target.checked;render();});
+function applyMode(){
+  document.querySelectorAll('#modes .mode-tab').forEach(t=>t.classList.toggle('on',t.dataset.mode===MODE));
+  const bag=MODE==='bag';
+  document.getElementById('stepBudget').hidden=bag;
+  document.getElementById('tipsBox').hidden=bag;
+  document.getElementById('bagIntro').hidden=!bag;
+  document.getElementById('discShop').hidden=bag;
+  document.getElementById('discBag').hidden=!bag;
+  document.getElementById('legNo').hidden=bag;
+  document.querySelector('#stepFeed .step').textContent=bag?'שלב 1':'שלב 2';
+  document.querySelector('#stepFeed label').textContent=bag
+    ? 'איך אתם מתכננים להאכיל? (מתאים את פריטי ההנקה בתיק)'
+    : 'איך אתם מתכננים להאכיל? (מסנן את הפריטים הרלוונטיים)';
+  document.querySelector('.hero .legend-note').innerHTML = bag
+    ? '<b>הכרחי</b> = בלי זה לא יוצאים מהבית · <b>מומלץ</b> = יעשה לכם את האשפוז נעים בהרבה · <b>כיף שיהיה</b> = אם יש מקום בתיק'
+    : '<b>הכרחי</b> = חובה · <b>מומלץ</b> = שווה מאוד ומקל על החיים · <b>כיף שיהיה</b> = נחמד, לא תרגישי חוסר בלי · <b>לא מומלץ</b> = לדלג (לא בטוח או בזבוז כסף)';
+  document.querySelector('.hero-title h1').innerHTML = bag
+    ? 'תיק ל<span class="em">חדר לידה</span>'
+    : 'רשימת <span class="em">קניות ללידה</span>';
+  document.querySelector('.hero-title p').textContent = bag
+    ? 'כל מה שאורזים לבית החולים - מסמכים, ליולדת, לתינוק/ת ולמי שמלווה. מסמנים מה כבר בתיק, ורואים כמה נשאר.'
+    : 'קובעים תקציב, בוחרים שיטת האכלה, ומחלקים לפי קטגוריה - עם דירוג מה הכרחי, מה כדאי, ומה עדיף לא לקנות.';
+  document.getElementById('resetBtn').textContent = bag ? 'איפוס התיק לברירת המחדל' : 'איפוס הרשימה לברירת המחדל';
+  document.getElementById('shareBtn').textContent = bag ? '🔗 שמירה ושליחת התיק' : '🔗 שמירה ושליחת הרשימה';
+}
+document.querySelectorAll('#modes .mode-tab').forEach(t=>t.onclick=()=>{
+  if(MODE===t.dataset.mode)return;
+  MODE=t.dataset.mode;
+  document.getElementById('actLink').hidden=true;
+  applyMode();render();persist();
+});
 document.querySelectorAll('#feedChips .feed-chip').forEach(ch=>ch.onclick=()=>{feedMode=ch.dataset.feed;document.querySelectorAll('#feedChips .feed-chip').forEach(c=>c.classList.toggle('on',c===ch));render();persist();});
 
 // save / share
-const SKEY='richlife-shopping-v3';
-function enc(){return JSON.stringify({t:S.total,f:feedMode,cb:S.catB,it:S.items.map(it=>[it.cat,it.name,it.pri,it.feed,it.note,it.bought?1:0,it.gift?1:0,it.paid])});}
+const SKEY='richlife-shopping-v4';
+const packItems=arr=>arr.map(it=>[it.cat,it.name,it.pri,it.feed,it.note,it.bought?1:0,it.gift?1:0,it.paid]);
+const unpackItems=arr=>arr.map(x=>({id:++uid,cat:x[0]||'שונות',name:x[1]||'',pri:x[2]||'mid',feed:x[3]||'all',note:x[4]||'',bought:!!x[5],gift:!!x[6],paid:x[7]??''}));
+function enc(){return JSON.stringify({v:4,m:MODE,t:S.total,f:feedMode,cb:S.catB,it:packItems(S.items),bg:packItems(B.items)});}
 function persist(){try{localStorage.setItem(SKEY,enc());}catch(e){}syncLive();}
-function dec(str){try{const o=JSON.parse(str);if(!o||!Array.isArray(o.it))return null;feedMode=o.f||'all';return {total:o.t??'',catB:o.cb||{},items:o.it.map(x=>({id:++uid,cat:x[0]||'שונות',name:x[1]||'',pri:x[2]||'mid',feed:x[3]||'all',note:x[4]||'',bought:!!x[5],gift:!!x[6],paid:x[7]??''}))};}catch(e){return null;}}
+function dec(str){try{
+  const o=JSON.parse(str);
+  if(!o||!Array.isArray(o.it))return null;
+  feedMode=o.f||'all';
+  if(o.m==='shop'||o.m==='bag')MODE=o.m;
+  return {total:o.t??'',catB:o.cb||{},items:unpackItems(o.it),bag:Array.isArray(o.bg)?unpackItems(o.bg):null};
+}catch(e){return null;}}
+function applyLoaded(l){
+  S={total:l.total,catB:l.catB,items:l.items};
+  B={items:(l.bag&&l.bag.length)?l.bag:seedBag().items};
+}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#s='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}
@@ -626,7 +806,13 @@ function refreshShareUI(){var btn=document.getElementById('shareBtn');if(!btn)re
   btn.onclick=async()=>{wrap.hidden=false;field.value='יוצר קישור...';btn.disabled=true;try{let l;if(docId){try{const _r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()});if(_r.status===404)docId=null;}catch(_e){}}if(!docId){try{const _r=await fetch(SHARE_API,{method:'POST',body:enc()});const _j=_r.ok?await _r.json():null;if(_j&&_j.id){docId=_j.id;setHash(_j.id);}}catch(_e){}}l=docId?linkFor(docId):makeLink();refreshShareUI();field.value=l;field.focus();field.select();try{navigator.clipboard.writeText(l).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
   copy.onclick=()=>{field.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);ok=true;}catch(e){}flash(copy,ok?'✓ הועתק':'בחר/י והעתק/י');};
 })();
-document.getElementById('resetBtn').onclick=()=>{if(confirm('לאפס את הרשימה לברירת המחדל? כל השינויים יימחקו.')){try{localStorage.removeItem(SKEY);}catch(e){}feedMode='all';S=seed();document.getElementById('totalBudget').value='';syncFeedChips();render();}};
+document.getElementById('resetBtn').onclick=()=>{
+  const what=MODE==='bag'?'את התיק':'את הרשימה';
+  if(!confirm('לאפס '+what+' לברירת המחדל? כל השינויים כאן יימחקו.'))return;
+  if(MODE==='bag'){B=seedBag();}
+  else{S=seed();document.getElementById('totalBudget').value='';}
+  render();persist();
+};
 function syncFeedChips(){document.querySelectorAll('#feedChips .feed-chip').forEach(c=>c.classList.toggle('on',c.dataset.feed===feedMode));}
 
 // boot
@@ -636,16 +822,17 @@ function syncFeedChips(){document.querySelectorAll('#feedChips .feed-chip').forE
   if(h){loaded=dec(decodeURIComponent(h[1]));}
   let fromLink=!!(loaded&&loaded.items);
   if(!fromLink){const ls=(function(){try{return localStorage.getItem(SKEY);}catch(e){return null;}})();if(ls)loaded=dec(ls);}
-  S=(loaded&&loaded.items)?loaded:seed();
+  if(loaded&&loaded.items)applyLoaded(loaded);
+  else{S=seed();B=seedBag();}
   if(S.total!=='')document.getElementById('totalBudget').value=money(S.total);
   syncFeedChips();
+  applyMode();
   render();
   if(fromLink){persist();}
 })();
 
 // short-link (#p=) loader: fetch the raw payload and apply it with the same dec/render path
-(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp){refreshShareUI();return;}docId=hp[1];refreshShareUI();fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){var loaded=dec(t);if(!loaded||!loaded.items)return;S=loaded;document.getElementById('totalBudget').value=(S.total!=='')?money(S.total):'';syncFeedChips();render();persist();}).catch(function(){});})();
+(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp){refreshShareUI();return;}docId=hp[1];refreshShareUI();fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){var loaded=dec(t);if(!loaded||!loaded.items)return;applyLoaded(loaded);document.getElementById('totalBudget').value=(S.total!=='')?money(S.total):'';syncFeedChips();applyMode();render();persist();}).catch(function(){});})();
 </script>
-<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'רשימת קניות ללידה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 </body>
 </html>

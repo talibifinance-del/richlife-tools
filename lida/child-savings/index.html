@@ -149,6 +149,22 @@ body{font-family:var(--font);
 .cmp2 .c2.full .c2-l{color:rgba(255,255,255,.9)}
 .cmp2 .c2 .c2-v{display:block;font-size:clamp(17px,4.2vw,21px);font-weight:900;color:var(--pine-darker);margin-top:4px;font-variant-numeric:tabular-nums}
 .cmp2 .c2.full .c2-v{color:#fff}
+
+/* ── compound-interest chart (private savings) ── */
+.cc-wrap{margin-top:14px}
+.cc-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:8px}
+.cc-title{font-size:13px;font-weight:800;color:var(--ink)}
+.cc-legend{display:flex;gap:12px;margin-inline-start:auto;flex-wrap:wrap}
+.cc-lg{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--ink-soft)}
+.cc-sw{width:11px;height:11px;border-radius:3px;flex:none}
+.cc-sw.dep{background:var(--sage)}
+.cc-sw.grow{background:var(--pine-deep)}
+.cc-chart{width:100%;height:auto;display:block;overflow:visible}
+.cc-chart .cc-grid{stroke:rgba(var(--pine-rgb),.16);stroke-width:1}
+.cc-chart .cc-axis{fill:var(--ink-soft);font-size:9px;font-weight:700}
+.cc-chart .cc-cap{fill:var(--ink);font-size:9.5px;font-weight:800}
+.cc-foot{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:8px;line-height:1.5}
+
 .mini-hint{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:8px;line-height:1.5}
 /* separate private-savings card */
 .card.priv{background:linear-gradient(120deg,rgba(var(--sage-rgb),.18),#fff);border:1px dashed rgba(var(--pine-rgb),.3)}
@@ -430,6 +446,17 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
         <div class="c2"><span class="c2-l">📅 החיסכון הפרטי בגיל 18</span><span class="c2-v" id="priv18">0 ₪</span></div>
         <div class="c2"><span class="c2-l">🎂 בגיל 21 (המשך צמיחה)</span><span class="c2-v" id="priv21">0 ₪</span></div>
       </div>
+      <div class="cc-wrap">
+        <div class="cc-head">
+          <span class="cc-title">📈 איך זה גדל עם השנים</span>
+          <span class="cc-legend">
+            <span class="cc-lg"><span class="cc-sw dep"></span>מה שהפקדתם</span>
+            <span class="cc-lg"><span class="cc-sw grow"></span>מה שהזמן הוסיף</span>
+          </span>
+        </div>
+        <svg class="cc-chart" id="ccChart" viewBox="0 0 320 170" role="img" aria-labelledby="ccDesc"><title id="ccDesc">גרף המראה את צמיחת החיסכון הפרטי לאורך השנים, מחולק להפקדות ולרווח מריבית דריבית</title></svg>
+        <div class="cc-foot" id="ccFoot"></div>
+      </div>
       <div class="split-note" id="totalNote" style="margin-top:12px"></div>
       <div class="mini-hint">כאן חושב בהנחת הפקדה עד גיל 18 - אבל זה חשבון שלכם, אפשר להמשיך גם אחרי.</div>
     </div>
@@ -474,6 +501,47 @@ let S=Object.assign({},DEF);
 
 // grow a starting balance + a monthly contribution for n months at monthly rate r
 function grow(principal,monthly,n,r){return principal*Math.pow(1+r,n)+(r>0?monthly*((Math.pow(1+r,n)-1)/r):monthly*n);}
+/* ── compound-interest chart: stacked area of deposits vs time-growth ── */
+function drawCC(priv,age,r,yTo18){
+  const svg=document.getElementById('ccChart'),foot=document.getElementById('ccFoot');
+  if(!svg) return;
+  const W=320,H=170,ml=6,mr=40,mt=10,mb=22;           // RTL: value axis on the right
+  const pw=W-ml-mr, ph=H-mt-mb;
+  if(!(priv>0)||yTo18<=0){svg.innerHTML='';if(foot)foot.textContent='';return;}
+  const pts=[];
+  for(let y=0;y<=yTo18;y++){
+    const n=y*12;
+    const dep=priv*n;
+    const tot=r>0?priv*((Math.pow(1+r,n)-1)/r):priv*n;
+    pts.push({age:age+y,dep:dep,tot:tot});
+  }
+  const maxV=Math.max(1,pts[pts.length-1].tot);
+  // RTL: first year on the RIGHT edge, last year on the LEFT
+  const X=i=>ml+pw-(i/(pts.length-1||1))*pw;
+  const Y=v=>mt+ph-(v/maxV)*ph;
+  const line=k=>pts.map((p,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(p[k]).toFixed(1)).join(' ');
+  const base=(k)=>line(k)+' L'+X(pts.length-1).toFixed(1)+' '+(mt+ph)+' L'+X(0).toFixed(1)+' '+(mt+ph)+' Z';
+  const areaTot=base('tot'), areaDep=base('dep');
+  const short=v=>v>=1000?Math.round(v/1000)+'k':Math.round(v);
+  let g='';
+  for(let t=0;t<=3;t++){const v=maxV*t/3,y=Y(v);
+    g+='<line class="cc-grid" x1="'+ml+'" y1="'+y.toFixed(1)+'" x2="'+(ml+pw)+'" y2="'+y.toFixed(1)+'"/>'
+      +'<text class="cc-axis" x="'+(ml+pw+5)+'" y="'+(y+3).toFixed(1)+'" text-anchor="start">'+short(v)+'</text>';}
+  // x labels: first, middle, last age
+  const idxs=[0,Math.floor((pts.length-1)/2),pts.length-1].filter((v,i,a)=>a.indexOf(v)===i);
+  let xl='';
+  idxs.forEach(i=>{xl+='<text class="cc-axis" x="'+X(i).toFixed(1)+'" y="'+(mt+ph+13)+'" text-anchor="middle">'+(pts[i].age===0?'לידה':'גיל '+pts[i].age)+'</text>';});
+  const last=pts[pts.length-1];
+  svg.innerHTML=g
+    +'<path d="'+areaTot+'" fill="var(--pine-deep)" opacity=".92"/>'
+    +'<path d="'+areaDep+'" fill="var(--sage)"/>'
+    +'<path d="'+line('dep')+'" fill="none" stroke="#8fae94" stroke-width="1.2" stroke-linejoin="round"/>'
+    +'<path d="'+line('tot')+'" fill="none" stroke="var(--pine-darker)" stroke-width="1.6" stroke-linejoin="round"/>'
+    +xl;
+  const growth=Math.max(0,last.tot-last.dep);
+  const pct=last.tot>0?Math.round(growth/last.tot*100):0;
+  if(foot) foot.innerHTML='עד גיל 18 תפקידו <b>'+money(last.dep)+' ₪</b>, והזמן יוסיף עוד <b>'+money(growth)+' ₪</b> - '+pct+'% מהסכום הסופי. השטח הכהה הוא הכסף שנוצר מעצמו.';
+}
 function calc(){
   syncLive();
   const age=Math.min(18,Math.max(0,Math.floor(num(S.age))));
@@ -521,6 +589,7 @@ function calc(){
     document.getElementById('priv18').textContent=money(v18priv)+' ₪';
     document.getElementById('priv21').textContent=money(v21priv)+' ₪';
     document.getElementById('totalNote').innerHTML='🧮 סה"כ לילד/ה (תוכנית + פרטי): <b>'+money(total18)+' ₪</b> בגיל 18, <b>'+money(total21)+' ₪</b> בגיל 21.';
+    drawCC(priv,age,r,yTo18);
   } else pr.hidden=true;
 }
 

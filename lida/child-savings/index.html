@@ -353,7 +353,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   <div class="card leave21">
     <div class="l21-row">
       <div class="l21-ico">🎁</div>
-      <div class="l21-txt"><span class="l21-lbl">ואם משאירים בקופת גמל עד גיל 21</span><span class="l21-sub">הכסף ממשיך לצמוח 3 שנים בלי שאף אחד מפקיד עוד, המדינה משלמת דמי ניהול עד 21, ומתווסף מענק ~568 ₪ מהמדינה</span></div>
+      <div class="l21-txt"><span class="l21-lbl">ואם משאירים בקופת גמל עד גיל 21</span><span class="l21-sub">הכסף ממשיך לצמוח 3 שנים בלי שאף אחד מפקיד עוד, המדינה משלמת דמי ניהול עד 21, ומתווסף מענק ~582 ₪ מהמדינה</span></div>
       <div class="l21-num" id="sum21">0 ₪</div>
     </div>
   </div>
@@ -442,7 +442,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">בואו נתכנן את זה יחד ←</a>
   </div>
 
-  <div class="disclaimer"><span>💡</span><span>הערכה להמחשה בלבד, לא ייעוץ, והתשואה אינה מובטחת. לחשבון חיסכון לכל ילד נכנסים רק הפקדת המדינה וההכפלה מקצבת הילדים - חיסכון נוסף הוא חשבון נפרד. עד גיל 21 המדינה משלמת את דמי הניהול. מלבד ההפקדה החודשית, המדינה מוסיפה מענקים קטנים (כ-284 ₪ בגיל 3 וכ-284 ₪ סביב בר/בת מצווה, לילדים שנולדו מ-2017) שלא נכללו בחישוב, ומענק של כ-568 ₪ בגיל 21 שכן נכלל. הסכומים נכונים ל-2026 - כדאי לבדוק באתר הביטוח הלאומי.</span></div>
+  <div class="disclaimer"><span>💡</span><span>הערכה להמחשה בלבד, לא ייעוץ, והתשואה אינה מובטחת. לחשבון חיסכון לכל ילד נכנסים רק הפקדת המדינה וההכפלה מקצבת הילדים - חיסכון נוסף הוא חשבון נפרד. עד גיל 21 המדינה משלמת את דמי הניהול. מלבד ההפקדה החודשית, המדינה מוסיפה מענקים קטנים (291 ₪ בגיל 3 ו-291 ₪ בגיל בר או בת מצווה, 13 לבנים ו-12 לבנות, לילדים שנולדו מ-2017) שלא נכללו בחישוב, ומענק של 582 ₪ בגיל 21 שכן נכלל. הסכומים צמודי מדד ונכונים ל-2026 - כדאי לבדוק באתר הביטוח הלאומי.</span></div>
 
   <div class="actions">
     <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת החישוב</button>
@@ -468,7 +468,7 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 const money=v=>fmt.format(Math.round(+v||0));
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const SKEY='richlife-childsaving-v1';
-const GRANT21=568;               // state bonus at 21 if left untouched (born 2017+); applies to the program account
+const GRANT21=582;               // state bonus at 21 if left untouched (born 2017+); applies to the program account. Verified 2.9.26 vs btl.gov.il FAQ
 const DEF={age:0,bal:0,state:58,dbl:true,extra:0,rate:5};
 let S=Object.assign({},DEF);
 

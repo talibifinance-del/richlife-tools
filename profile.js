@@ -25,7 +25,7 @@
     'maternity-leave-plan': 'richlife-leaveplan-v1',
     'monthly-baby-cost':    'richlife-monthlybaby-v1',
     'refund-tracker':       'richlife-refunds-v1',
-    'shopping-list':        'richlife-shopping-v3',
+    'shopping-list':        'richlife-shopping-v4',
     'child-savings':        'richlife-childsaving-v1',
     'ribit':                'richlife-ribit-v1'
   };

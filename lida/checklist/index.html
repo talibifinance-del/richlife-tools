@@ -199,6 +199,24 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
 .gn-tab:hover{border-color:var(--pine)}
 .gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+
+/* בלוק כל המחשבונים */
+.tools-block{margin-top:22px}
+.tb-head{text-align:center;margin-bottom:14px}
+.tb-head h3{font-family:var(--font);font-size:20px;font-weight:900;color:var(--pine-deep);margin:0 0 5px}
+.tb-head p{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.5;margin:0;max-width:430px;margin-inline:auto}
+.tb-grid{display:grid;gap:10px}
+.tb-card{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1.5px solid rgba(var(--pine-rgb),.16);border-radius:15px;padding:14px 15px;box-shadow:var(--shadow);text-decoration:none;transition:transform .16s,box-shadow .16s,border-color .16s}
+.tb-card:hover{transform:translateY(-2px);border-color:rgba(var(--pine-rgb),.42);box-shadow:var(--shadow-hi)}
+.tb-emoji{font-size:23px;line-height:1.15;flex:none}
+.tb-txt{flex:1;min-width:0}
+.tb-name{font-family:var(--font);font-size:15px;font-weight:900;color:var(--pine-deep);margin-bottom:3px}
+.tb-desc{font-size:12.6px;font-weight:600;color:var(--ink-soft);line-height:1.45}
+.tb-arrow{flex:none;align-self:center;font-size:17px;font-weight:900;color:var(--pine);opacity:.6}
+.tb-card.current{background:var(--sage-tint);border-color:rgba(var(--pine-rgb),.4)}
+.tb-card.current .tb-arrow{opacity:0}
+.tb-here{display:inline-block;font-size:11px;font-weight:800;color:var(--pine-deep);background:rgba(var(--sage-rgb),.55);border-radius:100px;padding:2px 9px;margin-inline-start:7px;vertical-align:middle}
+@media(min-width:620px){.tb-grid{grid-template-columns:1fr 1fr}}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -394,6 +412,23 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
   </div>
 
   <div id="rooms"></div>
+
+
+  <div class="tools-block">
+    <div class="tb-head">
+      <h3>🧰 כל המחשבונים שלכם ללידה</h3>
+      <p>הרשימה אומרת מה לעשות. המחשבונים נותנים את המספרים. כולם שלכם, בלי הרשמה - נשמרים באותו קישור.</p>
+    </div>
+    <div class="tb-grid">
+      <div class="tb-card current"><span class="tb-emoji">✅</span><div class="tb-txt"><div class="tb-name">הצ'ק-ליסט הכלכלי ללידה<span class="tb-here">אתם כאן</span></div><div class="tb-desc">כל המשימות במקום אחד, לפי השלבים: מה לעשות לפני, בזמן ואחרי.</div></div><span class="tb-arrow">←</span></div>
+      <a class="tb-card" href="../maternity-allowance/" target="_blank" rel="noopener"><span class="tb-emoji">👶</span><div class="tb-txt"><div class="tb-name">מחשבון דמי לידה ומענק</div><div class="tb-desc">כמה תקבלי מביטוח לאומי בחופשת הלידה, וכמה מענק לידה מגיע לך.</div></div><span class="tb-arrow">←</span></a>
+      <a class="tb-card" href="../monthly-baby-cost/" target="_blank" rel="noopener"><span class="tb-emoji">👶</span><div class="tb-txt"><div class="tb-name">כמה עולה חודש עם תינוק</div><div class="tb-desc">ההוצאה החודשית והשנתית השוטפת מכאן והלאה - כדאי למלא לפני תכנון החופשה.</div></div><span class="tb-arrow">←</span></a>
+      <a class="tb-card" href="../maternity-leave-plan/" target="_blank" rel="noopener"><span class="tb-emoji">🍼</span><div class="tb-txt"><div class="tb-name">תכנון כלכלי לחופשת הלידה</div><div class="tb-desc">כמה להפריש כל חודש כדי להגיע ללידה רגועים, עם כסף לציוד ולחודשים בבית.</div></div><span class="tb-arrow">←</span></a>
+      <a class="tb-card" href="../shopping-list/" target="_blank" rel="noopener"><span class="tb-emoji">🛒</span><div class="tb-txt"><div class="tb-name">רשימת קניות ותיק לחדר לידה</div><div class="tb-desc">מה באמת צריך לתינוק/ת לפי עדיפות ותקציב, ומה אורזים לבית החולים.</div></div><span class="tb-arrow">←</span></a>
+      <a class="tb-card" href="../refund-tracker/" target="_blank" rel="noopener"><span class="tb-emoji">🧾</span><div class="tb-txt"><div class="tb-name">מעקב החזרי כספים</div><div class="tb-desc">כמה שילמת על בדיקות בהיריון, וכמה חזר מקופת החולים ומהביטוחים.</div></div><span class="tb-arrow">←</span></a>
+      <a class="tb-card" href="../child-savings/" target="_blank" rel="noopener"><span class="tb-emoji">🐷</span><div class="tb-txt"><div class="tb-name">חיסכון לכל ילד</div><div class="tb-desc">כמה יצטבר לילד/ה עד גיל 18, וכמה זה גדל אם מכפילים את הפקדת המדינה ומוסיפים.</div></div><span class="tb-arrow">←</span></a>
+    </div>
+  </div>
 
   <div class="cta-card">
     <div class="cta-emoji">🤍</div>

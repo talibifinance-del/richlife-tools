@@ -151,6 +151,11 @@ body{font-family:var(--font);
 .cmp2 .c2.full .c2-v{color:#fff}
 
 /* ── compound-interest chart (private savings) ── */
+.worth{margin-top:10px;background:linear-gradient(180deg,var(--pine-deep),var(--pine-darker));color:#fff;border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:800;line-height:1.5;text-align:center}
+.src-split{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.src-split .ss{flex:1;min-width:130px;background:var(--sage-tint);border:1px solid rgba(var(--pine-rgb),.16);border-radius:11px;padding:8px 10px}
+.src-split .ss-l{display:block;font-size:11px;font-weight:800;color:var(--ink-soft);line-height:1.3}
+.src-split .ss-v{display:block;font-size:15px;font-weight:900;color:var(--ink);margin-top:2px}
 .cc-wrap{margin-top:14px}
 .cc-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:8px}
 .cc-title{font-size:13px;font-weight:800;color:var(--ink)}
@@ -420,20 +425,24 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
   <div class="card">
     <div class="card-h"><div class="ch-ico">✨</div><h2>הכוח של ההכפלה</h2></div>
+    <div class="sub">השאלה כאן: <b>כמה יהיה לילד/ה בגיל 18</b>, אם תבחרו להכפיל ואם לא. שני המספרים הם התוצאה הסופית, לא ההפקדה.</div>
     <div class="cmp2">
-      <div class="c2"><span class="c2-l">🇮🇱 רק הפקדת המדינה</span><span class="c2-v" id="cmpState">0 ₪</span></div>
-      <div class="c2 full"><span class="c2-l">✨ בהכפלה מקצבת הילדים</span><span class="c2-v" id="cmpFull">0 ₪</span></div>
+      <div class="c2"><span class="c2-l">🇮🇱 בלי הכפלה</span><span class="c2-v" id="cmpState">0 ₪</span></div>
+      <div class="c2 full"><span class="c2-l">✨ עם הכפלה</span><span class="c2-v" id="cmpFull">0 ₪</span></div>
     </div>
-    <div class="mini-hint">אפשר להשאיר רק את הפקדת המדינה בלי להכפיל - זו בחירה לגיטימית. ההכפלה מגיעה מקצבת הילדים, כסף שממילא מגיע לכם. שתי ההשוואות הן לגיל 18.</div>
+    <div class="worth" id="dblWorth" hidden></div>
+    <div class="mini-hint"><b>ומהכיס שלכם לא יוצא שקל, בשני המקרים.</b> ההכפלה היא לא כסף חדש שאתם מוציאים מהמשכורת - זו קצבת הילדים שממילא מגיעה לכם, ואתם רק מחליטים אם היא נשארת בעו"ש או נכנסת לחיסכון של הילד/ה. שתי ההשוואות הן לגיל 18.</div>
   </div>
 
   <div class="card">
-    <div class="card-h"><div class="ch-ico">📊</div><h2>כמה מזה הפקדתם, וכמה הזמן הוסיף</h2></div>
+    <div class="card-h"><div class="ch-ico">📊</div><h2>מאיפה מגיע הכסף הזה</h2></div>
+    <div class="sub">כאן לוקחים את <b>אותו סכום סופי</b> מלמעלה, ומפרקים אותו: כמה נכנס בהפקדות, וכמה נוצר מעצמו.</div>
     <div class="gbar" aria-hidden="true"><div class="gb gb-dep" id="gbDep"></div><div class="gb gb-grow" id="gbGrow"></div></div>
     <div class="gbar-legend">
-      <div class="gl"><span class="gl-t">💰 מה שהפקדתם</span><span class="gl-v" id="glDep">0 ₪</span></div>
+      <div class="gl"><span class="gl-t">💰 סך ההפקדות</span><span class="gl-v" id="glDep">0 ₪</span></div>
       <div class="gl grow"><span class="gl-t">📈 מה שהשוק הוסיף</span><span class="gl-v" id="glGrow">0 ₪</span></div>
     </div>
+    <div class="src-split" id="srcSplit" hidden></div>
     <div class="split-note" id="splitNote" hidden style="margin-top:12px"></div>
   </div>
 
@@ -617,10 +626,15 @@ function calc(){
   document.getElementById('heroMeta').innerHTML=yTo18>0?('בעוד <b>'+yTo18+'</b> '+(yTo18===1?'שנה':'שנים')+', בגיל 18'):'הילד/ה כבר בגיל 18';
   document.getElementById('sum21').textContent=money(v21prog)+' ₪';
   const sn=document.getElementById('splitNote');
-  if(progMonthly>0||bal>0){sn.hidden=false;sn.innerHTML='📊 עד גיל 18 יופקדו <b>'+money(depProg)+' ₪</b> לחיסכון לכל ילד, והוא ירוויח עוד <b>'+money(growProg)+' ₪</b> בזכות הזמן.';}
+  if(progMonthly>0||bal>0){sn.hidden=false;sn.innerHTML='📊 עד גיל 18 ייכנסו לחיסכון <b>'+money(depProg)+' ₪</b> (הכל מהמדינה ומקצבת הילדים, לא מהכיס שלכם), והם ירוויחו עוד <b>'+money(growProg)+' ₪</b> בזכות הזמן.';}
   else sn.hidden=true;
   document.getElementById('cmpState').textContent=money(v18stateOnly)+' ₪';
   document.getElementById('cmpFull').textContent=money(v18doubled)+' ₪';
+  // what the doubling itself is worth at 18
+  const dw=document.getElementById('dblWorth');
+  if(dw){const diff=Math.max(0,v18doubled-v18stateOnly);
+    if(diff>0){dw.hidden=false;dw.innerHTML='✨ ההכפלה שווה לילד/ה עוד <b>'+money(diff)+' ₪</b> בגיל 18 - בלי שתוציאו שקל נוסף מהמשכורת.';}
+    else dw.hidden=true;}
   document.getElementById('mLine').textContent='הפקדה חודשית לתוכנית: '+money(progMonthly)+' ₪'+(S.dbl?' (כולל ההכפלה)':' (רק המדינה)')+' - עד גיל 18';
   // deposits-vs-growth bar (program at 18)
   const totBar=Math.max(1,depProg+growProg),depPct=depProg/totBar*100,growPct=growProg/totBar*100;
@@ -630,6 +644,16 @@ function calc(){
   gbGrow.textContent=growPct>=14?Math.round(growPct)+'%':'';
   document.getElementById('glDep').textContent=money(depProg)+' ₪';
   document.getElementById('glGrow').textContent=money(growProg)+' ₪';
+  // break the DEPOSITS down by who actually put the money in
+  const ss=document.getElementById('srcSplit');
+  if(ss){
+    const stDep=st*n18, dblDep=(S.dbl?st*n18:0);
+    if(stDep>0||dblDep>0){ss.hidden=false;
+      ss.innerHTML='<div class="ss"><span class="ss-l">🇮🇱 מהמדינה</span><span class="ss-v">'+money(stDep+bal)+' ₪</span></div>'
+        +(S.dbl?'<div class="ss"><span class="ss-l">👶 מקצבת הילדים (ההכפלה)</span><span class="ss-v">'+money(dblDep)+' ₪</span></div>':'')
+        +'<div class="ss"><span class="ss-l">💳 מהכיס שלכם</span><span class="ss-v">0 ₪</span></div>';}
+    else ss.hidden=true;
+  }
   // track comparison at 18 (same config, vary rate over the three tracks)
   const TRACKS=[['🏦 בנק',2],['📊 קופת גמל',5],['📈 מוגבר סיכון',7]];
   const tvals=TRACKS.map(t=>grow(bal,progMonthly,n18,t[1]/100/12));

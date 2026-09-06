@@ -27,6 +27,7 @@
     'refund-tracker':       'richlife-refunds-v1',
     'shopping-list':        'richlife-shopping-v4',
     'child-savings':        'richlife-childsaving-v1',
+    'couples-map':          'richlife-couplesmap-v1',
     'ribit':                'richlife-ribit-v1'
   };
 
@@ -146,7 +147,7 @@
 
   // --- UI: banner + hide per-tool share + carry ?u across internal links ---
   ready(function () {
-    hideEls(['shareBtn', 'actLink', 'liveBadge']);
+    hideEls(['shareBtn', 'actLink', 'liveBadge', 'saveBtn', 'saveMsg']);
     injectBanner();
     rewriteLinks();
   });

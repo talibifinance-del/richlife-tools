@@ -78,7 +78,7 @@ footer a{color:var(--ink-soft)}
 <script>
 (function(){
   var MODES=[["fs","הגדלת טקסט",2],["contrast","ניגודיות מוגברת",1],["links","הדגשת קישורים",1],["nomotion","עצירת אנימציות",1],["font","גופן קריא",1]];
-  var KEY="brain_a11y",STMT="https://talibifinance-del.github.io/richlife-lida/negishut.html";
+  var KEY="brain_a11y",STMT="https://lida.richlife.co.il/lida/negishut.html";
   function state(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}}}
   function apply(s){var h=document.documentElement;h.classList.toggle("a11y-fs1",s.fs===1);h.classList.toggle("a11y-fs2",s.fs===2);["contrast","links","nomotion","font"].forEach(function(m){h.classList.toggle("a11y-"+m,!!s[m])})}
   function build(){

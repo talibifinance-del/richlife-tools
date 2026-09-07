@@ -367,8 +367,27 @@
       <input type="text" class="amt2" data-a="amtB" inputmode="numeric" placeholder="כמה בחודש? ₪">
     </div>
     <div class="brow">
+      <div class="blab neutral">מטרת העל הזוגית שלנו לשנה הקרובה</div>
+      <input type="text" data-a="goal" placeholder="הדבר הכי חשוב שנשיג יחד (למשל: חיסכון לדירה, קרן חירום)">
+      <input type="text" class="amt2" data-a="goalAmt" inputmode="numeric" placeholder="כמה ₪?">
+    </div>
+    <div class="brow">
+      <div class="blab neutral">מתי נגיע אליה</div>
+      <input type="text" data-a="goalWhen" placeholder="עד מתי? (חודש ושנה)">
+      <input type="text" class="amt2" data-a="goalMonthly" inputmode="numeric" placeholder="כמה בחודש? ₪">
+    </div>
+    <div class="brow">
+      <div class="blab neutral">מרחב אישי: סכום חופשי לכל אחד, בלי לתת דין וחשבון</div>
+      <input type="text" class="amt2" data-a="spaceA" inputmode="numeric" placeholder="לא' — ₪ בחודש">
+      <input type="text" class="amt2" data-a="spaceB" inputmode="numeric" placeholder="לב' — ₪ בחודש">
+    </div>
+    <div class="brow">
       <div class="blab neutral">כלל משותף: מעל סכום מסוים, מתייעצים לפני קנייה</div>
       <input type="text" class="amt2" data-a="consultAmt" inputmode="numeric" placeholder="מעל כמה ₪?">
+    </div>
+    <div class="brow">
+      <div class="blab neutral">הקווים האדומים שלנו: מה בכלל לא עושים</div>
+      <input type="text" data-a="redlines" placeholder="למשל: לא נכנסים למינוס · לא לוקחים הלוואה בלי לדבר">
     </div>
     <div class="brow date"><label for="dt">פגישת הכסף הראשונה שלנו:</label><input type="date" id="dt" data-a="date"></div>
   </div>
@@ -414,16 +433,19 @@
   var REPRESENTS=["ביטחון","חופש","הנאה","אהבה ונתינה","ערך והצלחה","הישרדות"];
   var VALUES=["ביטחון","חופש","הנאה","משפחה","כבוד","עצמאות","נדיבות","יציבות","שקט נפשי","הרפתקה"];
   var STYLES=["חסכן/ית","בזבזן/ית","נמנע/ת","מנהל/ת"];
+  var FEELS=["מרוחק/ת","חסום/ה","חנוק/ה","חסר/ת שליטה","לא מוערך/ת","מוצף/ת","בודד/ה","מובן/ת","נינוח/ה","בטוח/ה","מוערך/ת","רגוע/ה"];
   var BELIEFS=[
     ['b1','"כסף זה ___"'],['b2','"אנשים עם הרבה כסף הם ___"'],['b3','"בבית שגדלתי בו, כסף היה ___"'],
     ['b4','"כשאני חושב/ת על כסף, אני מרגיש/ה ___"'],['b5','"הדבר שהכי מלחיץ אותי סביב כסף הוא ___"'],
     ['b6','"כשאני מוציא/ה כסף על עצמי, אני מרגיש/ה ___"']
   ];
-  var state={a:{warmup:'',represents:[],beliefs:{},limiting:'',disprove:'',reframe:'',ladderQ:'',ladderW1:'',ladderW2:'',values:[],style:''},
-             b:{warmup:'',represents:[],beliefs:{},limiting:'',disprove:'',reframe:'',ladderQ:'',ladderW1:'',ladderW2:'',values:[],style:''},ag:{}};
+  var BLANK={warmup:'',represents:[],beliefs:{},limiting:'',disprove:'',reframe:'',ladderQ:'',ladderW1:'',ladderW2:'',values:[],style:'',home:'',homeLines:'',homeDid:'',aspire:'',bugs:'',bugsWhy:'',feels:[],behind:''};
+  function blank(){ return JSON.parse(JSON.stringify(BLANK)); }
+  var state={a:blank(), b:blank(), ag:{}};
   function q(s,el){return (el||document).querySelector(s);}
   function qa(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s));}
   function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+  function nis(v){ var t=String(v==null?'':v).replace(/[^\d.]/g,''); if(!t) return esc(String(v||'')); var n=parseFloat(t); if(isNaN(n)) return esc(String(v||'')); return n.toLocaleString('en-US'); }
   function nameOf(p,fb){ return (state[p].name||'').trim()||fb; }
   function repOf(p){ var r=state[p].represents; if(Array.isArray(r)) return r.join(' · '); return r||''; }
 
@@ -440,7 +462,16 @@
     }).join('');
     return ''+
     '<div class="who"><span class="dot"></span><input type="text" data-f="name" value="'+esc(s.name||'')+'" placeholder="'+(p==='a'?'השם שלי':'השם של בן/בת הזוג')+'" aria-label="שם"></div>'+
-    '<div class="sec" style="border-top:none;padding-top:6px"><span class="lbl">רגע לפני שמתחילים</span><span class="desc">תיזכרו בשני רגעים: אחד שבו הרגשתם ממש טוב עם כסף, ואחד ממש לא נעים. מה עמד מאחורי כל אחד?</span>'+
+    '<div class="sec" style="border-top:none;padding-top:6px"><span class="lbl">רגע של כנות: איפה גדלתי</span>'+
+      '<span class="desc">איך נראתה ההתנהלות הכלכלית בבית שגדלתי בו? איך דיברו על כסף, מי קיבל את ההחלטות, והאם היו לחצים, חובות או תחושת חוסר?</span>'+
+      '<input type="text" data-f="home" value="'+esc(s.home||'')+'" placeholder="ככה זה נראה אצלנו בבית">'+
+      '<label style="display:block;font-size:12px;font-weight:800;color:var(--ink-soft);margin:10px 0 4px">אילו משפטים על כסף אני זוכר/ת מהילדות?</label>'+
+      '<input type="text" data-f="homeLines" value="'+esc(s.homeLines||'')+'" placeholder="למשל: כסף לא גדל על העצים · לא חוסכים על אוכל">'+
+      '<label style="display:block;font-size:12px;font-weight:800;color:var(--ink-soft);margin:10px 0 4px">איזו התנהגות זה יצר אצלי, ומה אני סוחב/ת מזה לזוגיות?</label>'+
+      '<input type="text" data-f="homeDid" value="'+esc(s.homeDid||'')+'" placeholder="מה אני עושה היום בגלל מה ששמעתי אז">'+
+      '<label style="display:block;font-size:12px;font-weight:800;color:var(--ink-soft);margin:10px 0 4px">ומה אני שואף/ת שיקרה בינינו?</label>'+
+      '<input type="text" data-f="aspire" value="'+esc(s.aspire||'')+'" placeholder="למשל: שיהיה לנו כיוון ברור · שלא יכעסו עליי אם אקנה משהו"></div>'+
+    '<div class="sec"><span class="lbl">רגע לפני שמתחילים</span><span class="desc">תיזכרו בשני רגעים: אחד שבו הרגשתם ממש טוב עם כסף, ואחד ממש לא נעים. מה עמד מאחורי כל אחד?</span>'+
       '<input type="text" data-f="warmup" value="'+esc(s.warmup||'')+'" placeholder="הרגעים שעולים לי, ומה היה מאחוריהם"></div>'+
     '<div class="sec"><span class="lbl">ומתוך זה, מה כסף מייצג בשבילי</span>'+
       '<span class="desc">אפשר לסמן כמה, כסף יכול לסמל יותר מדבר אחד. מיד נעמיק אליהם יחד.</span>'+
@@ -465,7 +496,16 @@
       '<input type="text" data-f="disprove" value="'+esc(s.disprove||'')+'" placeholder="למשל: עשיר שהוא טוב ותורם, מישהו שנהנה מהעבודה ומרוויח בקלות">'+
       '<label>עכשיו נסחו אמונה מעצימה במקום (בגוף ראשון, חיובי, בלי "לא"):</label>'+
       '<input type="text" data-f="reframe" value="'+esc(s.reframe||'')+'" placeholder="למשל: כסף נמשך אליי בקלות · אני יודע/ת לנהל כסף"></div></div>'+
-    '<div class="sec"><span class="lbl">איך אני מתנהל/ת מול כסף</span>'+chipsHTML('style',STYLES,s.style)+'</div>';
+    '<div class="sec"><span class="lbl">איך אני מתנהל/ת מול כסף</span>'+chipsHTML('style',STYLES,s.style)+'</div>'+
+    '<div class="sec"><span class="lbl">ככה אני רואה את זה</span>'+
+      '<span class="desc">מה מפריע לי בהתנהלות הכלכלית של בן/בת הזוג שלי? המטרה היא לשים מילים, לא רק רגשות. אף אחד לא צודק כאן, ואף אחד לא מואשם.</span>'+
+      '<input type="text" data-f="bugs" value="'+esc(s.bugs||'')+'" placeholder="מה שמפריע לי">'+
+      '<label style="display:block;font-size:12px;font-weight:800;color:var(--ink-soft);margin:10px 0 4px">ולמה זה מפריע לי?</label>'+
+      '<input type="text" data-f="bugsWhy" value="'+esc(s.bugsWhy||'')+'" placeholder="כי זה מגביל אותי · כי זה לא אחראי בעיניי · כי זה מחניק אותי">'+
+      '<span class="desc" style="margin-top:10px">ואיך זה גורם לי להרגיש? (אפשר לסמן כמה)</span>'+
+      chipsHTML('feels',FEELS,s.feels)+
+      '<label style="display:block;font-size:12px;font-weight:800;color:var(--ink-soft);margin:10px 0 4px">ומה לדעתי מסתתר מאחורי ההתנהגות שלו/שלה?</label>'+
+      '<input type="text" data-f="behind" value="'+esc(s.behind||'')+'" placeholder="איזו חוויה מהעבר יכולה להסביר את זה? מה זה מאפשר לו/לה?"></div>';
   }
 
   function renderVlist(p){
@@ -502,6 +542,18 @@
       }
       if(s.limiting){ html+='<div class="mrf"><b>אמונה שאני משחרר/ת:</b> '+esc(s.limiting)+(s.reframe?(' ← '+esc(s.reframe)):'')+(s.disprove?('<div style="font-size:10.5px;color:var(--ink-faint);margin-top:2px">מה שסותר אותה: '+esc(s.disprove)+'</div>'):'')+'</div>'; }
       html+='<div class="row">מתנהל/ת כ: <b>'+esc(s.style||'—')+'</b></div>';
+      if(s.home||s.homeLines||s.homeDid){
+        html+='<div class="mrf"><b>הבית שגדלתי בו:</b> '+esc(s.home||'—')+
+          (s.homeLines?('<div style="font-size:10.5px;color:var(--ink-faint);margin-top:2px">משפטים מהילדות: '+esc(s.homeLines)+'</div>'):'')+
+          (s.homeDid?('<div style="font-size:10.5px;color:var(--ink-faint);margin-top:2px">ומה זה יצר: '+esc(s.homeDid)+'</div>'):'')+'</div>';
+      }
+      if(s.aspire){ html+='<div class="row">מה שאני שואף/ת שיקרה בינינו: <b>'+esc(s.aspire)+'</b></div>'; }
+      if(s.bugs||(s.feels&&s.feels.length)||s.behind){
+        html+='<div class="mrf"><b>מה שמאתגר אותי:</b> '+esc(s.bugs||'—')+
+          (s.bugsWhy?(' — '+esc(s.bugsWhy)):'')+
+          ((s.feels&&s.feels.length)?('<div style="font-size:10.5px;color:var(--ink-faint);margin-top:2px">ואני מרגיש/ה: '+s.feels.map(esc).join(' · ')+'</div>'):'')+
+          (s.behind?('<div style="font-size:10.5px;color:var(--ink-faint);margin-top:2px">ומה שאולי מסתתר מאחורי: '+esc(s.behind)+'</div>'):'')+'</div>';
+      }
       q('[data-mc="'+p+'"]').innerHTML=html;
     });
     var nA=(state.a.name||'').trim()||"בן/בת זוג א'", nB=(state.b.name||'').trim()||"בן/בת זוג ב'";
@@ -513,9 +565,16 @@
     if(bA) bA.textContent='כדי לממש את הערך של '+nA+(tA?(' — '+tA):'');
     if(bB) bB.textContent='כדי לממש את הערך של '+nB+(tB?(' — '+tB):'');
     var ag=[];
-    if(state.ag.actA) ag.push('כדי לממש את הערך של '+esc(nA)+(tA?(' ('+esc(tA)+')'):'')+': '+esc(state.ag.actA)+(state.ag.amtA?(' — '+esc(state.ag.amtA)+' ₪ בחודש'):''));
-    if(state.ag.actB) ag.push('כדי לממש את הערך של '+esc(nB)+(tB?(' ('+esc(tB)+')'):'')+': '+esc(state.ag.actB)+(state.ag.amtB?(' — '+esc(state.ag.amtB)+' ₪ בחודש'):''));
-    if(state.ag.consultAmt) ag.push('כלל משותף: מעל '+esc(state.ag.consultAmt)+' ₪, מתייעצים לפני קנייה');
+    if(state.ag.actA) ag.push('כדי לממש את הערך של '+esc(nA)+(tA?(' ('+esc(tA)+')'):'')+': '+esc(state.ag.actA)+(state.ag.amtA?(' — '+nis(state.ag.amtA)+' ₪ בחודש'):''));
+    if(state.ag.actB) ag.push('כדי לממש את הערך של '+esc(nB)+(tB?(' ('+esc(tB)+')'):'')+': '+esc(state.ag.actB)+(state.ag.amtB?(' — '+nis(state.ag.amtB)+' ₪ בחודש'):''));
+    if(state.ag.goal){ var g='מטרת העל שלנו: '+esc(state.ag.goal);
+      if(state.ag.goalAmt) g+=' — '+nis(state.ag.goalAmt)+' ₪';
+      if(state.ag.goalWhen) g+=', עד '+esc(state.ag.goalWhen);
+      if(state.ag.goalMonthly) g+=' ('+nis(state.ag.goalMonthly)+' ₪ בחודש)';
+      ag.push(g); }
+    if(state.ag.spaceA||state.ag.spaceB){ ag.push('מרחב אישי חופשי: '+esc(nA)+' — '+nis(state.ag.spaceA||'0')+' ₪, '+esc(nB)+' — '+nis(state.ag.spaceB||'0')+' ₪ בחודש'); }
+    if(state.ag.consultAmt) ag.push('כלל משותף: מעל '+nis(state.ag.consultAmt)+' ₪, מתייעצים לפני קנייה');
+    if(state.ag.redlines) ag.push('הקווים האדומים שלנו: '+esc(state.ag.redlines));
     var out='';
     if(ag.length) out+='<div style="margin-bottom:6px"><b>הגשר שלנו:</b><br>· '+ag.join('<br>· ')+'</div>';
     if(state.ag.date) out+='<b>פגישת הכסף הראשונה שלנו:</b> '+esc(state.ag.date)+'.';
@@ -554,10 +613,10 @@
         var group=chip.parentNode, f=group.getAttribute('data-f'), txt=chip.textContent.trim();
         if(f==='valpick'){ toggleVal(p,txt); return; }
         var on=chip.getAttribute('aria-pressed')==='true';
-        if(f==='represents'){
-          if(!Array.isArray(s.represents)) s.represents = s.represents? [s.represents] : [];
-          var ri=s.represents.indexOf(txt);
-          if(ri>=0) s.represents.splice(ri,1); else s.represents.push(txt);
+        if(f==='represents'||f==='feels'){
+          if(!Array.isArray(s[f])) s[f] = s[f]? [s[f]] : [];
+          var ri=s[f].indexOf(txt);
+          if(ri>=0) s[f].splice(ri,1); else s[f].push(txt);
           chip.setAttribute('aria-pressed', on?'false':'true');
         } else {
           qa('.chip',group).forEach(function(c){ if(c!==chip) c.setAttribute('aria-pressed','false'); });
@@ -597,7 +656,7 @@
   function syncLive(){ if(!docId) return; clearTimeout(pushT); pushT=setTimeout(function(){ fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:encode()}).then(function(r){if(r.status===404)docId=null;}).catch(function(){}); },1200); }
   function save(silent){ persist(); if(docId){ syncLive(); if(!silent) q('#saveMsg').textContent='נשמר לקישור.'; return; } var h=encode(); if(h){ try{history.replaceState(null,'','#m='+h);}catch(e){} } if(!silent) q('#saveMsg').textContent='נשמר.'; }
   // apply a decoded map and fully refresh the UI (used by the short-link #p= loader)
-  function applyDecoded(st){ if(!st) return; state={a:st.a||state.a,b:st.b||state.b,ag:st.ag||{}}; ['a','b'].forEach(function(p){ ['warmup','represents','beliefs','limiting','disprove','reframe','ladderQ','ladderW1','ladderW2','values','style','name'].forEach(function(k){ if(state[p][k]===undefined) state[p][k]= ((k==='values'||k==='represents')?[]:(k==='beliefs'?{}:'')); }); if(!Array.isArray(state[p].represents)) state[p].represents = state[p].represents? [state[p].represents] : []; var c=q('.card[data-p="'+p+'"]'); if(c) c.innerHTML=cardHTML(p); bindCard(p); renderVlist(p); }); qa('#bridge [data-a]').forEach(function(inp){ var k=inp.getAttribute('data-a'); if(state.ag[k]!==undefined){ if(inp.type==='checkbox') inp.checked=!!state.ag[k]; else inp.value=state.ag[k]; } }); renderMap(); }
+  function applyDecoded(st){ if(!st) return; state={a:st.a||state.a,b:st.b||state.b,ag:st.ag||{}}; ['a','b'].forEach(function(p){ ['warmup','represents','beliefs','limiting','disprove','reframe','ladderQ','ladderW1','ladderW2','values','style','name','home','homeLines','homeDid','aspire','bugs','bugsWhy','feels','behind'].forEach(function(k){ if(state[p][k]===undefined) state[p][k]= ((k==='values'||k==='represents'||k==='feels')?[]:(k==='beliefs'?{}:'')); }); if(!Array.isArray(state[p].represents)) state[p].represents = state[p].represents? [state[p].represents] : []; var c=q('.card[data-p="'+p+'"]'); if(c) c.innerHTML=cardHTML(p); bindCard(p); renderVlist(p); }); qa('#bridge [data-a]').forEach(function(inp){ var k=inp.getAttribute('data-a'); if(state.ag[k]!==undefined){ if(inp.type==='checkbox') inp.checked=!!state.ag[k]; else inp.value=state.ag[k]; } }); renderMap(); }
 
   // restore from this device BEFORE the cards are built; a #m= / #p= link in the URL still wins over it.
   (function(){
@@ -606,8 +665,8 @@
       var st=JSON.parse(raw); if(!st) return;
       state={a:st.a||state.a,b:st.b||state.b,ag:st.ag||{}};
       ['a','b'].forEach(function(pp){
-        ['warmup','represents','beliefs','limiting','disprove','reframe','ladderQ','ladderW1','ladderW2','values','style','name'].forEach(function(k){
-          if(state[pp][k]===undefined) state[pp][k]= ((k==='values'||k==='represents')?[]:(k==='beliefs'?{}:''));
+        ['warmup','represents','beliefs','limiting','disprove','reframe','ladderQ','ladderW1','ladderW2','values','style','name','home','homeLines','homeDid','aspire','bugs','bugsWhy','feels','behind'].forEach(function(k){
+          if(state[pp][k]===undefined) state[pp][k]= ((k==='values'||k==='represents'||k==='feels')?[]:(k==='beliefs'?{}:''));
         });
         if(!Array.isArray(state[pp].represents)) state[pp].represents = state[pp].represents? [state[pp].represents] : [];
       });
@@ -617,7 +676,7 @@
   // build cards
   ['a','b'].forEach(function(p){ var el=document.createElement('div'); el.className='card '+p; el.setAttribute('data-p',p); el.innerHTML=cardHTML(p); q('#cards').appendChild(el); });
   // load hash
-  (function(){ var m=location.hash.match(/m=([^&]+)/); if(m){ var st=decode(m[1]); if(st){ state={a:st.a||state.a,b:st.b||state.b,ag:st.ag||{}}; ['a','b'].forEach(function(p){ ['warmup','represents','beliefs','limiting','disprove','reframe','ladderQ','ladderW1','ladderW2','values','style','name'].forEach(function(k){ if(state[p][k]===undefined) state[p][k]= ((k==='values'||k==='represents')?[]:(k==='beliefs'?{}:'')); }); if(!Array.isArray(state[p].represents)) state[p].represents = state[p].represents? [state[p].represents] : []; q('.card[data-p="'+p+'"]').innerHTML=cardHTML(p); }); } } })();
+  (function(){ var m=location.hash.match(/m=([^&]+)/); if(m){ var st=decode(m[1]); if(st){ state={a:st.a||state.a,b:st.b||state.b,ag:st.ag||{}}; ['a','b'].forEach(function(p){ ['warmup','represents','beliefs','limiting','disprove','reframe','ladderQ','ladderW1','ladderW2','values','style','name','home','homeLines','homeDid','aspire','bugs','bugsWhy','feels','behind'].forEach(function(k){ if(state[p][k]===undefined) state[p][k]= ((k==='values'||k==='represents'||k==='feels')?[]:(k==='beliefs'?{}:'')); }); if(!Array.isArray(state[p].represents)) state[p].represents = state[p].represents? [state[p].represents] : []; q('.card[data-p="'+p+'"]').innerHTML=cardHTML(p); }); } } })();
   ['a','b'].forEach(function(p){ bindCard(p); renderVlist(p); });
   // short-link (#p=) loader - fetches the stored map and applies it
   (function(){ var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/); if(!hp) return; docId=hp[1]; fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){ applyDecoded(decode(t)); }).catch(function(){}); })();
@@ -655,8 +714,8 @@
     h+='<div class="ev-cols">'+evCol('a')+evCol('b')+'</div>';
     if(tA&&tB){ var vt=(tA===tB)?('לשניכם הערך המוביל הוא '+esc(tA)+'. יש לכם בסיס משותף חזק לבנות עליו.'):('ל'+esc(nA)+' הכי חשוב '+esc(tA)+', ל'+esc(nB)+' הכי חשוב '+esc(tB)+'. ושניכם צודקים, וזה בדיוק מה שמגשרים עליו יחד.'); h+='<div class="ev-verdict">'+vt+'</div>'; }
     var br=[];
-    if(state.ag.actA) br.push('· כדי לממש את הערך של <b>'+esc(nA)+(tA?(' ('+esc(tA)+')'):'')+':</b> '+esc(state.ag.actA)+(state.ag.amtA?(' — '+esc(state.ag.amtA)+' ₪ בחודש'):''));
-    if(state.ag.actB) br.push('· כדי לממש את הערך של <b>'+esc(nB)+(tB?(' ('+esc(tB)+')'):'')+':</b> '+esc(state.ag.actB)+(state.ag.amtB?(' — '+esc(state.ag.amtB)+' ₪ בחודש'):''));
+    if(state.ag.actA) br.push('· כדי לממש את הערך של <b>'+esc(nA)+(tA?(' ('+esc(tA)+')'):'')+':</b> '+esc(state.ag.actA)+(state.ag.amtA?(' — '+nis(state.ag.amtA)+' ₪ בחודש'):''));
+    if(state.ag.actB) br.push('· כדי לממש את הערך של <b>'+esc(nB)+(tB?(' ('+esc(tB)+')'):'')+':</b> '+esc(state.ag.actB)+(state.ag.amtB?(' — '+nis(state.ag.amtB)+' ₪ בחודש'):''));
     if(state.ag.consultAmt) br.push('· כלל משותף: מעל '+esc(state.ag.consultAmt)+' ₪, מתייעצים לפני קנייה');
     if(br.length||state.ag.date) h+='<div class="ev-bridge"><b>הגשר שלנו — איך כל ערך מקבל מקום:</b><br>'+br.join('<br>')+(state.ag.date?('<br><b>פגישת הכסף הראשונה שלנו:</b> '+esc(state.ag.date)):'')+'</div>';
     if(tA&&tB){

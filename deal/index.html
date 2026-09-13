@@ -394,10 +394,20 @@ table.grid td.name{text-align:start}
 .faq details[open] summary .chev{transform:rotate(180deg)}
 .faq .a{font-size:13px;font-weight:600;color:var(--ink);line-height:1.65;margin-top:9px}
 .faq .a b{color:var(--pine-deep);font-weight:900}
+/* לשוניות סוג עסקה */
+.deal-tabs{display:flex;gap:8px;margin-bottom:18px}
+.deal-tabs .dt{flex:1;font-family:var(--font);cursor:pointer;text-align:center;border:1.5px solid rgba(var(--pine-rgb),.22);background:#fff;border-radius:15px;padding:11px 6px;transition:all .18s}
+.deal-tabs .dt .t-name{font-size:14px;font-weight:900;color:var(--pine-deep)}
+.deal-tabs .dt .t-sub{font-size:10.5px;font-weight:700;color:var(--ink-soft);margin-top:2px}
+.deal-tabs .dt.on{background:linear-gradient(135deg,var(--pine),var(--pine-deep));border-color:var(--pine-deep);box-shadow:0 8px 20px rgba(var(--pine-rgb),.30)}
+.deal-tabs .dt.on .t-name,.deal-tabs .dt.on .t-sub{color:#fff}
+.wrap.tab-us .il-land{display:none}
+.wrap.tab-il .us-only,.wrap.tab-land .us-only{display:none}
+.wrap.tab-land .rent-only{display:none}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap tab-il" id="wrapEl">
   <a id="backArgaz" class="back-argaz" href="/argaz/" hidden>← חזרה לארגז הכלים</a>
 
   <div class="brand">
@@ -410,7 +420,13 @@ table.grid td.name{text-align:start}
     <p>לפני שחותמים: כמה כסף באמת יוצא מהכיס, כמה חוזר בסוף, ואם זה עדיף על פני פשוט להשקיע את אותו סכום בשוק.</p>
   </div>
 
-  <div class="card">
+  <div class="deal-tabs" id="dealTabs" role="tablist" aria-label="סוג העסקה">
+    <button type="button" class="dt on" data-t="il"><div class="t-name">🏠 נכס בארץ</div><div class="t-sub">שכירות · מימון · מכירה</div></button>
+    <button type="button" class="dt" data-t="land"><div class="t-name">🏞️ קרקע</div><div class="t-sub">קונים, מחזיקים, מוכרים</div></button>
+    <button type="button" class="dt" data-t="us"><div class="t-name">🌎 עסקה בחו"ל</div><div class="t-sub">תזרים · ריפייננס · מט"ח</div></button>
+  </div>
+
+  <div class="card il-land">
     <div class="sec-lbl">🏠 נתוני העסקה</div>
     <div class="field full">
       <label for="dname">שם העסקה (לא חובה)</label>
@@ -448,7 +464,7 @@ table.grid td.name{text-align:start}
         <div class="hint" id="hGrow"></div>
         <div class="gm-help" id="gmHelp"></div>
       </div>
-      <div class="field">
+      <div class="field rent-only">
         <label for="rent">שכירות חודשית (אם יש)</label>
         <div class="input-shell"><span class="unit">₪</span><input id="rent" type="text" inputmode="numeric" value="0"></div>
         <div class="hint" id="hRent"></div>
@@ -471,7 +487,7 @@ table.grid td.name{text-align:start}
     <div class="insight" id="insGrow" style="margin-top:14px"></div>
   </div>
 
-  <div class="card">
+  <div class="card il-land">
     <div class="sec-lbl">🏦 מימון העסקה</div>
     <div class="sec-note">גררו את המחוון כדי לראות איך המינוף משנה את התמונה. פחות הון עצמי מגדיל את התשואה על הכסף שלכם, ומגדיל גם את הסיכון ואת ההחזר החודשי.</div>
 
@@ -509,11 +525,11 @@ table.grid td.name{text-align:start}
 
     <div class="tot-row">
       <div class="tot"><div class="k">החזר חודשי</div><div class="v" id="tPmt">0 ₪</div></div>
-      <div class="tot" id="tFlowBox"><div class="k">תזרים חודשי (שכירות פחות החזר)</div><div class="v" id="tFlow">0 ₪</div><div class="s" id="tFlowS"></div></div>
+      <div class="tot" id="tFlowBox"><div class="k" id="tFlowK">תזרים חודשי (שכירות פחות החזר)</div><div class="v" id="tFlow">0 ₪</div><div class="s" id="tFlowS"></div></div>
     </div>
   </div>
 
-  <div class="card">
+  <div class="card il-land">
     <div class="sec-lbl">📊 מה יוצא מזה</div>
 
     <div class="result">
@@ -537,7 +553,7 @@ table.grid td.name{text-align:start}
     </div>
   </div>
 
-  <div class="card" id="earlyCard">
+  <div class="card il-land" id="earlyCard">
     <div class="sec-lbl">🏁 סגירה מוקדמת של ההלוואה</div>
     <div class="gmode" id="cmode" role="group" aria-label="מתי סוגרים את ההלוואה" style="margin:0 0 10px">
       <button type="button" class="gm-chip on" data-c="sale">נסגרת במכירה</button>
@@ -555,18 +571,19 @@ table.grid td.name{text-align:start}
     <div class="insight" id="insEarly" style="margin-top:14px"></div>
   </div>
 
-  <div class="card">
+  <div class="card il-land">
     <div class="sec-lbl">⚖️ העסקה מול פשוט להשקיע את אותו כסף</div>
     <div class="sec-note">אותם תשלומים בדיוק - ההון העצמי בהתחלה וההחזר החודשי כל חודש - מושקעים בשוק במקום בעסקה. אחרי מס רווחי הון של 25%. זו השאלה האמיתית: לא "האם העסקה מרוויחה", אלא "האם היא מרוויחה יותר".</div>
-    <div class="field" style="max-width:280px">
+    <div class="field" style="max-width:300px">
       <label for="alt">תשואה שנתית בשוק להשוואה</label>
-      <div class="input-shell"><input id="alt" type="text" inputmode="decimal" value="8"><span class="unit suf">%</span></div>
+      <div class="input-shell"><input id="alt" type="text" inputmode="decimal" value="8"><span class="unit suf">% דריבית</span></div>
+      <div class="hint">ריבית דריבית - כך מדווחות תשואות מדדים. S&P 500 עשה בממוצע רב-שנתי כ-10% בשנה דריבית</div>
     </div>
     <div class="vs" id="vsBox"></div>
     <div class="insight" id="insVs" style="margin-top:14px"></div>
   </div>
 
-  <div class="chart-card">
+  <div class="chart-card il-land">
     <div class="chart-head">📈 ההון שלכם בנכס, שנה אחרי שנה</div>
     <div class="chart-sub">השטח הירוק הוא מה ששייך לכם (שווי הנכס פחות יתרת ההלוואה). הקו המקווקו הוא כמה כסף הזרמתם עד אותה נקודה. הפער ביניהם הוא הרווח.</div>
     <div class="chart-wrap" id="chartWrap"><svg class="chart" id="chart" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="גרף ההון בנכס מול הכסף שהוזרם לאורך השנים"></svg></div>
@@ -579,17 +596,17 @@ table.grid td.name{text-align:start}
     </div>
   </div>
 
-  <div class="card">
+  <div class="card il-land">
     <div class="sec-lbl">🗓️ שנה אחרי שנה</div>
     <div class="sec-note">בכל שורה: מה היה קורה אילו הייתם מוכרים באותה שנה. השורה המודגשת היא שנת המכירה שבחרתם.</div>
     <div class="tbl-wrap"><table class="grid" id="yearTable"></table></div>
   </div>
 
-  <div style="text-align:center;margin-top:18px">
+  <div class="il-land" style="text-align:center;margin-top:18px">
     <button type="button" class="adv-tg" id="advBtn" aria-expanded="false" aria-controls="advWrap"><span class="dot"></span>מצב מתקדם</button>
   </div>
 
-  <div class="adv-wrap" id="advWrap" hidden>
+  <div class="adv-wrap il-land" id="advWrap" hidden>
     <div class="card">
       <div class="sec-lbl">🎚️ מבחן רגישות: מה אם עליית הערך תהיה אחרת</div>
       <div class="sec-note">כל שאר הנתונים זהים, רק עליית הערך השנתית משתנה. זו הבדיקה הכי חשובה בעסקה ממונפת, כי היא היחידה שאתם לא שולטים בה.</div>
@@ -604,7 +621,7 @@ table.grid td.name{text-align:start}
     </div>
   </div>
 
-  <div class="card faq" style="margin-top:16px">
+  <div class="card faq il-land" style="margin-top:16px">
     <div class="sec-lbl">❓ שאלות נפוצות</div>
     <details><summary>למה התשואה כאן נמוכה ממה שראיתי במקומות אחרים?<span class="chev">▾</span></summary><div class="a">כי רוב החישובים סופרים רק את ההון העצמי ההתחלתי, ומתעלמים מהכסף שהזרמתם כל חודש. אם שילמתם ₪2,526 בחודש במשך שלוש שנים, הזרמתם עוד <b>₪90,947</b> מעבר להון העצמי. הכלי הזה סופר את זה. הרווח בשקלים לא משתנה, רק היחס שלו לכסף שבאמת יצא.</div></details>
     <details><summary>מה בדיוק רושמים בשדה עליית הערך?<span class="chev">▾</span></summary><div class="a">שלוש דרכים לומר את אותו דבר, ובוחרים לפי מה שיש לכם ביד:<br><br><b>שווי במכירה ₪</b> - הכי פשוט. אם אמרו לכם "הנכס יימכר ב-₪500,000", רשמו את הסכום והכלי יגזור לבד את הקצב.<br><b>% בשנה, קבוע</b> - כשהבטיחו לכם "X אחוז בשנה" על עסקה עם תאריך יציאה. לרוב הכוונה לחלוקה פשוטה של הרווח במספר השנים.<br><b>% בשנה, מצטבר</b> - כשאתם מעריכים לבד לפי השוק, או כשנאמר במפורש "ריבית דריבית".<br><br>המעבר בין הדרכים שומר על אותה עסקה, אז אפשר ללחוץ ולראות איך אותו מספר נראה בכל שפה.</div></details>
@@ -615,6 +632,109 @@ table.grid td.name{text-align:start}
     <details><summary>מה קורה כשהשכירות לא מכסה את ההחזר?<span class="chev">▾</span></summary><div class="a">אז יש תזרים שלילי, כלומר כל חודש אתם מוסיפים כסף מהכיס. זה לא בהכרח פסול, אבל צריך לדעת את הסכום מראש ולוודא שהוא בר-קיימא לאורך כל התקופה. הכלי מציג כמה זה בחודש וכמה זה מצטבר עד המכירה.</div></details>
     <details><summary>למה ההשוואה לשוק חשובה?<span class="chev">▾</span></summary><div class="a">כי הכסף הזה לא היה נעלם אחרת. השאלה היא לא אם העסקה מרוויחה, אלא אם היא מרוויחה <b>יותר</b> מהחלופה הפשוטה, ומצדיקה את הסיכון, המינוף והעבודה שהיא דורשת. אם הפער קטן, שווה לעצור ולחשוב.</div></details>
     <details><summary>המספרים כאן מדויקים?<span class="chev">▾</span></summary><div class="a">זו הדמיה לפי ההנחות שהזנתם, בהנחת עליית ערך קבועה, ריבית קבועה והלוואת שפיצר. אין כאן מס רכישה, עלויות תחזוקה, תקופות ללא שוכר, קנס פירעון מוקדם או שינויי מיסוי. אין כאן ייעוץ השקעות, וכל הנחה שתשנו משנה את התוצאה.</div></details>
+  </div>
+
+  <div class="card us-only">
+    <div class="sec-lbl">🌎 נתוני העסקה</div>
+    <div class="sec-note">עסקת תשואה בחו"ל: משקיעים סכום, מקבלים אחוז שנתי שמשולם רבעונית, אופציה לריפייננס שמחזיר את הקרן באמצע הדרך, ובסוף תקבול מכירה. מזינים במטבע של העסקה ומקבלים גם את התמונה בשקלים.</div>
+    <div class="unit-row" style="margin:0 0 14px"><span class="ur-lbl">מטבע העסקה</span>
+      <div class="unit-tg" id="usCur">
+        <button type="button" data-cur="$" class="on">$ דולר</button>
+        <button type="button" data-cur="€">€ יורו</button>
+        <button type="button" data-cur="₪">₪ שקל</button>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field">
+        <label for="usAmt">סכום ההשקעה (הקרן)</label>
+        <div class="input-shell"><span class="unit u-cur">$</span><input id="usAmt" type="text" inputmode="numeric" value="300,000"></div>
+      </div>
+      <div class="field">
+        <label for="usFees">עלויות כניסה נוספות</label>
+        <div class="input-shell"><span class="unit u-cur">$</span><input id="usFees" type="text" inputmode="numeric" value="0"></div>
+      </div>
+      <div class="field">
+        <label for="usY1">שלב ראשון - עד הריפייננס</label>
+        <div class="input-shell"><input id="usY1" type="number" inputmode="numeric" value="3" min="0" max="30"><span class="unit suf">שנים</span></div>
+        <div class="hint">אין ריפייננס בעסקה? רשמו כאן את כל שנות העסקה, ובשלב השני 0</div>
+      </div>
+      <div class="field">
+        <label for="usR1">תשואה שנתית בשלב הראשון</label>
+        <div class="input-shell"><input id="usR1" type="text" inputmode="decimal" value="10"><span class="unit suf">%</span></div>
+        <div class="hint" id="hUsR1"></div>
+      </div>
+      <div class="field">
+        <label for="usRef">כמה מהקרן חוזרת בריפייננס</label>
+        <div class="input-shell"><input id="usRef" type="text" inputmode="decimal" value="100"><span class="unit suf">%</span></div>
+        <div class="hint" id="hUsRef"></div>
+      </div>
+      <div class="field">
+        <label for="usY2">שלב שני - מהריפייננס עד המכירה</label>
+        <div class="input-shell"><input id="usY2" type="number" inputmode="numeric" value="5" min="0" max="30"><span class="unit suf">שנים</span></div>
+      </div>
+      <div class="field">
+        <label for="usR2">תשואה שנתית בשלב השני</label>
+        <div class="input-shell"><input id="usR2" type="text" inputmode="decimal" value="6"><span class="unit suf">%</span></div>
+        <div class="hint" id="hUsR2"></div>
+      </div>
+      <div class="field">
+        <label for="usTax">מס על הרווח</label>
+        <div class="input-shell"><input id="usTax" type="text" inputmode="decimal" value="25"><span class="unit suf">%</span></div>
+        <div class="hint">פשטני: פעם אחת על כל הרווח. מיסוי חו"ל תלוי מבנה העסקה - לבדוק מול רו"ח</div>
+      </div>
+      <div class="field full">
+        <label id="usSaleLbl">מה מקבלים במכירה, בסוף הדרך</label>
+        <div class="gmode" id="usSaleMode" role="group" aria-label="איך להזין את תקבול המכירה" style="margin:0 0 9px">
+          <button type="button" class="gm-chip on" data-s="promise">% לשנה מובטח, על כל העסקה</button>
+          <button type="button" class="gm-chip" data-s="amount">סכום שמתקבל במכירה</button>
+        </div>
+        <div class="input-shell" id="usPromShell"><input id="usProm" type="text" inputmode="decimal" value="20"><span class="unit suf">% לשנה, פשוט</span></div>
+        <div class="input-shell" id="usSaleShell" hidden><span class="unit u-cur">$</span><input id="usSale" type="text" inputmode="numeric" value="300,000" aria-label="סכום שמתקבל במכירה"></div>
+        <div class="hint" id="hUsSale"></div>
+        <div class="gm-help" id="usSaleHelp"></div>
+      </div>
+    </div>
+    <div class="fields" id="usFxWrap" style="margin-top:4px">
+      <div class="field">
+        <label for="usFxIn">שער היום (₪ ל<span class="u-curname">דולר</span>)</label>
+        <div class="input-shell"><input id="usFxIn" type="text" inputmode="decimal" value="3.5"></div>
+      </div>
+      <div class="field">
+        <label for="usFxOut">שער צפוי במכירה</label>
+        <div class="input-shell"><input id="usFxOut" type="text" inputmode="decimal" value="3.5"></div>
+        <div class="hint">לא יודעים? השאירו זהה לשער היום, ובדקו גם תרחיש נמוך יותר</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card us-only">
+    <div class="sec-lbl">📊 מה יוצא מזה</div>
+    <div class="result">
+      <div class="r-lbl">התשואה האמיתית לפי עיתוי הכסף (IRR), <b>בשנה, דריבית</b></div>
+      <div class="r-num" id="usIrr">0<small>%</small></div>
+      <div class="pi-lbl" id="usSimple"></div>
+      <div class="r-cells">
+        <div class="r-cell"><div class="k">הוזרם</div><div class="v" id="usInv">0</div></div>
+        <div class="r-cell"><div class="k">סה"כ חוזר (אחרי מס)</div><div class="v" id="usRet">0</div></div>
+        <div class="r-cell gain"><div class="k">רווח נטו</div><div class="v" id="usProfit">0</div></div>
+      </div>
+    </div>
+    <div class="insight" id="usIns"></div>
+    <div class="sec-lbl" style="margin:20px 0 4px">🗓️ הכסף שחוזר, שנה אחרי שנה</div>
+    <div class="tbl-wrap"><table class="grid" id="usFlowTable"></table></div>
+    <div class="insight soft" id="usFxIns" style="margin-top:14px" hidden></div>
+  </div>
+
+  <div class="card us-only">
+    <div class="sec-lbl">⚖️ העסקה מול פשוט להשקיע במדד</div>
+    <div class="sec-note">אותו סכום, מושקע במדד לאותן שנים. ההשוואה ההוגנת היא IRR מול IRR: בעסקה חלק מהכסף חוזר מוקדם ופנוי לעבוד במקום אחר, וזה בדיוק מה ש-IRR יודע לשקלל.</div>
+    <div class="field" style="max-width:300px">
+      <label for="usAlt">תשואת מדד שנתית להשוואה</label>
+      <div class="input-shell"><input id="usAlt" type="text" inputmode="decimal" value="10"><span class="unit suf">% דריבית</span></div>
+      <div class="hint">ריבית דריבית - כך מדווחות תשואות מדדים. S&P 500 עשה בממוצע רב-שנתי כ-10% בשנה דריבית</div>
+    </div>
+    <div class="vs" id="usVsBox"></div>
+    <div class="insight" id="usVsIns" style="margin-top:14px"></div>
   </div>
 
   <div class="cta-card">
@@ -641,7 +761,7 @@ table.grid td.name{text-align:start}
   </div>
 
   <div class="copyright">© 2026 כל הזכויות שמורות ל-RichLife ולטלי בנימינוב שרעבי. אין לשכפל, להפיץ או לעשות שימוש בתוכן זה ללא אישור מראש ובכתב.</div>
-  <div class="disc">המחשבון להמחשה בלבד ואינו מהווה ייעוץ השקעות, ייעוץ מס או המלצה לביצוע עסקה. ההדמיה מניחה עליית ערך וריבית קבועות ואינה כוללת מס רכישה, תחזוקה או תקופות ללא שוכר. עמלת פירעון מוקדם נלקחת בחשבון רק אם הזנתם אותה.</div>
+  <div class="disc">המחשבון להמחשה בלבד ואינו מהווה ייעוץ השקעות, ייעוץ מס או המלצה לביצוע עסקה. ההדמיה מניחה עליית ערך וריבית קבועות ואינה כוללת מס רכישה, תחזוקה או תקופות ללא שוכר. עמלת פירעון מוקדם נלקחת בחשבון רק אם הזנתם אותה. בעסקת חו"ל: המס מחושב באופן פשטני על כל הרווח, ושער החליפין מודמה בתנועה הדרגתית - מיסוי ומט"ח בפועל תלויים במבנה העסקה.</div>
 
 </div>
 
@@ -791,6 +911,8 @@ function nv(v){const x=parseFloat(String(v).replace(/[^\d.\-]/g,''));return isNa
 const $=id=>document.getElementById(id);
 let GMODE='c';
 let CMODE='sale';
+let TAB='il';
+let USCUR='$', USSALE='promise';
 const yearsWord=y=>y===1?'שנה':(y===2?'שנתיים':y+' שנים');
 
 /* ═══ המנוע ═══ */
@@ -843,14 +965,15 @@ function read(){
     price, fees:nv($('fLaw').value)+nv($('fDev').value)+nv($('fAdv').value)+nv($('fOth').value),
     years, mode:GMODE,
     grow, infl:nv($('infl').value)/100, taxR:nv($('tax').value)/100,
-    rent:nv($('rent').value), equity:nv($('equity').value),
+    rent:TAB==='land'?0:nv($('rent').value), equity:nv($('equity').value),
     months:Math.max(1,Math.round(nv($('months').value)||1)), rate:nv($('rate').value), alt:nv($('alt').value)/100, gmode:eff, penR:nv($('pen').value)/100,
     cmode:CMODE, closeY:Math.max(1,Math.round(nv($('closeY').value)||1))
   };
 }
 
 /* ═══ תצוגה ═══ */
-function calc(){
+function calc(){ if(TAB==='us'){usCalc();return;} calcIl(); }
+function calcIl(){
   const o=read(), M=model(o), L=M.last;
   const nm=($('dname').value||'').trim();
   $('tCost').textContent=money(M.cost);
@@ -869,9 +992,10 @@ function calc(){
 
   // תזרים חודשי
   const flow=o.rent-M.pmt, fb=$('tFlowBox');
+  $('tFlowK').textContent=TAB==='land'?'החזר חודשי מהכיס':'תזרים חודשי (שכירות פחות החזר)';
   $('tFlow').textContent=(flow>=0?'+':'-')+money(Math.abs(flow));
   fb.classList.toggle('hot',flow<0);
-  $('tFlowS').textContent=flow<0?'יוצא מהכיס כל חודש':(o.rent>0?'נכנס לכיס כל חודש':'אין שכירות');
+  $('tFlowS').textContent=flow<0?'יוצא מהכיס כל חודש':(o.rent>0?'נכנס לכיס כל חודש':(TAB==='land'?'בלי מימון אין הוצאה שוטפת':'אין שכירות'));
 
   if(!L||M.cost<=0){
     $('rROI').textContent='—'; $('rAnnual').textContent=''; $('rIn').textContent='0 ₪'; $('rProfit').textContent='0 ₪';
@@ -920,7 +1044,9 @@ function calc(){
   const afterClose=M.mClose?' מהשנה ה-'+(M.mClose/12+1)+', אחרי סגירת ההלוואה, אין יותר החזר'+(o.rent>0?' וכל השכירות נכנסת נקייה לכיס':'')+'.':'';
   if(flow<0&&M.pmt>0){ const tot=-flow*mPayEnd;
     fl.hidden=false; fl.className='insight soft';
-    fl.innerHTML='💸 השכירות לא מכסה את ההחזר. כל חודש תוסיפו <b>'+money(-flow)+'</b> מהכיס, ו'+(M.mClose?'עד סגירת ההלוואה':'עד המכירה')+' זה <b>'+money(tot)+'</b> מצטבר. זה כסף אמיתי שצריך שיהיה, גם בחודש שבו אין שוכר.'+afterClose; }
+    fl.innerHTML=(o.rent>0
+      ? '💸 השכירות לא מכסה את ההחזר. כל חודש תוסיפו <b>'+money(-flow)+'</b> מהכיס, ו'+(M.mClose?'עד סגירת ההלוואה':'עד המכירה')+' זה <b>'+money(tot)+'</b> מצטבר. זה כסף אמיתי שצריך שיהיה, גם בחודש שבו אין שוכר.'
+      : '💸 בעסקה הזאת אין הכנסה שוטפת, אז כל ההחזר החודשי (<b>'+money(-flow)+'</b>) יוצא מהכיס, ו'+(M.mClose?'עד סגירת ההלוואה':'עד המכירה')+' זה <b>'+money(tot)+'</b> מצטבר. צריך שהכסף הזה יהיה פנוי לאורך כל הדרך.')+afterClose; }
   else if(o.rent>0&&flow>=0){ fl.hidden=false; fl.className='insight';
     fl.innerHTML='✓ השכירות מכסה את ההחזר ונשארים <b>'+money(flow)+'</b> בחודש. הנכס מממן את עצמו.'+afterClose; }
   else fl.hidden=true;
@@ -1108,6 +1234,132 @@ function advanced(o,M){
   $('amortTable').innerHTML='<thead><tr><th>חודש</th><th>יתרה</th><th>קרן</th><th>ריבית</th><th>החזר</th></tr></thead><tbody>'+rows+'</tbody>';
 }
 
+/* ═══ עסקה בחו"ל / עסקת תזרים ═══ */
+const curName=c=>c==='$'?'דולר':(c==='€'?'יורו':'שקל');
+const usMoney=v=>fmt.format(Math.round(v||0))+' '+USCUR;
+const ils=v=>fmt.format(Math.round(v||0))+' ₪';
+function usRead(){return{
+  amt:nv($('usAmt').value), fees:nv($('usFees').value),
+  y1:Math.max(0,Math.round(nv($('usY1').value)||0)), r1:nv($('usR1').value)/100,
+  refPct:Math.max(0,Math.min(1,nv($('usRef').value)/100)),
+  y2:Math.max(0,Math.round(nv($('usY2').value)||0)), r2:nv($('usR2').value)/100,
+  prom:nv($('usProm').value)/100, saleAmt:nv($('usSale').value),
+  taxR:nv($('usTax').value)/100, alt:nv($('usAlt').value)/100,
+  fxIn:nv($('usFxIn').value), fxOut:nv($('usFxOut').value)
+};}
+function irrAnnual(flows){ // תזרימים רבעוניים, flows[0] בזמן 0
+  const npv=r=>flows.reduce((s,c,i)=>s+c/Math.pow(1+r,i),0);
+  let lo=-0.95,hi=5;
+  if(!(npv(lo)>0&&npv(hi)<0))return null;
+  for(let i=0;i<120;i++){const m=(lo+hi)/2;(npv(m)>0?lo=m:hi=m);}
+  return Math.pow(1+(lo+hi)/2,4)-1;
+}
+function usModel(o){
+  const P=o.amt, inv=P+o.fees, T=o.y1+o.y2, Q=T*4;
+  if(P<=0||T<=0||inv<=0)return null;
+  const q1=P*o.r1/4, q2=P*o.r2/4;
+  const dist1=q1*4*o.y1, dist2=q2*4*o.y2;
+  const refAmt=o.y1>0&&o.y2>0?P*o.refPct:0; // ריפייננס רלוונטי רק כשיש שלב שני
+  let salePay, promEff;
+  if(USSALE==='promise'){
+    const totProfit=P*o.prom*T; // "X% בשנה" פשוט = רווח כולל, כולל התזרים שכבר שולם
+    salePay=Math.max(0,totProfit-dist1-dist2)+(P-refAmt);
+    promEff=o.prom;
+  }else{
+    salePay=Math.max(0,o.saleAmt);
+    promEff=P>0&&T>0?(dist1+dist2+refAmt+salePay-P)/P/T:0;
+  }
+  const gross=dist1+dist2+refAmt+salePay;
+  const taxAmt=Math.max(0,gross-inv)*o.taxR;
+  const net=gross-taxAmt, profit=net-inv, roi=inv>0?profit/inv:0, simpleA=roi/T;
+  const flows=[-inv];
+  for(let i=1;i<=Q;i++){
+    let c=i<=o.y1*4?q1:q2;
+    if(refAmt>0&&i===o.y1*4)c+=refAmt;
+    if(i===Q)c+=salePay-taxAmt;
+    flows.push(c);
+  }
+  const irr=irrAnnual(flows);
+  const altFV=inv*Math.pow(1+o.alt,T);
+  const altNet=altFV-Math.max(0,altFV-inv)*o.taxR, altProfit=altNet-inv;
+  // שקלים: השער נע בהדרגה מהיום עד שער המכירה
+  const fx=t=>o.fxIn+(o.fxOut-o.fxIn)*(T>0?t/T:0);
+  let retILS=0; for(let i=1;i<=Q;i++) retILS+=flows[i]*fx(i/4);
+  return {P,inv,T,q1,q2,dist1,dist2,refAmt,salePay,promEff,gross,taxAmt,net,profit,roi,simpleA,irr,flows,
+    altNet,altProfit,retILS,invILS:inv*o.fxIn,flatILS:net*o.fxIn-inv*o.fxIn};
+}
+function usCalc(){
+  document.querySelectorAll('.u-cur').forEach(el=>el.textContent=USCUR);
+  document.querySelectorAll('.u-curname').forEach(el=>el.textContent=curName(USCUR));
+  [...document.querySelectorAll('#usCur button')].forEach(b=>b.classList.toggle('on',b.dataset.cur===USCUR));
+  [...document.querySelectorAll('#usSaleMode .gm-chip')].forEach(b=>b.classList.toggle('on',b.dataset.s===USSALE));
+  $('usPromShell').hidden=USSALE!=='promise'; $('usSaleShell').hidden=USSALE==='promise';
+  $('usFxWrap').hidden=USCUR==='₪';
+  const o=usRead(), U=usModel(o);
+  $('hUsR1').textContent=o.amt>0&&o.r1>0?usMoney(o.amt*o.r1/4)+' לרבעון':'';
+  $('hUsR2').textContent=o.amt>0&&o.r2>0?'על ההשקעה המקורית: '+usMoney(o.amt*o.r2/4)+' לרבעון':'';
+  $('hUsRef').textContent=(U&&U.refAmt>0)?usMoney(U.refAmt)+' חוזרים בתום שנה '+o.y1+', ואתם עדיין בעסקה':'';
+  if(!U){
+    $('usIrr').textContent='—'; $('usSimple').textContent='';
+    $('usInv').textContent='0'; $('usRet').textContent='0'; $('usProfit').textContent='0';
+    $('usIns').className='insight soft'; $('usIns').textContent='הזינו את סכום ההשקעה ואת שנות העסקה כדי לראות את הבדיקה.';
+    $('usFlowTable').innerHTML=''; $('usVsBox').innerHTML=''; $('usVsIns').textContent=''; $('hUsSale').textContent='';
+    $('usSaleHelp').textContent=''; $('usFxIns').hidden=true; return;
+  }
+  $('hUsSale').textContent=USSALE==='promise'
+    ? 'לפי ההבטחה, התקבול במכירה עצמה יוצא '+usMoney(U.salePay)
+    : 'כל העסקה יחד שקולה ל-'+(U.promEff*100).toFixed(1)+'% לשנה, פשוט, על הקרן';
+  $('usSaleHelp').innerHTML=USSALE==='promise'
+    ? '💡 "'+(o.prom*100).toFixed(0)+'% בשנה" בהבטחות כאלה זה כמעט תמיד <b>רווח כולל פשוט</b>: '+(o.prom*100).toFixed(0)+'% × '+U.T+' שנים = '+(o.prom*100*U.T).toFixed(0)+'% על הקרן, כולל כל התזרים שכבר קיבלתם בדרך. המכירה משלימה את מה שנשאר. שווה לוודא מול היזם שזו אכן הכוונה.'
+    : '💡 רשמו את הסכום שמתקבל במכירה עצמה, בלי התזרים השוטף והריפייננס שכבר נספרו.';
+  $('usIrr').innerHTML=U.irr===null?'—':(U.irr*100).toFixed(1)+'<small>%</small>';
+  $('usSimple').innerHTML='רווח של <b>'+pctS(U.roi)+'</b> על הכסף, שהם <b>'+(U.simpleA*100).toFixed(1)+'%</b> לשנה פשוט על פני '+U.T+' שנים';
+  $('usInv').textContent=usMoney(U.inv); $('usRet').textContent=usMoney(U.net);
+  $('usProfit').textContent=(U.profit<0?'-':'')+usMoney(Math.abs(U.profit));
+  const ins=$('usIns');
+  ins.className='insight'+(U.profit<0?' warn':'');
+  ins.innerHTML=(U.profit<0?'🔴 בהנחות האלה העסקה מפסידה. ':'')+'מתוך '+usMoney(U.inv)+' שהוזרמו חוזרים <b>'+usMoney(U.net)+'</b>: '
+    +usMoney(U.dist1+U.dist2)+' תזרים שוטף'
+    +(U.refAmt>0?', <b>'+usMoney(U.refAmt)+'</b> ריפייננס בתום שנה '+o.y1:'')
+    +', ו-'+usMoney(U.salePay)+' במכירה'+(U.taxAmt>0?' (בניכוי מס '+usMoney(U.taxAmt)+')':'')+'.'
+    +(U.irr!==null&&U.refAmt>0?' שימו לב: ה-IRR ('+(U.irr*100).toFixed(1)+'%) גבוה מהאחוז הפשוט ('+(U.simpleA*100).toFixed(1)+'%), כי הקרן חוזרת מוקדם ופנויה לעבוד במקום אחר. זה היתרון האמיתי של הריפייננס.':'');
+  // טבלת שנים
+  let rows='',cum=0;
+  for(let y=1;y<=U.T;y++){
+    const flowY=(y<=o.y1?U.q1:U.q2)*4;
+    cum+=flowY; let ev='';
+    if(U.refAmt>0&&y===o.y1){cum+=U.refAmt;ev='ריפייננס: '+usMoney(U.refAmt);}
+    if(y===U.T){cum+=U.salePay-U.taxAmt;ev=(ev?ev+' · ':'')+'מכירה: '+usMoney(U.salePay)+(U.taxAmt>0?' (מס '+usMoney(U.taxAmt)+')':'');}
+    const expo=y>=o.y1&&U.refAmt>0?U.P-U.refAmt:U.P;
+    rows+='<tr'+(y===U.T?' class="mark"':'')+'><td>'+y+'</td><td>'+usMoney(flowY)+'</td><td class="name">'+(ev||'—')+'</td><td>'+usMoney(cum)+'</td><td>'+usMoney(y===U.T?0:expo)+'</td></tr>';
+  }
+  $('usFlowTable').innerHTML='<thead><tr><th>שנה</th><th>תזרים שוטף</th><th>אירוע</th><th>סה"כ חזר עד כה</th><th>קרן שעוד בעסקה</th></tr></thead><tbody>'+rows+'</tbody>';
+  // שקלים
+  const fxi=$('usFxIns');
+  if(USCUR!=='₪'&&o.fxIn>0){
+    const profILS=U.retILS-U.invILS, fxDelta=profILS-U.flatILS;
+    fxi.hidden=false;
+    fxi.innerHTML='💱 <b>ובשקלים:</b> מוזרמים '+ils(U.invILS)+' (שער '+o.fxIn+'), חוזרים בערך <b>'+ils(U.retILS)+'</b> כשהשער נע בהדרגה עד '+o.fxOut+' במכירה. רווח בשקלים: <b>'+ils(profILS)+'</b>.'
+      +(Math.abs(fxDelta)>1?' תנועת השער '+(fxDelta>0?'מוסיפה':'גורעת')+' <b>'+ils(Math.abs(fxDelta))+'</b> לעומת שער יציב.':'')
+      +' המט"ח הוא סיכון אמיתי בעסקת חו"ל - בדקו גם תרחיש של שער נמוך יותר.';
+  } else fxi.hidden=true;
+  // מול המדד
+  const win=U.irr!==null&&U.irr>=o.alt;
+  $('usVsBox').innerHTML=
+    '<div class="v-col'+(win?' win':'')+'"><div class="h">🌎 העסקה</div><div class="n">'+(U.irr===null?'—':(U.irr*100).toFixed(1)+'%')+'</div><div class="s">IRR לשנה, דריבית<br>רווח '+usMoney(U.profit)+'</div></div>'+
+    '<div class="v-col'+(!win?' win':'')+'"><div class="h">📈 המדד</div><div class="n">'+(o.alt*100).toFixed(1)+'%</div><div class="s">לשנה, דריבית<br>על '+usMoney(U.inv)+' לאורך '+U.T+' שנים: רווח '+usMoney(U.altProfit)+' אחרי מס</div></div>';
+  const vi=$('usVsIns');
+  if(U.irr===null){ vi.className='insight soft'; vi.textContent='אי אפשר לחשב IRR בהנחות האלה.'; }
+  else{ const gap=U.irr-o.alt;
+    vi.className='insight'+(gap>=0?'':' soft');
+    vi.innerHTML=Math.abs(gap)<0.015
+      ? 'שתי הדרכים נותנות כמעט אותו קצב שנתי. כשזה המצב, ההכרעה היא סיכון: מדד נזיל ומפוזר, עסקה תלויה ביזם אחד, בשוק אחד ובהבטחה אחת.'
+      : (gap>0
+        ? 'העסקה מקדימה את המדד ב-<b>'+(gap*100).toFixed(1)+'%</b> לשנה. זו הפרמיה על הסיכון: יזם אחד, נכס אחד, והבטחה שצריכה להתממש עד הסוף.'
+        : 'המדד מקדים את העסקה ב-<b>'+(-gap*100).toFixed(1)+'%</b> לשנה, בלי תלות ביזם ועם נזילות מלאה. בהנחות האלה העסקה לא מפצה על הסיכון.');
+  }
+}
+
 /* ═══ גרף ═══ */
 let CH=null;
 function short(v){v=Math.round(v);if(Math.abs(v)>=1e6)return (v/1e6).toFixed(Math.abs(v)>=1e7?0:1)+'M';if(Math.abs(v)>=1e3)return Math.round(v/1e3)+'K';return v;}
@@ -1171,7 +1423,7 @@ function syncLoan(){const c=costNow(),e=Math.min(nv($('equity').value),c);
 function paintSlider(){const s=$('eqPct');s.style.setProperty('--p',s.value+'%');$('eqPctL').textContent=s.value+'%';}
 
 /* ═══ אירועים ═══ */
-const MONEY_IDS=['price','fLaw','fDev','fAdv','fOth','rent','equity','sellVal'];
+const MONEY_IDS=['price','fLaw','fDev','fAdv','fOth','rent','equity','sellVal','usAmt','usFees','usSale'];
 document.addEventListener('input',e=>{
   const id=e.target.id; if(!id)return;
   if(MONEY_IDS.includes(id)){
@@ -1182,6 +1434,28 @@ document.addEventListener('input',e=>{
   if(['price','fLaw','fDev','fAdv','fOth'].includes(id)) syncFromPct();
   else if(id==='equity') syncFromEquity();
   else if(id==='eqPct') syncFromPct();
+  calc(); syncLive();
+});
+$('dealTabs').addEventListener('click',e=>{
+  const b=e.target.closest('.dt'); if(!b)return;
+  TAB=b.dataset.t;
+  $('wrapEl').className='wrap tab-'+TAB;
+  [...document.querySelectorAll('#dealTabs .dt')].forEach(x=>x.classList.toggle('on',x.dataset.t===TAB));
+  calc(); syncLive();
+});
+$('usCur').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  USCUR=b.dataset.cur; calc(); syncLive();
+});
+$('usSaleMode').addEventListener('click',e=>{
+  const b=e.target.closest('.gm-chip'); if(!b)return;
+  const prev=USSALE, o0=usRead(), U0=usModel(o0);
+  USSALE=b.dataset.s;
+  // שומרים על אותה עסקה כשעוברים בין הדרכים
+  if(U0){
+    if(prev==='promise'&&USSALE==='amount') $('usSale').value=grp(Math.round(U0.salePay));
+    else if(prev==='amount'&&USSALE==='promise') $('usProm').value=+(U0.promEff*100).toFixed(1);
+  }
   calc(); syncLive();
 });
 $('cmode').addEventListener('click',e=>{
@@ -1208,7 +1482,8 @@ $('advBtn').onclick=()=>{
 function enc(){const o=read();return JSON.stringify({n:$('dname').value,p:o.price,
   f:[nv($('fLaw').value),nv($('fDev').value),nv($('fAdv').value),nv($('fOth').value)],
   y:o.years,g:nv($('grow').value),i:nv($('infl').value),t:nv($('tax').value),r:o.rent,
-  e:o.equity,m:o.months,rt:nv($('rate').value),a:nv($('alt').value),pn:nv($('pen').value),gm:GMODE,sv:nv($('sellVal').value),cm:CMODE==='early'?1:0,cy:nv($('closeY').value),adv:$('advWrap').hidden?0:1});}
+  e:o.equity,m:o.months,rt:nv($('rate').value),a:nv($('alt').value),pn:nv($('pen').value),gm:GMODE,sv:nv($('sellVal').value),cm:CMODE==='early'?1:0,cy:nv($('closeY').value),adv:$('advWrap').hidden?0:1,
+  tb:TAB,uc:USCUR,um:USSALE==='amount'?1:0,ua:nv($('usAmt').value),uf:nv($('usFees').value),u1:nv($('usY1').value),ur1:nv($('usR1').value),urf:nv($('usRef').value),u2:nv($('usY2').value),ur2:nv($('usR2').value),up:nv($('usProm').value),usv:nv($('usSale').value),ut:nv($('usTax').value),ub:nv($('usAlt').value),ufi:nv($('usFxIn').value),ufo:nv($('usFxOut').value)});}
 function dec(str){try{const o=JSON.parse(str);if(!o||typeof o!=='object')return false;
   $('dname').value=o.n||''; $('price').value=grp(o.p||0);
   const f=o.f||[0,0,0,0]; ['fLaw','fDev','fAdv','fOth'].forEach((k,ix)=>$(k).value=grp(f[ix]||0));
@@ -1219,6 +1494,17 @@ function dec(str){try{const o=JSON.parse(str);if(!o||typeof o!=='object')return 
   CMODE=o.cm?'early':'sale';
   $('closeY').value=o.cy||5;
   $('sellVal').value=grp(o.sv||0);
+  TAB=(o.tb==='land'||o.tb==='us')?o.tb:'il';
+  $('wrapEl').className='wrap tab-'+TAB;
+  [...document.querySelectorAll('#dealTabs .dt')].forEach(x=>x.classList.toggle('on',x.dataset.t===TAB));
+  USCUR=(o.uc==='€'||o.uc==='₪')?o.uc:'$';
+  USSALE=o.um?'amount':'promise';
+  $('usAmt').value=grp(o.ua??300000); $('usFees').value=grp(o.uf||0);
+  $('usY1').value=o.u1??3; $('usR1').value=o.ur1??10; $('usRef').value=o.urf??100;
+  $('usY2').value=o.u2??5; $('usR2').value=o.ur2??6;
+  $('usProm').value=o.up??20; $('usSale').value=grp(o.usv??300000);
+  $('usTax').value=o.ut??25; $('usAlt').value=o.ub??10;
+  $('usFxIn').value=o.ufi??3.5; $('usFxOut').value=o.ufo??3.5;
   [...document.querySelectorAll('#gmode .gm-chip')].forEach(x=>x.classList.toggle('on',x.dataset.g===GMODE));
   syncFromEquity();
   if(o.adv){$('advWrap').hidden=false;$('advBtn').classList.add('on');$('advBtn').setAttribute('aria-expanded','true');}

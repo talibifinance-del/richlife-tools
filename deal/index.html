@@ -539,6 +539,17 @@ table.grid td.name{text-align:start}
 
   <div class="card" id="earlyCard">
     <div class="sec-lbl">🏁 סגירה מוקדמת של ההלוואה</div>
+    <div class="gmode" id="cmode" role="group" aria-label="מתי סוגרים את ההלוואה" style="margin:0 0 10px">
+      <button type="button" class="gm-chip on" data-c="sale">נסגרת במכירה</button>
+      <button type="button" class="gm-chip" data-c="early">סוגרים מוקדם יותר</button>
+    </div>
+    <div class="fields" id="cyWrap" hidden style="margin-bottom:12px">
+      <div class="field">
+        <label for="closeY">סוגרים את ההלוואה בתום שנה</label>
+        <div class="input-shell"><input id="closeY" type="number" inputmode="numeric" value="5" min="1" max="30"><span class="unit suf">שנים מהיום</span></div>
+        <div class="hint" id="hCloseY"></div>
+      </div>
+    </div>
     <div class="sec-note" id="earlyNote"></div>
     <div class="tbl-wrap"><table class="grid" id="earlyTable" style="min-width:0"></table></div>
     <div class="insight" id="insEarly" style="margin-top:14px"></div>
@@ -599,7 +610,7 @@ table.grid td.name{text-align:start}
     <details><summary>מה בדיוק רושמים בשדה עליית הערך?<span class="chev">▾</span></summary><div class="a">שלוש דרכים לומר את אותו דבר, ובוחרים לפי מה שיש לכם ביד:<br><br><b>שווי במכירה ₪</b> - הכי פשוט. אם אמרו לכם "הנכס יימכר ב-₪500,000", רשמו את הסכום והכלי יגזור לבד את הקצב.<br><b>% בשנה, קבוע</b> - כשהבטיחו לכם "X אחוז בשנה" על עסקה עם תאריך יציאה. לרוב הכוונה לחלוקה פשוטה של הרווח במספר השנים.<br><b>% בשנה, מצטבר</b> - כשאתם מעריכים לבד לפי השוק, או כשנאמר במפורש "ריבית דריבית".<br><br>המעבר בין הדרכים שומר על אותה עסקה, אז אפשר ללחוץ ולראות איך אותו מספר נראה בכל שפה.</div></details>
     <details><summary>עליית ערך "מצטברת" מול "קבועה" - מה ההבדל?<span class="chev">▾</span></summary><div class="a"><b>מצטברת (ריבית דריבית)</b> מחשבת כל שנה על השווי החדש: 22% על ₪300,000 בשנה הראשונה, ואז 22% על ₪366,000 בשנייה. <b>קבועה</b> מחשבת כל שנה 22% מהמחיר המקורי. על שלוש שנים ההבדל הוא ₪46,754 על נכס של ₪300,000.<br><br>זה חשוב כי כשעסקה מבטיחה "25% בשנה", הרבה פעמים הכוונה היא ל-75% סך הכל על פני שלוש שנים, כלומר <b>קבועה</b>, ולא לריבית דריבית. 75% על שלוש שנים שקולים ל-20.5% ריבית דריבית בשנה, לא ל-25%. שווה לשאול את השאלה הזאת מפורשות לפני שחותמים.</div></details>
     <details><summary>איך מחושב המס?<span class="chev">▾</span></summary><div class="a">על <b>הרווח הריאלי</b>: קודם מנטרלים את האינפלציה מהשווי במכירה, ואז מחשבים את המס על מה שנשאר. כך זה עובד בפועל במס שבח בישראל, ולכן זה נכון יותר מלהטיל מס על הרווח הנומינלי. אם יש פטור או שיעור אחר, אפשר לשנות את שדה המס.</div></details>
-    <details><summary>ההלוואה שלי ל-10 שנים אבל אני מוכרת אחרי 3. זה בחישוב?<span class="chev">▾</span></summary><div class="a">כן, לאורך כל הדרך. ההחזרים נספרים רק עד חודש המכירה, יתרת ההלוואה מסולקת מתוך תמורת המכירה, ואת ריבית השנים שנשארו לא משלמים. בדוגמה של ₪225,000 ל-120 חודשים ב-6.25%: על כל התקופה הריבית היא <b>₪78,156</b>, אבל בסגירה אחרי 36 חודשים תשלמו רק <b>₪37,469</b> ותחסכו <b>₪40,687</b>. הכרטיס "סגירה מוקדמת" מראה את הפירוק המלא.<br><br>מה שכן, יש דבר אחד שהבנק עלול לגבות והוא <b>עמלת פירעון מוקדם</b>. יש לזה שדה נפרד, כי בהלוואה בריבית משתנה לרוב אין עמלה ובקבועה כן.</div></details>
+    <details><summary>ההלוואה שלי ל-10 שנים אבל אני מוכרת אחרי 3. זה בחישוב?<span class="chev">▾</span></summary><div class="a">כן, לאורך כל הדרך. ההחזרים נספרים רק עד חודש המכירה, יתרת ההלוואה מסולקת מתוך תמורת המכירה, ואת ריבית השנים שנשארו לא משלמים. בדוגמה של ₪225,000 ל-120 חודשים ב-6.25%: על כל התקופה הריבית היא <b>₪78,156</b>, אבל בסגירה אחרי 36 חודשים תשלמו רק <b>₪37,469</b> ותחסכו <b>₪40,687</b>. הכרטיס "סגירה מוקדמת" מראה את הפירוק המלא.<br><br>מה שכן, יש דבר אחד שהבנק עלול לגבות והוא <b>עמלת פירעון מוקדם</b>. יש לזה שדה נפרד, כי בהלוואה בריבית משתנה לרוב אין עמלה ובקבועה כן.<br><br>ואפשר גם לסגור את ההלוואה <b>עוד לפני המכירה</b>: בכרטיס "סגירה מוקדמת" בוחרים "סוגרים מוקדם יותר" ואת השנה, והכלי מחשב את ההזרמה הנדרשת, כמה ריבית שילמתם בסך הכל, וכמה זה משנה את הרווח ואת התשואה.</div></details>
     <details><summary>מה זה "הוזרם בפועל"?<span class="chev">▾</span></summary><div class="a">כל הכסף שיצא מהכיס: ההון העצמי, כל עלויות הרכישה, וכל ההחזרים החודשיים עד למכירה. זה המכנה של התשואה, וזה גם המספר שאנשים הכי נוטים לשכוח.</div></details>
     <details><summary>מה קורה כשהשכירות לא מכסה את ההחזר?<span class="chev">▾</span></summary><div class="a">אז יש תזרים שלילי, כלומר כל חודש אתם מוסיפים כסף מהכיס. זה לא בהכרח פסול, אבל צריך לדעת את הסכום מראש ולוודא שהוא בר-קיימא לאורך כל התקופה. הכלי מציג כמה זה בחודש וכמה זה מצטבר עד המכירה.</div></details>
     <details><summary>למה ההשוואה לשוק חשובה?<span class="chev">▾</span></summary><div class="a">כי הכסף הזה לא היה נעלם אחרת. השאלה היא לא אם העסקה מרוויחה, אלא אם היא מרוויחה <b>יותר</b> מהחלופה הפשוטה, ומצדיקה את הסיכון, המינוף והעבודה שהיא דורשת. אם הפער קטן, שווה לעצור ולחשוב.</div></details>
@@ -779,6 +790,7 @@ function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleStri
 function nv(v){const x=parseFloat(String(v).replace(/[^\d.\-]/g,''));return isNaN(x)?0:x;}
 const $=id=>document.getElementById(id);
 let GMODE='c';
+let CMODE='sale';
 const yearsWord=y=>y===1?'שנה':(y===2?'שנתיים':y+' שנים');
 
 /* ═══ המנוע ═══ */
@@ -788,28 +800,36 @@ function model(o){
   const pmt = loan<=0||months<=0 ? 0 : (r<=1e-9 ? loan/months : loan*r/(1-Math.pow(1+r,-months)));
   const balAt=m=>{ if(loan<=0)return 0; if(m>=months)return 0; if(r<=1e-9)return loan*(1-m/months);
     return loan*(Math.pow(1+r,months)-Math.pow(1+r,m))/(Math.pow(1+r,months)-1); };
+  // סגירה מוקדמת יזומה: רלוונטית רק אם היא לפני המכירה וגם לפני שההלוואה נגמרת לבד
+  const cyM=(o.cmode==='early'&&o.closeY>0)?Math.max(1,Math.round(o.closeY))*12:Infinity;
+  const mClose=(loan>0&&cyM<Math.min(years*12,months))?cyM:Infinity;
+  const payoffBal=isFinite(mClose)?balAt(mClose):0;
+  const payoffPen=payoffBal*penR;
   const rows=[];
   for(let y=1;y<=years;y++){
-    const m=y*12, mp=Math.min(m,months);
-    const val=price*(gmode==='s'?(1+grow*y):Math.pow(1+grow,y)), bal=balAt(m), paid=pmt*mp;
+    const m=y*12, closed=m>=mClose, mp=Math.min(m,months,mClose);
+    const val=price*(gmode==='s'?(1+grow*y):Math.pow(1+grow,y)), bal=closed?0:balAt(m), paid=pmt*mp;
     let rentCum=0; for(let k=1;k<=y;k++) rentCum+=rent*12*Math.pow(1+infl,k-1);
     const realVal=val/Math.pow(1+infl,y), realGain=realVal-cost;
     const tax=Math.max(0,realGain)*taxR;
-    const pen=bal*penR;
+    const pen=closed?0:bal*penR;
     const netSale=val-bal-pen-tax;
-    const ret=netSale+rentCum, inv=equity+paid, profit=ret-inv;
+    const inv=equity+paid+(closed?payoffBal+payoffPen:0);
+    const ret=netSale+rentCum, profit=ret-inv;
     const roi=inv>0?profit/inv:0;
     const annual=(inv>0&&ret>0)?Math.pow(ret/inv,1/y)-1:-1;
-    // אותם תשלומים בדיוק, מושקעים בשוק
+    // אותם תשלומים בדיוק, מושקעים בשוק (כולל הסכום שסוגר את ההלוואה, מאותו יום)
     const a=alt/12;
     const fvPay = a<=1e-9 ? pmt*mp : pmt*((Math.pow(1+a,mp)-1)/a)*Math.pow(1+a,m-mp);
-    const altFV = equity*Math.pow(1+alt,y)+fvPay;
+    const fvPayoff = closed ? (payoffBal+payoffPen)*Math.pow(1+a,m-mClose) : 0;
+    const altFV = equity*Math.pow(1+alt,y)+fvPay+fvPayoff;
     const altNet = altFV-Math.max(0,altFV-inv)*taxR;
     const altAnnual=(inv>0&&altNet>0)?Math.pow(altNet/inv,1/y)-1:-1;
     rows.push({y,val,bal,pen,paid,rentCum,nomGain:val-cost,realGain,tax,netSale,ret,inv,profit,roi,annual,altNet,altProfit:altNet-inv,altAnnual,equityInProp:val-bal});
   }
   const totalInterest=pmt*months-loan;
-  return {cost,loan,pmt,months,rows,last:rows[rows.length-1]||null,totalInterest,balAt};
+  return {cost,loan,pmt,months,rows,last:rows[rows.length-1]||null,totalInterest,balAt,
+    mClose:isFinite(mClose)?mClose:null,payoffBal,payoffPen};
 }
 function read(){
   const price=nv($('price').value);
@@ -824,7 +844,8 @@ function read(){
     years, mode:GMODE,
     grow, infl:nv($('infl').value)/100, taxR:nv($('tax').value)/100,
     rent:nv($('rent').value), equity:nv($('equity').value),
-    months:Math.max(1,Math.round(nv($('months').value)||1)), rate:nv($('rate').value), alt:nv($('alt').value)/100, gmode:eff, penR:nv($('pen').value)/100
+    months:Math.max(1,Math.round(nv($('months').value)||1)), rate:nv($('rate').value), alt:nv($('alt').value)/100, gmode:eff, penR:nv($('pen').value)/100,
+    cmode:CMODE, closeY:Math.max(1,Math.round(nv($('closeY').value)||1))
   };
 }
 
@@ -838,9 +859,9 @@ function calc(){
   $('tValS').textContent=L?'אחרי '+yearsWord(o.years)+' ב-'+nv($('grow').value)+'% בשנה':'';
   $('tPmt').textContent=money(M.pmt);
   $('hLoan').textContent=M.cost>0?'מינוף של '+Math.round(M.loan/M.cost*100)+'% מעלות העסקה':'';
-  const penAmt=L?L.pen:0;
-  $('hPen').textContent = nv($('pen').value)>0 ? (penAmt>0?money(penAmt)+' ביום המכירה':'') : 'ברוב ההלוואות בריבית משתנה אין עמלה. בקבועה כן, שווה לברר';
-  $('hMonths').textContent=o.months>=o.years*12?'ההלוואה ארוכה מתקופת ההשקעה, אז היא נסגרת במכירה':'ההלוואה נגמרת לפני המכירה';
+  const penAmt=L?(M.mClose?M.payoffPen:L.pen):0;
+  $('hPen').textContent = nv($('pen').value)>0 ? (penAmt>0?money(penAmt)+(M.mClose?' ביום הסגירה':' ביום המכירה'):'') : 'ברוב ההלוואות בריבית משתנה אין עמלה. בקבועה כן, שווה לברר';
+  $('hMonths').textContent=M.mClose?'בחרתם לסגור אותה מוקדם, בתום שנה '+(M.mClose/12):(o.months>=o.years*12?'ההלוואה ארוכה מתקופת ההשקעה, אז היא נסגרת במכירה':'ההלוואה נגמרת לפני המכירה');
   applyGrowMode(o);
   growInsight(o);
   $('hRent').textContent=(o.rent>0&&M.cost>0)?'תשואה שוטפת של '+(o.rent*12/M.cost*100).toFixed(1)+'% בשנה':'';
@@ -871,14 +892,15 @@ function calc(){
 
   // פירוק המכירה
   const row=(k,v,cls)=>'<tr><td class="name">'+k+'</td><td class="'+(cls||'')+'">'+v+'</td></tr>';
+  const mPayEnd=Math.min(o.years*12,M.months,M.mClose||Infinity);
   $('breakdown').innerHTML='<tbody>'+
     row('שווי הנכס במכירה',money(L.val))+
-    row('פחות סילוק יתרת ההלוואה',money(L.bal))+
+    (M.mClose?row('יתרת הלוואה לסילוק (נסגרה כבר בשנה '+(M.mClose/12)+')','0 ₪'):row('פחות סילוק יתרת ההלוואה',money(L.bal)))+
     (L.pen>0?row('פחות עמלת פירעון מוקדם',money(L.pen)):'')+
     row('פחות מס על רווח ריאלי של '+money(Math.max(0,L.realGain)),money(L.tax))+
     '<tr class="mark"><td class="name">נטו ביד מהמכירה</td><td>'+money(L.netSale)+'</td></tr>'+
     (L.rentCum>0?row('בתוספת שכירות מצטברת',money(L.rentCum)):'')+
-    row('פחות כל מה שהוזרם (הון עצמי + '+Math.min(o.years*12,M.months)+' החזרים)',money(L.inv))+
+    row('פחות כל מה שהוזרם (הון עצמי + '+mPayEnd+' החזרים'+(M.mClose?' + סגירת ההלוואה בשנה '+(M.mClose/12):'')+')',money(L.inv))+
     '<tr class="mark"><td class="name">רווח נטו</td><td class="'+(L.profit>=0?'pos':'neg')+'">'+(L.profit>=0?'':'-')+money(Math.abs(L.profit))+'</td></tr>'+
     '</tbody>';
 
@@ -895,11 +917,12 @@ function calc(){
 
   // תזרים
   const fl=$('insFlow');
-  if(flow<0&&M.pmt>0){ const tot=-flow*Math.min(o.years*12,M.months);
+  const afterClose=M.mClose?' מהשנה ה-'+(M.mClose/12+1)+', אחרי סגירת ההלוואה, אין יותר החזר'+(o.rent>0?' וכל השכירות נכנסת נקייה לכיס':'')+'.':'';
+  if(flow<0&&M.pmt>0){ const tot=-flow*mPayEnd;
     fl.hidden=false; fl.className='insight soft';
-    fl.innerHTML='💸 השכירות לא מכסה את ההחזר. כל חודש תוסיפו <b>'+money(-flow)+'</b> מהכיס, ועד המכירה זה <b>'+money(tot)+'</b> מצטבר. זה כסף אמיתי שצריך שיהיה, גם בחודש שבו אין שוכר.'; }
+    fl.innerHTML='💸 השכירות לא מכסה את ההחזר. כל חודש תוסיפו <b>'+money(-flow)+'</b> מהכיס, ו'+(M.mClose?'עד סגירת ההלוואה':'עד המכירה')+' זה <b>'+money(tot)+'</b> מצטבר. זה כסף אמיתי שצריך שיהיה, גם בחודש שבו אין שוכר.'+afterClose; }
   else if(o.rent>0&&flow>=0){ fl.hidden=false; fl.className='insight';
-    fl.innerHTML='✓ השכירות מכסה את ההחזר ונשארים <b>'+money(flow)+'</b> בחודש. הנכס מממן את עצמו.'; }
+    fl.innerHTML='✓ השכירות מכסה את ההחזר ונשארים <b>'+money(flow)+'</b> בחודש. הנכס מממן את עצמו.'+afterClose; }
   else fl.hidden=true;
 
   // השוואה לשוק
@@ -929,27 +952,68 @@ function calc(){
 /* ═══ סגירה מוקדמת ═══ */
 function earlyBlock(o,M){
   const L=M.last, card=$('earlyCard'); if(!L||M.loan<=0){card.hidden=true;return;} card.hidden=false;
-  const mSale=Math.min(o.years*12,M.months), paidTill=M.pmt*mSale;
+  [...document.querySelectorAll('#cmode .gm-chip')].forEach(x=>x.classList.toggle('on',x.dataset.c===CMODE));
+  $('cyWrap').hidden=CMODE!=='early';
+  const hC=$('hCloseY');
+  if(CMODE==='early'&&!M.mClose){
+    hC.className='hint warn';
+    hC.textContent = o.closeY*12>=M.months ? 'ההלוואה ממילא נגמרת לבד עד אז, אין מה לסגור'
+      : 'זו כבר שנת המכירה או אחריה, אז היתרה פשוט נסגרת במכירה';
+  } else { hC.className='hint'; hC.textContent=CMODE==='early'?'הכסף לסילוק היתרה מוזרם מהכיס באותו יום, וההחזרים נעצרים':''; }
+
+  const r2=(k,v,cls)=>'<tr><td class="name">'+k+'</td><td class="'+(cls||'')+'">'+v+'</td></tr>';
+  const ie=$('insEarly');
+  const mSale=Math.min(o.years*12,M.months);
+  const intAt=m=>{const p=M.pmt*Math.min(m,M.months);return p-(M.loan-M.balAt(m));}; // ריבית ששולמה עד חודש m
+
+  if(M.mClose){ // ── סגירה יזומה לפני המכירה ──
+    const mC=M.mClose, paidTill=M.pmt*mC;
+    const principalPaid=M.loan-M.payoffBal, intTill=paidTill-principalPaid;
+    const saved=Math.max(0,M.totalInterest-intTill);
+    const intIfSale=intAt(mSale), extraSaved=Math.max(0,intIfSale-intTill); // מה מרוויחים מול סגירה במכירה
+    $('earlyNote').textContent='ההלוואה נלקחה ל-'+M.months+' חודשים, העסקה נמכרת אחרי '+(o.years*12)+', ובחרתם לסגור את ההלוואה כבר בתום שנה '+(mC/12)+' - מכסף שמוזרם מהכיס באותו יום.';
+    $('earlyTable').innerHTML='<tbody>'+
+      r2('ההלוואה נלקחה ל',M.months+' חודשים ('+(M.months/12).toFixed(M.months%12?1:0)+' שנים)')+
+      r2('בפועל נסגרת אחרי',mC+' חודשים (שנה '+(mC/12)+')')+
+      r2('שולם בהחזרים עד הסגירה',money(paidTill))+
+      r2('מזה קרן',money(principalPaid))+
+      r2('מזה ריבית - כל הריבית ששולמה בעסקה',money(intTill),'neg')+
+      r2('הזרמה לסילוק היתרה ביום הסגירה',money(M.payoffBal))+
+      (M.payoffPen>0?r2('עמלת פירעון מוקדם ('+nv($('pen').value)+'% מהיתרה)',money(M.payoffPen),'neg'):'')+
+      r2('ריבית לכל התקופה אילו הייתם ממשיכים',money(M.totalInterest))+
+      r2('ריבית אילו הייתם סוגרים רק במכירה',money(intIfSale))+
+      '<tr class="mark"><td class="name">סה"כ ריבית שנחסכה מול המשך עד הסוף</td><td class="pos">'+money(saved)+'</td></tr>'+
+      '<tr class="mark"><td class="name">מזה בזכות ההקדמה משנת המכירה לשנה '+(mC/12)+'</td><td class="pos">'+money(extraSaved)+'</td></tr>'+
+      (M.payoffPen>0?'<tr class="mark"><td class="name">נטו אחרי העמלה</td><td class="'+(saved-M.payoffPen>=0?'pos':'neg')+'">'+money(saved-M.payoffPen)+'</td></tr>':'')+
+      '</tbody>';
+    if(M.payoffPen>0&&M.payoffPen>=extraSaved){ ie.className='insight warn';
+      ie.innerHTML='🔴 עמלת הפירעון (<b>'+money(M.payoffPen)+'</b>) גבוהה מהריבית הנוספת שההקדמה חוסכת (<b>'+money(extraSaved)+'</b>). במספרים האלה עדיף לסגור במכירה. שווה לבדוק מול הבנק את גובה העמלה המדויק.'; }
+    else{ ie.className='insight';
+      ie.innerHTML='✓ בסגירה בשנה '+(mC/12)+' תשלמו בסך הכל <b>'+money(intTill)+'</b> ריבית, במקום '+money(intIfSale)+' בסגירה במכירה - חיסכון נוסף של <b>'+money(extraSaved)+'</b>'+(M.payoffPen>0?' (ואחרי העמלה '+money(extraSaved-M.payoffPen)+')':'')+
+        '. בתמורה מוזרמים <b>'+money(M.payoffBal+M.payoffPen)+'</b> מהכיס כבר בשנה '+(mC/12)+'. שימו לב לתשואה למעלה: לפעמים היא דווקא יורדת, כי הכנסתם עוד הון לעסקה שהמינוף היה חלק מהכוח שלה. הכל כבר מחושב בכל המספרים בדף.'; }
+    return;
+  }
+
+  // ── ברירת המחדל: היתרה נסגרת במכירה ──
+  const paidTill=M.pmt*mSale;
   const principalPaid=M.loan-L.bal, intTill=paidTill-principalPaid;
   const saved=Math.max(0,M.totalInterest-intTill);
   const early=M.months>o.years*12;
   $('earlyNote').textContent = early
-    ? 'ההלוואה נלקחה ל-'+M.months+' חודשים, אבל העסקה נמכרת אחרי '+(o.years*12)+'. ביום המכירה סוגרים את היתרה מתוך התמורה, ואת כל הריבית של השנים שנשארו לא משלמים.'
+    ? 'ההלוואה נלקחה ל-'+M.months+' חודשים, אבל העסקה נמכרת אחרי '+(o.years*12)+'. ביום המכירה סוגרים את היתרה מתוך התמורה, ואת כל הריבית של השנים שנשארו לא משלמים. רוצים לבדוק סגירה עוד קודם? בחרו למעלה "סוגרים מוקדם יותר".'
     : 'ההלוואה מסתיימת לפני המכירה או בדיוק איתה, אז אין כאן סגירה מוקדמת.';
-  const r2=(k,v,cls)=>'<tr><td class="name">'+k+'</td><td class="'+(cls||'')+'">'+v+'</td></tr>';
   $('earlyTable').innerHTML='<tbody>'+
     r2('ההלוואה נלקחה ל',M.months+' חודשים ('+(M.months/12).toFixed(M.months%12?1:0)+' שנים)')+
     r2('בפועל נסגרת אחרי',mSale+' חודשים')+
     r2('סה"כ שולם עד המכירה',money(paidTill))+
     r2('מזה קרן',money(principalPaid))+
-    r2('מזה ריבית',money(intTill),'neg')+
+    r2('מזה ריבית - כל הריבית ששולמה בעסקה',money(intTill),'neg')+
     r2('יתרה לסילוק ביום המכירה',money(L.bal))+
     (L.pen>0?r2('עמלת פירעון מוקדם ('+nv($('pen').value)+'% מהיתרה)',money(L.pen),'neg'):'')+
     r2('ריבית לכל התקופה אילו הייתם ממשיכים',money(M.totalInterest))+
     '<tr class="mark"><td class="name">ריבית שנחסכה בזכות הסגירה המוקדמת</td><td class="pos">'+money(saved)+'</td></tr>'+
     (L.pen>0?'<tr class="mark"><td class="name">נטו אחרי העמלה</td><td class="'+(saved-L.pen>=0?'pos':'neg')+'">'+money(saved-L.pen)+'</td></tr>':'')+
     '</tbody>';
-  const ie=$('insEarly');
   if(!early){ ie.className='insight soft';
     ie.innerHTML='ההלוואה ל-'+M.months+' חודשים נגמרת לפני המכירה או איתה, אז אין ריבית שנחסכת. אם תארכו את ההלוואה מעבר לתקופת ההשקעה, תשלמו פחות בחודש אבל תסגרו יתרה גדולה יותר במכירה.'; }
   else if(L.pen>0 && L.pen>=saved){ ie.className='insight warn';
@@ -1034,11 +1098,11 @@ function advanced(o,M){
   bb.innerHTML=p1+p2+'<br><span style="font-size:12px;font-weight:700;color:var(--ink-soft)">ההנחה שהזנתם: '+(o.grow*100).toFixed(1)+'% בשנה.</span>';
 
   // לוח סילוקין
-  const mSale=Math.min(o.years*12,M.months);
+  const mSale=Math.min(o.years*12,M.months), mMark=Math.min(mSale,M.mClose||Infinity);
   let rows='',bal=M.loan;
   for(let m=1;m<=M.months&&m<=600;m++){
     const int=bal*(o.rate/1200), pr=Math.min(M.pmt-int,bal);
-    rows+='<tr'+(m===mSale?' class="mark"':'')+'><td>'+m+'</td><td>'+money(bal)+'</td><td>'+money(pr)+'</td><td>'+money(int)+'</td><td>'+money(M.pmt)+'</td></tr>';
+    rows+='<tr'+(m===mMark?' class="mark"':'')+'><td>'+m+'</td><td>'+money(bal)+'</td><td>'+money(pr)+'</td><td>'+money(int)+'</td><td>'+money(M.pmt)+'</td></tr>';
     bal-=pr; if(bal<=.5)break;
   }
   $('amortTable').innerHTML='<thead><tr><th>חודש</th><th>יתרה</th><th>קרן</th><th>ריבית</th><th>החזר</th></tr></thead><tbody>'+rows+'</tbody>';
@@ -1120,6 +1184,10 @@ document.addEventListener('input',e=>{
   else if(id==='eqPct') syncFromPct();
   calc(); syncLive();
 });
+$('cmode').addEventListener('click',e=>{
+  const b=e.target.closest('.gm-chip'); if(!b)return;
+  CMODE=b.dataset.c; calc(); syncLive();
+});
 $('gmode').addEventListener('click',e=>{
   const b=e.target.closest('.gm-chip'); if(!b)return;
   const prev=GMODE, o0=read();
@@ -1140,7 +1208,7 @@ $('advBtn').onclick=()=>{
 function enc(){const o=read();return JSON.stringify({n:$('dname').value,p:o.price,
   f:[nv($('fLaw').value),nv($('fDev').value),nv($('fAdv').value),nv($('fOth').value)],
   y:o.years,g:nv($('grow').value),i:nv($('infl').value),t:nv($('tax').value),r:o.rent,
-  e:o.equity,m:o.months,rt:nv($('rate').value),a:nv($('alt').value),pn:nv($('pen').value),gm:GMODE,sv:nv($('sellVal').value),adv:$('advWrap').hidden?0:1});}
+  e:o.equity,m:o.months,rt:nv($('rate').value),a:nv($('alt').value),pn:nv($('pen').value),gm:GMODE,sv:nv($('sellVal').value),cm:CMODE==='early'?1:0,cy:nv($('closeY').value),adv:$('advWrap').hidden?0:1});}
 function dec(str){try{const o=JSON.parse(str);if(!o||typeof o!=='object')return false;
   $('dname').value=o.n||''; $('price').value=grp(o.p||0);
   const f=o.f||[0,0,0,0]; ['fLaw','fDev','fAdv','fOth'].forEach((k,ix)=>$(k).value=grp(f[ix]||0));
@@ -1148,6 +1216,8 @@ function dec(str){try{const o=JSON.parse(str);if(!o||typeof o!=='object')return 
   $('rent').value=grp(o.r||0); $('equity').value=grp(o.e||0); $('months').value=o.m||120;
   $('rate').value=o.rt??6.25; $('alt').value=o.a??8; $('pen').value=o.pn??0;
   GMODE=(o.gm==='s'||o.gm==='v')?o.gm:'c';
+  CMODE=o.cm?'early':'sale';
+  $('closeY').value=o.cy||5;
   $('sellVal').value=grp(o.sv||0);
   [...document.querySelectorAll('#gmode .gm-chip')].forEach(x=>x.classList.toggle('on',x.dataset.g===GMODE));
   syncFromEquity();

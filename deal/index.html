@@ -404,6 +404,13 @@ table.grid td.name{text-align:start}
 .wrap.tab-us .il-land{display:none}
 .wrap.tab-il .us-only,.wrap.tab-land .us-only{display:none}
 .wrap.tab-land .rent-only{display:none}
+/* טול-טיפ מונחים */
+.tt{border-bottom:1.5px dashed rgba(var(--pine-rgb),.6);cursor:help}
+.result .tt,.r-lbl .tt{border-bottom-color:rgba(255,255,255,.6)}
+#ttBubble{position:fixed;z-index:10000;max-width:290px;background:rgba(30,43,37,.97);color:#fff;border-radius:13px;padding:12px 14px;font-size:12.5px;font-weight:600;line-height:1.65;box-shadow:0 10px 30px rgba(0,0,0,.32);display:none;text-align:right;direction:rtl}
+#ttBubble b{color:#bfe6c6;font-weight:900}
+#ttBubble::after{content:'';position:absolute;top:100%;left:var(--ax,50%);margin-left:-6px;border:6px solid transparent;border-top-color:rgba(30,43,37,.97)}
+#ttBubble.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:rgba(30,43,37,.97)}
 </style>
 </head>
 <body>
@@ -446,7 +453,7 @@ table.grid td.name{text-align:start}
     <div class="sec-lbl" style="margin:18px 0 8px;font-size:13.5px">עלויות רכישה נוספות</div>
     <div class="fees">
       <div><label for="fLaw">עו"ד</label><div class="mini-shell"><span class="unit">₪</span><input id="fLaw" type="text" inputmode="numeric" value="0"></div></div>
-      <div><label for="fDev">דמי יזמות</label><div class="mini-shell"><span class="unit">₪</span><input id="fDev" type="text" inputmode="numeric" value="0"></div></div>
+      <div><label for="fDev"><span class="tt" data-g="yazamut">דמי יזמות</span></label><div class="mini-shell"><span class="unit">₪</span><input id="fDev" type="text" inputmode="numeric" value="0"></div></div>
       <div><label for="fAdv">יועץ מימון</label><div class="mini-shell"><span class="unit">₪</span><input id="fAdv" type="text" inputmode="numeric" value="0"></div></div>
       <div><label for="fOth">עלויות נוספות</label><div class="mini-shell"><span class="unit">₪</span><input id="fOth" type="text" inputmode="numeric" value="0"></div></div>
     </div>
@@ -470,13 +477,13 @@ table.grid td.name{text-align:start}
         <div class="hint" id="hRent"></div>
       </div>
       <div class="field">
-        <label for="infl">אינפלציה שנתית צפויה</label>
+        <label for="infl"><span class="tt" data-g="infl">אינפלציה</span> שנתית צפויה</label>
         <div class="input-shell"><input id="infl" type="text" inputmode="decimal" value="3"><span class="unit suf">%</span></div>
       </div>
       <div class="field">
         <label for="tax">מס על הרווח</label>
         <div class="input-shell"><input id="tax" type="text" inputmode="decimal" value="25"><span class="unit suf">%</span></div>
-        <div class="hint">מחושב על הרווח הריאלי, אחרי אינפלציה</div>
+        <div class="hint">מחושב על <span class="tt" data-g="real">הרווח הריאלי</span>, אחרי אינפלציה</div>
       </div>
     </div>
 
@@ -489,9 +496,9 @@ table.grid td.name{text-align:start}
 
   <div class="card il-land">
     <div class="sec-lbl">🏦 מימון העסקה</div>
-    <div class="sec-note">גררו את המחוון כדי לראות איך המינוף משנה את התמונה. פחות הון עצמי מגדיל את התשואה על הכסף שלכם, ומגדיל גם את הסיכון ואת ההחזר החודשי.</div>
+    <div class="sec-note">גררו את המחוון כדי לראות איך <span class="tt" data-g="lever">המינוף</span> משנה את התמונה. פחות <span class="tt" data-g="equity">הון עצמי</span> מגדיל את התשואה על הכסף שלכם, ומגדיל גם את הסיכון ואת ההחזר החודשי.</div>
 
-    <label for="eqPct" style="display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:8px">הון עצמי מתוך עלות העסקה</label>
+    <label for="eqPct" style="display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:8px"><span class="tt" data-g="equity">הון עצמי</span> מתוך עלות העסקה</label>
     <div class="eq-row">
       <input id="eqPct" type="range" min="5" max="100" step="1" value="25" aria-label="אחוז הון עצמי מתוך עלות העסקה">
       <span class="eq-pct" id="eqPctL">25%</span>
@@ -517,7 +524,7 @@ table.grid td.name{text-align:start}
         <div class="input-shell"><input id="rate" type="text" inputmode="decimal" value="6.25"><span class="unit suf">%</span></div>
       </div>
       <div class="field">
-        <label for="pen">עמלת פירעון מוקדם</label>
+        <label for="pen"><span class="tt" data-g="pen">עמלת פירעון מוקדם</span></label>
         <div class="input-shell"><input id="pen" type="text" inputmode="decimal" value="0"><span class="unit suf">% מהיתרה</span></div>
         <div class="hint" id="hPen"></div>
       </div>
@@ -576,8 +583,8 @@ table.grid td.name{text-align:start}
     <div class="sec-note">אותם תשלומים בדיוק - ההון העצמי בהתחלה וההחזר החודשי כל חודש - מושקעים בשוק במקום בעסקה. אחרי מס רווחי הון של 25%. זו השאלה האמיתית: לא "האם העסקה מרוויחה", אלא "האם היא מרוויחה יותר".</div>
     <div class="field" style="max-width:300px">
       <label for="alt">תשואה שנתית בשוק להשוואה</label>
-      <div class="input-shell"><input id="alt" type="text" inputmode="decimal" value="8"><span class="unit suf">% דריבית</span></div>
-      <div class="hint">ריבית דריבית - כך מדווחות תשואות מדדים. S&P 500 עשה בממוצע רב-שנתי כ-10% בשנה דריבית</div>
+      <div class="input-shell"><input id="alt" type="text" inputmode="decimal" value="8"><span class="unit suf">% <span class="tt" data-g="comp">דריבית</span></span></div>
+      <div class="hint"><span class="tt" data-g="comp">ריבית דריבית</span> - כך מדווחות תשואות מדדים. S&P 500 עשה בממוצע רב-שנתי כ-10% בשנה דריבית</div>
     </div>
     <div class="vs" id="vsBox"></div>
     <div class="insight" id="insVs" style="margin-top:14px"></div>
@@ -608,14 +615,14 @@ table.grid td.name{text-align:start}
 
   <div class="adv-wrap il-land" id="advWrap" hidden>
     <div class="card">
-      <div class="sec-lbl">🎚️ מבחן רגישות: מה אם עליית הערך תהיה אחרת</div>
+      <div class="sec-lbl">🎚️ <span class="tt" data-g="sens">מבחן רגישות</span>: מה אם עליית הערך תהיה אחרת</div>
       <div class="sec-note">כל שאר הנתונים זהים, רק עליית הערך השנתית משתנה. זו הבדיקה הכי חשובה בעסקה ממונפת, כי היא היחידה שאתם לא שולטים בה.</div>
       <div class="tbl-wrap"><table class="grid" id="sensTable"></table></div>
       <div class="be" id="beBox"></div>
     </div>
 
     <div class="card">
-      <div class="sec-lbl">📋 לוח סילוקין</div>
+      <div class="sec-lbl">📋 <span class="tt" data-g="amort">לוח סילוקין</span></div>
       <div class="sec-note">חודש אחרי חודש: כמה מההחזר הולך לקרן וכמה לריבית. בהתחלה כמעט הכל ריבית.</div>
       <div class="tbl-wrap" style="max-height:420px;overflow-y:auto"><table class="grid" id="amortTable"></table></div>
     </div>
@@ -636,7 +643,7 @@ table.grid td.name{text-align:start}
 
   <div class="card us-only">
     <div class="sec-lbl">🌎 נתוני העסקה</div>
-    <div class="sec-note">עסקת תשואה בחו"ל: משקיעים סכום, מקבלים אחוז שנתי שמשולם רבעונית, אופציה לריפייננס שמחזיר את הקרן באמצע הדרך, ובסוף תקבול מכירה. מזינים במטבע של העסקה ומקבלים גם את התמונה בשקלים.</div>
+    <div class="sec-note">עסקת תשואה בחו"ל: משקיעים סכום, מקבלים אחוז שנתי שמשולם רבעונית, אופציה ל<span class="tt" data-g="refi">ריפייננס</span> שמחזיר את הקרן באמצע הדרך, ובסוף תקבול מכירה. מזינים במטבע של העסקה ומקבלים גם את התמונה בשקלים.</div>
     <div class="unit-row" style="margin:0 0 14px"><span class="ur-lbl">מטבע העסקה</span>
       <div class="unit-tg" id="usCur">
         <button type="button" data-cur="$" class="on">$ דולר</button>
@@ -654,7 +661,7 @@ table.grid td.name{text-align:start}
         <div class="input-shell"><span class="unit u-cur">$</span><input id="usFees" type="text" inputmode="numeric" value="0"></div>
       </div>
       <div class="field">
-        <label for="usY1">שלב ראשון - עד הריפייננס</label>
+        <label for="usY1">שלב ראשון - עד ה<span class="tt" data-g="refi">ריפייננס</span></label>
         <div class="input-shell"><input id="usY1" type="number" inputmode="numeric" value="3" min="0" max="30"><span class="unit suf">שנים</span></div>
         <div class="hint">אין ריפייננס בעסקה? רשמו כאן את כל שנות העסקה, ובשלב השני 0</div>
       </div>
@@ -664,7 +671,7 @@ table.grid td.name{text-align:start}
         <div class="hint" id="hUsR1"></div>
       </div>
       <div class="field">
-        <label for="usRef">כמה מהקרן חוזרת בריפייננס</label>
+        <label for="usRef">כמה מהקרן חוזרת ב<span class="tt" data-g="refi">ריפייננס</span></label>
         <div class="input-shell"><input id="usRef" type="text" inputmode="decimal" value="100"><span class="unit suf">%</span></div>
         <div class="hint" id="hUsRef"></div>
       </div>
@@ -688,7 +695,7 @@ table.grid td.name{text-align:start}
           <button type="button" class="gm-chip on" data-s="promise">% לשנה מובטח, על כל העסקה</button>
           <button type="button" class="gm-chip" data-s="amount">סכום שמתקבל במכירה</button>
         </div>
-        <div class="input-shell" id="usPromShell"><input id="usProm" type="text" inputmode="decimal" value="20"><span class="unit suf">% לשנה, פשוט</span></div>
+        <div class="input-shell" id="usPromShell"><input id="usProm" type="text" inputmode="decimal" value="20"><span class="unit suf">% לשנה, <span class="tt" data-g="simple">פשוט</span></span></div>
         <div class="input-shell" id="usSaleShell" hidden><span class="unit u-cur">$</span><input id="usSale" type="text" inputmode="numeric" value="300,000" aria-label="סכום שמתקבל במכירה"></div>
         <div class="hint" id="hUsSale"></div>
         <div class="gm-help" id="usSaleHelp"></div>
@@ -710,7 +717,7 @@ table.grid td.name{text-align:start}
   <div class="card us-only">
     <div class="sec-lbl">📊 מה יוצא מזה</div>
     <div class="result">
-      <div class="r-lbl">התשואה האמיתית לפי עיתוי הכסף (IRR), <b>בשנה, דריבית</b></div>
+      <div class="r-lbl">התשואה האמיתית לפי עיתוי הכסף (<span class="tt" data-g="irr">IRR</span>), <b>בשנה, <span class="tt" data-g="comp">דריבית</span></b></div>
       <div class="r-num" id="usIrr">0<small>%</small></div>
       <div class="pi-lbl" id="usSimple"></div>
       <div class="r-cells">
@@ -719,13 +726,7 @@ table.grid td.name{text-align:start}
         <div class="r-cell gain"><div class="k">רווח נטו</div><div class="v" id="usProfit">0</div></div>
       </div>
     </div>
-    <div class="gm-help" style="margin-top:12px">
-      🎓 <b>מה זה IRR, בפשטות:</b> התשואה השנתית האמיתית של העסקה, <b>בריבית דריבית</b>, שמתחשבת במתי בדיוק כל שקל יצא ומתי חזר.
-      תחשבו על זה ככה: אילו היה פיקדון שמשלם ריבית דריבית קבועה כל שנה, והייתם מפקידים ומושכים ממנו בדיוק את אותם סכומים באותם תאריכים כמו בעסקה - ה-IRR הוא הריבית שהפיקדון היה צריך לתת כדי לסיים עם אותה תוצאה.
-      לכן קרן שחוזרת מוקדם (ריפייננס) מעלה את ה-IRR: הכסף חזר אליכם ופנוי לעבוד במקום אחר.
-      זה שונה מ"אחוז פשוט לשנה" (כל הרווח חלקי הקרן חלקי השנים), שמתעלם מעיתוי הכסף - וזה גם המספר הנכון להשוות למדד, כי גם תשואת מדד מדווחת כריבית דריבית שנתית.
-    </div>
-    <div class="insight" id="usIns"></div>
+        <div class="insight" id="usIns"></div>
     <div class="sec-lbl" style="margin:20px 0 4px">🗓️ הכסף שחוזר, שנה אחרי שנה</div>
     <div class="tbl-wrap"><table class="grid" id="usFlowTable"></table></div>
     <div class="insight soft" id="usFxIns" style="margin-top:14px" hidden></div>
@@ -733,11 +734,11 @@ table.grid td.name{text-align:start}
 
   <div class="card us-only">
     <div class="sec-lbl">⚖️ העסקה מול פשוט להשקיע במדד</div>
-    <div class="sec-note">אותו סכום, מושקע במדד לאותן שנים. ההשוואה ההוגנת היא IRR מול IRR: בעסקה חלק מהכסף חוזר מוקדם ופנוי לעבוד במקום אחר, וזה בדיוק מה ש-IRR יודע לשקלל.</div>
+    <div class="sec-note">אותו סכום, מושקע במדד לאותן שנים. ההשוואה ההוגנת היא <span class="tt" data-g="irr">IRR</span> מול המדד: בעסקה חלק מהכסף חוזר מוקדם ופנוי לעבוד במקום אחר, וזה בדיוק מה ש-IRR יודע לשקלל.</div>
     <div class="field" style="max-width:300px">
       <label for="usAlt">תשואת מדד שנתית להשוואה</label>
-      <div class="input-shell"><input id="usAlt" type="text" inputmode="decimal" value="10"><span class="unit suf">% דריבית</span></div>
-      <div class="hint">ריבית דריבית - כך מדווחות תשואות מדדים. S&P 500 עשה בממוצע רב-שנתי כ-10% בשנה דריבית</div>
+      <div class="input-shell"><input id="usAlt" type="text" inputmode="decimal" value="10"><span class="unit suf">% <span class="tt" data-g="comp">דריבית</span></span></div>
+      <div class="hint"><span class="tt" data-g="comp">ריבית דריבית</span> - כך מדווחות תשואות מדדים. S&P 500 עשה בממוצע רב-שנתי כ-10% בשנה דריבית</div>
     </div>
     <div class="vs" id="usVsBox"></div>
     <div class="insight" id="usVsIns" style="margin-top:14px"></div>
@@ -998,7 +999,7 @@ function calcIl(){
 
   // תזרים חודשי
   const flow=o.rent-M.pmt, fb=$('tFlowBox');
-  $('tFlowK').textContent=TAB==='land'?'החזר חודשי מהכיס':'תזרים חודשי (שכירות פחות החזר)';
+  $('tFlowK').innerHTML=TAB==='land'?'החזר חודשי מהכיס':T('flow','תזרים')+' חודשי (שכירות פחות החזר)';
   $('tFlow').textContent=(flow>=0?'+':'-')+money(Math.abs(flow));
   fb.classList.toggle('hot',flow<0);
   $('tFlowS').textContent=flow<0?'יוצא מהכיס כל חודש':(o.rent>0?'נכנס לכיס כל חודש':(TAB==='land'?'בלי מימון אין הוצאה שוטפת':'אין שכירות'));
@@ -1071,7 +1072,7 @@ function calcIl(){
       : 'השקעה פשוטה בשוק הייתה מכניסה <b>'+money(-gap)+'</b> יותר, בלי מינוף, בלי שוכרים ובלי הצמדה לנכס אחד.');
 
   // טבלת שנים
-  const th='<thead><tr><th>שנה</th><th>שווי נכס</th><th>יתרת הלוואה</th><th>הוזרם</th><th>נטו ביד</th><th>רווח</th><th>ROI</th><th>לשנה</th></tr></thead>';
+  const th='<thead><tr><th>שנה</th><th>שווי נכס</th><th>יתרת הלוואה</th><th>הוזרם</th><th>נטו ביד</th><th>רווח</th><th>'+T('roi','ROI')+'</th><th>לשנה</th></tr></thead>';
   $('yearTable').innerHTML=th+'<tbody>'+M.rows.map(x=>
     '<tr'+(x.y===o.years?' class="mark"':'')+'><td>'+x.y+'</td><td>'+money(x.val)+'</td><td>'+money(x.bal)+'</td><td>'+money(x.inv)+'</td><td>'+money(x.ret)+'</td>'+
     '<td class="'+(x.profit>=0?'pos':'neg')+'">'+(x.profit>=0?'':'-')+money(Math.abs(x.profit))+'</td><td>'+(x.roi*100).toFixed(0)+'%</td><td>'+pctS(x.annual)+'</td></tr>').join('')+'</tbody>';
@@ -1208,7 +1209,7 @@ function advanced(o,M){
   const list=[0,.02,.04,.06,.08,.10,.12,.15,.20];
   if(!list.some(g=>Math.abs(g-o.grow)<1e-9)) list.push(o.grow);
   list.sort((a,b)=>a-b);
-  $('sensTable').innerHTML='<thead><tr><th>עליית ערך שנתית</th><th>רווח נטו</th><th>ROI</th><th>תשואה לשנה</th><th>מול השוק</th></tr></thead><tbody>'+
+  $('sensTable').innerHTML='<thead><tr><th>עליית ערך שנתית</th><th>רווח נטו</th><th>'+T('roi','ROI')+'</th><th>תשואה לשנה</th><th>מול השוק</th></tr></thead><tbody>'+
     list.map(g=>{const R=roiFor(o,g); if(!R)return'';
       const d=R.ret-R.alt;
       return '<tr'+(Math.abs(g-o.grow)<1e-9?' class="mark"':'')+'><td>'+(g*100).toFixed(0)+'%</td>'+
@@ -1319,7 +1320,7 @@ function usCalc(){
     ? '💡 "'+(o.prom*100).toFixed(0)+'% בשנה" בהבטחות כאלה זה כמעט תמיד <b>רווח כולל פשוט</b>: '+(o.prom*100).toFixed(0)+'% × '+U.T+' שנים = '+(o.prom*100*U.T).toFixed(0)+'% על הקרן, כולל כל התזרים שכבר קיבלתם בדרך. המכירה משלימה את מה שנשאר. שווה לוודא מול היזם שזו אכן הכוונה.'
     : '💡 רשמו את הסכום שמתקבל במכירה עצמה, בלי התזרים השוטף והריפייננס שכבר נספרו.';
   $('usIrr').innerHTML=U.irr===null?'—':(U.irr*100).toFixed(1)+'<small>%</small>';
-  $('usSimple').innerHTML='רווח של <b>'+pctS(U.roi)+'</b> על הכסף, שהם <b>'+(U.simpleA*100).toFixed(1)+'%</b> לשנה פשוט על פני '+U.T+' שנים';
+  $('usSimple').innerHTML='רווח של <b>'+pctS(U.roi)+'</b> על הכסף, שהם <b>'+(U.simpleA*100).toFixed(1)+'%</b> לשנה '+T('simple','פשוט')+' על פני '+U.T+' שנים';
   $('usInv').textContent=usMoney(U.inv); $('usRet').textContent=usMoney(U.net);
   $('usProfit').textContent=(U.profit<0?'-':'')+usMoney(Math.abs(U.profit));
   const ins=$('usIns');
@@ -1328,7 +1329,7 @@ function usCalc(){
     +usMoney(U.dist1+U.dist2)+' תזרים שוטף'
     +(U.refAmt>0?', <b>'+usMoney(U.refAmt)+'</b> ריפייננס בתום שנה '+o.y1:'')
     +', ו-'+usMoney(U.salePay)+' במכירה'+(U.taxAmt>0?' (בניכוי מס '+usMoney(U.taxAmt)+')':'')+'.'
-    +(U.irr!==null&&U.refAmt>0?' שימו לב: ה-IRR ('+(U.irr*100).toFixed(1)+'%) גבוה מהאחוז הפשוט ('+(U.simpleA*100).toFixed(1)+'%), כי הקרן חוזרת מוקדם ופנויה לעבוד במקום אחר. זה היתרון האמיתי של הריפייננס.':'');
+    +(U.irr!==null&&U.refAmt>0?' שימו לב: ה-'+T('irr','IRR')+' ('+(U.irr*100).toFixed(1)+'%) גבוה מהאחוז הפשוט ('+(U.simpleA*100).toFixed(1)+'%), כי הקרן חוזרת מוקדם ופנויה לעבוד במקום אחר. זה היתרון האמיתי של הריפייננס.':'');
   // טבלת שנים
   let rows='',cum=0;
   for(let y=1;y<=U.T;y++){
@@ -1352,8 +1353,8 @@ function usCalc(){
   // מול המדד
   const win=U.irr!==null&&U.irr>=o.alt;
   $('usVsBox').innerHTML=
-    '<div class="v-col'+(win?' win':'')+'"><div class="h">🌎 העסקה</div><div class="n">'+(U.irr===null?'—':(U.irr*100).toFixed(1)+'%')+'</div><div class="s">IRR לשנה, דריבית<br>רווח '+usMoney(U.profit)+'</div></div>'+
-    '<div class="v-col'+(!win?' win':'')+'"><div class="h">📈 המדד</div><div class="n">'+(o.alt*100).toFixed(1)+'%</div><div class="s">לשנה, דריבית<br>על '+usMoney(U.inv)+' לאורך '+U.T+' שנים: רווח '+usMoney(U.altProfit)+' אחרי מס</div></div>';
+    '<div class="v-col'+(win?' win':'')+'"><div class="h">🌎 העסקה</div><div class="n">'+(U.irr===null?'—':(U.irr*100).toFixed(1)+'%')+'</div><div class="s">'+T('irr','IRR')+' לשנה, '+T('comp','דריבית')+'<br>רווח '+usMoney(U.profit)+'</div></div>'+
+    '<div class="v-col'+(!win?' win':'')+'"><div class="h">📈 המדד</div><div class="n">'+(o.alt*100).toFixed(1)+'%</div><div class="s">לשנה, '+T('comp','דריבית')+'<br>על '+usMoney(U.inv)+' לאורך '+U.T+' שנים: רווח '+usMoney(U.altProfit)+' אחרי מס</div></div>';
   const vi=$('usVsIns');
   if(U.irr===null){ vi.className='insight soft'; vi.textContent='אי אפשר לחשב IRR בהנחות האלה.'; }
   else{ const gap=U.irr-o.alt;
@@ -1427,6 +1428,50 @@ function syncLoan(){const c=costNow(),e=Math.min(nv($('equity').value),c);
   $('loan').value=grp(Math.max(0,Math.round(c-e)));
   $('eqPctL').textContent=$('eqPct').value+'%';}
 function paintSlider(){const s=$('eqPct');s.style.setProperty('--p',s.value+'%');$('eqPctL').textContent=s.value+'%';}
+
+/* ═══ טול-טיפ מונחים - מילון בשפה פשוטה ═══ */
+const GLOSS={
+  irr:'<b>IRR</b> - התשואה השנתית האמיתית של העסקה, בריבית דריבית, לפי מתי בדיוק כל שקל יצא ומתי חזר. תחשבו על פיקדון שמשלם ריבית קבועה: ה-IRR הוא הריבית שהפיקדון היה צריך לתת כדי לסיים עם אותה תוצאה, באותם תאריכים. כסף שחוזר מוקדם מעלה אותו.',
+  comp:'<b>ריבית דריבית</b> - הרווח מחושב כל שנה על הסכום החדש, כולל הרווחים שכבר נצברו. ככה מדווחות תשואות של מדדים: "10% בשנה" במדד זה 10% דריבית.',
+  simple:'<b>אחוז פשוט</b> - מחושב תמיד מהסכום המקורי, בלי להצטבר. "20% לשנה" על 8 שנים = 160% רווח סך הכל. ככה יזמים בדרך כלל מבטיחים.',
+  refi:'<b>ריפייננס (מיחזור)</b> - החברה לוקחת מימון חדש על הנכס ומחזירה למשקיעים את הקרן, והם עדיין נשארים שותפים בעסקה וממשיכים לקבל תזרים.',
+  equity:'<b>הון עצמי</b> - הכסף שיוצא מהכיס שלכם לעסקה, בלי ההלוואה.',
+  lever:'<b>מינוף</b> - קנייה בעזרת הלוואה, מעבר לכסף שיש לכם. כשהעסקה מצליחה הוא מגדיל את התשואה על ההון העצמי, וכשלא - הוא מגדיל את ההפסד.',
+  amort:'<b>לוח סילוקין</b> - פירוט חודש-חודש של ההחזר: כמה הולך לריבית וכמה באמת מקטין את החוב. בתחילת ההלוואה רוב ההחזר הוא ריבית.',
+  pen:'<b>עמלת פירעון מוקדם</b> - קנס שהבנק עשוי לגבות כשסוגרים הלוואה לפני הזמן. נפוץ בריבית קבועה, נדיר במשתנה. שווה לברר מראש.',
+  real:'<b>רווח ריאלי</b> - הרווח אחרי ניקוי האינפלציה: כמה באמת גדל כוח הקנייה שלכם. ככה מחושב מס שבח בישראל.',
+  infl:'<b>אינפלציה</b> - עליית המחירים הכללית במשק. בגללה 100 ש"ח בעוד חמש שנים קונים פחות ממה שהם קונים היום.',
+  roi:'<b>ROI</b> - תשואה כוללת: הרווח הנקי חלקי כל הכסף שהוזרם. מספר מסכם אחד, שלא מתחשב בכמה זמן זה לקח.',
+  flow:'<b>תזרים</b> - הכסף שנכנס ויוצא בפועל, חודש אחרי חודש, לאורך חיי העסקה.',
+  sens:'<b>מבחן רגישות</b> - בודקים מה קורה לתוצאה כשמשנים הנחה אחת בלבד. ככה רואים כמה העסקה רגישה להפתעות.',
+  yazamut:'<b>דמי יזמות</b> - תשלום ליזם שמארגן את העסקה, מעבר למחיר הנכס עצמו.'
+};
+const ttBub=document.createElement('div');ttBub.id='ttBubble';document.body.appendChild(ttBub);
+let ttCur=null;
+function ttShow(el){
+  ttCur=el;
+  ttBub.innerHTML=GLOSS[el.dataset.g]||el.dataset.tip||'';
+  if(!ttBub.innerHTML){ttHide();return;}
+  ttBub.style.display='block';
+  const r=el.getBoundingClientRect(),bw=ttBub.offsetWidth,bh=ttBub.offsetHeight;
+  let x=r.left+r.width/2-bw/2; x=Math.max(8,Math.min(x,innerWidth-bw-8));
+  let y=r.top-bh-11; const below=y<8; if(below)y=r.bottom+11;
+  ttBub.style.left=x+'px'; ttBub.style.top=y+'px';
+  ttBub.classList.toggle('below',below);
+  ttBub.style.setProperty('--ax',Math.max(14,Math.min(bw-14,r.left+r.width/2-x))+'px');
+}
+function ttHide(){ttCur=null;ttBub.style.display='none';}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('.tt');if(t)ttShow(t);});
+document.addEventListener('mouseout',e=>{if(e.target.closest('.tt')&&!e.relatedTarget?.closest?.('#ttBubble'))ttHide();});
+let ttShownAt=0;
+document.addEventListener('click',e=>{
+  const t=e.target.closest('.tt');
+  if(t){e.preventDefault();ttShow(t);ttShownAt=Date.now();} // בנייד: נגיעה פותחת; סוגרים בנגיעה בכל מקום אחר
+  // חלון חסד: מונח בתוך label מעביר קליק נוסף לשדה - לא לסגור בגללו
+  else if(!e.target.closest('#ttBubble')&&Date.now()-ttShownAt>350)ttHide();
+});
+window.addEventListener('scroll',ttHide,{passive:true});
+const T=(g,w)=>'<span class="tt" data-g="'+g+'">'+w+'</span>';
 
 /* ═══ אירועים ═══ */
 const MONEY_IDS=['price','fLaw','fDev','fAdv','fOth','rent','equity','sellVal','usAmt','usFees','usSale'];

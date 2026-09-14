@@ -265,6 +265,11 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
         <label for="pens">הפרשת עובד לפנסיה</label>
         <div class="input-shell"><input id="pens" type="text" inputmode="decimal" value="6" placeholder="0" aria-label="אחוז הפרשת עובד לפנסיה"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
       </div>
+      <div class="field" style="margin-top:12px">
+        <label for="rechev">שווי רכב צמוד (חודשי)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="rechev" type="text" inputmode="numeric" value="0" placeholder="0" aria-label="שווי רכב צמוד חודשי"></div>
+        <div class="mini-hint">יש רכב צמוד מהעבודה? מזינים את שווי הרכב שמופיע בתלוש. זה לא כסף שנכנס לחשבון - זה סכום שמתווסף לשכר החייב במס ובביטוח לאומי, ולכן <b>מקטין</b> את הנטו. לא נכנס לבסיס הפנסיה.</div>
+      </div>
       <label class="keren-tg" for="kerenChk">
         <input type="checkbox" id="kerenChk">
         <span class="kt-t">🎓 מקבל/ת קרן השתלמות<small>לא כולם מקבלים. אם כן: העובד מפריש 2.5% (יורד מהנטו) והמעסיק 7.5% (מעבר לנטו). השיעורים ניתנים לעדכון בטבלאות.</small></span>
@@ -308,17 +313,21 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     </div>
     <div class="ded">
       <div class="ded-row gross"><span class="dr-l" id="dGrossLbl">שכר ברוטו</span><span class="dr-v" id="dGross">0 ₪</span></div>
+      <div class="ded-row gross" id="dRechevRow" hidden><span class="dr-l">שווי רכב צמוד<small>זקוף לחיוב - לא נכנס לחשבון</small></span><span class="dr-v" id="dRechev">0 ₪</span></div>
+      <div class="ded-row gross" id="dTaxableRow" hidden><span class="dr-l">שכר חייב במס ובב"ל</span><span class="dr-v" id="dTaxable">0 ₪</span></div>
       <div class="ded-row"><span class="dr-l">מס הכנסה<small id="dTaxSub"></small></span><span class="dr-v" id="dTax">0 ₪</span></div>
+      <div class="ded-row" id="dYesefRow" hidden><span class="dr-l">מס יסף<small>תוספת על ההכנסה שמעל הסף</small></span><span class="dr-v" id="dYesef">0 ₪</span></div>
       <div class="ded-row"><span class="dr-l" id="dNiLbl">ביטוח לאומי + מס בריאות</span><span class="dr-v" id="dNi">0 ₪</span></div>
       <div class="ded-row" id="dPensRow"><span class="dr-l">פנסיה (חלק העובד)</span><span class="dr-v" id="dPens">0 ₪</span></div>
       <div class="ded-row" id="dKerenRow" hidden><span class="dr-l">קרן השתלמות (חלק העובד)</span><span class="dr-v" id="dKeren">0 ₪</span></div>
       <div class="ded-row" id="dSelfPensRow" hidden><span class="dr-l">הפרשה לפנסיה (חיסכון שלך)</span><span class="dr-v" id="dSelfPens">0 ₪</span></div>
       <div class="ded-row" id="dSelfKerenRow" hidden><span class="dr-l">הפרשה לקרן השתלמות (חיסכון שלך)</span><span class="dr-v" id="dSelfKeren">0 ₪</span></div>
     </div>
+    <div class="guide-note" id="carNote" hidden></div>
     <div class="save-note" id="saveNote" hidden></div>
     <div class="guide-note" id="guideNote" hidden></div>
     <div class="emp-note" id="empNote"></div>
-    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה חודשית יציבה להמחשה, לא תחשיב שכר רשמי. <b>כוללת את זיכוי המס על הפרשות הפנסיה</b> (סעיף 45א, עד ~238 ש"ח בחודש). התלוש בפועל מחושב בשיטה <b>מצטברת</b> לאורך השנה, אז בחודש בודד (למשל בתחילת עבודה) הוא יכול להיראות שונה מההערכה כאן - זה מתאזן על פני שנה. לא כלולים: הטבות מס מיוחדות (עמית מוטב / ניכוי סעיף 47 על שכר לא מבוטח), שווי מס שאינו במזומן (ארוחות), ומרכיבים אישיים (תושב פריפריה). קרן ההשתלמות מחושבת עד תקרת השכר הפטורה (₪15,712). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
+    <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה חודשית יציבה להמחשה, לא תחשיב שכר רשמי. <b>כוללת את זיכוי המס על הפרשות הפנסיה</b> (סעיף 45א, עד ~238 ש"ח בחודש) <b>שווי רכב צמוד</b> כהכנסה זקופה חייבת, <b>ומס יסף</b> על שכר גבוה. התלוש בפועל מחושב בשיטה <b>מצטברת</b> לאורך השנה, אז בחודש בודד (למשל בתחילת עבודה) הוא יכול להיראות שונה מההערכה כאן - זה מתאזן על פני שנה. לא כלולים: הטבות מס מיוחדות (עמית מוטב / ניכוי סעיף 47 על שכר לא מבוטח), שווי זקוף שאינו רכב (למשל ארוחות), ומרכיבים אישיים (תושב פריפריה). קרן ההשתלמות מחושבת עד תקרת השכר הפטורה (₪15,712). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
   </div>
 
   <details class="card tt-wrap">
@@ -379,6 +388,13 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
         <div class="tt-field"><label>שיעור הזיכוי (%)</label><div class="tt-cell"><input id="tPzRate" inputmode="decimal" aria-label="שיעור זיכוי פנסיה"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>שיעור מוכר מהשכר (%)</label><div class="tt-cell"><input id="tPzPct" inputmode="decimal" aria-label="שיעור מוכר מהשכר"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>תקרת שכר לזיכוי (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tPzCeil" inputmode="numeric" aria-label="תקרת שכר לזיכוי פנסיה"></div></div>
+      </div>
+
+      <div class="tt-sub">מס יסף (מס על הכנסות גבוהות)</div>
+      <div class="tt-note" style="margin-bottom:10px">תוספת מס על החלק של ההכנסה החייבת שמעל הסף. נקודות הזיכוי וזיכוי הפנסיה <b>לא</b> מקטינים אותו. רלוונטי רק לשכר גבוה.</div>
+      <div class="tt-grid">
+        <div class="tt-field"><label>סף חודשי (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tYesefThresh" inputmode="numeric" aria-label="סף מס יסף חודשי"></div></div>
+        <div class="tt-field"><label>שיעור המס (%)</label><div class="tt-cell"><input id="tYesefRate" inputmode="decimal" aria-label="שיעור מס יסף"><span class="u suf">%</span></div></div>
       </div>
 
       <button class="tt-reset" id="ttReset" type="button">↺ איפוס לברירת מחדל 2026</button>
@@ -573,8 +589,9 @@ const DEF={
   brackets:[{to:7010,rate:10},{to:10060,rate:14},{to:19000,rate:20},{to:25100,rate:31},{to:46690,rate:35},{to:60130,rate:47},{to:null,rate:50}],
   pointValue:242,
   niRed:1.04, niFull:7, hRed:3.23, hFull:5.17, redThresh:7703, ceiling:50695,
-  tag:6.5, pit:6,
+  tag:6.5, pit:6, rechev:0,
   pzRate:35, pzPct:7, pzCeil:9700,
+  yesefThresh:60130, yesefRate:3,
   mode:'employee', niRedSelf:2.87, niFullSelf:12.83, niDeduct:52,
   pensSelf:0, kerenSelf:0, pensSelfUnit:'ils', kerenSelfUnit:'ils',
   spNikPct:11, spZikPct:5.5, spZikRate:35, spIncCeil:19400,
@@ -595,11 +612,14 @@ function incomeTax(gross){
 }
 function cpSum(){return S.cp.reduce((s,r)=>s+num(r.p)*num(r.q),0);}
 let EMP_DISC=null;
-const SELF_DISC='הערכה חודשית להמחשה לעצמאי/ת, לא תחשיב רשמי. כוללת ביטוח לאומי+בריאות בשיעורי עצמאי/ת, ניכוי 52% מהב"ל (סעיף 47א), ואת <b>הטבות המס על פנסיה וקרן השתלמות</b> (ניכוי 47 + זיכוי 45א + ניכוי קרן) - שמקטינות גם את המס וגם את הביטוח הלאומי. החלוקה המדויקת בין ניכוי לזיכוי בפנסיה מורכבת, אז <b>שווה לאמת מול רו"ח</b>. המקדמות בפועל מחושבות שנתית, אז חודש בודד עשוי להיראות שונה. הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.';
+const SELF_DISC='הערכה חודשית להמחשה לעצמאי/ת, לא תחשיב רשמי. כוללת ביטוח לאומי+בריאות בשיעורי עצמאי/ת, ניכוי 52% מהב"ל (סעיף 47א), את <b>מס יסף</b> על הכנסה גבוהה, ואת <b>הטבות המס על פנסיה וקרן השתלמות</b> (ניכוי 47 + זיכוי 45א + ניכוי קרן) - שמקטינות גם את המס וגם את הביטוח הלאומי. החלוקה המדויקת בין ניכוי לזיכוי בפנסיה מורכבת, אז <b>שווה לאמת מול רו"ח</b>. המקדמות בפועל מחושבות שנתית, אז חודש בודד עשוי להיראות שונה. הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.';
 function calc(){
   syncLive();
   const self=S.mode==='self';
   const gross=num(S.gross),pens=num(S.pens),points=cpSum();
+  // שווי רכב: הכנסה זקופה חייבת. מגדיל את בסיס המס והב"ל, לא נכנס לבסיס הפנסיה, ולא מתקבל במזומן.
+  const rechev=self?0:Math.max(0,num(S.rechev));
+  const taxableGross=gross+rechev;
   document.getElementById('cpTotal').textContent=(+points.toFixed(2))+'';
   const credit=points*num(S.pointValue);
   // ── self-employed voluntary pension + keren contributions and their recognized (deductible) portions
@@ -629,7 +649,7 @@ function calc(){
     return {tax:tx,niHealth:niH,total:tx+niH};
   }
   // ── national insurance + health (self: rate + reduced base; employee: gross)
-  const niBase=self?Math.max(0,gross-dedFromIncome):gross;
+  const niBase=self?Math.max(0,gross-dedFromIncome):taxableGross;
   const niHealth=niCalc(niBase);
   const ni=(function(){const rr=Math.min(niBase,num(S.redThresh)),ff=Math.max(0,Math.min(niBase,num(S.ceiling))-num(S.redThresh));const niR=self?num(S.niRedSelf):num(S.niRed),niF=self?num(S.niFullSelf):num(S.niFull);return rr*(niR/100)+ff*(niF/100);})();
   // ── pension zikuy (45א): employee on their pension; self on the עצמאי pension slice
@@ -637,11 +657,20 @@ function calc(){
   const pensZikuy=self?pZikBase*(num(S.spZikRate)/100):Math.min(pensEmp,(num(S.pzPct)/100)*Math.min(gross,num(S.pzCeil)))*(num(S.pzRate)/100);
   // ── income tax base: self deducts 52% of NI + pension/keren ניכוי
   const niDeduction=self?ni*(num(S.niDeduct)/100):0;
-  const taxBase=Math.max(0,gross-(self?dedFromIncome+niDeduction:0));
-  const grossTax=incomeTax(taxBase),tax=Math.max(0,grossTax-credit-pensZikuy);
+  const taxBase=Math.max(0,self?gross-dedFromIncome-niDeduction:taxableGross);
+  const grossTax=incomeTax(taxBase);
+  // מס יסף: תוספת על החלק שמעל הסף. לא מוקטן בנקודות זיכוי או בזיכוי הפנסיה.
+  const yesef=Math.max(0,taxBase-num(S.yesefThresh))*(num(S.yesefRate)/100);
+  const baseTax=Math.max(0,grossTax-credit-pensZikuy),tax=baseTax+yesef;
   const kerenBase=Math.min(gross,num(S.kerenCeil));
   const kerenEmp=(self||!S.keren)?0:kerenBase*(num(S.kep)/100);
-  const net=gross-tax-niHealth-pensEmp-kerenEmp-pS-kS;
+  const net=gross-tax-niHealth-pensEmp-kerenEmp-pS-kS;   // rechev is NOT added: never received as cash
+  // what the car actually costs in take-home: the extra tax + NI it creates
+  let carCost=0;
+  if(rechev>0){
+    const tax0=Math.max(0,incomeTax(gross)-credit-pensZikuy)+Math.max(0,gross-num(S.yesefThresh))*(num(S.yesefRate)/100);
+    carCost=(tax-tax0)+(niHealth-niCalc(gross));
+  }
   // ── self savings + max-out guidance (how much more can be deducted to minimise tax)
   let saveAmt=0,pMax=0,kMax=0,pRoom=0,kRoom=0,extraSave=0,mand=0;
   if(self){
@@ -657,10 +686,26 @@ function calc(){
   document.getElementById('netNum').innerHTML=money(net)+'<small> ₪</small>';
   document.getElementById('netSub').textContent=gross>0?('מתוך '+money(gross)+' ₪ '+(self?'הכנסה':'ברוטו')+' · '+Math.round(net/gross*100)+'% ביד'):'';
   document.getElementById('dGross').textContent=money(gross)+' ₪';
-  document.getElementById('dGrossLbl') && (document.getElementById('dGrossLbl').textContent=self?'הכנסה חייבת':'שכר ברוטו');
-  document.getElementById('dTax').textContent='- '+money(tax)+' ₪';
+  const rr_=document.getElementById('dRechevRow'),tr_=document.getElementById('dTaxableRow');
+  if(rechev>0){
+    rr_.hidden=false;tr_.hidden=false;
+    document.getElementById('dRechev').textContent='+ '+money(rechev)+' ₪';
+    document.getElementById('dTaxable').textContent=money(taxableGross)+' ₪';
+  }else{rr_.hidden=true;tr_.hidden=true;}
+  const cn=document.getElementById('carNote');
+  if(rechev>0&&gross>0){
+    cn.hidden=false;
+    cn.innerHTML='<span class="gt">🚗 מה הרכב הצמוד באמת עולה לך</span>'+
+      '<span class="grow">שווי הרכב (<b>'+money(rechev)+' ₪</b>) לא נכנס לחשבון הבנק. הוא רק מתווסף לשכר החייב, ולכן הוא <b>מוריד</b> לך מהנטו <b>'+money(carCost)+' ₪</b> בחודש (כ-'+money(carCost*12)+' ₪ בשנה) במס ובביטוח לאומי.</span>'+
+      '<span class="grow">כלומר: הרכב הצמוד משתלם אם החזקת רכב פרטי במקומו הייתה עולה יותר מ-<b>'+money(carCost)+' ₪</b> בחודש (החזר ליסינג או הלוואה, ביטוח, טסט, טיפולים ודלק).</span>'+
+      '<span class="mand">הפנסיה מחושבת על הברוטו במזומן בלבד ('+money(gross)+' ₪), בלי שווי הרכב.</span>';
+  }else cn.hidden=true;
+  document.getElementById('dGrossLbl') && (document.getElementById('dGrossLbl').textContent=self?'הכנסה חייבת':(rechev>0?'שכר ברוטו (במזומן)':'שכר ברוטו'));
+  document.getElementById('dTax').textContent='- '+money(yesef>0.5?baseTax:tax)+' ₪';
   const dedTot=self?(dedFromIncome+niDeduction):0;
-  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(+points.toFixed(2))+' נק\' זיכוי'+(pensZikuy>0?' ו-'+money(pensZikuy)+' זיכוי פנסיה':'')+(self&&dedTot>0?'; אחרי ניכוי '+money(dedTot)+' מההכנסה (ב"ל'+(dedFromIncome>0?'+פנסיה/קרן':'')+')':'')+')';
+  const yr_=document.getElementById('dYesefRow');
+  if(yesef>0.5){yr_.hidden=false;document.getElementById('dYesef').textContent='- '+money(yesef)+' ₪';}else yr_.hidden=true;
+  document.getElementById('dTaxSub').textContent=' (מ-'+money(grossTax)+' פחות '+(+points.toFixed(2))+' נק\' זיכוי'+(pensZikuy>0?' ו-'+money(pensZikuy)+' זיכוי פנסיה':'')+(self&&dedTot>0?'; אחרי ניכוי '+money(dedTot)+' מההכנסה (ב"ל'+(dedFromIncome>0?' ופנסיה וקרן':'')+')':'')+')';
   document.getElementById('dNiLbl').textContent=self?'ביטוח לאומי + מס בריאות (עצמאי/ת)':'ביטוח לאומי + מס בריאות';
   document.getElementById('dNi').textContent='- '+money(niHealth)+' ₪';
   document.getElementById('dPensRow').hidden=self;
@@ -740,12 +785,14 @@ function renderBrackets(){
 function applyTables(){
   document.getElementById('gross').value=grp(S.gross);
   document.getElementById('pens').value=S.pens;
+  document.getElementById('rechev').value=grp(S.rechev||0);
   document.getElementById('kerenChk').checked=!!S.keren;
   const set=(id,v)=>{document.getElementById(id).value=v;};
   set('tPoint',S.pointValue);set('tNiRed',S.niRed);set('tNiFull',S.niFull);set('tHRed',S.hRed);set('tHFull',S.hFull);
   set('tRedThresh',grp(S.redThresh));set('tCeiling',grp(S.ceiling));set('tTag',S.tag);set('tPit',S.pit);
   set('tKep',S.kep);set('tKer',S.ker);set('tKerCeil',grp(S.kerenCeil));
   set('tPzRate',S.pzRate);set('tPzPct',S.pzPct);set('tPzCeil',grp(S.pzCeil));
+  set('tYesefThresh',grp(S.yesefThresh));set('tYesefRate',S.yesefRate);
   set('tNiRedSelf',S.niRedSelf);set('tNiFullSelf',S.niFullSelf);set('tNiDeduct',S.niDeduct);
   set('pensSelf',S.pensSelf);set('kerenSelf',S.kerenSelf);
   applyUnitToggle('pensSelfTg','pensSelfUnit','pensSelfU');applyUnitToggle('kerenSelfTg','kerenSelfUnit','kerenSelfU');
@@ -759,6 +806,8 @@ function liveFormat(inp){const p=inp.selectionStart,old=inp.value;inp.value=grp(
 const grossInp=document.getElementById('gross');
 grossInp.addEventListener('input',()=>{liveFormat(grossInp);S.gross=num(grossInp.value);save();calc();});
 document.getElementById('pens').addEventListener('input',e=>{S.pens=num(e.target.value);save();calc();});
+const rechevInp=document.getElementById('rechev');
+rechevInp.addEventListener('input',()=>{liveFormat(rechevInp);S.rechev=num(rechevInp.value);save();calc();});
 document.getElementById('kerenChk').addEventListener('change',e=>{S.keren=e.target.checked;save();calc();});
 document.getElementById('pensSelf').addEventListener('input',e=>{S.pensSelf=num(e.target.value);save();calc();});
 document.getElementById('kerenSelf').addEventListener('input',e=>{S.kerenSelf=num(e.target.value);save();calc();});
@@ -786,12 +835,12 @@ function applyMode(){
 document.getElementById('modeEmployee').onclick=()=>{S.mode='employee';save();applyMode();calc();};
 document.getElementById('modeSelf').onclick=()=>{S.mode='self';save();applyMode();calc();};
 document.getElementById('cpAdd').onclick=()=>{S.cp.push({l:'',p:0.5,q:1});save();renderCP();calc();const rows=document.querySelectorAll('#cpList .cp-l');if(rows.length)rows[rows.length-1].focus();};
-[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit'],['tKep','kep'],['tKer','ker'],['tKerCeil','kerenCeil'],['tPzRate','pzRate'],['tPzPct','pzPct'],['tPzCeil','pzCeil'],['tNiRedSelf','niRedSelf'],['tNiFullSelf','niFullSelf'],['tNiDeduct','niDeduct'],['tSpNikPct','spNikPct'],['tSpZikPct','spZikPct'],['tSpZikRate','spZikRate'],['tSpIncCeil','spIncCeil'],['tSkDedPct','skDedPct'],['tSkIncCeil','skIncCeil']].forEach(([id,key])=>{
+[['tPoint','pointValue'],['tNiRed','niRed'],['tNiFull','niFull'],['tHRed','hRed'],['tHFull','hFull'],['tRedThresh','redThresh'],['tCeiling','ceiling'],['tTag','tag'],['tPit','pit'],['tKep','kep'],['tKer','ker'],['tKerCeil','kerenCeil'],['tPzRate','pzRate'],['tPzPct','pzPct'],['tPzCeil','pzCeil'],['tYesefThresh','yesefThresh'],['tYesefRate','yesefRate'],['tNiRedSelf','niRedSelf'],['tNiFullSelf','niFullSelf'],['tNiDeduct','niDeduct'],['tSpNikPct','spNikPct'],['tSpZikPct','spZikPct'],['tSpZikRate','spZikRate'],['tSpIncCeil','spIncCeil'],['tSkDedPct','skDedPct'],['tSkIncCeil','skIncCeil']].forEach(([id,key])=>{
   const el=document.getElementById(id);
-  el.addEventListener('input',()=>{if(key==='redThresh'||key==='ceiling'||key==='kerenCeil'||key==='pzCeil'||key==='spIncCeil'||key==='skIncCeil')liveFormat(el);S[key]=num(el.value);save();calc();});
+  el.addEventListener('input',()=>{if(key==='redThresh'||key==='ceiling'||key==='kerenCeil'||key==='pzCeil'||key==='yesefThresh'||key==='spIncCeil'||key==='skIncCeil')liveFormat(el);S[key]=num(el.value);save();calc();});
 });
 document.getElementById('ttReset').onclick=()=>{
-  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit,kep:DEF.kep,ker:DEF.ker,kerenCeil:DEF.kerenCeil,pzRate:DEF.pzRate,pzPct:DEF.pzPct,pzCeil:DEF.pzCeil,niRedSelf:DEF.niRedSelf,niFullSelf:DEF.niFullSelf,niDeduct:DEF.niDeduct,spNikPct:DEF.spNikPct,spZikPct:DEF.spZikPct,spZikRate:DEF.spZikRate,spIncCeil:DEF.spIncCeil,skDedPct:DEF.skDedPct,skIncCeil:DEF.skIncCeil})));
+  Object.assign(S,JSON.parse(JSON.stringify({brackets:DEF.brackets,pointValue:DEF.pointValue,niRed:DEF.niRed,niFull:DEF.niFull,hRed:DEF.hRed,hFull:DEF.hFull,redThresh:DEF.redThresh,ceiling:DEF.ceiling,tag:DEF.tag,pit:DEF.pit,kep:DEF.kep,ker:DEF.ker,kerenCeil:DEF.kerenCeil,pzRate:DEF.pzRate,pzPct:DEF.pzPct,pzCeil:DEF.pzCeil,yesefThresh:DEF.yesefThresh,yesefRate:DEF.yesefRate,niRedSelf:DEF.niRedSelf,niFullSelf:DEF.niFullSelf,niDeduct:DEF.niDeduct,spNikPct:DEF.spNikPct,spZikPct:DEF.spZikPct,spZikRate:DEF.spZikRate,spIncCeil:DEF.spIncCeil,skDedPct:DEF.skDedPct,skIncCeil:DEF.skIncCeil})));
   save();applyTables();calc();
 };
 

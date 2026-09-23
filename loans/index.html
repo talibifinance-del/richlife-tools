@@ -149,6 +149,19 @@ svg.chart{display:block;width:100%;height:auto}
 .unit-tg{display:inline-flex;background:var(--sage-tint);border-radius:100px;padding:3px;gap:2px}
 .unit-tg button{font-family:var(--font);cursor:pointer;border:none;background:transparent;color:var(--pine-deep);font-size:13px;font-weight:800;padding:7px 17px;border-radius:100px;transition:all .15s}
 .unit-tg button.on{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.25)}
+.mode-tg{display:flex;gap:6px;background:var(--sage-tint);border-radius:100px;padding:5px;margin:0 auto 16px;max-width:520px}
+.mode-tg button{font-family:var(--font);cursor:pointer;flex:1;border:none;background:transparent;color:var(--pine-deep);font-size:13.5px;font-weight:800;padding:11px 10px;border-radius:100px;transition:all .16s;line-height:1.25}
+.mode-tg button.on{background:var(--pine);color:#fff;box-shadow:0 5px 14px rgba(var(--pine-rgb),.26)}
+.mode-tg button:focus-visible{outline:2px solid var(--pine-deep);outline-offset:2px}
+.cap-note{font-size:12.5px;font-weight:700;color:var(--ink-soft);line-height:1.55;text-align:center;margin:0 0 14px}
+.bind-row{display:flex;gap:10px;margin-top:13px;flex-wrap:wrap}
+.bind-row .b{flex:1;min-width:150px;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);border-radius:14px;padding:12px 11px;text-align:center}
+.bind-row .b.tight{border-color:rgba(var(--red-rgb),.45);background:rgba(var(--red-rgb),.05)}
+.bind-row .b .k{font-size:11.5px;font-weight:700;color:var(--ink-soft);line-height:1.4}
+.bind-row .b .v{font-size:clamp(16px,4.2vw,20px);font-weight:900;color:var(--pine-deep);margin-top:4px;font-variant-numeric:tabular-nums}
+.bind-row .b.tight .v{color:#8f3a29}
+.bind-row .b .t{font-size:10.5px;font-weight:800;margin-top:4px;color:var(--ink-soft)}
+.bind-row .b.tight .t{color:#8f3a29}
 .unit-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .unit-row .ur-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
 
@@ -232,33 +245,39 @@ svg.chart{display:block;width:100%;height:auto}
 
   <div class="hero-title">
     <h1>מחשבון <span class="em">הלוואות</span></h1>
-    <p>תראו איך הכסף עובד בשבילכם - כמה צומח כל שקל שמשקיעים, לעומת סתם לשמור אותו בצד.</p>
+    <p>שני כיוונים: כמה תעלה לכם הלוואה שאתם שוקלים, או - מהצד השני - כמה הלוואה אפשר בכלל לעמוד בה, וכמה החיסכון שלכם מקצר את הדרך.</p>
   </div>
 
+  <div class="mode-tg" id="modeTg" role="tablist" aria-label="מצב החישוב">
+    <button type="button" class="on" data-mode="cost" role="tab" aria-selected="true">💳 כמה תעלה לי הלוואה</button>
+    <button type="button" data-mode="cap" role="tab" aria-selected="false">📏 כמה הלוואה אפשר לקחת</button>
+  </div>
+
+  <div id="panelCost">
   <div class="card">
     <div class="fields">
       <div class="field">
-        <label>סכום ההלוואה</label>
+        <label for="amount">סכום ההלוואה</label>
         <div class="input-shell"><span class="unit">₪</span><input id="amount" type="text" inputmode="numeric" value="100,000" placeholder="0"></div>
       </div>
       <div class="field">
-        <label>ריבית שנתית</label>
+        <label for="rate">ריבית שנתית</label>
         <div class="input-shell"><input id="rate" type="text" inputmode="decimal" value="6" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
       </div>
       <div class="field">
-        <label>תקופת ההלוואה</label>
+        <label for="months">תקופת ההלוואה</label>
         <div class="input-shell"><input id="months" type="number" inputmode="numeric" value="60" placeholder="0"><span class="unit" id="uTerm" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div>
       </div>
       <div class="field">
-        <label>תוספת החזר חודשי (לא חובה)</label>
+        <label for="extra">תוספת החזר חודשי (לא חובה)</label>
         <div class="input-shell"><span class="unit">₪</span><input id="extra" type="text" inputmode="numeric" value="0" placeholder="0"></div>
       </div>
       <div class="field">
-        <label>סגירה מוקדמת אחרי (לא חובה)</label>
+        <label for="closeM">סגירה מוקדמת אחרי (לא חובה)</label>
         <div class="input-shell"><input id="closeM" type="number" inputmode="numeric" value="0" placeholder="0"><span class="unit" id="uClose" style="padding-inline-start:8px;padding-inline-end:15px">חודשים</span></div>
       </div>
       <div class="field">
-        <label>הכנסה חודשית נטו (לבדיקת נטל, לא חובה)</label>
+        <label for="income">הכנסה חודשית נטו (לבדיקת נטל, לא חובה)</label>
         <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="0" placeholder="0"></div>
       </div>
     </div>
@@ -309,6 +328,79 @@ svg.chart{display:block;width:100%;height:auto}
       <span><i style="background:var(--pine)"></i>יתרת ההלוואה</span>
     </div>
   </div>
+  </div><!-- /panelCost -->
+
+  <div id="panelCap" hidden>
+  <div class="card">
+    <div class="cap-note">הכיוון ההפוך: לא "כמה תעלה הלוואה של X", אלא <b>עד כמה אפשר להגיע בלי לשבור את התקציב</b>. מזינים הכנסה, החזרים שכבר קיימים והחיסכון שיש - ומקבלים תקרה.</div>
+    <div class="fields">
+      <div class="field">
+        <label for="capIncome">הכנסה חודשית נטו (של משק הבית)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="capIncome" type="text" inputmode="numeric" value="15,000" placeholder="0"></div>
+      </div>
+      <div class="field">
+        <label for="capExisting">החזרי הלוואות שיש כבר היום (חודשי)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="capExisting" type="text" inputmode="numeric" value="0" placeholder="0"></div>
+      </div>
+      <div class="field">
+        <label for="capSavings">החיסכון שיש לכם היום</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="capSavings" type="text" inputmode="numeric" value="50,000" placeholder="0"></div>
+      </div>
+      <div class="field">
+        <label for="capRate">ריבית שנתית משוערת</label>
+        <div class="input-shell"><input id="capRate" type="text" inputmode="decimal" value="7" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
+      </div>
+      <div class="field">
+        <label for="capYears">על כמה שנים לפרוס</label>
+        <div class="input-shell"><input id="capYears" type="number" inputmode="numeric" value="5" placeholder="0" min="1" max="30"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">שנים</span></div>
+      </div>
+      <div class="field">
+        <label for="capTarget">כמה צריך בסך הכל? (לא חובה)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="capTarget" type="text" inputmode="numeric" value="0" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="unit-row">
+      <span class="ur-lbl">כמה מההכנסה להקדיש להחזרי הלוואות:</span>
+      <div class="li-filter" id="capPctTg" style="margin:0">
+        <button type="button" class="li-chip on" data-p="30">30% · בריא</button>
+        <button type="button" class="li-chip" data-p="35">35% · גבולי</button>
+        <button type="button" class="li-chip" data-p="40">40% · תקרת הבנק</button>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="r-lbl">📏 תקרת ההלוואה שאפשר לעמוד בה (ל-<span id="capTermLbl">5 שנים</span>)</div>
+      <div class="r-num" id="capMax">0<small> ₪</small></div>
+      <div class="r-cells">
+        <div class="r-cell"><div class="k">ההחזר החודשי בתקרה</div><div class="v" id="capPay">0 ₪</div></div>
+        <div class="r-cell gain"><div class="k">עם החיסכון - סכום כולל שאפשר להעמיד</div><div class="v" id="capPower">0 ₪</div></div>
+      </div>
+    </div>
+
+    <div class="bind-row" id="capBind"></div>
+    <div class="insight" id="capIns"></div>
+    <div class="insight" id="capSavIns" hidden></div>
+    <div class="early-box" id="capGapBox" hidden>
+      <div class="eb-title" id="capGapTitle">🎯 מול מה שאתם צריכים</div>
+      <div class="early-grid">
+        <div class="e"><div class="k">צריך ללוות (אחרי החיסכון)</div><div class="v" id="gNeed">0 ₪</div></div>
+        <div class="e"><div class="k" id="gapK">הפער מהתקרה</div><div class="v" id="gGap">0 ₪</div></div>
+      </div>
+      <div class="eb-note" id="gNote"></div>
+    </div>
+
+    <div class="early-box" id="capTermBox">
+      <div class="eb-title">⏱️ איך התקופה מזיזה את התקרה</div>
+      <div class="ov-grid">
+        <div class="ov-tile"><div class="k">3 שנים</div><div class="v" id="t3">0 ₪</div></div>
+        <div class="ov-tile"><div class="k">5 שנים</div><div class="v" id="t5">0 ₪</div></div>
+        <div class="ov-tile"><div class="k">7 שנים</div><div class="v" id="t7">0 ₪</div></div>
+      </div>
+      <div class="eb-note" id="capTermNote"></div>
+    </div>
+  </div>
+  </div><!-- /panelCap -->
 
   <details class="card cmp-loans">
     <summary><span class="sec-lbl" style="margin:0">🔴 כמה עולה לך המינוס?</span><span class="fin-chev">▾</span></summary>
@@ -793,9 +885,125 @@ function cmpLoans(){
     `<div class="cost-cmp"><div class="cc-title">💸 עלות הכסף - כמה עלתה לך הריבית</div><div class="cost-pair"><div class="cp"><span class="l">ההלוואה שלך</span><span class="v">${fmt.format(Math.round(mI))} ₪</span></div><div class="cp"><span class="l">ההצעה האחרת</span><span class="v">${fmt.format(Math.round(iB))} ₪</span></div></div></div>`+
     `<div class="cmp-verdict ${diff>=0?'good':'bad'}">${Math.abs(diff)<1?'שתי ההצעות עולות אותו דבר בריבית':(diff>0?`💚 ההצעה האחרת חוסכת לך ${fmt.format(Math.round(diff))} ₪ ריבית`:`⚠️ ההצעה האחרת יקרה ב-${fmt.format(Math.round(-diff))} ₪ ריבית`)}</div>`;
 }
+/* ─── מצב 2: כמה הלוואה אפשר לעמוד בה ─────────────────────────── */
+let CAPPCT=30, MODE='cost';
+const capIds=['capIncome','capExisting','capSavings','capRate','capYears','capTarget'];
+function pvAnn(pay,annual,n){const r=annual/100/12;if(pay<=0||n<=0)return 0;return r===0?pay*n:pay*(1-Math.pow(1+r,-n))/r;}
+function nFor(need,pay,annual){const r=annual/100/12;if(pay<=0)return Infinity;if(r===0)return need/pay;const k=1-need*r/pay;if(k<=0)return Infinity;return -Math.log(k)/Math.log(1+r);}
+function capCalc(){
+  const inc=num('capIncome'), exist=num('capExisting'), sav=num('capSavings'),
+        rate=num('capRate'), yrs=Math.max(1,Math.min(30,Math.round(num('capYears'))||1)),
+        n=yrs*12, target=num('capTarget');
+  const room=Math.max(0, inc*CAPPCT/100 - exist);
+  const byPay=pvAnn(room,rate,n), byRule=inc*10;
+  const max=Math.max(0,Math.min(byPay,byRule));
+  const payAtMax=max>0?pmt(max,rate,n):0;
+  document.getElementById('capTermLbl').textContent=yrs+(yrs===1?' שנה':' שנים');
+  document.getElementById('capMax').innerHTML=fmt.format(Math.round(max))+'<small> ₪</small>';
+  document.getElementById('capPay').textContent=fmt.format(Math.round(payAtMax))+' ₪';
+  document.getElementById('capPower').textContent=fmt.format(Math.round(max+sav))+' ₪';
+
+  // מה חוסם קודם
+  const tightPay=byPay<=byRule;
+  document.getElementById('capBind').innerHTML=
+    '<div class="b'+(tightPay?' tight':'')+'"><div class="k">לפי מה שהתקציב סופג</div><div class="v">'+fmt.format(Math.round(byPay))+' ₪</div><div class="t">'+(tightPay?'⬅ זה מה שחוסם אותך':'יש מרווח')+'</div></div>'+
+    '<div class="b'+(tightPay?'':' tight')+'"><div class="k">לפי כלל האצבע של הבנק (פי 10 מההכנסה)</div><div class="v">'+fmt.format(Math.round(byRule))+' ₪</div><div class="t">'+(tightPay?'יש מרווח':'⬅ זה מה שחוסם אותך')+'</div></div>';
+
+  // תובנה ראשית
+  const ins=document.getElementById('capIns');
+  if(inc<=0){ ins.className='insight'; ins.innerHTML='הזינו הכנסה חודשית נטו כדי לראות את התקרה.'; }
+  else if(room<=0){ ins.className='insight warn'; ins.innerHTML='🔴 ההחזרים שיש לכם כבר היום (<b>'+fmt.format(Math.round(exist))+' ₪</b>) מנצלים את כל המרווח של '+CAPPCT+'% מההכנסה. במצב הזה הלוואה נוספת רק תלחץ את התזרים - הצעד הראשון הוא לצמצם או למחזר את מה שקיים, לא להוסיף.'; }
+  else { ins.className='insight'; ins.innerHTML='אפשר להקדיש עוד <b>'+fmt.format(Math.round(room))+' ₪ בחודש</b> להחזר, וזה מתרגם לתקרת הלוואה של <b>'+fmt.format(Math.round(max))+' ₪</b> ל-'+yrs+(yrs===1?' שנה':' שנים')+' בריבית '+rate+'%. '+(tightPay?'מה שחוסם זה התקציב עצמו.':'מה שחוסם זה כלל האצבע של הבנק, לא התקציב.'); }
+
+  // שכבת החיסכון
+  const si=document.getElementById('capSavIns');
+  if(sav>0){
+    const costOfBorrowing=Math.max(0,pmt(sav,rate,n)*n-sav);
+    si.hidden=false; si.className='insight';
+    si.innerHTML='💚 החיסכון של <b>'+fmt.format(Math.round(sav))+' ₪</b> הוא החלק שלא צריך ללוות - ולכן לא נושא ריבית. אם הייתם לווים גם אותו, זה היה עולה לכם <b>'+fmt.format(Math.round(costOfBorrowing))+' ₪</b> ריבית. סך הכל אפשר להעמיד <b>'+fmt.format(Math.round(max+sav))+' ₪</b>.';
+  } else { si.hidden=true; }
+
+  // מול היעד
+  const gb=document.getElementById('capGapBox');
+  if(target>0){
+    gb.hidden=false;
+    const need=Math.max(0,target-sav), gap=need-max;
+    document.getElementById('gNeed').textContent=fmt.format(Math.round(need))+' ₪';
+    const gv=document.getElementById('gGap');
+    gv.textContent=fmt.format(Math.round(Math.abs(gap)))+' ₪';
+    gv.className='v'+(gap>0?' cost':'');
+    document.getElementById('gapK').textContent=gap>0?'חסר לכם':'מרווח מעל הצורך';
+    const note=document.getElementById('gNote');
+    if(need<=0){
+      document.getElementById('capGapTitle').textContent='🎯 מול מה שאתם צריכים';
+      note.innerHTML='החיסכון לבד מכסה את כל היעד של <b>'+fmt.format(Math.round(target))+' ₪</b>. אין צורך בהלוואה בכלל.';
+    } else if(gap<=0){
+      const pay=pmt(need,rate,n), pct=inc>0?Math.round((pay+exist)/inc*100):0;
+      document.getElementById('capGapTitle').textContent='✅ זה נכנס בתקציב';
+      note.innerHTML='ההחזר על <b>'+fmt.format(Math.round(need))+' ₪</b> יהיה <b>'+fmt.format(Math.round(pay))+' ₪ בחודש</b>. יחד עם ההחזרים הקיימים זה <b>'+pct+'%</b> מההכנסה. סך הריבית לאורך התקופה: <b>'+fmt.format(Math.round(pay*n-need))+' ₪</b>.';
+    } else {
+      document.getElementById('capGapTitle').textContent='⚠️ היעד גדול מהתקרה';
+      const addSav=Math.ceil(gap/1000)*1000;
+      let alt='';
+      // מתיחת התקופה עוזרת רק אם מה שחוסם הוא התקציב - לא אם זו תקרת הבנק
+      if(need<=byRule){
+        const nNeed=nFor(need,room,rate);
+        if(isFinite(nNeed)&&nNeed<=360&&Math.ceil(nNeed/12)>yrs)
+          alt='לפרוס על <b>'+Math.ceil(nNeed/12)+' שנים</b> במקום '+yrs+' (שימו לב: יותר שנים = יותר ריבית), ';
+      }
+      let head='כדי לסגור פער של <b>'+fmt.format(Math.round(gap))+' ₪</b> ';
+      if(need>byRule)
+        head+='לא יעזור למתוח את התקופה - מה שחוסם זה כלל האצבע של הבנק (עד <b>'+fmt.format(Math.round(byRule))+' ₪</b> בהכנסה הזו), והוא לא זז עם השנים. הדרכים שנשארו: ';
+      else
+        head+='יש כמה דרכים: ';
+      note.innerHTML=head+alt+'לחסוך עוד <b>'+fmt.format(addSav)+' ₪</b> לפני, או לצמצם את היעד ל-<b>'+fmt.format(Math.round(max+sav))+' ₪</b>. מה שלא עובד זה למתוח את ההחזר מעבר למה שהתקציב סופג.';
+    }
+  } else gb.hidden=true;
+
+  // התקרה בתקופות שונות
+  const capAt=function(y){return Math.max(0,Math.min(pvAnn(room,rate,y*12),byRule));};
+  const flat=Math.round(capAt(7))<=Math.round(capAt(5))+1;
+  [3,5,7].forEach(function(y){
+    const v=capAt(y);
+    document.getElementById('t'+y).textContent=fmt.format(Math.round(v))+' ₪';
+  });
+  document.getElementById('capTermNote').innerHTML=(flat&&room>0)
+    ? 'המספרים כמעט זהים כי מה שחוסם כאן זו תקרת הבנק ולא התקציב - ולכן מתיחת התקופה כמעט לא מזיזה אותם, רק מוסיפה ריבית.'
+    : 'תקופה ארוכה יותר מעלה את התקרה - אבל גם את סך הריבית שתשלמו. התקרה היא מה ש<b>אפשר</b>, לא מה ש<b>כדאי</b>.';
+  syncLive();
+}
+capIds.forEach(function(id){
+  const el=document.getElementById(id); if(!el)return;
+  el.addEventListener('input',function(){
+    if(id!=='capRate'&&id!=='capYears'){const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}}
+    capCalc();
+  });
+});
+(function(){
+  const tg=document.getElementById('capPctTg');
+  tg.addEventListener('click',function(e){
+    const b=e.target.closest('.li-chip'); if(!b)return;
+    tg.querySelectorAll('.li-chip').forEach(function(x){x.classList.toggle('on',x===b);});
+    CAPPCT=+b.dataset.p||30; capCalc();
+  });
+})();
+function syncCapPctUI(){document.getElementById('capPctTg').querySelectorAll('.li-chip').forEach(function(x){x.classList.toggle('on',+x.dataset.p===CAPPCT);});}
+function setMode(m){
+  MODE=(m==='cap')?'cap':'cost';
+  document.getElementById('panelCost').hidden=(MODE!=='cost');
+  document.getElementById('panelCap').hidden=(MODE!=='cap');
+  document.getElementById('modeTg').querySelectorAll('button').forEach(function(b){
+    const on=b.dataset.mode===MODE; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false');
+  });
+  if(MODE==='cap')capCalc(); else calc();
+}
+document.getElementById('modeTg').querySelectorAll('button').forEach(function(b){
+  b.addEventListener('click',function(){if(b.dataset.mode!==MODE){setMode(b.dataset.mode);syncLive();}});
+});
+
 const SKEY='richlife-loans-v1';
-function enc(){return JSON.stringify([document.getElementById('amount').value,document.getElementById('rate').value,document.getElementById('months').value,document.getElementById('extra').value,document.getElementById('closeM').value,UNIT,document.getElementById('income').value,document.getElementById('bAmount').value,document.getElementById('bRate').value,document.getElementById('bMonths').value]);}
-function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('amount').value=grp(a[0]);document.getElementById('rate').value=a[1]??'6';document.getElementById('months').value=a[2]??'';document.getElementById('extra').value=grp(a[3]||'0');document.getElementById('closeM').value=a[4]??'0';UNIT=a[5]==='y'?'y':'m';document.getElementById('income').value=grp(a[6]||'0');document.getElementById('bAmount').value=grp(a[7]||'0');document.getElementById('bRate').value=a[8]??'5';document.getElementById('bMonths').value=a[9]??'60';syncUnitLabels();return true;}catch(e){return false;}}
+function enc(){return JSON.stringify([document.getElementById('amount').value,document.getElementById('rate').value,document.getElementById('months').value,document.getElementById('extra').value,document.getElementById('closeM').value,UNIT,document.getElementById('income').value,document.getElementById('bAmount').value,document.getElementById('bRate').value,document.getElementById('bMonths').value,MODE,CAPPCT,document.getElementById('capIncome').value,document.getElementById('capExisting').value,document.getElementById('capSavings').value,document.getElementById('capRate').value,document.getElementById('capYears').value,document.getElementById('capTarget').value]);}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('amount').value=grp(a[0]);document.getElementById('rate').value=a[1]??'6';document.getElementById('months').value=a[2]??'';document.getElementById('extra').value=grp(a[3]||'0');document.getElementById('closeM').value=a[4]??'0';UNIT=a[5]==='y'?'y':'m';document.getElementById('income').value=grp(a[6]||'0');document.getElementById('bAmount').value=grp(a[7]||'0');document.getElementById('bRate').value=a[8]??'5';document.getElementById('bMonths').value=a[9]??'60';if(a.length>10){MODE=(a[10]==='cap')?'cap':'cost';CAPPCT=+a[11]||30;document.getElementById('capIncome').value=grp(a[12]||'0');document.getElementById('capExisting').value=grp(a[13]||'0');document.getElementById('capSavings').value=grp(a[14]||'0');document.getElementById('capRate').value=a[15]??'7';document.getElementById('capYears').value=a[16]??'5';document.getElementById('capTarget').value=grp(a[17]||'0');syncCapPctUI();}syncUnitLabels();return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#c='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}
@@ -816,9 +1024,9 @@ function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>
   try{localStorage.removeItem(SKEY);}catch(e){}
   const h=(location.hash||'').match(/c=([^&]+)/);
   if(h) dec(decodeURIComponent(h[1]));
-  calc();
+  calc(); capCalc(); setMode(MODE);
 })();
-(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp){refreshShareUI();return;}docId=hp[1];refreshShareUI();fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){dec(t);calc();}).catch(function(){});})();
+(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);if(!hp){refreshShareUI();return;}docId=hp[1];refreshShareUI();fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){dec(t);calc();capCalc();setMode(MODE);}).catch(function(){});})();
 
 (function(){try{var fromA=(document.referrer||'').indexOf('argaz')>-1;if(fromA)sessionStorage.setItem('rlArgaz','1');if(fromA||sessionStorage.getItem('rlArgaz')){var b=document.getElementById('backArgaz');if(b)b.hidden=false;}}catch(e){if((document.referrer||'').indexOf('argaz')>-1){var b2=document.getElementById('backArgaz');if(b2)b2.hidden=false;}}})();
 </script>

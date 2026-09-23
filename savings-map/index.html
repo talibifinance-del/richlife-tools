@@ -395,7 +395,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 
   <div class="hero-title">
     <h1>מפת <span class="em">החיסכון</span> שלך</h1>
-    <p>עשרות דרכים לשלם פחות על אותם דברים בדיוק, ולפעמים לא לשלם עליהם בכלל, בלי לרדת רמת חיים. מסמנים מה רלוונטי, פותחים כל תחום, ורואים כמה אפשר לחסוך בשנה.</p>
+    <p>עשרות דרכים לשלם פחות על אותם דברים בדיוק, ולפעמים לא לשלם עליהם בכלל, בלי לרדת רמת חיים. מסמנים מה רלוונטי, פותחים כל תחום, ובוחרים מאיפה להתחיל.</p>
   </div>
 
   <a class="top-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">
@@ -407,13 +407,6 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <span class="sec-lbl">🧭 קצת עליכם</span>
     <p class="pintro">מסמנים מה נכון לגביכם, ומופיעות הטבות שמתאימות בדיוק למצב שלכם. כל השאר כאן מתאים כמעט לכולם.</p>
     <div class="pchips" id="pchips"></div>
-  </div>
-
-  <div class="card counter">
-    <div class="c-lbl">פוטנציאל החיסכון שלכם</div>
-    <div class="c-val tabular" id="cval">עד 0 ₪</div>
-    <div class="c-sub">בשנה, בלי לוותר על שום דבר באורח החיים. זה אומדן, החיסכון בפועל תלוי בהרגלים שלכם.</div>
-    <div class="c-pill">מסמנים מה רלוונטי והמספר זז</div>
   </div>
 
   <div class="hint">לוחצים על כל תחום כדי לפתוח ולראות את ההטבות ↓</div>
@@ -655,7 +648,7 @@ function renderAreas(){
   });
 }
 
-function renderCounter(){ $('#cval').textContent='עד '+money(total())+' ₪'; }
+function renderCounter(){ const el=$('#cval'); if(el) el.textContent='עד '+money(total())+' ₪'; }
 
 function writeHash(){
   const p=[...state.profile], x=[...state.off], o=[...state.open], parts=[];

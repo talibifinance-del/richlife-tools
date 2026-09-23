@@ -210,10 +210,22 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .cc.match{border:2px solid rgba(var(--pine-rgb),.55)}
 .cc.top{border:2px solid var(--pine);box-shadow:0 12px 34px rgba(var(--pine-rgb),.24)}
 .cc-ribbon{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;font-weight:900;font-size:12px;border-radius:100px;padding:5px 13px;margin-bottom:9px}
-.cc-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:6px}
+.cc-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.cc-titles{flex:1;min-width:0}
+.cc-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+/* stylised card face: brand-coloured illustration, not the issuer artwork */
+.cc-art{flex:none;width:98px;aspect-ratio:1.586;border-radius:10px;position:relative;overflow:hidden;background:linear-gradient(138deg,var(--a1),var(--a2) 92%);box-shadow:0 6px 16px rgba(30,43,37,.26);color:#fff}
+@media(max-width:480px){.cc-art{width:78px;border-radius:8px}}
+.cc-art .a-sheen{position:absolute;inset:0;background:linear-gradient(116deg,rgba(255,255,255,.26),rgba(255,255,255,0) 46%)}
+.cc-art .a-chip{position:absolute;top:27%;inset-inline-start:10%;width:20%}
+.cc-art .a-nfc{position:absolute;top:27%;inset-inline-start:34%;width:9%}
+.cc-art .a-lbl{position:absolute;top:8%;inset-inline-end:9%;font-size:9px;font-weight:900;letter-spacing:.2px;color:rgba(255,255,255,.95);max-width:58%;text-align:left;line-height:1.1}
+@media(max-width:480px){.cc-art .a-lbl{font-size:7.5px}}
+.cc-art .a-dots{position:absolute;bottom:11%;inset-inline-start:10%;font-size:9px;font-weight:800;letter-spacing:1.6px;color:rgba(255,255,255,.72)}
+@media(max-width:480px){.cc-art .a-dots{font-size:7.5px;letter-spacing:1.1px}}
 .cc-name{font-weight:900;font-size:clamp(16px,3.4vw,18px);color:var(--pine-darker)}
 .cc-issuer{background:var(--sage-tint);color:var(--pine-deep);font-weight:800;font-size:11.5px;border-radius:100px;padding:3px 11px}
-.cc-fit{background:rgba(47,145,105,.14);color:var(--go);font-weight:900;font-size:11.5px;border-radius:100px;padding:3px 11px;margin-inline-start:auto}
+.cc-fit{background:rgba(47,145,105,.14);color:var(--go);font-weight:900;font-size:11.5px;border-radius:100px;padding:3px 11px}
 .cc-net{background:var(--sage-tint);border-radius:12px;padding:10px 13px;margin:2px 0 11px;font-size:13px;font-weight:800;color:var(--pine-darker);line-height:1.55}
 .cc-net b{font-variant-numeric:tabular-nums}
 .cc-net .pos{color:var(--go)} .cc-net .neg{color:var(--red)}
@@ -419,7 +431,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 
   <div id="cards"></div>
 
-  <div class="updated">עודכן: אוגוסט 2026, על בסיס מקורות 2025-2026. תנאי כרטיסים (אחוזים, תקרות ודמי כרטיס) משתנים תדיר, לאימות מול המנפיק לפני הצטרפות. המחשבון נותן אומדן לפי אחוז קאשבק מייצג ותקרה, לא חישוב מדויק. הקאשבק הוא לרוב שובר זיכוי, לא מזומן לחשבון.</div>
+  <div class="updated">תמונות הכרטיסים כאן הן איור בצבעי המנפיק, לא עיצוב הכרטיס האמיתי. הן נועדו לעזור לזהות מהר, המראה בפועל משתנה.<br>עודכן: אוגוסט 2026, על בסיס מקורות 2025-2026. תנאי כרטיסים (אחוזים, תקרות ודמי כרטיס) משתנים תדיר, לאימות מול המנפיק לפני הצטרפות. המחשבון נותן אומדן לפי אחוז קאשבק מייצג ותקרה, לא חישוב מדויק. הקאשבק הוא לרוב שובר זיכוי, לא מזומן לחשבון.</div>
 
   <div class="cta-card">
     <div class="cta-emoji">💳</div>
@@ -457,7 +469,7 @@ const PROFILE=[
   {tag:'online',   label:'קונה אונליין ובחו"ל'}
 ];
 const CARDS=[
-  {id:'isracard-cb',name:'כרטיס קאשבק פלוס',issuer:'ישראכרט',
+  {id:'isracard-cb',art:{c1:'#27548f',c2:'#0e2446',label:'ישראכרט'},name:'כרטיס קאשבק פלוס',issuer:'ישראכרט',
    fee:'שנה ראשונה חינם, אחר כך כ-₪16 לחודש',
    cash:'1% על קניות (עד 1.35% מעל תקרה), תקרת החזר ₪400 בחודש',
    redeem:'שוברי זיכוי דיגיטליים לרשתות ולאתרים (לא כסף לחשבון), מעל מינימום צבירה',
@@ -466,7 +478,7 @@ const CARDS=[
    forwho:'מי שרוצה החזר קבוע על ההוצאות היומיומיות',
    link:{url:'https://www.isracard.co.il/',label:'לאתר ישראכרט'},
    fits:['highspend'],rate:0.01,cap:400,feeYr:192},
-  {id:'cal-cb',name:'כאל קאשבק (CashCal)',issuer:'כאל',
+  {id:'cal-cb',art:{c1:'#5766c4',c2:'#2a3179',label:'כאל'},name:'כאל קאשבק (CashCal)',issuer:'כאל',
    fee:'שנה ראשונה חינם, אחר כך כ-₪20 לחודש',
    cash:'1% עד ₪10,000 בחודש, 1.25%-1.5% מעל',
    redeem:'שוברי BuyMe אצל רשתות ובתי עסק נבחרים (לא כסף לחשבון)',
@@ -475,7 +487,7 @@ const CARDS=[
    forwho:'מי שמוציאה מעל ₪10,000 בחודש',
    link:{url:'https://www.cal-online.co.il/',label:'לאתר כאל'},
    fits:['highspend'],rate:0.01,cap:0,feeYr:239},
-  {id:'max-cb',name:'מקס בק (MAX Back)',issuer:'מקס',
+  {id:'max-cb',art:{c1:'#8e3fa0',c2:'#4c1d60',label:'max'},name:'מקס בק (MAX Back)',issuer:'מקס',
    fee:'שנה ראשונה חינם, אחר כך כ-₪16-20 לחודש (מבוטל מעל ₪5,000 הוצאה בחודש)',
    cash:'1% בשנה הראשונה, כ-0.75% אחר כך, תקרת החזר ₪400 בחודש',
    redeem:'זיכוי דרך אפליקציית מקס, מ-₪100 צבירה ומעלה (לא כסף לחשבון)',
@@ -483,7 +495,7 @@ const CARDS=[
    forwho:'לקוחות מקס שרוצים החזר בסיסי בלי דמי כרטיס',
    link:{url:'https://www.max.co.il/',label:'לאתר מקס'},
    fits:['fee0'],rate:0.0075,cap:400,feeYr:192,feeWaiveSpend:5000},
-  {id:'amex-cb',name:'אמריקן אקספרס קאשבק',issuer:'אמריקן אקספרס',
+  {id:'amex-cb',art:{c1:'#2f7fc4',c2:'#17548c',label:'AMEX'},name:'אמריקן אקספרס קאשבק',issuer:'אמריקן אקספרס',
    fee:'שנה ראשונה חינם, אחר כך כ-₪23-30 לחודש',
    cash:'עד 1.6% מעל תקרה, ו-2% על קניות בחו"ל',
    redeem:'זיכוי או שוברים דרך המנפיק (לא כסף לחשבון)',
@@ -492,7 +504,7 @@ const CARDS=[
    forwho:'מי שמוציאה הרבה וקונה בחו"ל או אונליין',
    link:{url:'https://www.americanexpress.co.il/',label:'לאתר אמריקן אקספרס'},
    fits:['highspend','online','travel'],rate:0.01,cap:0,feeYr:300},
-  {id:'bank-gold',name:'ויזה גולד בנקאי (למשל הפועלים)',issuer:'בנק',
+  {id:'bank-gold',art:{c1:'#c3a46a',c2:'#8a6d3c',label:'ויזה גולד'},name:'ויזה גולד בנקאי (למשל הפועלים)',issuer:'בנק',
    fee:'כ-₪215 בשנה',cash:'כ-1% החזר',
    redeem:'בדרך כלל זיכוי בחשבון או נקודות בנק (משתנה לפי בנק)',
    fx:'כ-3%.',travel:'ביטוח נסיעות כלול בכרטיס',
@@ -500,7 +512,7 @@ const CARDS=[
    forwho:'מי שרוצה ביטוח נסיעות מובנה במחיר סביר',
    link:{url:'https://www.bankhapoalim.co.il/',label:'לאתר הבנק'},
    fits:['travel'],rate:0.01,cap:0,feeYr:215},
-  {id:'amex-plat',name:'אמריקן אקספרס פלטינום',issuer:'אמריקן אקספרס',
+  {id:'amex-plat',art:{c1:'#8d949c',c2:'#474d54',label:'פלטינום'},name:'אמריקן אקספרס פלטינום',issuer:'אמריקן אקספרס',
    fee:'דמי כרטיס גבוהים (כרטיס פרימיום)',cash:'נקודות והטבות פרימיום',
    redeem:'נקודות למימוש בטיסות, מלונות והטבות מועדון',
    fx:'כ-2.5%.',travel:'ביטוח נסיעות מורחב וכניסה לטרקלינים',
@@ -508,7 +520,7 @@ const CARDS=[
    forwho:'מי שנוסעת הרבה לחו"ל ומנצלת הטבות פרימיום',
    link:{url:'https://www.americanexpress.co.il/',label:'לאתר אמריקן אקספרס'},
    fits:['travel'],rate:null},
-  {id:'fly-card',name:'FLY CARD',issuer:'ישראכרט',
+  {id:'fly-card',art:{c1:'#2f8f9e',c2:'#14515e',label:'FLY'},name:'FLY CARD',issuer:'ישראכרט',
    fee:'דמי כרטיס בהתאם למסלול',cash:'צבירת נקודות טיסה',
    redeem:'נקודות טיסה למימוש בכרטיסי טיסה ושדרוגים',
    fx:'כ-2.9%.',travel:'ביטוח נסיעות דרך מועדון הנוסע המתמיד',
@@ -539,6 +551,17 @@ function calcNet(c,M){ let mc=M*c.rate; if(c.cap) mc=Math.min(mc,c.cap); const a
   return {annual:Math.round(annual),fee:fee,net:Math.round(annual-fee)}; }
 function row(k,v,cls){ return '<div class="cc-row"><span class="cc-k">'+k+'</span><span class="cc-v'+(cls?' '+cls:'')+'">'+v+'</span></div>'; }
 
+function cardArt(c){
+  const a=c.art||{c1:'#5f7d6a',c2:'#2f4036',label:c.issuer};
+  return '<div class="cc-art" aria-hidden="true" style="--a1:'+a.c1+';--a2:'+a.c2+'">'+
+    '<span class="a-sheen"></span>'+
+    '<svg class="a-chip" viewBox="0 0 24 18"><rect x=".6" y=".6" width="22.8" height="16.8" rx="3" fill="#e9d09b"/>'+
+      '<path d="M8 .6v16.8M16 .6v16.8M.6 6h22.8M.6 12h22.8" stroke="#b5945a" stroke-width="1" fill="none"/></svg>'+
+    '<svg class="a-nfc" viewBox="0 0 12 16"><path d="M2.5 3.2a7 7 0 010 9.6M5.5 5.4a4 4 0 010 5.2M8.4 7.4a1.5 1.5 0 010 1.2" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.4" stroke-linecap="round"/></svg>'+
+    '<span class="a-lbl">'+a.label+'</span>'+
+    '<span class="a-dots">\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022</span>'+
+  '</div>';
+}
 function renderCards(){
   const host=$('#cards'); host.innerHTML='';
   const M=state.spend||0, anyOn=state.profile.size>0;
@@ -550,9 +573,9 @@ function renderCards(){
   arr.forEach(({c,s,n})=>{
     const isTop=c.id===topId, match=anyOn&&s>0;
     const card=document.createElement('div'); card.className='card cc'+(isTop?' top':(match?' match':''));
-    let head='<div class="cc-head"><span class="cc-name">'+c.name+'</span><span class="cc-issuer">'+c.issuer+'</span>';
+    let head='<div class="cc-head">'+cardArt(c)+'<div class="cc-titles"><div class="cc-name">'+c.name+'</div><div class="cc-tags"><span class="cc-issuer">'+c.issuer+'</span>';
     if(!isTop&&match) head+='<span class="cc-fit">✓ מתאים לך</span>';
-    head+='</div>';
+    head+='</div></div></div>';
     const ribbon=isTop?'<span class="cc-ribbon">🥇 '+(M>0?'הכי משתלם לך':'הכי מתאים לך')+'</span>':'';
     let net='';
     if(M>0){

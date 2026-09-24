@@ -535,14 +535,16 @@ const CARDS=[
    forwho:'מי שמוציאה מעל ₪10,000 בחודש',
    link:{url:'https://www.cal-online.co.il/',label:'לאתר כאל'},
    fits:['highspend'],rate:0.01,cap:0,feeYr:239},
-  {id:'max-cb',art:{c1:'#8e3fa0',c2:'#4c1d60',label:'max'},name:'מקס בק (MAX Back)',issuer:'מקס',
-   fee:'שנה ראשונה חינם, אחר כך כ-₪16-20 לחודש (מבוטל מעל ₪5,000 הוצאה בחודש)',
-   cash:'1% בשנה הראשונה, כ-0.75% אחר כך, תקרת החזר ₪400 בחודש',
-   redeem:'זיכוי דרך אפליקציית מקס, מ-₪100 צבירה ומעלה (לא כסף לחשבון)',
-   fx:'כ-3%.',travel:'לא כלול',perks:'מבצעי 1+1, הטבות מקס מומנטס',
-   forwho:'לקוחות מקס שרוצים החזר בסיסי בלי דמי כרטיס',
-   link:{url:'https://www.max.co.il/',label:'לאתר מקס'},
-   fits:[],rate:0.0075,cap:400,feeYr:192,feeWaiveSpend:5000},
+  {id:'max-cb',art:{c1:'#8e3fa0',c2:'#4c1d60',label:'max'},name:'מקס בק טוטאל (MAX Back Total)',issuer:'מקס',
+   fee:'פטור מדמי כרטיס בשנה הראשונה, אחר כך דמי כרטיס חודשיים לפי תעריפון מקס',
+   cash:'1% מההוצאה הופך לנקודות. תקרה קשיחה: עד 2,000 נקודות בשנה קלנדרית, ולא יותר מ-6,000 נקודות בכרטיס בכל רגע. בעסקאות מול מוסדות המדינה הצבירה נמוכה יותר: 0.5% בשנה הראשונה ו-0.375% מהשנה השנייה.',
+   redeem:'הכי גמיש שיש כאן: גיפט קארד מקס ביותר מ-100 רשתות, טיסות ומלונות ב-MAX Travel ו-SKYMAX, רשתות מזון ומשלוחים כולל Wolt, המרה לביטקוין דרך Bits of Gold, או העברה לחשבון חיסכון. אפשר לפצל בין האפשרויות, ומינימום המרה 100 נקודות.',
+   fx:'צבירה כפולה על עסקאות במט"ח, בחו"ל ובאונליין, בתוקף עד 12.11.2026 ובכפוף לתקנון. אפשר גם לפתוח חשבון מט"ח של מקס ולשלם בלי עמלות המרה.',
+   travel:'לא כלול',perks:'חופש הבחירה במימוש הוא היתרון האמיתי כאן, לא האחוז. מי שמחזיקה MAXBack ישן יכולה לשדרג לטוטאל בחינם.',
+   forwho:'מי שרוצה לבחור בכל פעם מחדש לאן הולך הכסף שחזר, ולא להיתקע בשובר לרשת אחת',
+   note:'שימי לב לתקרה השנתית: גם אם מוציאים הרבה, הצבירה נעצרת ב-2,000 נקודות בשנה קלנדרית. מעל הוצאה של כ-₪16,700 בחודש הכרטיס מפסיק להחזיר יותר.',
+   link:{url:'https://www.max.co.il/cards/max-back-total',label:'לעמוד הכרטיס במקס'},
+   fits:['online','travel'],rate:0.01,cap:0,capYr:2000,feeYr:192},
   {id:'amex-cb',art:{c1:'#2f7fc4',c2:'#17548c',label:'AMEX'},name:'אמריקן אקספרס Cashback Premium',issuer:'אמריקן אקספרס',
    fee:'שנה ראשונה חינם, אחר כך כ-₪23-30 לחודש',
    cash:'1% על הוצאה של עד ₪10,000 בחודש, ו-1.2% על מה שמעל (בשנה הראשונה). תקרת החזר ₪500 בחודש, ועד ₪6,000 בשנה.',
@@ -687,7 +689,7 @@ function score(c){ let s=0; state.profile.forEach(t=>{ if(c.fits.indexOf(t)>-1) 
 function hasValue(c){ return c.rate!=null || c.clubRate!=null; }
 function calcNet(c,M,CM){
   let cash=0;
-  if(c.rate!=null){ let mc=M*c.rate; if(c.cap) mc=Math.min(mc,c.cap); cash=mc*12; }
+  if(c.rate!=null){ let mc=M*c.rate; if(c.cap) mc=Math.min(mc,c.cap); cash=mc*12; if(c.capYr) cash=Math.min(cash,c.capYr); }
   let club=0;
   if(c.clubRate!=null){ const base=c.clubCapMo?Math.min(CM,c.clubCapMo):CM; club=base*c.clubRate*12; }
   let fee=c.feeYr||0;

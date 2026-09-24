@@ -241,12 +241,26 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .fee-toggle input{width:20px;height:20px;accent-color:var(--pine);flex:none;margin-top:1px;cursor:pointer}
 .fee-toggle span{font-size:13.5px;font-weight:800;color:var(--pine-darker);line-height:1.4}
 .fee-toggle small{display:block;font-weight:600;color:var(--ink-soft);font-size:12px;margin-top:2px}
-.cc.locked{opacity:.62;background:#f7f9f7}
+.club-q{margin-top:16px;background:var(--sage-tint);border-radius:16px;padding:15px 16px}
+.cq-lead{font-size:12.5px;font-weight:700;color:var(--ink-soft);line-height:1.5}
+.cq-ask{font-size:clamp(14px,3.2vw,16px);font-weight:800;color:var(--pine-darker);line-height:1.55;margin-top:7px}
+.cq-ask b{color:var(--pine);font-weight:900}
+.cq-why{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.55;margin-top:8px}
+.club-q .pchips{margin-top:12px}
+.cq-out{margin-top:11px;font-size:13.5px;font-weight:900;color:var(--pine-deep);text-align:center;min-height:19px}
+.cq-manual{margin-top:10px}
+.cq-manual summary{cursor:pointer;font-size:12px;font-weight:800;color:var(--pine);list-style:none}
+.cq-manual summary::-webkit-details-marker{display:none}
+.cq-manual summary:focus-visible{outline:2px solid var(--pine);outline-offset:2px;border-radius:6px}
+.tie-box{max-width:620px;margin:0 auto 16px;background:rgba(var(--pine-rgb),.09);border:1.5px solid rgba(var(--pine-rgb),.3);border-radius:16px;padding:15px 17px;font-size:13px;font-weight:700;color:var(--pine-deep);line-height:1.65}
+.tie-box b{color:var(--pine-darker);font-weight:900}
+opacity:.62;background:#f7f9f7}
 .cc.locked .cc-art{filter:grayscale(.75)}
 .cc-club{font-size:10.5px;font-weight:900;color:#fff;background:var(--pine);border-radius:100px;padding:3px 9px;white-space:nowrap}
 .cc-gate{margin-top:10px;font-size:12.5px;font-weight:800;line-height:1.5;border-radius:12px;padding:10px 13px;background:rgba(var(--pine-rgb),.08);color:var(--pine-deep)}
 .cc-gate.ok{background:rgba(47,145,105,.12);color:#2f6e55}
 .cc-warn{margin-top:11px;font-size:12px;font-weight:700;line-height:1.55;border-radius:12px;padding:10px 13px;background:rgba(var(--red-rgb),.09);border:1.5px solid rgba(var(--red-rgb),.26);color:#8f3a29}
+.cc-note{margin-top:11px;font-size:12px;font-weight:700;line-height:1.55;border-radius:12px;padding:10px 13px;background:rgba(var(--pine-rgb),.07);color:var(--pine-deep)}
 .cc-upto{font-size:11px;font-weight:700;opacity:.8}
 .lead-note{background:rgba(var(--red-rgb),.09);border:1.5px solid rgba(var(--red-rgb),.28);border-radius:14px;padding:13px 16px;margin-top:16px;font-size:13.5px;font-weight:700;color:var(--red);line-height:1.6}
 .lead-note b{color:var(--red)}
@@ -433,11 +447,19 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
       <label for="spend">הוצאה חודשית ממוצעת בכרטיס</label>
       <div class="input-shell"><span class="unit">₪</span><input id="spend" type="text" inputmode="numeric" placeholder="למשל 6000" aria-label="הוצאה חודשית בשקלים"></div>
     </div>
-    <div class="field">
-      <label for="clubSpend">מזה, כמה אפשר לקנות דרך המועדון בחודש?</label>
-      <div class="input-shell"><span class="unit">₪</span><input id="clubSpend" type="text" inputmode="numeric" placeholder="למשל 1500" aria-label="הוצאה חודשית דרך המועדון בשקלים"></div>
+    <div class="club-q">
+      <div class="cq-lead">ועכשיו השאלה השנייה, וזו זאת שקובעת אם כרטיס מועדון שווה לך:</div>
+      <div class="cq-ask">מתוך ההוצאה הזאת, <b>כמה הולך לסופר, לפארם, לביגוד, לצעצועים, למסעדות ולבילויים?</b></div>
+      <div class="cq-why">רק על הדברים האלה המועדונים נותנים הנחה, כי אלה הרשתות שהם עובדים איתן. על שכר דירה, חשבונות, דלק, גן וחוגים אין הנחת מועדון, אז זה לא נספר כאן.</div>
+      <div class="pchips" id="clubSeg"></div>
+      <div class="cq-out" id="clubOut"></div>
+      <details class="cq-manual"><summary>לדייק סכום בעצמי</summary>
+        <div class="field" style="margin-top:10px">
+          <label for="clubSpend">סכום חודשי ברשתות האלה</label>
+          <div class="input-shell"><span class="unit">₪</span><input id="clubSpend" type="text" inputmode="numeric" placeholder="למשל 1500" aria-label="הוצאה חודשית ברשתות המועדון בשקלים"></div>
+        </div>
+      </details>
     </div>
-    <div class="gloss" style="margin:12px auto 0">🎯 <b>למה יש שדה שני:</b> ההנחה של המועדון חלה רק על מה שבאמת קונים דרכו, ברשתות שהוא עובד איתן. אז כאן כותבים רק את מה שממילא קונים שם, לא את כל ההוצאה. מספר מנופח כאן ייתן לכרטיס המועדון ניצחון מזויף.</div>
     <label class="fee-toggle"><input type="checkbox" id="waive" checked><span>מחשבים לפי ביטול דמי כרטיס<small>מסומן כברירת מחדל, כי דמי כרטיס כמעט תמיד ניתנים לביטול בשיחת טלפון אחת למנפיק. שני חריגים: דמי חבר של מועדון חבר הם דמי חברות ולא ירדו, ובפליי קארד לרוב מציעים חצי הנחה ולא ביטול מלא.</small></span></label>
   </div>
 
@@ -446,6 +468,8 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
   <div class="gloss">ℹ️ <b>עמלת מט"ח</b> = תוספת שגובים על כל קנייה בחו"ל או בדולר, כולל קניות אונליין מאתרים בחו"ל. ככל שהיא נמוכה יותר, הכרטיס משתלם יותר לנוסעים ולקונים מחו"ל.</div>
 
   <div class="hint">הכרטיסים למטה, לפי כמה הם שווים לכם בשנה ↓</div>
+
+  <div class="tie-box" id="tieBox" hidden></div>
 
   <div id="cards"></div>
 
@@ -519,15 +543,16 @@ const CARDS=[
    forwho:'לקוחות מקס שרוצים החזר בסיסי בלי דמי כרטיס',
    link:{url:'https://www.max.co.il/',label:'לאתר מקס'},
    fits:[],rate:0.0075,cap:400,feeYr:192,feeWaiveSpend:5000},
-  {id:'amex-cb',art:{c1:'#2f7fc4',c2:'#17548c',label:'AMEX'},name:'אמריקן אקספרס קאשבק',issuer:'אמריקן אקספרס',
+  {id:'amex-cb',art:{c1:'#2f7fc4',c2:'#17548c',label:'AMEX'},name:'אמריקן אקספרס Cashback Premium',issuer:'אמריקן אקספרס',
    fee:'שנה ראשונה חינם, אחר כך כ-₪23-30 לחודש',
-   cash:'עד 1.6% מעל תקרה, ו-2% על קניות בחו"ל',
+   cash:'1% על הוצאה של עד ₪10,000 בחודש, ו-1.2% על מה שמעל (בשנה הראשונה). תקרת החזר ₪500 בחודש, ועד ₪6,000 בשנה.',
    redeem:'זיכוי או שוברים דרך המנפיק (לא כסף לחשבון)',
-   fx:'כ-2.5%. בנוסף, 2% קאשבק על קניות בחו"ל.',travel:'הטבת ביטוח נסיעות (בהפעלה מראש)',
-   perks:'שירות VIP, החזר גבוה בחו"ל ואונליין',
-   forwho:'מי שמוציאה הרבה וקונה בחו"ל או אונליין',
-   link:{url:'https://www.americanexpress.co.il/',label:'לאתר אמריקן אקספרס'},
-   fits:['highspend','online','travel'],rate:0.01,cap:0,feeYr:300},
+   fx:'כ-2.5%.',travel:'הטבת ביטוח נסיעות (בהפעלה מראש)',
+   perks:'שירות VIP, תקרת קאשבק גבוהה יחסית',
+   forwho:'מי שמוציאה הרבה ורוצה כסף בחזרה, לא נקודות',
+   note:'רק כרטיסי הקאשבק של אמריקן אקספרס מחזירים כסף. שאר הכרטיסים שלהם צוברים נקודות Membership Rewards, שממירים לטיסות, מלונות והטבות ברשתות, ולא לכסף. אם את לא בטוחה איזה כרטיס יש לך, זה בדיוק ההבדל שכדאי לבדוק.',
+   link:{url:'https://www.americanexpress.co.il/credit-cards/cashback',label:'לעמוד כרטיס הקאשבק'},
+   fits:['highspend','online','travel'],rate:0.01,cap:500,feeYr:300},
   {id:'bank-gold',art:{c1:'#c3a46a',c2:'#8a6d3c',label:'ויזה גולד'},name:'ויזה גולד בנקאי (למשל הפועלים)',issuer:'בנק',
    fee:'כ-₪215 בשנה',cash:'כ-1% החזר',
    redeem:'בדרך כלל זיכוי בחשבון או נקודות בנק (משתנה לפי בנק)',
@@ -542,6 +567,7 @@ const CARDS=[
    fx:'כ-2.5%.',travel:'ביטוח נסיעות מורחב וכניסה לטרקלינים',
    perks:'טרקלינים בשדות תעופה, ביטוח נסיעות מורחב, שירות פרימיום',
    forwho:'מי שנוסעת הרבה לחו"ל ומנצלת הטבות פרימיום',
+   note:'זה כרטיס נקודות, לא קאשבק. צוברים Membership Rewards וממירים אותן לטיסות, מלונות והטבות. הערך תלוי לגמרי בזה שבאמת ממשים אותן.',
    link:{url:'https://www.americanexpress.co.il/',label:'לאתר אמריקן אקספרס'},
    fits:['travel'],rate:null},
   {id:'fly-card',art:{c1:'#2f8f9e',c2:'#14515e',label:'FLY'},name:'FLY CARD',issuer:'ישראכרט',
@@ -616,7 +642,13 @@ const CARDS=[
 
 const $=s=>document.querySelector(s);
 const money=n=>new Intl.NumberFormat('he-IL',{maximumFractionDigits:0}).format(Math.round(n||0));
-const state={profile:new Set(),elig:new Set(),spend:0,clubSpend:0,waiveFee:true};
+const state={profile:new Set(),elig:new Set(),spend:0,clubSpend:0,clubFrac:null,waiveFee:true};
+const CLUBSEG=[
+  {f:0.80,label:'כמעט הכל'},
+  {f:0.50,label:'בערך חצי'},
+  {f:0.25,label:'חלק קטן'},
+  {f:0,   label:'כמעט כלום'}
+];
 
 function chipsInto(sel,list,store){
   const w=$(sel); if(!w) return; w.innerHTML='';
@@ -629,7 +661,27 @@ function chipsInto(sel,list,store){
     w.appendChild(b);
   });
 }
-function renderProfile(){ chipsInto('#echips',ELIG,state.elig); chipsInto('#pchips',PROFILE,state.profile); }
+function renderProfile(){ chipsInto('#echips',ELIG,state.elig); chipsInto('#pchips',PROFILE,state.profile); renderClubSeg(); }
+function renderClubSeg(){
+  const w=$('#clubSeg'); if(!w) return; w.innerHTML='';
+  CLUBSEG.forEach(o=>{
+    const on=state.clubFrac===o.f;
+    const b=document.createElement('button');
+    b.type='button'; b.className='pchip'+(on?' on':''); b.textContent=o.label;
+    b.setAttribute('aria-pressed',on?'true':'false');
+    b.onclick=()=>{
+      state.clubFrac=o.f;
+      state.clubSpend=Math.round((state.spend||0)*o.f);
+      const f=$('#clubSpend'); if(f) f.value=state.clubSpend||'';
+      renderAll();
+    };
+    w.appendChild(b);
+  });
+  const out=$('#clubOut'); if(!out) return;
+  if(!state.spend) out.textContent='קודם כותבים למעלה כמה מוציאים בחודש.';
+  else if(state.clubFrac===null&&!state.clubSpend) out.textContent='בוחרים אחת מהאפשרויות למעלה.';
+  else out.innerHTML='נחשב לפי <b>₪'+money(state.clubSpend)+' בחודש</b> ברשתות שהמועדון עובד איתן.';
+}
 function eligible(c){ return !c.needs || state.elig.has(c.needs); }
 function score(c){ let s=0; state.profile.forEach(t=>{ if(c.fits.indexOf(t)>-1) s++; }); return s; }
 function hasValue(c){ return c.rate!=null || c.clubRate!=null; }
@@ -661,23 +713,50 @@ function renderCards(){
   const M=state.spend||0, CM=state.clubSpend||0, anyOn=state.profile.size>0;
   const arr=CARDS.map((c,i)=>({c,i,s:score(c),ok:eligible(c),n:hasValue(c)?calcNet(c,M,CM):null}));
   // רק כרטיס שהיא זכאית לו יכול לזכות בסרט. אחרת מציעים לה משהו שהיא לא יכולה לקחת.
-  let topId=null;
-  if(M>0||CM>0){ let best=-1e9; arr.forEach(o=>{ if(o.ok&&o.n&&o.n.net>best){best=o.n.net; topId=o.c.id;} }); }
+  let topId=null, tied=[], tieMargin=0;
+  if(M>0||CM>0){
+    let best=-1e9; arr.forEach(o=>{ if(o.ok&&o.n&&o.n.net>best){best=o.n.net; topId=o.c.id;} });
+    // הפרש קטן הוא רעש, לא הכרעה. עד ₪150 בשנה או 10%, מה שגדול יותר.
+    if(topId!==null&&best>0){
+      tieMargin=Math.max(150,best*0.10);
+      tied=arr.filter(o=>o.ok&&o.n&&(best-o.n.net)<=tieMargin&&o.n.net>0).map(o=>o.c.id);
+    }
+  }
   else if(anyOn){ let best=0; arr.forEach(o=>{ if(o.ok&&o.s>best){best=o.s; topId=o.c.id;} }); }
+  const isTie=tied.length>1;
+  const tieBox=$('#tieBox');
+  if(tieBox){
+    if(isTie){
+      const names=arr.filter(o=>tied.indexOf(o.c.id)>-1).map(o=>o.c.name);
+      const nets=arr.filter(o=>tied.indexOf(o.c.id)>-1).map(o=>o.n.net);
+      const spread=Math.max.apply(null,nets)-Math.min.apply(null,nets);
+      tieBox.hidden=false;
+      const gap = spread<1
+        ? 'הם מחזירים <b>בדיוק אותו סכום</b>.'
+        : 'ההפרש בין הראשון לאחרון הוא ₪'+money(spread)+' בשנה, בערך ₪'+money(spread/12)+' בחודש.';
+      tieBox.innerHTML='<b>🤝 '+names.length+' כרטיסים כאן שווים כמעט אותו דבר.</b><br>'+
+        names.join(' · ')+'. '+gap+' '+
+        'זה לא הפרש שצריך להחליט לפיו, אז אל תבחרי לפי המספר. תבחרי לפי מה שבאמת שונה ביניהם: '+
+        '<b>איפה מממשים</b> (שובר לרשת מסוימת או זיכוי חופשי), <b>עמלת המט"ח</b> אם קונים מחו"ל, '+
+        'ו<b>מי שהבנקאות שלך כבר אצלו</b>, כי שם קל יותר לבטל דמי כרטיס ולקבל שירות.';
+    } else tieBox.hidden=true;
+  }
   arr.sort((a,b)=>{
     if(a.ok!==b.ok) return a.ok?-1:1;                       // זכאית קודם
     if(M>0||CM>0){ const an=a.n?a.n.net:-1e9, bn=b.n?b.n.net:-1e9; return bn-an||a.i-b.i; }
     return b.s-a.s||a.i-b.i;
   });
   arr.forEach(({c,s,ok,n})=>{
-    const isTop=c.id===topId, match=ok&&anyOn&&s>0;
+    const isTop=c.id===topId, inTie=isTie&&tied.indexOf(c.id)>-1, match=ok&&anyOn&&s>0;
     const card=document.createElement('div');
-    card.className='card cc'+(isTop?' top':(match?' match':''))+(ok?'':' locked');
+    card.className='card cc'+(isTop||inTie?' top':(match?' match':''))+(ok?'':' locked');
     let head='<div class="cc-head">'+cardArt(c)+'<div class="cc-titles"><div class="cc-name">'+c.name+'</div><div class="cc-tags"><span class="cc-issuer">'+c.issuer+'</span>';
     if(c.needs) head+='<span class="cc-club">מועדון</span>';
     if(!isTop&&match) head+='<span class="cc-fit">✓ מתאים לך</span>';
     head+='</div></div></div>';
-    const ribbon=isTop?'<span class="cc-ribbon">🥇 '+((M>0||CM>0)?'הכי משתלם לך':'הכי מתאים לך')+'</span>':'';
+    let ribbon='';
+    if(isTie&&inTie) ribbon='<span class="cc-ribbon">🤝 מהמשתלמים לך</span>';
+    else if(isTop) ribbon='<span class="cc-ribbon">🥇 '+((M>0||CM>0)?'הכי משתלם לך':'הכי מתאים לך')+'</span>';
     let gate='';
     if(c.needs&&!ok) gate='<div class="cc-gate">🔒 צריך זכאות: '+c.needsLbl+'. סמני את זה למעלה כדי שייכנס להשוואה.</div>';
     else if(c.needs) gate='<div class="cc-gate ok">✓ סימנת שאת זכאית: '+c.needsLbl+'</div>';
@@ -706,6 +785,7 @@ function renderCards(){
       row('✈️ ביטוח נסיעות',c.travel,(c.travel.indexOf('לא כלול')>-1)?'':'travel-yes')+
       row('⭐ הטבות',c.perks)+
       row('👤 למי מתאים',c.forwho);
+    if(c.note) rows+='<div class="cc-note">ℹ️ '+c.note+'</div>';
     if(c.warn) rows+='<div class="cc-warn">⚠️ '+c.warn+'</div>';
     card.innerHTML=ribbon+head+gate+net+rows+
       (c.link&&c.link.url?'<a class="cc-link" href="'+c.link.url+'" target="_blank" rel="noopener">'+c.link.label+' ←</a>':'');
@@ -718,6 +798,7 @@ function writeHash(){
   if(e.length) parts.push('e='+e.join(','));
   if(state.spend) parts.push('s='+state.spend);
   if(state.clubSpend) parts.push('c='+state.clubSpend);
+  if(state.clubFrac!==null) parts.push('f='+state.clubFrac);
   if(!state.waiveFee) parts.push('w=0');
   history.replaceState(null,'', parts.length?'#'+parts.join('&'):location.pathname+location.search);
 }
@@ -727,6 +808,7 @@ function readHash(){
   (q.get('e')||'').split(',').filter(Boolean).forEach(t=>state.elig.add(t));
   const s=q.get('s'); if(s){ state.spend=parseInt(s,10)||0; const el=$('#spend'); if(el&&state.spend) el.value=state.spend; }
   const cs=q.get('c'); if(cs){ state.clubSpend=parseInt(cs,10)||0; const el=$('#clubSpend'); if(el&&state.clubSpend) el.value=state.clubSpend; }
+  const cf=q.get('f'); if(cf!==null&&cf!=='') state.clubFrac=parseFloat(cf);
   if(q.get('w')==='0'){ state.waiveFee=false; }
   const wl=$('#waive'); if(wl) wl.checked=state.waiveFee;
 }
@@ -734,11 +816,13 @@ function renderAll(){ renderProfile(); renderCards(); writeHash(); }
 
 $('#spend').addEventListener('input',function(){
   const v=(this.value||'').replace(/[^0-9]/g,''); if(v!==this.value) this.value=v;
-  state.spend=v?parseInt(v,10):0; renderCards(); writeHash();
+  state.spend=v?parseInt(v,10):0;
+  if(state.clubFrac!==null){ state.clubSpend=Math.round(state.spend*state.clubFrac); const f=$('#clubSpend'); if(f) f.value=state.clubSpend||''; }
+  renderAll();
 });
 $('#clubSpend').addEventListener('input',function(){
   const v=(this.value||'').replace(/[^0-9]/g,''); if(v!==this.value) this.value=v;
-  state.clubSpend=v?parseInt(v,10):0; renderCards(); writeHash();
+  state.clubSpend=v?parseInt(v,10):0; state.clubFrac=null; renderAll();
 });
 $('#waive').addEventListener('change',function(){ state.waiveFee=this.checked; renderCards(); writeHash(); });
 $('#shareBtn').onclick=()=>{ writeHash(); const f=$('#linkField'); $('#actLink').hidden=false; f.value=location.href; f.focus(); f.select(); };

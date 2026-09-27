@@ -314,6 +314,10 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <button type="button" class="mode-btn active" id="sexF" role="tab">👩 אישה</button>
       <button type="button" class="mode-btn" id="sexM" role="tab">👨 גבר</button>
     </div>
+    <div class="mode-tg" role="tablist" style="margin-top:-9px">
+      <button type="button" class="mode-btn active" id="stEmp" role="tab">👔 שכיר/ה</button>
+      <button type="button" class="mode-btn" id="stSelf" role="tab">💼 עצמאי/ת</button>
+    </div>
     <div class="fields2">
       <div class="field">
         <label for="age">גיל היום</label>
@@ -338,21 +342,35 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       </div>
     </div>
     <div class="field" style="margin-top:12px">
-      <label for="sal">השכר המבוטח (חודשי, ברוטו)</label>
+      <label for="sal" id="salLbl">השכר המבוטח (חודשי, ברוטו)</label>
       <div class="input-shell"><span class="unit">₪</span><input id="sal" type="text" inputmode="numeric" value="12,000" placeholder="0" aria-label="השכר המבוטח"></div>
-      <div class="hint">זה השכר שממנו מפקידים בפועל. אם הוא נמוך מהברוטו האמיתי - גם הפנסיה וגם הכיסוי לאובדן כושר עבודה קטנים בהתאם, וזה שווה בדיקה.</div>
+      <div class="hint" id="salHint">זה השכר שממנו מפקידים בפועל. אם הוא נמוך מהברוטו האמיתי - גם הפנסיה וגם הכיסוי לאובדן כושר עבודה קטנים בהתאם, וזה שווה בדיקה.</div>
     </div>
-    <div class="tt-sub" style="margin-top:16px">אחוזי ההפקדה</div>
-    <div class="tt-grid">
-      <div class="tt-field"><label>עובד/ת - תגמולים (%)</label><div class="tt-cell"><input id="pEmp" inputmode="decimal" aria-label="הפקדת עובד"><span class="u suf">%</span></div></div>
-      <div class="tt-field"><label>מעסיק - תגמולים (%)</label><div class="tt-cell"><input id="pTag" inputmode="decimal" aria-label="הפקדת מעסיק"><span class="u suf">%</span></div></div>
-      <div class="tt-field"><label>מעסיק - פיצויים (%)</label><div class="tt-cell"><input id="pPit" inputmode="decimal" aria-label="פיצויים"><span class="u suf">%</span></div></div>
-      <div class="tt-field"><label>סך ההפקדה החודשית</label><div class="tt-cell"><span class="u">₪</span><span class="rowlbl" id="depSum" style="text-align:center;font-weight:900;color:var(--pine-deep)">0</span></div></div>
+    <div id="empOnly">
+      <div class="tt-sub" style="margin-top:16px">אחוזי ההפקדה</div>
+      <div class="tt-grid">
+        <div class="tt-field"><label>עובד/ת - תגמולים (%)</label><div class="tt-cell"><input id="pEmp" inputmode="decimal" aria-label="הפקדת עובד"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>מעסיק - תגמולים (%)</label><div class="tt-cell"><input id="pTag" inputmode="decimal" aria-label="הפקדת מעסיק"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>מעסיק - פיצויים (%)</label><div class="tt-cell"><input id="pPit" inputmode="decimal" aria-label="פיצויים"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>סך ההפקדה החודשית</label><div class="tt-cell"><span class="u">₪</span><span class="rowlbl" id="depSum" style="text-align:center;font-weight:900;color:var(--pine-deep)">0</span></div></div>
+      </div>
+      <label class="keren-tg" for="pitChk">
+        <input type="checkbox" id="pitChk" checked>
+        <span class="kt-t">לכלול את רכיב הפיצויים בחיסכון לפנסיה<small>אם פודים את הפיצויים בין עבודות, הכסף הזה לא יהיה שם בפרישה. מבטלים את הסימון כדי לראות את התמונה בלעדיו.</small></span>
+      </label>
     </div>
-    <label class="keren-tg" for="pitChk">
-      <input type="checkbox" id="pitChk" checked>
-      <span class="kt-t">לכלול את רכיב הפיצויים בחיסכון לפנסיה<small>אם פודים את הפיצויים בין עבודות, הכסף הזה לא יהיה שם בפרישה. מבטלים את הסימון כדי לראות את התמונה בלעדיו.</small></span>
-    </label>
+    <div id="selfOnly" hidden>
+      <div class="field" style="margin-top:14px">
+        <label for="depSelf">ההפקדה החודשית שלך לפנסיה</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="depSelf" type="text" inputmode="numeric" value="750" placeholder="0" aria-label="ההפקדה החודשית לפנסיה"></div>
+        <div class="hint" style="margin-bottom:14px">כעצמאית מפקידים סכום קבוע, לא אחוז משכר. בדוח זה מופיע ב"תנועות אחרונות". החוק מחייב הפקדה מינימלית לפי ההכנסה, ומעליה ההפקדה היא בחירה שלך.</div>
+      </div>
+      <div class="field">
+        <label for="income">ההכנסה החודשית שלך (ברוטו)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="" placeholder="0" aria-label="ההכנסה החודשית ברוטו"></div>
+        <div class="hint">לא חובה, אבל בלעדיה אין מול מה להשוות. ההכנסה האמיתית היא זו שקובעת כמה באמת חסר לך בפרישה ובאובדן כושר עבודה. בלי זה ההשוואה נעשית מול השכר הקובע, שהוא בדרך כלל נמוך מההכנסה.</div>
+      </div>
+    </div>
     <div class="tt-sub" style="margin-top:16px">דמי הניהול שלך (מהדוח)</div>
     <div class="tt-grid">
       <div class="tt-field"><label>מההפקדה (%)</label><div class="tt-cell"><input id="feeDep" inputmode="decimal" aria-label="דמי ניהול מההפקדה"><span class="u suf">%</span></div></div>
@@ -362,7 +380,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="tt-field"><label>עלות הכיסויים הביטוחיים (₪ לחודש)</label><div class="tt-cell"><span class="u">₪</span><input id="insCost" inputmode="numeric" aria-label="עלות הכיסויים הביטוחיים לחודש"></div></div>
       <div class="tt-field"><label>נטו שנכנס לחיסכון בכל חודש</label><div class="tt-cell"><span class="u">₪</span><span class="rowlbl" id="netDep" style="text-align:center;font-weight:900;color:var(--pine-deep)">0</span></div></div>
     </div>
-    <div class="cp-note">בקרן פנסיה חלק מההפקדה קונה את הכיסוי לאובדן כושר עבודה ולשאירים, ולכן הוא לא נכנס לחיסכון. הסכום מופיע בדוח (בדרך כלל "עלות כיסויים ביטוחיים"). כשהוא מוזן, התחזית מדויקת יותר.</div>
+    <div class="cp-note">בקרן פנסיה חלק מההפקדה קונה את הכיסוי לאובדן כושר עבודה ולשאירים, ולכן הוא לא נכנס לחיסכון. הסכום מופיע בדוח (בדרך כלל "עלות כיסויים ביטוחיים" או "דמי סיכון"), לרוב לכל התקופה שבדוח ולא לחודש. כאן מזינים <b>לחודש</b>, וכשקוראים את הדוח אוטומטית ההמרה נעשית לבד.</div>
     <div class="cp-note">התקרה שהחוק מרשה: 6% מההפקדה ו-0.5% מהצבירה בשנה. בקרנות ברירת המחדל משלמים הרבה פחות, ואת שני המספרים האלה כמעט תמיד אפשר להוריד בשיחה אחת.</div>
     <div class="tt-sub" style="margin-top:16px">אובדן כושר עבודה</div>
     <div class="tt-grid">
@@ -619,7 +637,7 @@ const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n
 const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
 const SKEY='rl_pension_v1';
 const DEF={
-  sex:'f', age:35, retAge:65, bal:150000, extraBal:0, sal:12000,
+  sex:'f', status:'emp', depSelf:750, income:0, age:35, retAge:65, bal:150000, extraBal:0, sal:12000,
   pEmp:6, pTag:6.5, pPit:8.33, pit:true,
   feeDep:2, feeAcc:0.25, ins:0,
   okPct:75, okAmt:0,
@@ -636,11 +654,12 @@ function project(feeDep,feeAcc){
   const rm=Math.pow(1+Math.max(netY,-0.9),1/12)-1;
   const gm=Math.pow(1+Math.max(S.growth,-90)/100,1/12)-1;
   const rate=(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
-  let bal=S.bal+S.extraBal, sal=S.sal, dep=0;
+  const self=S.status==='self';
+  let bal=S.bal+S.extraBal, sal=S.sal, base=self?S.depSelf:0, dep=0;
   for(let i=0;i<n;i++){
-    dep=Math.max(sal*rate*(1-feeDep/100)-S.ins,0);
+    dep=Math.max((self?base:sal*rate)*(1-feeDep/100)-S.ins,0);
     bal=bal*(1+rm)+dep;
-    sal*=(1+gm);
+    sal*=(1+gm); base*=(1+gm);
   }
   return {cap:bal, finalSal:sal, n:n};
 }
@@ -661,17 +680,18 @@ function calc(){
   const bench=project(S.bFeeDep,S.bFeeAcc);
   const ann=mine.cap/coef;
   const yrs=Math.max(S.retAge-S.age,0);
-  const repl=S.sal>0?(ann/S.sal*100):0;
+  const baseInc=(S.status==='self'&&S.income>0)?S.income:S.sal;
+  const repl=baseInc>0?(ann/baseInc*100):0;
   const replThen=mine.finalSal>0?(ann/mine.finalSal*100):0;
 
   document.getElementById('annNum').innerHTML=money(ann)+'<small> ₪</small>';
   document.getElementById('annSub').textContent='במונחי היום, מגיל '+money(S.retAge)+' ולכל החיים';
   document.getElementById('capNum').textContent=money(mine.cap)+' ₪';
   document.getElementById('replNum').textContent=Math.round(repl)+'%';
-  document.getElementById('replSub').textContent='מהשכר שלך היום ('+Math.round(replThen)+'% מהשכר הצפוי אז)';
+  document.getElementById('replSub').textContent=(S.status==='self'&&S.income<=0?'מהשכר הקובע שבדוח, לא מההכנסה שלך':'מההכנסה שלך היום')+' ('+Math.round(replThen)+'% מהצפוי אז)';
   document.getElementById('yrsNum').textContent=money(yrs);
   document.getElementById('yrsSub').textContent=money(mine.n)+' הפקדות חודשיות';
-  const gross=S.sal*(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
+  const gross=S.status==='self'?S.depSelf:S.sal*(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
   document.getElementById('depSum').textContent=money(gross);
   document.getElementById('netDep').textContent=money(Math.max(gross*(1-S.feeDep/100)-S.ins,0));
 
@@ -721,7 +741,7 @@ function calc(){
   const okBase=S.okAmt>0?S.okAmt:S.sal*S.okPct/100;
   document.getElementById('okNum').textContent=money(okBase)+' ₪';
   document.getElementById('okBasis').textContent=S.okAmt>0?'לפי הסכום שמופיע בדוח שלך':'לפי '+S.okPct+'% מהשכר המבוטח';
-  const okGap=Math.max(S.sal-okBase,0);
+  const okGap=Math.max(baseInc-okBase,0);
   document.getElementById('okGap').textContent=money(okGap)+' ₪';
   const oi=document.getElementById('okInsight');
   if(okBase<=0){
@@ -729,7 +749,7 @@ function calc(){
     oi.innerHTML='לא הוזן כיסוי לאובדן כושר עבודה. אם באמת אין כיסוי, זה הדבר הראשון לבדוק, כי הוא מגן על ההכנסה שממנה הכל מתחיל.';
   }else{
     oi.className='insight';
-    oi.innerHTML='אם לא תוכל/י לעבוד, יגיעו כ-<b>'+money(okBase)+' ₪</b> בחודש, ויחסרו '+money(okGap)+' ₪ מהשכר של היום. בתקופה כזו גם ההפקדות לפנסיה ממשיכות דרך הקרן, וזה בדיוק מה שהכיסוי הזה קונה.';
+    oi.innerHTML='אם לא תוכל/י לעבוד, יגיעו כ-<b>'+money(okBase)+' ₪</b> בחודש, ויחסרו '+money(okGap)+' ₪ מההכנסה של היום. בתקופה כזו גם ההפקדות לפנסיה ממשיכות דרך הקרן, וזה בדיוק מה שהכיסוי הזה קונה.';
   }
 
   /* ── the gap to target ── */
@@ -772,26 +792,38 @@ function applyAll(){
   document.getElementById('retHint').textContent=S.sex==='f'
     ? 'גיל הפרישה לנשים עלה בהדרגה ל-65. מי שנולדה לפני 1965 - הגיל שלה נמוך יותר, אפשר לעדכן כאן.'
     : 'גיל הפרישה לגברים הוא 67. אפשר לעדכן אם מתכננים לפרוש בגיל אחר.';
+  const self=S.status==='self';
+  document.getElementById('stEmp').classList.toggle('active',!self);
+  document.getElementById('stSelf').classList.toggle('active',self);
+  document.getElementById('empOnly').hidden=self;
+  document.getElementById('selfOnly').hidden=!self;
+  document.getElementById('salLbl').textContent=self?'השכר הקובע לנכות ולשאירים (חודשי)':'השכר המבוטח (חודשי, ברוטו)';
+  document.getElementById('salHint').innerHTML=self
+    ?'כעצמאית זה לא השכר שממנו מפקידים אלא השכר שעליו מחושבים הכיסויים הביטוחיים. בדוח הוא מופיע בדיוק בשם הזה, והוא נגזר מההפקדות ומההכנסה המדווחת.'
+    :'זה השכר שממנו מפקידים בפועל. אם הוא נמוך מהברוטו האמיתי - גם הפנסיה וגם הכיסוי לאובדן כושר עבודה קטנים בהתאם, וזה שווה בדיקה.';
+  setVal('depSelf',grp(Math.round(S.depSelf))); setVal('income',S.income?grp(Math.round(S.income)):'');
   setVal('age',S.age); setVal('retAge',S.retAge);
-  setVal('bal',grp(S.bal)); setVal('extraBal',grp(S.extraBal)); setVal('sal',grp(S.sal));
+  setVal('bal',grp(Math.round(S.bal))); setVal('extraBal',grp(Math.round(S.extraBal))); setVal('sal',grp(Math.round(S.sal)));
   setVal('pEmp',S.pEmp); setVal('pTag',S.pTag); setVal('pPit',S.pPit);
   document.getElementById('pitChk').checked=!!S.pit;
-  setVal('feeDep',S.feeDep); setVal('feeAcc',S.feeAcc); setVal('insCost',S.ins?grp(S.ins):'');
-  setVal('okPct',S.okPct); setVal('okAmt',S.okAmt?grp(S.okAmt):'');
-  setVal('target',grp(S.target));
+  setVal('feeDep',S.feeDep); setVal('feeAcc',S.feeAcc); setVal('insCost',S.ins?grp(Math.round(S.ins)):'');
+  setVal('okPct',S.okPct); setVal('okAmt',S.okAmt?grp(Math.round(S.okAmt)):'');
+  setVal('target',grp(Math.round(S.target)));
   setVal('aYield',S.yld); setVal('aGrowth',S.growth); setVal('aCoef',S.coef); setVal('aSide',S.side);
   setVal('bFeeDep',S.bFeeDep); setVal('bFeeAcc',S.bFeeAcc);
 }
 function liveFormat(el){const s=el.selectionStart,old=el.value;el.value=grp(el.value);if(document.activeElement===el){const d=el.value.length-old.length;try{el.setSelectionRange(Math.max(s+d,0),Math.max(s+d,0));}catch(e){}}}
-const MONEYF=['bal','extraBal','sal','target','okAmt','insCost'];
+const MONEYF=['bal','extraBal','sal','target','okAmt','insCost','depSelf','income'];
 [['age','age'],['retAge','retAge'],['bal','bal'],['extraBal','extraBal'],['sal','sal'],
- ['pEmp','pEmp'],['pTag','pTag'],['pPit','pPit'],['feeDep','feeDep'],['feeAcc','feeAcc'],['insCost','ins'],
+ ['pEmp','pEmp'],['pTag','pTag'],['pPit','pPit'],['feeDep','feeDep'],['feeAcc','feeAcc'],['insCost','ins'],['depSelf','depSelf'],['income','income'],
  ['okPct','okPct'],['okAmt','okAmt'],['target','target'],
  ['aYield','yld'],['aGrowth','growth'],['aCoef','coef'],['aSide','side'],
  ['bFeeDep','bFeeDep'],['bFeeAcc','bFeeAcc']].forEach(function(p){
   const el=document.getElementById(p[0]);if(!el)return;
   el.addEventListener('input',function(){if(MONEYF.indexOf(p[0])>-1)liveFormat(el);S[p[1]]=num(el.value);calc();});
 });
+document.getElementById('stEmp').onclick=function(){S.status='emp';applyAll();calc();};
+document.getElementById('stSelf').onclick=function(){S.status='self';applyAll();calc();};
 document.getElementById('pitChk').addEventListener('change',function(){S.pit=this.checked;calc();});
 document.getElementById('sexF').onclick=function(){S.sex='f';if(S.retAge===67)S.retAge=65;if(S.coef===202)S.coef=212;applyAll();calc();};
 document.getElementById('sexM').onclick=function(){S.sex='m';if(S.retAge===65)S.retAge=67;if(S.coef===212)S.coef=202;applyAll();calc();};
@@ -825,82 +857,181 @@ function numsIn(str){
 }
 const SPECS=[
   {key:'feeDep', any:[['דמי ניהול','הפקד'],['דמי ניהול','פרמי'],['דמי ניהול','הפרשה']], not:['ממוצע'], lo:0.01, hi:6, lbl:'דמי ניהול מההפקדה', unit:'%'},
-  {key:'feeAcc', any:[['דמי ניהול','חיסכון'],['דמי ניהול','צביר'],['דמי ניהול','יתר'],['דמי ניהול','נכסים']], not:['ממוצע'], lo:0.01, hi:0.6, lbl:'דמי ניהול מהצבירה', unit:'%'},
-  {key:'bal',    any:[['יתרת הכספים'],['יתרה','צבור'],['יתרה','מצטבר'],['יתרת חשבון'],['יתרה לסוף'],['סך הכל חיסכון'],['צבירה']], not:['תחילת','דמי ניהול','דמי נהול','פתיחה'], lo:1000, hi:30000000, pickMax:true, lbl:'הצבירה בקרן', unit:'₪'},
-  {key:'sal',    any:[['שכר מבוטח'],['שכר קובע'],['שכר מדווח'],['שכר לחישוב'],['משכורת קובעת']], lo:2000, hi:300000, lbl:'השכר המבוטח', unit:'₪'},
+  {key:'feeAcc', any:[['דמי ניהול','צביר'],['דמי ניהול','חיסכון'],['דמי ניהול','יתר'],['דמי ניהול','נכסים']], not:['ממוצע'], lo:0.01, hi:0.6, lbl:'דמי ניהול מהצבירה', unit:'%'},
+  {key:'bal',    rival:['הפקדות','רווחים','משיכות','העברות','דמי ניהול','עלות'], any:[['יתרת הכספים'],['ערכי פדיון'],['יתרה','צבור'],['יתרה','מצטבר'],['יתרת חשבון'],['יתרה לסוף'],['סך הכל חיסכון'],['צבירה']], not:['תחילת','דמי ניהול','דמי נהול','פתיחה','שיעור'], lo:1000, hi:30000000, pickMax:true, lbl:'הצבירה בקרן', unit:'₪'},
+  {key:'sal',    any:[['שכר קובע'],['שכר מבוטח'],['שכר מדווח'],['שכר לחישוב'],['משכורת קובעת']], lo:2000, hi:300000, lbl:'השכר המבוטח / הקובע', unit:'₪'},
   {key:'coef',   any:[['מקדם המרה'],['מקדם קצבה'],['מקדם']], lo:50, hi:350, lbl:'מקדם המרה לקצבה', unit:''},
-  {key:'ins',    any:[['עלות ביטוח'],['עלות כיסוי'],['עלות הכיסויים'],['עלות ריסק'],['עלות הכיסוי']], lo:1, hi:20000, sum:true, abs:true, lbl:'עלות הכיסויים הביטוחיים', unit:'₪'},
-  {key:'okAmt',  any:[['קצבה','נכות'],['קצבת נכות'],['אובדן כושר'],['פנסיית נכות']], not:['שחרור'], lo:500, hi:200000, lbl:'קצבה חודשית במקרה נכות', unit:'₪'}
+  {key:'ins',    any:[['עלות כיסוי'],['עלות ביטוח'],['דמי סיכון'],['עלות הכיסויים'],['עלות ריסק']], lo:1, hi:50000, sum:true, abs:true, period:true, lbl:'עלות הכיסויים הביטוחיים', unit:'₪'},
+  {key:'okAmt',  any:[['פנסיה','נכות'],['קצבה','נכות'],['קצבת נכות'],['אובדן כושר']], not:['שחרור','עלות כיסוי','דמי סיכון'], rival:['שאירים','שארים','אלמן','יתום','זקנה','מוות','הורה'], lo:500, hi:200000, lbl:'קצבה חודשית במקרה נכות', unit:'₪'}
 ];
 const NUMRE=/-?\d[\d,]*(?:\.\d+)?/;
 function toNum(t){const a=parseFloat(String(t).replace(/,/g,''));return isNaN(a)?null:a;}
-function isDateish(t){return /\d{1,2}\/\d{1,2}\/\d{2,4}|^\d{1,2}\/\d{4}$/.test(t);}
-function hasAll(hay,words){return words.every(function(w){return hay.indexOf(w)>-1;});}
-/* pick the number that sits closest to the label inside the same row */
-function nearestNum(items,anchor,sp){
-  let best=null,bestD=1e9;
-  for(let j=0;j<items.length;j++){
-    if(j===anchor)continue;
-    const raw=items[j].s.trim();
-    if(isDateish(raw))continue;
-    const m=raw.match(NUMRE); if(!m)continue;
-    let v=toNum(m[0]); if(v===null)continue;
-    if(sp.abs)v=Math.abs(v);
-    if(v<sp.lo||v>sp.hi)continue;
-    const d=Math.abs(j-anchor);
-    if(d<bestD){bestD=d;best=v;}
-  }
-  return best;
+function isDateish(t){return /^\d{1,2}[\/.]\d{1,2}[\/.]\d{2,4}$/.test(t)||/^\d{1,2}\/\d{4}$/.test(t)||/\d{1,2}[\/.]\d{1,2}[\/.]\d{4}/.test(t);}
+function itemVal(raw,sp){
+  if(isDateish(raw))return null;
+  const m=raw.match(NUMRE); if(!m)return null;
+  let v=toNum(m[0]); if(v===null)return null;
+  if(sp.abs)v=Math.abs(v);
+  return (v>=sp.lo&&v<=sp.hi)?v:null;
 }
+function hasAll(hay,words){return words.every(function(w){return hay.indexOf(w)>-1;});}
 function anchorOf(items,words){
-  const last=words[words.length-1];
-  for(let j=0;j<items.length;j++)if(items[j].s.indexOf(last)>-1)return j;
-  for(let j=0;j<items.length;j++)if(items[j].s.indexOf(words[0])>-1)return j;
+  const toks=words.join(' ').split(/\s+/).filter(function(t){return t.length>1;});
+  for(let k=toks.length-1;k>=0;k--){
+    for(let j=0;j<items.length;j++)if(items[j].s.indexOf(toks[k])>-1)return j;
+  }
   return -1;
 }
-function scanLines(lines){
+/* the number belonging to a label is the closest one to it that no OTHER label in the row
+   is closer to. that is what keeps "דמי ניהול מהפקדה 1.6% ... מצבירה 0.15%" from swapping. */
+function pickForSpec(lines,i,sp,words){
+  const L=lines[i];
+  const a=anchorOf(L.items,words); if(a<0)return null;
+  const rivals=[];
+  SPECS.forEach(function(o){
+    if(o.key===sp.key)return;
+    const w=o.any.filter(function(ws){return hasAll(L.rtl,ws);})[0]; if(!w)return;
+    const ai=anchorOf(L.items,w); if(ai>=0&&ai!==a)rivals.push(ai);
+  });
+  (sp.rival||[]).forEach(function(w){
+    for(let j=0;j<L.items.length;j++)if(j!==a&&L.items[j].s.indexOf(w)>-1){rivals.push(j);break;}
+  });
+  /* right to left, the number comes just after its label - so look forward first */
+  let best=null,bestD=1e9,hasNum=false;
+  for(let pass=0;pass<2&&best===null;pass++){
+    for(let j=0;j<L.items.length;j++){
+      if(j===a)continue;
+      if(pass===0?j<a:j>a)continue;
+      const v=itemVal(L.items[j].s.trim(),sp); if(v===null)continue;
+      hasNum=true;
+      const d=Math.abs(j-a);
+      if(rivals.some(function(c){return Math.abs(j-c)<d;}))continue;
+      if(d<bestD){bestD=d;best=v;}
+    }
+    bestD=1e9;
+  }
+  if(best!==null)return best;
+  /* a table label with its value in the row underneath */
+  const ax=L.items[a].x;
+  const anyNum=L.items.some(function(it){return NUMRE.test(it.s)&&!isDateish(it.s.trim());});
+  const near=[i-1,i+1,i+2];
+  for(let n=0;n<near.length;n++){
+    const k=near[n]; if(k<0||k>=lines.length)continue;
+    for(let j=0;j<lines[k].items.length;j++){
+      const it=lines[k].items[j];
+      if(Math.abs(it.x-ax)>60)continue;
+      const v=itemVal(it.s.trim(),sp); if(v!==null)return v;
+    }
+  }
+  if(!anyNum){
+    for(let n=0;n<2;n++){
+      const k=near[n]; if(k<0||k>=lines.length)continue;
+      const vals=lines[k].items.map(function(it){return itemVal(it.s.trim(),sp);}).filter(function(v){return v!==null;});
+      if(vals.length)return Math.max.apply(null,vals);
+    }
+  }
+  return null;
+}
+/* the report's insurance cost is per reporting period, not per month */
+function periodMonths(lines){
+  const all=lines.map(function(l){return l.rtl;}).join(' ');
+  if(all.indexOf('מתחילת השנה')>-1){
+    const m=all.match(/(\d{1,2})[./](\d{1,2})[./](20\d{2})/);
+    if(m){const mm=parseInt(m[2],10);if(mm>=1&&mm<=12)return mm;}
+    return 12;
+  }
+  if(/רבעון|תקופת הדיווח/.test(all))return 3;
+  return 1;
+}
+function scanLines(lines,months){
   const found={};
   SPECS.forEach(function(sp){
     let vals=[];
     for(let i=0;i<lines.length;i++){
       const L=lines[i];
-      const words=sp.any.filter(function(ws){return hasAll(L.rtl,ws)||hasAll(L.ltr,ws);})[0];
+      const words=sp.any.filter(function(ws){return hasAll(L.rtl,ws);})[0];
       if(!words)continue;
       if(sp.not&&sp.not.some(function(w){return L.rtl.indexOf(w)>-1;}))continue;
-      const a=anchorOf(L.items,words);
-      const v=nearestNum(L.items,a<0?0:a,sp);
+      const v=pickForSpec(lines,i,sp,words);
       if(v===null)continue;
       vals.push(v);
       if(!sp.pickMax&&!sp.sum)break;
     }
     if(!vals.length)return;
-    if(sp.sum)found[sp.key]=vals.reduce(function(a,b){return a+b;},0);
-    else if(sp.pickMax)found[sp.key]=Math.max.apply(null,vals);
-    else found[sp.key]=vals[0];
+    let out=sp.sum?vals.reduce(function(a,b){return a+b;},0):(sp.pickMax?Math.max.apply(null,vals):vals[0]);
+    if(sp.period&&months>1)out=Math.round(out/months);
+    if(out>=sp.lo||!sp.period)found[sp.key]=out;
   });
   return found;
 }
-/* the deposits table: a row with a date and salary + the three components + a total.
+function rowDate(raw){
+  let best=0;
+  raw.forEach(function(t){
+    let m=t.match(/^(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})$/);
+    if(m)best=Math.max(best,parseInt(m[3],10)*100+parseInt(m[2],10));
+    m=t.match(/^(\d{1,2})\/(\d{4})$/);
+    if(m)best=Math.max(best,parseInt(m[2],10)*100+parseInt(m[1],10));
+  });
+  return best;
+}
+/* an employee's deposits table: salary + the three components + a total.
    accepted only when the components really add up to the total - that is the proof it was read right. */
 function scanDeposits(lines){
-  let hit=null;
+  let hit=null,hitDate=-1;
   lines.forEach(function(L){
     const raw=L.items.map(function(o){return o.s.trim();});
-    if(!raw.some(isDateish))return;
+    const d=rowDate(raw); if(!d)return;
     const nums=[];
-    raw.forEach(function(t){ if(isDateish(t))return; const m=t.match(NUMRE); if(!m)return; const v=toNum(m[0]); if(v!==null&&v>0)nums.push(v); });
+    raw.forEach(function(t){if(isDateish(t))return;const m=t.match(NUMRE);if(!m)return;const v=toNum(m[0]);if(v!==null&&v>0)nums.push(v);});
     if(nums.length<5)return;
     [nums.slice(0,5),nums.slice(0,5).slice().reverse(),nums.slice(-5),nums.slice(-5).slice().reverse()].forEach(function(t){
       const sal=t[0],e=t[1],g=t[2],pt=t[3],tot=t[4];
       if(!(sal>2000&&sal<300000))return;
       if(!(tot>0&&tot<sal))return;
       if(Math.abs(e+g+pt-tot)>Math.max(3,tot*0.02))return;
-      const pe=e/sal*100, pg=g/sal*100, pp=pt/sal*100;
+      const pe=e/sal*100,pg=g/sal*100,pp=pt/sal*100;
       if(pe<2||pe>10||pg<2||pg>12||pp<2||pp>12)return;
-      hit={sal:sal,pEmp:Math.round(pe*100)/100,pTag:Math.round(pg*100)/100,pPit:Math.round(pp*100)/100};
+      if(d>=hitDate){hitDate=d;hit={sal:sal,pEmp:Math.round(pe*100)/100,pTag:Math.round(pg*100)/100,pPit:Math.round(pp*100)/100};}
     });
   });
   return hit;
+}
+/* a self-employed report: one flat monthly deposit, no employer columns */
+function looksSelf(lines){
+  return lines.some(function(L){
+    return L.rtl.indexOf('עצמאי')>-1 && (L.rtl.indexOf('מעמד')>-1||L.rtl.indexOf('מעסיק')>-1||rowDate(L.items.map(function(o){return o.s.trim();}))>0);
+  });
+}
+function scanBirth(lines){
+  for(let i=0;i<lines.length;i++){
+    if(lines[i].rtl.indexOf('תאריך לידה')<0)continue;
+    const m=lines[i].rtl.match(/(\d{1,2})[\/.](\d{1,2})[\/.](19\d{2}|20\d{2})/);
+    if(!m)continue;
+    const d=new Date(parseInt(m[3],10),parseInt(m[2],10)-1,parseInt(m[1],10));
+    const age=(Date.now()-d.getTime())/(365.2425*24*3600*1000);
+    if(age>15&&age<75)return Math.floor(age);
+  }
+  return null;
+}
+function scanSex(lines){
+  for(let i=0;i<lines.length;i++){
+    const t=lines[i].rtl;
+    if(t.indexOf('מין')<0&&t.indexOf('מגדר')<0)continue;
+    if(t.indexOf('נקבה')>-1)return 'f';
+    if(t.indexOf('זכר')>-1)return 'm';
+  }
+  return null;
+}
+function scanSelfDeposit(lines){
+  let v=null,d0=-1;
+  lines.forEach(function(L){
+    const raw=L.items.map(function(o){return o.s.trim();});
+    const d=rowDate(raw); if(!d)return;
+    let mx=0;
+    raw.forEach(function(t){if(isDateish(t))return;const m=t.match(NUMRE);if(!m)return;const n=toNum(m[0]);if(n!==null&&n>=100&&n<=50000)mx=Math.max(mx,n);});
+    if(mx&&d>=d0){d0=d;v=mx;}
+  });
+  return v;
 }
 async function readReport(file){
   const stat=document.getElementById('upStat');
@@ -922,7 +1053,7 @@ async function readReport(file){
         const y=Math.round(it.transform[5]/3)*3;
         (rowsByY[y]=rowsByY[y]||[]).push({x:it.transform[4],s:it.str});
       });
-      Object.keys(rowsByY).forEach(function(y){
+      Object.keys(rowsByY).map(Number).sort(function(a,b){return b-a;}).forEach(function(y){
         const r=rowsByY[y];
         const sorted=r.slice().sort(function(a,b){return b.x-a.x;});
         const rtl=sorted.map(function(o){return o.s;}).join(' ');
@@ -937,16 +1068,27 @@ async function readReport(file){
   if(textLen<200){
     stat.className='up-stat err';stat.textContent='בקובץ הזה כמעט אין טקסט, כנראה דוח סרוק כתמונה. אפשר למלא את השדות ידנית למטה, זה לוקח דקה.';return;
   }
-  const f=scanLines(lines);
+  const months=periodMonths(lines);
+  const f=scanLines(lines,months);
   const dep=scanDeposits(lines);
-  if(dep){ if(!('sal' in f))f.sal=dep.sal; f.pEmp=dep.pEmp; f.pTag=dep.pTag; f.pPit=dep.pPit; }
+  const self=looksSelf(lines)&&!dep;
+  let selfDep=null;
+  if(self){ selfDep=scanSelfDeposit(lines); S.status='self'; if(selfDep)f.depSelf=selfDep; }
+  else if(dep){ S.status='emp'; if(!('sal' in f))f.sal=dep.sal; f.pEmp=dep.pEmp; f.pTag=dep.pTag; f.pPit=dep.pPit; }
+  const age=scanBirth(lines), sx=scanSex(lines);
+  if(sx&&sx!==S.sex){S.sex=sx;S.retAge=sx==='f'?65:67;S.coef=sx==='f'?212:202;}
+  if(age){S.age=age;}
   const keys=Object.keys(f);
-  if(keys.length){
+  if(keys.length||age||sx){
     keys.forEach(function(k){ S[k]=f[k]; });
     if('okAmt' in f && f.okAmt>0){/* keep okPct as is, the amount wins */}
     applyAll();calc();
   }
-  const extra=dep?'<div class="fnd-row"><span>✓ אחוזי ההפקדה (מטבלת ההפקדות)</span><span class="fr-v">'+dep.pEmp+'% · '+dep.pTag+'% · '+dep.pPit+'%</span></div>':'';
+  let extra=dep?'<div class="fnd-row"><span>✓ אחוזי ההפקדה (מטבלת ההפקדות)</span><span class="fr-v">'+dep.pEmp+'% · '+dep.pTag+'% · '+dep.pPit+'%</span></div>':'';
+  if(self)extra='<div class="fnd-row'+(selfDep?'':' miss')+'"><span>'+(selfDep?'✓':'•')+' עצמאי/ת - הפקדה חודשית</span><span class="fr-v">'+(selfDep?money(selfDep)+' ₪':'לא זוהתה, אפשר למלא ידנית')+'</span></div>'+extra;
+  if(age)extra+='<div class="fnd-row"><span>✓ גיל (מתאריך הלידה בדוח)</span><span class="fr-v">'+age+'</span></div>';
+  if(sx)extra+='<div class="fnd-row"><span>✓ מין, ולפיו גיל הפרישה</span><span class="fr-v">'+(sx==='f'?'אישה · 65':'גבר · 67')+'</span></div>';
+  if(('ins' in f)&&months>1)extra+='<div class="fnd-row"><span>עלות הכיסויים הומרה מהתקופה שבדוח</span><span class="fr-v">'+months+' חודשים</span></div>';
   const rowsHtml=SPECS.map(function(sp){
     const got=(sp.key in f);
     const v=got?(sp.unit==='₪'?money(f[sp.key])+' ₪':(f[sp.key]+(sp.unit?' '+sp.unit:''))):'לא זוהה, אפשר למלא ידנית';

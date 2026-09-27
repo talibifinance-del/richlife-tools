@@ -270,6 +270,20 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .fee-row.mid{background:rgba(183,121,31,.10);color:#8a5a12}
 .fee-row.bad{background:rgba(var(--red-rgb),.08);color:#8f3a29}
 .fee-row .fr-s{flex-basis:100%;font-size:11.5px;font-weight:700;opacity:.9}
+/* provenance chips: what came from the report and what is still on you */
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:900;border-radius:100px;padding:2px 8px;margin-inline-start:7px;vertical-align:middle;white-space:nowrap}
+.chip-auto{background:rgba(var(--pine-rgb),.14);color:var(--pine-deep)}
+.chip-need{background:rgba(183,121,31,.14);color:#8a5a12}
+.chip-edit{background:#fff;color:var(--pine);border:1.2px solid rgba(var(--pine-rgb),.4)}
+.chip-assume{background:var(--sage-tint);color:var(--ink-soft)}
+.input-shell.need,.tt-cell.need{border-color:rgba(183,121,31,.5);border-style:dashed;background:rgba(183,121,31,.06)}
+.input-shell.auto,.tt-cell.auto{border-color:rgba(var(--pine-rgb),.4);background:rgba(var(--pine-rgb),.06)}
+.src-sum{border-radius:14px;padding:13px 15px;margin-bottom:14px;font-size:13px;font-weight:700;line-height:1.6;background:var(--sage-tint);color:var(--pine-darker)}
+.src-sum .ss-t{display:block;font-size:13.5px;font-weight:900;color:var(--pine-deep);margin-bottom:5px}
+.src-sum .ss-need{display:block;margin-top:7px;padding-top:7px;border-top:1px solid rgba(var(--pine-rgb),.18);color:#8a5a12}
+.src-sum .ss-need b{color:#8a5a12}
+.src-sum button{font-family:var(--font);font-size:12.5px;font-weight:900;color:#8a5a12;background:rgba(183,121,31,.12);border:0;border-radius:100px;padding:3px 10px;margin:3px 3px 0 0;cursor:pointer}
+.src-sum button:hover{background:rgba(183,121,31,.2)}
 /* gap block */
 .gap-grid{display:grid;gap:9px;margin-top:13px}
 .gap-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sage-tint);border-radius:12px;padding:12px 14px}
@@ -310,6 +324,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 
   <div class="card">
     <span class="sec-lbl">💼 הנתונים שלך</span>
+    <div class="src-sum" id="srcSum" hidden></div>
     <div class="mode-tg" role="tablist">
       <button type="button" class="mode-btn active" id="sexF" role="tab">👩 אישה</button>
       <button type="button" class="mode-btn" id="sexM" role="tab">👨 גבר</button>
@@ -784,6 +799,78 @@ function calc(){
   save();
 }
 
+/* ── where every number came from: the report, a default, or your own hand ── */
+const FIELDS=[
+  {id:'age',lbl:'גיל היום',kind:'report'},
+  {id:'retAge',lbl:'גיל פרישה',kind:'you'},
+  {id:'bal',lbl:'הצבירה בקרן',kind:'report'},
+  {id:'extraBal',lbl:'חיסכון פנסיוני נוסף',kind:'you'},
+  {id:'sal',lbl:'השכר שבדוח',kind:'report'},
+  {id:'depSelf',lbl:'ההפקדה החודשית',kind:'report',mode:'self'},
+  {id:'income',lbl:'ההכנסה החודשית שלך',kind:'you',mode:'self'},
+  {id:'pEmp',lbl:'אחוזי ההפקדה',kind:'report',mode:'emp'},
+  {id:'pTag',lbl:'אחוזי ההפקדה',kind:'report',mode:'emp',quiet:true},
+  {id:'pPit',lbl:'אחוזי ההפקדה',kind:'report',mode:'emp',quiet:true},
+  {id:'feeDep',lbl:'דמי ניהול מההפקדה',kind:'report'},
+  {id:'feeAcc',lbl:'דמי ניהול מהצבירה',kind:'report'},
+  {id:'insCost',lbl:'עלות הכיסויים הביטוחיים',kind:'report'},
+  {id:'okAmt',lbl:'קצבת נכות מהדוח',kind:'report'},
+  {id:'okPct',lbl:'שיעור הכיסוי',kind:'assume'},
+  {id:'target',lbl:'הקצבה שאת/ה רוצה',kind:'you'},
+  {id:'aCoef',lbl:'מקדם ההמרה',kind:'report'},
+  {id:'aYield',lbl:'תשואה',kind:'assume'},
+  {id:'aGrowth',lbl:'גדילת שכר',kind:'assume'},
+  {id:'aSide',lbl:'תשואה על החיסכון בצד',kind:'assume'},
+  {id:'bFeeDep',lbl:'רף השוואה',kind:'assume'},
+  {id:'bFeeAcc',lbl:'רף השוואה',kind:'assume'}
+];
+let SRC={}, readOnce=false;
+function labelFor(id){
+  const el=document.getElementById(id); if(!el)return null;
+  let l=document.querySelector('label[for="'+id+'"]');
+  if(!l){const w=el.closest('.tt-field');if(w){l=w.querySelector('label');if(l&&!l.htmlFor)l.htmlFor=id;}}
+  return l;
+}
+function shellOf(id){const el=document.getElementById(id);return el?el.closest('.input-shell')||el.closest('.tt-cell'):null;}
+function paintSources(){
+  FIELDS.forEach(function(f){
+    const l=labelFor(f.id), sh=shellOf(f.id); if(!l)return;
+    const old=l.querySelector('.chip'); if(old)old.remove();
+    if(sh)sh.classList.remove('need','auto');
+    const st=SRC[f.id];
+    let cls=null,txt=null;
+    if(f.kind==='assume'){cls='chip-assume';txt='הנחה';}
+    else if(st==='auto'){cls='chip-auto';txt='✓ מהדוח';if(sh)sh.classList.add('auto');}
+    else if(st==='edit'){cls='chip-edit';txt='מילאת ידנית';}
+    else if(readOnce&&f.kind==='report'){cls='chip-need';txt='למילוי ידני';if(sh)sh.classList.add('need');}
+    if(!cls)return;
+    const c=document.createElement('span');c.className='chip '+cls;c.textContent=txt;l.appendChild(c);
+  });
+  const box=document.getElementById('srcSum');
+  if(!readOnce){box.hidden=true;return;}
+  const self=S.status==='self';
+  const rel=FIELDS.filter(function(f){return f.kind==='report'&&!f.quiet&&(!f.mode||(f.mode==='self')===self);});
+  const got=rel.filter(function(f){return SRC[f.id]==='auto';});
+  const need=rel.filter(function(f){return SRC[f.id]!=='auto'&&SRC[f.id]!=='edit';});
+  const mine=rel.filter(function(f){return SRC[f.id]==='edit';});
+  let h='<span class="ss-t">✓ '+got.length+' מהדוח'+(mine.length?' · ✎ '+mine.length+' מילאת ידנית':'')+(need.length?' · ✋ '+need.length+' מחכים לך':'')+'</span>';
+  h+='כל שדה מסומן: <b>מהדוח</b> נקרא אוטומטית מהקובץ שהעלית, <b>למילוי ידני</b> עדיין מציג ברירת מחדל ולא את המספר שלך, ו<b>הנחה</b> הוא פרמטר של החישוב שאף דוח לא נותן.';
+  if(need.length){
+    h+='<span class="ss-need">✋ '+(need.length===1?'שדה אחד מחכה לך, ועד שימולא':'עוד '+need.length+' שדות מחכים לך, ועד שימולאו')+' התוצאה למטה מבוססת על ברירת מחדל:<br>'+
+       need.map(function(f){return '<button type="button" data-go="'+f.id+'">'+f.lbl+'</button>';}).join('')+'</span>';
+  }else{
+    h+='<span class="ss-need" style="color:var(--pine-deep)">הכל מולא. התוצאה למטה מבוססת על הנתונים שלך בלבד.</span>';
+  }
+  box.innerHTML=h;box.hidden=false;
+  box.querySelectorAll('button[data-go]').forEach(function(b){
+    b.onclick=function(){
+      const id=b.getAttribute('data-go');
+      const d=document.getElementById(id).closest('details');if(d)d.open=true;
+      const el=document.getElementById(id);
+      el.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){el.focus();},350);
+    };
+  });
+}
 /* ── binding ── */
 function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function applyAll(){
@@ -811,6 +898,7 @@ function applyAll(){
   setVal('target',grp(Math.round(S.target)));
   setVal('aYield',S.yld); setVal('aGrowth',S.growth); setVal('aCoef',S.coef); setVal('aSide',S.side);
   setVal('bFeeDep',S.bFeeDep); setVal('bFeeAcc',S.bFeeAcc);
+  paintSources();
 }
 function liveFormat(el){const s=el.selectionStart,old=el.value;el.value=grp(el.value);if(document.activeElement===el){const d=el.value.length-old.length;try{el.setSelectionRange(Math.max(s+d,0),Math.max(s+d,0));}catch(e){}}}
 const MONEYF=['bal','extraBal','sal','target','okAmt','insCost','depSelf','income'];
@@ -820,7 +908,7 @@ const MONEYF=['bal','extraBal','sal','target','okAmt','insCost','depSelf','incom
  ['aYield','yld'],['aGrowth','growth'],['aCoef','coef'],['aSide','side'],
  ['bFeeDep','bFeeDep'],['bFeeAcc','bFeeAcc']].forEach(function(p){
   const el=document.getElementById(p[0]);if(!el)return;
-  el.addEventListener('input',function(){if(MONEYF.indexOf(p[0])>-1)liveFormat(el);S[p[1]]=num(el.value);calc();});
+  el.addEventListener('input',function(){if(MONEYF.indexOf(p[0])>-1)liveFormat(el);S[p[1]]=num(el.value);if(readOnce){SRC[p[0]]='edit';paintSources();}calc();});
 });
 document.getElementById('stEmp').onclick=function(){S.status='emp';applyAll();calc();};
 document.getElementById('stSelf').onclick=function(){S.status='self';applyAll();calc();};
@@ -1076,6 +1164,10 @@ async function readReport(file){
   if(self){ selfDep=scanSelfDeposit(lines); S.status='self'; if(selfDep)f.depSelf=selfDep; }
   else if(dep){ S.status='emp'; if(!('sal' in f))f.sal=dep.sal; f.pEmp=dep.pEmp; f.pTag=dep.pTag; f.pPit=dep.pPit; }
   const age=scanBirth(lines), sx=scanSex(lines);
+  readOnce=true; SRC={};
+  const MAP={feeDep:'feeDep',feeAcc:'feeAcc',bal:'bal',sal:'sal',coef:'aCoef',ins:'insCost',okAmt:'okAmt',depSelf:'depSelf',pEmp:'pEmp',pTag:'pTag',pPit:'pPit'};
+  Object.keys(f).forEach(function(k){if(MAP[k])SRC[MAP[k]]='auto';});
+  if(age)SRC.age='auto';
   if(sx&&sx!==S.sex){S.sex=sx;S.retAge=sx==='f'?65:67;S.coef=sx==='f'?212:202;}
   if(age){S.age=age;}
   const keys=Object.keys(f);
@@ -1096,6 +1188,7 @@ async function readReport(file){
   }).join('');
   document.getElementById('fndBox').innerHTML=rowsHtml+extra+'<div class="cp-note" style="margin-top:4px">אלה הנתונים שזוהו בדוח ומולאו למטה. חשוב לעבור עליהם ולתקן מה שלא מדויק, כי כל חברה מעצבת את הדוח אחרת.</div>';
   document.getElementById('fndBox').hidden=false;
+  paintSources();
   stat.className='up-stat';
   stat.textContent=keys.length?('זיהיתי '+keys.length+' נתונים מהדוח. מה שלא זוהה, אפשר למלא ידנית.'):'הדוח נקרא, אבל לא זיהיתי את השדות בפורמט הזה. אפשר למלא ידנית למטה.';
 }

@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- End Meta Pixel Code -->
+<title>מחשבון פנסיה · RichLife</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#5f7d6a; --pine-rgb:95,125,106; --pine-deep:#3e5448; --pine-darker:#2f4036;
+  --sage:#bcd3bf; --sage-rgb:188,211,191; --paper:#e9f1f2; --sage-tint:#eef4ef;
+  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f;
+  --font:'Heebo',system-ui,Arial,sans-serif;
+  --card:#fff; --shadow:0 10px 30px rgba(var(--pine-rgb),.10); --shadow-hi:0 18px 44px rgba(var(--pine-rgb),.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(14px,3vw,40px) clamp(12px,3vw,28px) 60px}
+.wrap{max-width:720px;margin:0 auto}
+.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:20px}
+.brand .avatar{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
+.brand .by-lead{font-weight:900;font-size:16px;color:var(--pine-darker)}
+.brand .by-sub{font-weight:700;font-size:12px;color:var(--pine)}
+.brand .by-sub b{color:var(--pine-deep)}
+.hero-title{text-align:center;margin-bottom:22px}
+.hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
+.hero-title h1 .em{color:var(--pine)}
+.hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:520px;margin-inline:auto}
+.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(var(--pine-rgb),.15),rgba(var(--sage-rgb),.34));border:1.5px solid rgba(var(--pine-rgb),.38);border-radius:14px;padding:12px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s,box-shadow .15s}
+.top-cta:hover{border-color:var(--pine);transform:translateY(-1px);box-shadow:0 8px 20px rgba(var(--pine-rgb),.16)}
+.top-cta .tc-txt{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center}
+.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-darker);white-space:nowrap}
+.savecheck{border:1.5px solid rgba(var(--pine-rgb),.28);background:linear-gradient(180deg,#fff, rgba(var(--sage-rgb),.14))}
+/* hero number badge */
+.sv-badge{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);border-radius:16px;padding:15px 18px;color:#fff;box-shadow:0 10px 26px rgba(var(--pine-rgb),.22)}
+.sv-badge .sv-lbl{font-size:12.5px;font-weight:700;opacity:.92}
+.sv-badge .sv-big{font-size:clamp(26px,7vw,34px);font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.sv-badge .sv-big small{font-size:15px;font-weight:800;opacity:.85}
+/* the test step */
+.sv-test{display:flex;gap:10px;align-items:flex-start;margin-top:13px;background:var(--sage-tint);border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.55}
+.sv-test .sv-ic{font-size:19px;flex:none;line-height:1.3}
+.sv-test b{color:var(--pine-darker);font-weight:900}
+/* two outcomes, each its own tinted row */
+.sv-outcomes{display:grid;gap:9px;margin-top:11px}
+.sv-out{display:flex;gap:10px;align-items:flex-start;border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;line-height:1.55}
+.sv-out .sv-ic{font-size:18px;flex:none;line-height:1.35}
+.sv-out.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-darker);border:1px solid rgba(var(--pine-rgb),.22)}
+.sv-out.ok b{color:var(--pine-deep);font-weight:900}
+.sv-out.warn{background:rgba(var(--red-rgb),.08);color:var(--red);border:1px solid rgba(var(--red-rgb),.22)}
+.sv-out.warn b{color:var(--red);font-weight:900}
+.sv-empty{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.6}
+/* coaching button (explicit colours so it never falls back to the browser's purple link) */
+.savecheck .sv-cta,.savecheck .sv-cta:link,.savecheck .sv-cta:visited{display:inline-block;margin-top:14px;font-family:var(--font);font-weight:900;font-size:14px;color:var(--pine-deep);text-decoration:none;background:var(--sage-tint);padding:11px 20px;border-radius:100px;transition:background .15s,transform .15s}
+.savecheck .sv-cta:hover{background:rgba(var(--pine-rgb),.14);transform:translateY(-1px)}
+.card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
+.card+.card{margin-top:16px}
+.sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
+.input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
+.input-shell .unit{padding-inline-start:13px;color:var(--ink-soft);font-weight:700;font-size:15px;flex:none}
+.input-shell input{font-family:var(--font);width:100%;border:none;background:transparent;outline:none;font-size:16px;font-weight:700;color:var(--ink);padding:12px 13px;min-width:0}
+.input-shell input:focus,.input-shell input:focus-visible{outline:none !important}
+.house{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.house .h-item label{font-size:12.5px}
+.house .full{grid-column:1/-1}
+.check{margin-top:14px;border-radius:14px;padding:15px 16px;text-align:center}
+.check.ok{background:rgba(var(--pine-rgb),.10);border:1.5px solid rgba(var(--pine-rgb),.3)}
+.check.over{background:rgba(var(--red-rgb),.08);border:1.5px solid rgba(var(--red-rgb),.3)}
+.check .c-top{font-size:13px;font-weight:700;color:var(--ink-soft)}
+.check .c-num{font-size:clamp(22px,5vw,28px);font-weight:900;margin:3px 0 2px}
+.check.ok .c-num{color:var(--pine-deep)} .check.over .c-num{color:#8f3a29}
+.check .c-msg{font-size:13px;font-weight:800;margin-top:4px}
+.check.ok .c-msg{color:var(--pine-deep)} .check.over .c-msg{color:#8f3a29}
+.rec{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin-top:10px}
+.rec b{color:var(--pine-deep)}
+.rec-house{text-align:center;background:var(--sage-tint);border-radius:14px;padding:15px 16px;margin-bottom:14px;font-size:14.5px;font-weight:700;color:var(--pine-darker);line-height:1.5}
+.rec-house b{color:var(--pine)}
+.rec-house .rh-num{display:block;font-size:clamp(26px,7vw,34px);font-weight:900;color:var(--pine-deep);margin-top:5px}
+.rec-house .rh-sub{font-size:12.5px;font-weight:700;color:var(--ink-soft);display:block;margin-top:3px}
+.incl-tg{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--pine-deep);background:var(--sage-tint);border-radius:12px;padding:12px 14px;margin-bottom:12px;line-height:1.4}
+.incl-tg input{width:19px;height:19px;accent-color:var(--pine);flex:none;cursor:pointer}
+.bills-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:9px}
+.rec-total{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding:13px 18px;background:linear-gradient(135deg,var(--pine),var(--pine-deep));border-radius:14px;box-shadow:0 8px 22px rgba(var(--pine-rgb),.22)}
+.rec-total .rt-lbl{font-size:14px;font-weight:900;color:#fff;line-height:1.3}
+.rec-total .rt-pc{display:block;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.82);margin-top:2px}
+.rec-total .rt-num{font-size:clamp(20px,4.6vw,26px);font-weight:900;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+#billsBox.hidden{display:none}
+.two-rec{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tr{border-radius:16px;padding:16px 13px;text-align:center;border:1.5px solid rgba(var(--pine-rgb),.22)}
+.tr.rent{background:linear-gradient(180deg,rgba(var(--sage-rgb),.32),rgba(var(--sage-rgb),.1))}
+.tr.bills{background:#fff}
+.tr-h{font-size:14.5px;font-weight:900;color:var(--pine-darker)}
+.tr-pc{font-size:11.5px;font-weight:800;color:var(--pine);margin-top:2px}
+.tr-num{font-size:clamp(23px,6.2vw,32px);font-weight:900;color:var(--pine-deep);margin-top:8px}
+.tr-eg{font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-top:7px;line-height:1.45}
+.cmp{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.cmp-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:12.5px;font-weight:700;border-radius:11px;padding:10px 13px;line-height:1.4}
+.cmp-row.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-deep)}
+.cmp-row.over{background:rgba(var(--red-rgb),.08);color:#8f3a29}
+.cmp-row .cr-name{font-weight:900}
+.cmp-row .cr-verdict{margin-inline-start:auto;font-weight:900;white-space:nowrap}
+.scen{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.sc{border-radius:16px;padding:15px 14px;border:1.5px solid rgba(var(--pine-rgb),.2)}
+.sc.home{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
+.sc.out{background:#fff}
+.sc-h{font-size:14.5px;font-weight:900;color:var(--pine-darker);text-align:center;margin-bottom:3px}
+.sc-sub{font-size:11px;font-weight:700;color:var(--ink-soft);text-align:center;margin-bottom:11px}
+.sc-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:700;color:var(--ink);padding:6px 0;border-top:1px solid rgba(var(--pine-rgb),.12)}
+.sc-row:first-of-type{border-top:none}
+.sc-row .pc{font-size:11px;font-weight:800;color:var(--ink-soft)}
+.sc-row b{white-space:nowrap}
+.sc-row.invest{background:rgba(var(--pine-rgb),.10);margin:6px -8px 0;padding:8px;border-radius:10px;border-top:none}
+.sc-row.invest b,.sc-row.invest span{color:var(--pine-deep);font-weight:900}
+.insight{margin-top:16px;font-size:clamp(15px,3.4vw,18px);font-weight:800;color:var(--pine-darker);background:var(--sage-tint);border-radius:14px;padding:16px 18px;text-align:center;line-height:1.55}
+.insight b{color:var(--pine);font-size:1.1em;font-weight:900}
+.note-tip{margin-top:12px;font-size:12px;font-weight:600;color:var(--ink-soft);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.15);border-radius:12px;padding:11px 13px;line-height:1.55}
+.cta-card{margin-top:18px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,4vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi)}
+.cta-card .cta-emoji{font-size:30px}
+.cta-card h3{font-size:clamp(17px,3.6vw,20px);font-weight:900;margin:6px 0 8px}
+.cta-card p{font-size:14px;font-weight:600;opacity:.94;max-width:460px;margin:0 auto 16px;line-height:1.55}
+.cta-btn{display:inline-block;font-family:var(--font);font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:15px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22);transition:transform .18s}
+.cta-btn:hover{transform:translateY(-2px)}
+.actions{margin-top:18px;text-align:center}
+.act-btn{font-family:var(--font);cursor:pointer;border:none;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;font-size:15.5px;font-weight:800;padding:15px 22px;border-radius:15px;box-shadow:0 12px 30px rgba(var(--pine-rgb),.30);transition:filter .15s;max-width:480px;width:100%}
+.act-btn:hover{filter:brightness(1.06)}
+.act-note{max-width:480px;margin:10px auto 0;font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.5}
+.act-link{max-width:480px;margin:12px auto 0;display:flex;gap:8px}
+.act-link input{flex:1;min-width:0;font-family:var(--font);font-size:13px;font-weight:600;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:11px;padding:11px 13px;direction:ltr;text-align:left}
+.act-link input:focus{outline:none !important}
+.act-link button{flex:none;font-family:var(--font);cursor:pointer;border:none;background:var(--pine-deep);color:#fff;font-size:14px;font-weight:800;padding:0 16px;border-radius:11px}
+.socials{display:flex;gap:12px;justify-content:center;margin-top:22px}
+.socials a{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);color:var(--pine-deep);box-shadow:var(--shadow);transition:all .18s}
+.socials a:hover{border-color:var(--pine);transform:translateY(-2px)}
+.socials svg{width:20px;height:20px}
+.copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:14px;font-weight:800;color:var(--pine-darker);line-height:1.6;max-width:520px;margin-inline:auto;text-align:center}
+.guide-nav{margin-bottom:18px;text-align:center}
+.gn-title{display:inline-block;font-family:var(--font);font-weight:900;font-size:12px;color:var(--pine);text-decoration:none;margin-bottom:9px}
+.gn-title.gn-static{color:var(--ink-soft);cursor:default}
+.gn-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
+.gn-tab:hover{border-color:var(--pine)}
+.gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+/* ── shared kit extras ── */
+.field .hint{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+.fields2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.fields2{grid-template-columns:1fr}}
+/* net hero */
+.net-hero{background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);border-radius:18px;padding:18px;text-align:center;color:#fff;box-shadow:0 12px 30px rgba(var(--pine-rgb),.24);margin-top:4px}
+.net-hero .nh-lbl{font-size:13px;font-weight:800;opacity:.9}
+.net-hero .nh-num{font-size:clamp(30px,8vw,44px);font-weight:900;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.net-hero .nh-num small{font-size:.42em;font-weight:800;opacity:.85}
+.net-hero .nh-sub{font-size:12.5px;font-weight:700;opacity:.9;margin-top:5px}
+/* deduction breakdown */
+.ded{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.ded-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sage-tint);border-radius:11px;padding:11px 14px}
+.ded-row .dr-l{font-size:13.5px;font-weight:800;color:var(--pine-darker)}
+.ded-row .dr-l small{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);margin-top:1px}
+.ded-row .dr-v{font-size:15.5px;font-weight:900;color:var(--red);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ded-row.plus .dr-v{color:var(--pine-deep)}
+.ded-row.gross{background:rgba(var(--pine-rgb),.1)}
+.ded-row.gross .dr-v{color:var(--pine-deep)}
+.emp-note{margin-top:12px;background:rgba(var(--pine-rgb),.08);border-radius:11px;padding:10px 13px;font-size:12px;font-weight:700;color:var(--pine-deep);line-height:1.55}
+.emp-note b{font-variant-numeric:tabular-nums}
+.disclaimer{display:flex;gap:9px;align-items:flex-start;background:rgba(183,121,31,.10);border:1px solid rgba(183,121,31,.28);color:#8a5a12;border-radius:12px;padding:11px 14px;margin-top:14px;font-size:12px;font-weight:600;line-height:1.55}
+/* editable tax tables */
+.tt-note{font-size:12px;font-weight:700;color:#8a5a12;background:rgba(183,121,31,.1);border-radius:10px;padding:9px 12px;margin-bottom:13px;line-height:1.5}
+.tt-sub{font-size:13px;font-weight:900;color:var(--pine-darker);margin:16px 0 8px}
+.tt-sub:first-of-type{margin-top:4px}
+.tt-head{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;font-weight:800;color:var(--ink-soft);padding:0 4px 4px}
+.tt-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:7px}
+.tt-cell{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px;transition:border-color .15s}
+.tt-cell:focus-within{border-color:var(--pine);background:#fff}
+.tt-cell .u{padding-inline-start:9px;color:var(--ink-soft);font-weight:700;font-size:12px;flex:none}
+.tt-cell .u.suf{padding-inline-start:0;padding-inline-end:9px}
+.tt-cell input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14px;color:var(--ink);padding:8px 8px;outline:none;text-align:center;font-variant-numeric:tabular-nums}
+.tt-cell .rowlbl{flex:1;font-size:11.5px;font-weight:700;color:var(--ink-soft);padding-inline-start:10px}
+.tt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tt-field{display:flex;flex-direction:column;gap:4px}
+.tt-field label{font-size:11.5px;font-weight:700;color:var(--ink-soft)}
+.tt-reset{margin-top:16px;border:1.5px dashed rgba(var(--pine-rgb),.4);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:9px 18px;cursor:pointer}
+.tt-reset:hover{background:var(--sage-tint)}
+details.tt-wrap>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px}
+details.tt-wrap>summary::-webkit-details-marker{display:none}
+details.tt-wrap .chev{margin-inline-start:auto;color:var(--ink-soft);transition:transform .25s;font-size:13px}
+details.tt-wrap[open] .chev{transform:rotate(180deg)}
+/* keren hishtalmut toggle */
+.keren-tg{display:flex;align-items:center;gap:11px;background:var(--sage-tint);border-radius:12px;padding:12px 14px;margin-top:12px;cursor:pointer;line-height:1.35}
+.keren-tg input{width:20px;height:20px;accent-color:var(--pine);flex:none;cursor:pointer;margin-top:1px}
+.keren-tg .kt-t{font-size:14px;font-weight:800;color:var(--pine-darker)}
+.keren-tg .kt-t small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+/* employee / self-employed mode toggle */
+.mode-tg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--sage-tint);border-radius:13px;padding:5px;margin:4px 0 15px}
+.mode-btn{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14.5px;color:var(--ink-soft);padding:11px 8px;border-radius:9px;cursor:pointer;transition:all .15s}
+.mode-btn.active{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
+.self-note{background:rgba(var(--pine-rgb),.08);border-radius:12px;padding:12px 14px;margin-top:13px;font-size:12.5px;font-weight:600;color:var(--pine-deep);line-height:1.55}
+.self-note b{font-weight:900}
+.save-note{background:linear-gradient(140deg,rgba(var(--pine-rgb),.14),rgba(var(--pine-rgb),.07));border:1px solid rgba(var(--pine-rgb),.2);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:13px;font-weight:700;color:var(--pine-deep);line-height:1.55}
+.save-note b{font-weight:900}
+.lbl-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.unit-tg{display:flex;gap:2px;background:var(--sage-tint);border-radius:8px;padding:2px}
+.unit-tg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:12px;color:var(--ink-soft);padding:3px 10px;border-radius:6px;cursor:pointer;min-width:30px}
+.unit-tg button.active{background:var(--pine);color:#fff}
+.mini-hint{font-size:11px;font-weight:700;color:var(--pine-deep);margin-top:5px;min-height:14px}
+.guide-note{background:var(--sage-tint);border-radius:12px;padding:13px 15px;margin-top:12px;font-size:12.5px;font-weight:600;color:var(--pine-darker);line-height:1.6}
+.guide-note .gt{font-size:13.5px;font-weight:900;color:var(--pine-deep);display:block;margin-bottom:7px}
+.guide-note .grow{display:block;margin-top:5px}
+.guide-note b{font-weight:900;color:var(--pine-deep)}
+.guide-note .ok{color:var(--pine)}
+.guide-note .mand{display:block;margin-top:9px;padding-top:8px;border-top:1px solid rgba(var(--pine-rgb),.15);font-size:11.5px;font-weight:600;color:var(--ink-soft)}
+/* credit-points builder */
+.cp-head{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;font-size:10.5px;font-weight:800;color:var(--ink-soft);padding:0 2px 5px}
+.cp-row{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;margin-bottom:7px;align-items:center}
+.cp-l{border:1.5px solid transparent;background:var(--sage-tint);border-radius:10px;font-family:var(--font);font-weight:700;font-size:12.5px;color:var(--ink);padding:9px 10px;min-width:0;outline:none}
+.cp-l:focus{border-color:var(--pine);background:#fff}
+.cp-mini{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px}
+.cp-mini:focus-within{border-color:var(--pine);background:#fff}
+.cp-mini .cp-u{font-size:10.5px;font-weight:700;color:var(--ink-soft);padding-inline:7px;flex:none}
+.cp-mini input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:13px;color:var(--ink);padding:8px 2px;outline:none;text-align:center;font-variant-numeric:tabular-nums}
+.cp-del{border:0;background:transparent;color:rgba(var(--pine-rgb),.5);font-size:17px;font-weight:900;cursor:pointer;line-height:1;padding:0}
+.cp-del:hover{color:var(--red)}
+.cp-add{margin-top:4px;border:1.5px dashed rgba(var(--pine-rgb),.4);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:8px 16px;cursor:pointer}
+.cp-add:hover{background:var(--sage-tint)}
+.cp-total{margin-top:12px;display:flex;justify-content:space-between;align-items:center;background:rgba(var(--pine-rgb),.1);border-radius:12px;padding:11px 15px}
+.cp-total .ct-l{font-size:14px;font-weight:900;color:var(--pine-darker)}
+.cp-total .ct-v{font-size:19px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
+.cp-note{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+.ded-row[hidden]{display:none}
+/* ── pension (מחשבון פנסיה) ── */
+/* progress bar */
+.bar{height:12px;background:var(--sage-tint);border-radius:100px;overflow:hidden;margin-top:14px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px;transition:width .35s}
+.bar>i.full{background:linear-gradient(90deg,var(--pine),var(--pine-deep))}
+.bar-note{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;font-weight:800;color:var(--ink-soft);margin-top:7px}
+/* status tiles */
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+@media(max-width:520px){.sum-grid{grid-template-columns:1fr}}
+.tile{background:var(--sage-tint);border-radius:14px;padding:12px;text-align:center}
+.tile .t-lbl{font-size:12px;font-weight:800;color:var(--ink-soft)}
+.tile .t-val{font-size:clamp(18px,4vw,22px);font-weight:900;color:var(--pine-darker);margin-top:3px}
+.tile .t-sub{font-size:11px;font-weight:700;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+.tile.good .t-val{color:var(--pine-deep)}
+.tile.gap .t-val{color:var(--amber)}
+.insight.soft{background:rgba(183,121,31,.10);color:var(--amber)}
+.insight.warn{background:rgba(var(--red-rgb),.09);color:var(--red)}
+/* PDF upload */
+.upl{border:1.5px dashed rgba(var(--pine-rgb),.42);background:var(--sage-tint);border-radius:15px;padding:18px 16px;text-align:center;transition:all .18s}
+.upl.hot{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.14)}
+.upl .up-ic{font-size:26px}
+.upl .up-t{font-size:14.5px;font-weight:900;color:var(--pine-darker);margin-top:5px}
+.upl .up-s{font-size:12px;font-weight:600;color:var(--ink-soft);margin-top:5px;line-height:1.55}
+.upl-btn{display:inline-block;margin-top:12px;font-family:var(--font);font-weight:900;font-size:14px;color:#fff;background:linear-gradient(135deg,var(--pine),var(--pine-deep));border:0;border-radius:100px;padding:12px 22px;cursor:pointer;box-shadow:0 8px 20px rgba(var(--pine-rgb),.22)}
+.upl-btn:hover{filter:brightness(1.06)}
+.upl input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.up-stat{margin-top:12px;font-size:12.5px;font-weight:800;color:var(--pine-deep);line-height:1.55}
+.up-stat.err{color:var(--red)}
+.fnd{margin-top:12px;display:grid;gap:7px}
+.fnd-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(var(--pine-rgb),.09);border-radius:11px;padding:10px 13px;font-size:13px;font-weight:800;color:var(--pine-darker)}
+.fnd-row .fr-v{font-variant-numeric:tabular-nums;color:var(--pine-deep);white-space:nowrap}
+.fnd-row.miss{background:rgba(183,121,31,.1);color:#8a5a12}
+.fnd-row.miss .fr-v{color:#8a5a12}
+/* fee traffic light */
+.fee-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:13px;font-weight:800;border-radius:12px;padding:12px 14px;line-height:1.45;margin-bottom:8px}
+.fee-row .fr-n{font-weight:900}
+.fee-row .fr-x{margin-inline-start:auto;font-weight:900;white-space:nowrap;font-variant-numeric:tabular-nums}
+.fee-row.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-deep)}
+.fee-row.mid{background:rgba(183,121,31,.10);color:#8a5a12}
+.fee-row.bad{background:rgba(var(--red-rgb),.08);color:#8f3a29}
+.fee-row .fr-s{flex-basis:100%;font-size:11.5px;font-weight:700;opacity:.9}
+/* gap block */
+.gap-grid{display:grid;gap:9px;margin-top:13px}
+.gap-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sage-tint);border-radius:12px;padding:12px 14px}
+.gap-row .gr-l{font-size:13.5px;font-weight:800;color:var(--pine-darker)}
+.gap-row .gr-l small{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+.gap-row .gr-v{font-size:16px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gap-row.hero{background:linear-gradient(135deg,var(--pine),var(--pine-deep))}
+.gap-row.hero .gr-l,.gap-row.hero .gr-v{color:#fff}
+.gap-row.hero .gr-l small{color:rgba(255,255,255,.82)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <img class="avatar" src="data:image/jpeg;base64,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" alt="טלי בנימינוב שרעבי">
+    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · פנסיה</div></div>
+  </div>
+
+  <div class="hero-title">
+    <h1>מחשבון <span class="em">פנסיה</span></h1>
+    <p>מעלים את הדוח הרבעוני, והמחשבון אומר אם דמי הניהול גבוהים, כמה הון וכמה קצבה חודשית מחכים בפרישה, מה מגיע באובדן כושר עבודה, וכמה צריך לחסוך בצד כדי להגיע לקצבה שרוצים.</p>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">📄 הדוח הרבעוני</span>
+    <div class="upl" id="dropZone">
+      <div class="up-ic">📤</div>
+      <div class="up-t">אפשר להעלות את הדוח הרבעוני (PDF)</div>
+      <div class="up-s">המחשבון קורא את הדוח כאן בדפדפן, בלי לשלוח אותו לשום מקום, ומנסה למלא את השדות לבד. כל חברה מעצבת את הדוח אחרת, ולכן חשוב לעבור על מה שזוהה ולתקן. דוח סרוק (תמונה) לא ניתן לקריאה - אותו ממלאים ידנית.</div>
+      <label class="upl-btn" for="pdfFile">בחירת קובץ PDF</label>
+      <input type="file" id="pdfFile" accept="application/pdf,.pdf" aria-label="העלאת דוח רבעוני PDF">
+      <div class="up-stat" id="upStat" hidden></div>
+    </div>
+    <div class="fnd" id="fndBox" hidden></div>
+    <div class="cp-note" style="margin-top:11px">אין דוח ביד? אפשר פשוט למלא את השדות למטה. מי שרוצה את הדוח - הוא יושב באזור האישי של קרן הפנסיה, או ב<b>מסלקה הפנסיונית</b>.</div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">💼 הנתונים שלך</span>
+    <div class="mode-tg" role="tablist">
+      <button type="button" class="mode-btn active" id="sexF" role="tab">👩 אישה</button>
+      <button type="button" class="mode-btn" id="sexM" role="tab">👨 גבר</button>
+    </div>
+    <div class="fields2">
+      <div class="field">
+        <label for="age">גיל היום</label>
+        <div class="input-shell"><input id="age" type="text" inputmode="decimal" value="35" placeholder="0" aria-label="גיל היום"></div>
+      </div>
+      <div class="field">
+        <label for="retAge">גיל פרישה</label>
+        <div class="input-shell"><input id="retAge" type="text" inputmode="decimal" value="65" placeholder="0" aria-label="גיל פרישה"></div>
+        <div class="hint" id="retHint">גיל הפרישה לנשים עלה בהדרגה ל-65. מי שנולדה לפני 1965 - הגיל שלה נמוך יותר, אפשר לעדכן כאן.</div>
+      </div>
+    </div>
+    <div class="fields2" style="margin-top:12px">
+      <div class="field">
+        <label for="bal">הצבירה בקרן היום</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="bal" type="text" inputmode="numeric" value="150,000" placeholder="0" aria-label="הצבירה בקרן היום"></div>
+        <div class="hint">בדוח זה "היתרה הצבורה" או "סך הכל צבירה".</div>
+      </div>
+      <div class="field">
+        <label for="extraBal">חיסכון פנסיוני נוסף</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="extraBal" type="text" inputmode="numeric" value="0" placeholder="0" aria-label="חיסכון פנסיוני נוסף"></div>
+        <div class="hint">קרנות או פוליסות מעבודות קודמות שלא מפקידים אליהן יותר.</div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label for="sal">השכר המבוטח (חודשי, ברוטו)</label>
+      <div class="input-shell"><span class="unit">₪</span><input id="sal" type="text" inputmode="numeric" value="12,000" placeholder="0" aria-label="השכר המבוטח"></div>
+      <div class="hint">זה השכר שממנו מפקידים בפועל. אם הוא נמוך מהברוטו האמיתי - גם הפנסיה וגם הכיסוי לאובדן כושר עבודה קטנים בהתאם, וזה שווה בדיקה.</div>
+    </div>
+    <div class="tt-sub" style="margin-top:16px">אחוזי ההפקדה</div>
+    <div class="tt-grid">
+      <div class="tt-field"><label>עובד/ת - תגמולים (%)</label><div class="tt-cell"><input id="pEmp" inputmode="decimal" aria-label="הפקדת עובד"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>מעסיק - תגמולים (%)</label><div class="tt-cell"><input id="pTag" inputmode="decimal" aria-label="הפקדת מעסיק"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>מעסיק - פיצויים (%)</label><div class="tt-cell"><input id="pPit" inputmode="decimal" aria-label="פיצויים"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>סך ההפקדה החודשית</label><div class="tt-cell"><span class="u">₪</span><span class="rowlbl" id="depSum" style="text-align:center;font-weight:900;color:var(--pine-deep)">0</span></div></div>
+    </div>
+    <label class="keren-tg" for="pitChk">
+      <input type="checkbox" id="pitChk" checked>
+      <span class="kt-t">לכלול את רכיב הפיצויים בחיסכון לפנסיה<small>אם פודים את הפיצויים בין עבודות, הכסף הזה לא יהיה שם בפרישה. מבטלים את הסימון כדי לראות את התמונה בלעדיו.</small></span>
+    </label>
+    <div class="tt-sub" style="margin-top:16px">דמי הניהול שלך (מהדוח)</div>
+    <div class="tt-grid">
+      <div class="tt-field"><label>מההפקדה (%)</label><div class="tt-cell"><input id="feeDep" inputmode="decimal" aria-label="דמי ניהול מההפקדה"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>מהצבירה (%)</label><div class="tt-cell"><input id="feeAcc" inputmode="decimal" aria-label="דמי ניהול מהצבירה"><span class="u suf">%</span></div></div>
+    </div>
+    <div class="tt-grid" style="margin-top:9px">
+      <div class="tt-field"><label>עלות הכיסויים הביטוחיים (₪ לחודש)</label><div class="tt-cell"><span class="u">₪</span><input id="insCost" inputmode="numeric" aria-label="עלות הכיסויים הביטוחיים לחודש"></div></div>
+      <div class="tt-field"><label>נטו שנכנס לחיסכון בכל חודש</label><div class="tt-cell"><span class="u">₪</span><span class="rowlbl" id="netDep" style="text-align:center;font-weight:900;color:var(--pine-deep)">0</span></div></div>
+    </div>
+    <div class="cp-note">בקרן פנסיה חלק מההפקדה קונה את הכיסוי לאובדן כושר עבודה ולשאירים, ולכן הוא לא נכנס לחיסכון. הסכום מופיע בדוח (בדרך כלל "עלות כיסויים ביטוחיים"). כשהוא מוזן, התחזית מדויקת יותר.</div>
+    <div class="cp-note">התקרה שהחוק מרשה: 6% מההפקדה ו-0.5% מהצבירה בשנה. בקרנות ברירת המחדל משלמים הרבה פחות, ואת שני המספרים האלה כמעט תמיד אפשר להוריד בשיחה אחת.</div>
+    <div class="tt-sub" style="margin-top:16px">אובדן כושר עבודה</div>
+    <div class="tt-grid">
+      <div class="tt-field"><label>שיעור הכיסוי מהשכר (%)</label><div class="tt-cell"><input id="okPct" inputmode="decimal" aria-label="שיעור כיסוי אובדן כושר עבודה"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>או קצבת נכות מהדוח (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="okAmt" inputmode="numeric" aria-label="קצבת נכות חודשית מהדוח"></div></div>
+    </div>
+    <div class="cp-note">בקרן פנסיה הכיסוי הוא עד 75% מהשכר המבוטח. אם בדוח מופיע סכום קצבת נכות חודשית - מזינים אותו, והוא זה שייחשב.</div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🎯 הקצבה שאת/ה רוצה</span>
+    <div class="field">
+      <label for="target">קצבה חודשית שהייתי רוצה לקבל בפרישה</label>
+      <div class="input-shell"><span class="unit">₪</span><input id="target" type="text" inputmode="numeric" value="12,000" placeholder="0" aria-label="קצבה חודשית יעד"></div>
+      <div class="hint">במונחים של היום. כלומר: איזה סכום חודשי היה מאפשר לך לחיות טוב אם היית פורשת מחר.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🧾 השורה התחתונה</span>
+    <div class="net-hero">
+      <div class="nh-lbl">💰 הקצבה החודשית הצפויה מהפנסיה</div>
+      <div class="nh-num" id="annNum">0<small> ₪</small></div>
+      <div class="nh-sub" id="annSub"></div>
+    </div>
+    <div class="sum-grid">
+      <div class="tile good"><div class="t-lbl">ההון שיצטבר בפרישה</div><div class="t-val" id="capNum">0 ₪</div><div class="t-sub">במונחי היום</div></div>
+      <div class="tile"><div class="t-lbl">אחוז מהשכר (תחלופה)</div><div class="t-val" id="replNum">0%</div><div class="t-sub" id="replSub"></div></div>
+      <div class="tile"><div class="t-lbl">שנים עד הפרישה</div><div class="t-val" id="yrsNum">0</div><div class="t-sub" id="yrsSub"></div></div>
+    </div>
+    <div class="insight" id="mainInsight"></div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">💸 דמי הניהול - גבוהים או נמוכים?</span>
+    <div id="feeRows"></div>
+    <div class="insight" id="feeInsight"></div>
+    <div class="cp-note" id="feeNote"></div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🛟 אובדן כושר עבודה</span>
+    <div class="gap-grid">
+      <div class="gap-row hero"><span class="gr-l">קצבה חודשית אם לא תוכל/י לעבוד<small id="okBasis"></small></span><span class="gr-v" id="okNum">0 ₪</span></div>
+      <div class="gap-row"><span class="gr-l">הפער מול השכר של היום<small>זה מה שצריך לכסות מהחיסכון הנזיל או מביטוח משלים</small></span><span class="gr-v" id="okGap">0 ₪</span></div>
+    </div>
+    <div class="insight" id="okInsight"></div>
+    <div class="cp-note">הכיסוי הזה מחושב מהשכר המבוטח, לא מהברוטו האמיתי, והוא נעצר בגיל הפרישה. אם יש בונוסים או שכר שלא מבוטח - הפער בפועל גדול יותר.</div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🧮 כמה לחסוך בצד כדי להגיע ליעד</span>
+    <div class="gap-grid" id="gapGrid">
+      <div class="gap-row"><span class="gr-l">הקצבה שאת/ה רוצה</span><span class="gr-v" id="gTarget">0 ₪</span></div>
+      <div class="gap-row"><span class="gr-l">הקצבה שהפנסיה נותנת</span><span class="gr-v" id="gHave">0 ₪</span></div>
+      <div class="gap-row hero"><span class="gr-l">הפער החודשי שצריך להשלים<small id="gGapSub"></small></span><span class="gr-v" id="gGap">0 ₪</span></div>
+      <div class="gap-row"><span class="gr-l">ההון שצריך להשלים בצד<small>כדי לייצר את הפער הזה כקצבה</small></span><span class="gr-v" id="gCap">0 ₪</span></div>
+      <div class="gap-row hero"><span class="gr-l">חיסכון חודשי בצד, מהיום<small id="gMonSub"></small></span><span class="gr-v" id="gMon">0 ₪</span></div>
+      <div class="gap-row"><span class="gr-l">או הפקדה חד פעמית היום<small>במקום ההפקדה החודשית</small></span><span class="gr-v" id="gOnce">0 ₪</span></div>
+    </div>
+    <div class="insight" id="gapInsight"></div>
+    <div class="cp-note">החיסכון הצדדי הוא לא עוד קרן פנסיה. בדרך כלל זה קרן השתלמות, גמל להשקעה או תיק השקעות, ולכל אחד מהם מיסוי, נזילות והטבות אחרות. מה נכון עבורך זו החלטה שנעשית לפי התמונה המלאה.</div>
+  </div>
+
+  <details class="card tt-wrap">
+    <summary><span class="sec-lbl" style="margin:0">⚙️ הנחות החישוב (ניתן לעדכן)</span><span class="chev">▾</span></summary>
+    <div style="margin-top:14px">
+      <div class="tt-note">כל המספרים במחשבון הם <b>ריאליים</b>, כלומר במונחי הכסף של היום, אחרי אינפלציה. כל שינוי כאן מעדכן מיד את התוצאה למעלה.</div>
+      <div class="tt-grid">
+        <div class="tt-field"><label>תשואה ריאלית שנתית בפנסיה (%)</label><div class="tt-cell"><input id="aYield" inputmode="decimal" aria-label="תשואה ריאלית בפנסיה"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>גדילת שכר ריאלית שנתית (%)</label><div class="tt-cell"><input id="aGrowth" inputmode="decimal" aria-label="גדילת שכר ריאלית"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>מקדם המרה לקצבה</label><div class="tt-cell"><input id="aCoef" inputmode="decimal" aria-label="מקדם המרה לקצבה"></div></div>
+        <div class="tt-field"><label>תשואה ריאלית על החיסכון בצד (%)</label><div class="tt-cell"><input id="aSide" inputmode="decimal" aria-label="תשואה ריאלית על חיסכון בצד"><span class="u suf">%</span></div></div>
+      </div>
+      <div class="cp-note">המקדם מופיע בדוח שלך והוא זה שקובע כמה קצבה מקבלים על כל שקל שנחסך. ככל שהוא גדול יותר, הקצבה קטנה יותר. בגיל 67 הוא בסביבות 200-205 ובגיל 65 בסביבות 210-215, והוא משתנה לפי מסלול, מין ובני זוג. רוצה לראות תמונה שמרנית יותר? מורידים את התשואה ל-3% ורואים מה קורה.</div>
+      <div class="tt-sub">דמי ניהול לצורך ההשוואה</div>
+      <div class="tt-grid">
+        <div class="tt-field"><label>מההפקדה - יעד (%)</label><div class="tt-cell"><input id="bFeeDep" inputmode="decimal" aria-label="דמי ניהול יעד מההפקדה"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>מהצבירה - יעד (%)</label><div class="tt-cell"><input id="bFeeAcc" inputmode="decimal" aria-label="דמי ניהול יעד מהצבירה"><span class="u suf">%</span></div></div>
+      </div>
+      <div class="cp-note">אלה דמי הניהול שאליהם משווים את שלך, ומהם מחושב "מה זה עולה לך". אפשר לעדכן אותם לפי מה שבאמת אפשר להשיג היום.</div>
+      <button class="tt-reset" id="asReset" type="button">↺ איפוס ההנחות</button>
+    </div>
+  </details>
+
+  <div class="card">
+    <div class="disclaimer"><span>💡</span><span>המחשבון נותן הערכה, לא הבטחה. התשואה בפועל משתנה משנה לשנה, גיל הפרישה ומקדם ההמרה יכולים להשתנות עד שתגיעי לשם, והחישוב לא מביא בחשבון תקופות בלי הפקדות, שינויי מסלול או מיסוי בפרישה. זו לא המלצה או ייעוץ פנסיוני אישי.</span></div>
+  </div>
+
+  <div class="cta-card">
+    <div class="cta-emoji">🌿</div>
+    <h3>הפנסיה היא רק חלק אחד מהתמונה</h3>
+    <p>לראות את המספר זה הצעד הראשון. להוריד את דמי הניהול, לבחור מסלול שמתאים לגיל שלך, ולבנות את החיסכון שישלים את הפער - זה בדיוק מה שאנחנו עושות יחד, צעד אחרי צעד.</p>
+    <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצה לעשות סדר בפנסיה שלך? בואו נדבר ←</a>
+  </div>
+
+  <div class="actions">
+    <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת החישוב</button>
+    <div class="act-note">✓ הקישור מכיל את כל החישוב שלך. שומרים אותו או שולחים בוואטסאפ. הכתובת הרגילה תמיד מתחילה נקי.</div>
+    <div class="act-link" id="actLink" hidden>
+      <input id="linkField" readonly aria-label="קישור החישוב">
+      <button id="copyBtn">העתקה</button>
+    </div>
+  </div>
+
+  <div class="socials">
+    <a href="https://www.instagram.com/tali_finance" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+    <a href="https://www.tiktok.com/@tali_beniaminov" target="_blank" rel="noopener" aria-label="טיקטוק"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M16.5 3c.3 2 1.6 3.6 3.5 3.9v2.4c-1.3.1-2.5-.3-3.6-1v6.1c0 3.2-2.6 5.6-5.7 5.4-2.7-.2-4.8-2.4-4.8-5.1 0-3 2.6-5.4 5.6-5.1v2.5c-.4-.1-.9-.2-1.3-.1-1.3.2-2.2 1.3-2 2.6.1 1.2 1.2 2.1 2.4 2 1.3-.1 2.2-1.2 2.2-2.5V3h3.3z"/></svg></a>
+  </div>
+
+  <div class="copyright">© 2026 כל הזכויות שמורות ל-RichLife ולטלי בנימינוב שרעבי. אין לשכפל, להפיץ או לעשות שימוש בתוכן זה ללא אישור מראש ובכתב.</div>
+
+</div>
+<!-- ═══════════════════════════════════════════════════════════════════
+     ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
+     מדביקים פעם אחת בתוך <head> של כל דף באתר.
+     אחרי הרצת setup.py השתמשו בקובץ output/a11y-snippet-ready.html
+
+     Zero-impact by default (Eden's directive, page-standard.md):
+     - Regular visitors see ONLY a small round a11y button (bottom-left).
+     - Focus outline appears via :focus-visible - keyboard users only.
+     - Skip-link hidden until keyboard-focused.
+     - All visual adjustments (text size / contrast / links / motion /
+       readable font) apply ONLY when chosen; saved in localStorage.
+     - The menu links to the accessibility statement (legal requirement).
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+  /* Keyboard-only focus - mouse users never see this */
+  :focus-visible { outline: 3px solid #4F46E5 !important; outline-offset: 2px !important; border-radius: 4px; }
+  /* Skip link - visible only on keyboard focus */
+  .brain-skip { position: fixed; top: -60px; right: 12px; z-index: 100000; background: #1E1B4B; color: #fff;
+    padding: 10px 18px; border-radius: 10px; font-size: 15px; text-decoration: none; transition: top .15s; }
+  .brain-skip:focus { top: 12px; }
+  /* Opt-in modes */
+  html.a11y-fs1 body { zoom: 1.12; } html.a11y-fs2 body { zoom: 1.25; }
+  html.a11y-contrast { filter: contrast(1.25); }
+  html.a11y-links a { text-decoration: underline !important; font-weight: 700 !important; }
+  html.a11y-nomotion *, html.a11y-nomotion *::before, html.a11y-nomotion *::after {
+    animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  html.a11y-font body, html.a11y-font body * { font-family: Arial, Helvetica, sans-serif !important; }
+  /* The button + menu */
+  #brain-a11y-btn { position: fixed; bottom: 18px; left: 18px; z-index: 99999; width: 44px; height: 44px;
+    border-radius: 50%; border: none; cursor: pointer; background: #1E1B4B; color: #fff;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(30,27,75,.35); padding: 0; }
+  #brain-a11y-btn:hover { background: #4F46E5; }
+  #brain-a11y-menu { position: fixed; bottom: 72px; left: 18px; z-index: 99999; background: #fff; color: #1E1B4B;
+    border-radius: 14px; box-shadow: 0 6px 30px rgba(30,27,75,.25); padding: 14px; width: 230px; display: none;
+    direction: rtl; text-align: right; font-family: Arial, sans-serif; font-size: 14px; }
+  #brain-a11y-menu.open { display: block; }
+  #brain-a11y-menu h2 { font-size: 15px; margin: 0 0 10px; }
+  #brain-a11y-menu button { display: block; width: 100%; margin: 4px 0; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid #E0E7FF; background: #F8FAFC; cursor: pointer; font-size: 13px; text-align: right; color: #1E1B4B; }
+  #brain-a11y-menu button[aria-pressed="true"] { background: #4F46E5; color: #fff; border-color: #4F46E5; }
+  #brain-a11y-menu a { display: block; margin-top: 10px; font-size: 12px; color: #4F46E5; }
+  /* polish: text fields show their OWN green focus ring (keeps ₪ / שנים visible), not the indigo box */
+  .input-shell input:focus, .input-shell input:focus-visible,
+  .goal-name:focus, .goal-name:focus-visible,
+  .act-link input:focus, .act-link input:focus-visible,
+  #linkField:focus, #linkField:focus-visible { outline: none !important; }
+</style>
+<script>
+(function () {
+  var MODES = [
+    ["fs", "הגדלת טקסט", 2],            // cycles: off → fs1 → fs2
+    ["contrast", "ניגודיות מוגברת", 1],
+    ["links", "הדגשת קישורים", 1],
+    ["nomotion", "עצירת אנימציות", 1],
+    ["font", "גופן קריא", 1]
+  ];
+  var KEY = "brain_a11y";
+
+  function state() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+  function apply(s) {
+    var h = document.documentElement;
+    h.classList.toggle("a11y-fs1", s.fs === 1); h.classList.toggle("a11y-fs2", s.fs === 2);
+    ["contrast", "links", "nomotion", "font"].forEach(function (m) { h.classList.toggle("a11y-" + m, !!s[m]); });
+  }
+
+  function build() {
+    if (document.getElementById("brain-a11y-btn")) return; // pasted twice - once is enough
+    // Skip link (target: <main> or first <h1>'s section)
+    if (!document.getElementById("brain-main")) {
+      var m = document.querySelector("main") || document.querySelector("h1");
+      if (m) m.id = m.id || "brain-main";
+    }
+    var skip = document.createElement("a");
+    skip.className = "brain-skip"; skip.href = "#" + ((document.querySelector("main,h1") || {}).id || "brain-main");
+    skip.textContent = "דילוג לתוכן"; document.body.prepend(skip);
+
+    var btn = document.createElement("button");
+    btn.id = "brain-a11y-btn"; btn.setAttribute("aria-label", "פתיחת תפריט נגישות");
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "brain-a11y-menu");
+    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="4.5" r="2.2" fill="currentColor"/><path d="M12 8c-3 0-5.5-.6-7-1l.5 2c1.5.5 3.5.8 5 .9v3.1l-2.3 6.2 1.9.8 2-5.5h-.2 2.2l2 5.5 1.9-.8L15.5 13V9.9c1.5-.1 3.5-.4 5-.9l.5-2c-1.5.4-4 1-7 1h-2z" fill="currentColor"/></svg>';
+
+    var menu = document.createElement("div");
+    menu.id = "brain-a11y-menu"; menu.setAttribute("role", "dialog"); menu.setAttribute("aria-label", "אפשרויות נגישות");
+    menu.innerHTML = "<h2>נגישות</h2>";
+    MODES.forEach(function (mode) {
+      var b = document.createElement("button");
+      b.textContent = mode[1]; b.dataset.mode = mode[0]; b.setAttribute("aria-pressed", "false");
+      b.onclick = function () {
+        var s = state();
+        if (mode[0] === "fs") { s.fs = ((s.fs || 0) + 1) % 3; b.setAttribute("aria-pressed", s.fs ? "true" : "false"); }
+        else { s[mode[0]] = !s[mode[0]]; b.setAttribute("aria-pressed", s[mode[0]] ? "true" : "false"); }
+        localStorage.setItem(KEY, JSON.stringify(s)); apply(s);
+      };
+      menu.appendChild(b);
+    });
+    var reset = document.createElement("button");
+    reset.textContent = "איפוס"; reset.onclick = function () { localStorage.removeItem(KEY); apply({});
+      menu.querySelectorAll("[aria-pressed]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); };
+    menu.appendChild(reset);
+    var link = document.createElement("a");
+    link.href = "https://lida.richlife.co.il/lida/negishut.html"; link.textContent = "הצהרת נגישות";
+    menu.appendChild(link);
+
+    // Permanent text link in the page footer (legal best practice: the statement
+    // must be reachable even if this widget fails to load elsewhere). Inherits
+    // the footer's own styling - visually just one more footer word.
+    var foot = document.querySelector("footer");
+    if (foot && !foot.querySelector('a[href*="negishut"]')) {
+      var fl = document.createElement("a");
+      fl.href = "https://lida.richlife.co.il/lida/negishut.html"; fl.textContent = "הצהרת נגישות";
+      fl.style.color = "inherit"; fl.style.marginRight = "6px";
+      foot.appendChild(document.createTextNode(" · "));
+      foot.appendChild(fl);
+    }
+
+    btn.onclick = function () {
+      var open = menu.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("open")) { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.focus(); }
+    });
+    document.body.appendChild(btn); document.body.appendChild(menu);
+
+    // Restore saved prefs + reflect on buttons
+    var s = state(); apply(s);
+    menu.querySelectorAll("[data-mode]").forEach(function (b) {
+      var m = b.dataset.mode;
+      b.setAttribute("aria-pressed", (m === "fs" ? !!s.fs : !!s[m]) ? "true" : "false");
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build);
+  else build();
+})();
+</script>
+<script>
+const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
+const money=v=>fmt.format(Math.round(+v||0));
+const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
+const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
+const SKEY='rl_pension_v1';
+const DEF={
+  sex:'f', age:35, retAge:65, bal:150000, extraBal:0, sal:12000,
+  pEmp:6, pTag:6.5, pPit:8.33, pit:true,
+  feeDep:2, feeAcc:0.25, ins:0,
+  okPct:75, okAmt:0,
+  target:12000,
+  yld:4, growth:1, coef:212, side:4,
+  bFeeDep:1, bFeeAcc:0.2
+};
+let S=JSON.parse(JSON.stringify(DEF));
+
+/* ── the projection ── */
+function project(feeDep,feeAcc){
+  const n=Math.min(Math.max(Math.round((S.retAge-S.age)*12),0),12*60);
+  const netY=(S.yld-feeAcc)/100;
+  const rm=Math.pow(1+Math.max(netY,-0.9),1/12)-1;
+  const gm=Math.pow(1+Math.max(S.growth,-90)/100,1/12)-1;
+  const rate=(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
+  let bal=S.bal+S.extraBal, sal=S.sal, dep=0;
+  for(let i=0;i<n;i++){
+    dep=Math.max(sal*rate*(1-feeDep/100)-S.ins,0);
+    bal=bal*(1+rm)+dep;
+    sal*=(1+gm);
+  }
+  return {cap:bal, finalSal:sal, n:n};
+}
+function pmtFor(capital,yearsRate,n){
+  if(n<=0)return capital;
+  const rm=Math.pow(1+yearsRate/100,1/12)-1;
+  if(Math.abs(rm)<1e-9)return capital/n;
+  return capital*rm/(Math.pow(1+rm,n)-1);
+}
+function pvFor(capital,yearsRate,n){
+  const rm=Math.pow(1+yearsRate/100,1/12)-1;
+  return capital/Math.pow(1+rm,Math.max(n,0));
+}
+
+function calc(){
+  const coef=Math.max(S.coef,1);
+  const mine=project(S.feeDep,S.feeAcc);
+  const bench=project(S.bFeeDep,S.bFeeAcc);
+  const ann=mine.cap/coef;
+  const yrs=Math.max(S.retAge-S.age,0);
+  const repl=S.sal>0?(ann/S.sal*100):0;
+  const replThen=mine.finalSal>0?(ann/mine.finalSal*100):0;
+
+  document.getElementById('annNum').innerHTML=money(ann)+'<small> ₪</small>';
+  document.getElementById('annSub').textContent='במונחי היום, מגיל '+money(S.retAge)+' ולכל החיים';
+  document.getElementById('capNum').textContent=money(mine.cap)+' ₪';
+  document.getElementById('replNum').textContent=Math.round(repl)+'%';
+  document.getElementById('replSub').textContent='מהשכר שלך היום ('+Math.round(replThen)+'% מהשכר הצפוי אז)';
+  document.getElementById('yrsNum').textContent=money(yrs);
+  document.getElementById('yrsSub').textContent=money(mine.n)+' הפקדות חודשיות';
+  const gross=S.sal*(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
+  document.getElementById('depSum').textContent=money(gross);
+  document.getElementById('netDep').textContent=money(Math.max(gross*(1-S.feeDep/100)-S.ins,0));
+
+  const mi=document.getElementById('mainInsight');
+  if(yrs<=0){
+    mi.className='insight soft';
+    mi.innerHTML='גיל הפרישה שהוזן לא מעל הגיל של היום, ולכן אין תקופת חיסכון לחשב. אפשר לעדכן את הגילים למעלה.';
+  }else if(repl<40){
+    mi.className='insight soft';
+    mi.innerHTML='בקצב הזה הקצבה תהיה <b>'+money(ann)+' ₪</b> בחודש, שזה כ-'+Math.round(repl)+'% מהשכר של היום. זה פער שמרגישים ביום־יום, וכדאי לטפל בו עכשיו כשיש '+money(yrs)+' שנים לעבוד איתן.';
+  }else if(repl<60){
+    mi.className='insight';
+    mi.innerHTML='בקצב הזה הקצבה תהיה <b>'+money(ann)+' ₪</b> בחודש, כ-'+Math.round(repl)+'% מהשכר של היום. זה בטווח הרגיל, ועדיין רחוק מהשכר עצמו. השאלה היא איזו קצבה באמת תרצי שם.';
+  }else{
+    mi.className='insight';
+    mi.innerHTML='בקצב הזה הקצבה תהיה <b>'+money(ann)+' ₪</b> בחודש, כ-'+Math.round(repl)+'% מהשכר של היום. זה מקום טוב. שווה לשמור עליו עם דמי ניהול נמוכים ומסלול שמתאים לגיל.';
+  }
+
+  /* ── fees ── */
+  const rows=[];
+  const fd=S.feeDep, fa=S.feeAcc;
+  let fdC='ok',fdT='נמוכים ביחס לשוק';
+  if(fd>3){fdC='bad';fdT='גבוהים';}else if(fd>1.5){fdC='mid';fdT='בינוניים';}
+  let faC='ok',faT='נמוכים ביחס לשוק';
+  if(fa>0.35){faC='bad';faT='גבוהים';}else if(fa>0.2){faC='mid';faT='בינוניים';}
+  rows.push('<div class="fee-row '+fdC+'"><span class="fr-n">דמי ניהול מההפקדה</span><span class="fr-x">'+fd+'% · '+fdT+'</span><span class="fr-s">התקרה בחוק 6%. כל הפקדה חודשית נכנסת קטנה בשיעור הזה.</span></div>');
+  rows.push('<div class="fee-row '+faC+'"><span class="fr-n">דמי ניהול מהצבירה</span><span class="fr-x">'+fa+'% · '+faT+'</span><span class="fr-s">התקרה בחוק 0.5% בשנה. זה החלק שנגבה מכל הכסף שנצבר, ולכן הוא היקר באמת לטווח ארוך.</span></div>');
+  document.getElementById('feeRows').innerHTML=rows.join('');
+
+  const diff=bench.cap-mine.cap;
+  const fi=document.getElementById('feeInsight');
+  if(diff>50){
+    fi.className='insight warn';
+    fi.innerHTML='דמי הניהול שלך היום עולים כ-<b>'+money(diff)+' ₪</b> מההון עד הפרישה, לעומת '+S.bFeeDep+'% ו-'+S.bFeeAcc+'%. במונחי קצבה זה כ-<b>'+money(diff/coef)+' ₪</b> פחות בכל חודש, לכל החיים.';
+  }else if(diff<-50){
+    fi.className='insight';
+    fi.innerHTML='דמי הניהול שלך טובים מרף ההשוואה, וזה מוסיף לך כ-<b>'+money(-diff)+' ₪</b> להון עד הפרישה. שווה לוודא פעם בשנה שהם לא זחלו למעלה.';
+  }else{
+    fi.className='insight';
+    fi.innerHTML='דמי הניהול שלך בדיוק בסביבת רף ההשוואה, ולכן אין כאן דליפה משמעותית.';
+  }
+  document.getElementById('feeNote').innerHTML=(fdC!=='ok'||faC!=='ok')
+    ? 'מה עושים עם זה: מתקשרים לקרן ומבקשים להשוות לדמי הניהול שמקבלים בקרנות ברירת המחדל, או עוברים לקרן אחרת (המעבר חינם ולא פוגע בזכויות). זו שיחה של עשר דקות שמשאירה אצלך כסף לכל החיים.'
+    : 'דמי הניהול כאן במקום טוב. בודקים אותם שוב פעם בשנה, ובמיוחד בכל החלפת מקום עבודה, כי אז לפעמים משתנים התנאים.';
+
+  /* ── disability ── */
+  const okBase=S.okAmt>0?S.okAmt:S.sal*S.okPct/100;
+  document.getElementById('okNum').textContent=money(okBase)+' ₪';
+  document.getElementById('okBasis').textContent=S.okAmt>0?'לפי הסכום שמופיע בדוח שלך':'לפי '+S.okPct+'% מהשכר המבוטח';
+  const okGap=Math.max(S.sal-okBase,0);
+  document.getElementById('okGap').textContent=money(okGap)+' ₪';
+  const oi=document.getElementById('okInsight');
+  if(okBase<=0){
+    oi.className='insight soft';
+    oi.innerHTML='לא הוזן כיסוי לאובדן כושר עבודה. אם באמת אין כיסוי, זה הדבר הראשון לבדוק, כי הוא מגן על ההכנסה שממנה הכל מתחיל.';
+  }else{
+    oi.className='insight';
+    oi.innerHTML='אם לא תוכל/י לעבוד, יגיעו כ-<b>'+money(okBase)+' ₪</b> בחודש, ויחסרו '+money(okGap)+' ₪ מהשכר של היום. בתקופה כזו גם ההפקדות לפנסיה ממשיכות דרך הקרן, וזה בדיוק מה שהכיסוי הזה קונה.';
+  }
+
+  /* ── the gap to target ── */
+  const gap=Math.max(S.target-ann,0);
+  const needCap=gap*coef;
+  const mon=pmtFor(needCap,S.side,mine.n);
+  const once=pvFor(needCap,S.side,mine.n);
+  document.getElementById('gTarget').textContent=money(S.target)+' ₪';
+  document.getElementById('gHave').textContent=money(ann)+' ₪';
+  document.getElementById('gGap').textContent=money(gap)+' ₪';
+  document.getElementById('gGapSub').textContent=gap>0?'זה מה שהחיסכון בצד צריך לייצר':'הפנסיה לבד מכסה את היעד';
+  document.getElementById('gCap').textContent=money(needCap)+' ₪';
+  document.getElementById('gMon').textContent=money(mon)+' ₪';
+  document.getElementById('gMonSub').textContent='בתשואה ריאלית של '+S.side+'% לשנה, למשך '+money(yrs)+' שנים';
+  document.getElementById('gOnce').textContent=money(once)+' ₪';
+  const gi=document.getElementById('gapInsight');
+  if(mine.n<=0){
+    ['gGap','gCap','gMon','gOnce'].forEach(function(id){document.getElementById(id).textContent='-';});
+    document.getElementById('gGapSub').textContent='';
+    document.getElementById('gMonSub').textContent='';
+    gi.className='insight soft';
+    gi.innerHTML='כדי לחשב כמה לחסוך בצד, גיל הפרישה צריך להיות גדול מהגיל של היום. אפשר לעדכן את הגילים למעלה.';
+  }else if(gap<=0){
+    gi.className='insight';
+    gi.innerHTML='לפי ההנחות האלה הפנסיה לבד מגיעה ל-<b>'+money(ann)+' ₪</b> בחודש, מעל היעד של '+money(S.target)+' ₪. אפשר להשתמש בעודף כדי לקצר את התקופה עד שהעבודה תהיה בחירה, ולא חובה.';
+  }else{
+    const late=Math.max(mine.n-60,0);
+    const monLate=pmtFor(needCap,S.side,late);
+    gi.className='insight';
+    gi.innerHTML='כדי להגיע ל-'+money(S.target)+' ₪ בחודש צריך להשלים <b>'+money(mon)+' ₪</b> בחודש לחיסכון נפרד, נוסף על הפנסיה. אם מתחילים רק בעוד חמש שנים, אותו יעד כבר דורש '+money(monLate)+' ₪ בחודש. הזמן הוא החלק שעושה כאן את העבודה.';
+  }
+  save();
+}
+
+/* ── binding ── */
+function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v;}
+function applyAll(){
+  document.getElementById('sexF').classList.toggle('active',S.sex==='f');
+  document.getElementById('sexM').classList.toggle('active',S.sex!=='f');
+  document.getElementById('retHint').textContent=S.sex==='f'
+    ? 'גיל הפרישה לנשים עלה בהדרגה ל-65. מי שנולדה לפני 1965 - הגיל שלה נמוך יותר, אפשר לעדכן כאן.'
+    : 'גיל הפרישה לגברים הוא 67. אפשר לעדכן אם מתכננים לפרוש בגיל אחר.';
+  setVal('age',S.age); setVal('retAge',S.retAge);
+  setVal('bal',grp(S.bal)); setVal('extraBal',grp(S.extraBal)); setVal('sal',grp(S.sal));
+  setVal('pEmp',S.pEmp); setVal('pTag',S.pTag); setVal('pPit',S.pPit);
+  document.getElementById('pitChk').checked=!!S.pit;
+  setVal('feeDep',S.feeDep); setVal('feeAcc',S.feeAcc); setVal('insCost',S.ins?grp(S.ins):'');
+  setVal('okPct',S.okPct); setVal('okAmt',S.okAmt?grp(S.okAmt):'');
+  setVal('target',grp(S.target));
+  setVal('aYield',S.yld); setVal('aGrowth',S.growth); setVal('aCoef',S.coef); setVal('aSide',S.side);
+  setVal('bFeeDep',S.bFeeDep); setVal('bFeeAcc',S.bFeeAcc);
+}
+function liveFormat(el){const s=el.selectionStart,old=el.value;el.value=grp(el.value);if(document.activeElement===el){const d=el.value.length-old.length;try{el.setSelectionRange(Math.max(s+d,0),Math.max(s+d,0));}catch(e){}}}
+const MONEYF=['bal','extraBal','sal','target','okAmt','insCost'];
+[['age','age'],['retAge','retAge'],['bal','bal'],['extraBal','extraBal'],['sal','sal'],
+ ['pEmp','pEmp'],['pTag','pTag'],['pPit','pPit'],['feeDep','feeDep'],['feeAcc','feeAcc'],['insCost','ins'],
+ ['okPct','okPct'],['okAmt','okAmt'],['target','target'],
+ ['aYield','yld'],['aGrowth','growth'],['aCoef','coef'],['aSide','side'],
+ ['bFeeDep','bFeeDep'],['bFeeAcc','bFeeAcc']].forEach(function(p){
+  const el=document.getElementById(p[0]);if(!el)return;
+  el.addEventListener('input',function(){if(MONEYF.indexOf(p[0])>-1)liveFormat(el);S[p[1]]=num(el.value);calc();});
+});
+document.getElementById('pitChk').addEventListener('change',function(){S.pit=this.checked;calc();});
+document.getElementById('sexF').onclick=function(){S.sex='f';if(S.retAge===67)S.retAge=65;if(S.coef===202)S.coef=212;applyAll();calc();};
+document.getElementById('sexM').onclick=function(){S.sex='m';if(S.retAge===65)S.retAge=67;if(S.coef===212)S.coef=202;applyAll();calc();};
+document.getElementById('asReset').onclick=function(){
+  S.yld=DEF.yld;S.growth=DEF.growth;S.side=DEF.side;S.bFeeDep=DEF.bFeeDep;S.bFeeAcc=DEF.bFeeAcc;
+  S.coef=S.sex==='f'?212:202;applyAll();calc();
+};
+
+/* ── reading the quarterly report (PDF, in the browser) ── */
+const PDFJS_SRC='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+const PDFJS_WORKER='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+let pdfjsReady=null;
+function loadPdfJs(){
+  if(pdfjsReady)return pdfjsReady;
+  pdfjsReady=new Promise(function(res,rej){
+    const s=document.createElement('script');s.src=PDFJS_SRC;
+    s.onload=function(){try{window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WORKER;}catch(e){}res(window.pdfjsLib);};
+    s.onerror=function(){rej(new Error('load'));};
+    document.head.appendChild(s);
+  });
+  return pdfjsReady;
+}
+const rev=s=>s.split('').reverse().join('');
+function numsIn(str){
+  const out=[];
+  (String(str).match(/-?\d[\d,]*(?:\.\d+)?/g)||[]).forEach(function(t){
+    const a=parseFloat(t.replace(/,/g,''));if(!isNaN(a))out.push(a);
+    const b=parseFloat(rev(t).replace(/,/g,''));if(!isNaN(b)&&b!==a)out.push(b);
+  });
+  return out;
+}
+const SPECS=[
+  {key:'feeDep', any:[['דמי ניהול','הפקד'],['דמי ניהול','פרמי'],['דמי ניהול','הפרשה']], not:['ממוצע'], lo:0.01, hi:6, lbl:'דמי ניהול מההפקדה', unit:'%'},
+  {key:'feeAcc', any:[['דמי ניהול','חיסכון'],['דמי ניהול','צביר'],['דמי ניהול','יתר'],['דמי ניהול','נכסים']], not:['ממוצע'], lo:0.01, hi:0.6, lbl:'דמי ניהול מהצבירה', unit:'%'},
+  {key:'bal',    any:[['יתרת הכספים'],['יתרה','צבור'],['יתרה','מצטבר'],['יתרת חשבון'],['יתרה לסוף'],['סך הכל חיסכון'],['צבירה']], not:['תחילת','דמי ניהול','דמי נהול','פתיחה'], lo:1000, hi:30000000, pickMax:true, lbl:'הצבירה בקרן', unit:'₪'},
+  {key:'sal',    any:[['שכר מבוטח'],['שכר קובע'],['שכר מדווח'],['שכר לחישוב'],['משכורת קובעת']], lo:2000, hi:300000, lbl:'השכר המבוטח', unit:'₪'},
+  {key:'coef',   any:[['מקדם המרה'],['מקדם קצבה'],['מקדם']], lo:50, hi:350, lbl:'מקדם המרה לקצבה', unit:''},
+  {key:'ins',    any:[['עלות ביטוח'],['עלות כיסוי'],['עלות הכיסויים'],['עלות ריסק'],['עלות הכיסוי']], lo:1, hi:20000, sum:true, abs:true, lbl:'עלות הכיסויים הביטוחיים', unit:'₪'},
+  {key:'okAmt',  any:[['קצבה','נכות'],['קצבת נכות'],['אובדן כושר'],['פנסיית נכות']], not:['שחרור'], lo:500, hi:200000, lbl:'קצבה חודשית במקרה נכות', unit:'₪'}
+];
+const NUMRE=/-?\d[\d,]*(?:\.\d+)?/;
+function toNum(t){const a=parseFloat(String(t).replace(/,/g,''));return isNaN(a)?null:a;}
+function isDateish(t){return /\d{1,2}\/\d{1,2}\/\d{2,4}|^\d{1,2}\/\d{4}$/.test(t);}
+function hasAll(hay,words){return words.every(function(w){return hay.indexOf(w)>-1;});}
+/* pick the number that sits closest to the label inside the same row */
+function nearestNum(items,anchor,sp){
+  let best=null,bestD=1e9;
+  for(let j=0;j<items.length;j++){
+    if(j===anchor)continue;
+    const raw=items[j].s.trim();
+    if(isDateish(raw))continue;
+    const m=raw.match(NUMRE); if(!m)continue;
+    let v=toNum(m[0]); if(v===null)continue;
+    if(sp.abs)v=Math.abs(v);
+    if(v<sp.lo||v>sp.hi)continue;
+    const d=Math.abs(j-anchor);
+    if(d<bestD){bestD=d;best=v;}
+  }
+  return best;
+}
+function anchorOf(items,words){
+  const last=words[words.length-1];
+  for(let j=0;j<items.length;j++)if(items[j].s.indexOf(last)>-1)return j;
+  for(let j=0;j<items.length;j++)if(items[j].s.indexOf(words[0])>-1)return j;
+  return -1;
+}
+function scanLines(lines){
+  const found={};
+  SPECS.forEach(function(sp){
+    let vals=[];
+    for(let i=0;i<lines.length;i++){
+      const L=lines[i];
+      const words=sp.any.filter(function(ws){return hasAll(L.rtl,ws)||hasAll(L.ltr,ws);})[0];
+      if(!words)continue;
+      if(sp.not&&sp.not.some(function(w){return L.rtl.indexOf(w)>-1;}))continue;
+      const a=anchorOf(L.items,words);
+      const v=nearestNum(L.items,a<0?0:a,sp);
+      if(v===null)continue;
+      vals.push(v);
+      if(!sp.pickMax&&!sp.sum)break;
+    }
+    if(!vals.length)return;
+    if(sp.sum)found[sp.key]=vals.reduce(function(a,b){return a+b;},0);
+    else if(sp.pickMax)found[sp.key]=Math.max.apply(null,vals);
+    else found[sp.key]=vals[0];
+  });
+  return found;
+}
+/* the deposits table: a row with a date and salary + the three components + a total.
+   accepted only when the components really add up to the total - that is the proof it was read right. */
+function scanDeposits(lines){
+  let hit=null;
+  lines.forEach(function(L){
+    const raw=L.items.map(function(o){return o.s.trim();});
+    if(!raw.some(isDateish))return;
+    const nums=[];
+    raw.forEach(function(t){ if(isDateish(t))return; const m=t.match(NUMRE); if(!m)return; const v=toNum(m[0]); if(v!==null&&v>0)nums.push(v); });
+    if(nums.length<5)return;
+    [nums.slice(0,5),nums.slice(0,5).slice().reverse(),nums.slice(-5),nums.slice(-5).slice().reverse()].forEach(function(t){
+      const sal=t[0],e=t[1],g=t[2],pt=t[3],tot=t[4];
+      if(!(sal>2000&&sal<300000))return;
+      if(!(tot>0&&tot<sal))return;
+      if(Math.abs(e+g+pt-tot)>Math.max(3,tot*0.02))return;
+      const pe=e/sal*100, pg=g/sal*100, pp=pt/sal*100;
+      if(pe<2||pe>10||pg<2||pg>12||pp<2||pp>12)return;
+      hit={sal:sal,pEmp:Math.round(pe*100)/100,pTag:Math.round(pg*100)/100,pPit:Math.round(pp*100)/100};
+    });
+  });
+  return hit;
+}
+async function readReport(file){
+  const stat=document.getElementById('upStat');
+  stat.hidden=false;stat.className='up-stat';stat.textContent='קורא/ת את הדוח...';
+  document.getElementById('fndBox').hidden=true;
+  let lib;
+  try{lib=await loadPdfJs();}catch(e){stat.className='up-stat err';stat.textContent='לא הצלחתי לטעון את קורא ה-PDF (אולי החיבור לאינטרנט). אפשר למלא את השדות ידנית למטה.';return;}
+  let lines=[];
+  try{
+    const buf=await file.arrayBuffer();
+    const pdf=await lib.getDocument({data:buf}).promise;
+    const pages=Math.min(pdf.numPages,12);
+    for(let p=1;p<=pages;p++){
+      const page=await pdf.getPage(p);
+      const tc=await page.getTextContent();
+      const rowsByY={};
+      tc.items.forEach(function(it){
+        if(!it.str||!it.str.trim())return;
+        const y=Math.round(it.transform[5]/3)*3;
+        (rowsByY[y]=rowsByY[y]||[]).push({x:it.transform[4],s:it.str});
+      });
+      Object.keys(rowsByY).forEach(function(y){
+        const r=rowsByY[y];
+        const sorted=r.slice().sort(function(a,b){return b.x-a.x;});
+        const rtl=sorted.map(function(o){return o.s;}).join(' ');
+        const ltr=r.slice().sort(function(a,b){return a.x-b.x;}).map(function(o){return o.s;}).join(' ');
+        lines.push({rtl:rtl,ltr:ltr,rtlRev:rev(rtl),items:sorted});
+      });
+    }
+  }catch(e){
+    stat.className='up-stat err';stat.textContent='לא הצלחתי לקרוא את הקובץ. אם זה דוח סרוק (תמונה) אין בו טקסט לקריאה, וממלאים ידנית למטה.';return;
+  }
+  const textLen=lines.reduce(function(a,l){return a+l.rtl.length;},0);
+  if(textLen<200){
+    stat.className='up-stat err';stat.textContent='בקובץ הזה כמעט אין טקסט, כנראה דוח סרוק כתמונה. אפשר למלא את השדות ידנית למטה, זה לוקח דקה.';return;
+  }
+  const f=scanLines(lines);
+  const dep=scanDeposits(lines);
+  if(dep){ if(!('sal' in f))f.sal=dep.sal; f.pEmp=dep.pEmp; f.pTag=dep.pTag; f.pPit=dep.pPit; }
+  const keys=Object.keys(f);
+  if(keys.length){
+    keys.forEach(function(k){ S[k]=f[k]; });
+    if('okAmt' in f && f.okAmt>0){/* keep okPct as is, the amount wins */}
+    applyAll();calc();
+  }
+  const extra=dep?'<div class="fnd-row"><span>✓ אחוזי ההפקדה (מטבלת ההפקדות)</span><span class="fr-v">'+dep.pEmp+'% · '+dep.pTag+'% · '+dep.pPit+'%</span></div>':'';
+  const rowsHtml=SPECS.map(function(sp){
+    const got=(sp.key in f);
+    const v=got?(sp.unit==='₪'?money(f[sp.key])+' ₪':(f[sp.key]+(sp.unit?' '+sp.unit:''))):'לא זוהה, אפשר למלא ידנית';
+    return '<div class="fnd-row'+(got?'':' miss')+'"><span>'+(got?'✓ ':'• ')+sp.lbl+'</span><span class="fr-v">'+v+'</span></div>';
+  }).join('');
+  document.getElementById('fndBox').innerHTML=rowsHtml+extra+'<div class="cp-note" style="margin-top:4px">אלה הנתונים שזוהו בדוח ומולאו למטה. חשוב לעבור עליהם ולתקן מה שלא מדויק, כי כל חברה מעצבת את הדוח אחרת.</div>';
+  document.getElementById('fndBox').hidden=false;
+  stat.className='up-stat';
+  stat.textContent=keys.length?('זיהיתי '+keys.length+' נתונים מהדוח. מה שלא זוהה, אפשר למלא ידנית.'):'הדוח נקרא, אבל לא זיהיתי את השדות בפורמט הזה. אפשר למלא ידנית למטה.';
+}
+(function(){
+  const inp=document.getElementById('pdfFile'),zone=document.getElementById('dropZone');
+  if(!inp)return;
+  inp.addEventListener('change',function(){if(inp.files&&inp.files[0])readReport(inp.files[0]);});
+  ['dragenter','dragover'].forEach(function(ev){zone.addEventListener(ev,function(e){e.preventDefault();zone.classList.add('hot');});});
+  ['dragleave','drop'].forEach(function(ev){zone.addEventListener(ev,function(e){e.preventDefault();zone.classList.remove('hot');});});
+  zone.addEventListener('drop',function(e){const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)readReport(f);});
+})();
+
+/* ── save / share ── */
+function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}syncLive();}
+function loadLocal(){try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&typeof s==='object'&&('bal'in s))return s;}catch(e){}return null;}
+function enc(){return btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
+function dec(str){try{const s=JSON.parse(decodeURIComponent(escape(atob(str))));if(s&&typeof s==='object'&&('bal'in s))return s;}catch(e){}return null;}
+const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
+let docId=null,pushT=null;
+function setHash(id){try{history.replaceState(null,'',location.pathname+location.search+'#p='+id);}catch(e){}}
+function syncLive(){if(!docId)return;clearTimeout(pushT);pushT=setTimeout(function(){fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()}).then(function(r){if(r.status===404){docId=null;}}).catch(function(){});},1200);}
+(function(){const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');if(!btn)return;
+  const flash=function(el,m){const o=el.textContent;el.textContent=m;setTimeout(function(){el.textContent=o;},1700);};
+  btn.onclick=async function(){
+    wrap.hidden=false;field.value=docId?'מעדכן...':'יוצר קישור...';btn.disabled=true;
+    try{
+      if(docId){try{const r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()});if(r.status===404)docId=null;}catch(e){}}
+      if(!docId){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});const j=r.ok?await r.json():null;if(j&&j.id){docId=j.id;setHash(j.id);}}catch(e){}}
+      const l=docId?(location.origin+location.pathname+location.search+'#p='+docId)
+                   :(location.origin+location.pathname+location.search+'#s='+encodeURIComponent(enc()));
+      field.value=l;field.focus();field.select();
+      try{navigator.clipboard.writeText(l).then(function(){flash(btn,'✓ הקישור הועתק');},function(){});}catch(e){}
+    }finally{btn.disabled=false;}
+  };
+  copy.onclick=function(){field.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);ok=true;}catch(e){}flash(copy,ok?'✓ הועתק':'בחר/י והעתק/י');};
+})();
+
+(function boot(){
+  const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);
+  const hs=(location.hash||'').match(/s=([^&]+)/);
+  function apply(fromLink,attachId){
+    S=Object.assign(JSON.parse(JSON.stringify(DEF)),fromLink||loadLocal()||{});
+    if(attachId){docId=attachId;}
+    else if(fromLink){try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
+    applyAll();calc();
+  }
+  if(hp){
+    fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){return r.ok?r.text():Promise.reject();}).then(function(t){const st=dec(t);apply(st||(hs?dec(decodeURIComponent(hs[1])):null),st?hp[1]:null);}).catch(function(){apply(hs?dec(decodeURIComponent(hs[1])):null,null);});
+  }else{apply(hs?dec(decodeURIComponent(hs[1])):null,null);}
+})();
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון פנסיה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
+<footer class="rl-legal-footer" style="max-width:900px;margin:34px auto 0;padding:16px 18px 26px;text-align:center;font-size:12.5px;line-height:1.75;opacity:.72"><div class="footer-legal" style="font-size:12.5px;line-height:1.75;opacity:.78">טלי בנימינוב שרעבי · עוסק מורשה 207381062<br>שדרות נים 2, ראשון לציון · <a href="mailto:tali.bi.finance@gmail.com">tali.bi.finance@gmail.com</a><br><button type="button" class="rl-consent-reopen" hidden>הגדרות עוגיות</button></div></footer>
+
+<style id="rl-consent-css">
+/* ===== באנר הסכמת עוגיות - RichLife ===== */
+#rl-consent{position:fixed;inset-inline:0;bottom:0;z-index:2147482000;
+  background:#2f4036;color:#eef4ef;font-family:inherit;direction:rtl;
+  box-shadow:0 -6px 28px rgba(0,0,0,.28);padding:18px 20px calc(18px + env(safe-area-inset-bottom));
+  display:none}
+#rl-consent[data-open="1"]{display:block}
+#rl-consent .rl-in{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;
+  gap:14px 22px;align-items:center;justify-content:space-between}
+#rl-consent p{margin:0;font-size:15px;line-height:1.65;flex:1 1 420px;min-width:0}
+#rl-consent a{color:#cfe3d5;text-decoration:underline;text-underline-offset:2px}
+#rl-consent a:hover{color:#fff}
+#rl-consent .rl-btns{display:flex;gap:10px;flex-wrap:wrap}
+#rl-consent button{font:inherit;font-size:15px;font-weight:700;cursor:pointer;
+  border-radius:10px;padding:11px 22px;border:1.5px solid #eef4ef;
+  min-height:44px;transition:background .15s,color .15s}
+/* אישור וסירוב באותו משקל חזותי: הסכמה חייבת להיות חופשית */
+#rl-consent .rl-yes{background:#eef4ef;color:#1e2b25}
+#rl-consent .rl-no{background:transparent;color:#eef4ef}
+#rl-consent .rl-yes:hover{background:#fff}
+#rl-consent .rl-no:hover{background:rgba(238,244,239,.14)}
+#rl-consent button:focus-visible,#rl-consent a:focus-visible{
+  outline:3px solid #ffd479;outline-offset:2px}
+@media (max-width:560px){
+  #rl-consent .rl-in{flex-direction:column;align-items:stretch}
+  #rl-consent .rl-btns{justify-content:stretch}
+  #rl-consent .rl-btns button{flex:1}
+}
+@media (prefers-reduced-motion:reduce){#rl-consent *{transition:none!important}}
+.rl-consent-reopen{background:none;border:0;padding:0;font:inherit;
+  color:inherit;text-decoration:underline;cursor:pointer}
+</style>
+
+<div id="rl-consent" role="dialog" aria-modal="false"
+     aria-labelledby="rl-consent-t" aria-describedby="rl-consent-d">
+  <div class="rl-in">
+    <p id="rl-consent-d"><strong id="rl-consent-t">רגע לפני שנמשיך.</strong>
+      אנחנו רוצים להשתמש בעוגיות של גוגל ומטא כדי להבין איך הגעתם לכאן ומה עניין אתכם.
+      זה לא הכרחי כדי לגלוש, אז זו בחירה שלכם.
+      אפשר לקרוא ב<a href="https://first-invest.richlife.co.il/privacy/">מדיניות הפרטיות</a> מה בדיוק נאסף.</p>
+    <div class="rl-btns">
+      <button type="button" class="rl-yes" data-rl="grant">אישור</button>
+      <button type="button" class="rl-no" data-rl="deny">בלי עוגיות מעקב</button>
+    </div>
+  </div>
+</div>
+
+<script id="rl-consent-js">
+/* ===== הסכמת עוגיות - RichLife =====
+   חוסם את GA4 ואת פיקסל מטא עד לאישור מפורש.
+   תיקון 13 לחוק הגנת הפרטיות: הסכמה מדעת לפני איסוף, לא אחריו. */
+(function () {
+  var KEY = 'rl-consent-v1';
+  var GA = '', PX = '208911198828875';
+  var loaded = false, replay = [];
+
+  function read() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function write(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+
+  /* בולם: קריאות מעקב שקיימות כבר בדף לא יזרקו שגיאה לפני ההסכמה,
+     ואם תינתן הסכמה בהמשך הן יישלחו. */
+  window.dataLayer = window.dataLayer || [];
+  if (!window.gtag) window.gtag = function () { window.dataLayer.push(arguments); };
+  if (!window.fbq) {
+    window.fbq = function () { replay.push(Array.prototype.slice.call(arguments)); };
+    window.fbq.queue = [];
+  }
+
+  function loadTrackers() {
+    if (loaded) return;
+    loaded = true;
+    if (GA) {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA;
+      document.head.appendChild(s);
+      window.gtag('js', new Date());
+      window.gtag('config', GA);
+    }
+    if (PX) {
+      var pending = replay.slice();
+      window.fbq = null;
+      !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+        n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+        s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+      }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', PX);
+      window.fbq('track', 'PageView');
+      pending.forEach(function (a) { try { window.fbq.apply(null, a); } catch (e) {} });
+    }
+  }
+
+  function box() { return document.getElementById('rl-consent'); }
+  function open() { var b = box(); if (b) { b.setAttribute('data-open', '1');
+    var y = b.querySelector('.rl-yes'); if (y) y.focus(); } }
+  function close() { var b = box(); if (b) b.removeAttribute('data-open'); }
+
+  function decide(v) { write(v); close(); if (v === 'grant') loadTrackers(); }
+
+  function start() {
+    var b = box();
+    if (b) b.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-rl]');
+      if (t) decide(t.getAttribute('data-rl'));
+    });
+    /* קישור קבוע לשינוי הבחירה - הזכות לחזור בה חייבת להיות מעשית */
+    document.querySelectorAll('.rl-consent-reopen').forEach(function (el) {
+      el.hidden = false;          /* מוצג רק בדף שבאמת יש בו מה לפתוח */
+      el.addEventListener('click', function (e) { e.preventDefault(); open(); });
+    });
+    var v = read();
+    if (v === 'grant') loadTrackers();
+    else if (v !== 'deny') open();
+  }
+
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
+
+</body>
+</html>

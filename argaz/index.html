@@ -29,6 +29,11 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .hero h1{font-size:clamp(26px,6vw,38px);font-weight:900;color:var(--pine-darker);line-height:1.12}
 .hero h1 .em{color:var(--pine)}
 .hero p{font-size:clamp(14px,2.8vw,16px);font-weight:600;color:var(--ink-soft);margin-top:10px;max-width:460px;margin-inline:auto}
+.grp{margin-bottom:30px}
+.grp:last-of-type{margin-bottom:8px}
+.grp-t{font-size:clamp(17px,4vw,21px);font-weight:900;color:var(--pine-darker);line-height:1.25;display:flex;align-items:center;gap:10px}
+.grp-t::after{content:"";flex:1;height:1.5px;background:linear-gradient(90deg,rgba(var(--pine-rgb),.28),transparent)}
+.grp-b{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin:5px 0 14px;line-height:1.5}
 .tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
 @media(min-width:600px){.tools{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}}
 .tool{display:flex;flex-direction:column;align-items:flex-start;background:var(--card);border-radius:20px;padding:clamp(15px,3vw,19px);min-height:178px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);text-decoration:none;color:inherit;transition:transform .18s,box-shadow .18s,border-color .18s}
@@ -59,73 +64,16 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 
   <div class="hero">
     <h1>ארגז הכלים <span class="em">הכלכלי</span> שלך</h1>
-    <p>כל המחשבונים במקום אחד - לתכנן, לחשב, ולראות בדיוק לאן אתם הולכים.</p>
+    <p>כל המחשבונים במקום אחד, מסודרים לפי שלב: הבסיס, החובות, ההשקעות והרגעים הגדולים.</p>
   </div>
 
-  <div class="tools">
-    <a class="tool" href="/matarot/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🎯</span>
-      <span class="t-txt"><span class="t-name">מחשבון יעדים והשקעות</span><span class="t-desc">כמה להפריש כל חודש לכל מטרה</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/dream/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🏝️</span>
-      <span class="t-txt"><span class="t-name">מחשבון החלום</span><span class="t-desc">כמה הון צריך לחופש כלכלי</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/ribit/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">📈</span>
-      <span class="t-txt"><span class="t-name">מחשבון ריבית דה ריבית</span><span class="t-desc">איך הכסף עובד לאורך זמן</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/loans/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🏦</span>
-      <span class="t-txt"><span class="t-name">מחשבון הלוואות</span><span class="t-desc">העלות האמיתית של ההלוואה</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/debt-snowball/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">❄️</span>
-      <span class="t-txt"><span class="t-name">מחשבון גלגול חובות</span><span class="t-desc">באיזה סדר לסגור כמה חובות</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/gemel-vs-tik/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">⚖️</span>
-      <span class="t-txt"><span class="t-name">גמל להשקעה או חשבון מסחר</span><span class="t-desc">איפה נשאר יותר כסף ביד אחרי עלויות ומס</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/pension/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🌿</span>
-      <span class="t-txt"><span class="t-name">מחשבון פנסיה</span><span class="t-desc">מהדוח הרבעוני: דמי ניהול, קצבה עתידית ופער</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/salary-net/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🧾</span>
-      <span class="t-txt"><span class="t-name">מחשבון שכר נטו</span><span class="t-desc">מברוטו לנטו, עם טבלאות 2026</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/pricing/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🏷️</span>
-      <span class="t-txt"><span class="t-name">מחשבון תמחור</span><span class="t-desc">כמה לתמחר מוצר או שירות</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/mortgage/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🏘️</span>
-      <span class="t-txt"><span class="t-name">מחשבון משכנתא</span><span class="t-desc">בונים תמהיל ורואים כמה זה עולה</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="https://lida.richlife.co.il/lida/">
-      <span class="t-ic">🤰</span>
-      <span class="t-txt"><span class="t-name">מחשבוני לידה</span><span class="t-desc">כל ההיערכות הכלכלית ללידה</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/moving-home/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🏡</span>
-      <span class="t-txt"><span class="t-name">יוצאים מהבית לשכירות</span><span class="t-desc">כמה שכירות, ותקציב למעבר</span></span>
-      <span class="t-arrow">←</span>
-    </a>
-    <a class="tool" href="/trip-budget/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">✈️</span>
-      <span class="t-txt"><span class="t-name">תקציב לחופשה בחו"ל</span><span class="t-desc">כמה תעלה החופשה, לפי קטגוריות</span></span>
+  <section class="grp">
+    <h2 class="grp-t">התנהלות כלכלית</h2>
+    <p class="grp-b">הבסיס. מכאן מתחילים, ועליו נשען כל השאר.</p>
+    <div class="tools">
+    <a class="tool" href="/savings-map/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🧭</span>
+      <span class="t-txt"><span class="t-name">מפת החיסכון</span><span class="t-desc">לשלם פחות על אותם דברים בדיוק</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/habit-cost/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
@@ -138,14 +86,14 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <span class="t-txt"><span class="t-name">מחשבון קרן חירום</span><span class="t-desc">כמה צריך ברשת ביטחון</span></span>
       <span class="t-arrow">←</span>
     </a>
-    <a class="tool" href="/savings-map/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
-      <span class="t-ic">🧭</span>
-      <span class="t-txt"><span class="t-name">מפת החיסכון</span><span class="t-desc">לשלם פחות על אותם דברים בדיוק</span></span>
-      <span class="t-arrow">←</span>
-    </a>
     <a class="tool" href="/credit-cards/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
       <span class="t-ic">💳</span>
       <span class="t-txt"><span class="t-name">השוואת כרטיסי אשראי</span><span class="t-desc">איזה כרטיס באמת מחזיר יותר</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/salary-net/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🧾</span>
+      <span class="t-txt"><span class="t-name">מחשבון שכר נטו</span><span class="t-desc">מברוטו לנטו, עם טבלאות 2026</span></span>
       <span class="t-arrow">←</span>
     </a>
     <a class="tool" href="/deal/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
@@ -153,6 +101,92 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <span class="t-txt"><span class="t-name">בחינת עסקה</span><span class="t-desc">האם העסקה באמת משתלמת</span></span>
       <span class="t-arrow">←</span>
     </a>
+    </div>
+  </section>
+  <section class="grp">
+    <h2 class="grp-t">חובות והלוואות</h2>
+    <p class="grp-b">לפני שמשקיעים, סוגרים את מה שגובה ריבית.</p>
+    <div class="tools">
+    <a class="tool" href="/loans/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🏦</span>
+      <span class="t-txt"><span class="t-name">מחשבון הלוואות</span><span class="t-desc">העלות האמיתית של ההלוואה</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/debt-snowball/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">❄️</span>
+      <span class="t-txt"><span class="t-name">מחשבון גלגול חובות</span><span class="t-desc">באיזה סדר לסגור כמה חובות</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    </div>
+  </section>
+  <section class="grp">
+    <h2 class="grp-t">השקעות</h2>
+    <p class="grp-b">איך גורמים לכסף לעבוד, אחרי שהבסיס מסודר.</p>
+    <div class="tools">
+    <a class="tool" href="/matarot/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🎯</span>
+      <span class="t-txt"><span class="t-name">מחשבון יעדים והשקעות</span><span class="t-desc">כמה להפריש כל חודש לכל מטרה</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/ribit/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">📈</span>
+      <span class="t-txt"><span class="t-name">מחשבון ריבית דה ריבית</span><span class="t-desc">איך הכסף עובד לאורך זמן</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/gemel-vs-tik/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">⚖️</span>
+      <span class="t-txt"><span class="t-name">גמל להשקעה או חשבון מסחר</span><span class="t-desc">איפה נשאר יותר כסף ביד אחרי עלויות ומס</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/pension/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🌿</span>
+      <span class="t-txt"><span class="t-name">מחשבון פנסיה</span><span class="t-desc">מהדוח הרבעוני: דמי ניהול, קצבה עתידית ופער</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/dream/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🏝️</span>
+      <span class="t-txt"><span class="t-name">מחשבון החלום</span><span class="t-desc">כמה הון צריך לחופש כלכלי</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    </div>
+  </section>
+  <section class="grp">
+    <h2 class="grp-t">החלטות כלכליות בחיים</h2>
+    <p class="grp-b">הרגעים הגדולים - דירה, מעבר, לידה, חופשה.</p>
+    <div class="tools">
+    <a class="tool" href="/mortgage/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🏘️</span>
+      <span class="t-txt"><span class="t-name">מחשבון משכנתא</span><span class="t-desc">בונים תמהיל ורואים כמה זה עולה</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/moving-home/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🏡</span>
+      <span class="t-txt"><span class="t-name">יוצאים מהבית לשכירות</span><span class="t-desc">כמה שכירות, ותקציב למעבר</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="https://lida.richlife.co.il/lida/">
+      <span class="t-ic">🤰</span>
+      <span class="t-txt"><span class="t-name">מחשבוני לידה</span><span class="t-desc">כל ההיערכות הכלכלית ללידה</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    <a class="tool" href="/trip-budget/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">✈️</span>
+      <span class="t-txt"><span class="t-name">תקציב לחופשה בחו"ל</span><span class="t-desc">כמה תעלה החופשה, לפי קטגוריות</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    </div>
+  </section>
+  <section class="grp">
+    <h2 class="grp-t">העסק שלי</h2>
+    <p class="grp-b">לתמחר נכון, כדי שהעסק יחזיר לך.</p>
+    <div class="tools">
+    <a class="tool" href="/pricing/" onclick="try{sessionStorage.setItem(\'rlArgaz\',\'1\')}catch(e){}">
+      <span class="t-ic">🏷️</span>
+      <span class="t-txt"><span class="t-name">מחשבון תמחור</span><span class="t-desc">כמה לתמחר מוצר או שירות</span></span>
+      <span class="t-arrow">←</span>
+    </a>
+    </div>
+  </section>
   </div>
 
   <div class="socials">

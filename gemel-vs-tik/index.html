@@ -275,6 +275,27 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .beven .be-l{font-size:13px;font-weight:800;color:var(--pine-darker);line-height:1.45}
 .beven .be-l small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
 .beven .be-v{font-size:19px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* the three-row comparison table */
+.ctab{margin-top:16px;border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:16px;overflow:hidden}
+.ctab .ct-head,.ctab .ct-row{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:6px;align-items:center;padding:11px 12px}
+.ctab .ct-head{background:var(--pine-deep);color:#fff;font-size:12px;font-weight:900;text-align:center}
+.ctab .ct-head span:first-child{text-align:start}
+.ctab .ct-row{border-top:1px solid rgba(var(--pine-rgb),.14);font-size:12.5px;font-weight:700;color:var(--ink)}
+.ctab .ct-row:nth-child(odd){background:rgba(var(--sage-rgb),.12)}
+.ctab .ct-row .ct-l{line-height:1.35}
+.ctab .ct-row .ct-l small{display:block;font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+.ctab .ct-row b{text-align:center;font-size:13.5px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--pine-darker)}
+.ctab .ct-row b.lead{color:var(--pine-deep);background:rgba(var(--pine-rgb),.12);border-radius:8px;padding:5px 2px}
+@media(max-width:400px){.ctab .ct-head,.ctab .ct-row{grid-template-columns:1.1fr .95fr .95fr;padding:10px 8px}.ctab .ct-row b{font-size:12.5px}}
+/* mode switch */
+.mswitch{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--sage-tint);border-radius:13px;padding:5px;margin:2px 0 14px}
+.mswitch button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:13.5px;color:var(--ink-soft);padding:10px 6px;border-radius:9px;cursor:pointer;transition:all .15s;line-height:1.3}
+.mswitch button small{display:block;font-size:10.5px;font-weight:700;opacity:.8}
+.mswitch button.on{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
+.selwrap{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s}
+.selwrap:focus-within{border-color:var(--pine);background:#fff}
+.selwrap select{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14.5px;color:var(--ink);padding:12px 13px;outline:none;appearance:none;cursor:pointer}
+.selwrap .cv{padding-inline-end:13px;color:var(--ink-soft);font-weight:900;font-size:12px}
 </style>
 </head>
 <body>
@@ -287,82 +308,112 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 
   <div class="hero-title">
     <h1>קופת גמל להשקעה או <span class="em">חשבון מסחר</span>?</h1>
-    <p>אותו כסף, אותה תשואה, שני מסלולים. בגמל דמי הניהול גבוהים יותר אבל המס נדחה, ואחרי גיל 60 כקצבה הוא נעלם. בחשבון מסחר העלויות זעירות אבל המס משלם עצמו בדרך. כאן רואים מי יוצא עם יותר כסף ביד, ולמה.</p>
+    <p>אותו כסף, אותה תשואה, שני מסלולים. משווים את שלושת המספרים שבאמת קובעים: כמה יצטבר לפני מס, כמה יישאר ביד במשיכה רגילה, וכמה קצבה חודשית זה שווה מגיל 60 - שם לגמל יש פטור ממס שאין לאף אחד אחר.</p>
   </div>
 
   <div class="card">
-    <span class="sec-lbl">💰 הכסף והזמן</span>
+    <span class="sec-lbl">💰 נתונים כלליים</span>
     <div class="fields2">
       <div class="field">
-        <label for="start">סכום התחלתי</label>
-        <div class="input-shell"><span class="unit">₪</span><input id="start" type="text" inputmode="numeric" value="0" placeholder="0" aria-label="סכום התחלתי"></div>
+        <label for="baseDep">סך ההפקדות שכבר בפנים</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="baseDep" type="text" inputmode="numeric" value="0" placeholder="0" aria-label="סך ההפקדות הקיימות"></div>
+        <div class="hint">הכסף שהפקדת עד היום, בלי הרווח. זה מה שלא ממוסה בסוף.</div>
       </div>
       <div class="field">
-        <label for="monthly">הפקדה חודשית</label>
-        <div class="input-shell"><span class="unit">₪</span><input id="monthly" type="text" inputmode="numeric" value="2,000" placeholder="0" aria-label="הפקדה חודשית"></div>
+        <label for="baseGain">הרווח שכבר נצבר עליו</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="baseGain" type="text" inputmode="numeric" value="0" placeholder="0" aria-label="הרווח שנצבר"></div>
+        <div class="hint">מתחילים מאפס? משאירים את שני השדות על 0.</div>
       </div>
     </div>
     <div class="fields2" style="margin-top:12px">
       <div class="field">
-        <label for="years">לכמה שנים</label>
-        <div class="input-shell"><input id="years" type="text" inputmode="decimal" value="20" placeholder="0" aria-label="מספר שנים"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שנים</span></div>
+        <label for="monthly">הפקדה חודשית</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="monthly" type="text" inputmode="numeric" value="2,000" placeholder="0" aria-label="הפקדה חודשית"></div>
       </div>
       <div class="field">
-        <label for="ret">תשואה שנתית ברוטו</label>
-        <div class="input-shell"><input id="ret" type="text" inputmode="decimal" value="8" placeholder="0" aria-label="תשואה שנתית ברוטו"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
-        <div class="hint">לפני דמי ניהול ולפני מס, זהה לשני המסלולים. ככה משווים תפוחים לתפוחים.</div>
+        <label for="years">שנות השקעה עתידיות</label>
+        <div class="input-shell"><input id="years" type="text" inputmode="decimal" value="20" placeholder="0" aria-label="שנות השקעה"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שנים</span></div>
       </div>
     </div>
-    <label class="keren-tg" for="pensionAge">
-      <input type="checkbox" id="pensionAge">
-      <span class="kt-t">אמשוך מהגמל כקצבה אחרי גיל 60<small>משיכה כקצבה מקופת גמל להשקעה פטורה ממס רווחי הון. זה הקלף הכי חזק של המסלול הזה, ולכן הוא מקבל מתג נפרד.</small></span>
-    </label>
+    <div class="field" style="margin-top:12px">
+      <label for="ret">תשואה שנתית ממוצעת (ברוטו)</label>
+      <div class="input-shell"><input id="ret" type="text" inputmode="decimal" value="8" placeholder="0" aria-label="תשואה שנתית ממוצעת"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
+      <div class="hint">לפני דמי ניהול, לפני מס דיבידנד ולפני מס רווחי הון, וזהה לשני המסלולים. ככה משווים תפוחים לתפוחים.</div>
+    </div>
   </div>
 
   <div class="card">
-    <span class="sec-lbl">🏦 קופת גמל להשקעה</span>
+    <span class="sec-lbl">🏦 העלויות בקופת גמל להשקעה</span>
     <div class="tt-grid">
-      <div class="tt-field"><label>דמי ניהול מהצבירה (%)</label><div class="tt-cell"><input id="gAcc" inputmode="decimal" aria-label="דמי ניהול מהצבירה בגמל"><span class="u suf">%</span></div></div>
-      <div class="tt-field"><label>דמי ניהול מההפקדה (%)</label><div class="tt-cell"><input id="gDep" inputmode="decimal" aria-label="דמי ניהול מההפקדה בגמל"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>דמי ניהול מהצבירה (%)</label><div class="tt-cell"><input id="gAcc" inputmode="decimal" aria-label="דמי ניהול מהצבירה"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>הוצאות ניהול השקעות (%)</label><div class="tt-cell"><input id="gExp" inputmode="decimal" aria-label="הוצאות ניהול השקעות"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>דמי ניהול מההפקדה (%)</label><div class="tt-cell"><input id="gDep" inputmode="decimal" aria-label="דמי ניהול מההפקדה"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>שמירת מזומנים בקופה (%)</label><div class="tt-cell"><input id="gCash" inputmode="decimal" aria-label="שיעור המזומן בקופה"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>מס דיבידנד בקופה (%)</label><div class="tt-cell"><input id="gDivTax" inputmode="decimal" aria-label="מס דיבידנד בקופה"><span class="u suf">%</span></div></div>
     </div>
-    <div class="cp-note">התקרה בחוק היא 1.05% מהצבירה ו-4% מההפקדה, אבל בשוק מקבלים הרבה פחות, ובעיקר 0% מההפקדה. זה מספר שמתמקחים עליו.</div>
+    <div class="cp-note">התקרה בחוק היא 1.05% מהצבירה ו-4% מההפקדה, ובשוק מקבלים הרבה פחות. <b>שמירת מזומנים</b> היא החלק בקופה שיושב בצד ולא מושקע, ולכן לא מרוויח את התשואה. <b>מס הדיבידנד</b> הוא המס שנגבה מהדיבידנדים בדרך, לפני שהכסף בכלל מגיע אליך, ובקופה מוסדית הוא גבוה משמעותית ממה שקרן אירית משלמת.</div>
     <div class="guide-note">
       <span class="gt">מה מיוחד כאן</span>
-      מעבר בין מסלולי השקעה או בין חברות <b>לא נחשב מכירה</b>, ולכן לא משלמים מס באמצע הדרך והכסף ממשיך לעבוד שלם. בחשבון מסחר כל מכירה היא אירוע מס.
-      <span class="mand">יש תקרת הפקדה שנתית לאדם. מעליה ממשיכים בחשבון מסחר או בקופה של בן/בת הזוג. את התקרה אפשר לעדכן בהנחות החישוב למטה.</span>
+      מעבר בין מסלולי השקעה או בין חברות <b>לא נחשב מכירה</b>, ולכן לא משלמים מס באמצע הדרך. ובעיקר: משיכה כקצבה מגיל 60 <b>פטורה ממס רווחי הון</b>, וזה המספר שמופיע בשורה השלישית בטבלה למטה.
+      <span class="mand">יש תקרת הפקדה שנתית לאדם. מעליה ממשיכים בחשבון מסחר או בקופה של בן/בת הזוג.</span>
     </div>
   </div>
 
   <div class="card">
-    <span class="sec-lbl">📊 חשבון מסחר עצמאי</span>
+    <span class="sec-lbl">📊 העלויות בחשבון מסחר עצמאי</span>
     <div class="tt-grid">
-      <div class="tt-field"><label>עלות שנתית של הקרן (%)</label><div class="tt-cell"><input id="tEtf" inputmode="decimal" aria-label="עלות שנתית של הקרן"><span class="u suf">%</span></div></div>
-      <div class="tt-field"><label>עמלת קנייה (% מההפקדה)</label><div class="tt-cell"><input id="tBuy" inputmode="decimal" aria-label="עמלת קנייה"><span class="u suf">%</span></div></div>
-      <div class="tt-field"><label>דמי משמרת שנתיים (%)</label><div class="tt-cell"><input id="tCust" inputmode="decimal" aria-label="דמי משמרת"><span class="u suf">%</span></div></div>
-      <div class="tt-field"><label>דיבידנד שנתי (%)</label><div class="tt-cell"><input id="tDiv" inputmode="decimal" aria-label="דיבידנד שנתי"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>דמי ניהול חודשיים (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tFee" inputmode="decimal" aria-label="דמי ניהול חודשיים לחשבון"></div></div>
+      <div class="tt-field"><label>עמלת קנייה (%)</label><div class="tt-cell"><input id="tComPct" inputmode="decimal" aria-label="עמלת קנייה באחוזים"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>מינימום עמלת קנייה (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tComMin" inputmode="decimal" aria-label="מינימום עמלת קנייה"></div></div>
+      <div class="tt-field"><label>דמי ניהול של הקרן (%)</label><div class="tt-cell"><input id="tTer" inputmode="decimal" aria-label="דמי ניהול של הקרן"><span class="u suf">%</span></div></div>
     </div>
-    <div class="field" style="margin-top:12px">
-      <label for="tTurn">כמה מהתיק נמכר בממוצע כל שנה</label>
-      <div class="input-shell"><input id="tTurn" type="text" inputmode="decimal" value="0" placeholder="0" aria-label="תחלופה שנתית בתיק"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
-      <div class="hint">0% זה קנייה והחזקה בלי לגעת. כל איזון מחדש, החלפת קרן או מכירה מתוך פחד מייצרים אירוע מס שגובה מס באמצע הדרך, וזה בדיוק היתרון שהגמל נותן.</div>
+    <label class="keren-tg" for="tOffset" style="margin-top:12px">
+      <input type="checkbox" id="tOffset">
+      <span class="kt-t">קיזוז עמלת המסחר מול דמי הניהול<small>יש ברוקרים שגובים דמי ניהול רק אם לא נצברו מספיק עמלות באותו חודש. אם זה המצב, מסמנים כאן.</small></span>
+    </label>
+    <div class="field" style="margin-top:14px">
+      <label for="tFund">סוג הקרן שאני קונה</label>
+      <div class="selwrap">
+        <select id="tFund" aria-label="סוג הקרן">
+          <option value="15">קרן אירית, עקיבה פיזית (מס דיבידנד 15%)</option>
+          <option value="0">קרן אירית, עקיבה סינתטית (בלי מס דיבידנד)</option>
+          <option value="25">קרן אמריקאית (מס דיבידנד 25%)</option>
+          <option value="custom">אחר, מזין/ה בעצמי</option>
+        </select>
+        <span class="cv">▾</span>
+      </div>
+      <div class="tt-grid" style="margin-top:10px">
+        <div class="tt-field"><label>מס דיבידנד בקרן (%)</label><div class="tt-cell"><input id="tDivTax" inputmode="decimal" aria-label="מס דיבידנד בקרן"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>תחלופה שנתית בתיק (%)</label><div class="tt-cell"><input id="tTurn" inputmode="decimal" aria-label="תחלופה שנתית"><span class="u suf">%</span></div></div>
+      </div>
     </div>
-    <div class="cp-note">קרן צוברת (שלא מחלקת דיבידנד) - משאירים 0 בשדה הדיבידנד. קרן מחלקת - הדיבידנד ממוסה בכל שנה, גם אם לא נגעת בכסף.</div>
+    <div class="cp-note">קרן <b>צוברת</b> לא מחלקת דיבידנד אליך, אבל עדיין משלמת מס דיבידנד בפנים, וזה ההבדל הגדול בין קרן אירית פיזית לסינתטית. <b>תחלופה</b> היא כמה מהתיק נמכר בממוצע כל שנה: 0% זה קנייה והחזקה בלי לגעת, וכל מכירה מייצרת אירוע מס באמצע הדרך.</div>
   </div>
 
   <div class="card">
     <span class="sec-lbl">🧾 מי יוצא עם יותר ביד</span>
+    <div class="mswitch" role="tablist">
+      <button type="button" class="on" id="mLump" role="tab">משיכה רגילה<small>לוקחים את הכסף</small></button>
+      <button type="button" id="mAnn" role="tab">קצבה מגיל 60<small>הגמל פטור ממס</small></button>
+    </div>
     <div class="verdict">
       <div class="v-lbl" id="vLbl">ההפרש בין המסלולים</div>
       <div class="v-num" id="vNum">0<small> ₪</small></div>
       <div class="v-sub" id="vSub"></div>
     </div>
+    <div class="ctab">
+      <div class="ct-head"><span>&nbsp;</span><span>🏦 גמל להשקעה</span><span>📊 חשבון מסחר</span></div>
+      <div class="ct-row"><span class="ct-l">צבירה בסוף התקופה<small>לפני מס</small></span><b id="r1g">0</b><b id="r1t">0</b></div>
+      <div class="ct-row"><span class="ct-l">משיכה רגילה<small>אחרי מס רווחי הון</small></span><b id="r2g">0</b><b id="r2t">0</b></div>
+      <div class="ct-row"><span class="ct-l">קצבה חודשית מגיל 60<small id="r3sub">לפי מקדם 200</small></span><b id="r3g">0</b><b id="r3t">0</b></div>
+    </div>
     <div class="cmpbar">
       <div class="cb-row">
-        <div class="cb-top"><span>🏦 גמל להשקעה, נטו ליד</span><b id="cbG">0 ₪</b></div>
+        <div class="cb-top"><span>🏦 גמל להשקעה</span><b id="cbG">0 ₪</b></div>
         <div class="cb-track"><i class="g" id="cbGi" style="width:0%"></i></div>
       </div>
       <div class="cb-row">
-        <div class="cb-top"><span>📊 חשבון מסחר, נטו ליד</span><b id="cbT">0 ₪</b></div>
+        <div class="cb-top"><span>📊 חשבון מסחר</span><b id="cbT">0 ₪</b></div>
         <div class="cb-track"><i class="t" id="cbTi" style="width:0%"></i></div>
       </div>
     </div>
@@ -372,12 +423,12 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
         <div class="tk-h">🏦 גמל להשקעה</div>
         <div class="tk-s">המס נדחה לסוף</div>
         <div class="tk-num" id="gNet">0<small> ₪</small></div>
-        <div class="tk-cap">נטו אחרי מס</div>
+        <div class="tk-cap" id="gCap">נטו אחרי מס</div>
         <div class="tk-rows">
-          <div class="tk-row"><span>הפקדת בסך הכל</span><b id="gIn">0</b></div>
+          <div class="tk-row"><span>הופקד בסך הכל</span><b id="gIn">0</b></div>
           <div class="tk-row"><span>שווי לפני מס</span><b id="gGross">0</b></div>
-          <div class="tk-row neg"><span>דמי ניהול ששולמו</span><b id="gFees">0</b></div>
-          <div class="tk-row neg"><span>מס בסוף</span><b id="gTax">0</b></div>
+          <div class="tk-row neg"><span>עלויות שנגסו בדרך</span><b id="gFees">0</b></div>
+          <div class="tk-row neg"><span>מס</span><b id="gTax">0</b></div>
           <div class="tk-row tot"><span>נשאר ביד</span><b id="gNet2">0</b></div>
         </div>
       </div>
@@ -386,12 +437,12 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
         <div class="tk-h">📊 חשבון מסחר</div>
         <div class="tk-s">עלויות נמוכות, מס בדרך</div>
         <div class="tk-num" id="tNet">0<small> ₪</small></div>
-        <div class="tk-cap">נטו אחרי מס</div>
+        <div class="tk-cap" id="tCap">נטו אחרי מס</div>
         <div class="tk-rows">
-          <div class="tk-row"><span>הפקדת בסך הכל</span><b id="tIn">0</b></div>
+          <div class="tk-row"><span>הופקד בסך הכל</span><b id="tIn">0</b></div>
           <div class="tk-row"><span>שווי לפני מס</span><b id="tGross">0</b></div>
           <div class="tk-row neg"><span>עלויות ועמלות</span><b id="tFees">0</b></div>
-          <div class="tk-row neg"><span>מס (בדרך ובסוף)</span><b id="tTax">0</b></div>
+          <div class="tk-row neg"><span>מס</span><b id="tTax">0</b></div>
           <div class="tk-row tot"><span>נשאר ביד</span><b id="tNet2">0</b></div>
         </div>
       </div>
@@ -402,19 +453,21 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     </div>
     <div class="insight" id="mainInsight"></div>
     <div class="insight" id="ceilInsight" hidden></div>
-    <div class="cp-note">המס בשני המסלולים מחושב על הרווח <b>הריאלי</b>, כלומר אחרי שמנטרלים את האינפלציה. זו הסיבה שהאינפלציה שמזינים למטה משנה את גובה המס.</div>
+    <div class="cp-note">המס בשני המסלולים מחושב על הרווח <b>הריאלי</b>, אחרי נטרול האינפלציה, ולכן האינפלציה שבהנחות משנה את גובה המס. הקצבה מגיל 60 מחושבת בגמל מהסכום <b>לפני מס</b>, כי היא פטורה, ובחשבון מסחר מהסכום שאחרי מס.</div>
   </div>
 
   <details class="card tt-wrap">
     <summary><span class="sec-lbl" style="margin:0">⚙️ הנחות החישוב (ניתן לעדכן)</span><span class="chev">▾</span></summary>
     <div style="margin-top:14px">
-      <div class="tt-note">⚠️ המספרים כאן הם ברירת מחדל ולא ייעוץ. שיעורי מס ותקרות משתנים, ולכן כדאי לאמת מול רשות המסים לפני שמסתמכים על התוצאה מול לקוחה.</div>
+      <div class="tt-note">⚠️ ברירות מחדל, לא ייעוץ. שיעורי מס ותקרות משתנים, ולכן כדאי לאמת מול רשות המסים לפני שמסתמכים על התוצאה מול לקוחה.</div>
       <div class="tt-grid">
-        <div class="tt-field"><label>מס רווחי הון (%)</label><div class="tt-cell"><input id="aTax" inputmode="decimal" aria-label="שיעור מס רווחי הון"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>מס רווחי הון (%)</label><div class="tt-cell"><input id="aTax" inputmode="decimal" aria-label="מס רווחי הון"><span class="u suf">%</span></div></div>
         <div class="tt-field"><label>אינפלציה שנתית (%)</label><div class="tt-cell"><input id="aInf" inputmode="decimal" aria-label="אינפלציה שנתית"><span class="u suf">%</span></div></div>
-        <div class="tt-field"><label>תקרת הפקדה שנתית לגמל (₪, לאמת)</label><div class="tt-cell"><span class="u">₪</span><input id="aCeil" inputmode="numeric" aria-label="תקרת הפקדה שנתית לגמל"></div></div>
+        <div class="tt-field"><label>תשואת דיבידנד של המדד (%)</label><div class="tt-cell"><input id="aDivY" inputmode="decimal" aria-label="תשואת דיבידנד"><span class="u suf">%</span></div></div>
+        <div class="tt-field"><label>מקדם קצבה מגיל 60</label><div class="tt-cell"><input id="aCoef" inputmode="decimal" aria-label="מקדם קצבה"></div></div>
+        <div class="tt-field"><label>תקרת הפקדה שנתית לגמל (₪, לאמת)</label><div class="tt-cell"><span class="u">₪</span><input id="aCeil" inputmode="numeric" aria-label="תקרת הפקדה שנתית"></div></div>
       </div>
-      <div class="cp-note">תקרת ההפקדה לקופת גמל להשקעה היא לאדם ולשנה קלנדרית, ומתעדכנת כל שנה לפי המדד. לזוג יש שתי תקרות, אחת לכל אחד.</div>
+      <div class="cp-note">תשואת הדיבידנד היא החלק מהתשואה שמגיע כדיבידנד, והוא זה שממוסה בדרך לפי סוג המכשיר. מקדם הקצבה הוא המחלק שקובע כמה קצבה חודשית מקבלים על כל שקל שנצבר.</div>
       <button class="tt-reset" id="asReset" type="button">↺ איפוס ההנחות</button>
     </div>
   </details>
@@ -584,54 +637,51 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 const money=v=>fmt.format(Math.round(+v||0));
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
-const SKEY='rl_gemel_vs_tik_v1';
+const SKEY='rl_gemel_vs_tik_v2';
 const DEF={
-  start:0, monthly:2000, years:20, ret:8, pensionAge:false,
-  gAcc:0.6, gDep:0,
-  tEtf:0.15, tBuy:0.1, tCust:0, tDiv:0, tTurn:0,
-  tax:25, inf:2.5, ceil:79000
+  baseDep:0, baseGain:0, monthly:2000, years:20, ret:8, mode:'lump',
+  gAcc:0.7, gExp:0.1, gDep:0, gCash:3, gDivTax:30,
+  tFee:0, tComPct:0.06, tComMin:2, tTer:0.07, tOffset:false, tFund:'15', tDivTax:15, tTurn:0,
+  tax:25, inf:2.5, divY:2, coef:200, ceil:79000
 };
 let S=JSON.parse(JSON.stringify(DEF));
 
-/* ── the engine. both tracks get the same gross return; only costs and tax differ. ── */
+/* ── the engine ──
+   both tracks get the same gross return. what differs: what is skimmed off the return
+   (fees, cash held aside, dividend tax inside the instrument) and when the tax is paid. */
 function run(){
   const n=Math.min(Math.max(Math.round(S.years*12),0),12*70);
   const im=Math.pow(1+Math.max(S.inf,-90)/100,1/12)-1;
   const taxR=S.tax/100;
-
-  /* קופת גמל להשקעה: fee off the return, no tax event until the end */
-  const rg=Math.pow(1+Math.max((S.ret-S.gAcc)/100,-0.9),1/12)-1;
+  const start=S.baseDep+S.baseGain;
   const rGross=Math.pow(1+Math.max(S.ret/100,-0.9),1/12)-1;
-  let gBal=S.start, gBasis=S.start, gIn=S.start, gNoFee=S.start;
-  for(let i=0;i<n;i++){
-    const dep=S.monthly;
-    gBal=gBal*(1+rg)+dep*(1-S.gDep/100);
-    gNoFee=gNoFee*(1+rGross)+dep;
-    gBasis=gBasis*(1+im)+dep;
-    gIn+=dep;
-  }
-  const gFees=Math.max(gNoFee-gBal,0);
-  const gRealProfit=Math.max(gBal-gBasis,0);
-  const gTax=S.pensionAge?0:gRealProfit*taxR;
 
-  /* חשבון מסחר: tiny costs, but dividends and every sale are taxed on the way */
-  const rt=Math.pow(1+Math.max((S.ret-S.tEtf-S.tCust-S.tDiv)/100,-0.9),1/12)-1;
-  const divM=S.tDiv/100/12;
-  let tBal=S.start, tBasis=S.start, tIn=S.start, tNoCost=S.start, tTaxPaid=0;
+  /* קופת גמל להשקעה */
+  const gAnnual=S.ret*(1-S.gCash/100) - S.divY*(S.gDivTax/100) - S.gAcc - S.gExp;
+  const rg=Math.pow(1+Math.max(gAnnual/100,-0.9),1/12)-1;
+  let gBal=start, gBasis=S.baseDep, gIn=start, gIdeal=start;
   for(let i=0;i<n;i++){
-    const dep=S.monthly;
+    gBal=gBal*(1+rg)+S.monthly*(1-S.gDep/100);
+    gIdeal=gIdeal*(1+rGross)+S.monthly;
+    gBasis=gBasis*(1+im)+S.monthly;
+    gIn+=S.monthly;
+  }
+  const gCosts=Math.max(gIdeal-gBal,0);
+  const gTax=Math.max(gBal-gBasis,0)*taxR;
+
+  /* חשבון מסחר עצמאי */
+  const tAnnual=S.ret - S.divY*(S.tDivTax/100) - S.tTer;
+  const rt=Math.pow(1+Math.max(tAnnual/100,-0.9),1/12)-1;
+  let tBal=start, tBasis=S.baseDep, tIn=start, tIdeal=start, tTaxPaid=0, tCash=0;
+  for(let i=0;i<n;i++){
     tBal=tBal*(1+rt);
-    tNoCost=tNoCost*(1+rGross)+dep;
-    /* dividends are taxed the year they land, then reinvested net */
-    if(divM>0){
-      const d=tBal*divM;
-      const dTax=d*taxR;
-      tBal+=d-dTax; tBasis+=d-dTax; tTaxPaid+=dTax;
-    }
-    tBal+=dep*(1-S.tBuy/100);
-    tBasis=tBasis*(1+im)+dep;
-    tIn+=dep;
-    /* a sale once a year realises its share of the real gain */
+    tIdeal=tIdeal*(1+rGross)+S.monthly;
+    let com=S.monthly>0?Math.max(S.monthly*S.tComPct/100,S.tComMin):0;
+    let fee=S.tOffset?Math.max(S.tFee-com,0):S.tFee;
+    tCash+=com+fee;
+    tBal+=S.monthly-com-fee;
+    tBasis=tBasis*(1+im)+S.monthly;
+    tIn+=S.monthly;
     if(S.tTurn>0&&(i+1)%12===0){
       const gain=tBal-tBasis;
       if(gain>0){
@@ -641,27 +691,23 @@ function run(){
       }
     }
   }
-  const tEndProfit=Math.max(tBal-tBasis,0);
-  const tEndTax=tEndProfit*taxR;
-  const tCosts=Math.max(tNoCost-tBal-tTaxPaid,0);
+  const tEndTax=Math.max(tBal-tBasis,0)*taxR;
+  const tCosts=Math.max(tIdeal-tBal-tTaxPaid,0);
 
+  const coef=Math.max(S.coef,1);
   return {
     n:n,
-    g:{gross:gBal, tax:gTax, net:gBal-gTax, fees:gFees, inTotal:gIn, basis:gBasis},
-    t:{gross:tBal, tax:tTaxPaid+tEndTax, net:tBal-tEndTax, fees:tCosts, inTotal:tIn, basis:tBasis, onTheWay:tTaxPaid}
+    g:{gross:gBal, tax:gTax, net:gBal-gTax, costs:gCosts, inTotal:gIn, ann:gBal/coef},
+    t:{gross:tBal, tax:tTaxPaid+tEndTax, net:tBal-tEndTax, costs:tCosts, inTotal:tIn, ann:(tBal-tEndTax)/coef}
   };
 }
-/* what management fee would make the two tracks tie */
 function breakeven(){
   const keep=S.gAcc;
-  let lo=0, hi=5, best=null;
-  const diffAt=function(f){S.gAcc=f;const r=run();return r.g.net-r.t.net;};
-  const d0=diffAt(0), d5=diffAt(5);
-  if((d0>0)!==(d5>0)){
-    for(let k=0;k<40;k++){
-      const mid=(lo+hi)/2;
-      if((diffAt(lo)>0)===(diffAt(mid)>0))lo=mid;else hi=mid;
-    }
+  const pick=function(r){return S.mode==='ann'?[r.g.ann,r.t.ann]:[r.g.net,r.t.net];};
+  const diffAt=function(f){S.gAcc=f;const p=pick(run());return p[0]-p[1];};
+  let lo=0,hi=5,best=null;
+  if((diffAt(0)>0)!==(diffAt(5)>0)){
+    for(let k=0;k<40;k++){const mid=(lo+hi)/2;if((diffAt(lo)>0)===(diffAt(mid)>0))lo=mid;else hi=mid;}
     best=(lo+hi)/2;
   }
   S.gAcc=keep;
@@ -670,63 +716,87 @@ function breakeven(){
 
 function calc(){
   const r=run();
-  const gNet=r.g.net, tNet=r.t.net, diff=gNet-tNet;
-  const gWins=diff>0;
-  document.getElementById('gNet').innerHTML=money(gNet)+'<small> ₪</small>';
-  document.getElementById('tNet').innerHTML=money(tNet)+'<small> ₪</small>';
-  document.getElementById('gNet2').textContent=money(gNet)+' ₪';
-  document.getElementById('tNet2').textContent=money(tNet)+' ₪';
+  const ann=S.mode==='ann';
+  const gVal=ann?r.g.ann:r.g.net, tVal=ann?r.t.ann:r.t.net;
+  const diff=gVal-tVal, gWins=diff>0;
+  const unit=ann?' ₪ בחודש':' ₪';
+
+  /* the comparison table */
+  document.getElementById('r1g').textContent=money(r.g.gross);
+  document.getElementById('r1t').textContent=money(r.t.gross);
+  document.getElementById('r2g').textContent=money(r.g.net);
+  document.getElementById('r2t').textContent=money(r.t.net);
+  document.getElementById('r3g').textContent=money(r.g.ann);
+  document.getElementById('r3t').textContent=money(r.t.ann);
+  document.getElementById('r3sub').textContent='לפי מקדם '+S.coef+', בגמל פטור ממס';
+  document.getElementById('r1g').classList.toggle('lead',r.g.gross>r.t.gross);
+  document.getElementById('r1t').classList.toggle('lead',r.t.gross>r.g.gross);
+  document.getElementById('r2g').classList.toggle('lead',r.g.net>r.t.net);
+  document.getElementById('r2t').classList.toggle('lead',r.t.net>r.g.net);
+  document.getElementById('r3g').classList.toggle('lead',r.g.ann>r.t.ann);
+  document.getElementById('r3t').classList.toggle('lead',r.t.ann>r.g.ann);
+
+  document.getElementById('mLump').classList.toggle('on',!ann);
+  document.getElementById('mAnn').classList.toggle('on',ann);
+  document.getElementById('gCap').textContent=ann?'קצבה חודשית מגיל 60':'נטו אחרי מס';
+  document.getElementById('tCap').textContent=ann?'קצבה חודשית מגיל 60':'נטו אחרי מס';
+  document.getElementById('gNet').innerHTML=money(gVal)+'<small>'+unit+'</small>';
+  document.getElementById('tNet').innerHTML=money(tVal)+'<small>'+unit+'</small>';
+  document.getElementById('gNet2').textContent=money(gVal)+' ₪';
+  document.getElementById('tNet2').textContent=money(tVal)+' ₪';
   document.getElementById('gIn').textContent=money(r.g.inTotal)+' ₪';
   document.getElementById('tIn').textContent=money(r.t.inTotal)+' ₪';
   document.getElementById('gGross').textContent=money(r.g.gross)+' ₪';
   document.getElementById('tGross').textContent=money(r.t.gross)+' ₪';
-  document.getElementById('gFees').textContent='- '+money(r.g.fees)+' ₪';
-  document.getElementById('tFees').textContent='- '+money(r.t.fees)+' ₪';
-  document.getElementById('gTax').textContent=(r.g.tax>0?'- ':'')+money(r.g.tax)+' ₪';
+  document.getElementById('gFees').textContent='- '+money(r.g.costs)+' ₪';
+  document.getElementById('tFees').textContent='- '+money(r.t.costs)+' ₪';
+  document.getElementById('gTax').textContent=ann?'0 ₪ (פטור)':'- '+money(r.g.tax)+' ₪';
   document.getElementById('tTax').textContent='- '+money(r.t.tax)+' ₪';
-  document.getElementById('cbG').textContent=money(gNet)+' ₪';
-  document.getElementById('cbT').textContent=money(tNet)+' ₪';
-  const mx=Math.max(gNet,tNet,1);
-  document.getElementById('cbGi').style.width=Math.max(gNet/mx*100,2)+'%';
-  document.getElementById('cbTi').style.width=Math.max(tNet/mx*100,2)+'%';
-  document.getElementById('trkG').classList.toggle('win',gWins&&Math.abs(diff)>1);
-  document.getElementById('trkT').classList.toggle('win',!gWins&&Math.abs(diff)>1);
-  document.getElementById('crownG').hidden=!(gWins&&Math.abs(diff)>1);
-  document.getElementById('crownT').hidden=!(!gWins&&Math.abs(diff)>1);
+  document.getElementById('cbG').textContent=money(gVal)+' ₪';
+  document.getElementById('cbT').textContent=money(tVal)+' ₪';
+  const mx=Math.max(gVal,tVal,1);
+  document.getElementById('cbGi').style.width=Math.max(gVal/mx*100,2)+'%';
+  document.getElementById('cbTi').style.width=Math.max(tVal/mx*100,2)+'%';
+  const clear=Math.abs(diff)>(ann?1:1);
+  document.getElementById('trkG').classList.toggle('win',gWins&&clear);
+  document.getElementById('trkT').classList.toggle('win',!gWins&&clear);
+  document.getElementById('crownG').hidden=!(gWins&&clear);
+  document.getElementById('crownT').hidden=!(!gWins&&clear);
 
-  const pct=Math.min(gNet,tNet)>0?Math.abs(diff)/Math.min(gNet,tNet)*100:0;
-  document.getElementById('vLbl').textContent=Math.abs(diff)<1?'תיקו כמעט מוחלט':(gWins?'🏦 קופת גמל להשקעה מקדימה ב':'📊 חשבון המסחר מקדים ב');
-  document.getElementById('vNum').innerHTML=money(Math.abs(diff))+'<small> ₪</small>';
-  document.getElementById('vSub').textContent=Math.abs(diff)<1
+  const pct=Math.min(gVal,tVal)>0?Math.abs(diff)/Math.min(gVal,tVal)*100:0;
+  document.getElementById('vLbl').textContent=!clear?'תיקו כמעט מוחלט':(gWins?'🏦 קופת גמל להשקעה מקדימה ב':'📊 חשבון המסחר מקדים ב');
+  document.getElementById('vNum').innerHTML=money(Math.abs(diff))+'<small>'+unit+'</small>';
+  document.getElementById('vSub').textContent=!clear
     ?'בנתונים האלה שני המסלולים מגיעים לאותו מקום, אז ההחלטה היא לפי נזילות ונוחות ולא לפי הכסף.'
-    :'הפרש של '+pct.toFixed(1)+'% בסוף התקופה, אחרי כל העלויות וכל המס.';
+    :(ann?'הפרש של '+pct.toFixed(1)+'% בקצבה החודשית, לכל החיים.':'הפרש של '+pct.toFixed(1)+'% בסוף התקופה, אחרי כל העלויות וכל המס.');
 
   const be=breakeven();
   document.getElementById('beVal').textContent=be===null?'-':be.toFixed(2)+'%';
   document.getElementById('beSub').textContent=be===null
-    ? 'בנתונים האלה אין נקודת איזון בטווח של 0 עד 5 אחוז. מסלול אחד מוביל בכל מקרה.'
-    : 'מעל דמי ניהול כאלה בגמל, חשבון המסחר מנצח. מתחת לזה הגמל. היום את/ה משלמ/ת '+S.gAcc+'%.';
+    ? 'בנתונים האלה אין נקודת איזון בין 0 ל-5 אחוז. מסלול אחד מוביל בכל מקרה.'
+    : 'מעל דמי ניהול כאלה בגמל, חשבון המסחר מנצח. מתחת לזה הגמל. היום מזינים '+S.gAcc+'%.';
 
+  const gapCost=(S.gAcc+S.gExp+S.ret*S.gCash/100+S.divY*S.gDivTax/100)-(S.tTer+S.divY*S.tDivTax/100);
   const mi=document.getElementById('mainInsight');
-  if(S.pensionAge){
+  if(ann){
     mi.className='insight';
-    mi.innerHTML='כשמושכים את הגמל <b>כקצבה אחרי גיל 60</b> המס על הרווח נמחק לגמרי, וכאן זה שווה כ-<b>'+money(Math.max(r.g.gross-r.g.basis,0)*S.tax/100)+' ₪</b> שלא משלמים. זה מה שמטה את הכף, וזה גם התנאי: הכסף הזה נשאר לקצבה אחרי 60, לא לדירה בעוד שבע שנים. מושכים אותו קודם כסכום חד פעמי, והפטור מתבטל.';
-  }else if(S.tTurn<=0&&S.tDiv<=0){
+    mi.innerHTML='כקצבה מגיל 60 הגמל <b>פטור לגמרי ממס רווחי הון</b>, וכאן זה שווה '+money(r.g.tax)+' ₪ שלא משולמים. זה מה שמצמצם את הפער, ולפעמים הופך אותו. התנאי הוא אמיתי: הכסף יוצא כקצבה חודשית אחרי 60, לא כסכום חד פעמי לדירה או לטיול.';
+  }else if(S.tTurn<=0){
     mi.className='insight';
-    mi.innerHTML='שווה לשים לב למה שקורה כאן: בקנייה והחזקה, בלי מכירות ובלי דיבידנד, <b>גם בחשבון המסחר המס משולם רק בסוף</b> - בדיוק כמו בגמל. כלומר לדחיית המס אין כאן שום יתרון, ונשארים רק דמי הניהול. לגמל יש שני מצבים שבהם הוא כן מנצח: <b>משיכה כקצבה אחרי גיל 60</b>, או תיק שמתחלף, מתאזן מחדש או מחלק דיבידנד. אפשר לסמן אותם למעלה ולראות איך התמונה מתהפכת.';
+    mi.innerHTML='שווה לשים לב: בקנייה והחזקה בלי מכירות, <b>גם בחשבון המסחר המס משולם רק בסוף</b>, בדיוק כמו בגמל. כלומר לדחיית המס אין כאן יתרון, ומה שמכריע זה הפער בעלויות השוטפות: '+gapCost.toFixed(2)+'% בשנה לטובת חשבון המסחר. שני המצבים שבהם הגמל כן מנצח הם משיכה כקצבה מגיל 60 (המתג למעלה), או תיק שמתחלף ומשלם מס בדרך.';
   }else if(gWins){
     mi.className='insight';
-    mi.innerHTML='הגמל מוביל כי <b>המס נדחה לסוף</b> בזמן שבחשבון המסחר הוא נגבה בדרך, בכל מכירה ובכל דיבידנד. כל שקל מס שלא שולם ממשיך לעבוד, וזה מכסה את דמי הניהול הגבוהים יותר. ככל שהתקופה ארוכה יותר, היתרון הזה גדל.';
+    mi.innerHTML='הגמל מוביל כי <b>המס נדחה לסוף</b> בזמן שבחשבון המסחר הוא נגבה בדרך, בכל מכירה. כל שקל מס שלא שולם ממשיך לעבוד, וזה מכסה את פער העלויות של '+gapCost.toFixed(2)+'% בשנה.';
   }else{
     mi.className='insight';
-    mi.innerHTML='חשבון המסחר מוביל כי <b>העלות השנתית שלו נמוכה בהרבה</b>, ודמי הניהול בגמל נגבים מכל הסכום בכל שנה. הפער בעלות כאן ('+(S.gAcc-S.tEtf-S.tCust).toFixed(2)+'% לשנה) גדול ממה שדחיית המס מצליחה להחזיר.';
+    mi.innerHTML='חשבון המסחר מוביל כי <b>העלות השנתית שלו נמוכה בהרבה</b>: פער של '+gapCost.toFixed(2)+'% בשנה, שכולל דמי ניהול, מזומן שיושב בצד ומס דיבידנד גבוה יותר בקופה. זה גדול ממה שדחיית המס מצליחה להחזיר.';
   }
 
   const ci=document.getElementById('ceilInsight');
   const perYear=S.monthly*12;
   if(S.ceil>0&&perYear>S.ceil){
     ci.hidden=false; ci.className='insight soft';
-    ci.innerHTML='⚠️ ההפקדה השנתית כאן היא '+money(perYear)+' ₪, מעל תקרת הגמל של '+money(S.ceil)+' ₪ לאדם. את העודף אי אפשר להפקיד לאותה קופה, והוא ילך ממילא לחשבון מסחר או לקופה של בן/בת הזוג. החישוב למעלה מתעלם מהתקרה כדי להשוות מסלול מול מסלול.';
+    ci.innerHTML='⚠️ ההפקדה השנתית כאן היא '+money(perYear)+' ₪, מעל תקרת הגמל של '+money(S.ceil)+' ₪ לאדם. את העודף אי אפשר להפקיד לאותה קופה, והוא ילך ממילא לחשבון מסחר או לקופה של בן/בת הזוג.';
   }else{ci.hidden=true;}
   save();
 }
@@ -734,28 +804,44 @@ function calc(){
 /* ── binding ── */
 function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function applyAll(){
-  setVal('start',grp(Math.round(S.start))); setVal('monthly',grp(Math.round(S.monthly)));
-  setVal('years',S.years); setVal('ret',S.ret);
-  document.getElementById('pensionAge').checked=!!S.pensionAge;
-  setVal('gAcc',S.gAcc); setVal('gDep',S.gDep);
-  setVal('tEtf',S.tEtf); setVal('tBuy',S.tBuy); setVal('tCust',S.tCust); setVal('tDiv',S.tDiv); setVal('tTurn',S.tTurn);
-  setVal('aTax',S.tax); setVal('aInf',S.inf); setVal('aCeil',grp(Math.round(S.ceil)));
+  setVal('baseDep',grp(Math.round(S.baseDep))); setVal('baseGain',grp(Math.round(S.baseGain)));
+  setVal('monthly',grp(Math.round(S.monthly))); setVal('years',S.years); setVal('ret',S.ret);
+  setVal('gAcc',S.gAcc); setVal('gExp',S.gExp); setVal('gDep',S.gDep); setVal('gCash',S.gCash); setVal('gDivTax',S.gDivTax);
+  setVal('tFee',S.tFee); setVal('tComPct',S.tComPct); setVal('tComMin',S.tComMin); setVal('tTer',S.tTer);
+  setVal('tDivTax',S.tDivTax); setVal('tTurn',S.tTurn);
+  document.getElementById('tOffset').checked=!!S.tOffset;
+  document.getElementById('tFund').value=S.tFund;
+  setVal('aTax',S.tax); setVal('aInf',S.inf); setVal('aDivY',S.divY); setVal('aCoef',S.coef); setVal('aCeil',grp(Math.round(S.ceil)));
   document.querySelectorAll('.tt-field').forEach(function(f){
     const i=f.querySelector('input'), l=f.querySelector('label');
     if(i&&l&&!l.htmlFor)l.htmlFor=i.id;
   });
 }
 function liveFormat(el){const s=el.selectionStart,old=el.value;el.value=grp(el.value);if(document.activeElement===el){const d=el.value.length-old.length;try{el.setSelectionRange(Math.max(s+d,0),Math.max(s+d,0));}catch(e){}}}
-const MONEYF=['start','monthly','aCeil'];
-[['start','start'],['monthly','monthly'],['years','years'],['ret','ret'],
- ['gAcc','gAcc'],['gDep','gDep'],
- ['tEtf','tEtf'],['tBuy','tBuy'],['tCust','tCust'],['tDiv','tDiv'],['tTurn','tTurn'],
- ['aTax','tax'],['aInf','inf'],['aCeil','ceil']].forEach(function(p){
+const MONEYF=['baseDep','baseGain','monthly','aCeil'];
+[['baseDep','baseDep'],['baseGain','baseGain'],['monthly','monthly'],['years','years'],['ret','ret'],
+ ['gAcc','gAcc'],['gExp','gExp'],['gDep','gDep'],['gCash','gCash'],['gDivTax','gDivTax'],
+ ['tFee','tFee'],['tComPct','tComPct'],['tComMin','tComMin'],['tTer','tTer'],['tDivTax','tDivTax'],['tTurn','tTurn'],
+ ['aTax','tax'],['aInf','inf'],['aDivY','divY'],['aCoef','coef'],['aCeil','ceil']].forEach(function(p){
   const el=document.getElementById(p[0]);if(!el)return;
-  el.addEventListener('input',function(){if(MONEYF.indexOf(p[0])>-1)liveFormat(el);S[p[1]]=num(el.value);calc();});
+  el.addEventListener('input',function(){
+    if(MONEYF.indexOf(p[0])>-1)liveFormat(el);
+    S[p[1]]=num(el.value);
+    if(p[0]==='tDivTax'){S.tFund='custom';document.getElementById('tFund').value='custom';}
+    calc();
+  });
 });
-document.getElementById('pensionAge').addEventListener('change',function(){S.pensionAge=this.checked;calc();});
-document.getElementById('asReset').onclick=function(){S.tax=DEF.tax;S.inf=DEF.inf;S.ceil=DEF.ceil;applyAll();calc();};
+document.getElementById('tFund').addEventListener('change',function(){
+  S.tFund=this.value;
+  if(this.value!=='custom'){S.tDivTax=parseFloat(this.value);setVal('tDivTax',S.tDivTax);}
+  calc();
+});
+document.getElementById('tOffset').addEventListener('change',function(){S.tOffset=this.checked;calc();});
+document.getElementById('mLump').onclick=function(){S.mode='lump';calc();};
+document.getElementById('mAnn').onclick=function(){S.mode='ann';calc();};
+document.getElementById('asReset').onclick=function(){
+  S.tax=DEF.tax;S.inf=DEF.inf;S.divY=DEF.divY;S.coef=DEF.coef;S.ceil=DEF.ceil;applyAll();calc();
+};
 
 /* ── save / share ── */
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}syncLive();}

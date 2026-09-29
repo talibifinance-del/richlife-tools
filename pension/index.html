@@ -299,6 +299,16 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .sens .s-r .s-b i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px}
 .sens .s-r .s-v{font-variant-numeric:tabular-nums;font-weight:900;color:var(--pine-darker);white-space:nowrap}
 .sens .s-r .s-v small{font-size:10.5px;font-weight:800;color:var(--ink-soft);display:block;text-align:end}
+/* the reality waterfall */
+.wfall{border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:15px;overflow:hidden}
+.wf-r{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 13px;border-top:1px solid rgba(var(--pine-rgb),.12);font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
+.wf-r:first-child{border-top:0;background:rgba(var(--pine-rgb),.10)}
+.wf-r .wf-l small{display:block;font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+.wf-r .wf-v{font-variant-numeric:tabular-nums;font-weight:900;color:var(--pine-darker);white-space:nowrap}
+.wf-r .wf-p{font-size:11px;font-weight:900;border-radius:100px;padding:3px 9px;white-space:nowrap}
+.wf-r .wf-p.ok{background:rgba(var(--pine-rgb),.12);color:var(--pine-deep)}
+.wf-r .wf-p.mid{background:rgba(183,121,31,.14);color:#8a5a12}
+.wf-r .wf-p.bad{background:rgba(var(--red-rgb),.10);color:#8f3a29}
 /* gap block */
 .gap-grid{display:grid;gap:9px;margin-top:13px}
 .gap-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sage-tint);border-radius:12px;padding:12px 14px}
@@ -417,6 +427,11 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="tt-field"><label>שיעור הכיסוי מהשכר (%)</label><div class="tt-cell"><input id="okPct" inputmode="decimal" aria-label="שיעור כיסוי אובדן כושר עבודה"><span class="u suf">%</span></div></div>
       <div class="tt-field"><label>או קצבת נכות מהדוח (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="okAmt" inputmode="numeric" aria-label="קצבת נכות חודשית מהדוח"></div></div>
     </div>
+    <div class="field" style="margin-top:14px">
+      <label for="gapY">שנים שבהן לא יופקד כלום</label>
+      <div class="input-shell"><input id="gapY" type="text" inputmode="decimal" value="0" placeholder="0" aria-label="שנות הפסקה בהפקדות"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שנים</span></div>
+      <div class="hint">חופשות לידה ארוכות, מעברים בין עבודות, תקופות של עצמאית בלי הפקדה, אבטלה. ברירת המחדל מניחה רצף מושלם של הפקדות, וזה כמעט אף פעם לא מה שקורה.</div>
+    </div>
     <div class="tt-sub" style="margin-top:18px">שתי ההנחות שקובעות את התוצאה</div>
     <div class="field">
       <div class="lbl-row">
@@ -473,11 +488,19 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     </div>
     <div class="sum-grid">
       <div class="tile good"><div class="t-lbl">ההון שיצטבר בפרישה</div><div class="t-val" id="capNum">0 ₪</div><div class="t-sub" id="capSub">בכוח הקנייה של היום</div></div>
-      <div class="tile"><div class="t-lbl">אחוז מהשכר (תחלופה)</div><div class="t-val" id="replNum">0%</div><div class="t-sub" id="replSub"></div></div>
+      <div class="tile"><div class="t-lbl">אחוז תחלופה</div><div class="t-val" id="replNum">0%</div><div class="t-sub" id="replSub"></div></div>
       <div class="tile"><div class="t-lbl">שנים עד הפרישה</div><div class="t-val" id="yrsNum">0</div><div class="t-sub" id="yrsSub"></div></div>
     </div>
     <div class="insight" id="mainInsight"></div>
     <div class="insight" id="realityGate" hidden></div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🧨 למה בפועל אומרים שההכנסה בפנסיה יורדת</span>
+    <div class="cp-note" style="margin-top:0;margin-bottom:13px">המספר למעלה מניח קריירה מושלמת: הפקדה בכל חודש, בלי הפסקה, בלי לפדות פיצויים, לאורך כל השנים. כמעט אף אחת לא חיה ככה. כאן מוסיפים שכבה-שכבה את מה שקורה באמת, ורואים לאן זה מגיע.</div>
+    <div class="wfall" id="wfall"></div>
+    <div class="insight" id="wfInsight"></div>
+    <div class="cp-note">כל שורה מצטברת על הקודמת, ומחושבת על הנתונים שהזנת. אלה לא תרחישי אימה - זה מה שקורה לרוב הנשים: לידה, מעבר עבודה שבו פודים את הפיצויים, ותקופה של עצמאית. <b>זו הסיבה שצריך חיסכון בצד, וזה בדיוק מה שמחושב בכרטיס הבא.</b></div>
   </div>
 
   <div class="card">
@@ -726,7 +749,7 @@ const DEF={
   pEmp:6, pTag:6.5, pPit:8.33, pit:true,
   feeDep:2, feeAcc:0.25, ins:0,
   okPct:75, okAmt:0,
-  target:12000, repAnn:0, fundRate:3.86,
+  target:12000, repAnn:0, fundRate:3.86, gapY:0,
   yld:4, yldMode:'real', inf:2.5, growth:1, coef:212, side:4,
   bFeeDep:1, bFeeAcc:0.2
 };
@@ -738,16 +761,21 @@ function toNom(real,inf){return ((1+real/100)*(1+inf/100)-1)*100;}
 function realYield(){return S.yldMode==='nom'?toReal(S.yld,S.inf):S.yld;}
 
 /* ── the projection ── */
-function project(feeDep,feeAcc,yOverride,gOverride){
+function project(feeDep,feeAcc,yOverride,gOverride,opts){
+  opts=opts||{};
   const n=Math.min(Math.max(Math.round((S.retAge-S.age)*12),0),12*60);
   const netY=((yOverride==null?realYield():yOverride)-feeAcc)/100;
   const rm=Math.pow(1+Math.max(netY,-0.9),1/12)-1;
   const gm=Math.pow(1+Math.max(gOverride==null?S.growth:gOverride,-90)/100,1/12)-1;
-  const rate=(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
+  const usePit=opts.noPit?false:S.pit;
+  const rate=(S.pEmp+S.pTag+(usePit?S.pPit:0))/100;
+  const gapM=Math.min(Math.round((opts.gapY==null?S.gapY:opts.gapY)*12),n);
+  const gapFrom=Math.floor((n-gapM)/2);
   const self=S.status==='self';
   let bal=S.bal+S.extraBal, sal=S.sal, base=self?S.depSelf:0, dep=0;
   for(let i=0;i<n;i++){
-    dep=Math.max((self?base:sal*rate)*(1-feeDep/100)-S.ins,0);
+    const onGap=(gapM>0&&i>=gapFrom&&i<gapFrom+gapM);
+    dep=onGap?0:Math.max((self?base:sal*rate)*(1-feeDep/100)-S.ins,0);
     bal=bal*(1+rm)+dep;
     sal*=(1+gm); base*=(1+gm);
   }
@@ -780,8 +808,8 @@ function calc(){
     (yrs>0?'<br><span style="opacity:.86">בשקלים של אז זה יהיה כ-'+money(ann*priceFactor)+' ₪, כי גם המחירים יעלו פי '+priceFactor.toFixed(1)+'</span>':'');
   document.getElementById('capNum').textContent=money(mine.cap)+' ₪';
   document.getElementById('capSub').innerHTML=yrs>0?'בכוח הקנייה של היום<br>('+money(mine.cap*priceFactor)+' ₪ בשקלים של אז)':'בכוח הקנייה של היום';
-  document.getElementById('replNum').textContent=Math.round(repl)+'%';
-  document.getElementById('replSub').textContent=(S.status==='self'?(S.income<=0?'מהשכר הקובע שבדוח, לא מההכנסה שלך':'מההכנסה שלך היום'):'מהשכר שלך היום')+' ('+Math.round(replThen)+'% מהצפוי אז)';
+  document.getElementById('replNum').textContent=Math.round(replThen)+'%';
+  document.getElementById('replSub').innerHTML='מהשכר הצפוי בפרישה<br>('+Math.round(repl)+'% מהשכר של היום)';
   document.getElementById('yrsNum').textContent=money(yrs);
   document.getElementById('yrsSub').textContent=money(mine.n)+' הפקדות חודשיות';
   const gross=S.status==='self'?S.depSelf:S.sal*(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
@@ -882,6 +910,33 @@ function calc(){
       rg.innerHTML='שימו לב: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, ו-'+Math.round(replThen)+'% מהשכר הצפוי בפרישה. יחס מעל 100% אפשרי בתקופה ארוכה, אבל הוא נשען כולו על כך שההפקדות באמת ימשיכו ברצף לאורך כל השנים.';
     }
   }else{rg.hidden=true;}
+
+  /* ── what a real career does to that number, layer by layer ── */
+  const wGrow=Math.max(S.growth,1.5);
+  const steps=[
+    {l:'כמו שהוזן למעלה', s:'רצף מלא של הפקדות', o:{}},
+    {l:'עם גדילת שכר ריאלית של '+wGrow+'%', s:'הקצבה עולה, אבל השכר שאליו משווים עולה יותר', o:{g:wGrow}},
+    {l:'ופודה את הפיצויים בין עבודות', s:'8.33% מתוך ההפקדה נעלמים מהחיסכון', o:{g:wGrow,noPit:true}},
+    {l:'ועוד 3 שנים בלי הפקדות', s:'לידות, מעברים, תקופה כעצמאית', o:{g:wGrow,noPit:true,gapY:Math.max(S.gapY,3)}},
+    {l:'ותשואה של 3% במקום 4%', s:'עשור חלש אחד מספיק לזה', o:{g:wGrow,noPit:true,gapY:Math.max(S.gapY,3),y:3}}
+  ];
+  const wf=steps.map(function(st){
+    const pr=project(S.feeDep,S.feeAcc,st.o.y==null?null:st.o.y,st.o.g==null?null:st.o.g,{noPit:!!st.o.noPit,gapY:st.o.gapY});
+    const a=pr.cap/coef, rt=pr.finalSal>0?a/pr.finalSal*100:0;
+    return {l:st.l,s:st.s,ann:a,rep:rt};
+  });
+  document.getElementById('wfall').innerHTML=wf.map(function(r,i){
+    const cls=r.rep>=70?'ok':(r.rep>=50?'mid':'bad');
+    return '<div class="wf-r"><span class="wf-l">'+(i?'↓ ':'')+r.l+'<small>'+r.s+'</small></span>'+
+           '<span class="wf-v">'+money(r.ann)+' ₪</span>'+
+           '<span class="wf-p '+cls+'">'+Math.round(r.rep)+'%</span></div>';
+  }).join('');
+  const wi=document.getElementById('wfInsight');
+  const last=wf[wf.length-1], first=wf[0];
+  wi.className='insight';
+  wi.innerHTML='ההבדל בין השורה הראשונה לאחרונה הוא <b>'+money(first.ann-last.ann)+' ₪ בחודש</b>, לכל החיים. '+
+    'ושימי לב לעמודה הימנית: היא מודדת את הקצבה מול <b>השכר בפרישה</b>, לא מול השכר של היום. '+
+    'זו בדיוק ההגדרה שממנה מגיע המספר המוכר של כ-75% תחלופה, וכאן רואים למה בפועל רוב האנשים נוחתים הרבה מתחתיו.';
 
   /* ── reconcile with the number printed in the report ── */
   const yrsF=Math.max(S.retAge-S.age,0);
@@ -1034,16 +1089,17 @@ function applyAll(){
   setVal('feeDep',S.feeDep); setVal('feeAcc',S.feeAcc); setVal('insCost',S.ins?grp(Math.round(S.ins)):'');
   setVal('okPct',S.okPct); setVal('okAmt',S.okAmt?grp(Math.round(S.okAmt)):'');
   setVal('target',grp(Math.round(S.target)));
-  setVal('repAnn',S.repAnn?grp(Math.round(S.repAnn)):''); setVal('fundRate',S.fundRate);
+  setVal('repAnn',S.repAnn?grp(Math.round(S.repAnn)):''); setVal('fundRate',S.fundRate); setVal('gapY',S.gapY);
   setVal('aYield',S.yld); setVal('aInf',S.inf); setVal('aGrowth',S.growth); setVal('aCoef',S.coef); setVal('aSide',S.side);
   setVal('bFeeDep',S.bFeeDep); setVal('bFeeAcc',S.bFeeAcc);
   paintSources();
 }
 function liveFormat(el){const s=el.selectionStart,old=el.value;el.value=grp(el.value);if(document.activeElement===el){const d=el.value.length-old.length;try{el.setSelectionRange(Math.max(s+d,0),Math.max(s+d,0));}catch(e){}}}
 const MONEYF=['bal','extraBal','sal','target','okAmt','insCost','depSelf','income','repAnn'];
+
 [['age','age'],['retAge','retAge'],['bal','bal'],['extraBal','extraBal'],['sal','sal'],
  ['pEmp','pEmp'],['pTag','pTag'],['pPit','pPit'],['feeDep','feeDep'],['feeAcc','feeAcc'],['insCost','ins'],['depSelf','depSelf'],['income','income'],
- ['okPct','okPct'],['okAmt','okAmt'],['target','target'],['repAnn','repAnn'],['fundRate','fundRate'],
+ ['okPct','okPct'],['okAmt','okAmt'],['target','target'],['repAnn','repAnn'],['gapY','gapY'],['fundRate','fundRate'],
  ['aYield','yld'],['aInf','inf'],['aGrowth','growth'],['aCoef','coef'],['aSide','side'],
  ['bFeeDep','bFeeDep'],['bFeeAcc','bFeeAcc']].forEach(function(p){
   const el=document.getElementById(p[0]);if(!el)return;

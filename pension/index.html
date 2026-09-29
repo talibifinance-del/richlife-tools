@@ -428,6 +428,12 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       </div>
       <div class="input-shell"><input id="aYield" type="text" inputmode="decimal" aria-label="תשואה שנתית ממוצעת"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
       <div class="mini-hint" id="yldConv"></div>
+      <div class="guide-note" style="margin-top:10px">
+        <b>נומינלית</b> = המספר שמפרסמים על המסלול, לפני שמורידים ממנו את התייקרות החיים.
+        <span class="grow"><b>ריאלית</b> = כמה באמת אפשר לקנות יותר בסוף השנה. זה נומינלי פחות אינפלציה, פחות או יותר.</span>
+        <span class="grow">דוגמה: הכסף גדל 9.7%, הכל התייקר 2.5%, אז בפועל אפשר לקנות כ-7% יותר. <b>9.7% נומינלי = 7% ריאלי.</b></span>
+        <span class="mand">כל התוצאות במחשבון הן <b>ריאליות</b>, כלומר בכוח הקנייה של היום. 8,000 ש"ח כאן זה 8,000 ש"ח כמו שאת מכירה אותם עכשיו, לא כמו שהם יהיו שווים בעוד 30 שנה.</span>
+      </div>
     </div>
     <div class="tt-grid" style="margin-top:12px">
       <div class="tt-field"><label>אינפלציה שנתית להמרה (%)</label><div class="tt-cell"><input id="aInf" inputmode="decimal" aria-label="אינפלציה שנתית"><span class="u suf">%</span></div></div>
@@ -466,7 +472,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="nh-sub" id="annSub"></div>
     </div>
     <div class="sum-grid">
-      <div class="tile good"><div class="t-lbl">ההון שיצטבר בפרישה</div><div class="t-val" id="capNum">0 ₪</div><div class="t-sub">במונחי היום</div></div>
+      <div class="tile good"><div class="t-lbl">ההון שיצטבר בפרישה</div><div class="t-val" id="capNum">0 ₪</div><div class="t-sub" id="capSub">בכוח הקנייה של היום</div></div>
       <div class="tile"><div class="t-lbl">אחוז מהשכר (תחלופה)</div><div class="t-val" id="replNum">0%</div><div class="t-sub" id="replSub"></div></div>
       <div class="tile"><div class="t-lbl">שנים עד הפרישה</div><div class="t-val" id="yrsNum">0</div><div class="t-sub" id="yrsSub"></div></div>
     </div>
@@ -732,11 +738,11 @@ function toNom(real,inf){return ((1+real/100)*(1+inf/100)-1)*100;}
 function realYield(){return S.yldMode==='nom'?toReal(S.yld,S.inf):S.yld;}
 
 /* ── the projection ── */
-function project(feeDep,feeAcc,yOverride){
+function project(feeDep,feeAcc,yOverride,gOverride){
   const n=Math.min(Math.max(Math.round((S.retAge-S.age)*12),0),12*60);
   const netY=((yOverride==null?realYield():yOverride)-feeAcc)/100;
   const rm=Math.pow(1+Math.max(netY,-0.9),1/12)-1;
-  const gm=Math.pow(1+Math.max(S.growth,-90)/100,1/12)-1;
+  const gm=Math.pow(1+Math.max(gOverride==null?S.growth:gOverride,-90)/100,1/12)-1;
   const rate=(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
   const self=S.status==='self';
   let bal=S.bal+S.extraBal, sal=S.sal, base=self?S.depSelf:0, dep=0;
@@ -769,8 +775,11 @@ function calc(){
   const replThen=mine.finalSal>0?(ann/mine.finalSal*100):0;
 
   document.getElementById('annNum').innerHTML=money(ann)+'<small> ₪</small>';
-  document.getElementById('annSub').textContent='במונחי היום, מגיל '+money(S.retAge)+' ולכל החיים';
+  const priceFactor=Math.pow(1+Math.max(S.inf,0)/100,Math.max(yrs,0));
+  document.getElementById('annSub').innerHTML='בכוח הקנייה של היום, מגיל '+money(S.retAge)+' ולכל החיים'+
+    (yrs>0?'<br><span style="opacity:.86">בשקלים של אז זה יהיה כ-'+money(ann*priceFactor)+' ₪, כי גם המחירים יעלו פי '+priceFactor.toFixed(1)+'</span>':'');
   document.getElementById('capNum').textContent=money(mine.cap)+' ₪';
+  document.getElementById('capSub').innerHTML=yrs>0?'בכוח הקנייה של היום<br>('+money(mine.cap*priceFactor)+' ₪ בשקלים של אז)':'בכוח הקנייה של היום';
   document.getElementById('replNum').textContent=Math.round(repl)+'%';
   document.getElementById('replSub').textContent=(S.status==='self'?(S.income<=0?'מהשכר הקובע שבדוח, לא מההכנסה שלך':'מההכנסה שלך היום'):'מהשכר שלך היום')+' ('+Math.round(replThen)+'% מהצפוי אז)';
   document.getElementById('yrsNum').textContent=money(yrs);
@@ -853,11 +862,8 @@ function calc(){
   });
   /* the live conversion, so the trap is visible before it costs anything */
   const cv=document.getElementById('yldConv');
-  if(S.yldMode==='nom'){
-    cv.innerHTML='= <b>'+effY.toFixed(1)+'% ריאלית</b> אחרי אינפלציה של '+S.inf+'%. זה המספר שהחישוב עובד לפיו.';
-  }else{
-    cv.innerHTML='= כ-<b>'+toNom(S.yld,S.inf).toFixed(1)+'% נומינלית</b> (מה שהיו מפרסמים על המסלול), באינפלציה של '+S.inf+'%.';
-  }
+  const nomY=S.yldMode==='nom'?S.yld:toNom(S.yld,S.inf);
+  cv.innerHTML='הכסף גדל ב-<b>'+nomY.toFixed(1)+'%</b> בשנה, המחירים עולים ב-'+S.inf+'%, ולכן מה שנשאר בכוח קנייה הוא <b>'+effY.toFixed(1)+'%</b>. החישוב עובד לפי המספר השני.';
   document.querySelectorAll('#yldMode button').forEach(function(b){
     b.classList.toggle('active',b.getAttribute('data-m')===S.yldMode);
   });
@@ -869,7 +875,9 @@ function calc(){
     if(effY>4.5){
       rg.innerHTML='⚠️ עצירה לרגע: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>. ההנחה שמייצרת אותה היא <b>'+effY.toFixed(1)+'% ריאלית, שהן כ-'+toNom(effY,S.inf).toFixed(1)+'% נומינליות</b>. שווה לעצור על המספר הזה: הממוצע ההיסטורי של S&P 500 הוא כ-10% <b>נומינלי</b>, וזה כ-7% ריאלי - כלומר '+(effY>=6.5?'ההנחה כאן היא בעצם התשואה ההיסטורית המלאה של המדד, לא הנחה שמרנית.':'ההנחה כאן כבר גבוהה בהרבה מ-4% שהקרנות מניחות.')+' הקרנות עצמן מחשבות לפי כ-4% ריאלי.';
     }else if(S.growth<1){
-      rg.innerHTML='שימו לב לפרופורציה: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, וזה נשמע מוגזם. הסיבה היא שההשוואה נעשית מול השכר של <b>היום</b>, בעוד שגדילת השכר מוגדרת 0%. כמעט אף אחת לא מרוויחה בגיל '+money(S.retAge)+' את מה שהיא מרוויחה בגיל '+money(S.age)+'. מספיק להזין גדילת שכר ריאלית של 1% בשנה, והתמונה נעשית הגיונית: הקצבה תהיה '+Math.round(replThen)+'% מהשכר הצפוי אז.';
+      const alt=project(S.feeDep,S.feeAcc,null,1);
+      const altRepl=alt.finalSal>0?(alt.cap/coef/alt.finalSal*100):0;
+      rg.innerHTML='שימו לב לפרופורציה: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, וזה נשמע מוגזם. הסיבה היא שההשוואה נעשית מול השכר של <b>היום</b>, בעוד שגדילת השכר מוגדרת 0%. כמעט אף אחת לא מרוויחה בגיל '+money(S.retAge)+' את מה שהיא מרוויחה בגיל '+money(S.age)+'. מספיק להזין גדילת שכר ריאלית של 1% בשנה, והתמונה נעשית הגיונית: הקצבה תהיה כ-<b>'+Math.round(altRepl)+'%</b> מהשכר הצפוי אז.';
     }else{
       rg.innerHTML='שימו לב: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, ו-'+Math.round(replThen)+'% מהשכר הצפוי בפרישה. יחס מעל 100% אפשרי בתקופה ארוכה, אבל הוא נשען כולו על כך שההפקדות באמת ימשיכו ברצף לאורך כל השנים.';
     }

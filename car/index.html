@@ -208,6 +208,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tbl th:first-child,.tbl td:first-child{text-align:start;font-weight:800;color:var(--ink-soft);background:var(--sage-tint);position:sticky;inset-inline-start:0;z-index:1;white-space:normal;min-width:118px}
 .tbl thead th:first-child{background:var(--pine-deep);color:#fff;z-index:2}
 .tbl tr:last-child td{border-bottom:none}
+.tbl .rsub{display:block;font-size:10px;font-weight:700;color:var(--ink-soft);opacity:.85;margin-top:1px}
 .tbl tr.total td{font-weight:900;font-size:13.5px;color:var(--pine-darker);background:rgba(var(--sage-rgb),.22)}
 .tbl tr.total td:first-child{color:var(--pine-darker)}
 .tbl td.best{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep);font-weight:900;box-shadow:inset 0 0 0 1.5px var(--pine)}
@@ -321,7 +322,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 
   <div class="card">
     <span class="sec-lbl">⚖️ מזומן, מימון או ליסינג - מה באמת עולה פחות</span>
-    <div class="rec" style="margin:0 0 13px">ההשוואה על <b>3 שנים</b>, כולל ההוצאות השוטפות, ואחרי שמחזירים לך את שווי הרכב בסוף.</div>
+    <div class="rec" style="margin:0 0 13px">ההשוואה על <span class="mini-inline"><span class="mini-shell"><input id="years" type="text" inputmode="numeric" value="3" aria-label="תקופת ההשוואה בשנים"></span></span> <b>שנים</b>, כולל ההוצאות השוטפות, ואחרי שמחזירים לך את שווי הרכב בסוף. ההמלצה שלי היא להחזיק 4 עד 7, אז שווה לבדוק גם שם.</div>
     <div class="field" style="margin-bottom:14px"><label for="lease">מחיר ליסינג תפעולי שהציעו לך (לחודש, כולל ביטוח וטיפולים)</label><div class="input-shell"><span class="unit">₪</span><input id="lease" type="text" inputmode="numeric" value="2,200" placeholder="0"></div></div>
     <div class="tbl-hint">↔️ אפשר לגרור את הטבלה הצידה כדי לראות את כל המסלולים</div>
     <div class="tbl-wrap">
@@ -331,11 +332,13 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       </table>
     </div>
     <div class="insight" id="cmpIns"></div>
+    <div class="note-tip" id="cmpUpkeep" hidden></div>
+    <div class="note-tip" id="leaseNote" hidden></div>
     <div class="note-tip">⚠️ מזומן תמיד ייראה הכי זול בטבלה הזאת, כי אין בו ריבית - אבל הוא גם מוציא את כל הסכום מהחשבון בבת אחת. הכסף הזה היה יכול לעבוד במקום אחר, והוא גם קרן הביטחון שלך. בדיוק לכן הכלל הוא <b>שליש מההון למקדמה</b>, לא הכל.</div>
     <div class="two-rec" style="margin-top:14px">
       <div class="tr rent">
         <div class="tr-h">🔁 מחליפים רכב כל 3 שנים</div>
-        <div class="tr-eg" style="font-size:12.5px;margin-top:8px">מימון ל-3 שנים וליסינג יוצאים כמעט אותו דבר, אבל בליסינג אין התעסקות במכירה, בתקלות ובירידת הערך. אם זה הקצב שלך - <b>ליסינג</b>.</div>
+        <div class="tr-eg" style="font-size:12.5px;margin-top:8px"><span id="swapMsg"></span></div>
       </div>
       <div class="tr bills">
         <div class="tr-h">🔒 מחזיקים רכב 4 עד 7 שנים</div>
@@ -512,7 +515,7 @@ function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleStri
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
 function ils(v){return fmt.format(Math.round(v))+' ₪';}
 const MONEY=['income','capital','price','down','fuel','insur','maint','park','lease'];
-const PLAIN=['rate','term','depr','prime'];
+const PLAIN=['rate','term','depr','prime','years'];
 const ALL=MONEY.concat(PLAIN);
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
 PLAIN.forEach(id=>document.getElementById(id).addEventListener('input',calc));
@@ -662,34 +665,61 @@ function calc(){
     `הרכב הזה יעלה לך באמת <b>${ils(realCost3)}</b> ב-3 שנים - ${ils(lost3)} ירידת ערך, ${ils(int3)} ריבית ו-${ils(running*36)} הוצאות שוטפות. `+
     `זה <b>${ils(realCost3/36)}</b> לחודש. אותו כסף מושקע ב-8% היה שווה <b>${ils(oppFV)}</b> בעוד 3 שנים.`;
 
-  /* ---------- 4. four routes over 3 years ---------- */
-  const M=36, kPaid=Math.min(term,M);
+  /* ---------- 4. the routes, over a horizon she can change ---------- */
+  const yrs=Math.max(1,Math.min(15,Math.round(num('years'))||3)), M=yrs*12, kPaid=Math.min(term,M);
+  const valH=price*Math.pow(1-depr,yrs);
+  /* every column reports the car and the upkeep separately, so a total is never a
+     mystery: a cheap car with heavy upkeep is mostly upkeep, and that must be visible. */
   function own(dn){
     const L=Math.max(0,price-dn), m=pmt(L,rate,term);
-    const paid=m*kPaid, left=balance(L,rate,term,kPaid);
-    return {up:dn, mo:m+running, paid:dn+paid+running*M, left:left, res:val3,
-            net:dn+paid+running*M+left-val3};
+    const car=dn+m*kPaid, run=running*M, left=balance(L,rate,term,kPaid);
+    return {up:dn,moLoan:m,moRun:running,mo:m+running,car:car,run:run,left:left,res:valH,
+            net:car+run+left-valH};
   }
-  const cash={up:price,mo:running,paid:price+running*M,left:0,res:val3,net:price+running*M-val3};
+  const cash={up:price,moLoan:0,moRun:running,mo:running,car:price,run:running*M,left:0,res:valH,
+              net:price+running*M-valH};
   const mix=own(down), full=own(0);
-  const ls={up:0,mo:lease,paid:lease*M,left:0,res:0,net:lease*M};
+  const leaseRun=num('fuel')+num('park');  /* the driver still buys fuel and pays for parking */
+  const ls={up:0,moLoan:lease,moRun:leaseRun,mo:lease+leaseRun,car:lease*M,run:leaseRun*M,left:0,res:0,
+            net:lease*M+leaseRun*M,leaseCol:true};
   const cols=[cash,mix,full,ls];
   const nets=cols.map(c=>c.net), best=Math.min.apply(null,nets);
+  const sub=t=>'<span class="rsub">'+t+'</span>';
   const rows=[
-    ['מהכיס ביום הקנייה',c=>ils(c.up)],
-    ['החזר חודשי',c=>ils(c.mo)],
-    ['סה"כ שולם ב-3 שנים',c=>ils(c.paid)],
-    ['יתרת הלוואה לסגירה',c=>c.left>0?ils(c.left):'<span class="na">-</span>'],
-    ['שווי הרכב בסוף',c=>c.res>0?ils(c.res):'<span class="na">אין, הרכב חוזר</span>']
+    ['\u05de\u05d4\u05db\u05d9\u05e1 \u05d1\u05d9\u05d5\u05dd \u05d4\u05e7\u05e0\u05d9\u05d9\u05d4',c=>ils(c.up)],
+    ['\u05d4\u05d7\u05d6\u05e8 \u05d7\u05d5\u05d3\u05e9\u05d9 \u05dc\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4',c=>c.moLoan>0?ils(c.moLoan):'<span class="na">-</span>'],
+    ['\u05d4\u05d5\u05e6\u05d0\u05d5\u05ea \u05e9\u05d5\u05d8\u05e4\u05d5\u05ea \u05dc\u05d7\u05d5\u05d3\u05e9'+sub('\u05d1\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2: \u05e8\u05e7 \u05d3\u05dc\u05e7 \u05d5\u05d7\u05e0\u05d9\u05d4, \u05d4\u05e9\u05d0\u05e8 \u05db\u05dc\u05d5\u05dc'),c=>ils(c.moRun)],
+    ['\u05e1\u05d4"\u05db \u05dc\u05d7\u05d5\u05d3\u05e9'+sub(''),c=>ils(c.mo)],
+    ['\u05ea\u05e9\u05dc\u05d5\u05de\u05d9\u05dd \u05e2\u05dc \u05d4\u05e8\u05db\u05d1'+sub('\u05de\u05e7\u05d3\u05de\u05d4, \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d0\u05d5 \u05d3\u05de\u05d9 \u05dc\u05d9\u05e1\u05d9\u05e0\u05d2'),c=>ils(c.car)],
+    ['\u05e9\u05d9\u05dc\u05de\u05ea \u05e2\u05dc \u05d0\u05d7\u05d6\u05e7\u05d4'+sub('\u05d3\u05dc\u05e7, \u05d1\u05d9\u05d8\u05d5\u05d7, \u05d8\u05d9\u05e4\u05d5\u05dc\u05d9\u05dd, \u05d7\u05e0\u05d9\u05d4'),c=>ils(c.run)],
+    ['\u05d9\u05ea\u05e8\u05ea \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05e9\u05e2\u05d5\u05d3 \u05dc\u05d0 \u05e9\u05d5\u05dc\u05de\u05d4',c=>c.left>0?ils(c.left):'<span class="na">-</span>'],
+    ['\u05e9\u05d5\u05d5\u05d9 \u05d4\u05e8\u05db\u05d1 \u05d1\u05e1\u05d5\u05e3, \u05d7\u05d5\u05d6\u05e8 \u05d0\u05dc\u05d9\u05da',c=>c.res>0?ils(c.res):'<span class="na">\u05d0\u05d9\u05df, \u05d4\u05e8\u05db\u05d1 \u05d7\u05d5\u05d6\u05e8</span>']
   ];
   let html=rows.map(([label,f])=>`<tr><td>${label}</td>${cols.map(c=>`<td>${f(c)}</td>`).join('')}</tr>`).join('');
-  html+=`<tr class="total"><td>💸 עלות נטו ל-3 שנים</td>${cols.map(c=>`<td class="${c.net===best?'best':''}">${ils(c.net)}</td>`).join('')}</tr>`;
+  html+=`<tr class="total"><td>\ud83d\udcb8 \u05e2\u05dc\u05d5\u05ea \u05e0\u05d8\u05d5 \u05dc-${yrs} \u05e9\u05e0\u05d9\u05dd</td>${cols.map(c=>`<td class="${c.net===best?'best':''}">${ils(c.net)}</td>`).join('')}</tr>`;
   document.getElementById('cmpBody').innerHTML=html;
 
   const names=['רכישה במזומן','מקדמה + הלוואה','הלוואה מלאה','ליסינג תפעולי'];
   const worst=Math.max.apply(null,nets), bi=nets.indexOf(best), wi=nets.indexOf(worst);
   document.getElementById('cmpIns').innerHTML=
-    `הכי זול ל-3 שנים: <b>${names[bi]}</b> ב-${ils(best)}. הכי יקר: <b>${names[wi]}</b> ב-${ils(worst)}. הפער ביניהם <b>${ils(worst-best)}</b>, שזה ${ils((worst-best)/36)} בחודש.`;
+    `הכי זול ל-${yrs} שנים: <b>${names[bi]}</b> ב-${ils(best)}. הכי יקר: <b>${names[wi]}</b> ב-${ils(worst)}. הפער ביניהם <b>${ils(worst-best)}</b>, שזה ${ils((worst-best)/M)} בחודש.`;
+  /* the answer to "how do I pay 70,000 for a 20,000 car": it is mostly upkeep */
+  const upk=document.getElementById('cmpUpkeep'), runTot=running*M;
+  if(price>0&&runTot>0){
+    upk.hidden=false;
+    upk.innerHTML=(runTot>price
+      ? '⚠️ האחזקה לאורך '+yrs+' שנים היא <b>'+ils(runTot)+'</b>, יותר ממחיר הרכב עצמו (<b>'+ils(price)+'</b>). זו הסיבה שהסכומים בטבלה נראים גדולים כל כך: רוב הכסף הוא לא הרכב, אלא דלק, ביטוח, טיפולים וחניה. ברכב זול זה תמיד יהיה המצב, וזה בדיוק מה שכדאי לבדוק לפני שקונים.'
+      : '🧾 הסכומים בטבלה כוללים גם את האחזקה: <b>'+ils(runTot)+'</b> לאורך '+yrs+' שנים, לצד <b>'+ils(price)+'</b> על הרכב עצמו.');
+  } else upk.hidden=true;
+  /* the swap-every-few-years advice must agree with the table above it */
+  const ownBest=Math.min(cash.net,mix.net,full.net), sm=document.getElementById('swapMsg');
+  if(ls.net<ownBest) sm.innerHTML='\u05dc\u05e4\u05d9 \u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05e9\u05dc\u05da, \u05e2\u05dc '+yrs+' \u05e9\u05e0\u05d9\u05dd \u05d4\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05d9\u05d5\u05e6\u05d0 <b>\u05d6\u05d5\u05dc \u05d9\u05d5\u05ea\u05e8</b> \u05d1-'+ils(ownBest-ls.net)+'. \u05d5\u05d2\u05dd \u05d0\u05d9\u05df \u05d4\u05ea\u05e2\u05e1\u05e7\u05d5\u05ea \u05d1\u05de\u05db\u05d9\u05e8\u05d4, \u05d1\u05ea\u05e7\u05dc\u05d5\u05ea \u05d5\u05d1\u05d9\u05e8\u05d9\u05d3\u05ea \u05d4\u05e2\u05e8\u05da. \u05d0\u05dd \u05d6\u05d4 \u05d4\u05e7\u05e6\u05d1 \u05e9\u05dc\u05da - <b>\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2</b>.';
+  else if(ls.net<=ownBest*1.05) sm.innerHTML='\u05dc\u05e4\u05d9 \u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05e9\u05dc\u05da, \u05e2\u05dc '+yrs+' \u05e9\u05e0\u05d9\u05dd \u05d4\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05d5\u05d4\u05e8\u05db\u05d9\u05e9\u05d4 \u05d9\u05d5\u05e6\u05d0\u05d9\u05dd \u05db\u05de\u05e2\u05d8 \u05d0\u05d5\u05ea\u05d5 \u05d3\u05d1\u05e8, \u05d4\u05e4\u05e8\u05e9 \u05e9\u05dc '+ils(ls.net-ownBest)+' \u05d1\u05dc\u05d1\u05d3. \u05db\u05e9\u05d6\u05d4 \u05d4\u05de\u05e6\u05d1 \u05d4\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05e2\u05d3\u05d9\u05e3: \u05d0\u05d9\u05df \u05d4\u05ea\u05e2\u05e1\u05e7\u05d5\u05ea \u05d1\u05de\u05db\u05d9\u05e8\u05d4, \u05d1\u05ea\u05e7\u05dc\u05d5\u05ea \u05d5\u05d1\u05d9\u05e8\u05d9\u05d3\u05ea \u05d4\u05e2\u05e8\u05da. <b>\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2</b>.';
+  else
+    sm.innerHTML='\u05d4\u05db\u05dc\u05dc \u05d4\u05d6\u05d4 \u05e0\u05db\u05d5\u05df \u05db\u05e9\u05d4\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05d5\u05d4\u05de\u05d9\u05de\u05d5\u05df \u05d9\u05d5\u05e6\u05d0\u05d9\u05dd \u05d3\u05d5\u05de\u05d4, \u05d0\u05d1\u05dc <b>\u05dc\u05d0 \u05d1\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05e9\u05dc\u05da</b>: \u05d4\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05e2\u05d5\u05dc\u05d4 '+ils(ls.net)+' \u05dc\u05e2\u05d5\u05de\u05ea '+ils(ownBest)+' \u05d1\u05e8\u05db\u05d9\u05e9\u05d4, \u05d4\u05e4\u05e8\u05e9 \u05e9\u05dc <b>'+ils(ls.net-ownBest)+'</b>. \u05d1\u05de\u05e6\u05d1 \u05db\u05d6\u05d4 \u05d4\u05e0\u05d5\u05d7\u05d5\u05ea \u05e9\u05dc \u05d4\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05e2\u05d5\u05dc\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05de\u05d3\u05d9, \u05d5\u05e2\u05d3\u05d9\u05e3 <b>\u05dc\u05e7\u05e0\u05d5\u05ea</b> \u05d2\u05dd \u05d0\u05dd \u05de\u05d7\u05dc\u05d9\u05e4\u05d9\u05dd \u05ea\u05db\u05d5\u05e3.';
+  const lf=document.getElementById('leaseNote');
+  lf.hidden=!(yrs>3);
+  if(yrs>3) lf.innerHTML='\u2139\ufe0f \u05d7\u05d5\u05d6\u05d4 \u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05ea\u05e4\u05e2\u05d5\u05dc\u05d9 \u05d4\u05d5\u05d0 \u05d1\u05d3\u05e8\u05da \u05db\u05dc\u05dc \u05dc-3 \u05e9\u05e0\u05d9\u05dd. \u05d1\u05d7\u05d9\u05e9\u05d5\u05d1 \u05dc-'+yrs+' \u05e9\u05e0\u05d9\u05dd \u05d4\u05e0\u05d7\u05ea\u05d9 \u05e9\u05ea\u05d7\u05ea\u05de\u05d9 \u05e2\u05dc \u05d7\u05d5\u05d6\u05d4 \u05d7\u05d3\u05e9 \u05d1\u05d0\u05d5\u05ea\u05d5 \u05de\u05d7\u05d9\u05e8. \u05d1\u05e4\u05d5\u05e2\u05dc \u05d4\u05de\u05d7\u05d9\u05e8 \u05d9\u05e9\u05ea\u05e0\u05d4, \u05d5\u05d6\u05d4 \u05d1\u05d3\u05d9\u05d5\u05e7 \u05d4\u05d4\u05d1\u05d3\u05dc: \u05d1\u05e8\u05db\u05d9\u05e9\u05d4 \u05d4\u05d4\u05d7\u05d6\u05e8 \u05e0\u05d2\u05de\u05e8, \u05d1\u05dc\u05d9\u05e1\u05d9\u05e0\u05d2 \u05d4\u05ea\u05e9\u05dc\u05d5\u05dd \u05de\u05de\u05e9\u05d9\u05da \u05dc\u05e0\u05e6\u05d7.';
 }
 
 // save / share

@@ -299,6 +299,13 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .sens .s-r .s-b i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px}
 .sens .s-r .s-v{font-variant-numeric:tabular-nums;font-weight:900;color:var(--pine-darker);white-space:nowrap}
 .sens .s-r .s-v small{font-size:10.5px;font-weight:800;color:var(--ink-soft);display:block;text-align:end}
+details.why{margin-top:9px}
+details.why>summary{list-style:none;cursor:pointer;font-size:12px;font-weight:900;color:var(--pine);display:inline-flex;align-items:center;gap:5px}
+details.why>summary::-webkit-details-marker{display:none}
+details.why>summary::after{content:"▾";font-size:10px;transition:transform .2s}
+details.why[open]>summary::after{transform:rotate(180deg)}
+details.why .why-b{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.6;margin-top:8px;background:var(--sage-tint);border-radius:11px;padding:11px 13px}
+details.why .why-b b{color:var(--pine-deep);font-weight:900}
 /* the reality waterfall */
 .wfall{border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:15px;overflow:hidden}
 .wf-r{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 13px;border-top:1px solid rgba(var(--pine-rgb),.12);font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
@@ -408,7 +415,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="field">
         <label for="income">ההכנסה החודשית שלך (ברוטו)</label>
         <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="" placeholder="0" aria-label="ההכנסה החודשית ברוטו"></div>
-        <div class="hint">לא חובה, אבל בלעדיה אין מול מה להשוות. ההכנסה האמיתית היא זו שקובעת כמה באמת חסר לך בפרישה ובאובדן כושר עבודה. בלי זה ההשוואה נעשית מול השכר הקובע, שהוא בדרך כלל נמוך מההכנסה.</div>
+        <div class="hint">בלעדיה ההשוואה נעשית מול השכר הקובע, שנמוך מההכנסה האמיתית.</div>
       </div>
     </div>
     <div class="tt-sub" style="margin-top:16px">דמי הניהול שלך (מהדוח)</div>
@@ -420,7 +427,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="tt-field"><label>עלות הכיסויים הביטוחיים (₪ לחודש)</label><div class="tt-cell"><span class="u">₪</span><input id="insCost" inputmode="numeric" aria-label="עלות הכיסויים הביטוחיים לחודש"></div></div>
       <div class="tt-field"><label>נטו שנכנס לחיסכון בכל חודש</label><div class="tt-cell"><span class="u">₪</span><span class="rowlbl" id="netDep" style="text-align:center;font-weight:900;color:var(--pine-deep)">0</span></div></div>
     </div>
-    <div class="cp-note">בקרן פנסיה חלק מההפקדה קונה את הכיסוי לאובדן כושר עבודה ולשאירים, ולכן הוא לא נכנס לחיסכון. הסכום מופיע בדוח (בדרך כלל "עלות כיסויים ביטוחיים" או "דמי סיכון"), לרוב לכל התקופה שבדוח ולא לחודש. כאן מזינים <b>לחודש</b>, וכשקוראים את הדוח אוטומטית ההמרה נעשית לבד.</div>
+    <div class="cp-note">חלק מההפקדה קונה את הכיסוי לאובדן כושר עבודה ולשאירים ולכן לא נכנס לחיסכון. הסכום בדוח הוא לכל התקופה, וההמרה לחודש נעשית אוטומטית.</div>
     <div class="cp-note">התקרה שהחוק מרשה: 6% מההפקדה ו-0.5% מהצבירה בשנה. בקרנות ברירת המחדל משלמים הרבה פחות, ואת שני המספרים האלה כמעט תמיד אפשר להוריד בשיחה אחת.</div>
     <div class="tt-sub" style="margin-top:16px">אובדן כושר עבודה</div>
     <div class="tt-grid">
@@ -430,7 +437,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <div class="field" style="margin-top:14px">
       <label for="gapY">שנים שבהן לא יופקד כלום</label>
       <div class="input-shell"><input id="gapY" type="text" inputmode="decimal" value="0" placeholder="0" aria-label="שנות הפסקה בהפקדות"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שנים</span></div>
-      <div class="hint">חופשות לידה ארוכות, מעברים בין עבודות, תקופות של עצמאית בלי הפקדה, אבטלה. ברירת המחדל מניחה רצף מושלם של הפקדות, וזה כמעט אף פעם לא מה שקורה.</div>
+      <div class="hint">לידות, מעברים בין עבודות, תקופות כעצמאית, אבטלה.</div>
     </div>
     <div class="tt-sub" style="margin-top:18px">שתי ההנחות שקובעות את התוצאה</div>
     <div class="field">
@@ -443,12 +450,10 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       </div>
       <div class="input-shell"><input id="aYield" type="text" inputmode="decimal" aria-label="תשואה שנתית ממוצעת"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
       <div class="mini-hint" id="yldConv"></div>
-      <div class="guide-note" style="margin-top:10px">
-        <b>נומינלית</b> = המספר שמפרסמים על המסלול, לפני שמורידים ממנו את התייקרות החיים.
-        <span class="grow"><b>ריאלית</b> = כמה באמת אפשר לקנות יותר בסוף השנה. זה נומינלי פחות אינפלציה, פחות או יותר.</span>
-        <span class="grow">דוגמה: הכסף גדל 9.7%, הכל התייקר 2.5%, אז בפועל אפשר לקנות כ-7% יותר. <b>9.7% נומינלי = 7% ריאלי.</b></span>
-        <span class="mand">כל התוצאות במחשבון הן <b>ריאליות</b>, כלומר בכוח הקנייה של היום. 8,000 ש"ח כאן זה 8,000 ש"ח כמו שאת מכירה אותם עכשיו, לא כמו שהם יהיו שווים בעוד 30 שנה.</span>
-      </div>
+      <details class="why"><summary>מה ההבדל?</summary><div class="why-b">
+        <b>נומינלית</b> = המספר שמפרסמים על המסלול. <b>ריאלית</b> = מה שנשאר אחרי שהמחירים עלו.<br>
+        כל התוצאות כאן ריאליות, כלומר בכוח הקנייה של היום.
+        </div></details>
     </div>
     <div class="tt-grid" style="margin-top:12px">
       <div class="tt-field"><label>אינפלציה שנתית להמרה (%)</label><div class="tt-cell"><input id="aInf" inputmode="decimal" aria-label="אינפלציה שנתית"><span class="u suf">%</span></div></div>
@@ -461,12 +466,12 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <button type="button" data-y="5">5%</button>
       <button type="button" data-y="6">6%</button>
     </div>
-    <div class="cp-note"><b>ריאלית = אחרי אינפלציה</b>, במונחי הכסף של היום. <b>נומינלית</b> = המספר שמפרסמים על מסלול או על מדד. זו ההבחנה שהכי מבלבלת, ולכן יש כאן מתג: מזינים איך שנוח, והמחשבון ממיר. <b>הקרנות עצמן מחשבות לפי כ-4% ריאלי</b> (3.86% במקפת, 4.07% בהראל, מודפס בדוח) - שזה כ-6.6% נומינלי. כל אחוז ריאלי נוסף נשמע קטן ומכפיל את הקצבה.</div>
+    <div class="cp-note">הקרנות מחשבות לפי כ-<b>4% ריאלי</b> (3.86% מקפת, 4.07% הראל, מודפס בדוח).</div>
     <div class="sens" id="sens"></div>
     <div class="tt-grid" style="margin-top:12px">
       <div class="tt-field"><label>גדילת שכר ריאלית שנתית (%)</label><div class="tt-cell"><input id="aGrowth" inputmode="decimal" aria-label="גדילת שכר ריאלית"><span class="u suf">%</span></div></div>
     </div>
-    <div class="cp-note">המקדם מופיע בדוח שלך, והוא שקובע כמה קצבה מקבלים על כל שקל שנצבר. ככל שהוא גדול יותר, הקצבה קטנה יותר. בגיל 67 הוא בסביבות 200-205 ובגיל 65 בסביבות 210-215.</div>
+    <div class="cp-note">המקדם מופיע בדוח: כ-200 בגיל 67, כ-212 בגיל 65. ככל שהוא גדול יותר, הקצבה קטנה יותר.</div>
     <div class="cp-note">בקרן פנסיה הכיסוי הוא עד 75% מהשכר המבוטח. אם בדוח מופיע סכום קצבת נכות חודשית - מזינים אותו, והוא זה שייחשב.</div>
   </div>
 
@@ -497,15 +502,15 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 
   <div class="card">
     <span class="sec-lbl">🧨 למה בפועל אומרים שההכנסה בפנסיה יורדת</span>
-    <div class="cp-note" style="margin-top:0;margin-bottom:13px">המספר למעלה מניח קריירה מושלמת: הפקדה בכל חודש, בלי הפסקה, בלי לפדות פיצויים, לאורך כל השנים. כמעט אף אחת לא חיה ככה. כאן מוסיפים שכבה-שכבה את מה שקורה באמת, ורואים לאן זה מגיע.</div>
+    <div class="cp-note" style="margin-top:0;margin-bottom:13px">השורה הראשונה מניחה רצף מושלם של הפקדות. כל שורה מוסיפה עליה עוד משהו שקורה בחיים.</div>
     <div class="wfall" id="wfall"></div>
     <div class="insight" id="wfInsight"></div>
-    <div class="cp-note">כל שורה מצטברת על הקודמת, ומחושבת על הנתונים שהזנת. אלה לא תרחישי אימה - זה מה שקורה לרוב הנשים: לידה, מעבר עבודה שבו פודים את הפיצויים, ותקופה של עצמאית. <b>זו הסיבה שצריך חיסכון בצד, וזה בדיוק מה שמחושב בכרטיס הבא.</b></div>
+    <div class="cp-note">האחוז מודד את הקצבה מול <b>השכר בפרישה</b> - זו ההגדרה שממנה מגיע המספר המוכר של 75%.</div>
   </div>
 
   <div class="card">
     <span class="sec-lbl">📄 למה בדוח כתוב מספר אחר?</span>
-    <div class="cp-note" style="margin-top:0;margin-bottom:13px">זו השאלה הראשונה שעולה, ויש לה תשובה אחת: <b>הקצבה שמופיעה בדוח הרבעוני מחושבת מהכסף שכבר צבור, בלי ההפקדות שימשיכו להיכנס.</b> לכן היא תמיד קטנה בהרבה. כאן רואים את שני המספרים זה מול זה.</div>
+    <div class="cp-note" style="margin-top:0;margin-bottom:13px">הקצבה שבדוח מחושבת <b>מהכסף שכבר צבור בלבד</b>, בלי ההפקדות שימשיכו להיכנס.</div>
     <div class="fields2">
       <div class="field">
         <label for="repAnn">הקצבה שכתובה בדוח</label>
@@ -523,13 +528,10 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="gap-row"><span class="gr-l">מזה מגיע מההפקדות הבאות<small>החלק שהדוח פשוט לא סופר</small></span><span class="gr-v" id="recDelta">0 ₪</span></div>
     </div>
     <div class="insight" id="recInsight"></div>
-    <div class="guide-note" style="margin-top:14px">
-      <span class="gt">שלושה דברים שכתובים בדוח עצמו, ושווה להכיר</span>
-      1. "פנסיית הזקנה <b>הצבורה</b> מבוססת על היתרות שנצברו בקרן <b>עד למועד הפקת הדוח</b>" - כלומר בלי ההפקדות הבאות. יש קרנות שמדפיסות את שני המספרים זה לצד זה, למשל "פנסיה צפויה חזויה" מול "פנסיה צפויה על בסיס היתרה הצבורה".
-      <span class="grow">2. דמי הניהול שהקרן מניחה בתחזית הם <b>המקסימום שבחוק</b> (6% מההפקדה ו-0.5% מהצבירה בקרן מקיפה), ולא דמי הניהול שאת/ה באמת משלמ/ת. כלומר גם מהבחינה הזו התחזית שבדוח שמרנית מדי.</span>
-      <span class="grow">3. <b>איזון אקטוארי</b>: קרן פנסיה היא ביטוח הדדי בין העמיתים. כשהמציאות שונה מההנחות (תוחלת חיים, תביעות נכות, תשואה), הקרן מעדכנת את הזכויות של כולם למעלה או למטה. בדוח זה מופיע כשורה בשם "עדכון צבירה - מנגנון אקטוארי", והסכומים שם קטנים יחסית - בדוח אמיתי שבדקנו זה היה 43 ש"ח על צבירה של 42,717.</span>
-      <span class="mand">ולכן: המספר כאן הוא <b>תחזית, לא הבטחה</b>. מה שבאמת בשליטה שלך הוא ההפקדה החודשית, דמי הניהול, המסלול והרצף. השאר הוא הנחה שצריך לבדוק כל שנה מחדש.</span>
-    </div>
+    <details class="why"><summary>מה עוד כתוב בדוח</summary><div class="why-b">
+      הקרן מחשבת את התחזית שלה לפי <b>דמי הניהול המקסימליים בחוק</b>, לא לפי אלה שלך.<br>
+      שורת "עדכון צבירה - מנגנון אקטוארי" היא האיזון ההדדי בין העמיתים. בדוח אמיתי שבדקנו זה היה 43 ש"ח על צבירה של 42,717.
+      </div></details>
   </div>
 
   <div class="card">
@@ -569,13 +571,13 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <div class="tt-grid" style="margin-top:14px">
       <div class="tt-field"><label>תשואה ריאלית על החיסכון בצד (%)</label><div class="tt-cell"><input id="aSide" inputmode="decimal" aria-label="תשואה ריאלית על חיסכון בצד"><span class="u suf">%</span></div></div>
     </div>
-    <div class="cp-note">זו תשואה נפרדת מזו של הפנסיה, כי זה כסף אחר במקום אחר: קרן השתלמות, גמל להשקעה או תיק השקעות. היא משמשת <b>רק</b> לחישוב ההפקדה החודשית שכאן, ולא לתחזית הפנסיה למעלה.</div>
-    <div class="cp-note">החיסכון הצדדי הוא לא עוד קרן פנסיה. בדרך כלל זה קרן השתלמות, גמל להשקעה או תיק השקעות, ולכל אחד מהם מיסוי, נזילות והטבות אחרות. מה נכון עבורך זו החלטה שנעשית לפי התמונה המלאה.</div>
+    <div class="cp-note">תשואה נפרדת, על כסף אחר: קרן השתלמות, גמל להשקעה או תיק. משמשת רק לחישוב שכאן.</div>
+    <div class="cp-note">איזה מכשיר נכון לך זו החלטה לפי התמונה המלאה, לא לפי התשואה לבדה.</div>
   </div>
 
 
   <div class="card">
-    <div class="disclaimer"><span>💡</span><span>המחשבון נותן הערכה, לא הבטחה. התשואה בפועל משתנה משנה לשנה, גיל הפרישה ומקדם ההמרה יכולים להשתנות עד שתגיעי לשם, והחישוב לא מביא בחשבון תקופות בלי הפקדות, שינויי מסלול או מיסוי בפרישה. זו לא המלצה או ייעוץ פנסיוני אישי.</span></div>
+    <div class="disclaimer"><span>💡</span><span>הערכה, לא הבטחה. התשואה, גיל הפרישה והמקדם יכולים להשתנות. זה לא ייעוץ פנסיוני אישי.</span></div>
   </div>
 
   <div class="cta-card">
@@ -822,13 +824,13 @@ function calc(){
     mi.innerHTML='גיל הפרישה שהוזן לא מעל הגיל של היום, ולכן אין תקופת חיסכון לחשב. אפשר לעדכן את הגילים למעלה.';
   }else if(repl<40){
     mi.className='insight soft';
-    mi.innerHTML='בקצב הזה הקצבה תהיה <b>'+money(ann)+' ₪</b> בחודש, שזה כ-'+Math.round(repl)+'% מהשכר של היום. זה פער שמרגישים ביום־יום, וכדאי לטפל בו עכשיו כשיש '+money(yrs)+' שנים לעבוד איתן.';
+    mi.innerHTML='<b>'+money(ann)+' ₪</b> בחודש, '+Math.round(replThen)+'% מהשכר בפרישה. יש '+money(yrs)+' שנים לעבוד איתן.';
   }else if(repl<60){
     mi.className='insight';
-    mi.innerHTML='בקצב הזה הקצבה תהיה <b>'+money(ann)+' ₪</b> בחודש, כ-'+Math.round(repl)+'% מהשכר של היום. זה בטווח הרגיל, ועדיין רחוק מהשכר עצמו. השאלה היא איזו קצבה באמת תרצי שם.';
+    mi.innerHTML='<b>'+money(ann)+' ₪</b> בחודש, '+Math.round(replThen)+'% מהשכר בפרישה. בטווח הרגיל.';
   }else{
     mi.className='insight';
-    mi.innerHTML='בקצב הזה הקצבה תהיה <b>'+money(ann)+' ₪</b> בחודש, כ-'+Math.round(repl)+'% מהשכר של היום. זה מקום טוב. שווה לשמור עליו עם דמי ניהול נמוכים ומסלול שמתאים לגיל.';
+    mi.innerHTML='<b>'+money(ann)+' ₪</b> בחודש, '+Math.round(replThen)+'% מהשכר בפרישה. מקום טוב.';
   }
 
   /* ── fees ── */
@@ -846,17 +848,17 @@ function calc(){
   const fi=document.getElementById('feeInsight');
   if(diff>50){
     fi.className='insight warn';
-    fi.innerHTML='דמי הניהול שלך היום עולים כ-<b>'+money(diff)+' ₪</b> מההון עד הפרישה, לעומת '+S.bFeeDep+'% ו-'+S.bFeeAcc+'%. במונחי קצבה זה כ-<b>'+money(diff/coef)+' ₪</b> פחות בכל חודש, לכל החיים.';
+    fi.innerHTML='עולים לך כ-<b>'+money(diff)+' ₪</b> מההון, שהם <b>'+money(diff/coef)+' ₪</b> פחות קצבה בחודש.';
   }else if(diff<-50){
     fi.className='insight';
-    fi.innerHTML='דמי הניהול שלך טובים מרף ההשוואה, וזה מוסיף לך כ-<b>'+money(-diff)+' ₪</b> להון עד הפרישה. שווה לוודא פעם בשנה שהם לא זחלו למעלה.';
+    fi.innerHTML='טובים מרף ההשוואה: <b>'+money(-diff)+' ₪</b> יותר בהון. לבדוק שוב פעם בשנה.';
   }else{
     fi.className='insight';
     fi.innerHTML='דמי הניהול שלך בדיוק בסביבת רף ההשוואה, ולכן אין כאן דליפה משמעותית.';
   }
   document.getElementById('feeNote').innerHTML=(fdC!=='ok'||faC!=='ok')
-    ? 'מה עושים עם זה: מתקשרים לקרן ומבקשים להשוות לדמי הניהול שמקבלים בקרנות ברירת המחדל, או עוברים לקרן אחרת (המעבר חינם ולא פוגע בזכויות). זו שיחה של עשר דקות שמשאירה אצלך כסף לכל החיים.'
-    : 'דמי הניהול כאן במקום טוב. בודקים אותם שוב פעם בשנה, ובמיוחד בכל החלפת מקום עבודה, כי אז לפעמים משתנים התנאים.';
+    ? 'מתקשרים לקרן ומבקשים להשוות לקרנות ברירת המחדל, או עוברים. המעבר חינם ולא פוגע בזכויות.'
+    : 'במקום טוב. לבדוק שוב בכל החלפת עבודה.';
 
   /* ── disability ── */
   const okBase=S.okAmt>0?S.okAmt:S.sal*S.okPct/100;
@@ -870,7 +872,7 @@ function calc(){
     oi.innerHTML='לא הוזן כיסוי לאובדן כושר עבודה. אם באמת אין כיסוי, זה הדבר הראשון לבדוק, כי הוא מגן על ההכנסה שממנה הכל מתחיל.';
   }else{
     oi.className='insight';
-    oi.innerHTML='אם לא תוכל/י לעבוד, יגיעו כ-<b>'+money(okBase)+' ₪</b> בחודש, ויחסרו '+money(okGap)+' ₪ מההכנסה של היום. בתקופה כזו גם ההפקדות לפנסיה ממשיכות דרך הקרן, וזה בדיוק מה שהכיסוי הזה קונה.';
+    oi.innerHTML='<b>'+money(okBase)+' ₪</b> בחודש, חסר '+money(okGap)+' ₪. בתקופה כזו גם ההפקדות לפנסיה ממשיכות דרך הקרן.';
   }
 
   /* ── what the return assumption alone is worth ── */
@@ -901,13 +903,13 @@ function calc(){
   if(repl>100&&yrs>0){
     rg.hidden=false; rg.className='insight warn';
     if(effY>4.5){
-      rg.innerHTML='⚠️ עצירה לרגע: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>. ההנחה שמייצרת אותה היא <b>'+effY.toFixed(1)+'% ריאלית, שהן כ-'+toNom(effY,S.inf).toFixed(1)+'% נומינליות</b>. שווה לעצור על המספר הזה: הממוצע ההיסטורי של S&P 500 הוא כ-10% <b>נומינלי</b>, וזה כ-7% ריאלי - כלומר '+(effY>=6.5?'ההנחה כאן היא בעצם התשואה ההיסטורית המלאה של המדד, לא הנחה שמרנית.':'ההנחה כאן כבר גבוהה בהרבה מ-4% שהקרנות מניחות.')+' הקרנות עצמן מחשבות לפי כ-4% ריאלי.';
+      rg.innerHTML='⚠️ ההנחה כאן היא <b>'+effY.toFixed(1)+'% ריאלית</b> = כ-'+toNom(effY,S.inf).toFixed(1)+'% נומינלית. '+(effY>=6.5?'זו התשואה ההיסטורית המלאה של S&P, לא הנחה שמרנית.':'גבוה מ-4% שהקרנות מניחות.');
     }else if(S.growth<1){
       const alt=project(S.feeDep,S.feeAcc,null,1);
       const altRepl=alt.finalSal>0?(alt.cap/coef/alt.finalSal*100):0;
-      rg.innerHTML='שימו לב לפרופורציה: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, וזה נשמע מוגזם. הסיבה היא שההשוואה נעשית מול השכר של <b>היום</b>, בעוד שגדילת השכר מוגדרת 0%. כמעט אף אחת לא מרוויחה בגיל '+money(S.retAge)+' את מה שהיא מרוויחה בגיל '+money(S.age)+'. מספיק להזין גדילת שכר ריאלית של 1% בשנה, והתמונה נעשית הגיונית: הקצבה תהיה כ-<b>'+Math.round(altRepl)+'%</b> מהשכר הצפוי אז.';
+      rg.innerHTML='גדילת השכר מוגדרת 0%, ולכן ההשוואה היא מול השכר של היום. בגדילה ריאלית של 1% התחלופה היא <b>'+Math.round(altRepl)+'%</b>.';
     }else{
-      rg.innerHTML='שימו לב: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, ו-'+Math.round(replThen)+'% מהשכר הצפוי בפרישה. יחס מעל 100% אפשרי בתקופה ארוכה, אבל הוא נשען כולו על כך שההפקדות באמת ימשיכו ברצף לאורך כל השנים.';
+      rg.innerHTML='תחלופה של '+Math.round(replThen)+'% אפשרית בתקופה ארוכה, אבל היא נשענת על רצף הפקדות מלא.';
     }
   }else{rg.hidden=true;}
 
@@ -934,9 +936,7 @@ function calc(){
   const wi=document.getElementById('wfInsight');
   const last=wf[wf.length-1], first=wf[0];
   wi.className='insight';
-  wi.innerHTML='ההבדל בין השורה הראשונה לאחרונה הוא <b>'+money(first.ann-last.ann)+' ₪ בחודש</b>, לכל החיים. '+
-    'ושימי לב לעמודה הימנית: היא מודדת את הקצבה מול <b>השכר בפרישה</b>, לא מול השכר של היום. '+
-    'זו בדיוק ההגדרה שממנה מגיע המספר המוכר של כ-75% תחלופה, וכאן רואים למה בפועל רוב האנשים נוחתים הרבה מתחתיו.';
+  wi.innerHTML='בין השורה הראשונה לאחרונה: <b>'+money(first.ann-last.ann)+' ₪ פחות בחודש</b>, לכל החיים.';
 
   /* ── reconcile with the number printed in the report ── */
   const yrsF=Math.max(S.retAge-S.age,0);
@@ -950,14 +950,14 @@ function calc(){
     const gapPct=onlyAnn>0?Math.abs(S.repAnn-onlyAnn)/onlyAnn*100:999;
     if(gapPct<=20){
       ri.className='insight';
-      ri.innerHTML='✓ מסתדר. ה-<b>'+money(S.repAnn)+' ₪</b> שבדוח הם בדיוק הקצבה מהצבירה של היום בלבד (החישוב כאן נותן '+money(onlyAnn)+' ₪). זה לא סותר את התחזית למעלה, זו פשוט שאלה אחרת: הדוח עונה "כמה יצא מהכסף שכבר יש" והמחשבון עונה "כמה יצא אם ממשיכים להפקיד".';
+      ri.innerHTML='✓ מסתדר. החישוב כאן נותן '+money(onlyAnn)+' ₪ מהצבירה בלבד, והדוח '+money(S.repAnn)+' ₪. שאלה אחרת, לא סתירה.';
     }else{
       ri.className='insight soft';
-      ri.innerHTML='⚠️ ה-'+money(S.repAnn)+' ₪ שבדוח רחוקים מהחישוב כאן ('+money(onlyAnn)+' ₪ מהצבירה בלבד). לפני שמסתמכים על התחזית, שווה לבדוק שלושה דברים בדוח: <b>גיל הפרישה</b> שהוא מניח, <b>מקדם ההמרה</b>, ו<b>הנחת הריבית</b> - שלושתם מודפסים שם, ואם אחד מהם שונה ממה שהוזן כאן, שני המספרים לא מדברים על אותו דבר.';
+      ri.innerHTML='⚠️ פער מול הדוח ('+money(onlyAnn)+' ₪ מול '+money(S.repAnn)+' ₪). לבדוק בדוח: גיל הפרישה, המקדם והנחת הריבית.';
     }
   }else{
     ri.className='insight';
-    ri.innerHTML='מזינים למעלה את הקצבה שכתובה בדוח, והמחשבון יגיד אם היא מסתדרת עם החישוב הזה. ברוב הדוחות היא תהיה קרובה ל-<b>'+money(onlyAnn)+' ₪</b>, כי היא סופרת רק את הכסף שכבר צבור.';
+    ri.innerHTML='מזינים את הקצבה שבדוח והמחשבון יבדוק אם היא מסתדרת. היא אמורה להיות קרובה ל-<b>'+money(onlyAnn)+' ₪</b>.';
   }
 
   /* ── the gap to target ── */
@@ -982,12 +982,12 @@ function calc(){
     gi.innerHTML='כדי לחשב כמה לחסוך בצד, גיל הפרישה צריך להיות גדול מהגיל של היום. אפשר לעדכן את הגילים למעלה.';
   }else if(gap<=0){
     gi.className='insight';
-    gi.innerHTML='לפי ההנחות האלה הפנסיה לבד מגיעה ל-<b>'+money(ann)+' ₪</b> בחודש, מעל היעד של '+money(S.target)+' ₪. אפשר להשתמש בעודף כדי לקצר את התקופה עד שהעבודה תהיה בחירה, ולא חובה.';
+    gi.innerHTML='הפנסיה לבד מגיעה ל-<b>'+money(ann)+' ₪</b>, מעל היעד. העודף מקצר את הזמן עד שהעבודה היא בחירה.';
   }else{
     const late=Math.max(mine.n-60,0);
     const monLate=pmtFor(needCap,S.side,late);
     gi.className='insight';
-    gi.innerHTML='כדי להגיע ל-'+money(S.target)+' ₪ בחודש צריך להשלים <b>'+money(mon)+' ₪</b> בחודש לחיסכון נפרד, נוסף על הפנסיה. אם מתחילים רק בעוד חמש שנים, אותו יעד כבר דורש '+money(monLate)+' ₪ בחודש. הזמן הוא החלק שעושה כאן את העבודה.';
+    gi.innerHTML='<b>'+money(mon)+' ₪</b> בחודש לחיסכון נפרד. אם מתחילים בעוד חמש שנים: '+money(monLate)+' ₪.';
   }
   save();
 }

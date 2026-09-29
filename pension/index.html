@@ -284,6 +284,21 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .src-sum .ss-need b{color:#8a5a12}
 .src-sum button{font-family:var(--font);font-size:12.5px;font-weight:900;color:#8a5a12;background:rgba(183,121,31,.12);border:0;border-radius:100px;padding:3px 10px;margin:3px 3px 0 0;cursor:pointer}
 .src-sum button:hover{background:rgba(183,121,31,.2)}
+/* quick-set chips for the return, and the sensitivity strip under it */
+.quick{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:11px}
+.quick .q-l{font-size:12px;font-weight:800;color:var(--ink-soft)}
+.quick button{font-family:var(--font);font-size:12.5px;font-weight:900;color:var(--pine-deep);background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:6px 13px;cursor:pointer;transition:all .15s}
+.quick button:hover{border-color:var(--pine)}
+.quick button.on{background:var(--pine);color:#fff}
+.sens{margin-top:13px;border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:14px;overflow:hidden}
+.sens .s-h{background:rgba(var(--pine-rgb),.10);padding:9px 13px;font-size:12px;font-weight:900;color:var(--pine-deep)}
+.sens .s-r{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 13px;border-top:1px solid rgba(var(--pine-rgb),.12);font-size:13px;font-weight:800;color:var(--ink)}
+.sens .s-r.on{background:rgba(var(--sage-rgb),.28)}
+.sens .s-r .s-y{color:var(--pine-deep);font-weight:900;min-width:34px}
+.sens .s-r .s-b{height:8px;background:var(--sage-tint);border-radius:100px;overflow:hidden}
+.sens .s-r .s-b i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px}
+.sens .s-r .s-v{font-variant-numeric:tabular-nums;font-weight:900;color:var(--pine-darker);white-space:nowrap}
+.sens .s-r .s-v small{font-size:10.5px;font-weight:800;color:var(--ink-soft);display:block;text-align:end}
 /* gap block */
 .gap-grid{display:grid;gap:9px;margin-top:13px}
 .gap-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sage-tint);border-radius:12px;padding:12px 14px}
@@ -402,6 +417,24 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="tt-field"><label>שיעור הכיסוי מהשכר (%)</label><div class="tt-cell"><input id="okPct" inputmode="decimal" aria-label="שיעור כיסוי אובדן כושר עבודה"><span class="u suf">%</span></div></div>
       <div class="tt-field"><label>או קצבת נכות מהדוח (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="okAmt" inputmode="numeric" aria-label="קצבת נכות חודשית מהדוח"></div></div>
     </div>
+    <div class="tt-sub" style="margin-top:18px">שתי ההנחות שקובעות את התוצאה</div>
+    <div class="tt-grid">
+      <div class="tt-field"><label>תשואה ריאלית שנתית (%)</label><div class="tt-cell"><input id="aYield" inputmode="decimal" aria-label="תשואה ריאלית שנתית"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>מקדם ההמרה לקצבה</label><div class="tt-cell"><input id="aCoef" inputmode="decimal" aria-label="מקדם המרה לקצבה"></div></div>
+    </div>
+    <div class="quick" id="yieldQuick">
+      <span class="q-l">קופצים לתשואה:</span>
+      <button type="button" data-y="3">3%</button>
+      <button type="button" data-y="4">4% (כמו הקרנות)</button>
+      <button type="button" data-y="5">5%</button>
+      <button type="button" data-y="6">6%</button>
+    </div>
+    <div class="cp-note"><b>תשואה ריאלית</b> = אחרי אינפלציה, במונחי הכסף של היום. זו ההנחה שהכי משנה את התוצאה, ולכן היא כאן ולא מוסתרת. <b>הקרנות עצמן מחשבות את התחזית שלהן לפי כ-4%</b> (3.86% במקפת, 4.07% בהראל, מודפס בדוח). כל אחוז נוסף נשמע קטן ומכפיל את הקצבה, ולכן שווה להישאר קרוב למה שהקרן מניחה ולא למה שמקווים.</div>
+    <div class="sens" id="sens"></div>
+    <div class="tt-grid" style="margin-top:12px">
+      <div class="tt-field"><label>גדילת שכר ריאלית שנתית (%)</label><div class="tt-cell"><input id="aGrowth" inputmode="decimal" aria-label="גדילת שכר ריאלית"><span class="u suf">%</span></div></div>
+    </div>
+    <div class="cp-note">המקדם מופיע בדוח שלך, והוא שקובע כמה קצבה מקבלים על כל שקל שנצבר. ככל שהוא גדול יותר, הקצבה קטנה יותר. בגיל 67 הוא בסביבות 200-205 ובגיל 65 בסביבות 210-215.</div>
     <div class="cp-note">בקרן פנסיה הכיסוי הוא עד 75% מהשכר המבוטח. אם בדוח מופיע סכום קצבת נכות חודשית - מזינים אותו, והוא זה שייחשב.</div>
   </div>
 
@@ -427,6 +460,7 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="tile"><div class="t-lbl">שנים עד הפרישה</div><div class="t-val" id="yrsNum">0</div><div class="t-sub" id="yrsSub"></div></div>
     </div>
     <div class="insight" id="mainInsight"></div>
+    <div class="insight" id="realityGate" hidden></div>
   </div>
 
   <div class="card">
@@ -463,6 +497,12 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <div id="feeRows"></div>
     <div class="insight" id="feeInsight"></div>
     <div class="cp-note" id="feeNote"></div>
+    <div class="tt-sub" style="margin-top:16px">מול מה משווים</div>
+    <div class="tt-grid">
+      <div class="tt-field"><label>מההפקדה - יעד (%)</label><div class="tt-cell"><input id="bFeeDep" inputmode="decimal" aria-label="דמי ניהול יעד מההפקדה"><span class="u suf">%</span></div></div>
+      <div class="tt-field"><label>מהצבירה - יעד (%)</label><div class="tt-cell"><input id="bFeeAcc" inputmode="decimal" aria-label="דמי ניהול יעד מהצבירה"><span class="u suf">%</span></div></div>
+    </div>
+    <div class="cp-note">אלה לא דמי הניהול שלך - אלה דמי הניהול שאפשר להשיג היום, ומולם מחושב "מה זה עולה לך" שלמעלה. אפשר לעדכן אותם.</div>
   </div>
 
   <div class="card">
@@ -486,29 +526,13 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="gap-row"><span class="gr-l">או הפקדה חד פעמית היום<small>במקום ההפקדה החודשית</small></span><span class="gr-v" id="gOnce">0 ₪</span></div>
     </div>
     <div class="insight" id="gapInsight"></div>
+    <div class="tt-grid" style="margin-top:14px">
+      <div class="tt-field"><label>תשואה ריאלית על החיסכון בצד (%)</label><div class="tt-cell"><input id="aSide" inputmode="decimal" aria-label="תשואה ריאלית על חיסכון בצד"><span class="u suf">%</span></div></div>
+    </div>
+    <div class="cp-note">זו תשואה נפרדת מזו של הפנסיה, כי זה כסף אחר במקום אחר: קרן השתלמות, גמל להשקעה או תיק השקעות. היא משמשת <b>רק</b> לחישוב ההפקדה החודשית שכאן, ולא לתחזית הפנסיה למעלה.</div>
     <div class="cp-note">החיסכון הצדדי הוא לא עוד קרן פנסיה. בדרך כלל זה קרן השתלמות, גמל להשקעה או תיק השקעות, ולכל אחד מהם מיסוי, נזילות והטבות אחרות. מה נכון עבורך זו החלטה שנעשית לפי התמונה המלאה.</div>
   </div>
 
-  <details class="card tt-wrap">
-    <summary><span class="sec-lbl" style="margin:0">⚙️ הנחות החישוב (ניתן לעדכן)</span><span class="chev">▾</span></summary>
-    <div style="margin-top:14px">
-      <div class="tt-note">כל המספרים במחשבון הם <b>ריאליים</b>, כלומר במונחי הכסף של היום, אחרי אינפלציה. כל שינוי כאן מעדכן מיד את התוצאה למעלה.</div>
-      <div class="tt-grid">
-        <div class="tt-field"><label>תשואה ריאלית שנתית בפנסיה (%)</label><div class="tt-cell"><input id="aYield" inputmode="decimal" aria-label="תשואה ריאלית בפנסיה"><span class="u suf">%</span></div></div>
-        <div class="tt-field"><label>גדילת שכר ריאלית שנתית (%)</label><div class="tt-cell"><input id="aGrowth" inputmode="decimal" aria-label="גדילת שכר ריאלית"><span class="u suf">%</span></div></div>
-        <div class="tt-field"><label>מקדם המרה לקצבה</label><div class="tt-cell"><input id="aCoef" inputmode="decimal" aria-label="מקדם המרה לקצבה"></div></div>
-        <div class="tt-field"><label>תשואה ריאלית על החיסכון בצד (%)</label><div class="tt-cell"><input id="aSide" inputmode="decimal" aria-label="תשואה ריאלית על חיסכון בצד"><span class="u suf">%</span></div></div>
-      </div>
-      <div class="cp-note">המקדם מופיע בדוח שלך והוא זה שקובע כמה קצבה מקבלים על כל שקל שנחסך. ככל שהוא גדול יותר, הקצבה קטנה יותר. בגיל 67 הוא בסביבות 200-205 ובגיל 65 בסביבות 210-215, והוא משתנה לפי מסלול, מין ובני זוג. רוצה לראות תמונה שמרנית יותר? מורידים את התשואה ל-3% ורואים מה קורה.</div>
-      <div class="tt-sub">דמי ניהול לצורך ההשוואה</div>
-      <div class="tt-grid">
-        <div class="tt-field"><label>מההפקדה - יעד (%)</label><div class="tt-cell"><input id="bFeeDep" inputmode="decimal" aria-label="דמי ניהול יעד מההפקדה"><span class="u suf">%</span></div></div>
-        <div class="tt-field"><label>מהצבירה - יעד (%)</label><div class="tt-cell"><input id="bFeeAcc" inputmode="decimal" aria-label="דמי ניהול יעד מהצבירה"><span class="u suf">%</span></div></div>
-      </div>
-      <div class="cp-note">אלה דמי הניהול שאליהם משווים את שלך, ומהם מחושב "מה זה עולה לך". אפשר לעדכן אותם לפי מה שבאמת אפשר להשיג היום.</div>
-      <button class="tt-reset" id="asReset" type="button">↺ איפוס ההנחות</button>
-    </div>
-  </details>
 
   <div class="card">
     <div class="disclaimer"><span>💡</span><span>המחשבון נותן הערכה, לא הבטחה. התשואה בפועל משתנה משנה לשנה, גיל הפרישה ומקדם ההמרה יכולים להשתנות עד שתגיעי לשם, והחישוב לא מביא בחשבון תקופות בלי הפקדות, שינויי מסלול או מיסוי בפרישה. זו לא המלצה או ייעוץ פנסיוני אישי.</span></div>
@@ -732,7 +756,7 @@ function calc(){
   document.getElementById('annSub').textContent='במונחי היום, מגיל '+money(S.retAge)+' ולכל החיים';
   document.getElementById('capNum').textContent=money(mine.cap)+' ₪';
   document.getElementById('replNum').textContent=Math.round(repl)+'%';
-  document.getElementById('replSub').textContent=(S.status==='self'&&S.income<=0?'מהשכר הקובע שבדוח, לא מההכנסה שלך':'מההכנסה שלך היום')+' ('+Math.round(replThen)+'% מהצפוי אז)';
+  document.getElementById('replSub').textContent=(S.status==='self'?(S.income<=0?'מהשכר הקובע שבדוח, לא מההכנסה שלך':'מההכנסה שלך היום'):'מהשכר שלך היום')+' ('+Math.round(replThen)+'% מהצפוי אז)';
   document.getElementById('yrsNum').textContent=money(yrs);
   document.getElementById('yrsSub').textContent=money(mine.n)+' הפקדות חודשיות';
   const gross=S.status==='self'?S.depSelf:S.sal*(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
@@ -795,6 +819,36 @@ function calc(){
     oi.className='insight';
     oi.innerHTML='אם לא תוכל/י לעבוד, יגיעו כ-<b>'+money(okBase)+' ₪</b> בחודש, ויחסרו '+money(okGap)+' ₪ מההכנסה של היום. בתקופה כזו גם ההפקדות לפנסיה ממשיכות דרך הקרן, וזה בדיוק מה שהכיסוי הזה קונה.';
   }
+
+  /* ── what the return assumption alone is worth ── */
+  const SENS=[3,4,5,6];
+  const keepY=S.yld;
+  const sRows=SENS.map(function(y){S.yld=y;const pr=project(S.feeDep,S.feeAcc);return {y:y,ann:pr.cap/coef};});
+  S.yld=keepY;
+  const smax=Math.max.apply(null,sRows.map(function(r){return r.ann;}))||1;
+  document.getElementById('sens').innerHTML='<div class="s-h">אותם נתונים בדיוק, רק ההנחה משתנה</div>'+
+    sRows.map(function(r){
+      const on=Math.abs(r.y-S.yld)<0.05;
+      return '<div class="s-r'+(on?' on':'')+'"><span class="s-y">'+r.y+'%</span>'+
+             '<span class="s-b"><i style="width:'+Math.max(r.ann/smax*100,3)+'%"></i></span>'+
+             '<span class="s-v">'+money(r.ann)+' ₪'+(S.sal>0?'<small>'+Math.round(r.ann/S.sal*100)+'% מהשכר של היום</small>':'')+'</span></div>';
+    }).join('');
+  document.querySelectorAll('#yieldQuick button').forEach(function(b){
+    b.classList.toggle('on',Math.abs(parseFloat(b.getAttribute('data-y'))-S.yld)<0.05);
+  });
+
+  /* ── reality gate: a pension above the salary means the assumption is doing the work ── */
+  const rg=document.getElementById('realityGate');
+  if(repl>100&&yrs>0){
+    rg.hidden=false; rg.className='insight warn';
+    if(S.yld>4.5){
+      rg.innerHTML='⚠️ עצירה לרגע: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>. קצבה שגבוהה מהשכר היא כמעט תמיד סימן שהתשואה שהוזנה אופטימית מדי, ולא סימן שהלקוחה מסודרת. ההנחה כאן היא <b>'+S.yld+'%</b>, והקרנות עצמן מחשבות את התחזית שלהן לפי כ-4%. שווה ללחוץ על 4% בטבלה למעלה ולראות מה נשאר.';
+    }else if(S.growth<1){
+      rg.innerHTML='שימו לב לפרופורציה: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, וזה נשמע מוגזם. הסיבה היא שההשוואה נעשית מול השכר של <b>היום</b>, בעוד שגדילת השכר מוגדרת 0%. כמעט אף אחת לא מרוויחה בגיל '+money(S.retAge)+' את מה שהיא מרוויחה בגיל '+money(S.age)+'. מספיק להזין גדילת שכר ריאלית של 1% בשנה, והתמונה נעשית הגיונית: הקצבה תהיה '+Math.round(replThen)+'% מהשכר הצפוי אז.';
+    }else{
+      rg.innerHTML='שימו לב: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, ו-'+Math.round(replThen)+'% מהשכר הצפוי בפרישה. יחס מעל 100% אפשרי בתקופה ארוכה, אבל הוא נשען כולו על כך שההפקדות באמת ימשיכו ברצף לאורך כל השנים.';
+    }
+  }else{rg.hidden=true;}
 
   /* ── reconcile with the number printed in the report ── */
   const yrsF=Math.max(S.retAge-S.age,0);
@@ -967,10 +1021,10 @@ document.getElementById('stSelf').onclick=function(){S.status='self';applyAll();
 document.getElementById('pitChk').addEventListener('change',function(){S.pit=this.checked;calc();});
 document.getElementById('sexF').onclick=function(){S.sex='f';if(S.retAge===67)S.retAge=65;if(S.coef===202)S.coef=212;applyAll();calc();};
 document.getElementById('sexM').onclick=function(){S.sex='m';if(S.retAge===65)S.retAge=67;if(S.coef===212)S.coef=202;applyAll();calc();};
-document.getElementById('asReset').onclick=function(){
-  S.yld=DEF.yld;S.growth=DEF.growth;S.side=DEF.side;S.bFeeDep=DEF.bFeeDep;S.bFeeAcc=DEF.bFeeAcc;
-  S.coef=S.sex==='f'?212:202;applyAll();calc();
-};
+document.querySelectorAll('#yieldQuick button').forEach(function(b){
+  b.onclick=function(){S.yld=parseFloat(b.getAttribute('data-y'));setVal('aYield',S.yld);if(readOnce){SRC.aYield='edit';}calc();};
+});
+
 
 /* ── reading the quarterly report (PDF, in the browser) ── */
 const PDFJS_SRC='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';

@@ -577,7 +577,8 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
       <div class="gap-row"><span class="gr-l">הקצבה שהפנסיה נותנת</span><span class="gr-v" id="gHave">0 ₪</span></div>
       <div class="gap-row hero"><span class="gr-l">הפער החודשי שצריך להשלים<small id="gGapSub"></small></span><span class="gr-v" id="gGap">0 ₪</span></div>
       <div class="gap-row"><span class="gr-l">ההון שצריך להשלים בצד<small>כדי לייצר את הפער הזה כקצבה</small></span><span class="gr-v" id="gCap">0 ₪</span></div>
-      <div class="gap-row hero"><span class="gr-l">חיסכון חודשי בצד, מהיום<small id="gMonSub"></small></span><span class="gr-v" id="gMon">0 ₪</span></div>
+      <div class="gap-row hero"><span class="gr-l">חיסכון חודשי בצד, <b>צמוד למדד</b><small id="gMonSub"></small></span><span class="gr-v" id="gMon">0 ₪</span></div>
+      <div class="gap-row hero"><span class="gr-l">או בהוראת קבע <b>קבועה</b> שלא משתנה<small>זה מה שקורה בפועל אצל רוב האנשים</small></span><span class="gr-v" id="gMonFix">0 ₪</span></div>
       <div class="gap-row"><span class="gr-l">או הפקדה חד פעמית היום<small>במקום ההפקדה החודשית</small></span><span class="gr-v" id="gOnce">0 ₪</span></div>
     </div>
     <div class="insight" id="gapInsight"></div>
@@ -585,6 +586,7 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
       <div class="tt-field"><label>תשואה ריאלית על החיסכון בצד (%)</label><div class="tt-cell"><input id="aSide" inputmode="decimal" aria-label="תשואה ריאלית על חיסכון בצד"><span class="u suf">%</span></div></div>
     </div>
     <div class="cp-note">תשואה נפרדת, על כסף אחר: קרן השתלמות, גמל להשקעה או תיק. משמשת רק לחישוב שכאן.</div>
+    <div class="cp-note">שתי השורות מגיעות לאותו יעד. ההפרש ביניהן הוא האינפלציה: הוראת קבע שלא מתעדכנת שוחקת את עצמה, ולכן היא צריכה להתחיל גבוה יותר.</div>
     <div class="cp-note">איזה מכשיר נכון לך זו החלטה לפי התמונה המלאה, לא לפי התשואה לבדה.</div>
   </div>
 
@@ -802,6 +804,14 @@ function pmtFor(capital,yearsRate,n){
   if(Math.abs(rm)<1e-9)return capital/n;
   return capital*rm/(Math.pow(1+rm,n)-1);
 }
+/* הפקדה קבועה בשקלים שלא עולה עם המדד - מה שבאמת קורה בהוראת קבע */
+function pmtFixed(capitalReal,realRate,inf,n){
+  if(n<=0)return capitalReal;
+  const rn=Math.pow((1+realRate/100)*(1+inf/100),1/12)-1;
+  const targetNom=capitalReal*Math.pow(1+inf/100,n/12);
+  if(Math.abs(rn)<1e-9)return targetNom/n;
+  return targetNom*rn/(Math.pow(1+rn,n)-1);
+}
 function pvFor(capital,yearsRate,n){
   const rm=Math.pow(1+yearsRate/100,1/12)-1;
   return capital/Math.pow(1+rm,Math.max(n,0));
@@ -995,6 +1005,7 @@ function calc(){
   const gap=Math.max(S.target-ann,0);
   const needCap=gap*coef;
   const mon=pmtFor(needCap,S.side,mine.n);
+  const monFix=pmtFixed(needCap,S.side,S.inf,mine.n);
   const once=pvFor(needCap,S.side,mine.n);
   document.getElementById('gTarget').textContent=money(S.target)+' ₪';
   document.getElementById('gHave').textContent=money(ann)+' ₪';
@@ -1002,11 +1013,12 @@ function calc(){
   document.getElementById('gGapSub').textContent=gap>0?'זה מה שהחיסכון בצד צריך לייצר':'הפנסיה לבד מכסה את היעד';
   document.getElementById('gCap').textContent=money(needCap)+' ₪';
   document.getElementById('gMon').textContent=money(mon)+' ₪';
-  document.getElementById('gMonSub').textContent='בתשואה ריאלית של '+S.side+'% לשנה, למשך '+money(yrs)+' שנים';
+  document.getElementById('gMonFix').textContent=money(monFix)+' ₪';
+  document.getElementById('gMonSub').textContent='מעלים אותו כל שנה לפי המדד. '+S.side+'% ריאלי, '+money(yrs)+' שנים';
   document.getElementById('gOnce').textContent=money(once)+' ₪';
   const gi=document.getElementById('gapInsight');
   if(mine.n<=0){
-    ['gGap','gCap','gMon','gOnce'].forEach(function(id){document.getElementById(id).textContent='-';});
+    ['gGap','gCap','gMon','gMonFix','gOnce'].forEach(function(id){document.getElementById(id).textContent='-';});
     document.getElementById('gGapSub').textContent='';
     document.getElementById('gMonSub').textContent='';
     gi.className='insight soft';
@@ -1018,7 +1030,7 @@ function calc(){
     const late=Math.max(mine.n-60,0);
     const monLate=pmtFor(needCap,S.side,late);
     gi.className='insight';
-    gi.innerHTML='<b>'+money(mon)+' ₪</b> בחודש לחיסכון נפרד. אם מתחילים בעוד חמש שנים: '+money(monLate)+' ₪.';
+    gi.innerHTML='<b>'+money(mon)+' ₪</b> בחודש צמוד למדד, או <b>'+money(monFix)+' ₪</b> קבוע. אם מתחילים בעוד חמש שנים: '+money(monLate)+' ₪.';
   }
   save();
 }

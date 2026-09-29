@@ -284,10 +284,10 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
   </div>
 
   <div class="card">
-    <span class="sec-lbl">🚗 הרכב שאני רוצה - מבחן שלושת הכללים</span>
+    <span class="sec-lbl">🚗 הרכב שאני רוצה - מבחן הכללים</span>
     <div class="house">
       <div class="h-item field"><label for="price">מחיר הרכב</label><div class="input-shell"><span class="unit">₪</span><input id="price" type="text" inputmode="numeric" value="60,000" placeholder="0"></div></div>
-      <div class="h-item field"><label for="down">מקדמה במזומן</label><div class="input-shell"><span class="unit">₪</span><input id="down" type="text" inputmode="numeric" value="15,000" placeholder="0"></div></div>
+      <div class="h-item field"><label for="down">מקדמה במזומן</label><div class="input-shell"><span class="unit">₪</span><input id="down" type="text" inputmode="numeric" value="15,000" placeholder="0"></div><div class="fw" id="downWarn" role="status" aria-live="polite" hidden></div></div>
     </div>
 
     <div class="sum-grid" id="loanBox">
@@ -549,16 +549,15 @@ function calc(){
 
   /* term: over 60 months. Say the extra interest, and check if the debt
      actually outruns the car's value instead of just claiming it does. */
-  let termMsg='<b>הפריסה הזאת ארוכה מדי.</b>';
+  let termMsg='<b>הפריסה הזאת ארוכה מדי.</b> הלוואת רכב טובה נפרסת לעד <b>4 שנים</b>, כלומר 48 חודשים.';
   if(L0>0){
-    const ex=(pmt(L0,rate,term)*term)-(pmt(L0,rate,60)*60);
-    if(ex>=1) termMsg+=' פריסה ל-60 חודשים הייתה חוסכת <b>'+ils(ex)+'</b> ריבית.';
+    const ex=(pmt(L0,rate,term)*term)-(pmt(L0,rate,48)*48);
+    if(ex>=1) termMsg+=' פריסה ל-48 חודשים הייתה חוסכת <b>'+ils(ex)+'</b> ריבית.';
     let under=0;
     for(let m=1;m<=term;m++){ if(balance(L0,rate,term,m)>price*Math.pow(1-depr,m/12)) under=m; }
     if(under>0) termMsg+=' ועד חודש '+under+' החוב גדול משווי הרכב, כלומר מכירה בתקופה הזאת משאירה אותך עם חוב בלי רכב.';
-    else termMsg+='';
-  } else termMsg+=' מעל 60 חודשים ההחזר נראה נוח אבל הריבית המצטברת קופצת.';
-  warn('termWarn', term>60, termMsg);
+  } else termMsg+=' ההחזר נראה נוח יותר, אבל הריבית המצטברת קופצת.';
+  warn('termWarn', term>48, termMsg);
 
   /* ---------- 1. what the budget holds, at three levels ---------- */
   const thirdCap=capital/3;
@@ -589,12 +588,13 @@ function calc(){
   const rec=ceiling(15), recMax=rec.max;
   const cn=document.getElementById('capNote');
   cn.hidden=!(term>48);
-  if(term>48) cn.innerHTML='\u2139\ufe0f \u05d4\u05ea\u05e7\u05e8\u05d4 \u05db\u05d0\u05df \u05de\u05d7\u05d5\u05e9\u05d1\u05ea \u05dc-<b>48 \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd</b> \u05d5\u05dc\u05d0 \u05dc-'+term+', \u05db\u05d9 \u05d0\u05d7\u05d3 \u05de\u05e9\u05dc\u05d5\u05e9\u05ea \u05d4\u05db\u05dc\u05dc\u05d9\u05dd \u05d4\u05d5\u05d0 \u05e4\u05e8\u05d9\u05e1\u05d4 \u05e2\u05d3 4 \u05e9\u05e0\u05d9\u05dd. \u05db\u05da \u05e8\u05db\u05d1 \u05e9\u05e2\u05d5\u05de\u05d3 \u05d1\u05d3\u05d9\u05d5\u05e7 \u05d1\u05ea\u05e7\u05e8\u05d4 \u05e2\u05d5\u05d1\u05e8 \u05d0\u05ea \u05db\u05dc \u05e9\u05dc\u05d5\u05e9\u05ea \u05d4\u05db\u05dc\u05dc\u05d9\u05dd, \u05d5\u05dc\u05d0 \u05e8\u05e7 \u05d0\u05ea \u05db\u05dc\u05dc \u05d4-15%.';
+  if(term>48) cn.innerHTML='\u2139\ufe0f \u05d4\u05ea\u05e7\u05e8\u05d4 \u05db\u05d0\u05df \u05de\u05d7\u05d5\u05e9\u05d1\u05ea \u05dc-<b>48 \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd</b> \u05d5\u05dc\u05d0 \u05dc-'+term+', \u05db\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d8\u05d5\u05d1\u05d4 \u05e0\u05e4\u05e8\u05e1\u05ea \u05dc\u05e2\u05d3 4 \u05e9\u05e0\u05d9\u05dd. \u05db\u05da \u05e8\u05db\u05d1 \u05e9\u05e2\u05d5\u05de\u05d3 \u05d1\u05d3\u05d9\u05d5\u05e7 \u05d1\u05ea\u05e7\u05e8\u05d4 \u05e2\u05d5\u05d1\u05e8 \u05d0\u05ea \u05db\u05dc \u05d4\u05db\u05dc\u05dc\u05d9\u05dd, \u05d5\u05dc\u05d0 \u05e8\u05e7 \u05d0\u05ea \u05db\u05dc\u05dc \u05d4-15%.';
   const ci=document.getElementById('capIns');
   if(income<=0){ci.style.display='none';}
   else{
     ci.style.display='block';
-    if(rec.toLoan<=0) ci.innerHTML='בתקציב של 15% מהנטו, כלומר <b>'+ils(rec.budget)+'</b>, ההוצאות השוטפות לבדן (<b>'+ils(running)+'</b>) כבר אוכלות את כולו, ולא נשאר כלום להחזר. זה אומר שברמת ההכנסה הזאת הדרך היחידה היא רכב במזומן, או להוריד את ההוצאות השוטפות.';
+    if(capital<=0) ci.innerHTML='\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df, \u05d0\u05d6 \u05db\u05e8\u05d2\u05e2 <b>\u05d0\u05d9\u05df \u05de\u05e7\u05d3\u05de\u05d4</b> \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1. \u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05d4\u05d3\u05e8\u05da, \u05d6\u05d4 \u05e4\u05e9\u05d5\u05d8 \u05d4\u05e9\u05dc\u05d1 \u05e9\u05dc\u05e4\u05e0\u05d9: \u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc <b>\u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd</b> \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05e9\u05d0\u05e4\u05e9\u05e8 \u05dc\u05e9\u05d9\u05dd \u05d1\u05de\u05e7\u05d3\u05de\u05d4, \u05d5\u05d4\u05e9\u05e0\u05d9\u05d9\u05dd \u05d4\u05d0\u05d7\u05e8\u05d9\u05dd \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df.';
+    else if(rec.toLoan<=0) ci.innerHTML='בתקציב של 15% מהנטו, כלומר <b>'+ils(rec.budget)+'</b>, ההוצאות השוטפות לבדן (<b>'+ils(running)+'</b>) כבר אוכלות את כולו, ולא נשאר כלום להחזר. זה אומר שברמת ההכנסה הזאת הדרך היחידה היא רכב במזומן, או להוריד את ההוצאות השוטפות.';
     else{
       let t='בתקציב של 15% מהנטו, כלומר <b>'+ils(rec.budget)+'</b> לחודש, אחרי <b>'+ils(running)+'</b> הוצאות שוטפות נשארים <b>'+ils(rec.toLoan)+'</b> להחזר חודשי. ההחזר הזה קונה הלוואה של <b>'+ils(rec.loan)+'</b>, ועם מקדמה של <b>'+ils(thirdCap)+'</b> מההון זה רכב עד <b>'+ils(recMax)+'</b>.';
       if(rec.capped) t+='\u05db\u05d0\u05df \u05d3\u05d5\u05d5\u05e7\u05d0 \u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd \u05d5\u05dc\u05d0 \u05d4\u05d4\u05d7\u05d6\u05e8: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05d4\u05de\u05e7\u05d3\u05de\u05d4. \u05e2\u05d5\u05d3 \u05d4\u05d5\u05df \u05e2\u05e6\u05de\u05d9 \u05d9\u05e8\u05d9\u05dd \u05d0\u05ea \u05d4\u05ea\u05e7\u05e8\u05d4.';
@@ -616,7 +616,13 @@ function calc(){
      val:loanAmt===0?'אין הלוואה, אין פריסה':`הפריסה שלך: ${term} חודשים (${(term/12).toFixed(1)} שנים)`},
     {key:'עד 15% מההכנסה',ok:income>0&&Math.round(totalMonthly)<=Math.round(income*0.15),ic:'📊',name:'עד 15% מההכנסה על הרכב, כולל הכל',
      val:income>0?`העלות שלך: ${ils(totalMonthly)} = ${pcIncome.toFixed(1)}% מהנטו · הגבול ${ils(income*0.15)}`:'צריך למלא את ההכנסה למעלה'}
+    ,{key:'מקדמה מתוך שליש מההון',ok:capital>0&&Math.round(down)<=Math.round(thirdCap),ic:'🏦',name:'המקדמה באה משליש ההון הנזיל, לא יותר',
+     val:capital<=0?'אין הון נזיל, אז אין מקדמה. צריך לחסוך קודם':`המקדמה שלך: ${ils(down)} · שליש מההון הוא ${ils(thirdCap)}`}
   ];
+  /* the same rule, shown right under the field it is about */
+  const wNoCap='<b>אין הון נזיל למקדמה.</b> לפני רכב צריך לחסוך. כדי שמקדמה של <b>'+ils(down)+'</b> תהיה שליש מההון, צריך להגיע להון נזיל של <b>'+ils(down*3)+'</b>. שני השלישים האחרים נשארים קרן ביטחון.';
+  const wOver='<b>המקדמה הזאת גדולה מדי ביחס להון שלך.</b> שליש מההון הנזיל הוא <b>'+ils(thirdCap)+'</b>, והמקדמה שרשומה היא <b>'+ils(down)+'</b>. הפרש של '+ils(down-thirdCap)+' יוצא מקרן הביטחון, ואז כל תקלה הופכת להלוואה חדשה. או מקטינים את המקדמה, או חוסכים עוד לפני הקנייה.';
+  warn('downWarn', down>0&&Math.round(down)>Math.round(thirdCap), capital<=0?wNoCap:wOver);
   document.getElementById('rules').innerHTML=rules.map(r=>
     `<div class="rule ${r.ok?'ok':'no'}"><span class="r-ic">${r.ok?'✅':'🚩'}</span><div><span class="r-name">${r.ic} ${r.name}</span><span class="r-val">${r.val}</span></div></div>`).join('');
 
@@ -630,10 +636,11 @@ function calc(){
   const passed=rules.filter(r=>r.ok).length;
   const vd=document.getElementById('verdict'),vm=document.getElementById('vMsg');
   document.getElementById('vNum').textContent=ils(totalMonthly);
-  vd.className='check '+(passed===3?'ok':passed===2?'mid':'over');
+  const total=rules.length;
+  vd.className='check '+(passed===total?'ok':passed===total-1?'mid':'over');
   if(income<=0) vm.textContent='';
-  else if(passed===3) vm.innerHTML=`✓ עובר את שלושת הכללים. הרכב הזה יושב טוב בתקציב שלך.`;
-  else if(passed===2) vm.innerHTML=`כמעט. הכלל שלא נעמד הוא <b>${rules.filter(r=>!r.ok).map(r=>r.key).join(', ')}</b>.`;
+  else if(passed===total) vm.innerHTML=`✓ עובר את כל הכללים. הרכב הזה יושב טוב בתקציב שלך.`;
+  else if(passed===total-1) vm.innerHTML=`כמעט. הכלל שלא נעמד הוא <b>${rules.filter(r=>!r.ok).map(r=>r.key).join(', ')}</b>.`;
   else vm.innerHTML=`הרכב הזה גדול על התקציב. עם ההוצאות השוטפות שלך, מתאים לך רכב עד <b>${ils(recMax)}</b>.`;
   document.getElementById('breakdown').innerHTML=
     `🧾 <b>מאיפה מגיעים ${ils(totalMonthly)} בחודש:</b> החזר הלוואה ${ils(monthlyLoan)} על ${ils(loanAmt)} ל-${term} חודשים בריבית ${rate}%, ועוד ${ils(running)} הוצאות שוטפות. `+

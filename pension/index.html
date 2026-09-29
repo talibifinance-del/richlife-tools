@@ -430,6 +430,35 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
   </div>
 
   <div class="card">
+    <span class="sec-lbl">📄 למה בדוח כתוב מספר אחר?</span>
+    <div class="cp-note" style="margin-top:0;margin-bottom:13px">זו השאלה הראשונה שעולה, ויש לה תשובה אחת: <b>הקצבה שמופיעה בדוח הרבעוני מחושבת מהכסף שכבר צבור, בלי ההפקדות שימשיכו להיכנס.</b> לכן היא תמיד קטנה בהרבה. כאן רואים את שני המספרים זה מול זה.</div>
+    <div class="fields2">
+      <div class="field">
+        <label for="repAnn">הקצבה שכתובה בדוח</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="repAnn" type="text" inputmode="numeric" value="" placeholder="0" aria-label="הקצבה שכתובה בדוח"></div>
+      </div>
+      <div class="field">
+        <label for="fundRate">הנחת הריבית שבדוח</label>
+        <div class="input-shell"><input id="fundRate" type="text" inputmode="decimal" value="3.86" placeholder="0" aria-label="הנחת הריבית שבדוח"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
+        <div class="hint">מודפסת בהערות הדוח, בנוסח "תחת הנחת ריבית נטו של X% לשנה".</div>
+      </div>
+    </div>
+    <div class="gap-grid">
+      <div class="gap-row"><span class="gr-l">מהצבירה שכבר יש, בלי הפקדות<small>זה מה שהקרן מציגה בדוח</small></span><span class="gr-v" id="recOnly">0 ₪</span></div>
+      <div class="gap-row hero"><span class="gr-l">עם ההפקדות שממשיכות<small>זה מה שהמחשבון הזה מחשב</small></span><span class="gr-v" id="recFull">0 ₪</span></div>
+      <div class="gap-row"><span class="gr-l">מזה מגיע מההפקדות הבאות<small>החלק שהדוח פשוט לא סופר</small></span><span class="gr-v" id="recDelta">0 ₪</span></div>
+    </div>
+    <div class="insight" id="recInsight"></div>
+    <div class="guide-note" style="margin-top:14px">
+      <span class="gt">שלושה דברים שכתובים בדוח עצמו, ושווה להכיר</span>
+      1. "פנסיית הזקנה <b>הצבורה</b> מבוססת על היתרות שנצברו בקרן <b>עד למועד הפקת הדוח</b>" - כלומר בלי ההפקדות הבאות. יש קרנות שמדפיסות את שני המספרים זה לצד זה, למשל "פנסיה צפויה חזויה" מול "פנסיה צפויה על בסיס היתרה הצבורה".
+      <span class="grow">2. דמי הניהול שהקרן מניחה בתחזית הם <b>המקסימום שבחוק</b> (6% מההפקדה ו-0.5% מהצבירה בקרן מקיפה), ולא דמי הניהול שאת/ה באמת משלמ/ת. כלומר גם מהבחינה הזו התחזית שבדוח שמרנית מדי.</span>
+      <span class="grow">3. <b>איזון אקטוארי</b>: קרן פנסיה היא ביטוח הדדי בין העמיתים. כשהמציאות שונה מההנחות (תוחלת חיים, תביעות נכות, תשואה), הקרן מעדכנת את הזכויות של כולם למעלה או למטה. בדוח זה מופיע כשורה בשם "עדכון צבירה - מנגנון אקטוארי", והסכומים שם קטנים יחסית - בדוח אמיתי שבדקנו זה היה 43 ש"ח על צבירה של 42,717.</span>
+      <span class="mand">ולכן: המספר כאן הוא <b>תחזית, לא הבטחה</b>. מה שבאמת בשליטה שלך הוא ההפקדה החודשית, דמי הניהול, המסלול והרצף. השאר הוא הנחה שצריך לבדוק כל שנה מחדש.</span>
+    </div>
+  </div>
+
+  <div class="card">
     <span class="sec-lbl">💸 דמי הניהול - גבוהים או נמוכים?</span>
     <div id="feeRows"></div>
     <div class="insight" id="feeInsight"></div>
@@ -656,7 +685,7 @@ const DEF={
   pEmp:6, pTag:6.5, pPit:8.33, pit:true,
   feeDep:2, feeAcc:0.25, ins:0,
   okPct:75, okAmt:0,
-  target:12000,
+  target:12000, repAnn:0, fundRate:3.86,
   yld:4, growth:1, coef:212, side:4,
   bFeeDep:1, bFeeAcc:0.2
 };
@@ -765,6 +794,28 @@ function calc(){
   }else{
     oi.className='insight';
     oi.innerHTML='אם לא תוכל/י לעבוד, יגיעו כ-<b>'+money(okBase)+' ₪</b> בחודש, ויחסרו '+money(okGap)+' ₪ מההכנסה של היום. בתקופה כזו גם ההפקדות לפנסיה ממשיכות דרך הקרן, וזה בדיוק מה שהכיסוי הזה קונה.';
+  }
+
+  /* ── reconcile with the number printed in the report ── */
+  const yrsF=Math.max(S.retAge-S.age,0);
+  const onlyCap=(S.bal+S.extraBal)*Math.pow(1+S.fundRate/100,yrsF);
+  const onlyAnn=onlyCap/coef;
+  document.getElementById('recOnly').textContent=money(onlyAnn)+' ₪';
+  document.getElementById('recFull').textContent=money(ann)+' ₪';
+  document.getElementById('recDelta').textContent=money(Math.max(ann-onlyAnn,0))+' ₪';
+  const ri=document.getElementById('recInsight');
+  if(S.repAnn>0){
+    const gapPct=onlyAnn>0?Math.abs(S.repAnn-onlyAnn)/onlyAnn*100:999;
+    if(gapPct<=20){
+      ri.className='insight';
+      ri.innerHTML='✓ מסתדר. ה-<b>'+money(S.repAnn)+' ₪</b> שבדוח הם בדיוק הקצבה מהצבירה של היום בלבד (החישוב כאן נותן '+money(onlyAnn)+' ₪). זה לא סותר את התחזית למעלה, זו פשוט שאלה אחרת: הדוח עונה "כמה יצא מהכסף שכבר יש" והמחשבון עונה "כמה יצא אם ממשיכים להפקיד".';
+    }else{
+      ri.className='insight soft';
+      ri.innerHTML='⚠️ ה-'+money(S.repAnn)+' ₪ שבדוח רחוקים מהחישוב כאן ('+money(onlyAnn)+' ₪ מהצבירה בלבד). לפני שמסתמכים על התחזית, שווה לבדוק שלושה דברים בדוח: <b>גיל הפרישה</b> שהוא מניח, <b>מקדם ההמרה</b>, ו<b>הנחת הריבית</b> - שלושתם מודפסים שם, ואם אחד מהם שונה ממה שהוזן כאן, שני המספרים לא מדברים על אותו דבר.';
+    }
+  }else{
+    ri.className='insight';
+    ri.innerHTML='מזינים למעלה את הקצבה שכתובה בדוח, והמחשבון יגיד אם היא מסתדרת עם החישוב הזה. ברוב הדוחות היא תהיה קרובה ל-<b>'+money(onlyAnn)+' ₪</b>, כי היא סופרת רק את הכסף שכבר צבור.';
   }
 
   /* ── the gap to target ── */
@@ -896,15 +947,16 @@ function applyAll(){
   setVal('feeDep',S.feeDep); setVal('feeAcc',S.feeAcc); setVal('insCost',S.ins?grp(Math.round(S.ins)):'');
   setVal('okPct',S.okPct); setVal('okAmt',S.okAmt?grp(Math.round(S.okAmt)):'');
   setVal('target',grp(Math.round(S.target)));
+  setVal('repAnn',S.repAnn?grp(Math.round(S.repAnn)):''); setVal('fundRate',S.fundRate);
   setVal('aYield',S.yld); setVal('aGrowth',S.growth); setVal('aCoef',S.coef); setVal('aSide',S.side);
   setVal('bFeeDep',S.bFeeDep); setVal('bFeeAcc',S.bFeeAcc);
   paintSources();
 }
 function liveFormat(el){const s=el.selectionStart,old=el.value;el.value=grp(el.value);if(document.activeElement===el){const d=el.value.length-old.length;try{el.setSelectionRange(Math.max(s+d,0),Math.max(s+d,0));}catch(e){}}}
-const MONEYF=['bal','extraBal','sal','target','okAmt','insCost','depSelf','income'];
+const MONEYF=['bal','extraBal','sal','target','okAmt','insCost','depSelf','income','repAnn'];
 [['age','age'],['retAge','retAge'],['bal','bal'],['extraBal','extraBal'],['sal','sal'],
  ['pEmp','pEmp'],['pTag','pTag'],['pPit','pPit'],['feeDep','feeDep'],['feeAcc','feeAcc'],['insCost','ins'],['depSelf','depSelf'],['income','income'],
- ['okPct','okPct'],['okAmt','okAmt'],['target','target'],
+ ['okPct','okPct'],['okAmt','okAmt'],['target','target'],['repAnn','repAnn'],['fundRate','fundRate'],
  ['aYield','yld'],['aGrowth','growth'],['aCoef','coef'],['aSide','side'],
  ['bFeeDep','bFeeDep'],['bFeeAcc','bFeeAcc']].forEach(function(p){
   const el=document.getElementById(p[0]);if(!el)return;
@@ -950,16 +1002,19 @@ const SPECS=[
   {key:'sal',    any:[['שכר קובע'],['שכר מבוטח'],['שכר מדווח'],['שכר לחישוב'],['משכורת קובעת']], lo:2000, hi:300000, lbl:'השכר המבוטח / הקובע', unit:'₪'},
   {key:'coef',   any:[['מקדם המרה'],['מקדם קצבה'],['מקדם']], lo:50, hi:350, lbl:'מקדם המרה לקצבה', unit:''},
   {key:'ins',    any:[['עלות כיסוי'],['עלות ביטוח'],['דמי סיכון'],['עלות הכיסויים'],['עלות ריסק']], lo:1, hi:50000, sum:true, abs:true, period:true, lbl:'עלות הכיסויים הביטוחיים', unit:'₪'},
+  {key:'repAnn', any:[['קצבה','הצפויה','פרישה'],['פנסיה צפויה','היתרה'],['פנסיה צפויה חזויה'],['קצבה חודשית הצפויה']], not:['נכות','שאירים','שארים','אלמן','יתום','מוות'], notAge:true, lo:50, hi:200000, lbl:'הקצבה שהדוח חוזה', unit:'₪'},
   {key:'okAmt',  any:[['פנסיה','נכות'],['קצבה','נכות'],['קצבת נכות'],['אובדן כושר']], not:['שחרור','עלות כיסוי','דמי סיכון'], rival:['שאירים','שארים','אלמן','יתום','זקנה','מוות','הורה'], lo:500, hi:200000, lbl:'קצבה חודשית במקרה נכות', unit:'₪'}
 ];
 const NUMRE=/-?\d[\d,]*(?:\.\d+)?/;
 function toNum(t){const a=parseFloat(String(t).replace(/,/g,''));return isNaN(a)?null:a;}
 function isDateish(t){return /^\d{1,2}[\/.]\d{1,2}[\/.]\d{2,4}$/.test(t)||/^\d{1,2}\/\d{4}$/.test(t)||/\d{1,2}[\/.]\d{1,2}[\/.]\d{4}/.test(t);}
-function itemVal(raw,sp){
+function looksLikeAge(v){return Number.isInteger(v)&&v>=55&&v<=75;}
+function itemVal(raw,sp,rowHasAge){
   if(isDateish(raw))return null;
   const m=raw.match(NUMRE); if(!m)return null;
   let v=toNum(m[0]); if(v===null)return null;
   if(sp.abs)v=Math.abs(v);
+  if(rowHasAge&&sp.notAge&&looksLikeAge(v))return null;
   return (v>=sp.lo&&v<=sp.hi)?v:null;
 }
 function hasAll(hay,words){return words.every(function(w){return hay.indexOf(w)>-1;});}
@@ -974,6 +1029,7 @@ function anchorOf(items,words){
    is closer to. that is what keeps "דמי ניהול מהפקדה 1.6% ... מצבירה 0.15%" from swapping. */
 function pickForSpec(lines,i,sp,words){
   const L=lines[i];
+  const rowHasAge=/בגיל|גיל\s*פרישה/.test(L.rtl);
   const a=anchorOf(L.items,words); if(a<0)return null;
   const rivals=[];
   SPECS.forEach(function(o){
@@ -990,7 +1046,7 @@ function pickForSpec(lines,i,sp,words){
     for(let j=0;j<L.items.length;j++){
       if(j===a)continue;
       if(pass===0?j<a:j>a)continue;
-      const v=itemVal(L.items[j].s.trim(),sp); if(v===null)continue;
+      const v=itemVal(L.items[j].s.trim(),sp,rowHasAge); if(v===null)continue;
       hasNum=true;
       const d=Math.abs(j-a);
       if(rivals.some(function(c){return Math.abs(j-c)<d;}))continue;
@@ -1008,13 +1064,13 @@ function pickForSpec(lines,i,sp,words){
     for(let j=0;j<lines[k].items.length;j++){
       const it=lines[k].items[j];
       if(Math.abs(it.x-ax)>60)continue;
-      const v=itemVal(it.s.trim(),sp); if(v!==null)return v;
+      const v=itemVal(it.s.trim(),sp,rowHasAge); if(v!==null)return v;
     }
   }
   if(!anyNum){
     for(let n=0;n<2;n++){
       const k=near[n]; if(k<0||k>=lines.length)continue;
-      const vals=lines[k].items.map(function(it){return itemVal(it.s.trim(),sp);}).filter(function(v){return v!==null;});
+      const vals=lines[k].items.map(function(it){return itemVal(it.s.trim(),sp,rowHasAge);}).filter(function(v){return v!==null;});
       if(vals.length)return Math.max.apply(null,vals);
     }
   }
@@ -1090,6 +1146,25 @@ function looksSelf(lines){
     return L.rtl.indexOf('עצמאי')>-1 && (L.rtl.indexOf('מעמד')>-1||L.rtl.indexOf('מעסיק')>-1||rowDate(L.items.map(function(o){return o.s.trim();}))>0);
   });
 }
+/* the report prints the interest it assumes: "תחת הנחת ריבית נטו של 3.86% לשנה" */
+function scanFundRate(lines){
+  const all=lines.map(function(l){return l.rtl;}).join(' ');
+  const pats=[/ריבית\s*היוון[^%]{0,40}?(\d\.?\d*)\s*%/,/הנחת\s*ריבית[^%]{0,40}?(\d\.?\d*)\s*%/,/ריבית\s*נטו[^%]{0,30}?(\d\.?\d*)\s*%/];
+  for(let i=0;i<pats.length;i++){
+    const m=all.match(pats[i]);
+    if(m){const v=parseFloat(m[1]);if(v>0&&v<10)return v;}
+  }
+  return null;
+}
+function scanRetAge(lines){
+  for(let i=0;i<lines.length;i++){
+    const t=lines[i].rtl;
+    if(!/פרישה|זקנה/.test(t))continue;
+    const m=t.match(/בגיל\s*(\d{2})/);
+    if(m){const v=parseInt(m[1],10);if(v>=55&&v<=75)return v;}
+  }
+  return null;
+}
 function scanBirth(lines){
   for(let i=0;i<lines.length;i++){
     if(lines[i].rtl.indexOf('תאריך לידה')<0)continue;
@@ -1163,21 +1238,26 @@ async function readReport(file){
   let selfDep=null;
   if(self){ selfDep=scanSelfDeposit(lines); S.status='self'; if(selfDep)f.depSelf=selfDep; }
   else if(dep){ S.status='emp'; if(!('sal' in f))f.sal=dep.sal; f.pEmp=dep.pEmp; f.pTag=dep.pTag; f.pPit=dep.pPit; }
-  const age=scanBirth(lines), sx=scanSex(lines);
+  const age=scanBirth(lines), sx=scanSex(lines), ra=scanRetAge(lines), fr=scanFundRate(lines);
   readOnce=true; SRC={};
-  const MAP={feeDep:'feeDep',feeAcc:'feeAcc',bal:'bal',sal:'sal',coef:'aCoef',ins:'insCost',okAmt:'okAmt',depSelf:'depSelf',pEmp:'pEmp',pTag:'pTag',pPit:'pPit'};
+  const MAP={repAnn:'repAnn',feeDep:'feeDep',feeAcc:'feeAcc',bal:'bal',sal:'sal',coef:'aCoef',ins:'insCost',okAmt:'okAmt',depSelf:'depSelf',pEmp:'pEmp',pTag:'pTag',pPit:'pPit'};
   Object.keys(f).forEach(function(k){if(MAP[k])SRC[MAP[k]]='auto';});
   if(age)SRC.age='auto';
+  if(ra)SRC.retAge='auto';
   if(sx&&sx!==S.sex){S.sex=sx;S.retAge=sx==='f'?65:67;S.coef=sx==='f'?212:202;}
   if(age){S.age=age;}
+  if(ra){S.retAge=ra;}
+  if(fr){S.fundRate=fr;}
   const keys=Object.keys(f);
-  if(keys.length||age||sx){
+  if(keys.length||age||sx||ra||fr){
     keys.forEach(function(k){ S[k]=f[k]; });
     if('okAmt' in f && f.okAmt>0){/* keep okPct as is, the amount wins */}
     applyAll();calc();
   }
   let extra=dep?'<div class="fnd-row"><span>✓ אחוזי ההפקדה (מטבלת ההפקדות)</span><span class="fr-v">'+dep.pEmp+'% · '+dep.pTag+'% · '+dep.pPit+'%</span></div>':'';
   if(self)extra='<div class="fnd-row'+(selfDep?'':' miss')+'"><span>'+(selfDep?'✓':'•')+' עצמאי/ת - הפקדה חודשית</span><span class="fr-v">'+(selfDep?money(selfDep)+' ₪':'לא זוהתה, אפשר למלא ידנית')+'</span></div>'+extra;
+  if(fr)extra+='<div class="fnd-row"><span>✓ הנחת הריבית שבדוח</span><span class="fr-v">'+fr+'%</span></div>';
+  if(ra)extra+='<div class="fnd-row"><span>✓ גיל הפרישה שהדוח מניח</span><span class="fr-v">'+ra+'</span></div>';
   if(age)extra+='<div class="fnd-row"><span>✓ גיל (מתאריך הלידה בדוח)</span><span class="fr-v">'+age+'</span></div>';
   if(sx)extra+='<div class="fnd-row"><span>✓ מין, ולפיו גיל הפרישה</span><span class="fr-v">'+(sx==='f'?'אישה · 65':'גבר · 67')+'</span></div>';
   if(('ins' in f)&&months>1)extra+='<div class="fnd-row"><span>עלות הכיסויים הומרה מהתקופה שבדוח</span><span class="fr-v">'+months+' חודשים</span></div>';

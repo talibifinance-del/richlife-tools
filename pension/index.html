@@ -418,18 +418,29 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
       <div class="tt-field"><label>או קצבת נכות מהדוח (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="okAmt" inputmode="numeric" aria-label="קצבת נכות חודשית מהדוח"></div></div>
     </div>
     <div class="tt-sub" style="margin-top:18px">שתי ההנחות שקובעות את התוצאה</div>
-    <div class="tt-grid">
-      <div class="tt-field"><label>תשואה ריאלית שנתית (%)</label><div class="tt-cell"><input id="aYield" inputmode="decimal" aria-label="תשואה ריאלית שנתית"><span class="u suf">%</span></div></div>
+    <div class="field">
+      <div class="lbl-row">
+        <label for="aYield">תשואה שנתית ממוצעת</label>
+        <div class="unit-tg" id="yldMode">
+          <button type="button" data-m="real">ריאלית</button>
+          <button type="button" data-m="nom">נומינלית</button>
+        </div>
+      </div>
+      <div class="input-shell"><input id="aYield" type="text" inputmode="decimal" aria-label="תשואה שנתית ממוצעת"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div>
+      <div class="mini-hint" id="yldConv"></div>
+    </div>
+    <div class="tt-grid" style="margin-top:12px">
+      <div class="tt-field"><label>אינפלציה שנתית להמרה (%)</label><div class="tt-cell"><input id="aInf" inputmode="decimal" aria-label="אינפלציה שנתית"><span class="u suf">%</span></div></div>
       <div class="tt-field"><label>מקדם ההמרה לקצבה</label><div class="tt-cell"><input id="aCoef" inputmode="decimal" aria-label="מקדם המרה לקצבה"></div></div>
     </div>
     <div class="quick" id="yieldQuick">
-      <span class="q-l">קופצים לתשואה:</span>
+      <span class="q-l">קופצים לתשואה ריאלית:</span>
       <button type="button" data-y="3">3%</button>
       <button type="button" data-y="4">4% (כמו הקרנות)</button>
       <button type="button" data-y="5">5%</button>
       <button type="button" data-y="6">6%</button>
     </div>
-    <div class="cp-note"><b>תשואה ריאלית</b> = אחרי אינפלציה, במונחי הכסף של היום. זו ההנחה שהכי משנה את התוצאה, ולכן היא כאן ולא מוסתרת. <b>הקרנות עצמן מחשבות את התחזית שלהן לפי כ-4%</b> (3.86% במקפת, 4.07% בהראל, מודפס בדוח). כל אחוז נוסף נשמע קטן ומכפיל את הקצבה, ולכן שווה להישאר קרוב למה שהקרן מניחה ולא למה שמקווים.</div>
+    <div class="cp-note"><b>ריאלית = אחרי אינפלציה</b>, במונחי הכסף של היום. <b>נומינלית</b> = המספר שמפרסמים על מסלול או על מדד. זו ההבחנה שהכי מבלבלת, ולכן יש כאן מתג: מזינים איך שנוח, והמחשבון ממיר. <b>הקרנות עצמן מחשבות לפי כ-4% ריאלי</b> (3.86% במקפת, 4.07% בהראל, מודפס בדוח) - שזה כ-6.6% נומינלי. כל אחוז ריאלי נוסף נשמע קטן ומכפיל את הקצבה.</div>
     <div class="sens" id="sens"></div>
     <div class="tt-grid" style="margin-top:12px">
       <div class="tt-field"><label>גדילת שכר ריאלית שנתית (%)</label><div class="tt-cell"><input id="aGrowth" inputmode="decimal" aria-label="גדילת שכר ריאלית"><span class="u suf">%</span></div></div>
@@ -710,15 +721,20 @@ const DEF={
   feeDep:2, feeAcc:0.25, ins:0,
   okPct:75, okAmt:0,
   target:12000, repAnn:0, fundRate:3.86,
-  yld:4, growth:1, coef:212, side:4,
+  yld:4, yldMode:'real', inf:2.5, growth:1, coef:212, side:4,
   bFeeDep:1, bFeeAcc:0.2
 };
 let S=JSON.parse(JSON.stringify(DEF));
 
+/* ── nominal and real are not the same number, and the gap is the whole story ── */
+function toReal(nom,inf){return ((1+nom/100)/(1+inf/100)-1)*100;}
+function toNom(real,inf){return ((1+real/100)*(1+inf/100)-1)*100;}
+function realYield(){return S.yldMode==='nom'?toReal(S.yld,S.inf):S.yld;}
+
 /* ── the projection ── */
-function project(feeDep,feeAcc){
+function project(feeDep,feeAcc,yOverride){
   const n=Math.min(Math.max(Math.round((S.retAge-S.age)*12),0),12*60);
-  const netY=(S.yld-feeAcc)/100;
+  const netY=((yOverride==null?realYield():yOverride)-feeAcc)/100;
   const rm=Math.pow(1+Math.max(netY,-0.9),1/12)-1;
   const gm=Math.pow(1+Math.max(S.growth,-90)/100,1/12)-1;
   const rate=(S.pEmp+S.pTag+(S.pit?S.pPit:0))/100;
@@ -822,27 +838,36 @@ function calc(){
 
   /* ── what the return assumption alone is worth ── */
   const SENS=[3,4,5,6];
-  const keepY=S.yld;
-  const sRows=SENS.map(function(y){S.yld=y;const pr=project(S.feeDep,S.feeAcc);return {y:y,ann:pr.cap/coef};});
-  S.yld=keepY;
+  const sRows=SENS.map(function(y){const pr=project(S.feeDep,S.feeAcc,y);return {y:y,ann:pr.cap/coef};});
+  const effY=realYield();
   const smax=Math.max.apply(null,sRows.map(function(r){return r.ann;}))||1;
   document.getElementById('sens').innerHTML='<div class="s-h">אותם נתונים בדיוק, רק ההנחה משתנה</div>'+
     sRows.map(function(r){
-      const on=Math.abs(r.y-S.yld)<0.05;
+      const on=Math.abs(r.y-effY)<0.05;
       return '<div class="s-r'+(on?' on':'')+'"><span class="s-y">'+r.y+'%</span>'+
              '<span class="s-b"><i style="width:'+Math.max(r.ann/smax*100,3)+'%"></i></span>'+
              '<span class="s-v">'+money(r.ann)+' ₪'+(S.sal>0?'<small>'+Math.round(r.ann/S.sal*100)+'% מהשכר של היום</small>':'')+'</span></div>';
     }).join('');
   document.querySelectorAll('#yieldQuick button').forEach(function(b){
-    b.classList.toggle('on',Math.abs(parseFloat(b.getAttribute('data-y'))-S.yld)<0.05);
+    b.classList.toggle('on',Math.abs(parseFloat(b.getAttribute('data-y'))-effY)<0.05);
+  });
+  /* the live conversion, so the trap is visible before it costs anything */
+  const cv=document.getElementById('yldConv');
+  if(S.yldMode==='nom'){
+    cv.innerHTML='= <b>'+effY.toFixed(1)+'% ריאלית</b> אחרי אינפלציה של '+S.inf+'%. זה המספר שהחישוב עובד לפיו.';
+  }else{
+    cv.innerHTML='= כ-<b>'+toNom(S.yld,S.inf).toFixed(1)+'% נומינלית</b> (מה שהיו מפרסמים על המסלול), באינפלציה של '+S.inf+'%.';
+  }
+  document.querySelectorAll('#yldMode button').forEach(function(b){
+    b.classList.toggle('active',b.getAttribute('data-m')===S.yldMode);
   });
 
   /* ── reality gate: a pension above the salary means the assumption is doing the work ── */
   const rg=document.getElementById('realityGate');
   if(repl>100&&yrs>0){
     rg.hidden=false; rg.className='insight warn';
-    if(S.yld>4.5){
-      rg.innerHTML='⚠️ עצירה לרגע: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>. קצבה שגבוהה מהשכר היא כמעט תמיד סימן שהתשואה שהוזנה אופטימית מדי, ולא סימן שהלקוחה מסודרת. ההנחה כאן היא <b>'+S.yld+'%</b>, והקרנות עצמן מחשבות את התחזית שלהן לפי כ-4%. שווה ללחוץ על 4% בטבלה למעלה ולראות מה נשאר.';
+    if(effY>4.5){
+      rg.innerHTML='⚠️ עצירה לרגע: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>. ההנחה שמייצרת אותה היא <b>'+effY.toFixed(1)+'% ריאלית, שהן כ-'+toNom(effY,S.inf).toFixed(1)+'% נומינליות</b>. שווה לעצור על המספר הזה: הממוצע ההיסטורי של S&P 500 הוא כ-10% <b>נומינלי</b>, וזה כ-7% ריאלי - כלומר '+(effY>=6.5?'ההנחה כאן היא בעצם התשואה ההיסטורית המלאה של המדד, לא הנחה שמרנית.':'ההנחה כאן כבר גבוהה בהרבה מ-4% שהקרנות מניחות.')+' הקרנות עצמן מחשבות לפי כ-4% ריאלי.';
     }else if(S.growth<1){
       rg.innerHTML='שימו לב לפרופורציה: הקצבה כאן היא <b>'+Math.round(repl)+'% מהשכר של היום</b>, וזה נשמע מוגזם. הסיבה היא שההשוואה נעשית מול השכר של <b>היום</b>, בעוד שגדילת השכר מוגדרת 0%. כמעט אף אחת לא מרוויחה בגיל '+money(S.retAge)+' את מה שהיא מרוויחה בגיל '+money(S.age)+'. מספיק להזין גדילת שכר ריאלית של 1% בשנה, והתמונה נעשית הגיונית: הקצבה תהיה '+Math.round(replThen)+'% מהשכר הצפוי אז.';
     }else{
@@ -1002,7 +1027,7 @@ function applyAll(){
   setVal('okPct',S.okPct); setVal('okAmt',S.okAmt?grp(Math.round(S.okAmt)):'');
   setVal('target',grp(Math.round(S.target)));
   setVal('repAnn',S.repAnn?grp(Math.round(S.repAnn)):''); setVal('fundRate',S.fundRate);
-  setVal('aYield',S.yld); setVal('aGrowth',S.growth); setVal('aCoef',S.coef); setVal('aSide',S.side);
+  setVal('aYield',S.yld); setVal('aInf',S.inf); setVal('aGrowth',S.growth); setVal('aCoef',S.coef); setVal('aSide',S.side);
   setVal('bFeeDep',S.bFeeDep); setVal('bFeeAcc',S.bFeeAcc);
   paintSources();
 }
@@ -1011,7 +1036,7 @@ const MONEYF=['bal','extraBal','sal','target','okAmt','insCost','depSelf','incom
 [['age','age'],['retAge','retAge'],['bal','bal'],['extraBal','extraBal'],['sal','sal'],
  ['pEmp','pEmp'],['pTag','pTag'],['pPit','pPit'],['feeDep','feeDep'],['feeAcc','feeAcc'],['insCost','ins'],['depSelf','depSelf'],['income','income'],
  ['okPct','okPct'],['okAmt','okAmt'],['target','target'],['repAnn','repAnn'],['fundRate','fundRate'],
- ['aYield','yld'],['aGrowth','growth'],['aCoef','coef'],['aSide','side'],
+ ['aYield','yld'],['aInf','inf'],['aGrowth','growth'],['aCoef','coef'],['aSide','side'],
  ['bFeeDep','bFeeDep'],['bFeeAcc','bFeeAcc']].forEach(function(p){
   const el=document.getElementById(p[0]);if(!el)return;
   el.addEventListener('input',function(){if(MONEYF.indexOf(p[0])>-1)liveFormat(el);S[p[1]]=num(el.value);if(readOnce){SRC[p[0]]='edit';paintSources();}calc();});
@@ -1022,7 +1047,15 @@ document.getElementById('pitChk').addEventListener('change',function(){S.pit=thi
 document.getElementById('sexF').onclick=function(){S.sex='f';if(S.retAge===67)S.retAge=65;if(S.coef===202)S.coef=212;applyAll();calc();};
 document.getElementById('sexM').onclick=function(){S.sex='m';if(S.retAge===65)S.retAge=67;if(S.coef===212)S.coef=202;applyAll();calc();};
 document.querySelectorAll('#yieldQuick button').forEach(function(b){
-  b.onclick=function(){S.yld=parseFloat(b.getAttribute('data-y'));setVal('aYield',S.yld);if(readOnce){SRC.aYield='edit';}calc();};
+  b.onclick=function(){S.yldMode='real';S.yld=parseFloat(b.getAttribute('data-y'));setVal('aYield',S.yld);if(readOnce){SRC.aYield='edit';}calc();};
+});
+document.querySelectorAll('#yldMode button').forEach(function(b){
+  b.onclick=function(){
+    const m=b.getAttribute('data-m');
+    if(m===S.yldMode)return;
+    S.yld=parseFloat((m==='nom'?toNom(S.yld,S.inf):toReal(S.yld,S.inf)).toFixed(2));
+    S.yldMode=m; setVal('aYield',S.yld); calc();
+  };
 });
 
 

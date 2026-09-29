@@ -306,9 +306,17 @@ details.why>summary::after{content:"▾";font-size:10px;transition:transform .2s
 details.why[open]>summary::after{transform:rotate(180deg)}
 details.why .why-b{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.6;margin-top:8px;background:var(--sage-tint);border-radius:11px;padding:11px 13px}
 details.why .why-b b{color:var(--pine-deep);font-weight:900}
+/* the reality checkboxes */
+.wf-r{cursor:pointer}
+.wf-r input{width:19px;height:19px;accent-color:var(--pine);flex:none;cursor:pointer;margin:0}
+.wf-r.on{background:rgba(var(--sage-rgb),.26)}
+.wf-out{margin-top:13px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);border-radius:15px;padding:15px 16px;color:#fff;text-align:center;box-shadow:0 10px 26px rgba(var(--pine-rgb),.22)}
+.wf-out .wo-l{font-size:12.5px;font-weight:800;opacity:.92}
+.wf-out .wo-n{font-size:clamp(24px,6.5vw,32px);font-weight:900;font-variant-numeric:tabular-nums;line-height:1.15;margin-top:3px}
+.wf-out .wo-s{font-size:12px;font-weight:700;opacity:.9;margin-top:4px;line-height:1.5}
 /* the reality waterfall */
 .wfall{border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:15px;overflow:hidden}
-.wf-r{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 13px;border-top:1px solid rgba(var(--pine-rgb),.12);font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
+.wf-r{display:grid;grid-template-columns:auto 1fr auto auto;gap:9px;align-items:center;padding:11px 13px;border-top:1px solid rgba(var(--pine-rgb),.12);font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4}
 .wf-r:first-child{border-top:0;background:rgba(var(--pine-rgb),.10)}
 .wf-r .wf-l small{display:block;font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
 .wf-r .wf-v{font-variant-numeric:tabular-nums;font-weight:900;color:var(--pine-darker);white-space:nowrap}
@@ -502,10 +510,11 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
 
   <div class="card">
     <span class="sec-lbl">🧨 למה בפועל אומרים שההכנסה בפנסיה יורדת</span>
-    <div class="cp-note" style="margin-top:0;margin-bottom:13px">השורה הראשונה מניחה רצף מושלם של הפקדות. כל שורה מוסיפה עליה עוד משהו שקורה בחיים.</div>
+    <div class="cp-note" style="margin-top:0;margin-bottom:13px">מסמנים מה רלוונטי ללקוחה, וכל סימון מראה כמה הוא לבדו עולה לה.</div>
     <div class="wfall" id="wfall"></div>
-    <div class="insight" id="wfInsight"></div>
+    <div class="wf-out" id="wfOut"></div>
     <div class="cp-note">האחוז מודד את הקצבה מול <b>השכר בפרישה</b> - זו ההגדרה שממנה מגיע המספר המוכר של 75%.</div>
+    <div class="cp-note">ההון לא נמשך כסכום. הוא מחולק במקדם והופך ל<b>קצבה חודשית לכל החיים</b>. מי שחי/ה הרבה מעבר לתוחלת מקבל/ת יותר ממה שנצבר, ומי שנפטר/ת מוקדם - בן/בת הזוג והילדים מקבלים קצבת שאירים.</div>
   </div>
 
   <div class="card">
@@ -913,30 +922,48 @@ function calc(){
     }
   }else{rg.hidden=true;}
 
-  /* ── what a real career does to that number, layer by layer ── */
+  /* ── what a real career does to that number: each one is a tick-box ── */
   const wGrow=Math.max(S.growth,1.5);
-  const steps=[
-    {l:'כמו שהוזן למעלה', s:'רצף מלא של הפקדות', o:{}},
-    {l:'עם גדילת שכר ריאלית של '+wGrow+'%', s:'הקצבה עולה, אבל השכר שאליו משווים עולה יותר', o:{g:wGrow}},
-    {l:'ופודה את הפיצויים בין עבודות', s:'8.33% מתוך ההפקדה נעלמים מהחיסכון', o:{g:wGrow,noPit:true}},
-    {l:'ועוד 3 שנים בלי הפקדות', s:'לידות, מעברים, תקופה כעצמאית', o:{g:wGrow,noPit:true,gapY:Math.max(S.gapY,3)}},
-    {l:'ותשואה של 3% במקום 4%', s:'עשור חלש אחד מספיק לזה', o:{g:wGrow,noPit:true,gapY:Math.max(S.gapY,3),y:3}}
+  const loY=Math.max(effY-1,0);
+  const WF=[
+    {k:'grow', l:'המשכורת תגדל ריאלית ב-'+wGrow+'%', s:'הקצבה עולה, אבל השכר שאליו משווים עולה יותר', o:{g:wGrow}},
+    {k:'pit',  l:'תפדה את הפיצויים בין עבודות',      s:'8.33% מתוך ההפקדה נעלמים מהחיסכון',        o:{noPit:true}},
+    {k:'gap',  l:'3 שנים בלי הפקדות',                s:'לידות, מעברים, תקופה כעצמאית',             o:{gapY:Math.max(S.gapY,3)}},
+    {k:'yld',  l:'תשואה של '+loY.toFixed(1)+'% במקום '+effY.toFixed(1)+'%', s:'עשור חלש אחד מספיק לזה', o:{y:loY}}
   ];
-  const wf=steps.map(function(st){
-    const pr=project(S.feeDep,S.feeAcc,st.o.y==null?null:st.o.y,st.o.g==null?null:st.o.g,{noPit:!!st.o.noPit,gapY:st.o.gapY});
-    const a=pr.cap/coef, rt=pr.finalSal>0?a/pr.finalSal*100:0;
-    return {l:st.l,s:st.s,ann:a,rep:rt};
-  });
-  document.getElementById('wfall').innerHTML=wf.map(function(r,i){
-    const cls=r.rep>=70?'ok':(r.rep>=50?'mid':'bad');
-    return '<div class="wf-r"><span class="wf-l">'+(i?'↓ ':'')+r.l+'<small>'+r.s+'</small></span>'+
-           '<span class="wf-v">'+money(r.ann)+' ₪</span>'+
-           '<span class="wf-p '+cls+'">'+Math.round(r.rep)+'%</span></div>';
+  const mix=function(list){
+    const o={};
+    list.forEach(function(w){
+      if(w.o.g!=null)o.g=w.o.g;
+      if(w.o.y!=null)o.y=w.o.y;
+      if(w.o.noPit)o.noPit=true;
+      if(w.o.gapY!=null)o.gapY=w.o.gapY;
+    });
+    const pr=project(S.feeDep,S.feeAcc,o.y==null?null:o.y,o.g==null?null:o.g,{noPit:!!o.noPit,gapY:o.gapY});
+    return {ann:pr.cap/coef, rep:pr.finalSal>0?pr.cap/coef/pr.finalSal*100:0};
+  };
+  const base=mix([]);
+  document.getElementById('wfall').innerHTML=WF.map(function(w){
+    const alone=mix([w]);
+    const d=alone.ann-base.ann;
+    const cls=d<-1?'bad':(d>1?'ok':'mid');
+    return '<label class="wf-r'+(WFON[w.k]?' on':'')+'">'+
+      '<input type="checkbox" data-k="'+w.k+'"'+(WFON[w.k]?' checked':'')+'>'+
+      '<span class="wf-l">'+w.l+'<small>'+w.s+'</small></span>'+
+      '<span class="wf-v">'+money(alone.ann)+' ₪</span>'+
+      '<span class="wf-p '+cls+'">'+(d>0?'+':'')+money(d)+'</span></label>';
   }).join('');
-  const wi=document.getElementById('wfInsight');
-  const last=wf[wf.length-1], first=wf[0];
-  wi.className='insight';
-  wi.innerHTML='בין השורה הראשונה לאחרונה: <b>'+money(first.ann-last.ann)+' ₪ פחות בחודש</b>, לכל החיים.';
+  const chosen=WF.filter(function(w){return WFON[w.k];});
+  const res=mix(chosen);
+  const dTot=res.ann-base.ann;
+  document.getElementById('wfOut').innerHTML=
+    '<div class="wo-l">'+(chosen.length?'בתרחיש שסימנת':'בלי שום שינוי')+'</div>'+
+    '<div class="wo-n">'+money(res.ann)+' ₪</div>'+
+    '<div class="wo-s">'+Math.round(res.rep)+'% מהשכר בפרישה'+
+      (chosen.length?' · '+(dTot<0?'פחות ב-'+money(-dTot):'יותר ב-'+money(dTot))+' ₪ בחודש מהמצב הנקי':'')+'</div>';
+  document.querySelectorAll('.wf-r input').forEach(function(cb){
+    cb.onchange=function(){WFON[cb.getAttribute('data-k')]=cb.checked;calc();};
+  });
 
   /* ── reconcile with the number printed in the report ── */
   const yrsF=Math.max(S.retAge-S.age,0);
@@ -1018,6 +1045,7 @@ const FIELDS=[
   {id:'bFeeAcc',lbl:'רף השוואה',kind:'assume'}
 ];
 let SRC={}, readOnce=false;
+const WFON={grow:false,pit:false,gap:false,yld:false};
 function labelFor(id){
   const el=document.getElementById(id); if(!el)return null;
   let l=document.querySelector('label[for="'+id+'"]');

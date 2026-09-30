@@ -177,6 +177,17 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tile .t-s{font-size:10.5px;font-weight:700;color:var(--ink-soft);line-height:1.4}
 .tile.main .t-l,.tile.main .t-s{color:rgba(255,255,255,.84)} .tile.main .t-v{color:#fff}
 @media(max-width:560px){.sum-grid{grid-template-columns:1fr 1fr}}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin-bottom:4px}
+.vs-side{border-radius:16px;padding:14px 11px;text-align:center;border:1.5px solid rgba(var(--pine-rgb),.22);display:flex;flex-direction:column;justify-content:center;gap:3px}
+.vs-side.rec-side{background:linear-gradient(180deg,rgba(var(--sage-rgb),.34),rgba(var(--sage-rgb),.1))}
+.vs-side.plan-side{background:#fff}
+.vs-side.plan-side.over{background:rgba(var(--red-rgb),.08);border-color:rgba(var(--red-rgb),.34)}
+.vs-side.plan-side.ok{background:rgba(var(--pine-rgb),.10);border-color:rgba(var(--pine-rgb),.34)}
+.vs-h{font-size:12.5px;font-weight:800;color:var(--ink-soft)}
+.vs-n{font-size:clamp(18px,4.6vw,25px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
+.vs-side.plan-side.over .vs-n{color:#8f3a29}
+.vs-s{font-size:11px;font-weight:700;color:var(--ink-soft);line-height:1.4}
+.vs-mid{align-self:center;font-size:12px;font-weight:900;color:var(--pine);background:var(--sage-tint);border-radius:100px;padding:6px 9px}
 /* three-rules traffic light */
 .rules{display:flex;flex-direction:column;gap:8px;margin:16px 0 4px}
 .rule{display:flex;align-items:flex-start;gap:10px;border-radius:12px;padding:11px 13px;font-size:13px;font-weight:700;line-height:1.5}
@@ -229,32 +240,23 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
   </div>
 
   <div class="card">
-    <span class="sec-lbl">💵 הנתונים שלי</span>
+    <span class="sec-lbl">שלב 1 · 💵 שני מספרים עלייך</span>
+    <div class="rec" style="margin:0 0 13px">לפני שמדברים על רכב, ריבית או פריסה - שתי שאלות בלבד. מהן נגזרת כל ההמלצה.</div>
     <div class="house">
       <div class="h-item field"><label for="income">כמה נכנס לבנק בחודש (נטו)</label><div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="12,000" placeholder="0"></div></div>
       <div class="h-item field"><label for="capital">כמה הון עצמי נזיל יש לי</label><div class="input-shell"><span class="unit">₪</span><input id="capital" type="text" inputmode="numeric" value="50,000" placeholder="0"></div></div>
-      <div class="h-item field"><label for="rate">ריבית הלוואה שנתית</label><div class="input-shell"><span class="unit">%</span><input id="rate" type="text" inputmode="decimal" value="6.5" placeholder="0"></div><div class="fw" id="rateWarn" role="status" aria-live="polite" hidden></div></div>
-      <div class="h-item field"><label for="term">פריסת ההלוואה (חודשים)</label><div class="input-shell"><span class="unit">ח'</span><input id="term" type="text" inputmode="numeric" value="48" placeholder="0"></div><div class="fw" id="termWarn" role="status" aria-live="polite" hidden></div></div>
     </div>
-    <div class="bills-lbl" style="margin-top:15px">מה רכב עולה לך כל חודש גם בלי ההלוואה (ההוצאות השוטפות):</div>
-    <div class="house">
-      <div class="h-item field"><label for="fuel">דלק</label><div class="input-shell"><span class="unit">₪</span><input id="fuel" type="text" inputmode="numeric" value="700" placeholder="0"></div></div>
-      <div class="h-item field"><label for="insur">ביטוחים (חובה + מקיף)</label><div class="input-shell"><span class="unit">₪</span><input id="insur" type="text" inputmode="numeric" value="400" placeholder="0"></div></div>
-      <div class="h-item field"><label for="maint">טיפולים, טסט ותקלות</label><div class="input-shell"><span class="unit">₪</span><input id="maint" type="text" inputmode="numeric" value="300" placeholder="0"></div></div>
-      <div class="h-item field"><label for="park">חניה ונסיעות</label><div class="input-shell"><span class="unit">₪</span><input id="park" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
-    </div>
-    <div class="prime-line">הפריים היום <span class="mini-inline"><span class="mini-shell"><input id="prime" type="text" inputmode="decimal" value="6" aria-label="ריבית הפריים היום">%</span></span> לכן הגבול הסביר להלוואת רכב הוא <b>פריים + 0.5% = <span id="primeCap">6.5%</span></b>. הפריים משתנה עם בנק ישראל, אז אפשר לעדכן אותו כאן.</div>
   </div>
 
   <div class="card">
-    <span class="sec-lbl">🎯 איזה רכב התקציב שלי מחזיק</span>
-    <div class="rec" style="margin:0 0 13px">שלוש רמות של נועזות. העמודה האמצעית היא ההמלצה שלי: <b>עד 15% מהנטו על כל מה שקשור לרכב</b>. החישוב יורד מהתקציב למטה: קודם יורדות ההוצאות השוטפות שהזנת, ומה שנשאר הוא מה שבאמת אפשר לשים בהחזר.</div>
+    <span class="sec-lbl">שלב 2 · 🎯 איזה רכב מתאים לך</span>
+    <div class="rec" style="margin:0 0 13px">שלוש רמות של נועזות. האמצעית היא ההמלצה שלי: <b>עד 15% מהנטו על כל מה שקשור לרכב</b>, חצי להחזר וחצי לשוטף.</div>
     <div class="lvl-grid">
       <div class="lvl" id="lvl10">
         <div class="lvl-h">זהיר<span>10% מהנטו</span></div>
-        <div class="lvl-row"><span>תקציב חודשי לרכב</span><b id="b10">0</b></div>
-        <div class="lvl-row"><span>פחות ההוצאות השוטפות שלך</span><b id="r10">0</b></div>
-        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p10">0</b></div>
+        <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b10">0</b></div>
+        <div class="lvl-row"><span>מזה להחזר ההלוואה (חצי)</span><b id="p10">0</b></div>
+        <div class="lvl-row"><span>והחצי השני לדלק, ביטוח וטיפולים</span><b id="r10">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l10">0</b></div>
         <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d10">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m10">0</b></div>
@@ -262,49 +264,66 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="lvl on" id="lvl15">
         <div class="lvl-tag">ההמלצה</div>
         <div class="lvl-h">מאוזן<span>15% מהנטו</span></div>
-        <div class="lvl-row"><span>תקציב חודשי לרכב</span><b id="b15">0</b></div>
-        <div class="lvl-row"><span>פחות ההוצאות השוטפות שלך</span><b id="r15">0</b></div>
-        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p15">0</b></div>
+        <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b15">0</b></div>
+        <div class="lvl-row"><span>מזה להחזר ההלוואה (חצי)</span><b id="p15">0</b></div>
+        <div class="lvl-row"><span>והחצי השני לדלק, ביטוח וטיפולים</span><b id="r15">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l15">0</b></div>
         <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d15">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m15">0</b></div>
       </div>
       <div class="lvl" id="lvl20">
         <div class="lvl-h">על הקצה<span>20% מהנטו</span></div>
-        <div class="lvl-row"><span>תקציב חודשי לרכב</span><b id="b20">0</b></div>
-        <div class="lvl-row"><span>פחות ההוצאות השוטפות שלך</span><b id="r20">0</b></div>
-        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p20">0</b></div>
+        <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b20">0</b></div>
+        <div class="lvl-row"><span>מזה להחזר ההלוואה (חצי)</span><b id="p20">0</b></div>
+        <div class="lvl-row"><span>והחצי השני לדלק, ביטוח וטיפולים</span><b id="r20">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l20">0</b></div>
         <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d20">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m20">0</b></div>
       </div>
     </div>
     <div class="insight" id="capIns"></div>
-    <div class="note-tip" id="capNote" hidden></div>
-    <div class="note-tip">💡 למה רק <b>שליש מההון</b> למקדמה? כי שני השלישים האחרים הם קרן הביטחון שלך. רכב שמרוקן את החשבון הופך כל תקלה להלוואה חדשה. כלל האצבע אומר שבערך <b>חצי</b> מהתקציב החודשי הולך להחזר והחצי לשוטף, אבל כאן לא מנחשים: החישוב משתמש בהוצאות האמיתיות שלך. אם השוטף גבוה מחצי התקציב, התקרה יורדת בהתאם.</div>
+    <div class="note-tip">💡 ההמלצה מניחה <b>הלוואה טובה</b>: פריים + 0.5% (<span id="recRateTxt">6.5%</span>) ל-48 חודשים, מקדמה משליש ההון הנזיל (שני השלישים האחרים הם קרן הביטחון), והלוואה שלא עולה על פי שלוש מהמקדמה. הפריים היום <span class="mini-inline"><span class="mini-shell"><input id="prime" type="text" inputmode="decimal" value="6" aria-label="ריבית הפריים היום">%</span></span> ואפשר לעדכן אותו.</div>
   </div>
 
   <div class="card">
-    <span class="sec-lbl">🚗 הרכב שאני רוצה - מבחן הכללים</span>
+    <span class="sec-lbl">שלב 3 · 🚗 הרכב שאתם מתכננים לקנות</span>
+    <div class="rec" style="margin:0 0 13px">עכשיו הרכב המסוים שלכם וההצעה שקיבלתם בפועל.</div>
     <div class="house">
       <div class="h-item field"><label for="price">מחיר הרכב</label><div class="input-shell"><span class="unit">₪</span><input id="price" type="text" inputmode="numeric" value="60,000" placeholder="0"></div></div>
       <div class="h-item field"><label for="down">מקדמה במזומן</label><div class="input-shell"><span class="unit">₪</span><input id="down" type="text" inputmode="numeric" value="15,000" placeholder="0"></div><div class="fw" id="downWarn" role="status" aria-live="polite" hidden></div></div>
+      <div class="h-item field"><label for="rate">הריבית שהציעו לכם</label><div class="input-shell"><span class="unit">%</span><input id="rate" type="text" inputmode="decimal" value="6.5" placeholder="0"></div><div class="fw" id="rateWarn" role="status" aria-live="polite" hidden></div></div>
+      <div class="h-item field"><label for="term">פריסת ההלוואה (חודשים)</label><div class="input-shell"><span class="unit">ח'</span><input id="term" type="text" inputmode="numeric" value="48" placeholder="0"></div><div class="fw" id="termWarn" role="status" aria-live="polite" hidden></div></div>
     </div>
-
+    <div class="bills-lbl" style="margin-top:15px">ועל <b>הרכב הזה בדיוק</b>, כמה יצא כל חודש גם בלי ההלוואה:</div>
+    <div class="house">
+      <div class="h-item field"><label for="fuel">דלק</label><div class="input-shell"><span class="unit">₪</span><input id="fuel" type="text" inputmode="numeric" value="700" placeholder="0"></div></div>
+      <div class="h-item field"><label for="insur">ביטוחים (חובה + מקיף)</label><div class="input-shell"><span class="unit">₪</span><input id="insur" type="text" inputmode="numeric" value="400" placeholder="0"></div></div>
+      <div class="h-item field"><label for="maint">טיפולים, טסט ותקלות</label><div class="input-shell"><span class="unit">₪</span><input id="maint" type="text" inputmode="numeric" value="300" placeholder="0"></div></div>
+      <div class="h-item field"><label for="park">חניה ונסיעות</label><div class="input-shell"><span class="unit">₪</span><input id="park" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
+    </div>
     <div class="sum-grid" id="loanBox">
       <div class="tile"><span class="t-l">סכום ההלוואה</span><span class="t-v" id="tLoan">0</span><span class="t-s" id="tLoanS"></span></div>
       <div class="tile"><span class="t-l">החזר חודשי להלוואה</span><span class="t-v" id="tPmt">0</span><span class="t-s" id="tPmtS"></span></div>
       <div class="tile"><span class="t-l">הוצאות שוטפות</span><span class="t-v" id="tRun">0</span><span class="t-s">דלק, ביטוח, טיפולים, חניה</span></div>
       <div class="tile main"><span class="t-l">סה"כ לחודש</span><span class="t-v" id="tTot">0</span><span class="t-s" id="tTotS"></span></div>
     </div>
-    <div class="rules" id="rules"></div>
+    <div class="note-tip" id="breakdown"></div>
+  </div>
 
+  <div class="card">
+    <span class="sec-lbl">שלב 4 · ⚖️ האם זה מסתדר עם ההמלצה</span>
+    <div class="vs">
+      <div class="vs-side rec-side"><div class="vs-h">ההמלצה</div><div class="vs-n" id="vsRecCar">0</div><div class="vs-s" id="vsRecMo"></div></div>
+      <div class="vs-mid">מול</div>
+      <div class="vs-side plan-side" id="vsPlanBox"><div class="vs-h">מה שתכננתם</div><div class="vs-n" id="vsPlanCar">0</div><div class="vs-s" id="vsPlanMo"></div></div>
+    </div>
+    <div class="rules" id="rules"></div>
     <div class="check" id="verdict">
       <div class="c-top">העלות החודשית האמיתית של הרכב הזה</div>
       <div class="c-num" id="vNum">0 ₪</div>
       <div class="c-msg" id="vMsg"></div>
     </div>
-    <div class="note-tip" id="breakdown"></div>
+    <div class="note-tip" id="capNote" hidden></div>
   </div>
 
   <div class="card">
@@ -537,7 +556,6 @@ function calc(){
 
   /* ---------- 0. flag a loan that is priced or stretched too far ---------- */
   const capTxt=rateCap.toFixed(2).replace(/\.?0+$/,'')+'%';
-  document.getElementById('primeCap').textContent=capTxt;
   const L0=Math.max(0,price-down);
   function warn(id,on,html){const el=document.getElementById(id);el.hidden=!on;if(on)el.innerHTML='<span class="fw-ic">\u26a0\ufe0f</span><div>'+html+'</div>';}
 
@@ -564,47 +582,46 @@ function calc(){
 
   /* ---------- 1. what the budget holds, at three levels ---------- */
   const thirdCap=capital/3;
-  /* the ceiling uses the SAME running costs the specific car is judged by, otherwise
-     a car can sit under the ceiling and still fail the 15% rule (the bug Tali caught). */
-  /* the ceiling is "the priciest car that passes all three rules", so it is bound by
-     all three: the 15% budget, the 4-year term, and the 25% down payment
-     (a loan over 3x the down payment would break the 25% rule). */
-  const rTerm=Math.min(term,48);
+  /* STEP 2 is the recommendation, and it must stand on income + capital alone.
+     So it assumes the GOOD loan by definition (prime+0.5%, 48 months) and the
+     rule of thumb that half the monthly budget goes to the repayment. The car
+     they actually want, with its own rate, term and upkeep, is step 3. */
+  const RECTERM=48;
+  document.getElementById('recRateTxt').textContent=capTxt;
   function ceiling(pc){
-    const budget=income*pc/100, toLoan=budget-running;
-    const byPay=toLoan>0?maxLoan(toLoan,rate,rTerm):0;
-    const byDown=thirdCap*3;
+    const budget=income*pc/100, toLoan=budget/2;
+    const byPay=toLoan>0?maxLoan(toLoan,rateCap,RECTERM):0, byDown=thirdCap*3;
     const loan=Math.min(byPay,byDown);
     return {budget:budget,toLoan:toLoan,loan:loan,max:thirdCap+loan,capped:byDown<byPay};
   }
   [[10,'10'],[15,'15'],[20,'20']].forEach(([pc,sfx])=>{
     const c=ceiling(pc);
     document.getElementById('b'+sfx).textContent=ils(c.budget);
-    document.getElementById('r'+sfx).textContent='- '+ils(running);
-    const pEl=document.getElementById('p'+sfx);
-    pEl.textContent=ils(Math.max(0,c.toLoan));
-    pEl.parentNode.classList.toggle('neg',c.toLoan<=0);
+    document.getElementById('p'+sfx).textContent=ils(c.toLoan);
+    document.getElementById('r'+sfx).textContent=ils(c.toLoan);
     document.getElementById('l'+sfx).textContent=ils(c.loan);
     document.getElementById('d'+sfx).textContent=ils(thirdCap);
     document.getElementById('m'+sfx).textContent=ils(c.max);
   });
-  const rec=ceiling(15), recMax=rec.max;
-  const cn=document.getElementById('capNote');
-  cn.hidden=!(term>48);
-  if(term>48) cn.innerHTML='\u2139\ufe0f \u05d4\u05ea\u05e7\u05e8\u05d4 \u05db\u05d0\u05df \u05de\u05d7\u05d5\u05e9\u05d1\u05ea \u05dc-<b>48 \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd</b> \u05d5\u05dc\u05d0 \u05dc-'+term+', \u05db\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d8\u05d5\u05d1\u05d4 \u05e0\u05e4\u05e8\u05e1\u05ea \u05dc\u05e2\u05d3 4 \u05e9\u05e0\u05d9\u05dd. \u05db\u05da \u05e8\u05db\u05d1 \u05e9\u05e2\u05d5\u05de\u05d3 \u05d1\u05d3\u05d9\u05d5\u05e7 \u05d1\u05ea\u05e7\u05e8\u05d4 \u05e2\u05d5\u05d1\u05e8 \u05d0\u05ea \u05db\u05dc \u05d4\u05db\u05dc\u05dc\u05d9\u05dd, \u05d5\u05dc\u05d0 \u05e8\u05e7 \u05d0\u05ea \u05db\u05dc\u05dc \u05d4-15%.';
+  const rec=ceiling(15), recMax=rec.max, recMo=rec.budget;
   const ci=document.getElementById('capIns');
   if(income<=0){ci.style.display='none';}
   else{
     ci.style.display='block';
-    if(capital<=0) ci.innerHTML='\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df, \u05d0\u05d6 \u05db\u05e8\u05d2\u05e2 <b>\u05d0\u05d9\u05df \u05de\u05e7\u05d3\u05de\u05d4</b> \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1. \u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05d4\u05d3\u05e8\u05da, \u05d6\u05d4 \u05e4\u05e9\u05d5\u05d8 \u05d4\u05e9\u05dc\u05d1 \u05e9\u05dc\u05e4\u05e0\u05d9: \u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc <b>\u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd</b> \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05e9\u05d0\u05e4\u05e9\u05e8 \u05dc\u05e9\u05d9\u05dd \u05d1\u05de\u05e7\u05d3\u05de\u05d4, \u05d5\u05d4\u05e9\u05e0\u05d9\u05d9\u05dd \u05d4\u05d0\u05d7\u05e8\u05d9\u05dd \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df.';
-    else if(rec.toLoan<=0) ci.innerHTML='בתקציב של 15% מהנטו, כלומר <b>'+ils(rec.budget)+'</b>, ההוצאות השוטפות לבדן (<b>'+ils(running)+'</b>) כבר אוכלות את כולו, ולא נשאר כלום להחזר. זה אומר שברמת ההכנסה הזאת הדרך היחידה היא רכב במזומן, או להוריד את ההוצאות השוטפות.';
+    if(capital<=0) ci.innerHTML='\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df, \u05d0\u05d6 \u05db\u05e8\u05d2\u05e2 <b>\u05d0\u05d9\u05df \u05de\u05e7\u05d3\u05de\u05d4</b> \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1. \u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05d4\u05d3\u05e8\u05da, \u05d6\u05d4 \u05d4\u05e9\u05dc\u05d1 \u05e9\u05dc\u05e4\u05e0\u05d9: \u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc \u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05e9\u05d0\u05e4\u05e9\u05e8 \u05dc\u05e9\u05d9\u05dd \u05d1\u05de\u05e7\u05d3\u05de\u05d4, \u05d5\u05d4\u05e9\u05e0\u05d9\u05d9\u05dd \u05d4\u05d0\u05d7\u05e8\u05d9\u05dd \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df.';
     else{
-      let t='בתקציב של 15% מהנטו, כלומר <b>'+ils(rec.budget)+'</b> לחודש, אחרי <b>'+ils(running)+'</b> הוצאות שוטפות נשארים <b>'+ils(rec.toLoan)+'</b> להחזר חודשי. ההחזר הזה קונה הלוואה של <b>'+ils(rec.loan)+'</b>, ועם מקדמה של <b>'+ils(thirdCap)+'</b> מההון זה רכב עד <b>'+ils(recMax)+'</b>.';
-      if(rec.capped) t+='\u05db\u05d0\u05df \u05d3\u05d5\u05d5\u05e7\u05d0 \u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd \u05d5\u05dc\u05d0 \u05d4\u05d4\u05d7\u05d6\u05e8: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05d4\u05de\u05e7\u05d3\u05de\u05d4. \u05e2\u05d5\u05d3 \u05d4\u05d5\u05df \u05e2\u05e6\u05de\u05d9 \u05d9\u05e8\u05d9\u05dd \u05d0\u05ea \u05d4\u05ea\u05e7\u05e8\u05d4.';
-      if(rec.toLoan<rec.budget*0.25) t+=' שווה לשים לב: השוטף בולע כמעט את כל התקציב, כלומר רוב הכסף הולך לאחזקה ולא לרכב עצמו. רכב זול יותר מוריד גם את הדלק והביטוח.';
+      let t='\u05d1\u05ea\u05e7\u05e6\u05d9\u05d1 \u05e9\u05dc 15% \u05de\u05d4\u05e0\u05d8\u05d5, \u05db\u05dc\u05d5\u05de\u05e8 <b>'+ils(rec.budget)+'</b> \u05dc\u05d7\u05d5\u05d3\u05e9 \u05e2\u05dc \u05db\u05dc \u05de\u05d4 \u05e9\u05e7\u05e9\u05d5\u05e8 \u05dc\u05e8\u05db\u05d1: <b>'+ils(rec.toLoan)+'</b> \u05dc\u05d4\u05d7\u05d6\u05e8 \u05d4\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d5\u05d0\u05d5\u05ea\u05d5 \u05e1\u05db\u05d5\u05dd \u05dc\u05d3\u05dc\u05e7, \u05d1\u05d9\u05d8\u05d5\u05d7, \u05d8\u05d9\u05e4\u05d5\u05dc\u05d9\u05dd \u05d5\u05d7\u05e0\u05d9\u05d4. \u05d4\u05d4\u05d7\u05d6\u05e8 \u05d4\u05d6\u05d4 \u05e7\u05d5\u05e0\u05d4 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05e9\u05dc <b>'+ils(rec.loan)+'</b>, \u05d5\u05e2\u05dd \u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05dc <b>'+ils(thirdCap)+'</b> \u05de\u05d4\u05d4\u05d5\u05df \u05d6\u05d4 <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(recMax)+'</b>.';
+      if(rec.capped) t+=' \u05db\u05d0\u05df \u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd \u05d5\u05dc\u05d0 \u05d4\u05d4\u05d7\u05d6\u05e8: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05d4\u05de\u05e7\u05d3\u05de\u05d4. \u05e2\u05d5\u05d3 \u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05de\u05e8\u05d9\u05dd \u05d0\u05ea \u05d4\u05ea\u05e7\u05e8\u05d4.';
       ci.innerHTML=t;
     }
   }
+
+  /* the ceiling recomputed with THIS car's real upkeep - the verdict quotes it */
+  const rTerm2=Math.min(term>0?term:RECTERM,RECTERM);
+  const realToLoan=income*0.15-running;
+  const realLoan=realToLoan>0?Math.min(maxLoan(realToLoan,rateCap,rTerm2),thirdCap*3):0;
+  const noRoom=income>0&&running>=income*0.15;   /* upkeep alone breaks the rule */
+  const realMax=noRoom?0:thirdCap+realLoan;
 
   /* ---------- 2. the three rules on the car she actually wants ---------- */
   const loanAmt=Math.max(0,price-down);
@@ -643,11 +660,32 @@ function calc(){
   vd.className='check '+(passed===total?'ok':passed===total-1?'mid':'over');
   if(income<=0) vm.textContent='';
   else if(passed===total) vm.innerHTML=`✓ עובר את כל הכללים. הרכב הזה יושב טוב בתקציב שלך.`;
+  else if(noRoom) vm.innerHTML=`לא מדובר במחיר הרכב: <b>ההוצאות השוטפות לבדן</b> (${ils(running)}) הן כבר יותר מ-15% מהנטו. גם רכב במתנה, בלי שקל אחד של הלוואה, חורג.`;
   else if(passed===total-1) vm.innerHTML=`כמעט. הכלל שלא נעמד הוא <b>${rules.filter(r=>!r.ok).map(r=>r.key).join(', ')}</b>.`;
-  else vm.innerHTML=`הרכב הזה גדול על התקציב. עם ההוצאות השוטפות שלך, מתאים לך רכב עד <b>${ils(recMax)}</b>.`;
+  else vm.innerHTML=`הרכב הזה גדול על התקציב. עם ההוצאות השוטפות של הרכב הזה, מתאים לך רכב עד <b>${ils(realMax)}</b>.`;
   document.getElementById('breakdown').innerHTML=
     `🧾 <b>מאיפה מגיעים ${ils(totalMonthly)} בחודש:</b> החזר הלוואה ${ils(monthlyLoan)} על ${ils(loanAmt)} ל-${term} חודשים בריבית ${rate}%, ועוד ${ils(running)} הוצאות שוטפות. `+
     `סך הריבית שתשלמי לאורך ההלוואה: <b>${ils(Math.max(0,monthlyLoan*term-loanAmt))}</b>.`;
+
+
+  /* STEP 4: the recommendation stands on a rule of thumb; the plan carries the real
+     upkeep. Show both and say out loud why they differ, so a car under the headline
+     number can still, honestly, not fit. */
+  document.getElementById('vsRecCar').textContent=ils(recMax);
+  document.getElementById('vsRecMo').textContent=ils(recMo)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
+  document.getElementById('vsPlanCar').textContent=ils(price);
+  document.getElementById('vsPlanMo').textContent=ils(totalMonthly)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
+  document.getElementById('vsPlanBox').className='vs-side plan-side'+(income<=0?'':(passed===total?' ok':' over'));
+  const cn=document.getElementById('capNote');
+  if(noRoom){
+    cn.hidden=false;
+    cn.innerHTML='\u26a0\ufe0f \u05d4\u05d4\u05d5\u05e6\u05d0\u05d5\u05ea \u05d4\u05e9\u05d5\u05d8\u05e4\u05d5\u05ea \u05e9\u05d4\u05d6\u05e0\u05ea (<b>'+ils(running)+'</b>) \u05d4\u05df \u05dc\u05d1\u05d3\u05df <b>'+(running/income*100).toFixed(1)+'%</b> \u05de\u05d4\u05e0\u05d8\u05d5, \u05de\u05e2\u05dc \u05d4\u05d2\u05d1\u05d5\u05dc \u05e9\u05dc 15%. \u05d6\u05d4 \u05d0\u05d5\u05de\u05e8 \u05e9\u05d4\u05d1\u05e2\u05d9\u05d4 \u05d4\u05d9\u05d0 \u05dc\u05d0 \u05d4\u05de\u05d9\u05de\u05d5\u05df \u05d0\u05dc\u05d0 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4. \u05e8\u05db\u05d1 \u05e7\u05d8\u05df \u05d5\u05d7\u05e1\u05db\u05d5\u05e0\u05d9 \u05d9\u05d5\u05ea\u05e8 \u05de\u05d5\u05e8\u05d9\u05d3 \u05d2\u05dd \u05d3\u05dc\u05e7 \u05d5\u05d2\u05dd \u05d1\u05d9\u05d8\u05d5\u05d7, \u05d5\u05d6\u05d5 \u05d4\u05d3\u05e8\u05da \u05d4\u05d9\u05d7\u05d9\u05d3\u05d4 \u05e9\u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d9\u05e1\u05ea\u05d3\u05e8\u05d5 \u05db\u05d0\u05df.';
+  } else if(income>0&&Math.abs(realMax-recMax)>500){
+    cn.hidden=false;
+    cn.innerHTML=(realMax<recMax
+      ? '\u05d4\u05d4\u05de\u05dc\u05e6\u05d4 \u05dc\u05de\u05e2\u05dc\u05d4 \u05de\u05e0\u05d9\u05d7\u05d4 \u05e9\u05d4\u05e9\u05d5\u05d8\u05e3 \u05d4\u05d5\u05d0 <b>'+ils(rec.toLoan)+'</b> (\u05d7\u05e6\u05d9 \u05de\u05d4\u05ea\u05e7\u05e6\u05d9\u05d1), \u05d0\u05d1\u05dc \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4 \u05d4\u05d6\u05e0\u05ea <b>'+ils(running)+'</b>. \u05db\u05e9\u05de\u05d7\u05e9\u05d1\u05d9\u05dd \u05e2\u05dd \u05d4\u05e9\u05d5\u05d8\u05e3 \u05d4\u05d0\u05de\u05d9\u05ea\u05d9 \u05e9\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4, \u05d4\u05ea\u05e7\u05e8\u05d4 \u05d9\u05d5\u05e8\u05d3\u05ea \u05de-<b>'+ils(recMax)+'</b> \u05dc-<b>'+ils(realMax)+'</b>. \u05d6\u05d4 \u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05e7\u05d5\u05d1\u05e2.'
+      : '\u05d4\u05e9\u05d5\u05d8\u05e3 \u05e9\u05d4\u05d6\u05e0\u05ea (<b>'+ils(running)+'</b>) \u05e0\u05de\u05d5\u05da \u05de\u05d7\u05e6\u05d9 \u05d4\u05ea\u05e7\u05e6\u05d9\u05d1, \u05d0\u05d6 \u05d1\u05e4\u05d5\u05e2\u05dc \u05e0\u05e9\u05d0\u05e8 \u05dc\u05da \u05d9\u05d5\u05ea\u05e8 \u05dc\u05d4\u05d7\u05d6\u05e8 \u05d5\u05d4\u05ea\u05e7\u05e8\u05d4 \u05e2\u05d5\u05dc\u05d4 \u05dc-<b>'+ils(realMax)+'</b>.');
+  } else cn.hidden=true;
 
   /* ---------- 3. depreciation ---------- */
   const k=1-depr;

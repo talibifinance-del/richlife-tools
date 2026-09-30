@@ -208,6 +208,10 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .plan-opt .po-ic{flex:none;font-size:15px;line-height:1.35}
 .plan-opt b{font-weight:900}
 .seg{display:flex;gap:8px;margin-bottom:14px}
+.seg.seg-sm{margin-bottom:0}
+.seg.seg-sm .seg-b{font-size:12px;padding:9px 8px}
+.house .full{grid-column:1/-1}
+#commuteBox.hidden{display:none}
 .seg-b{flex:1;font-family:var(--font);cursor:pointer;font-size:13px;font-weight:800;color:var(--ink-soft);background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;padding:11px 10px;transition:all .15s}
 .seg-b:hover{border-color:rgba(var(--pine-rgb),.4)}
 .seg-b.on{background:var(--pine);color:#fff;border-color:var(--pine);box-shadow:0 6px 16px rgba(var(--pine-rgb),.22)}
@@ -274,7 +278,18 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <div class="house">
       <div class="h-item field"><label for="income">כמה נכנס לבנק בחודש (נטו)</label><div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="12,000" placeholder="0"></div></div>
       <div class="h-item field"><label for="capital">כמה הון עצמי נזיל יש לי</label><div class="input-shell"><span class="unit">₪</span><input id="capital" type="text" inputmode="numeric" value="50,000" placeholder="0"></div></div>
-      <div class="h-item field"><label for="commute">כמה קילומטר מהבית לעבודה, לכיוון אחד</label><div class="input-shell"><span class="unit">ק"מ</span><input id="commute" type="text" inputmode="numeric" value="15" placeholder="0"></div><div class="hintline" id="kmHint"></div></div>
+      <div class="h-item field full">
+        <label>כמה נוסעים</label>
+        <div class="seg seg-sm">
+          <button type="button" class="seg-b on" id="kmAvg">לא יודעת, לפי הממוצע</button>
+          <button type="button" class="seg-b" id="kmCom">לפי המרחק לעבודה</button>
+        </div>
+        <div id="commuteBox" class="hidden" style="margin-top:9px">
+          <label for="commute" style="font-size:12.5px">כמה קילומטר מהבית לעבודה, לכיוון אחד</label>
+          <div class="input-shell"><span class="unit">ק"מ</span><input id="commute" type="text" inputmode="numeric" value="15" placeholder="0"></div>
+        </div>
+        <div class="hintline" id="kmHint"></div>
+      </div>
       <div class="h-item field hidden" id="tradeinBox"><label for="tradein">שווי הרכב שלך היום (מה שתקבלי עליו)</label><div class="input-shell"><span class="unit">₪</span><input id="tradein" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
     </div>
   </div>
@@ -319,8 +334,9 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <p><b>הלוואה טובה:</b> פריים + 0.5% (<span id="recRateTxt">6.5%</span>) ל-48 חודשים. המקדמה באה משליש ההון הנזיל ומשווי הרכב הנוכחי, וההלוואה לא עולה על פי שלוש ממנה.</p>
         <div class="asm-grid">
           <label>פריים היום<span class="mini-shell"><input id="prime" type="text" inputmode="decimal" value="6">%</span></label>
+          <label>נסועה ממוצעת לשנה<span class="mini-shell"><input id="kmyear" type="text" inputmode="numeric" value="14700"></span></label>
           <label>ימי נסיעה בחודש<span class="mini-shell"><input id="wdays" type="text" inputmode="numeric" value="22"></span></label>
-          <label>ק"מ לסידורים בחודש<span class="mini-shell"><input id="extrakm" type="text" inputmode="numeric" value="250"></span></label>
+          <label>ק"מ לסידורים בחודש<span class="mini-shell"><input id="extrakm" type="text" inputmode="numeric" value="565"></span></label>
           <label>צריכת דלק<span class="mini-shell"><input id="cons" type="text" inputmode="decimal" value="7">ל/100</span></label>
           <label>מחיר ליטר<span class="mini-shell"><input id="fuelp" type="text" inputmode="decimal" value="7.5">₪</span></label>
           <label>ביטוח חובה לשנה<span class="mini-shell"><input id="cmpl" type="text" inputmode="numeric" value="1500">₪</span></label>
@@ -330,7 +346,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
           <label>ועוד, משווי הרכב<span class="mini-shell"><input id="mpct" type="text" inputmode="decimal" value="2.5">%</span></label>
           <label>חניה לחודש<span class="mini-shell"><input id="park" type="text" inputmode="numeric" value="0">₪</span></label>
         </div>
-        <p class="asm-warn">המספרים האלה הם <b>הערכה</b> לרכב משפחתי ממוצע. אם יש לך הצעת ביטוח אמיתית או נתוני צריכה של דגם מסוים, עדיף להחליף אותם כאן.</p>
+        <p class="asm-warn">הנסועה הממוצעת היא נתון למ"ס: 14,700 ק"מ לשנה לרכב פרטי, סוף 2023. שאר המספרים הם <b>הערכה</b> לרכב משפחתי ממוצע. אם יש לך הצעת ביטוח אמיתית או נתוני צריכה של דגם מסוים, עדיף להחליף אותם כאן.</p>
       </div>
     </details>
   </div>
@@ -586,12 +602,18 @@ function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleStri
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
 function ils(v){return fmt.format(Math.round(v))+' ₪';}
 const MONEY=['income','capital','tradein','price','down','fuel','insur','maint','park','lease'];
-const PLAIN=['rate','term','depr','prime','years','commute','wdays','extrakm','cons','fuelp','cmpl','comp','mbase','mpct','newdrv'];
+const PLAIN=['rate','term','depr','prime','years','commute','kmyear','wdays','extrakm','cons','fuelp','cmpl','comp','mbase','mpct','newdrv'];
 const ALL=MONEY.concat(PLAIN);
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
 PLAIN.forEach(id=>document.getElementById(id).addEventListener('input',calc));
 /* a first car has no car to trade in, and its driver has no claims history */
-let firstCar=true;
+let firstCar=true, kmByCommute=false;
+/* nobody has to know their kilometrage: the published average is the default */
+(function(){const a=document.getElementById('kmAvg'),b=document.getElementById('kmCom');
+  function set(v){kmByCommute=v;b.classList.toggle('on',v);a.classList.toggle('on',!v);
+    document.getElementById('commuteBox').classList.toggle('hidden',!v);calc();}
+  a.onclick=()=>set(false); b.onclick=()=>set(true);
+  document.getElementById('commuteBox').classList.toggle('hidden',!kmByCommute);})();
 (function(){const a=document.getElementById('segFirst'),b=document.getElementById('segSwap');
   function set(v){firstCar=v;a.classList.toggle('on',v);b.classList.toggle('on',!v);
     document.getElementById('tradeinBox').classList.toggle('hidden',v);calc();}
@@ -613,11 +635,13 @@ function calc(){
   /* a first-time buyer cannot answer "how many km a month", but everyone knows
      how far work is. Derive the month from the commute plus errands. */
   const commute=num('commute'), wdays=num('wdays'), extrakm=num('extrakm');
-  const km=commute*2*wdays+extrakm;
+  const km=kmByCommute?(commute*2*wdays+extrakm):(num('kmyear')/12);
   const tradein=firstCar?0:num('tradein');
   const depr=num('depr')/100, lease=num('lease'), park=num('park');
   const ownRun=document.getElementById('ownRun').checked;
-  document.getElementById('kmHint').innerHTML='\u05d6\u05d4 \u05d1\u05e2\u05e8\u05da <b>'+fmt.format(Math.round(km))+'</b> \u05e7"\u05de \u05d1\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05e1\u05d9\u05d3\u05d5\u05e8\u05d9\u05dd \u05d5\u05e1\u05d5\u05e4\u05d9 \u05e9\u05d1\u05d5\u05e2';
+  document.getElementById('kmHint').innerHTML=kmByCommute
+    ?'\u05d6\u05d4 \u05d1\u05e2\u05e8\u05da <b>'+fmt.format(Math.round(km))+'</b> \u05e7"\u05de \u05d1\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05e1\u05d9\u05d3\u05d5\u05e8\u05d9\u05dd \u05d5\u05e1\u05d5\u05e4\u05d9 \u05e9\u05d1\u05d5\u05e2'
+    :'\u05d4\u05de\u05de\u05d5\u05e6\u05e2 \u05d1\u05d9\u05e9\u05e8\u05d0\u05dc \u05d4\u05d5\u05d0 <b>'+fmt.format(Math.round(km))+'</b> \u05e7"\u05de \u05d1\u05d7\u05d5\u05d3\u05e9 (14,700 \u05d1\u05e9\u05e0\u05d4, \u05e0\u05ea\u05d5\u05e0\u05d9 \u05d4\u05dc\u05de"\u05e1). \u05d0\u05dd \u05d0\u05ea \u05e0\u05d5\u05e1\u05e2\u05ea \u05d4\u05e8\u05d1\u05d4 \u05e4\u05d7\u05d5\u05ea \u05d0\u05d5 \u05d4\u05e8\u05d1\u05d4 \u05d9\u05d5\u05ea\u05e8, \u05e9\u05d5\u05d5\u05d4 \u05dc\u05e2\u05d1\u05d5\u05e8 \u05dc\u05d7\u05d9\u05e9\u05d5\u05d1 \u05dc\u05e4\u05d9 \u05d4\u05de\u05e8\u05d7\u05e7 \u05dc\u05e2\u05d1\u05d5\u05d3\u05d4';
 
   /* ---------- the upkeep model ----------
      Splitting the budget in half was a guess, and a bad one: it promised a

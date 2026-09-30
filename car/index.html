@@ -188,6 +188,25 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .vs-side.plan-side.over .vs-n{color:#8f3a29}
 .vs-s{font-size:11px;font-weight:700;color:var(--ink-soft);line-height:1.4}
 .vs-mid{align-self:center;font-size:12px;font-weight:900;color:var(--pine);background:var(--sage-tint);border-radius:100px;padding:6px 9px}
+.asm{margin-top:14px;border:1.5px solid rgba(var(--pine-rgb),.18);border-radius:14px;background:#fff;overflow:hidden}
+.asm summary{cursor:pointer;list-style:none;padding:12px 14px;font-size:12.5px;font-weight:800;color:var(--pine-deep);background:var(--sage-tint)}
+.asm summary::-webkit-details-marker{display:none}
+.asm summary::before{content:'\25c0';font-size:9px;margin-inline-end:7px;display:inline-block;transition:transform .15s}
+.asm[open] summary::before{transform:rotate(-90deg)}
+.asm-body{padding:13px 14px 15px}
+.asm-body p{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.6;margin-bottom:11px}
+.asm-warn{font-size:11.5px;font-weight:700;color:var(--amber);background:rgba(183,121,31,.08);border-radius:10px;padding:9px 11px;margin:11px 0 0 !important}
+.asm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+.asm-grid label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11.5px;font-weight:700;color:var(--ink-soft)}
+.asm-grid .mini-shell{flex:none}
+.asm-grid .mini-shell input{width:46px}
+/* the plan that follows a no */
+.plan{margin-top:14px;border-radius:16px;padding:15px 16px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 85%);color:#fff;box-shadow:0 10px 26px rgba(var(--pine-rgb),.22)}
+.plan h4{font-size:14.5px;font-weight:900;margin-bottom:9px}
+.plan-opt{display:flex;gap:9px;align-items:flex-start;font-size:13px;font-weight:600;line-height:1.55;padding:8px 0;border-top:1px solid rgba(255,255,255,.18)}
+.plan-opt:first-of-type{border-top:none}
+.plan-opt .po-ic{flex:none;font-size:15px;line-height:1.35}
+.plan-opt b{font-weight:900}
 /* three-rules traffic light */
 .rules{display:flex;flex-direction:column;gap:8px;margin:16px 0 4px}
 .rule{display:flex;align-items:flex-start;gap:10px;border-radius:12px;padding:11px 13px;font-size:13px;font-weight:700;line-height:1.5}
@@ -245,18 +264,20 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <div class="house">
       <div class="h-item field"><label for="income">כמה נכנס לבנק בחודש (נטו)</label><div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="12,000" placeholder="0"></div></div>
       <div class="h-item field"><label for="capital">כמה הון עצמי נזיל יש לי</label><div class="input-shell"><span class="unit">₪</span><input id="capital" type="text" inputmode="numeric" value="50,000" placeholder="0"></div></div>
+      <div class="h-item field"><label for="km">כמה קילומטר נוסעים בחודש</label><div class="input-shell"><span class="unit">ק"מ</span><input id="km" type="text" inputmode="numeric" value="1,000" placeholder="0"></div></div>
+      <div class="h-item field"><label for="tradein">שווי הרכב הנוכחי (אם מחליפים)</label><div class="input-shell"><span class="unit">₪</span><input id="tradein" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
     </div>
   </div>
 
   <div class="card">
     <span class="sec-lbl">שלב 2 · 🎯 איזה רכב מתאים לך</span>
-    <div class="rec" style="margin:0 0 13px">שלוש רמות של נועזות. האמצעית היא ההמלצה שלי: <b>עד 15% מהנטו על כל מה שקשור לרכב</b>, חצי להחזר וחצי לשוטף.</div>
+    <div class="rec" style="margin:0 0 13px">שלוש רמות של נועזות. האמצעית היא ההמלצה שלי: <b>עד 15% מהנטו על כל מה שקשור לרכב</b>, האחזקה לא מנוחשת ולא מחולקת בחצי: היא מחושבת מהרכב עצמו ומהקילומטראז׳ שלך, ומה שנשאר הוא מה שבאמת אפשר לשים בהחזר.</div>
     <div class="lvl-grid">
       <div class="lvl" id="lvl10">
         <div class="lvl-h">זהיר<span>10% מהנטו</span></div>
         <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b10">0</b></div>
-        <div class="lvl-row"><span>מזה להחזר ההלוואה (חצי)</span><b id="p10">0</b></div>
-        <div class="lvl-row"><span>והחצי השני לדלק, ביטוח וטיפולים</span><b id="r10">0</b></div>
+        <div class="lvl-row"><span>פחות אחזקה משוערת לרכב כזה</span><b id="r10">0</b></div>
+        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p10">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l10">0</b></div>
         <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d10">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m10">0</b></div>
@@ -265,8 +286,8 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-tag">ההמלצה</div>
         <div class="lvl-h">מאוזן<span>15% מהנטו</span></div>
         <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b15">0</b></div>
-        <div class="lvl-row"><span>מזה להחזר ההלוואה (חצי)</span><b id="p15">0</b></div>
-        <div class="lvl-row"><span>והחצי השני לדלק, ביטוח וטיפולים</span><b id="r15">0</b></div>
+        <div class="lvl-row"><span>פחות אחזקה משוערת לרכב כזה</span><b id="r15">0</b></div>
+        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p15">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l15">0</b></div>
         <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d15">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m15">0</b></div>
@@ -274,15 +295,31 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="lvl" id="lvl20">
         <div class="lvl-h">על הקצה<span>20% מהנטו</span></div>
         <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b20">0</b></div>
-        <div class="lvl-row"><span>מזה להחזר ההלוואה (חצי)</span><b id="p20">0</b></div>
-        <div class="lvl-row"><span>והחצי השני לדלק, ביטוח וטיפולים</span><b id="r20">0</b></div>
+        <div class="lvl-row"><span>פחות אחזקה משוערת לרכב כזה</span><b id="r20">0</b></div>
+        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p20">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l20">0</b></div>
         <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d20">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m20">0</b></div>
       </div>
     </div>
     <div class="insight" id="capIns"></div>
-    <div class="note-tip">💡 ההמלצה מניחה <b>הלוואה טובה</b>: פריים + 0.5% (<span id="recRateTxt">6.5%</span>) ל-48 חודשים, מקדמה משליש ההון הנזיל (שני השלישים האחרים הם קרן הביטחון), והלוואה שלא עולה על פי שלוש מהמקדמה. הפריים היום <span class="mini-inline"><span class="mini-shell"><input id="prime" type="text" inputmode="decimal" value="6" aria-label="ריבית הפריים היום">%</span></span> ואפשר לעדכן אותו.</div>
+    <details class="asm">
+      <summary>ההנחות שמאחורי החישוב, ואפשר לשנות אותן</summary>
+      <div class="asm-body">
+        <p><b>הלוואה טובה:</b> פריים + 0.5% (<span id="recRateTxt">6.5%</span>) ל-48 חודשים. המקדמה באה משליש ההון הנזיל ומשווי הרכב הנוכחי, וההלוואה לא עולה על פי שלוש ממנה.</p>
+        <div class="asm-grid">
+          <label>פריים היום<span class="mini-shell"><input id="prime" type="text" inputmode="decimal" value="6">%</span></label>
+          <label>צריכת דלק<span class="mini-shell"><input id="cons" type="text" inputmode="decimal" value="7">ל/100</span></label>
+          <label>מחיר ליטר<span class="mini-shell"><input id="fuelp" type="text" inputmode="decimal" value="7.5">₪</span></label>
+          <label>ביטוח חובה לשנה<span class="mini-shell"><input id="cmpl" type="text" inputmode="numeric" value="1500">₪</span></label>
+          <label>מקיף לשנה<span class="mini-shell"><input id="comp" type="text" inputmode="decimal" value="3.5">%</span></label>
+          <label>טיפולים וטסט לשנה<span class="mini-shell"><input id="mbase" type="text" inputmode="numeric" value="2800">₪</span></label>
+          <label>ועוד, משווי הרכב<span class="mini-shell"><input id="mpct" type="text" inputmode="decimal" value="2.5">%</span></label>
+          <label>חניה לחודש<span class="mini-shell"><input id="park" type="text" inputmode="numeric" value="0">₪</span></label>
+        </div>
+        <p class="asm-warn">המספרים האלה הם <b>הערכה</b> לרכב משפחתי ממוצע. אם יש לך הצעת ביטוח אמיתית או נתוני צריכה של דגם מסוים, עדיף להחליף אותם כאן.</p>
+      </div>
+    </details>
   </div>
 
   <div class="card">
@@ -294,12 +331,13 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="h-item field"><label for="rate">הריבית שהציעו לכם</label><div class="input-shell"><span class="unit">%</span><input id="rate" type="text" inputmode="decimal" value="6.5" placeholder="0"></div><div class="fw" id="rateWarn" role="status" aria-live="polite" hidden></div></div>
       <div class="h-item field"><label for="term">פריסת ההלוואה (חודשים)</label><div class="input-shell"><span class="unit">ח'</span><input id="term" type="text" inputmode="numeric" value="48" placeholder="0"></div><div class="fw" id="termWarn" role="status" aria-live="polite" hidden></div></div>
     </div>
-    <div class="bills-lbl" style="margin-top:15px">ועל <b>הרכב הזה בדיוק</b>, כמה יצא כל חודש גם בלי ההלוואה:</div>
+    <label class="incl-tg" style="margin-top:15px"><input type="checkbox" id="ownRun"><span>אני יודעת את המספרים האמיתיים של הרכב הזה ואני רוצה להזין אותם בעצמי</span></label>
+    <div class="bills-lbl" id="runLbl">האחזקה מחושבת ממחיר הרכב ומהקילומטראז׳ שלך:</div>
     <div class="house">
-      <div class="h-item field"><label for="fuel">דלק</label><div class="input-shell"><span class="unit">₪</span><input id="fuel" type="text" inputmode="numeric" value="700" placeholder="0"></div></div>
-      <div class="h-item field"><label for="insur">ביטוחים (חובה + מקיף)</label><div class="input-shell"><span class="unit">₪</span><input id="insur" type="text" inputmode="numeric" value="400" placeholder="0"></div></div>
-      <div class="h-item field"><label for="maint">טיפולים, טסט ותקלות</label><div class="input-shell"><span class="unit">₪</span><input id="maint" type="text" inputmode="numeric" value="300" placeholder="0"></div></div>
-      <div class="h-item field"><label for="park">חניה ונסיעות</label><div class="input-shell"><span class="unit">₪</span><input id="park" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
+      <div class="h-item field"><label for="fuel">דלק</label><div class="input-shell"><span class="unit">₪</span><input id="fuel" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
+      <div class="h-item field"><label for="insur">ביטוחים (חובה + מקיף)</label><div class="input-shell"><span class="unit">₪</span><input id="insur" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
+      <div class="h-item field"><label for="maint">טיפולים, טסט ואגרת רישוי</label><div class="input-shell"><span class="unit">₪</span><input id="maint" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
+      <div class="h-item field"><label for="park2">חניה ונסיעות</label><div class="input-shell"><span class="unit">₪</span><input id="park2" type="text" inputmode="numeric" value="0" placeholder="0" readonly></div></div>
     </div>
     <div class="sum-grid" id="loanBox">
       <div class="tile"><span class="t-l">סכום ההלוואה</span><span class="t-v" id="tLoan">0</span><span class="t-s" id="tLoanS"></span></div>
@@ -323,6 +361,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="c-num" id="vNum">0 ₪</div>
       <div class="c-msg" id="vMsg"></div>
     </div>
+    <div class="plan" id="planBox" hidden></div>
     <div class="note-tip" id="capNote" hidden></div>
   </div>
 
@@ -533,8 +572,8 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
 function ils(v){return fmt.format(Math.round(v))+' ₪';}
-const MONEY=['income','capital','price','down','fuel','insur','maint','park','lease'];
-const PLAIN=['rate','term','depr','prime','years'];
+const MONEY=['income','capital','tradein','km','price','down','fuel','insur','maint','park','lease'];
+const PLAIN=['rate','term','depr','prime','years','cons','fuelp','cmpl','comp','mbase','mpct'];
 const ALL=MONEY.concat(PLAIN);
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
 PLAIN.forEach(id=>document.getElementById(id).addEventListener('input',calc));
@@ -550,9 +589,44 @@ function calc(){
   syncLive();
   const income=num('income'),capital=num('capital'),rate=num('rate'),term=Math.round(num('term'));
   const prime=num('prime'),rateCap=prime+0.5;
-  const price=num('price'),down=Math.min(num('down'),price);
-  const running=num('fuel')+num('insur')+num('maint')+num('park');
-  const depr=num('depr')/100, lease=num('lease');
+  const price=num('price'),tradein=num('tradein'),km=num('km');
+  const depr=num('depr')/100, lease=num('lease'), park=num('park');
+  const ownRun=document.getElementById('ownRun').checked;
+
+  /* ---------- the upkeep model ----------
+     Splitting the budget in half was a guess, and a bad one: it promised a
+     900 upkeep on a 55,000 car. Upkeep is a property of the CAR, so model it:
+     fuel from the kilometres actually driven, insurance and servicing partly
+     fixed and partly a share of the car's value. Every coefficient is editable.
+     upkeep(P) = BASE + K*P  -> linear, so the ceiling below solves exactly. */
+  const consum=num('cons'), fuelPrice=num('fuelp');
+  const compulsory=num('cmpl'), compPct=num('comp')/100;
+  const maintBase=num('mbase'), maintPct=num('mpct')/100;
+  const fuelMo=km*consum/100*fuelPrice;
+  const BASE=fuelMo+(compulsory+maintBase)/12+park;
+  const K=(compPct+maintPct)/12;
+  const estIns=p2=>(compulsory+compPct*p2)/12;
+  const estMnt=p2=>(maintBase+maintPct*p2)/12;
+
+  /* step 3 shows the estimate, unless she says she knows the real numbers */
+  const f_=document.getElementById('fuel'), i_=document.getElementById('insur'),
+        m_=document.getElementById('maint'), p_=document.getElementById('park2');
+  [f_,i_,m_].forEach(el=>{el.readOnly=!ownRun;el.style.opacity=ownRun?'1':'.75';});
+  if(!ownRun){
+    f_.value=Math.round(fuelMo).toLocaleString('en-US');
+    i_.value=Math.round(estIns(price)).toLocaleString('en-US');
+    m_.value=Math.round(estMnt(price)).toLocaleString('en-US');
+  }
+  p_.value=Math.round(park).toLocaleString('en-US');
+  document.getElementById('runLbl').textContent=ownRun
+    ?'\u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d4\u05d0\u05de\u05d9\u05ea\u05d9\u05d9\u05dd \u05e9\u05dc\u05da (\u05d7\u05e0\u05d9\u05d4 \u05de\u05d5\u05d2\u05d3\u05e8\u05ea \u05d1\u05d4\u05e0\u05d7\u05d5\u05ea \u05dc\u05de\u05e2\u05dc\u05d4):'
+    :'\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05d7\u05d5\u05e9\u05d1\u05ea \u05de\u05de\u05d7\u05d9\u05e8 \u05d4\u05e8\u05db\u05d1 \u05d5\u05de\u05d4\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05e9\u05dc\u05da. \u05dc\u05e9\u05d9\u05e0\u05d5\u05d9 \u05d9\u05d3\u05e0\u05d9, \u05e1\u05de\u05e0\u05d9 \u05d0\u05ea \u05d4\u05ea\u05d9\u05d1\u05d4 \u05dc\u05de\u05e2\u05dc\u05d4.';
+  const running=ownRun?(num('fuel')+num('insur')+num('maint')+park):(BASE+K*price);
+
+  /* the recommended down payment: a third of the liquid capital plus the car
+     being traded in. The trade-in is money that never touches the safety net. */
+  const thirdCap=capital/3, recDown=thirdCap+tradein;
+  const down=Math.min(num('down'),price);
 
   /* ---------- 0. flag a loan that is priced or stretched too far ---------- */
   const capTxt=rateCap.toFixed(2).replace(/\.?0+$/,'')+'%';
@@ -580,27 +654,32 @@ function calc(){
   } else termMsg+=' ההחזר נראה נוח יותר, אבל הריבית המצטברת קופצת.';
   warn('termWarn', term>48, termMsg);
 
-  /* ---------- 1. what the budget holds, at three levels ---------- */
-  const thirdCap=capital/3;
-  /* STEP 2 is the recommendation, and it must stand on income + capital alone.
-     So it assumes the GOOD loan by definition (prime+0.5%, 48 months) and the
-     rule of thumb that half the monthly budget goes to the repayment. The car
-     they actually want, with its own rate, term and upkeep, is step 3. */
+  /* ---------- STEP 2: the recommendation, solved so it cannot lie ----------
+     Budget B must cover BOTH the repayment and the upkeep of the very car it
+     is buying:   (P - D)/A  +  BASE + K*P  =  B
+     which solves exactly for P. No half-half guess, so a car at the ceiling
+     lands on the budget to the shekel, and anything cheaper costs less still. */
   const RECTERM=48;
   document.getElementById('recRateTxt').textContent=capTxt;
+  const rr=rateCap/100/12;
+  const A=rr===0?RECTERM:(1-Math.pow(1+rr,-RECTERM))/rr;   /* annuity factor */
   function ceiling(pc){
-    const budget=income*pc/100, toLoan=budget/2;
-    const byPay=toLoan>0?maxLoan(toLoan,rateCap,RECTERM):0, byDown=thirdCap*3;
-    const loan=Math.min(byPay,byDown);
-    return {budget:budget,toLoan:toLoan,loan:loan,max:thirdCap+loan,capped:byDown<byPay};
+    const B=income*pc/100;
+    let P=(B-BASE+recDown/A)/(1/A+K);
+    const capped=P>recDown*4;                 /* the 25% down-payment rule */
+    if(capped) P=recDown*4;
+    if(P<recDown) P=recDown;                  /* all cash, no loan */
+    const upk=BASE+K*P, toLoan=B-upk, loan=Math.max(0,P-recDown);
+    const fits=upk<=B;
+    return {budget:B,upk:upk,toLoan:toLoan,loan:loan,max:fits?P:0,capped:capped,fits:fits};
   }
   [[10,'10'],[15,'15'],[20,'20']].forEach(([pc,sfx])=>{
     const c=ceiling(pc);
     document.getElementById('b'+sfx).textContent=ils(c.budget);
-    document.getElementById('p'+sfx).textContent=ils(c.toLoan);
-    document.getElementById('r'+sfx).textContent=ils(c.toLoan);
+    document.getElementById('r'+sfx).textContent='- '+ils(c.upk);
+    document.getElementById('p'+sfx).textContent=ils(Math.max(0,c.toLoan));
     document.getElementById('l'+sfx).textContent=ils(c.loan);
-    document.getElementById('d'+sfx).textContent=ils(thirdCap);
+    document.getElementById('d'+sfx).textContent=ils(recDown);
     document.getElementById('m'+sfx).textContent=ils(c.max);
   });
   const rec=ceiling(15), recMax=rec.max, recMo=rec.budget;
@@ -608,20 +687,20 @@ function calc(){
   if(income<=0){ci.style.display='none';}
   else{
     ci.style.display='block';
-    if(capital<=0) ci.innerHTML='\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df, \u05d0\u05d6 \u05db\u05e8\u05d2\u05e2 <b>\u05d0\u05d9\u05df \u05de\u05e7\u05d3\u05de\u05d4</b> \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1. \u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05d4\u05d3\u05e8\u05da, \u05d6\u05d4 \u05d4\u05e9\u05dc\u05d1 \u05e9\u05dc\u05e4\u05e0\u05d9: \u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc \u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05e9\u05d0\u05e4\u05e9\u05e8 \u05dc\u05e9\u05d9\u05dd \u05d1\u05de\u05e7\u05d3\u05de\u05d4, \u05d5\u05d4\u05e9\u05e0\u05d9\u05d9\u05dd \u05d4\u05d0\u05d7\u05e8\u05d9\u05dd \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df.';
+    if(recDown<=0) ci.innerHTML='\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1 \u05dc\u05d4\u05d7\u05dc\u05d9\u05e3, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df, \u05d0\u05d6 \u05db\u05e8\u05d2\u05e2 <b>\u05d0\u05d9\u05df \u05de\u05e7\u05d3\u05de\u05d4</b>. \u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05d4\u05d3\u05e8\u05da, \u05d6\u05d4 \u05d4\u05e9\u05dc\u05d1 \u05e9\u05dc\u05e4\u05e0\u05d9: \u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc \u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05dc\u05de\u05e7\u05d3\u05de\u05d4.';
+    else if(!rec.fits) ci.innerHTML='\u05d1\u05ea\u05e7\u05e6\u05d9\u05d1 \u05e9\u05dc 15% \u05de\u05d4\u05e0\u05d8\u05d5 (<b>'+ils(rec.budget)+'</b>) \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05db\u05d1\u05e8 \u05e2\u05d5\u05dc\u05d4 \u05d9\u05d5\u05ea\u05e8, \u05d2\u05dd \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05d1\u05d9\u05d5\u05ea\u05e8. \u05d6\u05d4 \u05d0\u05d5\u05de\u05e8 \u05e9\u05d1\u05e8\u05de\u05d4 \u05d4\u05d6\u05d0\u05ea \u05e8\u05db\u05d1 \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8, \u05d5\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05de\u05d9\u05de\u05d5\u05df \u05d0\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4. \u05e4\u05d7\u05d5\u05ea \u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05d0\u05d5 \u05d4\u05db\u05e0\u05e1\u05d4 \u05d2\u05d1\u05d5\u05d4\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05d9\u05e9\u05e0\u05d5 \u05d0\u05ea \u05d6\u05d4.';
     else{
-      let t='\u05d1\u05ea\u05e7\u05e6\u05d9\u05d1 \u05e9\u05dc 15% \u05de\u05d4\u05e0\u05d8\u05d5, \u05db\u05dc\u05d5\u05de\u05e8 <b>'+ils(rec.budget)+'</b> \u05dc\u05d7\u05d5\u05d3\u05e9 \u05e2\u05dc \u05db\u05dc \u05de\u05d4 \u05e9\u05e7\u05e9\u05d5\u05e8 \u05dc\u05e8\u05db\u05d1: <b>'+ils(rec.toLoan)+'</b> \u05dc\u05d4\u05d7\u05d6\u05e8 \u05d4\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d5\u05d0\u05d5\u05ea\u05d5 \u05e1\u05db\u05d5\u05dd \u05dc\u05d3\u05dc\u05e7, \u05d1\u05d9\u05d8\u05d5\u05d7, \u05d8\u05d9\u05e4\u05d5\u05dc\u05d9\u05dd \u05d5\u05d7\u05e0\u05d9\u05d4. \u05d4\u05d4\u05d7\u05d6\u05e8 \u05d4\u05d6\u05d4 \u05e7\u05d5\u05e0\u05d4 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05e9\u05dc <b>'+ils(rec.loan)+'</b>, \u05d5\u05e2\u05dd \u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05dc <b>'+ils(thirdCap)+'</b> \u05de\u05d4\u05d4\u05d5\u05df \u05d6\u05d4 <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(recMax)+'</b>.';
-      if(rec.capped) t+=' \u05db\u05d0\u05df \u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd \u05d5\u05dc\u05d0 \u05d4\u05d4\u05d7\u05d6\u05e8: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05d4\u05de\u05e7\u05d3\u05de\u05d4. \u05e2\u05d5\u05d3 \u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05de\u05e8\u05d9\u05dd \u05d0\u05ea \u05d4\u05ea\u05e7\u05e8\u05d4.';
+      let t='\u05d1\u05ea\u05e7\u05e6\u05d9\u05d1 \u05e9\u05dc 15% \u05de\u05d4\u05e0\u05d8\u05d5, \u05db\u05dc\u05d5\u05de\u05e8 <b>'+ils(rec.budget)+'</b> \u05dc\u05d7\u05d5\u05d3\u05e9 \u05e2\u05dc \u05db\u05dc \u05de\u05d4 \u05e9\u05e7\u05e9\u05d5\u05e8 \u05dc\u05e8\u05db\u05d1, \u05de\u05ea\u05d0\u05d9\u05dd \u05dc\u05da <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(recMax)+'</b>. \u05e2\u05dc \u05e8\u05db\u05d1 \u05db\u05d6\u05d4 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05ea\u05e2\u05dc\u05d4 \u05d1\u05e2\u05e8\u05da <b>'+ils(rec.upk)+'</b> \u05d1\u05d7\u05d5\u05d3\u05e9, \u05d0\u05d6 \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd <b>'+ils(rec.toLoan)+'</b> \u05dc\u05d4\u05d7\u05d6\u05e8, \u05e9\u05d6\u05d4 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05e9\u05dc <b>'+ils(rec.loan)+'</b> \u05d5\u05e2\u05d5\u05d3 \u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05dc <b>'+ils(recDown)+'</b>.';
+      if(rec.capped) t+=' \u05db\u05d0\u05df \u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05de\u05e0\u05d4.';
       ci.innerHTML=t;
     }
   }
 
-  /* the ceiling recomputed with THIS car's real upkeep - the verdict quotes it */
-  const rTerm2=Math.min(term>0?term:RECTERM,RECTERM);
-  const realToLoan=income*0.15-running;
-  const realLoan=realToLoan>0?Math.min(maxLoan(realToLoan,rateCap,rTerm2),thirdCap*3):0;
-  const noRoom=income>0&&running>=income*0.15;   /* upkeep alone breaks the rule */
-  const realMax=noRoom?0:thirdCap+realLoan;
+  /* the ceiling for THIS car's actual upkeep (identical to rec when estimated) */
+  const noRoom=income>0&&running>=income*0.15;
+  const realMax=noRoom?0:Math.max(0,Math.min((income*0.15-running)>0
+        ? recDown+maxLoan(income*0.15-running,rateCap,Math.min(term>0?term:RECTERM,RECTERM))
+        : recDown, recDown*4));
 
   /* ---------- 2. the three rules on the car she actually wants ---------- */
   const loanAmt=Math.max(0,price-down);
@@ -636,13 +715,13 @@ function calc(){
      val:loanAmt===0?'אין הלוואה, אין פריסה':`הפריסה שלך: ${term} חודשים (${(term/12).toFixed(1)} שנים)`},
     {key:'עד 15% מההכנסה',ok:income>0&&Math.round(totalMonthly)<=Math.round(income*0.15),ic:'📊',name:'עד 15% מההכנסה על הרכב, כולל הכל',
      val:income>0?`העלות שלך: ${ils(totalMonthly)} = ${pcIncome.toFixed(1)}% מהנטו · הגבול ${ils(income*0.15)}`:'צריך למלא את ההכנסה למעלה'}
-    ,{key:'מקדמה מתוך שליש מההון',ok:capital>0&&Math.round(down)<=Math.round(thirdCap),ic:'🏦',name:'המקדמה באה משליש ההון הנזיל, לא יותר',
-     val:capital<=0?'אין הון נזיל, אז אין מקדמה. צריך לחסוך קודם':`המקדמה שלך: ${ils(down)} · שליש מההון הוא ${ils(thirdCap)}`}
+    ,{key:'מקדמה מתוך שליש מההון',ok:recDown>0&&Math.round(down)<=Math.round(recDown),ic:'🏦',name:'המקדמה באה משליש ההון הנזיל, לא יותר',
+     val:recDown<=0?'אין הון נזיל, אז אין מקדמה. צריך לחסוך קודם':`המקדמה שלך: ${ils(down)} · המקור המומלץ הוא ${ils(recDown)}`}
   ];
   /* the same rule, shown right under the field it is about */
   const wNoCap='<b>אין הון נזיל למקדמה.</b> לפני רכב צריך לחסוך. כדי שמקדמה של <b>'+ils(down)+'</b> תהיה שליש מההון, צריך להגיע להון נזיל של <b>'+ils(down*3)+'</b>. שני השלישים האחרים נשארים קרן ביטחון.';
-  const wOver='<b>המקדמה הזאת גדולה מדי ביחס להון שלך.</b> שליש מההון הנזיל הוא <b>'+ils(thirdCap)+'</b>, והמקדמה שרשומה היא <b>'+ils(down)+'</b>. הפרש של '+ils(down-thirdCap)+' יוצא מקרן הביטחון, ואז כל תקלה הופכת להלוואה חדשה. או מקטינים את המקדמה, או חוסכים עוד לפני הקנייה.';
-  warn('downWarn', down>0&&Math.round(down)>Math.round(thirdCap), capital<=0?wNoCap:wOver);
+  const wOver='<b>המקדמה הזאת גדולה מדי.</b> המקור המומלץ למקדמה הוא שליש מההון ועוד הרכב הנוכחי, כלומר <b>'+ils(recDown)+'</b>, והמקדמה שרשומה היא <b>'+ils(down)+'</b>. הפרש של '+ils(down-recDown)+' יוצא מקרן הביטחון, ואז כל תקלה הופכת להלוואה חדשה. או מקטינים את המקדמה, או חוסכים עוד לפני הקנייה.';
+  warn('downWarn', down>0&&Math.round(down)>Math.round(recDown), recDown<=0?wNoCap:wOver);
   document.getElementById('rules').innerHTML=rules.map(r=>
     `<div class="rule ${r.ok?'ok':'no'}"><span class="r-ic">${r.ok?'✅':'🚩'}</span><div><span class="r-name">${r.ic} ${r.name}</span><span class="r-val">${r.val}</span></div></div>`).join('');
 
@@ -676,6 +755,26 @@ function calc(){
   document.getElementById('vsPlanCar').textContent=ils(price);
   document.getElementById('vsPlanMo').textContent=ils(totalMonthly)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
   document.getElementById('vsPlanBox').className='vs-side plan-side'+(income<=0?'':(passed===total?' ok':' over'));
+
+  /* the ending: a "no" that does not come with a next step is not advice */
+  const pb2=document.getElementById('planBox');
+  if(income>0&&price>0&&passed<total&&!noRoom){
+    const payRoom=income*0.15-running;
+    const loanOk=payRoom>0?maxLoan(payRoom,rateCap,Math.min(term>0?term:RECTERM,RECTERM)):0;
+    const needDown=Math.max(price-loanOk,price*0.25);
+    const gap=Math.max(0,needDown-recDown);
+    const save=income*0.15;
+    const months=save>0?Math.ceil(gap/save):0;
+    let o='<h4>\u05d0\u05d6 \u05de\u05d4 \u05e2\u05d5\u05e9\u05d9\u05dd \u05e2\u05db\u05e9\u05d9\u05d5?</h4>';
+    const onlyDownTooBig=rules.filter(r=>!r.ok).length===1&&!rules[3].ok&&down>recDown&&price<=realMax;
+    if(onlyDownTooBig) o+='<div class="plan-opt"><span class="po-ic">\u2728</span><div>\u05e4\u05e9\u05d5\u05d8 \u05dc\u05d4\u05e7\u05d8\u05d9\u05df \u05d0\u05ea \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05dc-<b>'+ils(recDown)+'</b> \u05d5\u05dc\u05d4\u05e9\u05d0\u05d9\u05e8 \u05d0\u05ea \u05d4\u05d4\u05e4\u05e8\u05e9 \u05d1\u05e7\u05e8\u05df \u05d4\u05d1\u05d9\u05d8\u05d7\u05d5\u05df. \u05e2\u05dd \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d4\u05d6\u05d0\u05ea \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4 \u05e2\u05d5\u05d1\u05e8 \u05d0\u05ea \u05db\u05dc \u05d4\u05db\u05dc\u05dc\u05d9\u05dd.</div></div>';
+    if(realMax>0) o+='<div class="plan-opt"><span class="po-ic">\u2705</span><div>\u05dc\u05d1\u05d7\u05d5\u05e8 \u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+ils(realMax)+'</b> \u05d5\u05dc\u05e7\u05e0\u05d5\u05ea \u05db\u05d1\u05e8 \u05e2\u05db\u05e9\u05d9\u05d5, \u05d1\u05dc\u05d9 \u05dc\u05d7\u05db\u05d5\u05ea.</div></div>';
+    if(gap>0&&needDown<=price*0.6) o+='<div class="plan-opt"><span class="po-ic">\u{1F4B0}</span><div>\u05dc\u05d4\u05d9\u05e9\u05d0\u05e8 \u05e2\u05dd \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4 \u05d5\u05dc\u05d4\u05d2\u05d3\u05d9\u05dc \u05d0\u05ea \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05dc-<b>'+ils(needDown)+'</b>, \u05db\u05dc\u05d5\u05de\u05e8 \u05e2\u05d5\u05d3 <b>'+ils(gap)+'</b> \u05de\u05e2\u05d1\u05e8 \u05dc\u05de\u05d4 \u05e9\u05ea\u05db\u05e0\u05e0\u05ea.</div></div>';
+    if(gap>0&&needDown<=price*0.6&&months>0&&months<=120) o+='<div class="plan-opt"><span class="po-ic">\u{1F4C5}</span><div>\u05dc\u05d7\u05e1\u05d5\u05da \u05d0\u05ea \u05d4\u05d4\u05e4\u05e8\u05e9 \u05d4\u05d6\u05d4 \u05dc\u05e4\u05e0\u05d9 \u05d4\u05e7\u05e0\u05d9\u05d9\u05d4. \u05d0\u05dd \u05ea\u05e9\u05d9\u05de\u05d9 \u05d1\u05e6\u05d3 \u05d0\u05ea <b>'+ils(save)+'</b> \u05e9\u05ea\u05db\u05e0\u05e0\u05ea \u05dc\u05d4\u05d5\u05e6\u05d9\u05d0 \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d1\u05db\u05dc \u05d7\u05d5\u05d3\u05e9, \u05d6\u05d4 \u05d9\u05d9\u05e7\u05d7 <b>'+months+(months===1?' \u05d7\u05d5\u05d3\u05e9':' \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd')+'</b>. \u05d5\u05d1\u05d3\u05e8\u05da \u05de\u05ea\u05d1\u05e8\u05e8 \u05d0\u05dd \u05d1\u05d0\u05de\u05ea \u05d0\u05e4\u05e9\u05e8 \u05dc\u05e2\u05de\u05d5\u05d3 \u05d1\u05e1\u05db\u05d5\u05dd \u05d4\u05d6\u05d4 \u05db\u05dc \u05d7\u05d5\u05d3\u05e9.</div></div>';
+    o+='<div class="plan-opt"><span class="po-ic">\u26d4</span><div>\u05dc\u05e4\u05e8\u05d5\u05e1 \u05dc\u05d9\u05d5\u05ea\u05e8 \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd \u05d6\u05d4 <b>\u05dc\u05d0</b> \u05e4\u05ea\u05e8\u05d5\u05df \u05db\u05d0\u05df. \u05d6\u05d4 \u05de\u05d5\u05e8\u05d9\u05d3 \u05d0\u05ea \u05d4\u05d4\u05d7\u05d6\u05e8 \u05d0\u05d1\u05dc \u05de\u05d2\u05d3\u05d9\u05dc \u05d0\u05ea \u05d4\u05e8\u05d9\u05d1\u05d9\u05ea, \u05d5\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d0 \u05de\u05e9\u05ea\u05e0\u05d4 \u05d1\u05db\u05dc\u05dc.</div></div>';
+    pb2.hidden=false; pb2.innerHTML=o;
+  } else pb2.hidden=true;
+
   const cn=document.getElementById('capNote');
   if(noRoom){
     cn.hidden=false;

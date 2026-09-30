@@ -606,6 +606,7 @@ const PLAIN=['rate','term','depr','prime','years','commute','kmyear','wdays','ex
 const ALL=MONEY.concat(PLAIN);
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
 PLAIN.forEach(id=>document.getElementById(id).addEventListener('input',calc));
+document.getElementById('ownRun').addEventListener('change',calc);
 /* a first car has no car to trade in, and its driver has no claims history */
 let firstCar=true, kmByCommute=false;
 /* nobody has to know their kilometrage: the published average is the default */
@@ -912,8 +913,22 @@ function calc(){
 
 // save / share
 const SKEY='richlife-car-v1';
-function enc(){return JSON.stringify(ALL.map(id=>document.getElementById(id).value));}
-function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;ALL.forEach((id,k)=>{if(a[k]!==undefined)document.getElementById(id).value=a[k];});return true;}catch(e){return false;}}
+function flags(){return [firstCar?1:0,kmByCommute?1:0,document.getElementById('ownRun').checked?1:0];}
+function enc(){return JSON.stringify(ALL.map(id=>document.getElementById(id).value).concat(flags()));}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;
+  ALL.forEach((id,k)=>{if(a[k]!==undefined)document.getElementById(id).value=a[k];});
+  const f=a.slice(ALL.length);
+  if(f.length===3){
+    firstCar=!!f[0]; kmByCommute=!!f[1];
+    document.getElementById('segFirst').classList.toggle('on',firstCar);
+    document.getElementById('segSwap').classList.toggle('on',!firstCar);
+    document.getElementById('tradeinBox').classList.toggle('hidden',firstCar);
+    document.getElementById('kmCom').classList.toggle('on',kmByCommute);
+    document.getElementById('kmAvg').classList.toggle('on',!kmByCommute);
+    document.getElementById('commuteBox').classList.toggle('hidden',!kmByCommute);
+    document.getElementById('ownRun').checked=!!f[2];
+  }
+  return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#m='+encodeURIComponent(enc());}
 let docId=null,pushT=null;

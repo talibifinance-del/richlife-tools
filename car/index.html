@@ -175,9 +175,17 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .lvl-row.hi{background:rgba(var(--pine-rgb),.10);margin:4px -6px;padding:6px;border-radius:9px;border-top:none}
 .lvl-row.hi b,.lvl-row.hi span{color:var(--pine-deep);font-weight:900}
 .lvl-row.neg b{color:var(--red)}
+.lvl-row.back{background:rgba(var(--pine-rgb),.07);margin:4px -6px;padding:6px;border-radius:9px;border-top:none}
+.lvl-row.back b{color:var(--pine-deep)}
+.lvl-row.hidden{display:none}
 .sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:16px 0 4px}
 .tile{background:var(--sage-tint);border:1px solid rgba(var(--pine-rgb),.16);border-radius:14px;padding:12px 9px;text-align:center;display:flex;flex-direction:column;gap:2px}
 .tile.main{background:linear-gradient(140deg,var(--pine),var(--pine-deep) 85%);border-color:transparent;box-shadow:0 8px 20px rgba(var(--pine-rgb),.2)}
+.tile.main.tier-mid{background:linear-gradient(140deg,#c98f2e,#a06a16 85%);box-shadow:0 8px 20px rgba(183,121,31,.26)}
+.tile.main.tier-over{background:linear-gradient(140deg,#c1553f,#97402e 85%);box-shadow:0 8px 20px rgba(var(--red-rgb),.26)}
+.vs-side.plan-side.mid{background:rgba(183,121,31,.09);border-color:rgba(183,121,31,.38)}
+.vs-side.plan-side.mid .vs-n{color:#a06a16}
+.vs-n.nofit{font-size:16px;color:#8f3a29}
 .tile .t-l{font-size:11.5px;font-weight:800;color:var(--ink-soft)}
 .tile .t-v{font-size:clamp(15px,3.8vw,19px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
 .tile .t-s{font-size:10.5px;font-weight:700;color:var(--ink-soft);line-height:1.4}
@@ -312,6 +320,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p10">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l10">0</b></div>
         <div class="lvl-row"><span id="dl10">ועוד מקדמה</span><b id="d10">0</b></div>
+        <div class="lvl-row back hidden" id="bk10"><span>ונשאר לך במזומן</span><b id="b210">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m10">0</b></div>
       </div>
       <div class="lvl" id="lvl15">
@@ -321,6 +330,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p15">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l15">0</b></div>
         <div class="lvl-row"><span id="dl15">ועוד מקדמה</span><b id="d15">0</b></div>
+        <div class="lvl-row back hidden" id="bk15"><span>ונשאר לך במזומן</span><b id="b215">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m15">0</b></div>
       </div>
       <div class="lvl bad" id="lvl20">
@@ -330,6 +340,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p20">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l20">0</b></div>
         <div class="lvl-row"><span id="dl20">ועוד מקדמה</span><b id="d20">0</b></div>
+        <div class="lvl-row back hidden" id="bk20"><span>ונשאר לך במזומן</span><b id="b220">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m20">0</b></div>
         <div class="lvl-bad">ברמה הזאת קשה לחסוך וקשה לסגור את החודש</div>
       </div>
@@ -740,6 +751,8 @@ function calc(){
     const upk=BASE+K*P;
     return {budget:B,upk:upk,toLoan:B-upk,loan:loan,max:P,capped:capped,fits:true};
   }
+  const MO_SUFFIX=' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
+  const NEAR_SUFFIX=' \u00b7 \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4, \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8\u05ea';
   const NOFIT='\u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8';
   const TAG_REC='\u05d4\u05d4\u05de\u05dc\u05e6\u05d4', TAG_BEST='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 \u05dc\u05d4\u05de\u05dc\u05e6\u05d4';
   /* name the down payment after what it is actually made of */
@@ -753,6 +766,10 @@ function calc(){
     document.getElementById('l'+sfx).textContent=ils(c.loan);
     document.getElementById('d'+sfx).textContent=ils(recDown);
     document.getElementById('dl'+sfx).textContent=downLabel;
+    const back=c.fits?Math.max(0,recDown-c.max):0;
+    const bkEl=document.getElementById('bk'+sfx);
+    bkEl.classList.toggle('hidden',!(back>500));
+    document.getElementById('b2'+sfx).textContent=ils(back);
     const mEl=document.getElementById('m'+sfx);
     if(income>0&&!c.fits){mEl.textContent=NOFIT;mEl.classList.add('nofit');}
     else {mEl.textContent=ils(c.max);mEl.classList.remove('nofit');}
@@ -779,6 +796,16 @@ function calc(){
   const REC_PC=0.10, LIMIT_PC=0.15;
   const rec=ceiling(10), recMax=rec.max, recMo=rec.budget;
   const lim=ceiling(15), limitMax=lim.max;
+  /* when the car that fits costs less than what is already on the table, the
+     difference comes back as cash. For a household with no capital, that
+     leftover IS the emergency fund, so it must be said out loud. */
+  function cashBack(maxP){
+    const back=Math.max(0,recDown-maxP);
+    if(back<=500) return '';
+    let s=' \u05d5\u05db\u05d9\u05d5\u05d5\u05df \u05e9\u05d4\u05e8\u05db\u05d1 \u05e2\u05d5\u05dc\u05d4 \u05e4\u05d7\u05d5\u05ea \u05de\u05de\u05d4 \u05e9\u05db\u05d1\u05e8 \u05d9\u05e9 \u05dc\u05da, \u05d0\u05d7\u05e8\u05d9 \u05d4\u05d4\u05d7\u05dc\u05e4\u05d4 \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05dc\u05da <b>'+ils(back)+'</b> \u05d1\u05de\u05d6\u05d5\u05de\u05df.';
+    if(capital<=0) s+=' \u05d6\u05d4 \u05dc\u05d0 \u05e2\u05d5\u05d3\u05e3 \u05dc\u05d1\u05d6\u05d1\u05d5\u05d6: \u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d9\u05d5\u05dd \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc \u05d1\u05db\u05dc\u05dc, \u05d0\u05d6 \u05d4\u05e1\u05db\u05d5\u05dd \u05d4\u05d6\u05d4 \u05d4\u05d5\u05d0 <b>\u05e7\u05e8\u05df \u05d4\u05d1\u05d9\u05d8\u05d7\u05d5\u05df \u05e9\u05dc\u05da</b>, \u05d5\u05d4\u05d7\u05dc\u05e4\u05ea \u05d4\u05e8\u05db\u05d1 \u05d4\u05d9\u05d0 \u05de\u05d4 \u05e9\u05d9\u05d5\u05e6\u05e8\u05ea \u05d0\u05d5\u05ea\u05d4.';
+    return s;
+  }
   const ci=document.getElementById('capIns');
   if(income<=0){ci.style.display='none';}
   else{
@@ -786,7 +813,7 @@ function calc(){
     if(recDown<=0) ci.innerHTML='\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1 \u05dc\u05d4\u05d7\u05dc\u05d9\u05e3, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df, \u05d0\u05d6 \u05db\u05e8\u05d2\u05e2 <b>\u05d0\u05d9\u05df \u05de\u05e7\u05d3\u05de\u05d4</b>. \u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05d4\u05d3\u05e8\u05da, \u05d6\u05d4 \u05d4\u05e9\u05dc\u05d1 \u05e9\u05dc\u05e4\u05e0\u05d9: \u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc \u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05dc\u05de\u05e7\u05d3\u05de\u05d4.';
     else if(!rec.fits){
       let t2='\u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea (10% \u05de\u05d4\u05e0\u05d8\u05d5, <b>'+ils(rec.budget)+'</b>) \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05db\u05d1\u05e8 \u05e2\u05d5\u05dc\u05d4 \u05d9\u05d5\u05ea\u05e8, \u05d2\u05dd \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05d1\u05d9\u05d5\u05ea\u05e8.';
-      if(lim.fits&&lim.max>0) t2+=' \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 (15%) \u05db\u05df \u05de\u05e1\u05ea\u05d3\u05e8 <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(lim.max)+'</b>, \u05d0\u05d1\u05dc \u05d6\u05d4 \u05db\u05d1\u05e8 \u05de\u05e2\u05dc \u05de\u05d4 \u05e9\u05d0\u05e0\u05d9 \u05de\u05de\u05dc\u05d9\u05e6\u05d4.';
+      if(lim.fits&&lim.max>0) t2+=' \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 (15%) \u05db\u05df \u05de\u05e1\u05ea\u05d3\u05e8 <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(lim.max)+'</b>, \u05d0\u05d1\u05dc \u05d6\u05d4 \u05db\u05d1\u05e8 \u05de\u05e2\u05dc \u05de\u05d4 \u05e9\u05d0\u05e0\u05d9 \u05de\u05de\u05dc\u05d9\u05e6\u05d4.'+cashBack(lim.max);
       else t2+=' \u05d6\u05d4 \u05d0\u05d5\u05de\u05e8 \u05e9\u05db\u05e8\u05d2\u05e2 \u05e8\u05db\u05d1 \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8, \u05d5\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05de\u05d9\u05de\u05d5\u05df \u05d0\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4. \u05e4\u05d7\u05d5\u05ea \u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05d0\u05d5 \u05d4\u05db\u05e0\u05e1\u05d4 \u05d2\u05d1\u05d5\u05d4\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05d9\u05e9\u05e0\u05d5 \u05d0\u05ea \u05d6\u05d4.';
       ci.innerHTML=t2;
     }
@@ -799,7 +826,7 @@ function calc(){
         t='\u05d1\u05ea\u05e7\u05e6\u05d9\u05d1 \u05d4\u05de\u05d5\u05de\u05dc\u05e5 \u05e9\u05dc 10% \u05de\u05d4\u05e0\u05d8\u05d5, \u05db\u05dc\u05d5\u05de\u05e8 <b>'+ils(rec.budget)+'</b> \u05dc\u05d7\u05d5\u05d3\u05e9 \u05e2\u05dc \u05db\u05dc \u05de\u05d4 \u05e9\u05e7\u05e9\u05d5\u05e8 \u05dc\u05e8\u05db\u05d1, \u05de\u05ea\u05d0\u05d9\u05dd \u05dc\u05da <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(recMax)+'</b>. \u05e2\u05dc \u05e8\u05db\u05d1 \u05db\u05d6\u05d4 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05ea\u05e2\u05dc\u05d4 \u05d1\u05e2\u05e8\u05da <b>'+ils(rec.upk)+'</b> \u05d1\u05d7\u05d5\u05d3\u05e9, \u05d0\u05d6 \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd <b>'+ils(rec.toLoan)+'</b> \u05dc\u05d4\u05d7\u05d6\u05e8, \u05e9\u05d6\u05d4 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05e9\u05dc <b>'+ils(rec.loan)+'</b> \u05d5\u05e2\u05d5\u05d3 \u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05dc <b>'+ils(recDown)+'</b>.';
       }
       if(rec.capped) t+=' \u05db\u05d0\u05df \u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05de\u05e0\u05d4.';
-      ci.innerHTML=t;
+      ci.innerHTML=t+cashBack(recMax);
     }
   }
 
@@ -849,11 +876,18 @@ function calc(){
   const vd=document.getElementById('verdict'),vm=document.getElementById('vMsg');
   document.getElementById('vNum').textContent=ils(totalMonthly);
   const total=rules.length;
-  vd.className='check '+(passed===total?'ok':passed===total-1?'mid':'over');
+  /* Tali's tiers: up to 10% green, 10-15% orange, over 15% red. A broken rule
+     can never show green, however small the percentage. */
+  let tier = income<=0 ? 'ok'
+    : (pcIncome<=10.05 ? 'ok' : (pcIncome<=15.05 ? 'mid' : 'over'));
+  if(passed<total&&tier==='ok') tier='mid';
+  if(passed<total-1) tier='over';
+  vd.className='check '+tier;
+  document.getElementById('tTot').parentNode.className='tile main tier-'+tier;
   if(income<=0) vm.textContent='';
-  else if(passed===total&&Math.round(totalMonthly)<=Math.round(income*REC_PC))
+  else if(tier==='ok'&&passed===total)
     vm.innerHTML=`✓ בדיוק בהמלצה. הרכב הזה עולה ${pcIncome.toFixed(1)}% מהנטו, ונשאר לך מקום לחסוך ולחיות.`;
-  else if(passed===total)
+  else if(tier==='mid'&&passed===total)
     vm.innerHTML=`סביר. עובר את כל הכללים ב-${pcIncome.toFixed(1)}% מהנטו, אבל מעל ההמלצה שלי. רכב עד <b>${ils(recMax)}</b> ישאיר לך יותר אוויר לחסוך.`;
   else if(noRoom) vm.innerHTML=`לא מדובר במחיר הרכב: <b>ההוצאות השוטפות לבדן</b> (${ils(running)}) הן כבר יותר מ-15% מהנטו. גם רכב במתנה, בלי שקל אחד של הלוואה, חורג.`;
   else if(passed===total-1) vm.innerHTML=`כמעט. הכלל שלא נעמד הוא <b>${rules.filter(r=>!r.ok).map(r=>r.key).join(', ')}</b>.`;
@@ -866,11 +900,22 @@ function calc(){
   /* STEP 4: the recommendation stands on a rule of thumb; the plan carries the real
      upkeep. Show both and say out loud why they differ, so a car under the headline
      number can still, honestly, not fit. */
-  document.getElementById('vsRecCar').textContent=ils(recMax);
-  document.getElementById('vsRecMo').textContent=ils(recMo)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
+  /* when the recommended level does not fit, show the nearest one that does */
+  const vrc=document.getElementById('vsRecCar'), vrm=document.getElementById('vsRecMo');
+  if(income>0&&recMax<=0&&lim.fits&&lim.max>0){
+    vrc.textContent=ils(lim.max); vrc.classList.remove('nofit');
+    vrm.textContent=ils(lim.budget)+MO_SUFFIX+NEAR_SUFFIX;
+  } else if(income>0&&recMax<=0){
+    vrc.textContent=NOFIT; vrc.classList.add('nofit');
+    vrm.textContent=ils(recMo)+MO_SUFFIX;
+  } else {
+    vrc.textContent=ils(recMax); vrc.classList.remove('nofit');
+    vrm.textContent=ils(recMo)+MO_SUFFIX;
+  }
+
   document.getElementById('vsPlanCar').textContent=ils(price);
   document.getElementById('vsPlanMo').textContent=ils(totalMonthly)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
-  document.getElementById('vsPlanBox').className='vs-side plan-side'+(income<=0?'':(passed===total?' ok':' over'));
+  document.getElementById('vsPlanBox').className='vs-side plan-side'+(income<=0?'':' '+tier);
 
   /* the ending: a "no" that does not come with a next step is not advice */
   const pb2=document.getElementById('planBox');

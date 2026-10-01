@@ -231,6 +231,18 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .plan-opt b{font-weight:900}
 .seg{display:flex;gap:8px;margin-bottom:14px}
 .seg.seg-sm{margin-bottom:0}
+.ticks{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:8px}
+.tick{display:flex;align-items:center;gap:9px;font-family:var(--font);cursor:pointer;text-align:start;
+  font-size:12.5px;font-weight:700;color:var(--ink-soft);background:var(--sage-tint);
+  border:1.5px solid transparent;border-radius:11px;padding:10px 11px;transition:all .15s}
+.tick:hover{border-color:rgba(var(--pine-rgb),.4)}
+.tick b{color:var(--pine-deep);font-weight:900}
+.tick .tk-b{flex:none;width:19px;height:19px;border-radius:6px;border:1.5px solid rgba(var(--pine-rgb),.35);
+  background:#fff;display:grid;place-items:center;transition:all .15s}
+.tick .tk-b::after{content:"\2713";font-size:12px;font-weight:900;color:#fff;opacity:0;transition:opacity .15s}
+.tick.on{background:rgba(var(--pine-rgb),.12);border-color:var(--pine);color:var(--pine-darker)}
+.tick.on .tk-b{background:var(--pine);border-color:var(--pine)}
+.tick.on .tk-b::after{opacity:1}
 .seg.seg-sm .seg-b{font-size:12px;padding:9px 8px}
 .house .full{grid-column:1/-1}
 #commuteBox.hidden{display:none}
@@ -314,12 +326,15 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="hintline" id="kmHint"></div>
       </div>
       <div class="h-item field full">
-        <label>איזה ביטוח תעשי לרכב</label>
-        <div class="seg seg-sm">
-          <button type="button" class="seg-b on" id="insFull">מקיף</button>
-          <button type="button" class="seg-b" id="insThird">צד ג׳</button>
-          <button type="button" class="seg-b" id="insOnly">חובה בלבד</button>
+        <label>מה משפיע על עלות האחזקה</label>
+        <div class="ticks">
+          <button type="button" class="tick" id="insOnly" role="checkbox" aria-checked="false"><span class="tk-b"></span><span><b>חובה</b> בלבד</span></button>
+          <button type="button" class="tick" id="insThird" role="checkbox" aria-checked="false"><span class="tk-b"></span><span>חובה + <b>צד ג׳</b></span></button>
+          <button type="button" class="tick on" id="insFull" role="checkbox" aria-checked="true"><span class="tk-b"></span><span>חובה + <b>מקיף</b></span></button>
+          <button type="button" class="tick" id="tkNew" role="checkbox" aria-checked="false"><span class="tk-b"></span><span><b>נהג צעיר או חדש</b></span></button>
         </div>
+        <div class="hintline" id="insHint"></div>
+      </div>
         <div class="hintline" id="insHint"></div>
       </div>
       <div class="h-item field hidden" id="tradeinBox"><label for="tradein">שווי הרכב שלך היום, בניכוי הלוואה שעוד רשומה עליו</label><div class="input-shell"><span class="unit">₪</span><input id="tradein" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
@@ -379,7 +394,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
           <label class="asm-f" for="compmin"><span class="asm-l">מקיף: מינימום לשנה</span><span class="mini-shell"><input id="compmin" type="text" inputmode="numeric" value="2300"><span class="asm-u">₪</span></span></label>
           <label class="asm-f" for="comp"><span class="asm-l">מקיף: ועוד, משווי הרכב</span><span class="mini-shell"><input id="comp" type="text" inputmode="decimal" value="3.5"><span class="asm-u">%</span></span></label>
           <label class="asm-f" for="third"><span class="asm-l">ביטוח צד ג׳ לשנה</span><span class="mini-shell"><input id="third" type="text" inputmode="numeric" value="700"><span class="asm-u">₪</span></span></label>
-          <label class="asm-f" for="newdrv"><span class="asm-l">תוספת ביטוח לנהג חדש</span><span class="mini-shell"><input id="newdrv" type="text" inputmode="numeric" value="60"><span class="asm-u">%</span></span></label>
+          <label class="asm-f" for="newdrv"><span class="asm-l">תוספת לנהג צעיר או חדש</span><span class="mini-shell"><input id="newdrv" type="text" inputmode="numeric" value="60"><span class="asm-u">%</span></span></label>
           <label class="asm-f" for="mbase"><span class="asm-l">טיפולים, טסט ורישוי לשנה</span><span class="mini-shell"><input id="mbase" type="text" inputmode="numeric" value="2800"><span class="asm-u">₪</span></span></label>
           <label class="asm-f" for="mpct"><span class="asm-l">תחזוקה: ועוד, משווי הרכב</span><span class="mini-shell"><input id="mpct" type="text" inputmode="decimal" value="2.5"><span class="asm-u">%</span></span></label>
           <label class="asm-f" for="park"><span class="asm-l">חניה קבועה לחודש</span><span class="mini-shell"><input id="park" type="text" inputmode="numeric" value="0"><span class="asm-u">₪</span></span></label>
@@ -646,11 +661,21 @@ MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('inp
 PLAIN.forEach(id=>document.getElementById(id).addEventListener('input',calc));
 document.getElementById('ownRun').addEventListener('change',calc);
 /* a first car has no car to trade in, and its driver has no claims history */
-let firstCar=true, kmByCommute=false, insType='full';
-/* comprehensive, third-party or compulsory only is a 2,000+ a year difference */
+let firstCar=true, kmByCommute=false, insType='full', newDriver=false, newDriverTouched=false;
+/* cover is one of three; "new driver" is independent - replacing a car and
+   being a new driver are different questions, and the premium cares about
+   the driver, not the car. */
+function paintTicks(){
+  const m={full:'insFull',third:'insThird',only:'insOnly'};
+  for(const k in m){const el=document.getElementById(m[k]);
+    el.classList.toggle('on',k===insType);el.setAttribute('aria-checked',k===insType);}
+  const t=document.getElementById('tkNew');
+  t.classList.toggle('on',newDriver);t.setAttribute('aria-checked',newDriver);
+}
 (function(){const m={full:'insFull',third:'insThird',only:'insOnly'};
-  function set(v){insType=v;for(const k in m)document.getElementById(m[k]).classList.toggle('on',k===v);calc();}
-  for(const k in m) document.getElementById(m[k]).onclick=()=>set(k);})();
+  for(const k in m) document.getElementById(m[k]).onclick=()=>{insType=k;paintTicks();calc();};
+  document.getElementById('tkNew').onclick=()=>{newDriver=!newDriver;newDriverTouched=true;paintTicks();calc();};
+  paintTicks();})();
 /* nobody has to know their kilometrage: the published average is the default */
 (function(){const a=document.getElementById('kmAvg'),b=document.getElementById('kmCom');
   function set(v){kmByCommute=v;b.classList.toggle('on',v);a.classList.toggle('on',!v);
@@ -659,7 +684,9 @@ let firstCar=true, kmByCommute=false, insType='full';
   document.getElementById('commuteBox').classList.toggle('hidden',!kmByCommute);})();
 (function(){const a=document.getElementById('segFirst'),b=document.getElementById('segSwap');
   function set(v){firstCar=v;a.classList.toggle('on',v);b.classList.toggle('on',!v);
-    document.getElementById('tradeinBox').classList.toggle('hidden',v);calc();}
+    document.getElementById('tradeinBox').classList.toggle('hidden',v);
+    if(!newDriverTouched){newDriver=v;paintTicks();}   /* a sensible default, not a lock */
+    calc();}
   a.onclick=()=>set(true); b.onclick=()=>set(false);
   document.getElementById('tradeinBox').classList.toggle('hidden',firstCar);})();
 
@@ -695,7 +722,7 @@ function calc(){
   const consum=num('cons'), fuelPrice=num('fuelp');
   const compulsory=num('cmpl'), compMin=num('compmin'), thirdY=num('third');
   const compPct=num('comp')/100;
-  const drvMul=firstCar?1+num('newdrv')/100:1;      /* no claims history costs more */
+  const drvMul=newDriver?1+num('newdrv')/100:1;      /* no claims history costs more */
   /* comprehensive is not a flat percentage: it has a floor of its own, which is
      why a 3.5%-of-value model priced a cheap car far under the market. */
   const insFixed=(compulsory+(insType==='third'?thirdY:0))*drvMul;
@@ -712,9 +739,9 @@ function calc(){
   const estIns=p2=>(insFixed+Math.max(insFloor,insPct*p2))/12;
   (function(){
     const y=insFixed+(insType==='full'?Math.max(insFloor,insPct*Math.max(price,0)):0);
-    const names={full:'\u05de\u05e7\u05d9\u05e3 \u05db\u05d5\u05dc\u05dc \u05d7\u05d5\u05d1\u05d4',third:'\u05e6\u05d3 \u05d2\u05f3 \u05db\u05d5\u05dc\u05dc \u05d7\u05d5\u05d1\u05d4',only:'\u05d7\u05d5\u05d1\u05d4 \u05d1\u05dc\u05d1\u05d3'};
+    const names={full:'\u05d7\u05d5\u05d1\u05d4 + \u05de\u05e7\u05d9\u05e3',third:'\u05d7\u05d5\u05d1\u05d4 + \u05e6\u05d3 \u05d2\u05f3',only:'\u05d7\u05d5\u05d1\u05d4 \u05d1\u05dc\u05d1\u05d3'};
     document.getElementById('insHint').innerHTML=names[insType]+' · '+ils(y)+' \u05dc\u05e9\u05e0\u05d4 \u05dc\u05e4\u05d9 \u05d4\u05d4\u05e2\u05e8\u05db\u05d4'
-      +(firstCar?' \u00b7 \u05db\u05d5\u05dc\u05dc \u05ea\u05d5\u05e1\u05e4\u05ea \u05e0\u05d4\u05d2 \u05d7\u05d3\u05e9':'');
+      +(firstCar?' \u00b7 \u05db\u05d5\u05dc\u05dc \u05ea\u05d5\u05e1\u05e4\u05ea \u05e0\u05d4\u05d2 \u05e6\u05e2\u05d9\u05e8 \u05d0\u05d5 \u05d7\u05d3\u05e9':'');
   })();
   const estMnt=p2=>(maintBase+maintPct*p2)/12;
 
@@ -1084,12 +1111,12 @@ function calc(){
 
 // save / share
 const SKEY='richlife-car-v1';
-function flags(){return [firstCar?1:0,kmByCommute?1:0,document.getElementById('ownRun').checked?1:0];}
+function flags(){return [firstCar?1:0,kmByCommute?1:0,document.getElementById('ownRun').checked?1:0,{full:0,third:1,only:2}[insType],newDriver?1:0];}
 function enc(){return JSON.stringify(ALL.map(id=>document.getElementById(id).value).concat(flags()));}
 function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;
   ALL.forEach((id,k)=>{if(a[k]!==undefined)document.getElementById(id).value=a[k];});
   const f=a.slice(ALL.length);
-  if(f.length===3){
+  if(f.length>=3){
     firstCar=!!f[0]; kmByCommute=!!f[1];
     document.getElementById('segFirst').classList.toggle('on',firstCar);
     document.getElementById('segSwap').classList.toggle('on',!firstCar);
@@ -1098,6 +1125,7 @@ function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;
     document.getElementById('kmAvg').classList.toggle('on',!kmByCommute);
     document.getElementById('commuteBox').classList.toggle('hidden',!kmByCommute);
     document.getElementById('ownRun').checked=!!f[2];
+    if(f.length>=5){insType=['full','third','only'][f[3]]||'full';newDriver=!!f[4];newDriverTouched=true;paintTicks();}
   }
   return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';

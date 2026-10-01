@@ -235,6 +235,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .rules{display:flex;flex-direction:column;gap:8px;margin:16px 0 4px}
 .rule{display:flex;align-items:flex-start;gap:10px;border-radius:12px;padding:11px 13px;font-size:13px;font-weight:700;line-height:1.5}
 .rule.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-deep);border:1px solid rgba(var(--pine-rgb),.22)}
+.rule.mid{background:rgba(183,121,31,.09);color:#8a5a12;border:1px solid rgba(183,121,31,.3)}
 .rule.no{background:rgba(var(--red-rgb),.08);color:#8f3a29;border:1px solid rgba(var(--red-rgb),.22)}
 .rule .r-ic{font-size:16px;flex:none;line-height:1.35}
 .rule .r-name{font-weight:900}
@@ -320,7 +321,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p10">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l10">0</b></div>
         <div class="lvl-row"><span id="dl10">ועוד מקדמה</span><b id="d10">0</b></div>
-        <div class="lvl-row back hidden" id="bk10"><span>ונשאר לך במזומן</span><b id="b210">0</b></div>
+        <div class="lvl-row back hidden" id="bk10"><span>ונשאר לקרן הביטחון</span><b id="b210">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m10">0</b></div>
       </div>
       <div class="lvl" id="lvl15">
@@ -330,7 +331,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p15">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l15">0</b></div>
         <div class="lvl-row"><span id="dl15">ועוד מקדמה</span><b id="d15">0</b></div>
-        <div class="lvl-row back hidden" id="bk15"><span>ונשאר לך במזומן</span><b id="b215">0</b></div>
+        <div class="lvl-row back hidden" id="bk15"><span>ונשאר לקרן הביטחון</span><b id="b215">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m15">0</b></div>
       </div>
       <div class="lvl bad" id="lvl20">
@@ -340,7 +341,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p20">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l20">0</b></div>
         <div class="lvl-row"><span id="dl20">ועוד מקדמה</span><b id="d20">0</b></div>
-        <div class="lvl-row back hidden" id="bk20"><span>ונשאר לך במזומן</span><b id="b220">0</b></div>
+        <div class="lvl-row back hidden" id="bk20"><span>ונשאר לקרן הביטחון</span><b id="b220">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m20">0</b></div>
         <div class="lvl-bad">ברמה הזאת קשה לחסוך וקשה לסגור את החודש</div>
       </div>
@@ -695,7 +696,8 @@ function calc(){
 
   /* the recommended down payment: a third of the liquid capital plus the car
      being traded in. The trade-in is money that never touches the safety net. */
-  const thirdCap=capital/3, recDown=thirdCap+tradein;
+  const assets=capital+tradein;      /* the current car is capital once sold */
+  const thirdCap=capital/3, recDown=assets/3;
   const down=Math.min(num('down'),price);
 
   /* ---------- 0. flag a loan that is priced or stretched too far ---------- */
@@ -756,8 +758,7 @@ function calc(){
   const NOFIT='\u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8';
   const TAG_REC='\u05d4\u05d4\u05de\u05dc\u05e6\u05d4', TAG_BEST='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 \u05dc\u05d4\u05de\u05dc\u05e6\u05d4';
   /* name the down payment after what it is actually made of */
-  const downLabel = (thirdCap>0&&tradein>0) ? '\u05d5\u05e2\u05d5\u05d3 \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05d5\u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9'
-    : (tradein>0 ? '\u05d5\u05e2\u05d5\u05d3 \u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9 \u05e9\u05dc\u05da' : '\u05d5\u05e2\u05d5\u05d3 \u05de\u05e7\u05d3\u05de\u05d4 \u05de\u05d4\u05d4\u05d5\u05df (\u05e9\u05dc\u05d9\u05e9)');
+  const downLabel = tradein>0 ? '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05db\u05d5\u05dc\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9' : '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05d4\u05e0\u05d6\u05d9\u05dc';
   [[10,'10'],[15,'15'],[20,'20']].forEach(([pc,sfx])=>{
     const c=ceiling(pc);
     document.getElementById('b'+sfx).textContent=ils(c.budget);
@@ -766,7 +767,7 @@ function calc(){
     document.getElementById('l'+sfx).textContent=ils(c.loan);
     document.getElementById('d'+sfx).textContent=ils(recDown);
     document.getElementById('dl'+sfx).textContent=downLabel;
-    const back=c.fits?Math.max(0,recDown-c.max):0;
+    const back=c.fits?Math.max(0,assets-Math.min(c.max,recDown)):0;
     const bkEl=document.getElementById('bk'+sfx);
     bkEl.classList.toggle('hidden',!(back>500));
     document.getElementById('b2'+sfx).textContent=ils(back);
@@ -799,11 +800,12 @@ function calc(){
   /* when the car that fits costs less than what is already on the table, the
      difference comes back as cash. For a household with no capital, that
      leftover IS the emergency fund, so it must be said out loud. */
+  /* the two thirds that stay out of the car are the whole point of the rule */
   function cashBack(maxP){
-    const back=Math.max(0,recDown-maxP);
-    if(back<=500) return '';
-    let s=' \u05d5\u05db\u05d9\u05d5\u05d5\u05df \u05e9\u05d4\u05e8\u05db\u05d1 \u05e2\u05d5\u05dc\u05d4 \u05e4\u05d7\u05d5\u05ea \u05de\u05de\u05d4 \u05e9\u05db\u05d1\u05e8 \u05d9\u05e9 \u05dc\u05da, \u05d0\u05d7\u05e8\u05d9 \u05d4\u05d4\u05d7\u05dc\u05e4\u05d4 \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05dc\u05da <b>'+ils(back)+'</b> \u05d1\u05de\u05d6\u05d5\u05de\u05df.';
-    if(capital<=0) s+=' \u05d6\u05d4 \u05dc\u05d0 \u05e2\u05d5\u05d3\u05e3 \u05dc\u05d1\u05d6\u05d1\u05d5\u05d6: \u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d9\u05d5\u05dd \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc \u05d1\u05db\u05dc\u05dc, \u05d0\u05d6 \u05d4\u05e1\u05db\u05d5\u05dd \u05d4\u05d6\u05d4 \u05d4\u05d5\u05d0 <b>\u05e7\u05e8\u05df \u05d4\u05d1\u05d9\u05d8\u05d7\u05d5\u05df \u05e9\u05dc\u05da</b>, \u05d5\u05d4\u05d7\u05dc\u05e4\u05ea \u05d4\u05e8\u05db\u05d1 \u05d4\u05d9\u05d0 \u05de\u05d4 \u05e9\u05d9\u05d5\u05e6\u05e8\u05ea \u05d0\u05d5\u05ea\u05d4.';
+    const keep=Math.max(0,assets-Math.min(maxP,recDown));
+    if(keep<=500) return '';
+    let s=' \u05de\u05ea\u05d5\u05da \u05d4-'+ils(assets)+' \u05e9\u05e2\u05d5\u05de\u05d3\u05d9\u05dd \u05dc\u05e8\u05e9\u05d5\u05ea\u05da, \u05e8\u05e7 \u05e9\u05dc\u05d9\u05e9 \u05e0\u05db\u05e0\u05e1 \u05dc\u05e8\u05db\u05d1, \u05d5-<b>'+ils(keep)+'</b> \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df.';
+    if(capital<=0&&tradein>0) s+=' \u05d6\u05d4 \u05d1\u05d3\u05d9\u05d5\u05e7 \u05d4\u05e2\u05e0\u05d9\u05d9\u05df: \u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9 \u05d4\u05d5\u05d0 \u05db\u05dc \u05d4\u05d4\u05d5\u05df \u05e9\u05dc\u05da, \u05d5\u05d0\u05dd \u05db\u05d5\u05dc\u05d5 \u05e0\u05db\u05e0\u05e1 \u05dc\u05e8\u05db\u05d1 \u05d4\u05d1\u05d0 \u05ea\u05d9\u05e9\u05d0\u05e8\u05d9 \u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05d1\u05e6\u05d3.';
     return s;
   }
   const ci=document.getElementById('capIns');
@@ -853,17 +855,21 @@ function calc(){
      val:`המקדמה שלך: ${ils(down)} = ${downPc.toFixed(0)}% מהמחיר · צריך ${ils(price*0.25)}`},
     {key:'פריסה עד 4 שנים',ok:term<=48||loanAmt===0,ic:'📅',name:'פריסה של עד 4 שנים',
      val:loanAmt===0?'אין הלוואה, אין פריסה':`הפריסה שלך: ${term} חודשים (${(term/12).toFixed(1)} שנים)`},
-    {key:'עד 15% מההכנסה',ok:income>0&&Math.round(totalMonthly)<=Math.round(income*LIMIT_PC),ic:'📊',name:'עד 15% מההכנסה על הרכב, כולל הכל',
+    {key:'אחוז מההכנסה',ok:income>0&&Math.round(totalMonthly)<=Math.round(income*LIMIT_PC),
+     tier:income<=0?'no':(pcIncome<=10.05?'ok':(pcIncome<=15.05?'mid':'no')),ic:'📊',name:'אחוז מההכנסה שהרכב לוקח, כולל הכל',
      val:income>0?`העלות שלך: ${ils(totalMonthly)} = ${pcIncome.toFixed(1)}% מהנטו · מומלץ עד ${ils(income*REC_PC)}, הגבול ${ils(income*LIMIT_PC)}`:'צריך למלא את ההכנסה למעלה'}
-    ,{key:'מקדמה מתוך שליש מההון',ok:recDown>0&&Math.round(down)<=Math.round(recDown),ic:'🏦',name:'המקדמה באה משליש ההון הנזיל, לא יותר',
+    ,{key:'מקדמה מתוך שליש מההון',ok:recDown>0&&Math.round(down)<=Math.round(recDown),ic:'🏦',name:'המקדמה באה משליש ההון, כולל הרכב הנוכחי',
      val:recDown<=0?'אין הון נזיל, אז אין מקדמה. צריך לחסוך קודם':`המקדמה שלך: ${ils(down)} · המקור המומלץ הוא ${ils(recDown)}`}
   ];
   /* the same rule, shown right under the field it is about */
   const wNoCap='<b>אין הון נזיל למקדמה.</b> לפני רכב צריך לחסוך. כדי שמקדמה של <b>'+ils(down)+'</b> תהיה שליש מההון, צריך להגיע להון נזיל של <b>'+ils(down*3)+'</b>. שני השלישים האחרים נשארים קרן ביטחון.';
   const wOver='<b>המקדמה הזאת גדולה מדי.</b> המקור המומלץ למקדמה הוא שליש מההון ועוד הרכב הנוכחי, כלומר <b>'+ils(recDown)+'</b>, והמקדמה שרשומה היא <b>'+ils(down)+'</b>. הפרש של '+ils(down-recDown)+' יוצא מקרן הביטחון, ואז כל תקלה הופכת להלוואה חדשה. או מקטינים את המקדמה, או חוסכים עוד לפני הקנייה.';
   warn('downWarn', down>0&&Math.round(down)>Math.round(recDown), recDown<=0?wNoCap:wOver);
-  document.getElementById('rules').innerHTML=rules.map(r=>
-    `<div class="rule ${r.ok?'ok':'no'}"><span class="r-ic">${r.ok?'✅':'🚩'}</span><div><span class="r-name">${r.ic} ${r.name}</span><span class="r-val">${r.val}</span></div></div>`).join('');
+  const RICON={ok:'✅',mid:'🟠',no:'🚩'};
+  document.getElementById('rules').innerHTML=rules.map(r=>{
+    const tr=r.tier||(r.ok?'ok':'no');
+    return `<div class="rule ${tr}"><span class="r-ic">${RICON[tr]}</span><div><span class="r-name">${r.ic} ${r.name}</span><span class="r-val">${r.val}</span></div></div>`;
+  }).join('');
 
   document.getElementById('tLoan').textContent=ils(loanAmt);
   document.getElementById('tLoanS').textContent=loanAmt>0?('מחיר '+ils(price)+' פחות מקדמה '+ils(down)):'אין הלוואה, הכל מזומן';

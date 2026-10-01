@@ -243,6 +243,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tick.on{background:rgba(var(--pine-rgb),.12);border-color:var(--pine);color:var(--pine-darker)}
 .tick.on .tk-b{background:var(--pine);border-color:var(--pine)}
 .tick.on .tk-b::after{opacity:1}
+.tick.tk-wide{grid-column:1/-1;margin-top:3px;border-top:1px dashed rgba(var(--pine-rgb),.25);border-radius:11px}
 .seg.seg-sm .seg-b{font-size:12px;padding:9px 8px}
 .house .full{grid-column:1/-1}
 #commuteBox.hidden{display:none}
@@ -331,10 +332,8 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
           <button type="button" class="tick" id="insOnly" role="checkbox" aria-checked="false"><span class="tk-b"></span><span><b>חובה</b> בלבד</span></button>
           <button type="button" class="tick" id="insThird" role="checkbox" aria-checked="false"><span class="tk-b"></span><span>חובה + <b>צד ג׳</b></span></button>
           <button type="button" class="tick on" id="insFull" role="checkbox" aria-checked="true"><span class="tk-b"></span><span>חובה + <b>מקיף</b></span></button>
-          <button type="button" class="tick" id="tkNew" role="checkbox" aria-checked="false"><span class="tk-b"></span><span><b>נהג צעיר או חדש</b></span></button>
+          <button type="button" class="tick tk-wide" id="tkNew" role="checkbox" aria-checked="false"><span class="tk-b"></span><span><b>נהג צעיר או חדש</b></span></button>
         </div>
-        <div class="hintline" id="insHint"></div>
-      </div>
         <div class="hintline" id="insHint"></div>
       </div>
       <div class="h-item field hidden" id="tradeinBox"><label for="tradein">שווי הרכב שלך היום, בניכוי הלוואה שעוד רשומה עליו</label><div class="input-shell"><span class="unit">₪</span><input id="tradein" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>

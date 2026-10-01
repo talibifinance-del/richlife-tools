@@ -215,10 +215,13 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .asm-body{padding:13px 14px 15px}
 .asm-body p{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.6;margin-bottom:11px}
 .asm-warn{font-size:11.5px;font-weight:700;color:var(--amber);background:rgba(183,121,31,.08);border-radius:10px;padding:9px 11px;margin:11px 0 0 !important}
-.asm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
-.asm-grid label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11.5px;font-weight:700;color:var(--ink-soft)}
-.asm-grid .mini-shell{flex:none}
-.asm-grid .mini-shell input{width:46px}
+.asm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}
+.asm-f{display:flex;flex-direction:column;gap:7px;background:var(--sage-tint);border:1px solid rgba(var(--pine-rgb),.16);border-radius:12px;padding:10px 11px;transition:border-color .15s}
+.asm-f:focus-within{border-color:var(--pine);background:#fff}
+.asm-l{font-size:11.5px;font-weight:800;color:var(--ink-soft);line-height:1.35}
+.asm-f .mini-shell{background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);width:100%;padding:0;gap:0}
+.asm-f .mini-shell input{flex:1;width:auto;min-width:0;text-align:start;padding:8px 10px;font-size:14.5px}
+.asm-u{flex:none;padding:0 10px;font-size:11.5px;font-weight:800;color:var(--pine);border-inline-start:1px solid rgba(var(--pine-rgb),.16);align-self:stretch;display:flex;align-items:center;white-space:nowrap}
 /* the plan that follows a no */
 .plan{margin-top:14px;border-radius:16px;padding:15px 16px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 85%);color:#fff;box-shadow:0 10px 26px rgba(var(--pine-rgb),.22)}
 .plan h4{font-size:14.5px;font-weight:900;margin-bottom:9px}
@@ -310,6 +313,15 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         </div>
         <div class="hintline" id="kmHint"></div>
       </div>
+      <div class="h-item field full">
+        <label>איזה ביטוח תעשי לרכב</label>
+        <div class="seg seg-sm">
+          <button type="button" class="seg-b on" id="insFull">מקיף</button>
+          <button type="button" class="seg-b" id="insThird">צד ג׳</button>
+          <button type="button" class="seg-b" id="insOnly">חובה בלבד</button>
+        </div>
+        <div class="hintline" id="insHint"></div>
+      </div>
       <div class="h-item field hidden" id="tradeinBox"><label for="tradein">שווי הרכב שלך היום, בניכוי הלוואה שעוד רשומה עליו</label><div class="input-shell"><span class="unit">₪</span><input id="tradein" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
     </div>
   </div>
@@ -357,18 +369,20 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="asm-body">
         <p><b>הלוואה טובה:</b> פריים + 0.5% (<span id="recRateTxt">6.5%</span>) ל-48 חודשים. המקדמה באה משליש ההון הנזיל ומשווי הרכב הנוכחי, וההלוואה לא עולה על פי שלוש ממנה.</p>
         <div class="asm-grid">
-          <label>פריים היום<span class="mini-shell"><input id="prime" type="text" inputmode="decimal" value="6">%</span></label>
-          <label>נסועה ממוצעת לשנה<span class="mini-shell"><input id="kmyear" type="text" inputmode="numeric" value="14700"></span></label>
-          <label>ימי נסיעה בחודש<span class="mini-shell"><input id="wdays" type="text" inputmode="numeric" value="22"></span></label>
-          <label>ק"מ לסידורים בחודש<span class="mini-shell"><input id="extrakm" type="text" inputmode="numeric" value="565"></span></label>
-          <label>צריכת דלק<span class="mini-shell"><input id="cons" type="text" inputmode="decimal" value="7">ל/100</span></label>
-          <label>מחיר ליטר<span class="mini-shell"><input id="fuelp" type="text" inputmode="decimal" value="7.5">₪</span></label>
-          <label>ביטוח חובה לשנה<span class="mini-shell"><input id="cmpl" type="text" inputmode="numeric" value="1500">₪</span></label>
-          <label>מקיף לשנה<span class="mini-shell"><input id="comp" type="text" inputmode="decimal" value="3.5">%</span></label>
-          <label>תוספת לנהג חדש<span class="mini-shell"><input id="newdrv" type="text" inputmode="numeric" value="60">%</span></label>
-          <label>טיפולים וטסט לשנה<span class="mini-shell"><input id="mbase" type="text" inputmode="numeric" value="2800">₪</span></label>
-          <label>ועוד, משווי הרכב<span class="mini-shell"><input id="mpct" type="text" inputmode="decimal" value="2.5">%</span></label>
-          <label>חניה לחודש<span class="mini-shell"><input id="park" type="text" inputmode="numeric" value="0">₪</span></label>
+          <label class="asm-f" for="prime"><span class="asm-l">ריבית הפריים היום</span><span class="mini-shell"><input id="prime" type="text" inputmode="decimal" value="6"><span class="asm-u">%</span></span></label>
+          <label class="asm-f" for="kmyear"><span class="asm-l">נסועה ממוצעת לשנה</span><span class="mini-shell"><input id="kmyear" type="text" inputmode="numeric" value="14700"><span class="asm-u">ק"מ</span></span></label>
+          <label class="asm-f" for="wdays"><span class="asm-l">ימי נסיעה לעבודה בחודש</span><span class="mini-shell"><input id="wdays" type="text" inputmode="numeric" value="22"><span class="asm-u">ימים</span></span></label>
+          <label class="asm-f" for="extrakm"><span class="asm-l">ק"מ לסידורים בחודש</span><span class="mini-shell"><input id="extrakm" type="text" inputmode="numeric" value="565"><span class="asm-u">ק"מ</span></span></label>
+          <label class="asm-f" for="cons"><span class="asm-l">צריכת דלק</span><span class="mini-shell"><input id="cons" type="text" inputmode="decimal" value="7"><span class="asm-u">ל׳ ל-100 ק"מ</span></span></label>
+          <label class="asm-f" for="fuelp"><span class="asm-l">מחיר ליטר דלק</span><span class="mini-shell"><input id="fuelp" type="text" inputmode="decimal" value="7.5"><span class="asm-u">₪</span></span></label>
+          <label class="asm-f" for="cmpl"><span class="asm-l">ביטוח חובה לשנה</span><span class="mini-shell"><input id="cmpl" type="text" inputmode="numeric" value="1200"><span class="asm-u">₪</span></span></label>
+          <label class="asm-f" for="compmin"><span class="asm-l">מקיף: מינימום לשנה</span><span class="mini-shell"><input id="compmin" type="text" inputmode="numeric" value="2300"><span class="asm-u">₪</span></span></label>
+          <label class="asm-f" for="comp"><span class="asm-l">מקיף: ועוד, משווי הרכב</span><span class="mini-shell"><input id="comp" type="text" inputmode="decimal" value="3.5"><span class="asm-u">%</span></span></label>
+          <label class="asm-f" for="third"><span class="asm-l">ביטוח צד ג׳ לשנה</span><span class="mini-shell"><input id="third" type="text" inputmode="numeric" value="700"><span class="asm-u">₪</span></span></label>
+          <label class="asm-f" for="newdrv"><span class="asm-l">תוספת ביטוח לנהג חדש</span><span class="mini-shell"><input id="newdrv" type="text" inputmode="numeric" value="60"><span class="asm-u">%</span></span></label>
+          <label class="asm-f" for="mbase"><span class="asm-l">טיפולים, טסט ורישוי לשנה</span><span class="mini-shell"><input id="mbase" type="text" inputmode="numeric" value="2800"><span class="asm-u">₪</span></span></label>
+          <label class="asm-f" for="mpct"><span class="asm-l">תחזוקה: ועוד, משווי הרכב</span><span class="mini-shell"><input id="mpct" type="text" inputmode="decimal" value="2.5"><span class="asm-u">%</span></span></label>
+          <label class="asm-f" for="park"><span class="asm-l">חניה קבועה לחודש</span><span class="mini-shell"><input id="park" type="text" inputmode="numeric" value="0"><span class="asm-u">₪</span></span></label>
         </div>
         <p class="asm-warn">הנסועה הממוצעת היא נתון למ"ס: 14,700 ק"מ לשנה לרכב פרטי, סוף 2023. שאר המספרים הם <b>הערכה</b> לרכב משפחתי ממוצע. אם יש לך הצעת ביטוח אמיתית או נתוני צריכה של דגם מסוים, עדיף להחליף אותם כאן.</p>
       </div>
@@ -626,13 +640,17 @@ function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleStri
 function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
 function ils(v){return fmt.format(Math.round(v))+' ₪';}
 const MONEY=['income','capital','tradein','price','down','fuel','insur','maint','park','lease'];
-const PLAIN=['rate','term','depr','prime','years','commute','kmyear','wdays','extrakm','cons','fuelp','cmpl','comp','mbase','mpct','newdrv'];
+const PLAIN=['rate','term','depr','prime','years','commute','kmyear','wdays','extrakm','cons','fuelp','cmpl','compmin','comp','third','mbase','mpct','newdrv'];
 const ALL=MONEY.concat(PLAIN);
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});});
 PLAIN.forEach(id=>document.getElementById(id).addEventListener('input',calc));
 document.getElementById('ownRun').addEventListener('change',calc);
 /* a first car has no car to trade in, and its driver has no claims history */
-let firstCar=true, kmByCommute=false;
+let firstCar=true, kmByCommute=false, insType='full';
+/* comprehensive, third-party or compulsory only is a 2,000+ a year difference */
+(function(){const m={full:'insFull',third:'insThird',only:'insOnly'};
+  function set(v){insType=v;for(const k in m)document.getElementById(m[k]).classList.toggle('on',k===v);calc();}
+  for(const k in m) document.getElementById(m[k]).onclick=()=>set(k);})();
 /* nobody has to know their kilometrage: the published average is the default */
 (function(){const a=document.getElementById('kmAvg'),b=document.getElementById('kmCom');
   function set(v){kmByCommute=v;b.classList.toggle('on',v);a.classList.toggle('on',!v);
@@ -675,13 +693,29 @@ function calc(){
      fixed and partly a share of the car's value. Every coefficient is editable.
      upkeep(P) = BASE + K*P  -> linear, so the ceiling below solves exactly. */
   const consum=num('cons'), fuelPrice=num('fuelp');
-  const compulsory=num('cmpl');
-  const compPct=num('comp')/100*(firstCar?1+num('newdrv')/100:1);   /* no claims history costs more */
+  const compulsory=num('cmpl'), compMin=num('compmin'), thirdY=num('third');
+  const compPct=num('comp')/100;
+  const drvMul=firstCar?1+num('newdrv')/100:1;      /* no claims history costs more */
+  /* comprehensive is not a flat percentage: it has a floor of its own, which is
+     why a 3.5%-of-value model priced a cheap car far under the market. */
+  const insFixed=(compulsory+(insType==='third'?thirdY:0))*drvMul;
+  const insPct=(insType==='full'?compPct:0)*drvMul;
+  const insFloor=(insType==='full'?compMin:0)*drvMul;
   const maintBase=num('mbase'), maintPct=num('mpct')/100;
   const fuelMo=km*consum/100*fuelPrice;
-  const BASE=fuelMo+(compulsory+maintBase)/12+park;
-  const K=(compPct+maintPct)/12;
-  const estIns=p2=>(compulsory+compPct*p2)/12;
+  /* comprehensive = max(floor, pct*value). Linearise around the floor so the
+     ceiling still solves exactly: below the crossover the floor rules. */
+  const crossover=insPct>0?insFloor/insPct:Infinity;
+  const useFloor=price<=0?true:(price<crossover);
+  const BASE=fuelMo+(insFixed+(useFloor?insFloor:0)+maintBase)/12+park;
+  const K=((useFloor?0:insPct)+maintPct)/12;
+  const estIns=p2=>(insFixed+Math.max(insFloor,insPct*p2))/12;
+  (function(){
+    const y=insFixed+(insType==='full'?Math.max(insFloor,insPct*Math.max(price,0)):0);
+    const names={full:'\u05de\u05e7\u05d9\u05e3 \u05db\u05d5\u05dc\u05dc \u05d7\u05d5\u05d1\u05d4',third:'\u05e6\u05d3 \u05d2\u05f3 \u05db\u05d5\u05dc\u05dc \u05d7\u05d5\u05d1\u05d4',only:'\u05d7\u05d5\u05d1\u05d4 \u05d1\u05dc\u05d1\u05d3'};
+    document.getElementById('insHint').innerHTML=names[insType]+' · '+ils(y)+' \u05dc\u05e9\u05e0\u05d4 \u05dc\u05e4\u05d9 \u05d4\u05d4\u05e2\u05e8\u05db\u05d4'
+      +(firstCar?' \u00b7 \u05db\u05d5\u05dc\u05dc \u05ea\u05d5\u05e1\u05e4\u05ea \u05e0\u05d4\u05d2 \u05d7\u05d3\u05e9':'');
+  })();
   const estMnt=p2=>(maintBase+maintPct*p2)/12;
 
   /* step 3 shows the estimate, unless she says she knows the real numbers */

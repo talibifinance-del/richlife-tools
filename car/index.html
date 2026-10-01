@@ -389,16 +389,16 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
           <label class="asm-f" for="extrakm"><span class="asm-l">ק"מ לסידורים בחודש</span><span class="mini-shell"><input id="extrakm" type="text" inputmode="numeric" value="565"><span class="asm-u">ק"מ</span></span></label>
           <label class="asm-f" for="cons"><span class="asm-l">צריכת דלק</span><span class="mini-shell"><input id="cons" type="text" inputmode="decimal" value="7"><span class="asm-u">ל׳ ל-100 ק"מ</span></span></label>
           <label class="asm-f" for="fuelp"><span class="asm-l">מחיר ליטר דלק</span><span class="mini-shell"><input id="fuelp" type="text" inputmode="decimal" value="7.5"><span class="asm-u">₪</span></span></label>
-          <label class="asm-f" for="cmpl"><span class="asm-l">ביטוח חובה לשנה</span><span class="mini-shell"><input id="cmpl" type="text" inputmode="numeric" value="1200"><span class="asm-u">₪</span></span></label>
+          <label class="asm-f" for="cmpl"><span class="asm-l">ביטוח חובה לשנה</span><span class="mini-shell"><input id="cmpl" type="text" inputmode="numeric" value="1650"><span class="asm-u">₪</span></span></label>
           <label class="asm-f" for="compmin"><span class="asm-l">מקיף: מינימום לשנה</span><span class="mini-shell"><input id="compmin" type="text" inputmode="numeric" value="2300"><span class="asm-u">₪</span></span></label>
           <label class="asm-f" for="comp"><span class="asm-l">מקיף: ועוד, משווי הרכב</span><span class="mini-shell"><input id="comp" type="text" inputmode="decimal" value="3.5"><span class="asm-u">%</span></span></label>
-          <label class="asm-f" for="third"><span class="asm-l">ביטוח צד ג׳ לשנה</span><span class="mini-shell"><input id="third" type="text" inputmode="numeric" value="700"><span class="asm-u">₪</span></span></label>
+          <label class="asm-f" for="third"><span class="asm-l">ביטוח צד ג׳ לשנה</span><span class="mini-shell"><input id="third" type="text" inputmode="numeric" value="1150"><span class="asm-u">₪</span></span></label>
           <label class="asm-f" for="newdrv"><span class="asm-l">תוספת לנהג צעיר או חדש</span><span class="mini-shell"><input id="newdrv" type="text" inputmode="numeric" value="60"><span class="asm-u">%</span></span></label>
           <label class="asm-f" for="mbase"><span class="asm-l">טיפולים, טסט ורישוי לשנה</span><span class="mini-shell"><input id="mbase" type="text" inputmode="numeric" value="2800"><span class="asm-u">₪</span></span></label>
           <label class="asm-f" for="mpct"><span class="asm-l">תחזוקה: ועוד, משווי הרכב</span><span class="mini-shell"><input id="mpct" type="text" inputmode="decimal" value="2.5"><span class="asm-u">%</span></span></label>
           <label class="asm-f" for="park"><span class="asm-l">חניה קבועה לחודש</span><span class="mini-shell"><input id="park" type="text" inputmode="numeric" value="0"><span class="asm-u">₪</span></span></label>
         </div>
-        <p class="asm-warn">הנסועה הממוצעת היא נתון למ"ס: 14,700 ק"מ לשנה לרכב פרטי, סוף 2023. שאר המספרים הם <b>הערכה</b> לרכב משפחתי ממוצע. אם יש לך הצעת ביטוח אמיתית או נתוני צריכה של דגם מסוים, עדיף להחליף אותם כאן.</p>
+        <p class="asm-warn"><b>מאיפה המספרים:</b> הנסועה הממוצעת היא נתון למ"ס (14,700 ק"מ לשנה לרכב פרטי, סוף 2023). החובה והצד ג׳ הם <b>פוליסה אמיתית</b>: 1,648 ו-1,150 לשנה, בת 28, בלי תביעות ועם הגבלת נהגת יחידה. פוליסה אחרת תיתן מספרים אחרים, אז שווה להחליף לפי ההצעה שיש ביד. המקיף, הדלק והתחזוקה הם עדיין <b>הערכה</b>. אם יש לך הצעת ביטוח אמיתית או נתוני צריכה של דגם מסוים, עדיף להחליף אותם כאן.</p>
       </div>
     </details>
   </div>
@@ -740,7 +740,7 @@ function calc(){
     const y=insFixed+(insType==='full'?Math.max(insFloor,insPct*Math.max(price,0)):0);
     const names={full:'\u05d7\u05d5\u05d1\u05d4 + \u05de\u05e7\u05d9\u05e3',third:'\u05d7\u05d5\u05d1\u05d4 + \u05e6\u05d3 \u05d2\u05f3',only:'\u05d7\u05d5\u05d1\u05d4 \u05d1\u05dc\u05d1\u05d3'};
     document.getElementById('insHint').innerHTML=names[insType]+' · '+ils(y)+' \u05dc\u05e9\u05e0\u05d4 \u05dc\u05e4\u05d9 \u05d4\u05d4\u05e2\u05e8\u05db\u05d4'
-      +(firstCar?' \u00b7 \u05db\u05d5\u05dc\u05dc \u05ea\u05d5\u05e1\u05e4\u05ea \u05e0\u05d4\u05d2 \u05e6\u05e2\u05d9\u05e8 \u05d0\u05d5 \u05d7\u05d3\u05e9':'');
+      +(newDriver?' \u00b7 \u05db\u05d5\u05dc\u05dc \u05ea\u05d5\u05e1\u05e4\u05ea \u05e0\u05d4\u05d2 \u05e6\u05e2\u05d9\u05e8 \u05d0\u05d5 \u05d7\u05d3\u05e9':'');
   })();
   const estMnt=p2=>(maintBase+maintPct*p2)/12;
 

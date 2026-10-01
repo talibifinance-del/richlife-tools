@@ -171,6 +171,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .lvl-max b{display:block;font-size:clamp(15px,3.6vw,19px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;margin-top:1px}
 .lvl.on .lvl-max span{color:rgba(255,255,255,.85)} .lvl.on .lvl-max b{color:#fff}
 @media(max-width:560px){.lvl-grid{grid-template-columns:1fr;gap:14px}.lvl-tag{inset-inline-start:14px;transform:none}}
+.fw.soft{background:rgba(183,121,31,.08);border-color:rgba(183,121,31,.3);color:#8a5a12}
 .fw{display:flex;gap:7px;align-items:flex-start;margin-top:7px;background:rgba(var(--red-rgb),.08);border:1px solid rgba(var(--red-rgb),.24);border-radius:10px;padding:8px 10px;font-size:11.5px;font-weight:700;color:#8f3a29;line-height:1.5}
 .fw[hidden]{display:none}
 .fw .fw-ic{flex:none;font-size:13px;line-height:1.35}
@@ -858,6 +859,18 @@ function calc(){
   const noRoom=income>0&&running>=income*LIMIT_PC;
   const realMax=noRoom?0:(ownRun?solvedFlat(15):lim.max);
 
+  /* A big down payment is only a problem when it empties the safety net.
+     It also saves every shekel of interest, so present the trade-off with
+     both numbers instead of scolding. */
+  const reserveAfter=Math.max(0,assets-down);
+  const loanAtRule=Math.max(0,price-recDown), loanNow=Math.max(0,price-down);
+  const intSaved=(term>0)?Math.max(0,(pmt(loanAtRule,rate,term)-pmt(loanNow,rate,term))*term):0;
+  const thin=reserveAfter<assets/3;        /* less than a third of the capital left */
+  let wOver='<b>\u05d6\u05d0\u05ea \u05d1\u05d7\u05d9\u05e8\u05d4, \u05dc\u05d0 \u05d8\u05e2\u05d5\u05ea.</b> ';
+  wOver+= loanNow<=0 ? '\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d4\u05d2\u05d3\u05d5\u05dc\u05d4 \u05e4\u05d5\u05d8\u05e8\u05ea \u05d0\u05d5\u05ea\u05da \u05de\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05dc\u05d2\u05de\u05e8\u05d9, ' : (intSaved>=1 ? '\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d4\u05d2\u05d3\u05d5\u05dc\u05d4 \u05d7\u05d5\u05e1\u05db\u05ea \u05dc\u05da <b>'+ils(intSaved)+'</b> \u05e8\u05d9\u05d1\u05d9\u05ea, ' : '');
+  wOver+='\u05d0\u05d1\u05dc \u05de\u05e9\u05d0\u05d9\u05e8\u05d4 \u05d1\u05e6\u05d3 <b>'+ils(reserveAfter)+'</b> \u05d1\u05de\u05e7\u05d5\u05dd <b>'+ils(assets-recDown)+'</b> \u05e9\u05d4\u05db\u05dc\u05dc \u05de\u05de\u05dc\u05d9\u05e5 \u05e2\u05dc\u05d9\u05d4\u05dd. \u05d4\u05e9\u05d0\u05dc\u05d4 \u05d4\u05d9\u05d7\u05d9\u05d3\u05d4: \u05d4\u05e1\u05db\u05d5\u05dd \u05e9\u05e0\u05e9\u05d0\u05e8 \u05de\u05e1\u05e4\u05d9\u05e7 \u05dc\u05da \u05dc\u05ea\u05e7\u05dc\u05d4 \u05d1\u05dc\u05ea\u05d9 \u05e6\u05e4\u05d5\u05d9\u05d4?';
+  const wBad='<b>\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d4\u05d6\u05d0\u05ea \u05de\u05e8\u05d5\u05e7\u05e0\u05ea \u05d0\u05ea \u05e7\u05e8\u05df \u05d4\u05d1\u05d9\u05d8\u05d7\u05d5\u05df.</b> \u05d0\u05d7\u05e8\u05d9 \u05d4\u05e7\u05e0\u05d9\u05d9\u05d4 \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05dc\u05da <b>'+ils(reserveAfter)+'</b> \u05d1\u05dc\u05d1\u05d3. \u05d6\u05d4 \u05d4\u05de\u05e6\u05d1 \u05e9\u05d1\u05d5 \u05db\u05dc \u05ea\u05e7\u05dc\u05d4 \u05d4\u05d5\u05e4\u05db\u05ea \u05dc\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d7\u05d3\u05e9\u05d4, \u05d5\u05d1\u05d3\u05e8\u05da \u05db\u05dc\u05dc \u05d1\u05e8\u05d9\u05d1\u05d9\u05ea \u05d2\u05e8\u05d5\u05e2\u05d4 \u05de\u05d4\u05dc\u05d5\u05d5\u05d0\u05ea \u05e8\u05db\u05d1. \u05e2\u05d3\u05d9\u05e3 \u05dc\u05d4\u05e7\u05d8\u05d9\u05df \u05d0\u05ea \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d5\u05dc\u05e9\u05de\u05d5\u05e8 \u05e2\u05dc \u05d4\u05db\u05e8\u05d9\u05ea \u05d1\u05e6\u05d3.';
+
   /* ---------- 2. the three rules on the car she actually wants ---------- */
   const loanAmt=Math.max(0,price-down);
   const monthlyLoan=pmt(loanAmt,rate,term);
@@ -872,13 +885,14 @@ function calc(){
     {key:'אחוז מההכנסה',ok:income>0&&Math.round(totalMonthly)<=Math.round(income*LIMIT_PC),
      tier:income<=0?'no':(pcIncome<=10.05?'ok':(pcIncome<=15.05?'mid':'no')),ic:'📊',name:'אחוז מההכנסה שהרכב לוקח, כולל הכל',
      val:income>0?`העלות שלך: ${ils(totalMonthly)} = ${pcIncome.toFixed(1)}% מהנטו · מומלץ עד ${ils(income*REC_PC)}, הגבול ${ils(income*LIMIT_PC)}`:'צריך למלא את ההכנסה למעלה'}
-    ,{key:'מקדמה מתוך שליש מההון',ok:recDown>0&&Math.round(down)<=Math.round(recDown),ic:'🏦',name:'המקדמה באה משליש ההון, כולל הרכב הנוכחי',
+    ,{key:'מקדמה מתוך שליש מההון',ok:recDown>0&&(Math.round(down)<=Math.round(recDown)||!thin),ic:'🏦',name:'המקדמה באה משליש ההון, כולל הרכב הנוכחי',
      val:recDown<=0?'אין הון נזיל, אז אין מקדמה. צריך לחסוך קודם':`המקדמה שלך: ${ils(down)} · המקור המומלץ הוא ${ils(recDown)}`}
   ];
   /* the same rule, shown right under the field it is about */
   const wNoCap='<b>אין הון נזיל למקדמה.</b> לפני רכב צריך לחסוך. כדי שמקדמה של <b>'+ils(down)+'</b> תהיה שליש מההון, צריך להגיע להון נזיל של <b>'+ils(down*3)+'</b>. שני השלישים האחרים נשארים קרן ביטחון.';
-  const wOver='<b>המקדמה הזאת גדולה מדי.</b> המקור המומלץ למקדמה הוא שליש מההון ועוד הרכב הנוכחי, כלומר <b>'+ils(recDown)+'</b>, והמקדמה שרשומה היא <b>'+ils(down)+'</b>. הפרש של '+ils(down-recDown)+' יוצא מקרן הביטחון, ואז כל תקלה הופכת להלוואה חדשה. או מקטינים את המקדמה, או חוסכים עוד לפני הקנייה.';
-  warn('downWarn', down>0&&Math.round(down)>Math.round(recDown), recDown<=0?wNoCap:wOver);
+  const dwOn=down>0&&Math.round(down)>Math.round(recDown);
+  warn('downWarn', dwOn, recDown<=0?wNoCap:(thin?wBad:wOver));
+  document.getElementById('downWarn').classList.toggle('soft', dwOn&&recDown>0&&!thin);
   const RICON={ok:'✅',mid:'🟠',no:'🚩'};
   document.getElementById('rules').innerHTML=rules.map(r=>{
     const tr=r.tier||(r.ok?'ok':'no');

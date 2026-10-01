@@ -161,6 +161,8 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .lvl-max{margin-top:8px;padding:9px 6px;border-radius:11px;background:rgba(var(--pine-rgb),.10);text-align:center}
 .lvl.on .lvl-max{background:linear-gradient(135deg,var(--pine),var(--pine-deep));box-shadow:0 6px 16px rgba(var(--pine-rgb),.22)}
 .lvl-max span{display:block;font-size:10.5px;font-weight:800;color:var(--ink-soft)}
+.lvl-max b.nofit{font-size:14px;color:#8f3a29}
+.lvl.on .lvl-max b.nofit{color:#ffd9d1}
 .lvl-max b{display:block;font-size:clamp(15px,3.6vw,19px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;margin-top:1px}
 .lvl.on .lvl-max span{color:rgba(255,255,255,.85)} .lvl.on .lvl-max b{color:#fff}
 @media(max-width:560px){.lvl-grid{grid-template-columns:1fr;gap:14px}.lvl-tag{inset-inline-start:14px;transform:none}}
@@ -294,7 +296,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         </div>
         <div class="hintline" id="kmHint"></div>
       </div>
-      <div class="h-item field hidden" id="tradeinBox"><label for="tradein">שווי הרכב שלך היום (מה שתקבלי עליו)</label><div class="input-shell"><span class="unit">₪</span><input id="tradein" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
+      <div class="h-item field hidden" id="tradeinBox"><label for="tradein">שווי הרכב שלך היום, בניכוי הלוואה שעוד רשומה עליו</label><div class="input-shell"><span class="unit">₪</span><input id="tradein" type="text" inputmode="numeric" value="0" placeholder="0"></div></div>
     </div>
   </div>
 
@@ -309,7 +311,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row"><span>פחות אחזקה משוערת לרכב כזה</span><b id="r10">0</b></div>
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p10">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l10">0</b></div>
-        <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d10">0</b></div>
+        <div class="lvl-row"><span id="dl10">ועוד מקדמה</span><b id="d10">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m10">0</b></div>
       </div>
       <div class="lvl" id="lvl15">
@@ -318,7 +320,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row"><span>פחות אחזקה משוערת לרכב כזה</span><b id="r15">0</b></div>
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p15">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l15">0</b></div>
-        <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d15">0</b></div>
+        <div class="lvl-row"><span id="dl15">ועוד מקדמה</span><b id="d15">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m15">0</b></div>
       </div>
       <div class="lvl bad" id="lvl20">
@@ -327,7 +329,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row"><span>פחות אחזקה משוערת לרכב כזה</span><b id="r20">0</b></div>
         <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p20">0</b></div>
         <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l20">0</b></div>
-        <div class="lvl-row"><span>ועוד מקדמה מההון (שליש)</span><b id="d20">0</b></div>
+        <div class="lvl-row"><span id="dl20">ועוד מקדמה</span><b id="d20">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m20">0</b></div>
         <div class="lvl-bad">ברמה הזאת קשה לחסוך וקשה לסגור את החודש</div>
       </div>
@@ -738,6 +740,11 @@ function calc(){
     const upk=BASE+K*P;
     return {budget:B,upk:upk,toLoan:B-upk,loan:loan,max:P,capped:capped,fits:true};
   }
+  const NOFIT='\u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8';
+  const TAG_REC='\u05d4\u05d4\u05de\u05dc\u05e6\u05d4', TAG_BEST='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 \u05dc\u05d4\u05de\u05dc\u05e6\u05d4';
+  /* name the down payment after what it is actually made of */
+  const downLabel = (thirdCap>0&&tradein>0) ? '\u05d5\u05e2\u05d5\u05d3 \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05d5\u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9'
+    : (tradein>0 ? '\u05d5\u05e2\u05d5\u05d3 \u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9 \u05e9\u05dc\u05da' : '\u05d5\u05e2\u05d5\u05d3 \u05de\u05e7\u05d3\u05de\u05d4 \u05de\u05d4\u05d4\u05d5\u05df (\u05e9\u05dc\u05d9\u05e9)');
   [[10,'10'],[15,'15'],[20,'20']].forEach(([pc,sfx])=>{
     const c=ceiling(pc);
     document.getElementById('b'+sfx).textContent=ils(c.budget);
@@ -745,8 +752,29 @@ function calc(){
     document.getElementById('p'+sfx).textContent=ils(Math.max(0,c.toLoan));
     document.getElementById('l'+sfx).textContent=ils(c.loan);
     document.getElementById('d'+sfx).textContent=ils(recDown);
-    document.getElementById('m'+sfx).textContent=ils(c.max);
+    document.getElementById('dl'+sfx).textContent=downLabel;
+    const mEl=document.getElementById('m'+sfx);
+    if(income>0&&!c.fits){mEl.textContent=NOFIT;mEl.classList.add('nofit');}
+    else {mEl.textContent=ils(c.max);mEl.classList.remove('nofit');}
   });
+  /* the "recommendation" badge belongs on the cheapest level that actually
+     works. Leaving it on a column reading zero is how a 60,000 trade-in gets
+     told it can buy nothing. */
+  (function(){
+    const fits={'10':ceiling(10).fits,'15':ceiling(15).fits,'20':ceiling(20).fits};
+    const best=['10','15','20'].find(k=>fits[k])||null;
+    ['10','15','20'].forEach(k=>{
+      const el=document.getElementById('lvl'+k);
+      el.classList.toggle('on',k===best);
+      const tag=el.querySelector&&el.querySelector('.lvl-tag');
+      if(tag){tag.textContent=(k==='10')?TAG_REC:TAG_BEST;tag.style.display=(k===best)?'':'none';}
+    });
+    const bestEl=best?document.getElementById('lvl'+best):null;
+    if(bestEl&&bestEl.querySelector&&!bestEl.querySelector('.lvl-tag')){
+      const d=document.createElement('div');d.className='lvl-tag';d.textContent=TAG_BEST;
+      bestEl.insertBefore(d,bestEl.firstChild);
+    }
+  })();
   /* 10% is the recommendation, 15% is still acceptable and is the hard limit */
   const REC_PC=0.10, LIMIT_PC=0.15;
   const rec=ceiling(10), recMax=rec.max, recMo=rec.budget;
@@ -776,10 +804,16 @@ function calc(){
   }
 
   /* the ceiling for THIS car's actual upkeep (identical to rec when estimated) */
+  /* the recommendation already carries the modelled upkeep, so there is no gap
+     to explain - except when she overrode the numbers by hand. */
+  function solvedFlat(pc){            /* upkeep fixed by hand: solve directly */
+    const B=income*pc/100, room=B-running;
+    if(income<=0||room<=0) return 0;
+    return Math.min(recDown+maxLoan(room,rateCap,Math.min(term>0?term:RECTERM,RECTERM)),recDown*4);
+  }
+  const recMaxReal=ownRun?solvedFlat(10):rec.max;
   const noRoom=income>0&&running>=income*LIMIT_PC;
-  const realMax=noRoom?0:Math.max(0,Math.min((income*LIMIT_PC-running)>0
-        ? recDown+maxLoan(income*LIMIT_PC-running,rateCap,Math.min(term>0?term:RECTERM,RECTERM))
-        : recDown, recDown*4));
+  const realMax=noRoom?0:(ownRun?solvedFlat(15):lim.max);
 
   /* ---------- 2. the three rules on the car she actually wants ---------- */
   const loanAmt=Math.max(0,price-down);
@@ -850,7 +884,12 @@ function calc(){
     let o='<h4>\u05d0\u05d6 \u05de\u05d4 \u05e2\u05d5\u05e9\u05d9\u05dd \u05e2\u05db\u05e9\u05d9\u05d5?</h4>';
     const onlyDownTooBig=rules.filter(r=>!r.ok).length===1&&!rules[3].ok&&down>recDown&&price<=realMax;
     if(onlyDownTooBig) o+='<div class="plan-opt"><span class="po-ic">\u2728</span><div>\u05e4\u05e9\u05d5\u05d8 \u05dc\u05d4\u05e7\u05d8\u05d9\u05df \u05d0\u05ea \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05dc-<b>'+ils(recDown)+'</b> \u05d5\u05dc\u05d4\u05e9\u05d0\u05d9\u05e8 \u05d0\u05ea \u05d4\u05d4\u05e4\u05e8\u05e9 \u05d1\u05e7\u05e8\u05df \u05d4\u05d1\u05d9\u05d8\u05d7\u05d5\u05df. \u05e2\u05dd \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d4\u05d6\u05d0\u05ea \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4 \u05e2\u05d5\u05d1\u05e8 \u05d0\u05ea \u05db\u05dc \u05d4\u05db\u05dc\u05dc\u05d9\u05dd.</div></div>';
-    if(realMax>0) o+='<div class="plan-opt"><span class="po-ic">\u2705</span><div>\u05dc\u05d1\u05d7\u05d5\u05e8 \u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+ils(realMax)+'</b> \u05d5\u05dc\u05e7\u05e0\u05d5\u05ea \u05db\u05d1\u05e8 \u05e2\u05db\u05e9\u05d9\u05d5, \u05d1\u05dc\u05d9 \u05dc\u05d7\u05db\u05d5\u05ea.</div></div>';
+    /* lead with the recommended ceiling; the 15% limit is only 'still acceptable' */
+    if(recMaxReal>0){
+      let s1='\u05dc\u05d1\u05d7\u05d5\u05e8 \u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+(recMaxReal>0?ils(recMaxReal):NOFIT)+'</b> \u05d5\u05dc\u05e7\u05e0\u05d5\u05ea \u05db\u05d1\u05e8 \u05e2\u05db\u05e9\u05d9\u05d5, \u05d1\u05dc\u05d9 \u05dc\u05d7\u05db\u05d5\u05ea. \u05d6\u05d4 \u05d1\u05ea\u05d5\u05da \u05d4\u05d4\u05de\u05dc\u05e6\u05d4.';
+      if(realMax>recMaxReal+500) s1+=' \u05e2\u05d3 <b>'+ils(realMax)+'</b> \u05d6\u05d4 \u05e2\u05d3\u05d9\u05d9\u05df \u05e1\u05d1\u05d9\u05e8, \u05d0\u05d1\u05dc \u05db\u05d1\u05e8 \u05de\u05e2\u05dc \u05de\u05d4 \u05e9\u05d0\u05e0\u05d9 \u05de\u05de\u05dc\u05d9\u05e6\u05d4.';
+      o+='<div class="plan-opt"><span class="po-ic">\u2705</span><div>'+s1+'</div></div>';
+    } else if(realMax>0) o+='<div class="plan-opt"><span class="po-ic">\u2705</span><div>\u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05e9\u05d5\u05dd \u05e8\u05db\u05d1 \u05dc\u05d0 \u05e0\u05db\u05e0\u05e1, \u05d0\u05d1\u05dc \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 \u05d0\u05e4\u05e9\u05e8 \u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+ils(realMax)+'</b>.</div></div>';
     if(gap>0&&needDown<=price*0.6) o+='<div class="plan-opt"><span class="po-ic">\u{1F4B0}</span><div>\u05dc\u05d4\u05d9\u05e9\u05d0\u05e8 \u05e2\u05dd \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4 \u05d5\u05dc\u05d4\u05d2\u05d3\u05d9\u05dc \u05d0\u05ea \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05dc-<b>'+ils(needDown)+'</b>, \u05db\u05dc\u05d5\u05de\u05e8 \u05e2\u05d5\u05d3 <b>'+ils(gap)+'</b> \u05de\u05e2\u05d1\u05e8 \u05dc\u05de\u05d4 \u05e9\u05ea\u05db\u05e0\u05e0\u05ea.</div></div>';
     if(gap>0&&needDown<=price*0.6&&months>0&&months<=120) o+='<div class="plan-opt"><span class="po-ic">\u{1F4C5}</span><div>\u05dc\u05d7\u05e1\u05d5\u05da \u05d0\u05ea \u05d4\u05d4\u05e4\u05e8\u05e9 \u05d4\u05d6\u05d4 \u05dc\u05e4\u05e0\u05d9 \u05d4\u05e7\u05e0\u05d9\u05d9\u05d4. \u05d0\u05dd \u05ea\u05e9\u05d9\u05de\u05d9 \u05d1\u05e6\u05d3 \u05d0\u05ea <b>'+ils(save)+'</b> \u05e9\u05ea\u05db\u05e0\u05e0\u05ea \u05dc\u05d4\u05d5\u05e6\u05d9\u05d0 \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d1\u05db\u05dc \u05d7\u05d5\u05d3\u05e9, \u05d6\u05d4 \u05d9\u05d9\u05e7\u05d7 <b>'+months+(months===1?' \u05d7\u05d5\u05d3\u05e9':' \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd')+'</b>. \u05d5\u05d1\u05d3\u05e8\u05da \u05de\u05ea\u05d1\u05e8\u05e8 \u05d0\u05dd \u05d1\u05d0\u05de\u05ea \u05d0\u05e4\u05e9\u05e8 \u05dc\u05e2\u05de\u05d5\u05d3 \u05d1\u05e1\u05db\u05d5\u05dd \u05d4\u05d6\u05d4 \u05db\u05dc \u05d7\u05d5\u05d3\u05e9.</div></div>';
     o+='<div class="plan-opt"><span class="po-ic">\u26d4</span><div>\u05dc\u05e4\u05e8\u05d5\u05e1 \u05dc\u05d9\u05d5\u05ea\u05e8 \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd \u05d6\u05d4 <b>\u05dc\u05d0</b> \u05e4\u05ea\u05e8\u05d5\u05df \u05db\u05d0\u05df. \u05d6\u05d4 \u05de\u05d5\u05e8\u05d9\u05d3 \u05d0\u05ea \u05d4\u05d4\u05d7\u05d6\u05e8 \u05d0\u05d1\u05dc \u05de\u05d2\u05d3\u05d9\u05dc \u05d0\u05ea \u05d4\u05e8\u05d9\u05d1\u05d9\u05ea, \u05d5\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d0 \u05de\u05e9\u05ea\u05e0\u05d4 \u05d1\u05db\u05dc\u05dc.</div></div>';
@@ -858,14 +897,12 @@ function calc(){
   } else pb2.hidden=true;
 
   const cn=document.getElementById('capNote');
-  if(noRoom){
+  if(income>0&&ownRun&&Math.abs(recMaxReal-recMax)>500){
     cn.hidden=false;
-    cn.innerHTML='\u26a0\ufe0f \u05d4\u05d4\u05d5\u05e6\u05d0\u05d5\u05ea \u05d4\u05e9\u05d5\u05d8\u05e4\u05d5\u05ea \u05e9\u05d4\u05d6\u05e0\u05ea (<b>'+ils(running)+'</b>) \u05d4\u05df \u05dc\u05d1\u05d3\u05df <b>'+(running/income*100).toFixed(1)+'%</b> \u05de\u05d4\u05e0\u05d8\u05d5, \u05de\u05e2\u05dc \u05d4\u05d2\u05d1\u05d5\u05dc \u05e9\u05dc 15%. \u05d6\u05d4 \u05d0\u05d5\u05de\u05e8 \u05e9\u05d4\u05d1\u05e2\u05d9\u05d4 \u05d4\u05d9\u05d0 \u05dc\u05d0 \u05d4\u05de\u05d9\u05de\u05d5\u05df \u05d0\u05dc\u05d0 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4. \u05e8\u05db\u05d1 \u05e7\u05d8\u05df \u05d5\u05d7\u05e1\u05db\u05d5\u05e0\u05d9 \u05d9\u05d5\u05ea\u05e8 \u05de\u05d5\u05e8\u05d9\u05d3 \u05d2\u05dd \u05d3\u05dc\u05e7 \u05d5\u05d2\u05dd \u05d1\u05d9\u05d8\u05d5\u05d7, \u05d5\u05d6\u05d5 \u05d4\u05d3\u05e8\u05da \u05d4\u05d9\u05d7\u05d9\u05d3\u05d4 \u05e9\u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d9\u05e1\u05ea\u05d3\u05e8\u05d5 \u05db\u05d0\u05df.';
-  } else if(income>0&&Math.abs(realMax-recMax)>500){
-    cn.hidden=false;
-    cn.innerHTML=(realMax<recMax
-      ? '\u05d4\u05d4\u05de\u05dc\u05e6\u05d4 \u05dc\u05de\u05e2\u05dc\u05d4 \u05de\u05e0\u05d9\u05d7\u05d4 \u05e9\u05d4\u05e9\u05d5\u05d8\u05e3 \u05d4\u05d5\u05d0 <b>'+ils(rec.toLoan)+'</b> (\u05d7\u05e6\u05d9 \u05de\u05d4\u05ea\u05e7\u05e6\u05d9\u05d1), \u05d0\u05d1\u05dc \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4 \u05d4\u05d6\u05e0\u05ea <b>'+ils(running)+'</b>. \u05db\u05e9\u05de\u05d7\u05e9\u05d1\u05d9\u05dd \u05e2\u05dd \u05d4\u05e9\u05d5\u05d8\u05e3 \u05d4\u05d0\u05de\u05d9\u05ea\u05d9 \u05e9\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d4, \u05d4\u05ea\u05e7\u05e8\u05d4 \u05d9\u05d5\u05e8\u05d3\u05ea \u05de-<b>'+ils(recMax)+'</b> \u05dc-<b>'+ils(realMax)+'</b>. \u05d6\u05d4 \u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05e7\u05d5\u05d1\u05e2.'
-      : '\u05d4\u05e9\u05d5\u05d8\u05e3 \u05e9\u05d4\u05d6\u05e0\u05ea (<b>'+ils(running)+'</b>) \u05e0\u05de\u05d5\u05da \u05de\u05d7\u05e6\u05d9 \u05d4\u05ea\u05e7\u05e6\u05d9\u05d1, \u05d0\u05d6 \u05d1\u05e4\u05d5\u05e2\u05dc \u05e0\u05e9\u05d0\u05e8 \u05dc\u05da \u05d9\u05d5\u05ea\u05e8 \u05dc\u05d4\u05d7\u05d6\u05e8 \u05d5\u05d4\u05ea\u05e7\u05e8\u05d4 \u05e2\u05d5\u05dc\u05d4 \u05dc-<b>'+ils(realMax)+'</b>.');
+    if(recMaxReal<=0) cn.innerHTML='\u26a0\ufe0f \u05e2\u05dd \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05e9\u05d4\u05d6\u05e0\u05ea \u05d9\u05d3\u05e0\u05d9\u05ea (<b>'+ils(running)+'</b>) \u05e9\u05d5\u05dd \u05e8\u05db\u05d1 \u05dc\u05d0 \u05e0\u05db\u05e0\u05e1 \u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea, \u05db\u05d9 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05d4\u05ea\u05e7\u05e6\u05d9\u05d1 \u05e9\u05dc 10%.';
+    else cn.innerHTML=(recMaxReal<recMax
+      ? '\u26a0\ufe0f \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05e9\u05d4\u05d6\u05e0\u05ea \u05d9\u05d3\u05e0\u05d9\u05ea (<b>'+ils(running)+'</b>) \u05d2\u05d1\u05d5\u05d4\u05d4 \u05de\u05d4\u05d4\u05e2\u05e8\u05db\u05d4 \u05e9\u05dc \u05d4\u05db\u05dc\u05d9, \u05d0\u05d6 \u05d4\u05ea\u05e7\u05e8\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05d9\u05d5\u05e8\u05d3\u05ea \u05de-<b>'+ils(recMax)+'</b> \u05dc-<b>'+(recMaxReal>0?ils(recMaxReal):NOFIT)+'</b>. \u05d6\u05d4 \u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05e7\u05d5\u05d1\u05e2, \u05db\u05d9 \u05d4\u05d5\u05d0 \u05de\u05d1\u05d5\u05e1\u05e1 \u05e2\u05dc \u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d4\u05d0\u05de\u05d9\u05ea\u05d9\u05d9\u05dd \u05e9\u05dc\u05da.'
+      : '\u2705 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05e9\u05d4\u05d6\u05e0\u05ea \u05d9\u05d3\u05e0\u05d9\u05ea (<b>'+ils(running)+'</b>) \u05e0\u05de\u05d5\u05db\u05d4 \u05de\u05d4\u05d4\u05e2\u05e8\u05db\u05d4 \u05e9\u05dc \u05d4\u05db\u05dc\u05d9, \u05d0\u05d6 \u05d4\u05ea\u05e7\u05e8\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05e2\u05d5\u05dc\u05d4 \u05de-<b>'+ils(recMax)+'</b> \u05dc-<b>'+(recMaxReal>0?ils(recMaxReal):NOFIT)+'</b>. \u05d6\u05d4 \u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05e7\u05d5\u05d1\u05e2, \u05db\u05d9 \u05d4\u05d5\u05d0 \u05de\u05d1\u05d5\u05e1\u05e1 \u05e2\u05dc \u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d4\u05d0\u05de\u05d9\u05ea\u05d9\u05d9\u05dd \u05e9\u05dc\u05da.');
   } else cn.hidden=true;
 
   /* ---------- 3. depreciation ---------- */

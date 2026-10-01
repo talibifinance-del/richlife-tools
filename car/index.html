@@ -161,7 +161,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .lvl-max{margin-top:8px;padding:9px 6px;border-radius:11px;background:rgba(var(--pine-rgb),.10);text-align:center}
 .lvl.on .lvl-max{background:linear-gradient(135deg,var(--pine),var(--pine-deep));box-shadow:0 6px 16px rgba(var(--pine-rgb),.22)}
 .lvl-max span{display:block;font-size:10.5px;font-weight:800;color:var(--ink-soft)}
-.lvl-max b.nofit{font-size:14px;color:#8f3a29}
+.lvl-max b.nofit{font-size:12.5px;line-height:1.35;color:#8f3a29}
 .lvl.on .lvl-max b.nofit{color:#ffd9d1}
 .lvl-max b{display:block;font-size:clamp(15px,3.6vw,19px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;margin-top:1px}
 .lvl.on .lvl-max span{color:rgba(255,255,255,.85)} .lvl.on .lvl-max b{color:#fff}
@@ -185,7 +185,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tile.main.tier-over{background:linear-gradient(140deg,#c1553f,#97402e 85%);box-shadow:0 8px 20px rgba(var(--red-rgb),.26)}
 .vs-side.plan-side.mid{background:rgba(183,121,31,.09);border-color:rgba(183,121,31,.38)}
 .vs-side.plan-side.mid .vs-n{color:#a06a16}
-.vs-n.nofit{font-size:16px;color:#8f3a29}
+.vs-n.nofit{font-size:14px;line-height:1.35;color:#8f3a29}
 .tile .t-l{font-size:11.5px;font-weight:800;color:var(--ink-soft)}
 .tile .t-v{font-size:clamp(15px,3.8vw,19px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
 .tile .t-s{font-size:10.5px;font-weight:700;color:var(--ink-soft);line-height:1.4}
@@ -755,7 +755,7 @@ function calc(){
   }
   const MO_SUFFIX=' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
   const NEAR_SUFFIX=' \u00b7 \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4, \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8\u05ea';
-  const NOFIT='\u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8';
+  const NOFIT='\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05d7\u05d5\u05e8\u05d2\u05ea';
   const TAG_REC='\u05d4\u05d4\u05de\u05dc\u05e6\u05d4', TAG_BEST='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 \u05dc\u05d4\u05de\u05dc\u05e6\u05d4';
   /* name the down payment after what it is actually made of */
   const downLabel = tradein>0 ? '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05db\u05d5\u05dc\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9' : '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05d4\u05e0\u05d6\u05d9\u05dc';
@@ -801,6 +801,13 @@ function calc(){
      difference comes back as cash. For a household with no capital, that
      leftover IS the emergency fund, so it must be said out loud. */
   /* the two thirds that stay out of the car are the whole point of the rule */
+  /* "no car fits" must never be heard as "you cannot buy a car". Buying
+     outright is always on the table; say what it costs to run. */
+  function cashOnly(){
+    if(recDown<=500||income<=0) return '';
+    const upk=BASE+K*recDown, pc=upk/income*100;
+    return '  \u05d5\u05db\u05df, \u05d0\u05e4\u05e9\u05e8 \u05dc\u05e7\u05e0\u05d5\u05ea <b>\u05d1\u05de\u05d6\u05d5\u05de\u05df \u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d1\u05db\u05dc\u05dc</b>: \u05e2\u05dd \u05d4-'+ils(recDown)+' \u05e9\u05e2\u05d5\u05de\u05d3\u05d9\u05dd \u05dc\u05de\u05e7\u05d3\u05de\u05d4, \u05e8\u05db\u05d1 \u05db\u05d6\u05d4 \u05d9\u05e2\u05dc\u05d4 \u05d1\u05d0\u05d7\u05d6\u05e7\u05d4 \u05d1\u05e2\u05e8\u05da <b>'+ils(upk)+'</b> \u05d1\u05d7\u05d5\u05d3\u05e9, \u05e9\u05d6\u05d4 <b>'+pc.toFixed(1)+'%</b> \u05de\u05d4\u05e0\u05d8\u05d5. \u05d6\u05d4 \u05dc\u05d0 \u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea, \u05d0\u05d1\u05dc \u05d6\u05d5 \u05d1\u05d4\u05d7\u05dc\u05d8 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05d5\u05d4\u05d9\u05d0 \u05e4\u05d5\u05d8\u05e8\u05ea \u05d0\u05d5\u05ea\u05da \u05de\u05e8\u05d9\u05d1\u05d9\u05ea \u05dc\u05d2\u05de\u05e8\u05d9.';
+  }
   function cashBack(maxP){
     const keep=Math.max(0,assets-Math.min(maxP,recDown));
     if(keep<=500) return '';
@@ -815,8 +822,8 @@ function calc(){
     if(recDown<=0) ci.innerHTML='\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05e0\u05d6\u05d9\u05dc \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1 \u05dc\u05d4\u05d7\u05dc\u05d9\u05e3, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df, \u05d0\u05d6 \u05db\u05e8\u05d2\u05e2 <b>\u05d0\u05d9\u05df \u05de\u05e7\u05d3\u05de\u05d4</b>. \u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05d4\u05d3\u05e8\u05da, \u05d6\u05d4 \u05d4\u05e9\u05dc\u05d1 \u05e9\u05dc\u05e4\u05e0\u05d9: \u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc \u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05dc\u05de\u05e7\u05d3\u05de\u05d4.';
     else if(!rec.fits){
       let t2='\u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea (10% \u05de\u05d4\u05e0\u05d8\u05d5, <b>'+ils(rec.budget)+'</b>) \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05db\u05d1\u05e8 \u05e2\u05d5\u05dc\u05d4 \u05d9\u05d5\u05ea\u05e8, \u05d2\u05dd \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05d1\u05d9\u05d5\u05ea\u05e8.';
-      if(lim.fits&&lim.max>0) t2+=' \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 (15%) \u05db\u05df \u05de\u05e1\u05ea\u05d3\u05e8 <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(lim.max)+'</b>, \u05d0\u05d1\u05dc \u05d6\u05d4 \u05db\u05d1\u05e8 \u05de\u05e2\u05dc \u05de\u05d4 \u05e9\u05d0\u05e0\u05d9 \u05de\u05de\u05dc\u05d9\u05e6\u05d4.'+cashBack(lim.max);
-      else t2+=' \u05d6\u05d4 \u05d0\u05d5\u05de\u05e8 \u05e9\u05db\u05e8\u05d2\u05e2 \u05e8\u05db\u05d1 \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8, \u05d5\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05de\u05d9\u05de\u05d5\u05df \u05d0\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4. \u05e4\u05d7\u05d5\u05ea \u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05d0\u05d5 \u05d4\u05db\u05e0\u05e1\u05d4 \u05d2\u05d1\u05d5\u05d4\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05d9\u05e9\u05e0\u05d5 \u05d0\u05ea \u05d6\u05d4.';
+      if(lim.fits&&lim.max>0) t2+=' \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 (15%) \u05db\u05df \u05de\u05e1\u05ea\u05d3\u05e8 <b>\u05e8\u05db\u05d1 \u05e2\u05d3 '+ils(lim.max)+'</b>, \u05d0\u05d1\u05dc \u05d6\u05d4 \u05db\u05d1\u05e8 \u05de\u05e2\u05dc \u05de\u05d4 \u05e9\u05d0\u05e0\u05d9 \u05de\u05de\u05dc\u05d9\u05e6\u05d4.'+cashOnly()+cashBack(lim.max);
+      else t2+=' \u05d6\u05d4 \u05d0\u05d5\u05de\u05e8 \u05e9\u05db\u05e8\u05d2\u05e2 \u05e8\u05db\u05d1 \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8, \u05d5\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05de\u05d9\u05de\u05d5\u05df \u05d0\u05dc\u05d0 \u05d1\u05d2\u05dc\u05dc \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4. \u05e4\u05d7\u05d5\u05ea \u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05d0\u05d5 \u05d4\u05db\u05e0\u05e1\u05d4 \u05d2\u05d1\u05d5\u05d4\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05d9\u05e9\u05e0\u05d5 \u05d0\u05ea \u05d6\u05d4.'+cashOnly();
       ci.innerHTML=t2;
     }
     else{

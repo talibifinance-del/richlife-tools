@@ -859,8 +859,8 @@ function calc(){
      works. Leaving it on a column reading zero is how a 60,000 trade-in gets
      told it can buy nothing. */
   (function(){
-    const fits={'10':ceiling(10).fits,'15':ceiling(15).fits,'20':ceiling(20).fits};
-    const best=['10','15','20'].find(k=>fits[k])||null;
+    const fits={'10':ceiling(10).fits,'15':ceiling(15).fits};
+    const best=['10','15'].find(k=>fits[k])||null;   /* never 20%: Tali calls it לא תקין */
     ['10','15','20'].forEach(k=>{
       const el=document.getElementById('lvl'+k);
       el.classList.toggle('on',k===best);
@@ -892,10 +892,14 @@ function calc(){
     if(capital<=0&&tradein>0) s+=li('\u26a0\ufe0f','\u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9 \u05d4\u05d5\u05d0 \u05db\u05dc \u05d4\u05d4\u05d5\u05df \u05e9\u05dc\u05da. \u05d0\u05dd \u05db\u05d5\u05dc\u05d5 \u05e0\u05db\u05e0\u05e1 \u05dc\u05e8\u05db\u05d1 \u05d4\u05d1\u05d0, \u05ea\u05d9\u05e9\u05d0\u05e8\u05d9 \u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05d1\u05e6\u05d3');
     return s;
   }
+  /* buying outright is a route of its own, not a consolation - but it only
+     fixes the interest, never the running cost, so colour it by the truth. */
   function cashLine(){
     if(recDown<=500||income<=0) return '';
     const upk=BASE+K*recDown, pc=upk/income*100;
-    return li('\u{1F4B5}','\u05d0\u05e4\u05e9\u05e8 \u05d2\u05dd <b>\u05d1\u05de\u05d6\u05d5\u05de\u05df \u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4</b>: \u05e8\u05db\u05d1 \u05d1-'+ils(recDown)+', \u05d0\u05d7\u05d6\u05e7\u05d4 '+ils(upk)+' \u05d1\u05d7\u05d5\u05d3\u05e9 ('+pc.toFixed(1)+'% \u05de\u05d4\u05e0\u05d8\u05d5). \u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05e9\u05dc \u05e8\u05d9\u05d1\u05d9\u05ea');
+    const ic = pc<=10.05?'\u{1F7E2}':(pc<=15.05?'\u{1F7E0}':'\u{1F534}');
+    const tail = pc<=10.05?'\u05d6\u05d5 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05de\u05e6\u05d5\u05d9\u05e0\u05ea: \u05d1\u05ea\u05d5\u05da \u05d4\u05d4\u05de\u05dc\u05e6\u05d4 \u05d5\u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05e9\u05dc \u05e8\u05d9\u05d1\u05d9\u05ea.':(pc<=15.05?'\u05d6\u05d5 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05e1\u05d1\u05d9\u05e8\u05d4, \u05d5\u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05e9\u05dc \u05e8\u05d9\u05d1\u05d9\u05ea.':'\u05d0\u05d1\u05dc \u05d6\u05d4 <b>\u05dc\u05d0 \u05e4\u05d5\u05ea\u05e8</b> \u05d0\u05ea \u05d4\u05d1\u05e2\u05d9\u05d4: \u05d2\u05dd \u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05e9\u05dc \u05e8\u05d9\u05d1\u05d9\u05ea, \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05de\u05e2\u05dc \u05d4\u05d2\u05d1\u05d5\u05dc \u05e9\u05dc 15%.');
+    return li(ic,'\u05dc\u05e7\u05e0\u05d5\u05ea <b>\u05d1\u05de\u05d6\u05d5\u05de\u05df, \u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d1\u05db\u05dc\u05dc</b>: \u05e8\u05db\u05d1 \u05d1-'+ils(recDown)+', \u05d5\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 '+ils(upk)+' \u05d1\u05d7\u05d5\u05d3\u05e9 ('+pc.toFixed(1)+'% \u05de\u05d4\u05e0\u05d8\u05d5). '+tail);
   }
   const ci=document.getElementById('capIns');
   if(income<=0){ci.style.display='none';}
@@ -915,6 +919,7 @@ function calc(){
         ? li('\u{1F3E6}','\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 <b>'+ils(rec.loan)+'</b> \u05d1\u05d4\u05d7\u05d6\u05e8 \u05e9\u05dc '+ils(rec.toLoan)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05d5\u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05dc '+ils(Math.min(recMax,recDown)))
         : li('\u{1F4B5}','<b>\u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d1\u05db\u05dc\u05dc</b> - \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05de\u05dc\u05d0\u05d4 \u05d0\u05ea \u05db\u05dc \u05d4\u05ea\u05e7\u05e6\u05d9\u05d1, \u05d0\u05d6 \u05d4\u05e8\u05db\u05d1 \u05e0\u05e7\u05e0\u05d4 \u05d1\u05de\u05d6\u05d5\u05de\u05df');
       if(rec.capped) out+=li('\u26a0\ufe0f','\u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd \u05db\u05d0\u05df: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05de\u05e0\u05d4');
+      if(rec.loan>0) out+=cashLine();   /* a loan is never mandatory */
       out+=keepLine(recMax);
     }
     ci.innerHTML='<ul class="pts">'+out+'</ul>';

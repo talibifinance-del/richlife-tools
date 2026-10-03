@@ -830,6 +830,7 @@ function calc(){
     return {budget:B,upk:upk,toLoan:B-upk,loan:loan,max:P,capped:capped,fits:true};
   }
   const H_REC='\u05d4\u05de\u05d5\u05de\u05dc\u05e5 (10%)', H_NEAR='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 (15%)';
+  const MINUP1='\u05d4\u05db\u05d9 \u05e0\u05de\u05d5\u05da \u05e9\u05d0\u05e4\u05e9\u05e8: ', MINUP2='% \u05de\u05d4\u05e0\u05d8\u05d5, \u05d1\u05de\u05d6\u05d5\u05de\u05df \u05d5\u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4';
   const MO_SUFFIX=' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
   const NEAR_SUFFIX=' \u00b7 \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4, \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8\u05ea';
   const RUN_LBL='\u05e4\u05d7\u05d5\u05ea \u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05e9\u05d5\u05e2\u05e8\u05ea \u05dc\u05e8\u05db\u05d1 \u05db\u05d6\u05d4';
@@ -871,19 +872,12 @@ function calc(){
      works. Leaving it on a column reading zero is how a 60,000 trade-in gets
      told it can buy nothing. */
   (function(){
-    const fits={'10':ceiling(10).fits,'15':ceiling(15).fits};
-    const best=['10','15'].find(k=>fits[k])||null;   /* never 20%: Tali calls it לא תקין */
     ['10','15','20'].forEach(k=>{
       const el=document.getElementById('lvl'+k);
-      el.classList.toggle('on',k===best);
+      el.classList.toggle('on',k==='10');          /* the badge never moves */
       const tag=el.querySelector&&el.querySelector('.lvl-tag');
-      if(tag){tag.textContent=(k==='10')?TAG_REC:TAG_BEST;tag.style.display=(k===best)?'':'none';}
+      if(tag){tag.textContent=TAG_REC;tag.style.display=(k==='10')?'':'none';}
     });
-    const bestEl=best?document.getElementById('lvl'+best):null;
-    if(bestEl&&bestEl.querySelector&&!bestEl.querySelector('.lvl-tag')){
-      const d=document.createElement('div');d.className='lvl-tag';d.textContent=TAG_BEST;
-      bestEl.insertBefore(d,bestEl.firstChild);
-    }
   })();
   /* 10% is the recommendation, 15% is still acceptable and is the hard limit */
   const REC_PC=0.10, LIMIT_PC=0.15;
@@ -923,11 +917,15 @@ function calc(){
     } else if(!rec.fits){
       out=li('\u{1F534}','\u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea (10%, '+ils(rec.budget)+') \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05db\u05d1\u05e8 \u05e2\u05d5\u05dc\u05d4 \u05d9\u05d5\u05ea\u05e8');
       if(!lim.fits||lim.max<=0) out=li('\u{1F6D1}','<b>\u05d1\u05d4\u05ea\u05d0\u05dd \u05dc\u05e0\u05ea\u05d5\u05e0\u05d9\u05dd \u05e9\u05dc\u05da, \u05dc\u05d0 \u05de\u05d5\u05de\u05dc\u05e5 \u05dc\u05e7\u05e0\u05d5\u05ea \u05e8\u05db\u05d1 \u05db\u05e8\u05d2\u05e2.</b>')+out;
+      if(recDown>500&&(BASE+K*recDown)/income*100<=15.05)
+        out+=li('\u{1F3AF}','\u05d4\u05db\u05d9 \u05e0\u05de\u05d5\u05da \u05e9\u05d0\u05e4\u05e9\u05e8 \u05dc\u05d4\u05d2\u05d9\u05e2 \u05d0\u05dc\u05d9\u05d5 \u05d4\u05d5\u05d0 <b>'+((BASE+K*recDown)/income*100).toFixed(1)+'% \u05de\u05d4\u05e0\u05d8\u05d5</b>, \u05e2\u05dd \u05e8\u05db\u05d1 \u05d1-<b>'+ils(recDown)+'</b> \u05d1\u05de\u05d6\u05d5\u05de\u05df. \u05db\u05dc \u05e9\u05e7\u05dc \u05e9\u05ea\u05e8\u05d3\u05d9 \u05de\u05de\u05d7\u05d9\u05e8 \u05d4\u05e8\u05db\u05d1 \u05de\u05e7\u05e8\u05d1 \u05d0\u05d5\u05ea\u05da \u05dc-10%.');
+      else
       out+=(lim.fits&&lim.max>0)?li('\u{1F7E0}','\u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 (15%): \u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+ils(lim.max)+'</b>'):li('\u26a0\ufe0f','\u05d2\u05dd \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 \u05e8\u05db\u05d1 \u05dc\u05d0 \u05e0\u05db\u05e0\u05e1. \u05e4\u05d7\u05d5\u05ea \u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05d0\u05d5 \u05d4\u05db\u05e0\u05e1\u05d4 \u05d2\u05d1\u05d5\u05d4\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05d9\u05e9\u05e0\u05d5 \u05d0\u05ea \u05d6\u05d4');
       let saidCash=false;
+      if(recDown>500&&income>0&&(BASE+K*recDown)/income*100<=15.05) saidCash=true;
       if(!rec.fits&&lim.fits&&lim.max>0&&recDown>500){
         const cu=BASE+K*recDown, cp=cu/income*100;
-        if(cp<14.9){saidCash=true;} if(cp<14.9) out+=li('\u{1F4A1}','\u05d4\u05e9\u05d0\u05dc\u05d4 \u05d4\u05d0\u05de\u05d9\u05ea\u05d9\u05ea: <b>\u05e8\u05db\u05d1 \u05d6\u05d5\u05dc \u05d1-'+ils(recDown)+' \u05e9\u05d9\u05d1\u05d9\u05d0 \u05d0\u05d5\u05ea\u05da \u05dc-'+cp.toFixed(1)+'%</b>, \u05d0\u05d5 <b>\u05e8\u05db\u05d1 \u05d1-'+ils(lim.max)+' \u05e9\u05d9\u05d1\u05d9\u05d0 \u05d0\u05d5\u05ea\u05da \u05dc-15%</b>? \u05d4\u05e4\u05e2\u05e8 \u05d1\u05d9\u05e0\u05d9\u05d4\u05dd \u05d4\u05d5\u05d0 '+ils(lim.budget-cu)+' \u05d1\u05d7\u05d5\u05d3\u05e9 \u05e9\u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05d0\u05e6\u05dc\u05da. \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05e2\u05d3\u05d9\u05e3.');
+        if(cp<14.9) out+=li('\u{1F4A1}','\u05d5\u05dc\u05e7\u05e0\u05d5\u05ea \u05d1-<b>'+ils(lim.max)+'</b> \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4? \u05d6\u05d4 \u05de\u05d2\u05d9\u05e2 \u05dc-15% \u05de\u05d4\u05e0\u05d8\u05d5, \u05db\u05dc\u05d5\u05de\u05e8 <b>'+ils(lim.budget-cu)+'</b> \u05d1\u05d7\u05d5\u05d3\u05e9 \u05e4\u05d7\u05d5\u05ea \u05e9\u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05d0\u05e6\u05dc\u05da. \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05e2\u05d3\u05d9\u05e3.');
       }
       out+=(saidCash?'':cashLine())+keepLine(lim.fits?lim.max:recDown);
     } else {
@@ -1032,10 +1030,12 @@ function calc(){
   /* when the recommended level does not fit, show the nearest one that does */
   const vrc=document.getElementById('vsRecCar'), vrm=document.getElementById('vsRecMo');
   const vrh=document.getElementById('vsRecH');
-  if(income>0&&recMax<=0&&lim.fits&&lim.max>0){
-    vrh.textContent=H_NEAR;                       /* the number is the 15% one, so say 15% */
-    vrc.textContent=ils(lim.max); vrc.classList.remove('nofit');
-    vrm.textContent=ils(lim.budget)+MO_SUFFIX+NEAR_SUFFIX;
+  const cashUpkV=BASE+K*recDown, cashPcV=income>0?cashUpkV/income*100:0;
+  if(income>0&&recMax<=0&&recDown>500&&cashPcV<=15.05){
+    /* 10% is out of reach, so rise as little as possible - not to the 15% cap */
+    vrh.textContent=H_REC;
+    vrc.textContent=ils(recDown); vrc.classList.remove('nofit');
+    vrm.textContent=MINUP1+cashPcV.toFixed(1)+MINUP2;
   } else if(income>0&&recMax<=0){
     vrh.textContent=H_REC;
     vrc.textContent=NOFIT; vrc.classList.add('nofit');

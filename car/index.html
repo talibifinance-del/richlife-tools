@@ -57,6 +57,15 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .savecheck .sv-cta:hover{background:rgba(var(--pine-rgb),.14);transform:translateY(-1px)}
 .card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
 .card+.card{margin-top:16px}
+.foldcard{padding:0;overflow:hidden}
+.foldcard>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:clamp(14px,2.6vw,18px) clamp(16px,3vw,24px)}
+.foldcard>summary::-webkit-details-marker{display:none}
+.foldcard>summary .sec-lbl{margin-bottom:0}
+.foldcard>summary::after{content:'\25c0';margin-inline-start:auto;font-size:11px;color:var(--pine);transition:transform .15s;flex:none}
+.foldcard[open]>summary::after{transform:rotate(-90deg)}
+.foldcard>summary:hover .sec-lbl{background:rgba(var(--pine-rgb),.16)}
+.fold-body{padding:0 clamp(16px,3vw,24px) clamp(16px,3vw,24px)}
+
 .sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
 .field label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
 .input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
@@ -454,8 +463,9 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <div class="note-tip" id="capNote" hidden></div>
   </div>
 
-  <div class="card">
-    <span class="sec-lbl">📉 ירידת הערך - מה הרכב באמת עולה</span>
+  <details class="card foldcard">
+    <summary><span class="sec-lbl">📉 ירידת הערך - מה הרכב באמת עולה</span></summary>
+    <div class="fold-body">
     <div class="rec" style="margin:0 0 13px">רכב הוא לא נכס. הוא ההוצאה היחידה שקונים ביוקר ומוכרים בזול. <span class="mini-inline">ירידת ערך שנתית <span class="mini-shell"><input id="depr" type="text" inputmode="decimal" value="12" aria-label="אחוז ירידת ערך שנתית">%</span></span></div>
     <div class="dep-grid">
       <div class="dep"><div class="dep-h">אחרי 3 שנים</div><div class="dep-v" id="v3">0</div><div class="dep-s" id="s3">0</div></div>
@@ -465,10 +475,13 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <div class="insight" id="insight"></div>
     <div class="note-tip">💡 רכב <b>חדש</b> מאבד כ-5% עד 7% מערכו בשנייה שהוא יוצא מהחברה, וכ-15% בשנה הראשונה. משנה שלישית והלאה הקצב מתמתן לכ-12% עד 14%. רכב יד שנייה בן 3 שנים כבר עבר את הנפילה החדה - וזה בדיוק היתרון שלו.</div>
     <div class="note-tip" style="background:var(--sage-tint);border-color:rgba(var(--pine-rgb),.3)">🎯 <b>ההמלצה שלי: להחזיק רכב בין 4 ל-7 שנים.</b> פחות מ-4 ועוד לא סיימת לספוג את ירידת הערך החדה, ומיד נכנסים לאחת חדשה. יותר מ-7 והתחזוקה מתחילה לאכול את מה שחסכת. באמצע הטווח הזה הרכב כבר משולם, עדיין אמין, וההוצאה החודשית הכי נמוכה.</div>
-  </div>
+    </div>
+  </details>
 
-  <div class="card">
-    <span class="sec-lbl">⚖️ מזומן, מימון או ליסינג - מה באמת עולה פחות</span>
+
+  <details class="card foldcard">
+    <summary><span class="sec-lbl">⚖️ מזומן, מימון או ליסינג - מה באמת עולה פחות</span></summary>
+    <div class="fold-body">
     <div class="rec" style="margin:0 0 13px">ההשוואה על <span class="mini-inline"><span class="mini-shell"><input id="years" type="text" inputmode="numeric" value="3" aria-label="תקופת ההשוואה בשנים"></span></span> <b>שנים</b>, כולל ההוצאות השוטפות, ואחרי שמחזירים לך את שווי הרכב בסוף. ההמלצה שלי היא להחזיק 4 עד 7, אז שווה לבדוק גם שם.</div>
     <div class="field" style="margin-bottom:14px"><label for="lease">מחיר ליסינג תפעולי שהציעו לך (לחודש, כולל ביטוח וטיפולים)</label><div class="input-shell"><span class="unit">₪</span><input id="lease" type="text" inputmode="numeric" value="2,200" placeholder="0"></div></div>
     <div class="tbl-hint">↔️ אפשר לגרור את הטבלה הצידה כדי לראות את כל המסלולים</div>
@@ -492,7 +505,9 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="tr-eg" style="font-size:12.5px;margin-top:8px">זה טווח הזהב, וזו ההמלצה שלי. מהשנה הרביעית ההחזר נגמר וההוצאה צונחת, בזמן שהליסינג ממשיך לגבות. אחרי 7 שנים התחזוקה מתחילה לאכול את החיסכון. בטווח הזה - <b>רכישה</b>, ועדיף יד שנייה.</div>
       </div>
     </div>
-  </div>
+    </div>
+  </details>
+
 
   <div class="cta-card">
     <div class="cta-emoji">🚗</div>
@@ -836,6 +851,7 @@ function calc(){
   const RUN_LBL='\u05e4\u05d7\u05d5\u05ea \u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05e9\u05d5\u05e2\u05e8\u05ea \u05dc\u05e8\u05db\u05d1 \u05db\u05d6\u05d4';
   const RUN_LBL_MIN='\u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05d9\u05e0\u05d9\u05de\u05dc\u05d9\u05ea, \u05d2\u05dd \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05d1\u05d9\u05d5\u05ea\u05e8';
   const LANDS1='\u05d1\u05de\u05d6\u05d5\u05de\u05df \u00b7 \u05de\u05d2\u05d9\u05e2 \u05dc-', LANDS2='% \u05de\u05d4\u05e0\u05d8\u05d5';
+  const CAPPED='\u05de\u05d5\u05d2\u05d1\u05dc \u05d1\u05de\u05e7\u05d3\u05de\u05d4, \u05dc\u05d0 \u05d1\u05ea\u05e7\u05e6\u05d9\u05d1';
   const GAP1='\u05d7\u05e1\u05e8\u05d9\u05dd ', GAP2=' \u05d1\u05d7\u05d5\u05d3\u05e9';
   const NOFIT='\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05d7\u05d5\u05e8\u05d2\u05ea';
   const TAG_REC='\u05d4\u05d4\u05de\u05dc\u05e6\u05d4', TAG_BEST='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 \u05dc\u05d4\u05de\u05dc\u05e6\u05d4';
@@ -866,7 +882,11 @@ function calc(){
         mEl.classList.add('nofit');
       }
     }
-    else {mEl.textContent=ils(c.max);mEl.classList.remove('nofit');}
+    else {
+      /* identical ceilings look broken until you say the down payment is what binds */
+      mEl.innerHTML=ils(c.max)+(c.capped?'<span class="gap">'+CAPPED+'</span>':'');
+      mEl.classList.remove('nofit');
+    }
   });
   /* the "recommendation" badge belongs on the cheapest level that actually
      works. Leaving it on a column reading zero is how a 60,000 trade-in gets

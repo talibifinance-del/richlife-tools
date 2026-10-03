@@ -159,7 +159,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .gn-tab:hover{border-color:var(--pine)}
 .gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
 /* ===== car tool additions (same kit, new components) ===== */
-.lvl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lvl-grid{display:grid;grid-template-columns:1fr;gap:10px}
 .lvl{position:relative;border-radius:16px;padding:14px 11px 12px;border:1.5px solid rgba(var(--pine-rgb),.2);background:#fff}
 .lvl.bad{border-color:rgba(var(--red-rgb),.34);background:rgba(var(--red-rgb),.05)}
 .lvl.bad .lvl-h{color:#8f3a29}
@@ -180,7 +180,16 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .lvl.on .lvl-max b.nofit{color:#ffd9d1}
 .lvl-max b{display:block;font-size:clamp(15px,3.6vw,19px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;margin-top:1px}
 .lvl.on .lvl-max span{color:rgba(255,255,255,.85)} .lvl.on .lvl-max b{color:#fff}
-@media(max-width:560px){.lvl-grid{grid-template-columns:1fr;gap:14px}.lvl-tag{inset-inline-start:14px;transform:none}}
+@media(max-width:560px){.lvl-tag{inset-inline-start:14px;transform:none}}
+.lvl-more{margin-top:11px;border-radius:14px;border:1px dashed rgba(var(--pine-rgb),.3);padding:10px 12px;background:rgba(var(--sage-rgb),.12)}
+.lm-h{font-size:11.5px;font-weight:900;color:var(--pine-darker);margin-bottom:6px}
+.lm-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding:6px 0;border-top:1px solid rgba(var(--pine-rgb),.12);font-size:11.5px;font-weight:700;color:var(--ink-soft)}
+.lm-row:first-of-type{border-top:none}
+.lm-row .lm-n{font-weight:800;color:var(--ink)}
+.lm-row.bad .lm-n{color:#8f3a29}
+.lm-row b{margin-inline-start:auto;font-size:14px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lm-row.bad b{color:#8f3a29}
+.lm-row .lm-s{flex-basis:100%;font-size:10.5px;font-weight:700;color:var(--ink-soft)}
 .fw{display:flex;gap:7px;align-items:flex-start;margin-top:7px;background:rgba(var(--red-rgb),.08);border:1px solid rgba(var(--red-rgb),.24);border-radius:10px;padding:8px 10px;font-size:11.5px;font-weight:700;color:#8f3a29;line-height:1.5}
 .fw[hidden]{display:none}
 .fw .fw-ic{flex:none;font-size:13px;line-height:1.35}
@@ -358,7 +367,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 
   <div class="card">
     <span class="sec-lbl">שלב 2 · 🎯 איזה רכב מתאים לך</span>
-    <div class="rec" style="margin:0 0 13px">שלוש רמות של נועזות. ההמלצה שלי היא <b>עד 10% מהנטו על כל מה שקשור לרכב</b>. 15% עוד סביר, ומ-20% ומעלה זה כבר לא תקין, האחזקה לא מנוחשת ולא מחולקת בחצי: היא מחושבת מהרכב עצמו ומהקילומטראז׳ שלך, ומה שנשאר הוא מה שבאמת אפשר לשים בהחזר.</div>
+    <div class="rec" style="margin:0 0 13px">ההמלצה שלי היא <b>עד 10% מהנטו על כל מה שקשור לרכב</b>, כולל החזר, דלק, ביטוח וטיפולים. האחזקה לא מנוחשת: היא מחושבת מהרכב עצמו ומהקילומטראז׳ שלך. ברגע שתמלאי רכב ספציפי בשלב 3, המספר כאן מתעדכן לפי המקדמה, הריבית והאחזקה האמיתיות שלו.</div>
     <div class="lvl-grid">
       <div class="lvl on" id="lvl10">
         <div class="lvl-tag">ההמלצה</div>
@@ -371,27 +380,11 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
         <div class="lvl-row back hidden" id="bk10"><span>ונשאר לקרן הביטחון</span><b id="b210">0</b></div>
         <div class="lvl-max"><span>רכב עד</span><b id="m10">0</b></div>
       </div>
-      <div class="lvl" id="lvl15">
-        <div class="lvl-h">סביר<span>15% מהנטו</span></div>
-        <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b15">0</b></div>
-        <div class="lvl-row"><span id="rl15">פחות אחזקה משוערת לרכב כזה</span><b id="r15">0</b></div>
-        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p15">0</b></div>
-        <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l15">0</b></div>
-        <div class="lvl-row"><span id="dl15">ועוד מקדמה</span><b id="d15">0</b></div>
-        <div class="lvl-row back hidden" id="bk15"><span>ונשאר לקרן הביטחון</span><b id="b215">0</b></div>
-        <div class="lvl-max"><span>רכב עד</span><b id="m15">0</b></div>
-      </div>
-      <div class="lvl bad" id="lvl20">
-        <div class="lvl-h">לא תקין<span>20% מהנטו</span></div>
-        <div class="lvl-row"><span>תקציב חודשי לרכב, כולל הכל</span><b id="b20">0</b></div>
-        <div class="lvl-row"><span id="rl20">פחות אחזקה משוערת לרכב כזה</span><b id="r20">0</b></div>
-        <div class="lvl-row hi"><span>נשאר להחזר ההלוואה</span><b id="p20">0</b></div>
-        <div class="lvl-row"><span>הלוואה שההחזר הזה קונה</span><b id="l20">0</b></div>
-        <div class="lvl-row"><span id="dl20">ועוד מקדמה</span><b id="d20">0</b></div>
-        <div class="lvl-row back hidden" id="bk20"><span>ונשאר לקרן הביטחון</span><b id="b220">0</b></div>
-        <div class="lvl-max"><span>רכב עד</span><b id="m20">0</b></div>
-        <div class="lvl-bad">ברמה הזאת קשה לחסוך וקשה לסגור את החודש</div>
-      </div>
+    </div>
+    <div class="lvl-more">
+      <div class="lm-h">ומה אם נעלה אחוז?</div>
+      <div class="lm-row"><span class="lm-n">סביר · 15% מהנטו</span><b id="lmm15">0</b><span class="lm-s" id="lms15"></span></div>
+      <div class="lm-row bad"><span class="lm-n">לא תקין · 20% מהנטו</span><b id="lmm20">0</b><span class="lm-s" id="lms20">ברמה הזאת קשה לחסוך וקשה לסגור את החודש</span></div>
     </div>
     <div class="insight" id="capIns"></div>
     <details class="asm">
@@ -460,7 +453,6 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="c-msg" id="vMsg"></div>
     </div>
     <div class="plan" id="planBox" hidden></div>
-    <div class="note-tip" id="capNote" hidden></div>
   </div>
 
   <details class="card foldcard">
@@ -724,7 +716,10 @@ function balance(P,annual,n,k){if(k>=n)return 0;const r=annual/100/12,m=pmt(P,an
 
 function calc(){
   syncLive();
-  const income=num('income'),capital=num('capital'),rate=num('rate'),term=Math.round(num('term'));
+  const income=num('income'),capital=num('capital'),rate=num('rate');
+  /* an empty term field is not a free loan. Fall back to the recommended
+     4 years in BOTH directions, so the ceiling and the verdict cannot part. */
+  const term=Math.max(1,Math.round(num('term'))||48);
   const prime=num('prime'),rateCap=prime+0.5;
   const price=num('price');
   /* a first-time buyer cannot answer "how many km a month", but everyone knows
@@ -743,7 +738,7 @@ function calc(){
      900 upkeep on a 55,000 car. Upkeep is a property of the CAR, so model it:
      fuel from the kilometres actually driven, insurance and servicing partly
      fixed and partly a share of the car's value. Every coefficient is editable.
-     upkeep(P) = BASE + K*P  -> linear, so the ceiling below solves exactly. */
+     Every coefficient is editable, and the ceiling inverts this exact curve. */
   const consum=num('cons'), fuelPrice=num('fuelp');
   const compulsory=num('cmpl'), compMin=num('compmin'), thirdY=num('third');
   const compPct=num('comp')/100;
@@ -755,12 +750,11 @@ function calc(){
   const insFloor=(insType==='full'?compMin:0)*drvMul;
   const maintBase=num('mbase'), maintPct=num('mpct')/100;
   const fuelMo=km*consum/100*fuelPrice;
-  /* comprehensive = max(floor, pct*value). Linearise around the floor so the
-     ceiling still solves exactly: below the crossover the floor rules. */
-  const crossover=insPct>0?insFloor/insPct:Infinity;
-  const useFloor=price<=0?true:(price<crossover);
-  const BASE=fuelMo+(insFixed+(useFloor?insFloor:0)+maintBase)/12+park;
-  const K=((useFloor?0:insPct)+maintPct)/12;
+  /* comprehensive = max(floor, pct*value), exactly. Linearising it around the
+     crossover is what let the ceiling land in one insurance regime and the
+     verdict in the other, so the two disagreed by a few hundred shekels. */
+  const modelUpk=P2=>{const v=Math.max(P2,0);
+    return fuelMo+(insFixed+(insType==='full'?Math.max(insFloor,insPct*v):0)+maintBase+maintPct*v)/12+park;};
   const estIns=p2=>(insFixed+Math.max(insFloor,insPct*p2))/12;
   (function(){
     const y=insFixed+(insType==='full'?Math.max(insFloor,insPct*Math.max(price,0)):0);
@@ -783,7 +777,7 @@ function calc(){
   document.getElementById('runLbl').textContent=ownRun
     ?'\u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d4\u05d0\u05de\u05d9\u05ea\u05d9\u05d9\u05dd \u05e9\u05dc\u05da (\u05d7\u05e0\u05d9\u05d4 \u05de\u05d5\u05d2\u05d3\u05e8\u05ea \u05d1\u05d4\u05e0\u05d7\u05d5\u05ea \u05dc\u05de\u05e2\u05dc\u05d4):'
     :'\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05d7\u05d5\u05e9\u05d1\u05ea \u05de\u05de\u05d7\u05d9\u05e8 \u05d4\u05e8\u05db\u05d1 \u05d5\u05de\u05d4\u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05e9\u05dc\u05da. \u05dc\u05e9\u05d9\u05e0\u05d5\u05d9 \u05d9\u05d3\u05e0\u05d9, \u05e1\u05de\u05e0\u05d9 \u05d0\u05ea \u05d4\u05ea\u05d9\u05d1\u05d4 \u05dc\u05de\u05e2\u05dc\u05d4.';
-  const running=ownRun?(num('fuel')+num('insur')+num('maint')+park):(BASE+K*price);
+  const running=ownRun?(num('fuel')+num('insur')+num('maint')+park):modelUpk(price);
 
   /* the recommended down payment: a third of the liquid capital plus the car
      being traded in. The trade-in is money that never touches the safety net. */
@@ -817,32 +811,56 @@ function calc(){
   } else termMsg+=' ההחזר נראה נוח יותר, אבל הריבית המצטברת קופצת.';
   warn('termWarn', term>48, termMsg);
 
-  /* ---------- STEP 2: the recommendation, solved so it cannot lie ----------
-     Budget B must cover BOTH the repayment and the upkeep of the very car it
-     is buying:   (P - D)/A  +  BASE + K*P  =  B
-     which solves exactly for P. No half-half guess, so a car at the ceiling
-     lands on the budget to the shekel, and anything cheaper costs less still. */
+  /* ---------- ONE ENGINE, TWO DIRECTIONS ----------
+     Everything on this page comes out of a single function:
+         monthly(P) = upkeep(P) + repayment(P)
+     The ceiling is that same function solved for P, built from the SAME inputs
+     the verdict reads: her down payment, her rate, her term, her upkeep. That
+     is why a car under the ceiling can no longer fail the verdict. It is
+     arithmetic now, not a test I have to remember to keep passing.
+     Two engines with two sets of assumptions is what produced every
+     "the ceiling says 66,667 but your 60,000 car does not fit". */
   const RECTERM=48;
   document.getElementById('recRateTxt').textContent=capTxt;
-  const rr=rateCap/100/12;
-  const A=rr===0?RECTERM:(1-Math.pow(1+rr,-RECTERM))/rr;   /* annuity factor */
+  /* with no car on the table we plan with the recommended terms; the moment a
+     car is entered the question becomes "with THIS plan, how much car fits" */
+  const planned=price>0;
+  const cDown=planned?Math.max(0,num('down')):recDown;
+  const cTerm=planned?term:RECTERM;
+  const cRate=planned?rate:rateCap;
+  const crr=cRate/100/12;
+  const cA=crr===0?cTerm:(1-Math.pow(1+crr,-cTerm))/crr;   /* annuity factor */
+  /* repayment per shekel financed. Mirrors pmt(), including its n<=0 -> 0, so
+     the two directions cannot drift apart on an empty term field. */
+  const pf=cA>0?1/cA:0;
+  /* upkeep: her own figures when she says she has them, otherwise modelled */
+  const upkOf=P=>ownRun?running:modelUpk(P);
+  const uBASE=upkOf(0);                       /* what even a free car costs */
+  const monthlyOf=P=>upkOf(P)+Math.max(0,P-cDown)*pf;
   function ceiling(pc){
     const B=income*pc/100;
     /* a car nobody financed still burns fuel and insurance. If the budget does
        not even cover the fixed part of the upkeep, no car fits at this level. */
-    if(B<=BASE) return {budget:B,upk:BASE,toLoan:B-BASE,loan:0,max:0,capped:false,fits:false};
-    let P=(B-BASE+recDown/A)/(1/A+K), loan=0, capped=false;
-    if(P<recDown){
-      /* the budget does not need a loan at all, so the payment term drops out
-         and the car is whatever the upkeep alone leaves room for, paid cash.
-         Forcing P up to the down payment here was the bug behind "car up to 0". */
-      P=K>0?Math.min((B-BASE)/K,recDown):recDown;
-    } else {
-      if(P>recDown*4){P=recDown*4;capped=true;}   /* the 25% down-payment rule */
-      loan=Math.max(0,P-recDown);
+    const none={budget:B,upk:uBASE,toLoan:B-uBASE,loan:0,max:0,capped:false,fits:false};
+    if(income<=0||B<=uBASE) return none;
+    /* monthlyOf is continuous and strictly rising in P, so invert it by halving.
+       Every closed form I wrote eventually broke on a kink in the curve (the
+       insurance floor, the cash branch); halving cannot, and it converges from
+       below, so the printed ceiling is always a car that really does fit. */
+    let P, capped=false, hi=1000;
+    while(monthlyOf(hi)<B&&hi<5e7) hi*=2;
+    if(monthlyOf(hi)<B){P=Math.max(cDown*4,0);capped=true;}
+    else{
+      let lo=0;
+      for(let i=0;i<64;i++){const mid=(lo+hi)/2; if(monthlyOf(mid)<B) lo=mid; else hi=mid;}
+      P=lo;
     }
-    const upk=BASE+K*P;
-    return {budget:B,upk:upk,toLoan:B-upk,loan:loan,max:P,capped:capped,fits:true};
+    /* the 25% rule binds here too: 15% of net with a thin down payment would
+       otherwise "allow" a 120,000 car on 15,000 down. Skipped only when there
+       is no down payment at all, where capping would print a 0 car. */
+    if(cDown>0&&P>cDown*4){P=cDown*4;capped=true;}
+    if(!(P>0)) return none;
+    return {budget:B,upk:upkOf(P),toLoan:B-upkOf(P),loan:Math.max(0,P-cDown),max:P,capped:capped,fits:true};
   }
   const H_REC='\u05d4\u05de\u05d5\u05de\u05dc\u05e5 (10%)', H_NEAR='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 (15%)';
   const MINUP1='\u05d4\u05db\u05d9 \u05e0\u05de\u05d5\u05da \u05e9\u05d0\u05e4\u05e9\u05e8: ', MINUP2='% \u05de\u05d4\u05e0\u05d8\u05d5, \u05d1\u05de\u05d6\u05d5\u05de\u05df \u05d5\u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4';
@@ -854,49 +872,51 @@ function calc(){
   const CAPPED='\u05de\u05d5\u05d2\u05d1\u05dc \u05d1\u05de\u05e7\u05d3\u05de\u05d4, \u05dc\u05d0 \u05d1\u05ea\u05e7\u05e6\u05d9\u05d1';
   const GAP1='\u05d7\u05e1\u05e8\u05d9\u05dd ', GAP2=' \u05d1\u05d7\u05d5\u05d3\u05e9';
   const NOFIT='\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05d7\u05d5\u05e8\u05d2\u05ea';
-  const TAG_REC='\u05d4\u05d4\u05de\u05dc\u05e6\u05d4', TAG_BEST='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 \u05dc\u05d4\u05de\u05dc\u05e6\u05d4';
   /* name the down payment after what it is actually made of */
-  const downLabel = tradein>0 ? '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05db\u05d5\u05dc\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9' : '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05d4\u05e0\u05d6\u05d9\u05dc';
-  [[10,'10'],[15,'15'],[20,'20']].forEach(([pc,sfx])=>{
-    const c=ceiling(pc);
-    const dash='\u2013';
-    document.getElementById('b'+sfx).textContent=ils(c.budget);
-    document.getElementById('r'+sfx).textContent=(c.fits?'- ':'')+ils(c.upk);
-    document.getElementById('p'+sfx).textContent=c.fits?ils(Math.max(0,c.toLoan)):dash;
-    document.getElementById('l'+sfx).textContent=c.fits?ils(c.loan):dash;
-    document.getElementById('d'+sfx).textContent=c.fits?ils(recDown):dash;
-    document.getElementById('dl'+sfx).textContent=downLabel;
-    document.getElementById('rl'+sfx).textContent=c.fits?RUN_LBL:RUN_LBL_MIN;
-    const back=c.fits?Math.max(0,assets-Math.min(c.max,recDown)):0;
-    const bkEl=document.getElementById('bk'+sfx);
-    bkEl.classList.toggle('hidden',!(back>500));
-    document.getElementById('b2'+sfx).textContent=ils(back);
-    const mEl=document.getElementById('m'+sfx);
+  const downLabel = planned
+    ? '\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05d4\u05d6\u05e0\u05ea'
+    : (tradein>0 ? '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05db\u05d5\u05dc\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9'
+                 : '\u05de\u05e7\u05d3\u05de\u05d4: \u05e9\u05dc\u05d9\u05e9 \u05de\u05d4\u05d4\u05d5\u05df \u05d4\u05e0\u05d6\u05d9\u05dc');
+  /* the recommended level, in full. 15% and 20% are one compact line each:
+     fewer numbers on the screen is fewer numbers that can disagree. */
+  (function(){
+    const c=ceiling(10), dash='\u2013';
+    document.getElementById('b10').textContent=ils(c.budget);
+    document.getElementById('r10').textContent=(c.fits?'- ':'')+ils(c.upk);
+    document.getElementById('p10').textContent=c.fits?ils(Math.max(0,c.toLoan)):dash;
+    document.getElementById('l10').textContent=c.fits?ils(c.loan):dash;
+    document.getElementById('d10').textContent=c.fits?ils(cDown):dash;
+    document.getElementById('dl10').textContent=downLabel;
+    document.getElementById('rl10').textContent=c.fits?RUN_LBL:RUN_LBL_MIN;
+    const back=c.fits?Math.max(0,assets-Math.min(c.max,cDown)):0;
+    document.getElementById('bk10').classList.toggle('hidden',!(back>500));
+    document.getElementById('b210').textContent=ils(back);
+    const mEl=document.getElementById('m10');
     if(income>0&&!c.fits){
-      const cashUpk=BASE+K*recDown, cashPc=cashUpk/income*100;
-      if(recDown>500){
+      const cashUpk=upkOf(recDown), cashPc=cashUpk/income*100;
+      /* 20% of net on a car is never a recommendation, cash or not */
+      if(recDown>500&&cashPc<=15.05){
         mEl.innerHTML=ils(recDown)+'<span class="gap">'+LANDS1+cashPc.toFixed(1)+LANDS2+'</span>';
         mEl.classList.remove('nofit');
       } else {
         mEl.innerHTML=NOFIT+'<span class="gap">'+GAP1+ils(c.upk-c.budget)+GAP2+'</span>';
         mEl.classList.add('nofit');
       }
-    }
-    else {
-      /* identical ceilings look broken until you say the down payment is what binds */
+    } else {
+      /* an identical ceiling at every level looks broken until you say that
+         the down payment, not the budget, is what binds */
       mEl.innerHTML=ils(c.max)+(c.capped?'<span class="gap">'+CAPPED+'</span>':'');
       mEl.classList.remove('nofit');
     }
-  });
-  /* the "recommendation" badge belongs on the cheapest level that actually
-     works. Leaving it on a column reading zero is how a 60,000 trade-in gets
-     told it can buy nothing. */
-  (function(){
-    ['10','15','20'].forEach(k=>{
-      const el=document.getElementById('lvl'+k);
-      el.classList.toggle('on',k==='10');          /* the badge never moves */
-      const tag=el.querySelector&&el.querySelector('.lvl-tag');
-      if(tag){tag.textContent=TAG_REC;tag.style.display=(k==='10')?'':'none';}
+    [[15,'15'],[20,'20']].forEach(([pc,sfx])=>{
+      const x=ceiling(pc);
+      const v=document.getElementById('lmm'+sfx);
+      const sub=document.getElementById('lms'+sfx);
+      if(income<=0){v.textContent=dash;if(sfx==='15')sub.textContent='';return;}
+      v.textContent=(x.fits&&x.max>0)?ils(x.max):NOFIT;
+      if(sfx==='15') sub.textContent=(x.fits&&x.max>0)
+        ? ils(x.budget)+MO_SUFFIX+(x.capped?' \u00b7 '+CAPPED:'')
+        : '';
     });
   })();
   /* 10% is the recommendation, 15% is still acceptable and is the hard limit */
@@ -912,9 +932,12 @@ function calc(){
   /* one short line per point. The paragraph had grown into a wall. */
   function li(ic,txt){return '<li><span class="li-ic">'+ic+'</span><span>'+txt+'</span></li>';}
   function keepLine(maxP){
-    const keep=Math.max(0,assets-Math.min(maxP,recDown));
+    const dn=Math.min(maxP,cDown);
+    const keep=Math.max(0,assets-dn);
     if(keep<=500) return '';
-    let s=li('\u{1F6DF}','\u05de\u05ea\u05d5\u05da '+ils(assets)+' \u05e9\u05dc\u05da, \u05e8\u05e7 \u05e9\u05dc\u05d9\u05e9 \u05e0\u05db\u05e0\u05e1 \u05dc\u05e8\u05db\u05d1. <b>'+ils(keep)+'</b> \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df');
+    let s=li('\u{1F6DF}', planned
+      ? '\u05de\u05ea\u05d5\u05da '+ils(assets)+' \u05e9\u05dc\u05da, \u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05dc\u05d5\u05e7\u05d7\u05ea '+ils(dn)+'. <b>'+ils(keep)+'</b> \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df'
+      : '\u05de\u05ea\u05d5\u05da '+ils(assets)+' \u05e9\u05dc\u05da, \u05e8\u05e7 \u05e9\u05dc\u05d9\u05e9 \u05e0\u05db\u05e0\u05e1 \u05dc\u05e8\u05db\u05d1. <b>'+ils(keep)+'</b> \u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05e7\u05e8\u05df \u05d1\u05d9\u05d8\u05d7\u05d5\u05df');
     if(capital<=0&&tradein>0) s+=li('\u26a0\ufe0f','\u05d4\u05e8\u05db\u05d1 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9 \u05d4\u05d5\u05d0 \u05db\u05dc \u05d4\u05d4\u05d5\u05df \u05e9\u05dc\u05da. \u05d0\u05dd \u05db\u05d5\u05dc\u05d5 \u05e0\u05db\u05e0\u05e1 \u05dc\u05e8\u05db\u05d1 \u05d4\u05d1\u05d0, \u05ea\u05d9\u05e9\u05d0\u05e8\u05d9 \u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05d1\u05e6\u05d3');
     return s;
   }
@@ -922,7 +945,7 @@ function calc(){
      fixes the interest, never the running cost, so colour it by the truth. */
   function cashLine(){
     if(recDown<=500||income<=0) return '';
-    const upk=BASE+K*recDown, pc=upk/income*100;
+    const upk=upkOf(recDown), pc=upk/income*100;
     const ic = pc<=10.05?'\u{1F7E2}':(pc<=15.05?'\u{1F7E0}':'\u{1F534}');
     const tail = pc<=10.05?'\u05d6\u05d5 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05de\u05e6\u05d5\u05d9\u05e0\u05ea: \u05d1\u05ea\u05d5\u05da \u05d4\u05d4\u05de\u05dc\u05e6\u05d4 \u05d5\u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05e9\u05dc \u05e8\u05d9\u05d1\u05d9\u05ea.':(pc<=15.05?'\u05d6\u05d5 \u05d0\u05e4\u05e9\u05e8\u05d5\u05ea \u05e1\u05d1\u05d9\u05e8\u05d4, \u05d5\u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05e9\u05dc \u05e8\u05d9\u05d1\u05d9\u05ea.':'\u05d0\u05d1\u05dc \u05d6\u05d4 <b>\u05dc\u05d0 \u05e4\u05d5\u05ea\u05e8</b> \u05d0\u05ea \u05d4\u05d1\u05e2\u05d9\u05d4: \u05d2\u05dd \u05d1\u05dc\u05d9 \u05e9\u05e7\u05dc \u05e9\u05dc \u05e8\u05d9\u05d1\u05d9\u05ea, \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05de\u05e2\u05dc \u05d4\u05d2\u05d1\u05d5\u05dc \u05e9\u05dc 15%.');
     return li(ic,'\u05dc\u05e7\u05e0\u05d5\u05ea <b>\u05d1\u05de\u05d6\u05d5\u05de\u05df, \u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d1\u05db\u05dc\u05dc</b>: \u05e8\u05db\u05d1 \u05d1-'+ils(recDown)+', \u05d5\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 '+ils(upk)+' \u05d1\u05d7\u05d5\u05d3\u05e9 ('+pc.toFixed(1)+'% \u05de\u05d4\u05e0\u05d8\u05d5). '+tail);
@@ -937,14 +960,14 @@ function calc(){
     } else if(!rec.fits){
       out=li('\u{1F534}','\u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea (10%, '+ils(rec.budget)+') \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05db\u05d1\u05e8 \u05e2\u05d5\u05dc\u05d4 \u05d9\u05d5\u05ea\u05e8');
       if(!lim.fits||lim.max<=0) out=li('\u{1F6D1}','<b>\u05d1\u05d4\u05ea\u05d0\u05dd \u05dc\u05e0\u05ea\u05d5\u05e0\u05d9\u05dd \u05e9\u05dc\u05da, \u05dc\u05d0 \u05de\u05d5\u05de\u05dc\u05e5 \u05dc\u05e7\u05e0\u05d5\u05ea \u05e8\u05db\u05d1 \u05db\u05e8\u05d2\u05e2.</b>')+out;
-      if(recDown>500&&(BASE+K*recDown)/income*100<=15.05)
-        out+=li('\u{1F3AF}','\u05d4\u05db\u05d9 \u05e0\u05de\u05d5\u05da \u05e9\u05d0\u05e4\u05e9\u05e8 \u05dc\u05d4\u05d2\u05d9\u05e2 \u05d0\u05dc\u05d9\u05d5 \u05d4\u05d5\u05d0 <b>'+((BASE+K*recDown)/income*100).toFixed(1)+'% \u05de\u05d4\u05e0\u05d8\u05d5</b>, \u05e2\u05dd \u05e8\u05db\u05d1 \u05d1-<b>'+ils(recDown)+'</b> \u05d1\u05de\u05d6\u05d5\u05de\u05df. \u05db\u05dc \u05e9\u05e7\u05dc \u05e9\u05ea\u05e8\u05d3\u05d9 \u05de\u05de\u05d7\u05d9\u05e8 \u05d4\u05e8\u05db\u05d1 \u05de\u05e7\u05e8\u05d1 \u05d0\u05d5\u05ea\u05da \u05dc-10%.');
+      if(recDown>500&&upkOf(recDown)/income*100<=15.05)
+        out+=li('\u{1F3AF}','\u05d4\u05db\u05d9 \u05e0\u05de\u05d5\u05da \u05e9\u05d0\u05e4\u05e9\u05e8 \u05dc\u05d4\u05d2\u05d9\u05e2 \u05d0\u05dc\u05d9\u05d5 \u05d4\u05d5\u05d0 <b>'+(upkOf(recDown)/income*100).toFixed(1)+'% \u05de\u05d4\u05e0\u05d8\u05d5</b>, \u05e2\u05dd \u05e8\u05db\u05d1 \u05d1-<b>'+ils(recDown)+'</b> \u05d1\u05de\u05d6\u05d5\u05de\u05df. \u05db\u05dc \u05e9\u05e7\u05dc \u05e9\u05ea\u05e8\u05d3\u05d9 \u05de\u05de\u05d7\u05d9\u05e8 \u05d4\u05e8\u05db\u05d1 \u05de\u05e7\u05e8\u05d1 \u05d0\u05d5\u05ea\u05da \u05dc-10%.');
       else
       out+=(lim.fits&&lim.max>0)?li('\u{1F7E0}','\u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 (15%): \u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+ils(lim.max)+'</b>'):li('\u26a0\ufe0f','\u05d2\u05dd \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 \u05e8\u05db\u05d1 \u05dc\u05d0 \u05e0\u05db\u05e0\u05e1. \u05e4\u05d7\u05d5\u05ea \u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05d0\u05d5 \u05d4\u05db\u05e0\u05e1\u05d4 \u05d2\u05d1\u05d5\u05d4\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05d9\u05e9\u05e0\u05d5 \u05d0\u05ea \u05d6\u05d4');
       let saidCash=false;
-      if(recDown>500&&income>0&&(BASE+K*recDown)/income*100<=15.05) saidCash=true;
+      if(recDown>500&&income>0&&upkOf(recDown)/income*100<=15.05) saidCash=true;
       if(!rec.fits&&lim.fits&&lim.max>0&&recDown>500){
-        const cu=BASE+K*recDown, cp=cu/income*100;
+        const cu=upkOf(recDown), cp=cu/income*100;
         if(cp<14.9) out+=li('\u{1F4A1}','\u05d5\u05dc\u05e7\u05e0\u05d5\u05ea \u05d1-<b>'+ils(lim.max)+'</b> \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4? \u05d6\u05d4 \u05de\u05d2\u05d9\u05e2 \u05dc-15% \u05de\u05d4\u05e0\u05d8\u05d5, \u05db\u05dc\u05d5\u05de\u05e8 <b>'+ils(lim.budget-cu)+'</b> \u05d1\u05d7\u05d5\u05d3\u05e9 \u05e4\u05d7\u05d5\u05ea \u05e9\u05e0\u05e9\u05d0\u05e8\u05d9\u05dd \u05d0\u05e6\u05dc\u05da. \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05e2\u05d3\u05d9\u05e3.');
       }
       out+=(saidCash?'':cashLine())+keepLine(lim.fits?lim.max:recDown);
@@ -952,7 +975,7 @@ function calc(){
       out=li('\u{1F3AF}','\u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+ils(recMax)+'</b>, \u05d1\u05ea\u05e7\u05e6\u05d9\u05d1 \u05d4\u05de\u05d5\u05de\u05dc\u05e5 \u05e9\u05dc '+ils(rec.budget)+' \u05dc\u05d7\u05d5\u05d3\u05e9');
       out+=li('\u{1F527}','\u05d0\u05d7\u05d6\u05e7\u05d4 \u05d1\u05e2\u05e8\u05da <b>'+ils(rec.upk)+'</b> \u05d1\u05d7\u05d5\u05d3\u05e9 \u05e2\u05dc \u05e8\u05db\u05d1 \u05db\u05d6\u05d4');
       out+=(rec.loan>0)
-        ? li('\u{1F3E6}','\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 <b>'+ils(rec.loan)+'</b> \u05d1\u05d4\u05d7\u05d6\u05e8 \u05e9\u05dc '+ils(rec.toLoan)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05d5\u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05dc '+ils(Math.min(recMax,recDown)))
+        ? li('\u{1F3E6}','\u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 <b>'+ils(rec.loan)+'</b> \u05d1\u05d4\u05d7\u05d6\u05e8 \u05e9\u05dc '+ils(rec.toLoan)+' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05d5\u05de\u05e7\u05d3\u05de\u05d4 \u05e9\u05dc '+ils(Math.min(recMax,cDown)))
         : li('\u{1F4B5}','<b>\u05d1\u05dc\u05d9 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d1\u05db\u05dc\u05dc</b> - \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05de\u05dc\u05d0\u05d4 \u05d0\u05ea \u05db\u05dc \u05d4\u05ea\u05e7\u05e6\u05d9\u05d1, \u05d0\u05d6 \u05d4\u05e8\u05db\u05d1 \u05e0\u05e7\u05e0\u05d4 \u05d1\u05de\u05d6\u05d5\u05de\u05df');
       if(rec.capped) out+=li('\u26a0\ufe0f','\u05d4<b>\u05de\u05e7\u05d3\u05de\u05d4</b> \u05d4\u05d9\u05d0 \u05d4\u05d7\u05e1\u05dd \u05db\u05d0\u05df: \u05db\u05dc\u05dc \u05d4-25% \u05dc\u05d0 \u05de\u05d0\u05e4\u05e9\u05e8 \u05d4\u05dc\u05d5\u05d5\u05d0\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05e4\u05d9 \u05e9\u05dc\u05d5\u05e9 \u05de\u05de\u05e0\u05d4');
       if(rec.loan>0) out+=cashLine();   /* a loan is never mandatory */
@@ -962,17 +985,12 @@ function calc(){
   }
 
 
-  /* the ceiling for THIS car's actual upkeep (identical to rec when estimated) */
-  /* the recommendation already carries the modelled upkeep, so there is no gap
-     to explain - except when she overrode the numbers by hand. */
-  function solvedFlat(pc){            /* upkeep fixed by hand: solve directly */
-    const B=income*pc/100, room=B-running;
-    if(income<=0||room<=0) return 0;
-    return Math.min(recDown+maxLoan(room,rateCap,Math.min(term>0?term:RECTERM,RECTERM)),recDown*4);
-  }
-  const recMaxReal=ownRun?solvedFlat(10):rec.max;
+  /* ONE engine means there is no second ceiling to reconcile: recMax already
+     carries her down payment, her rate, her term and her upkeep. These two
+     names stay only so the copy below reads the way it did. */
+  const recMaxReal=recMax;
   const noRoom=income>0&&running>=income*LIMIT_PC;
-  const realMax=noRoom?0:(ownRun?solvedFlat(15):lim.max);
+  const realMax=noRoom?0:limitMax;
 
   /* Paying more up front is not a problem: it removes the interest and lowers
      the monthly cost. The only thing worth flagging is an emptied safety net. */
@@ -1018,7 +1036,7 @@ function calc(){
   document.getElementById('vNum').textContent=ils(totalMonthly);
   const total=rules.length;
   /* with a high enough fixed upkeep, 10% is unreachable at any car price */
-  const greenReachable=income>0&&BASE<income*REC_PC;
+  const greenReachable=income>0&&upkOf(0)<income*REC_PC;
   /* Tali's tiers: up to 10% green, 10-15% orange, over 15% red. A broken rule
      can never show green, however small the percentage. */
   let tier = income<=0 ? 'ok'
@@ -1032,7 +1050,7 @@ function calc(){
     vm.innerHTML=`✓ בדיוק בהמלצה. הרכב הזה עולה ${pcIncome.toFixed(1)}% מהנטו, ונשאר לך מקום לחסוך ולחיות.`;
   else if(tier==='mid'&&passed===total&&!greenReachable)
     /* green is out of reach at this income - orange IS the best outcome */
-    vm.innerHTML=`זה הטוב ביותר שאפשר כאן. גם הרכב הזול ביותר היה מגיע ל-${(BASE/income*100).toFixed(1)}% מהנטו, כי האחזקה לבדה עולה ${ils(BASE)} בחודש. את ב-${pcIncome.toFixed(1)}%, וזה בסדר גמור.`;
+    vm.innerHTML=`זה הטוב ביותר שאפשר כאן. גם הרכב הזול ביותר היה מגיע ל-${(upkOf(0)/income*100).toFixed(1)}% מהנטו, כי האחזקה לבדה עולה ${ils(upkOf(0))} בחודש. את ב-${pcIncome.toFixed(1)}%, וזה בסדר גמור.`;
   else if(tier==='mid'&&passed===total)
     vm.innerHTML=`סביר. עובר את כל הכללים ב-${pcIncome.toFixed(1)}% מהנטו, אבל מעל ההמלצה שלי. רכב עד <b>${ils(recMax)}</b> ישאיר לך יותר אוויר לחסוך.`;
 
@@ -1050,7 +1068,7 @@ function calc(){
   /* when the recommended level does not fit, show the nearest one that does */
   const vrc=document.getElementById('vsRecCar'), vrm=document.getElementById('vsRecMo');
   const vrh=document.getElementById('vsRecH');
-  const cashUpkV=BASE+K*recDown, cashPcV=income>0?cashUpkV/income*100:0;
+  const cashUpkV=upkOf(recDown), cashPcV=income>0?cashUpkV/income*100:0;
   if(income>0&&recMax<=0&&recDown>500&&cashPcV<=15.05){
     /* 10% is out of reach, so rise as little as possible - not to the 15% cap */
     vrh.textContent=H_REC;
@@ -1094,14 +1112,6 @@ function calc(){
     pb2.hidden=false; pb2.innerHTML=o;
   } else pb2.hidden=true;
 
-  const cn=document.getElementById('capNote');
-  if(income>0&&ownRun&&Math.abs(recMaxReal-recMax)>500){
-    cn.hidden=false;
-    if(recMaxReal<=0) cn.innerHTML='\u26a0\ufe0f \u05e2\u05dd \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05e9\u05d4\u05d6\u05e0\u05ea \u05d9\u05d3\u05e0\u05d9\u05ea (<b>'+ils(running)+'</b>) \u05e9\u05d5\u05dd \u05e8\u05db\u05d1 \u05dc\u05d0 \u05e0\u05db\u05e0\u05e1 \u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea, \u05db\u05d9 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05d2\u05d3\u05d5\u05dc\u05d4 \u05de\u05d4\u05ea\u05e7\u05e6\u05d9\u05d1 \u05e9\u05dc 10%.';
-    else cn.innerHTML=(recMaxReal<recMax
-      ? '\u26a0\ufe0f \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05e9\u05d4\u05d6\u05e0\u05ea \u05d9\u05d3\u05e0\u05d9\u05ea (<b>'+ils(running)+'</b>) \u05d2\u05d1\u05d5\u05d4\u05d4 \u05de\u05d4\u05d4\u05e2\u05e8\u05db\u05d4 \u05e9\u05dc \u05d4\u05db\u05dc\u05d9, \u05d0\u05d6 \u05d4\u05ea\u05e7\u05e8\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05d9\u05d5\u05e8\u05d3\u05ea \u05de-<b>'+ils(recMax)+'</b> \u05dc-<b>'+(recMaxReal>0?ils(recMaxReal):NOFIT)+'</b>. \u05d6\u05d4 \u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05e7\u05d5\u05d1\u05e2, \u05db\u05d9 \u05d4\u05d5\u05d0 \u05de\u05d1\u05d5\u05e1\u05e1 \u05e2\u05dc \u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d4\u05d0\u05de\u05d9\u05ea\u05d9\u05d9\u05dd \u05e9\u05dc\u05da.'
-      : '\u2705 \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05e9\u05d4\u05d6\u05e0\u05ea \u05d9\u05d3\u05e0\u05d9\u05ea (<b>'+ils(running)+'</b>) \u05e0\u05de\u05d5\u05db\u05d4 \u05de\u05d4\u05d4\u05e2\u05e8\u05db\u05d4 \u05e9\u05dc \u05d4\u05db\u05dc\u05d9, \u05d0\u05d6 \u05d4\u05ea\u05e7\u05e8\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05e2\u05d5\u05dc\u05d4 \u05de-<b>'+ils(recMax)+'</b> \u05dc-<b>'+(recMaxReal>0?ils(recMaxReal):NOFIT)+'</b>. \u05d6\u05d4 \u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05e7\u05d5\u05d1\u05e2, \u05db\u05d9 \u05d4\u05d5\u05d0 \u05de\u05d1\u05d5\u05e1\u05e1 \u05e2\u05dc \u05d4\u05de\u05e1\u05e4\u05e8\u05d9\u05dd \u05d4\u05d0\u05de\u05d9\u05ea\u05d9\u05d9\u05dd \u05e9\u05dc\u05da.');
-  } else cn.hidden=true;
 
   /* ---------- 3. depreciation ---------- */
   const k=1-depr;

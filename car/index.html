@@ -439,7 +439,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
   <div class="card">
     <span class="sec-lbl">שלב 4 · ⚖️ האם זה מסתדר עם ההמלצה</span>
     <div class="vs">
-      <div class="vs-side rec-side"><div class="vs-h">המומלץ (10%)</div><div class="vs-n" id="vsRecCar">0</div><div class="vs-s" id="vsRecMo"></div></div>
+      <div class="vs-side rec-side"><div class="vs-h" id="vsRecH">המומלץ (10%)</div><div class="vs-n" id="vsRecCar">0</div><div class="vs-s" id="vsRecMo"></div></div>
       <div class="vs-mid">מול</div>
       <div class="vs-side plan-side" id="vsPlanBox"><div class="vs-h">מה שתכננתם</div><div class="vs-n" id="vsPlanCar">0</div><div class="vs-s" id="vsPlanMo"></div></div>
     </div>
@@ -828,6 +828,7 @@ function calc(){
     const upk=BASE+K*P;
     return {budget:B,upk:upk,toLoan:B-upk,loan:loan,max:P,capped:capped,fits:true};
   }
+  const H_REC='\u05d4\u05de\u05d5\u05de\u05dc\u05e5 (10%)', H_NEAR='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 (15%)';
   const MO_SUFFIX=' \u05dc\u05d7\u05d5\u05d3\u05e9, \u05db\u05d5\u05dc\u05dc \u05d4\u05db\u05dc';
   const NEAR_SUFFIX=' \u00b7 \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4, \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8\u05ea';
   const RUN_LBL='\u05e4\u05d7\u05d5\u05ea \u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05e9\u05d5\u05e2\u05e8\u05ea \u05dc\u05e8\u05db\u05d1 \u05db\u05d6\u05d4';
@@ -1001,13 +1002,17 @@ function calc(){
      number can still, honestly, not fit. */
   /* when the recommended level does not fit, show the nearest one that does */
   const vrc=document.getElementById('vsRecCar'), vrm=document.getElementById('vsRecMo');
+  const vrh=document.getElementById('vsRecH');
   if(income>0&&recMax<=0&&lim.fits&&lim.max>0){
+    vrh.textContent=H_NEAR;                       /* the number is the 15% one, so say 15% */
     vrc.textContent=ils(lim.max); vrc.classList.remove('nofit');
     vrm.textContent=ils(lim.budget)+MO_SUFFIX+NEAR_SUFFIX;
   } else if(income>0&&recMax<=0){
+    vrh.textContent=H_REC;
     vrc.textContent=NOFIT; vrc.classList.add('nofit');
     vrm.textContent=ils(recMo)+MO_SUFFIX;
   } else {
+    vrh.textContent=H_REC;
     vrc.textContent=ils(recMax); vrc.classList.remove('nofit');
     vrm.textContent=ils(recMo)+MO_SUFFIX;
   }

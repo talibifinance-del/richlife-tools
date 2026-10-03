@@ -167,6 +167,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .lvl.on .lvl-max{background:linear-gradient(135deg,var(--pine),var(--pine-deep));box-shadow:0 6px 16px rgba(var(--pine-rgb),.22)}
 .lvl-max span{display:block;font-size:10.5px;font-weight:800;color:var(--ink-soft)}
 .lvl-max b.nofit{font-size:12.5px;line-height:1.35;color:#8f3a29}
+.lvl-max .gap{display:block;font-size:11px;font-weight:800;color:var(--ink-soft);margin-top:2px}
 .lvl.on .lvl-max b.nofit{color:#ffd9d1}
 .lvl-max b{display:block;font-size:clamp(15px,3.6vw,19px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;margin-top:1px}
 .lvl.on .lvl-max span{color:rgba(255,255,255,.85)} .lvl.on .lvl-max b{color:#fff}
@@ -833,6 +834,7 @@ function calc(){
   const NEAR_SUFFIX=' \u00b7 \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4, \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea \u05dc\u05d0 \u05de\u05e1\u05ea\u05d3\u05e8\u05ea';
   const RUN_LBL='\u05e4\u05d7\u05d5\u05ea \u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05e9\u05d5\u05e2\u05e8\u05ea \u05dc\u05e8\u05db\u05d1 \u05db\u05d6\u05d4';
   const RUN_LBL_MIN='\u05d0\u05d7\u05d6\u05e7\u05d4 \u05de\u05d9\u05e0\u05d9\u05de\u05dc\u05d9\u05ea, \u05d2\u05dd \u05e2\u05dc \u05d4\u05e8\u05db\u05d1 \u05d4\u05d6\u05d5\u05dc \u05d1\u05d9\u05d5\u05ea\u05e8';
+  const GAP1='\u05d7\u05e1\u05e8\u05d9\u05dd ', GAP2=' \u05d1\u05d7\u05d5\u05d3\u05e9';
   const NOFIT='\u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05d7\u05d5\u05e8\u05d2\u05ea';
   const TAG_REC='\u05d4\u05d4\u05de\u05dc\u05e6\u05d4', TAG_BEST='\u05d4\u05db\u05d9 \u05e7\u05e8\u05d5\u05d1 \u05dc\u05d4\u05de\u05dc\u05e6\u05d4';
   /* name the down payment after what it is actually made of */
@@ -852,7 +854,7 @@ function calc(){
     bkEl.classList.toggle('hidden',!(back>500));
     document.getElementById('b2'+sfx).textContent=ils(back);
     const mEl=document.getElementById('m'+sfx);
-    if(income>0&&!c.fits){mEl.textContent=NOFIT;mEl.classList.add('nofit');}
+    if(income>0&&!c.fits){mEl.innerHTML=NOFIT+'<span class="gap">'+GAP1+ils(c.upk-c.budget)+GAP2+'</span>';mEl.classList.add('nofit');}
     else {mEl.textContent=ils(c.max);mEl.classList.remove('nofit');}
   });
   /* the "recommendation" badge belongs on the cheapest level that actually
@@ -910,6 +912,7 @@ function calc(){
       out=li('\u{1F6AB}','\u05d0\u05d9\u05df \u05dc\u05da \u05d4\u05d5\u05df \u05d5\u05d0\u05d9\u05df \u05e8\u05db\u05d1 \u05dc\u05d4\u05d7\u05dc\u05d9\u05e3, \u05d5\u05d4\u05de\u05e7\u05d3\u05de\u05d4 \u05d1\u05d0\u05d4 \u05de\u05e9\u05dc\u05d9\u05e9 \u05d4\u05d4\u05d5\u05df')+li('\u{1F4C5}','\u05e7\u05d5\u05d3\u05dd \u05d7\u05d5\u05e1\u05db\u05d9\u05dd. \u05db\u05dc \u05e9\u05dc\u05d5\u05e9\u05d4 \u05e9\u05e7\u05dc\u05d9\u05dd \u05e9\u05e0\u05db\u05e0\u05e1\u05d9\u05dd \u05dc\u05d7\u05d9\u05e1\u05db\u05d5\u05df \u05e9\u05d5\u05d5\u05d9\u05dd \u05e9\u05e7\u05dc \u05d0\u05d7\u05d3 \u05dc\u05de\u05e7\u05d3\u05de\u05d4');
     } else if(!rec.fits){
       out=li('\u{1F534}','\u05d1\u05e8\u05de\u05d4 \u05d4\u05de\u05d5\u05de\u05dc\u05e6\u05ea (10%, '+ils(rec.budget)+') \u05d4\u05d0\u05d7\u05d6\u05e7\u05d4 \u05dc\u05d1\u05d3\u05d4 \u05db\u05d1\u05e8 \u05e2\u05d5\u05dc\u05d4 \u05d9\u05d5\u05ea\u05e8');
+      if(!lim.fits||lim.max<=0) out=li('\u{1F6D1}','<b>\u05d1\u05d4\u05ea\u05d0\u05dd \u05dc\u05e0\u05ea\u05d5\u05e0\u05d9\u05dd \u05e9\u05dc\u05da, \u05dc\u05d0 \u05de\u05d5\u05de\u05dc\u05e5 \u05dc\u05e7\u05e0\u05d5\u05ea \u05e8\u05db\u05d1 \u05db\u05e8\u05d2\u05e2.</b>')+out;
       out+=(lim.fits&&lim.max>0)?li('\u{1F7E0}','\u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 (15%): \u05e8\u05db\u05d1 \u05e2\u05d3 <b>'+ils(lim.max)+'</b>'):li('\u26a0\ufe0f','\u05d2\u05dd \u05d1\u05e8\u05de\u05d4 \u05d4\u05e1\u05d1\u05d9\u05e8\u05d4 \u05e8\u05db\u05d1 \u05dc\u05d0 \u05e0\u05db\u05e0\u05e1. \u05e4\u05d7\u05d5\u05ea \u05e7\u05d9\u05dc\u05d5\u05de\u05d8\u05e8\u05d0\u05d6\u05f3 \u05d0\u05d5 \u05d4\u05db\u05e0\u05e1\u05d4 \u05d2\u05d1\u05d5\u05d4\u05d4 \u05d9\u05d5\u05ea\u05e8 \u05d9\u05e9\u05e0\u05d5 \u05d0\u05ea \u05d6\u05d4');
       out+=cashLine()+keepLine(lim.fits?lim.max:recDown);
     } else {

@@ -5,9 +5,11 @@ function run(o){
   const ids={};
   for(const m of html.matchAll(/id="([^"]+)"/g)) ids[m[1]]={querySelector:()=>null,insertBefore(){},firstChild:null,setAttribute(){},getAttribute(){},value:"",textContent:"",innerHTML:"",className:"",hidden:true,checked:false,readOnly:false,style:{},addEventListener(){},selectionStart:0,setSelectionRange(){},classList:{_s:new Set(),add(c){this._s.add(c)},remove(c){this._s.delete(c)},toggle(c,f){f===undefined?(this._s.has(c)?this._s.delete(c):this._s.add(c)):(f?this._s.add(c):this._s.delete(c))},contains(c){return this._s.has(c)}},parentNode:{classList:{_s:new Set(),add(c){this._s.add(c)},remove(c){this._s.delete(c)},toggle(c,f){f===undefined?(this._s.has(c)?this._s.delete(c):this._s.add(c)):(f?this._s.add(c):this._s.delete(c))},contains(c){return this._s.has(c)}}}};
   for(const m of html.matchAll(/<input id="([^"]+)"[^>]*value="([^"]*)"/g)) ids[m[1]].value=m[2];
-  let first=true;
+  /* every run starts clean. These are module globals, so leaving a previous
+     run's toggles in place quietly tested a state the caller never asked for. */
+  let first=true; global.__kmc=false; global.__ins=null; global.__nd=false; global.__cp=false;
   for(const k in o){ if(k==="ownRun") ids[k].checked=o[k]; else if(k==="firstCar") first=o[k]; else if(k==="kmByCommute") global.__kmc=o[k]; else if(k==="insType") global.__ins=o[k]; else if(k==="newDriver") global.__nd=o[k]; else if(k==="cleanPol") global.__cp=o[k]; else ids[k].value=String(o[k]); }
-  global.__first=first;global.__kmc=global.__kmc||false;global.__ins=global.__ins||null;global.__nd=global.__nd||false;global.__cp=global.__cp||false;
+  global.__first=first;
   global.document={getElementById:i=>ids[i]||null,addEventListener(){},querySelectorAll:()=>[],createElement:()=>({style:{},setAttribute(){},appendChild(){}}),readyState:"complete"};
   global.syncLive=()=>{};
   eval(app+"\nfirstCar=global.__first;kmByCommute=!!global.__kmc;insType=global.__ins||\"full\";newDriver=!!global.__nd;cleanPol=!!global.__cp;\ncalc();");

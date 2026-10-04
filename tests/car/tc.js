@@ -64,3 +64,45 @@ for(const v of variants) for(const p of profs) for(const pr of ["0","100","60,00
   }
 }
 console.log("  "+(zeros?zeros+" zero-shekel cars printed":"no zero-shekel car anywhere"));
+
+/* ---------------------------------------------------------------------------
+   Two invariants about what the card is ALLOWED to say, added after a sweep
+   found the 10% card printing 11.2% and a "car" costing 287 shekels.
+   --------------------------------------------------------------------------- */
+console.log("\n=== a card headed 10% may never present a higher % as its answer ===");
+let lied=0, fired=0;
+const RA=(s=>()=>(s=(1103515245*s+12345)%2147483648)/2147483648)(777);
+for(let i=0;i<2000;i++){
+  const s=t(run({price:"0",down:"0",
+    income:String(Math.round(4000+RA()*30000)), capital:String(Math.round(RA()*250000)),
+    kmyear:String(Math.round(3000+RA()*35000)), park:String(Math.round(RA()*900)),
+    fuelp:(6.5+RA()*2).toFixed(2), cons:(5+RA()*6).toFixed(1),
+    mbase:String(Math.round(1800+RA()*4000)),
+    insType:["full","third","only"][Math.floor(RA()*3)],
+    newDriver:RA()<.3, cleanPol:RA()<.3}).m10);
+  const m=s.match(/([\d.]+)% מהנטו/);
+  if(!m) continue;
+  fired++;
+  /* the cash fallback is mathematically forced above 10%, so it must say so */
+  if(+m[1]>10.051 && !s.includes("לא יוצא")){lied++;if(lied<4)console.log("  LIES",s);}
+}
+console.log("  "+fired+" cash-fallback cards, "+(lied?lied+" presented as if they met 10%":"every one says 10% was not reachable"));
+
+console.log("\n=== never present a sub-10,000 ₪ figure as a car ===");
+let thin=0, seen=0;
+const RB=(s=>()=>(s=(1103515245*s+12345)%2147483648)/2147483648)(2024);
+for(let i=0;i<1500;i++){
+  const tr=RB()<.3;
+  const r=run({price:"0",down:"0",income:String(Math.round(5000+RB()*35000)),
+    capital:String(Math.round(RB()*RB()*120000)), tradein:tr?String(Math.round(RB()*40000)):"0",
+    firstCar:!tr, kmyear:String(Math.round(5000+RB()*25000))});
+  for(const id of ["m10","lmm15"]){
+    const s=t(r[id]); if(!/^\d/.test(s)) continue;
+    const v=+s.split("₪")[0].replace(/[^\d]/g,"");
+    if(!(v>0&&v<10000)) continue;
+    seen++;
+    const sub=id==="m10"?s:s+" "+t(r.lms15);
+    if(!sub.includes("רכב אמיתי")){thin++;if(thin<4)console.log("  BARE",id,"=",s);}
+  }
+}
+console.log("  "+seen+" sub-10,000 figures, "+(thin?thin+" printed bare":"every one marked as below a real car price"));

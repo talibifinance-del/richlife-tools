@@ -241,6 +241,15 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .tg-sub{font-size:12.5px;font-weight:700;opacity:.9;margin-top:2px}
 .blt-lbl{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
 .blt-val{background:var(--sage-tint);border-radius:12px;padding:11px 13px;font-size:17px;font-weight:900;color:var(--pine-darker)}
+.vx{border-top:1px solid rgba(var(--pine-rgb),.10);padding:10px 0}
+.vx-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.vx-name{font-weight:800;font-size:14.5px;color:var(--ink)}
+.vx-body{display:flex;gap:8px;align-items:center;margin-top:8px}
+.vx-body .mini-shell{flex:1;min-width:0}
+.vx-body .seg button{font-size:11px;padding:5px 9px}
+.real-plate{margin-top:12px;background:var(--sage-tint);border-radius:14px;padding:12px 14px;font-size:13.5px;font-weight:700;color:var(--ink-soft);line-height:1.6}
+.real-plate b{color:var(--pine-darker);font-weight:900;font-variant-numeric:tabular-nums}
+.real-plate .big{display:block;font-size:20px;font-weight:900;color:var(--pine-darker);margin-top:2px}
 #commitNote{display:block}#commitNote[hidden]{display:none}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -456,15 +465,16 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
         <label for="plate">מחיר המנה שהאולם נתן לכם</label>
         <div class="input-shell"><span class="unit">₪</span><input id="plate" type="text" inputmode="numeric" placeholder="0"></div>
       </div>
-      <div class="field">
-        <label for="perHead">תוספת לראש מהאולם (דמי חליצה, חבילת אלכוהול)</label>
-        <div class="input-shell"><span class="unit">₪</span><input id="perHead" type="text" inputmode="numeric" placeholder="0"></div>
-      </div>
       <div class="field full">
         <label for="commit">לכמה מנות התחייבתם מול האולם? (אם יגיעו פחות, משלמים בכל זאת)</label>
         <div class="input-shell"><input id="commit" type="text" inputmode="numeric" placeholder="אם עוד לא חתמתם, אפשר להשאיר ריק"><span class="unit unit-suf">מנות</span></div>
       </div>
     </div>
+    <div class="scen-t">מה כלול במחיר המנה?</div>
+    <p class="act-intro" style="margin:4px 0 6px">יש אולמות שהמחיר כולל הכל, ויש כאלה שנותנים מחיר מנה נמוך ומוסיפים על כל השאר. מה שלא כלול - מסמנים "בתוספת" וכותבים כמה.</p>
+    <div id="vxList"></div>
+    <div class="real-plate" id="realPlate" hidden></div>
+    <div class="insight soft" id="dupNote" hidden></div>
   </div>
 
   <div class="card">
@@ -581,7 +591,7 @@ const SEED=[
 ];
 
 function seedState(){
-  return {blt:'',inv:'',pct:'',gift:'',help:'',plate:'',ph:'',commit:'',ag:'',ahelp:'',aover:'',b200:'',b100:'',b50:'',gch:'',gtr:'',goth:'',
+  return {vx:null,blt:'',inv:'',pct:'',gift:'',help:'',plate:'',ph:'',commit:'',ag:'',ahelp:'',aover:'',b200:'',b100:'',b50:'',gch:'',gtr:'',goth:'',
     rooms:SEED.map(r=>({id:nid(),e:r[0],n:r[1],closed:true,items:r[2].map(n=>({id:nid(),n:n,p:'',pd:''}))}))};
 }
 let S=null;
@@ -617,14 +627,46 @@ function suppliersTotals(){
   const buf=items*bltPct()/100;
   return {items,paid,buf,cost:items+buf};
 }
+/* venue extras: what the plate price does / does not include. Each: inc=true (included) or
+   an add-on amount, either for the whole event ('ev') or per guest ('hd'). */
+const VX=[['dmei','דמי חליצה'],['alc','אלכוהול ובר'],['dj',"דיג'יי"],['sound','הגברה ותאורה'],['design','עיצוב והפקה'],['other','תוספת אחרת מהאולם']];
+const VX_AROUND={dj:"דיג'יי",sound:'הגברה ותאורה',design:'עיצוב אולם'};
+function vxState(){
+  if(!S.vx){S.vx={};VX.forEach(([k])=>S.vx[k]={inc:true,amt:'',per:'ev'});
+    if(num(S.ph)>0){S.vx.alc={inc:false,amt:num(S.ph),per:'hd'};} S.ph='';}  // migrate old single per-head field
+  VX.forEach(([k])=>{if(!S.vx[k])S.vx[k]={inc:true,amt:'',per:'ev'};});
+  return S.vx;
+}
+function vxTotals(){
+  const v=vxState();let lump=0,ph=0;
+  VX.forEach(([k])=>{const x=v[k];if(x.inc)return;const a=num(x.amt);if(x.per==='hd')ph+=a;else lump+=a;});
+  return {lump,ph};
+}
+function renderVx(){
+  const host=document.getElementById('vxList'),v=vxState();host.innerHTML='';
+  VX.forEach(([k,name])=>{
+    const x=v[k],row=document.createElement('div');row.className='vx';
+    row.innerHTML='<div class="vx-top"><span class="vx-name">'+name+'</span><div class="seg"><button type="button" data-v="inc">כלול</button><button type="button" data-v="add">בתוספת</button></div></div>'+
+      '<div class="vx-body"><div class="mini-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" placeholder="0" aria-label="'+name+' - סכום התוספת"></div><div class="seg per"><button type="button" data-p="ev">לכל האירוע</button><button type="button" data-p="hd">לאורח</button></div></div>';
+    const body=row.querySelector('.vx-body'),inp=row.querySelector('input');
+    const sync=()=>{row.querySelectorAll('.seg:not(.per) button').forEach(b=>b.classList.toggle('on',(b.dataset.v==='inc')===x.inc));
+      row.querySelectorAll('.per button').forEach(b=>b.classList.toggle('on',b.dataset.p===x.per));body.style.display=x.inc?'none':'';};
+    row.querySelectorAll('.seg:not(.per) button').forEach(b=>b.onclick=()=>{x.inc=b.dataset.v==='inc';sync();save();refreshSummary();if(!x.inc)inp.focus();});
+    row.querySelectorAll('.per button').forEach(b=>b.onclick=()=>{x.per=b.dataset.p;sync();save();refreshSummary();});
+    inp.value=num(x.amt)>0?fmt.format(num(x.amt)):'';
+    inp.oninput=()=>{liveFormat(inp);x.amt=num(inp.value);save();refreshSummary();};
+    inp.onblur=()=>fmtField(inp);
+    sync();host.appendChild(row);
+  });
+}
 function pctOf(){const p=num(S.pct);return S.pct===''||S.pct==null?70:Math.min(100,p);}
 function calcAt(pct){
-  const inv=num(S.inv),g=inv*pct/100,gift=num(S.gift),help=num(S.help),plate=num(S.plate),ph=num(S.ph),commit=num(S.commit);
+  const inv=num(S.inv),g=inv*pct/100,gift=num(S.gift),help=num(S.help),plate=num(S.plate),commit=num(S.commit),vt=vxTotals(),ph=vt.ph,lump=vt.lump;
   const plates=Math.max(g,commit);
-  const venue=plates*plate+g*ph;
+  const venue=plates*plate+lump+g*ph;
   const sup=suppliersTotals().cost;
   const income=g*gift+help, expenses=venue+sup;
-  return {inv,g,gift,help,plate,ph,commit,plates,venue,sup,income,expenses,result:income-expenses};
+  return {inv,g,gift,help,plate,ph,lump,commit,plates,venue,realPlate:plates>0?venue/plates:0,sup,income,expenses,result:income-expenses};
 }
 function calc(){return calcAt(pctOf());}
 
@@ -654,6 +696,16 @@ function refreshSummary(){
 
   const stb=suppliersTotals();document.getElementById('bltVal').textContent=money(stb.buf)+' ₪';
   refreshTarget(c);
+  const rp=document.getElementById('realPlate');
+  if(c.plate>0&&(c.lump>0||c.ph>0)&&c.plates>0){
+    rp.hidden=false;
+    rp.innerHTML='מחיר המנה ברשימה <b>'+money(c.plate)+' ₪</b>'+(c.lump>0?' + תוספות לאירוע <b>'+money(c.lump)+' ₪</b> (≈'+money(c.lump/c.plates)+' ₪ למנה)':'')+(c.ph>0?' + <b>'+money(c.ph)+' ₪</b> לאורח':'')+
+      '<span class="big">המחיר האמיתי למנה: '+money(c.realPlate)+' ₪</span>';
+  } else rp.hidden=true;
+  const v=vxState(),dups=Object.keys(VX_AROUND).filter(k=>S.rooms.some(r=>r.items.some(it=>it.n===VX_AROUND[k]&&num(it.p)>0)));
+  const dn=document.getElementById('dupNote');
+  if(dups.length){dn.hidden=false;dn.textContent='🟠 '+dups.map(k=>VX.find(x=>x[0]===k)[1]).join(', ')+' '+(dups.length>1?'מופיעים':'מופיע')+' גם ברשימת המסביב. אם האולם נותן את זה (כלול או בתוספת), כדאי לאפס את הסעיף במסביב - אחרת זה נספר פעמיים.';}
+  else dn.hidden=true;
 
   // levers: what keeps you at zero
   const ll=document.getElementById('leverLine');
@@ -704,7 +756,7 @@ function refreshTarget(c){
     rows.innerHTML='';big.hidden=true;note.className='insight';
     note.textContent='💡 ממלאים למעלה כמה מוזמנים, כמה צפויים להגיע ומה המתנה הממוצעת, ומתקצבים את המסביב. כאן יופיע מחיר המנה שכדאי לחפש.';return;
   }
-  const left=c.income-c.sup,target=left/c.plates,clean=target-c.ph;
+  const left=c.income-c.sup,target=left/c.plates,clean=(left-c.lump-c.g*c.ph)/c.plates,hasX=c.lump>0||c.ph>0;
   rows.innerHTML='<div class="tg-row"><span>התקציב שלכם (מתנות + עזרה)</span><b>'+money(c.income)+' ₪</b></div>'+
     '<div class="tg-row"><span>פחות המסביב (ספקים, תוספות ובלת"מ)</span><b class="minus"><bdi dir="ltr">-'+money(c.sup)+'</bdi> ₪</b></div>'+
     '<div class="tg-row tot"><span>נשאר לאולם</span><b>'+money(left)+' ₪</b></div>'+
@@ -716,12 +768,12 @@ function refreshTarget(c){
     note.className='insight warn';note.textContent='🔴 המסביב לבד עולה יותר ממה שצפוי להיכנס. לפני שמחפשים אולם, שווה לחזור לרשימת הספקים ולהחליט מה מורידים או מוזילים.';return;
   }
   document.getElementById('tgVal').textContent=money(target)+' ₪';
-  document.getElementById('tgSub').textContent='למנה, כולל הכל באולם'+(c.ph>0?' · המנה עצמה עד '+money(Math.max(0,clean))+' ₪ (אחרי תוספת '+money(c.ph)+' ₪ לראש)':'');
+  document.getElementById('tgSub').textContent='למנה, כולל הכל באולם'+(hasX?' · עם התוספות שסימנתם, מחיר המנה ברשימה צריך להיות עד '+money(Math.max(0,clean))+' ₪':'');
   let msg,cls='';
   if(c.plate>0){
-    const all=c.plate+c.ph,diff=all-target;
-    if(diff>0){cls=' warn';msg='🔴 המנה שקיבלתם ('+money(all)+' ₪ כולל התוספות) גבוהה ב-'+money(diff)+' ₪ מהיעד. על '+money(c.plates)+' מנות זה '+money(diff*c.plates)+' ₪. אפשר לנסות להוריד מחיר מול האולם, לחפש אולם אחר, או להוריד מהמסביב.';}
-    else{msg='✅ המנה שקיבלתם ('+money(all)+' ₪ כולל התוספות) בתוך היעד, '+money(-diff)+' ₪ מתחת למקסימום. על '+money(c.plates)+' מנות זה מרווח של '+money(-diff*c.plates)+' ₪.';}
+    const all=c.realPlate,diff=all-target;
+    if(diff>0){cls=' warn';msg='🔴 המחיר האמיתי למנה ('+money(all)+' ₪ כולל התוספות) גבוהה ב-'+money(diff)+' ₪ מהיעד. על '+money(c.plates)+' מנות זה '+money(diff*c.plates)+' ₪. אפשר לנסות להוריד מחיר מול האולם, לחפש אולם אחר, או להוריד מהמסביב.';}
+    else{msg='✅ המחיר האמיתי למנה ('+money(all)+' ₪ כולל התוספות) בתוך היעד, '+money(-diff)+' ₪ מתחת למקסימום. על '+money(c.plates)+' מנות זה מרווח של '+money(-diff*c.plates)+' ₪.';}
   } else if(c.sup<=0){cls=' soft';msg='🟠 עוד לא תקצבתם את המסביב, אז המחיר כאן גבוה מדי - הוא מניח שכל התקציב הולך רק לאולם. כדאי למלא קודם את הספקים.';}
   else{msg='💡 זה המחיר שסביבו מחפשים אולם: מנה עד '+money(target)+' ₪ כולל אלכוהול, דמי חליצה וכל מה שהאולם גובה לראש. מחיר גבוה יותר אומר לצאת במינוס, אלא אם מורידים מהמסביב.';}
   note.className='insight'+cls;note.textContent=msg;
@@ -732,7 +784,7 @@ function calcActual(){
   const help=(S.ahelp===''||S.ahelp==null)?p.help:num(S.ahelp);
   const commit=p.commit>0?p.commit:p.g;
   const over=num(S.aover)>0?num(S.aover):p.plate;
-  const venue=(ag<=commit?commit*p.plate:commit*p.plate+(ag-commit)*over)+ag*p.ph;
+  const venue=(ag<=commit?commit*p.plate:commit*p.plate+(ag-commit)*over)+p.lump+ag*p.ph;
   const sup=suppliersTotals().items,income=gifts+help,expenses=venue+sup;
   return {p,ag,gifts,help,venue,sup,income,expenses,result:income-expenses,avgGift:ag>0?gifts/ag:0};
 }
@@ -780,7 +832,8 @@ function renderBreakdown(){
     const block=document.createElement('div');block.className='bd-room';
     block.innerHTML='<div class="bd-rhead"><span class="bd-rname">🏛️ האולם</span><span class="bd-rnums"><span class="paid">'+money(c.venue)+' ₪</span></span></div>'+
       '<div class="bd-item"><span class="bd-iname">'+money(c.plates)+' מנות × '+money(c.plate)+' ₪</span><span class="bd-plan">'+money(c.plates*c.plate)+' ₪</span><span class="bd-status pend"></span></div>'+
-      (c.ph>0?'<div class="bd-item"><span class="bd-iname">תוספת לראש × '+money(c.g)+'</span><span class="bd-plan">'+money(c.g*c.ph)+' ₪</span><span class="bd-status pend"></span></div>':'');
+      VX.filter(([k])=>!vxState()[k].inc&&num(vxState()[k].amt)>0).map(([k,n])=>{const x=vxState()[k],amt=x.per==='hd'?num(x.amt)*c.g:num(x.amt);
+        return '<div class="bd-item"><span class="bd-iname">'+n+(x.per==='hd'?' ('+money(num(x.amt))+' ₪ × '+money(c.g)+')':'')+'</span><span class="bd-plan">'+money(amt)+' ₪</span><span class="bd-status pend"></span></div>';}).join('');
     host.appendChild(block);
   }
   S.rooms.forEach(r=>{
@@ -908,7 +961,7 @@ function itemRow(card,r,it){
 function refreshAll(card,r){if(card&&r)refreshRoom(card,r);refreshSummary();}
 
 /* ── top-level wiring ── */
-const TOP=[['invited','inv',true],['pct','pct',false],['gift','gift',true],['help','help',true],['plate','plate',true],['perHead','ph',true],['commit','commit',true],['blt','blt',false],['aGuests','ag',true],['aHelp','ahelp',true],['aOver','aover',true],['b200','b200',true],['b100','b100',true],['b50','b50',true],['gChecks','gch',true],['gTransfer','gtr',true],['gOther','goth',true]];
+const TOP=[['invited','inv',true],['pct','pct',false],['gift','gift',true],['help','help',true],['plate','plate',true],['commit','commit',true],['blt','blt',false],['aGuests','ag',true],['aHelp','ahelp',true],['aOver','aover',true],['b200','b200',true],['b100','b100',true],['b50','b50',true],['gChecks','gch',true],['gTransfer','gtr',true],['gOther','goth',true]];
 TOP.forEach(([id,k,money_])=>{
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{
@@ -917,7 +970,7 @@ TOP.forEach(([id,k,money_])=>{
   });
   if(money_)el.addEventListener('blur',()=>fmtField(el));
 });
-function fillTop(){TOP.forEach(([id,k,m])=>{const el=document.getElementById(id),v=S[k];el.value=(v===''||v==null)?'':(m?(num(v)>0?fmt.format(num(v)):''):String(v));});}
+function fillTop(){renderVx();TOP.forEach(([id,k,m])=>{const el=document.getElementById(id),v=S[k];el.value=(v===''||v==null)?'':(m?(num(v)>0?fmt.format(num(v)):''):String(v));});}
 
 document.getElementById('addRoom').onclick=()=>{
   S.rooms.push({id:nid(),e:'✨',n:'',closed:false,items:[{id:nid(),n:'',p:'',pd:''}]});
@@ -971,6 +1024,8 @@ document.getElementById('resetBtn').onclick=()=>{
   const hs=(location.hash||'').match(/s=([^&]+)/);
   function start(fromLink,attachId){
     S=fromLink||load()||seedState();
+    // the old in-list בלת"מ category is now the automatic % buffer - drop it when empty so it isn't shown twice
+    S.rooms=S.rooms.filter(r=>!(r.n==='בלת"מ'&&r.items.every(it=>!num(it.p)&&!num(it.pd))));
     if(attachId){docId=attachId;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
     else if(fromLink){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
     fillTop();render();refreshShareUI();

@@ -227,6 +227,18 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .cmp-row:nth-child(odd){background:var(--sage-tint)}
 .cmp-row.h{background:var(--pine);color:#fff;font-weight:900;font-size:12px}
 .cmp-row .up{color:var(--go)}.cmp-row .down{color:var(--red)}
+.step-h{margin:22px 2px 0}.step-h .sec-lbl{background:#fff;box-shadow:var(--shadow);margin-bottom:8px}
+.step-h p{font-size:13px;font-weight:600;color:var(--ink-soft);line-height:1.55}
+#targetCard{margin-top:18px}
+.tg-row{display:flex;justify-content:space-between;gap:10px;padding:8px 2px;font-size:14px;font-weight:700;color:var(--ink-soft);border-bottom:1px solid rgba(var(--pine-rgb),.10);font-variant-numeric:tabular-nums}
+.tg-row b{color:var(--pine-darker);font-weight:900}
+.tg-row.tot{border-bottom:0;color:var(--pine-darker);font-weight:900}
+.tg-row .minus{color:var(--red)}
+.tg-big{margin-top:12px;display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 80%);border-radius:16px;padding:16px;color:#fff}
+.tg-big.neg{background:linear-gradient(140deg,#c96a55,var(--red) 80%)}
+.tg-lbl{font-size:13px;font-weight:800;opacity:.9}
+.tg-val{font-size:clamp(28px,7vw,36px);font-weight:900;line-height:1.2}
+.tg-sub{font-size:12.5px;font-weight:700;opacity:.9;margin-top:2px}
 #commitNote{display:block}#commitNote[hidden]{display:none}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -389,7 +401,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
   </a>
 
   <div class="card">
-    <span class="sec-lbl">💌 האורחים והמתנות</span>
+    <span class="sec-lbl">1 · 💌 האורחים והמתנות</span>
     <div class="trip-fields">
       <div class="field">
         <label for="invited">כמה מוזמנים הזמנתם?</label>
@@ -411,11 +423,23 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div class="per-line" id="guestLine" hidden></div>
   </div>
 
+  <div class="step-h"><span class="sec-lbl">2 · 🧾 מתקצבים את המסביב</span><p>כל מה שהוא לא מחיר המנה: שמלה, צלם, דיג'יי, רב, אטרקציות, תוספות באולם. כמה שאתם מתקצבים כאן, ככה נקבע כמה נשאר למנה.</p></div>
+  <div id="rooms"></div>
+
+  <button class="add-room" id="addRoom">+ הוספת קטגוריה</button>
+
+  <div class="card" id="targetCard">
+    <span class="sec-lbl">3 · 🎯 באיזה מחיר מנה לחפש</span>
+    <div class="tg-rows" id="tgRows"></div>
+    <div class="tg-big" id="tgBig" hidden><span class="tg-lbl">מחפשים אולם עם מנה של עד</span><span class="tg-val tabular" id="tgVal">0 ₪</span><span class="tg-sub" id="tgSub"></span></div>
+    <div class="insight" id="tgNote"></div>
+  </div>
+
   <div class="card">
-    <span class="sec-lbl">🏛️ האולם</span>
+    <span class="sec-lbl">4 · 🏛️ האולם - המחיר שקיבלתם</span>
     <div class="trip-fields">
       <div class="field">
-        <label for="plate">מחיר מנה</label>
+        <label for="plate">מחיר המנה שהאולם נתן לכם</label>
         <div class="input-shell"><span class="unit">₪</span><input id="plate" type="text" inputmode="numeric" placeholder="0"></div>
       </div>
       <div class="field">
@@ -448,12 +472,8 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     </div>
   </div>
 
-  <div id="rooms"></div>
-
-  <button class="add-room" id="addRoom">+ הוספת קטגוריה</button>
-
   <div class="card" style="margin-top:18px">
-    <span class="sec-lbl">🧾 סיכום הספקים</span>
+    <span class="sec-lbl">🧾 פירוט כל ההוצאות</span>
     <div id="breakdown"></div>
     <div class="bd-total" id="bdTotal" hidden></div>
   </div>
@@ -616,15 +636,15 @@ function refreshSummary(){
   setSum('barPct',c.expenses>0?'המתנות והעזרה מכסות '+Math.round(cover)+'% מההוצאות':'כמה מההוצאות המתנות מכסות');
   setSum('barLeft',c.expenses>0?'יוצא '+money(c.expenses)+' ₪':'');
 
+  refreshTarget(c);
+
   // levers: what keeps you at zero
   const ll=document.getElementById('leverLine');
   if(ready&&c.plate>0){
-    const maxPlate=(c.income-c.sup-c.g*c.ph)/c.plates;
     const needGift=(c.expenses-c.help)/c.g;
     const margin=c.gift-c.plate-c.ph;
     ll.hidden=false;
-    ll.innerHTML=chipH('🍽️ מחיר מנה מקסימלי לאפס',maxPlate>0?money(maxPlate)+' ₪':'אין מרווח')+
-      chipH('🎁 מתנה ממוצעת שצריך לאפס',money(needGift)+' ₪')+
+    ll.innerHTML=chipH('🎁 מתנה ממוצעת שצריך לאפס',money(needGift)+' ₪')+
       chipH(margin>=0?'➕ כל אורח מכניס נטו':'➖ כל אורח עולה לכם',money(Math.abs(margin))+' ₪');
   } else ll.hidden=true;
 
@@ -659,6 +679,36 @@ function refreshSummary(){
 /* ── actual (ביצוע) ──
    Like the sheet's ביצוע column: commitment = signed plates (or the planned guests if empty);
    up to it you pay the plate price, above it the over-commitment price. */
+/* target plate price - Tali's sheet logic: budget − "the around" (suppliers) = left for the venue;
+   ÷ expected guests (or the signed commitment, if higher) = all-in price per plate to look for. */
+function refreshTarget(c){
+  const rows=document.getElementById('tgRows'),big=document.getElementById('tgBig'),note=document.getElementById('tgNote');
+  if(!(c.g>0&&(c.gift>0||c.help>0))){
+    rows.innerHTML='';big.hidden=true;note.className='insight';
+    note.textContent='💡 ממלאים למעלה כמה מוזמנים, כמה צפויים להגיע ומה המתנה הממוצעת, ומתקצבים את המסביב. כאן יופיע מחיר המנה שכדאי לחפש.';return;
+  }
+  const left=c.income-c.sup,target=left/c.plates,clean=target-c.ph;
+  rows.innerHTML='<div class="tg-row"><span>התקציב שלכם (מתנות + עזרה)</span><b>'+money(c.income)+' ₪</b></div>'+
+    '<div class="tg-row"><span>פחות המסביב (ספקים ותוספות)</span><b class="minus"><bdi dir="ltr">-'+money(c.sup)+'</bdi> ₪</b></div>'+
+    '<div class="tg-row tot"><span>נשאר לאולם</span><b>'+money(left)+' ₪</b></div>'+
+    '<div class="tg-row"><span>חלקי '+(c.plates>c.g?'מנות שהתחייבתם':'אורחים צפויים')+'</span><b>'+money(c.plates)+'</b></div>';
+  big.hidden=false;big.classList.toggle('neg',target<=0);
+  if(target<=0){
+    document.getElementById('tgVal').textContent='אין מרווח';
+    document.getElementById('tgSub').textContent='המסביב כבר עולה יותר מכל התקציב';
+    note.className='insight warn';note.textContent='🔴 המסביב לבד עולה יותר ממה שצפוי להיכנס. לפני שמחפשים אולם, שווה לחזור לרשימת הספקים ולהחליט מה מורידים או מוזילים.';return;
+  }
+  document.getElementById('tgVal').textContent=money(target)+' ₪';
+  document.getElementById('tgSub').textContent='למנה, כולל הכל באולם'+(c.ph>0?' · המנה עצמה עד '+money(Math.max(0,clean))+' ₪ (אחרי תוספת '+money(c.ph)+' ₪ לראש)':'');
+  let msg,cls='';
+  if(c.plate>0){
+    const all=c.plate+c.ph,diff=all-target;
+    if(diff>0){cls=' warn';msg='🔴 המנה שקיבלתם ('+money(all)+' ₪ כולל התוספות) גבוהה ב-'+money(diff)+' ₪ מהיעד. על '+money(c.plates)+' מנות זה '+money(diff*c.plates)+' ₪. אפשר לנסות להוריד מחיר מול האולם, לחפש אולם אחר, או להוריד מהמסביב.';}
+    else{msg='✅ המנה שקיבלתם ('+money(all)+' ₪ כולל התוספות) בתוך היעד, '+money(-diff)+' ₪ מתחת למקסימום. על '+money(c.plates)+' מנות זה מרווח של '+money(-diff*c.plates)+' ₪.';}
+  } else if(c.sup<=0){cls=' soft';msg='🟠 עוד לא תקצבתם את המסביב, אז המחיר כאן גבוה מדי - הוא מניח שכל התקציב הולך רק לאולם. כדאי למלא קודם את הספקים.';}
+  else{msg='💡 זה המחיר שסביבו מחפשים אולם: מנה עד '+money(target)+' ₪ כולל אלכוהול, דמי חליצה וכל מה שהאולם גובה לראש. מחיר גבוה יותר אומר לצאת במינוס, אלא אם מורידים מהמסביב.';}
+  note.className='insight'+cls;note.textContent=msg;
+}
 function giftsTotal(){return num(S.b200)*200+num(S.b100)*100+num(S.b50)*50+num(S.gch)+num(S.gtr)+num(S.goth);}
 function calcActual(){
   const p=calc(),ag=num(S.ag),gifts=giftsTotal();

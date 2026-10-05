@@ -239,6 +239,8 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .tg-lbl{font-size:13px;font-weight:800;opacity:.9}
 .tg-val{font-size:clamp(28px,7vw,36px);font-weight:900;line-height:1.2}
 .tg-sub{font-size:12.5px;font-weight:700;opacity:.9;margin-top:2px}
+.blt-lbl{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.blt-val{background:var(--sage-tint);border-radius:12px;padding:11px 13px;font-size:17px;font-weight:900;color:var(--pine-darker)}
 #commitNote{display:block}#commitNote[hidden]{display:none}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -428,6 +430,18 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 
   <button class="add-room" id="addRoom">+ הוספת קטגוריה</button>
 
+  <div class="card" style="margin-top:16px">
+    <span class="sec-lbl">🛟 בלת"מ - הוצאות בלתי צפויות</span>
+    <div class="trip-fields">
+      <div class="field">
+        <label for="blt">כמה אחוז מהמסביב לשים בצד?</label>
+        <div class="input-shell"><input id="blt" type="text" inputmode="numeric" placeholder="10"><span class="unit unit-suf">%</span></div>
+      </div>
+      <div class="field"><span class="blt-lbl">נכנס אוטומטית למסביב</span><div class="blt-val tabular" id="bltVal">0 ₪</div></div>
+    </div>
+    <p class="act-intro" style="margin:12px 0 0">בכל חתונה צץ משהו שלא תכננו: עוד שעה של צלם, תיקון לשמלה, הסעה, טיפים. עדיף שזה יהיה כבר בתוך התקציב ולא הפתעה.</p>
+  </div>
+
   <div class="card" id="targetCard">
     <span class="sec-lbl">3 · 🎯 באיזה מחיר מנה לחפש</span>
     <div class="tg-rows" id="tgRows"></div>
@@ -563,12 +577,11 @@ const SEED=[
  ['💍','טקס',['רב','פתיחת תיק ברבנות','טבעות','כרית, סלסלאות ופרחים','ברכת הכלה']],
  ['🥂','תוספות באולם',['הגברה ותאורה','טיפים','אלכוהול מהבית','בקבוקים לשולחנות','עיצוב אולם']],
  ['📸','ספקים',['צלם סטילס ווידאו','עמדת צילום / מגנטים',"דיג'יי",'נגנים (סקסופון, כינור, זמר)','מנהל אירוע','סידורי הושבה','אישורי הגעה','זכויות יוצרים (אקו"ם)','הזמנות ובית דפוס','הסעות','רכב וקישוט לרכב','דוגיסיטר']],
- ['🎉','אטרקציות לרחבה',['אביזרים לרחבה','משקפיים','אורות','בועות סבון']],
- ['🛟','בלת"מ',['הוצאות בלתי צפויות']]
+ ['🎉','אטרקציות לרחבה',['אביזרים לרחבה','משקפיים','אורות','בועות סבון']]
 ];
 
 function seedState(){
-  return {inv:'',pct:'',gift:'',help:'',plate:'',ph:'',commit:'',ag:'',ahelp:'',aover:'',b200:'',b100:'',b50:'',gch:'',gtr:'',goth:'',
+  return {blt:'',inv:'',pct:'',gift:'',help:'',plate:'',ph:'',commit:'',ag:'',ahelp:'',aover:'',b200:'',b100:'',b50:'',gch:'',gtr:'',goth:'',
     rooms:SEED.map(r=>({id:nid(),e:r[0],n:r[1],closed:true,items:r[2].map(n=>({id:nid(),n:n,p:'',pd:''}))}))};
 }
 let S=null;
@@ -596,10 +609,13 @@ function syncLive(){
 /* ── calc ──
    Same logic as Tali's sheet: expected guests = invited × arrival %; income = guests × avg gift + help;
    venue = plates × plate price + guests × per-head extras; plates = max(guests, commitment). */
+// בלת"מ = % of "the around", added automatically (default 10%, editable)
+function bltPct(){return S.blt===''||S.blt==null?10:Math.min(100,num(S.blt));}
 function suppliersTotals(){
-  let cost=0,paid=0;
-  S.rooms.forEach(r=>r.items.forEach(it=>{cost+=num(it.p);paid+=num(it.pd);}));
-  return {cost,paid};
+  let items=0,paid=0;
+  S.rooms.forEach(r=>r.items.forEach(it=>{items+=num(it.p);paid+=num(it.pd);}));
+  const buf=items*bltPct()/100;
+  return {items,paid,buf,cost:items+buf};
 }
 function pctOf(){const p=num(S.pct);return S.pct===''||S.pct==null?70:Math.min(100,p);}
 function calcAt(pct){
@@ -636,6 +652,7 @@ function refreshSummary(){
   setSum('barPct',c.expenses>0?'המתנות והעזרה מכסות '+Math.round(cover)+'% מההוצאות':'כמה מההוצאות המתנות מכסות');
   setSum('barLeft',c.expenses>0?'יוצא '+money(c.expenses)+' ₪':'');
 
+  const stb=suppliersTotals();document.getElementById('bltVal').textContent=money(stb.buf)+' ₪';
   refreshTarget(c);
 
   // levers: what keeps you at zero
@@ -689,7 +706,7 @@ function refreshTarget(c){
   }
   const left=c.income-c.sup,target=left/c.plates,clean=target-c.ph;
   rows.innerHTML='<div class="tg-row"><span>התקציב שלכם (מתנות + עזרה)</span><b>'+money(c.income)+' ₪</b></div>'+
-    '<div class="tg-row"><span>פחות המסביב (ספקים ותוספות)</span><b class="minus"><bdi dir="ltr">-'+money(c.sup)+'</bdi> ₪</b></div>'+
+    '<div class="tg-row"><span>פחות המסביב (ספקים, תוספות ובלת"מ)</span><b class="minus"><bdi dir="ltr">-'+money(c.sup)+'</bdi> ₪</b></div>'+
     '<div class="tg-row tot"><span>נשאר לאולם</span><b>'+money(left)+' ₪</b></div>'+
     '<div class="tg-row"><span>חלקי '+(c.plates>c.g?'מנות שהתחייבתם':'אורחים צפויים')+'</span><b>'+money(c.plates)+'</b></div>';
   big.hidden=false;big.classList.toggle('neg',target<=0);
@@ -716,8 +733,8 @@ function calcActual(){
   const commit=p.commit>0?p.commit:p.g;
   const over=num(S.aover)>0?num(S.aover):p.plate;
   const venue=(ag<=commit?commit*p.plate:commit*p.plate+(ag-commit)*over)+ag*p.ph;
-  const income=gifts+help,expenses=venue+p.sup;
-  return {p,ag,gifts,help,venue,income,expenses,result:income-expenses,avgGift:ag>0?gifts/ag:0};
+  const sup=suppliersTotals().items,income=gifts+help,expenses=venue+sup;
+  return {p,ag,gifts,help,venue,sup,income,expenses,result:income-expenses,avgGift:ag>0?gifts/ag:0};
 }
 function refreshActual(){
   const a=calcActual(),gl=document.getElementById('giftLine'),box=document.getElementById('actualRes');
@@ -739,7 +756,7 @@ function refreshActual(){
     ['מתנה ממוצעת',planReady?money(p.gift)+' ₪':'-',money(a.avgGift)+' ₪'+d(a.avgGift,p.gift,' ₪',true)],
     ['נכנס',planReady?money(p.income)+' ₪':'-',money(a.income)+' ₪'+d(a.income,p.income,' ₪',true)],
     ['אולם',planReady?money(p.venue)+' ₪':'-',money(a.venue)+' ₪'+d(a.venue,p.venue,' ₪',false)],
-    ['ספקים',money(p.sup)+' ₪',money(p.sup)+' ₪'],
+    ['ספקים',money(p.sup)+' ₪',money(a.sup)+' ₪'+d(a.sup,p.sup,' ₪',false)],
     ['שורה תחתונה',planReady?sg(p.result):'-',sg(a.result)+d(a.result,p.result,' ₪',true)]
   ];
   document.getElementById('cmpTable').innerHTML='<div class="cmp-row h"><span></span><span>תקציב</span><span>בפועל</span></div>'+
@@ -783,14 +800,20 @@ function renderBreakdown(){
     });
     host.appendChild(block);
   });
+  const sb=suppliersTotals();
+  if(sb.buf>0){
+    const block=document.createElement('div');block.className='bd-room';
+    block.innerHTML='<div class="bd-rhead"><span class="bd-rname">🛟 בלת"מ ('+bltPct()+'% מהמסביב)</span><span class="bd-rnums"><span class="paid">'+money(sb.buf)+' ₪</span></span></div>';
+    host.appendChild(block);
+  }
   if(!host.children.length){
     host.innerHTML='<div class="bd-empty">כשתמלאו מחיר מנה ועלויות של ספקים, יופיע כאן פירוט מסודר: כמה עולה כל קטגוריה, כמה כבר שולם וכמה עוד נשאר לשלם.</div>';
     totalEl.hidden=true;return;
   }
   const st=suppliersTotals();
   totalEl.hidden=false;
-  totalEl.innerHTML='<span class="bd-tlbl">סה"כ</span><span class="bd-tnums">כל ההוצאות <span class="paid">'+money(c.expenses)+' ₪</span> · ספקים <span class="plan">'+money(st.cost)+' ₪</span>'+
-    (st.cost-st.paid>0?' · <span class="over">נשאר לשלם לספקים '+money(st.cost-st.paid)+' ₪</span>':'')+'</span>';
+  totalEl.innerHTML='<span class="bd-tlbl">סה"כ</span><span class="bd-tnums">כל ההוצאות <span class="paid">'+money(c.expenses)+' ₪</span> · ספקים <span class="plan">'+money(st.items)+' ₪</span>'+(st.buf>0?' · בלת"מ <span class="plan">'+money(st.buf)+' ₪</span>':'')+
+    (st.items-st.paid>0?' · <span class="over">נשאר לשלם לספקים '+money(st.items-st.paid)+' ₪</span>':'')+'</span>';
 }
 
 function refreshRoom(rEl,r){
@@ -885,7 +908,7 @@ function itemRow(card,r,it){
 function refreshAll(card,r){if(card&&r)refreshRoom(card,r);refreshSummary();}
 
 /* ── top-level wiring ── */
-const TOP=[['invited','inv',true],['pct','pct',false],['gift','gift',true],['help','help',true],['plate','plate',true],['perHead','ph',true],['commit','commit',true],['aGuests','ag',true],['aHelp','ahelp',true],['aOver','aover',true],['b200','b200',true],['b100','b100',true],['b50','b50',true],['gChecks','gch',true],['gTransfer','gtr',true],['gOther','goth',true]];
+const TOP=[['invited','inv',true],['pct','pct',false],['gift','gift',true],['help','help',true],['plate','plate',true],['perHead','ph',true],['commit','commit',true],['blt','blt',false],['aGuests','ag',true],['aHelp','ahelp',true],['aOver','aover',true],['b200','b200',true],['b100','b100',true],['b50','b50',true],['gChecks','gch',true],['gTransfer','gtr',true],['gOther','goth',true]];
 TOP.forEach(([id,k,money_])=>{
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{

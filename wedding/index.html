@@ -215,6 +215,18 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .per-line .pl-chip.cur{background:#fff;border:1.5px solid var(--pine)}
 .per-line .pl-val.neg{color:var(--red)}
 .per-line .pl-val.pos{color:var(--go)}
+.act-intro{font-size:13px;font-weight:600;color:var(--ink-soft);margin:-4px 0 14px;line-height:1.55}
+.gift-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
+.gift-grid .field{min-width:0}.gift-grid .field.full{grid-column:1/-1}
+.gift-grid .input-shell input{width:100%}
+@media(max-width:560px){.gift-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.trip-fields>.field{min-width:0}
+#aTileRes.neg{background:linear-gradient(140deg,#c96a55,var(--red) 80%)}
+.cmp{margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid rgba(var(--pine-rgb),.12)}
+.cmp-row{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr 1fr;gap:8px;padding:8px 12px;font-size:13px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.cmp-row:nth-child(odd){background:var(--sage-tint)}
+.cmp-row.h{background:var(--pine);color:#fff;font-weight:900;font-size:12px}
+.cmp-row .up{color:var(--go)}.cmp-row .down{color:var(--red)}
 #commitNote{display:block}#commitNote[hidden]{display:none}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -446,6 +458,46 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div class="bd-total" id="bdTotal" hidden></div>
   </div>
 
+  <div class="card" id="actualCard" style="margin-top:18px">
+    <span class="sec-lbl">✅ ביצוע - כמה יצא בפועל</span>
+    <p class="act-intro">אחרי החתונה: כמה הגיעו באמת וכמה מתנות נכנסו. עלויות הספקים נלקחות מהרשימה למעלה (עלות סופית), אז כדאי לעדכן שם את הסכומים הסופיים.</p>
+    <div class="trip-fields">
+      <div class="field">
+        <label for="aGuests">כמה אורחים הגיעו בפועל?</label>
+        <div class="input-shell"><input id="aGuests" type="text" inputmode="numeric" placeholder="0"><span class="unit unit-suf">אורחים</span></div>
+      </div>
+      <div class="field">
+        <label for="aHelp">עזרה מההורים בפועל</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="aHelp" type="text" inputmode="numeric" placeholder="כמו בתכנון"></div>
+      </div>
+      <div class="field full">
+        <label for="aOver">מחיר מנה מעל ההתחייבות (אם הגיעו יותר ממה שהתחייבתם)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="aOver" type="text" inputmode="numeric" placeholder="אם ריק - כמו מחיר המנה"></div>
+      </div>
+    </div>
+    <div class="scen-t">🎁 ספירת המתנות</div>
+    <div class="gift-grid">
+      <div class="field"><label for="b200">שטרות של 200</label><div class="input-shell"><input id="b200" type="text" inputmode="numeric" placeholder="0"><span class="unit unit-suf">שטרות</span></div></div>
+      <div class="field"><label for="b100">שטרות של 100</label><div class="input-shell"><input id="b100" type="text" inputmode="numeric" placeholder="0"><span class="unit unit-suf">שטרות</span></div></div>
+      <div class="field"><label for="b50">שטרות של 50</label><div class="input-shell"><input id="b50" type="text" inputmode="numeric" placeholder="0"><span class="unit unit-suf">שטרות</span></div></div>
+      <div class="field"><label for="gChecks">צ'קים (סכום)</label><div class="input-shell"><span class="unit">₪</span><input id="gChecks" type="text" inputmode="numeric" placeholder="0"></div></div>
+      <div class="field"><label for="gTransfer">העברות וביט (סכום)</label><div class="input-shell"><span class="unit">₪</span><input id="gTransfer" type="text" inputmode="numeric" placeholder="0"></div></div>
+      <div class="field full"><label for="gOther">מתנות שכבר נספרו (למשל מרשימת המוזמנים)</label><div class="input-shell"><span class="unit">₪</span><input id="gOther" type="text" inputmode="numeric" placeholder="0"></div></div>
+    </div>
+    <div class="per-line" id="giftLine" hidden></div>
+    <div id="actualRes" hidden>
+      <div class="sum-grid" style="margin-top:14px">
+        <div class="tile main" id="aTileRes"><span class="t-lbl" id="aResLbl">יצאנו ב...</span><div class="t-val tabular" id="aRes">0 ₪</div></div>
+        <div class="tile"><span class="t-lbl">קיבלנו (מתנות + עזרה)</span><div class="t-val tabular" id="aIncome">0 ₪</div></div>
+        <div class="tile"><span class="t-lbl">הוצאנו (אולם + ספקים)</span><div class="t-val tabular" id="aExp">0 ₪</div></div>
+        <div class="tile"><span class="t-lbl">עלות לאורח בפועל</span><div class="t-val tabular" id="aPer">0 ₪</div></div>
+      </div>
+      <div class="scen-t">📋 תקציב מול ביצוע</div>
+      <div class="cmp" id="cmpTable"></div>
+      <div class="insight" id="aInsight"></div>
+    </div>
+  </div>
+
   <div class="cta-card">
     <div class="cta-emoji">💍</div>
     <h3>מתחילים את החיים המשותפים בפלוס</h3>
@@ -496,7 +548,7 @@ const SEED=[
 ];
 
 function seedState(){
-  return {inv:'',pct:'',gift:'',help:'',plate:'',ph:'',commit:'',
+  return {inv:'',pct:'',gift:'',help:'',plate:'',ph:'',commit:'',ag:'',ahelp:'',aover:'',b200:'',b100:'',b50:'',gch:'',gtr:'',goth:'',
     rooms:SEED.map(r=>({id:nid(),e:r[0],n:r[1],closed:true,items:r[2].map(n=>({id:nid(),n:n,p:'',pd:''}))}))};
 }
 let S=null;
@@ -601,6 +653,50 @@ function refreshSummary(){
   } else sc.hidden=true;
 
   renderBreakdown();
+  refreshActual();
+}
+
+/* ── actual (ביצוע) ──
+   Like the sheet's ביצוע column: commitment = signed plates (or the planned guests if empty);
+   up to it you pay the plate price, above it the over-commitment price. */
+function giftsTotal(){return num(S.b200)*200+num(S.b100)*100+num(S.b50)*50+num(S.gch)+num(S.gtr)+num(S.goth);}
+function calcActual(){
+  const p=calc(),ag=num(S.ag),gifts=giftsTotal();
+  const help=(S.ahelp===''||S.ahelp==null)?p.help:num(S.ahelp);
+  const commit=p.commit>0?p.commit:p.g;
+  const over=num(S.aover)>0?num(S.aover):p.plate;
+  const venue=(ag<=commit?commit*p.plate:commit*p.plate+(ag-commit)*over)+ag*p.ph;
+  const income=gifts+help,expenses=venue+p.sup;
+  return {p,ag,gifts,help,venue,income,expenses,result:income-expenses,avgGift:ag>0?gifts/ag:0};
+}
+function refreshActual(){
+  const a=calcActual(),gl=document.getElementById('giftLine'),box=document.getElementById('actualRes');
+  if(a.gifts>0){gl.hidden=false;gl.innerHTML=chipH('🎁 סה"כ מתנות',money(a.gifts)+' ₪')+(a.ag>0?chipH('ממוצע לאורח',money(a.avgGift)+' ₪'):'');}
+  else gl.hidden=true;
+  if(!(a.ag>0&&a.gifts>0)){box.hidden=true;return;}
+  box.hidden=false;
+  document.getElementById('aResLbl').textContent=a.result>=0?'יצאנו בפלוס של':'יצאנו במינוס של';
+  document.getElementById('aRes').textContent=money(Math.abs(a.result))+' ₪';
+  document.getElementById('aTileRes').classList.toggle('neg',a.result<0);
+  document.getElementById('aIncome').textContent=money(a.income)+' ₪';
+  document.getElementById('aExp').textContent=money(a.expenses)+' ₪';
+  document.getElementById('aPer').textContent=money(a.expenses/a.ag)+' ₪';
+  const p=a.p,planReady=p.g>0&&p.gift>0;
+  const d=(act,plan,unit,goodUp)=>{const diff=act-plan;if(!planReady||Math.round(diff)===0)return '';const good=goodUp?diff>0:diff<0;return ' <span class="'+(good?'up':'down')+'">(<bdi dir="ltr">'+(diff>0?'+':'-')+money(Math.abs(diff))+'</bdi>'+unit+')</span>';};
+  const sg=v=>(v<0?'מינוס ':'פלוס ')+money(Math.abs(v))+' ₪';
+  const rows=[
+    ['אורחים',planReady?money(p.g):'-',money(a.ag)+d(a.ag,p.g,'',true)],
+    ['מתנה ממוצעת',planReady?money(p.gift)+' ₪':'-',money(a.avgGift)+' ₪'+d(a.avgGift,p.gift,' ₪',true)],
+    ['נכנס',planReady?money(p.income)+' ₪':'-',money(a.income)+' ₪'+d(a.income,p.income,' ₪',true)],
+    ['אולם',planReady?money(p.venue)+' ₪':'-',money(a.venue)+' ₪'+d(a.venue,p.venue,' ₪',false)],
+    ['ספקים',money(p.sup)+' ₪',money(p.sup)+' ₪'],
+    ['שורה תחתונה',planReady?sg(p.result):'-',sg(a.result)+d(a.result,p.result,' ₪',true)]
+  ];
+  document.getElementById('cmpTable').innerHTML='<div class="cmp-row h"><span></span><span>תקציב</span><span>בפועל</span></div>'+
+    rows.map(r=>'<div class="cmp-row"><span>'+r[0]+'</span><span>'+r[1]+'</span><span>'+r[2]+'</span></div>').join('');
+  const ai=document.getElementById('aInsight');
+  if(a.result>=0){ai.className='insight';ai.textContent='🎉 יצאתם מהחתונה בפלוס של '+money(a.result)+' ₪'+(planReady&&a.result>p.result?' - '+money(a.result-p.result)+' ₪ יותר ממה שתכננתם':'')+'. עכשיו השאלה החשובה: מה הכסף הזה הולך להיות? קרן חירום, הון עצמי לדירה או השקעה - כדאי להחליט לפני שהוא נבלע בעו"ש.';}
+  else{ai.className='insight warn';ai.textContent='יצאתם במינוס של '+money(-a.result)+' ₪. קורה, וזה לא סוף העולם - העיקר לסגור אותו מסודר ומהר, בלי שיגרור ריבית במינוס. שווה לבנות תוכנית החזר על בסיס התקציב המשותף החדש שלכם.';}
 }
 
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -739,7 +835,7 @@ function itemRow(card,r,it){
 function refreshAll(card,r){if(card&&r)refreshRoom(card,r);refreshSummary();}
 
 /* ── top-level wiring ── */
-const TOP=[['invited','inv',true],['pct','pct',false],['gift','gift',true],['help','help',true],['plate','plate',true],['perHead','ph',true],['commit','commit',true]];
+const TOP=[['invited','inv',true],['pct','pct',false],['gift','gift',true],['help','help',true],['plate','plate',true],['perHead','ph',true],['commit','commit',true],['aGuests','ag',true],['aHelp','ahelp',true],['aOver','aover',true],['b200','b200',true],['b100','b100',true],['b50','b50',true],['gChecks','gch',true],['gTransfer','gtr',true],['gOther','goth',true]];
 TOP.forEach(([id,k,money_])=>{
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{

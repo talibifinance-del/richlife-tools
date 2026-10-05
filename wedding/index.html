@@ -250,6 +250,14 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .real-plate{margin-top:12px;background:var(--sage-tint);border-radius:14px;padding:12px 14px;font-size:13.5px;font-weight:700;color:var(--ink-soft);line-height:1.6}
 .real-plate b{color:var(--pine-darker);font-weight:900;font-variant-numeric:tabular-nums}
 .real-plate .big{display:block;font-size:20px;font-weight:900;color:var(--pine-darker);margin-top:2px}
+.rp-t{font-size:14px;font-weight:900;color:var(--pine-darker);margin-bottom:4px}
+.real-plate .tg-row{font-size:13.5px}
+.rp-sum{border-top:2px solid rgba(var(--pine-rgb),.25);margin-top:2px;font-size:15.5px!important}
+.rp-sum b{font-size:18px}
+.rp-verdict{margin-top:10px;border-radius:12px;padding:10px 12px;font-size:13.5px;font-weight:800;line-height:1.55}
+.rp-verdict.good{background:rgba(47,145,105,.12);color:var(--go)}
+.rp-verdict.bad{background:rgba(var(--red-rgb),.10);color:var(--red)}
+.rp-foot{margin-top:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:left}
 #commitNote{display:block}#commitNote[hidden]{display:none}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -473,8 +481,8 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div class="scen-t">מה כלול במחיר המנה?</div>
     <p class="act-intro" style="margin:4px 0 6px">יש אולמות שהמחיר כולל הכל, ויש כאלה שנותנים מחיר מנה נמוך ומוסיפים על כל השאר. מה שלא כלול - מסמנים "בתוספת" וכותבים כמה.</p>
     <div id="vxList"></div>
-    <div class="real-plate" id="realPlate" hidden></div>
     <div class="insight soft" id="dupNote" hidden></div>
+    <div class="real-plate" id="realPlate" hidden></div>
   </div>
 
   <div class="card">
@@ -697,10 +705,24 @@ function refreshSummary(){
   const stb=suppliersTotals();document.getElementById('bltVal').textContent=money(stb.buf)+' ₪';
   refreshTarget(c);
   const rp=document.getElementById('realPlate');
-  if(c.plate>0&&(c.lump>0||c.ph>0)&&c.plates>0){
+  if(c.plate>0&&c.plates>0){
     rp.hidden=false;
-    rp.innerHTML='מחיר המנה ברשימה <b>'+money(c.plate)+' ₪</b>'+(c.lump>0?' + תוספות לאירוע <b>'+money(c.lump)+' ₪</b> (≈'+money(c.lump/c.plates)+' ₪ למנה)':'')+(c.ph>0?' + <b>'+money(c.ph)+' ₪</b> לאורח':'')+
-      '<span class="big">המחיר האמיתי למנה: '+money(c.realPlate)+' ₪</span>';
+    const vs=vxState(),pr=v=>Math.round(v);
+    let h='<div class="rp-t">🧮 כמה באמת עולה מנה</div><div class="tg-row"><span>מחיר המנה שהאולם נתן</span><b>'+money(c.plate)+' ₪</b></div>';
+    VX.forEach(([k,n])=>{const x=vs[k],a=num(x.amt);if(x.inc||a<=0)return;
+      h+=x.per==='hd'
+        ?'<div class="tg-row"><span>+ '+n+' (לאורח)</span><b>'+money(a*c.g/c.plates)+' ₪</b></div>'
+        :'<div class="tg-row"><span>+ '+n+': '+money(a)+' ₪ ÷ '+money(c.plates)+' מנות</span><b>'+money(a/c.plates)+' ₪</b></div>';});
+    h+='<div class="tg-row tot rp-sum"><span>= המחיר האמיתי למנה</span><b>'+money(c.realPlate)+' ₪</b></div>';
+    const income=c.income,target=c.plates>0?(income-c.sup)/c.plates:0,ready=c.g>0&&(c.gift>0||c.help>0);
+    if(ready&&target>0){
+      const diff=c.realPlate-target;
+      h+=diff>0
+        ?'<div class="rp-verdict bad">🔴 היעד שלכם: עד '+money(target)+' ₪ למנה. ההצעה הזאת יקרה ב-'+money(diff)+' ₪ למנה, כלומר '+money(diff*c.plates)+' ₪ על כל האירוע. אפשר לנסות להוריד מחיר או תוספות מול האולם, לחפש אולם אחר, או להוריד מהמסביב.</div>'
+        :'<div class="rp-verdict good">✅ היעד שלכם: עד '+money(target)+' ₪ למנה. ההצעה הזאת בתוך היעד, '+money(-diff)+' ₪ פחות למנה - מרווח של '+money(-diff*c.plates)+' ₪ על כל האירוע.</div>';
+    }
+    h+='<div class="rp-foot">סה"כ האולם: '+money(c.venue)+' ₪</div>';
+    rp.innerHTML=h;
   } else rp.hidden=true;
   const v=vxState(),dups=Object.keys(VX_AROUND).filter(k=>S.rooms.some(r=>r.items.some(it=>it.n===VX_AROUND[k]&&num(it.p)>0)));
   const dn=document.getElementById('dupNote');
@@ -756,7 +778,7 @@ function refreshTarget(c){
     rows.innerHTML='';big.hidden=true;note.className='insight';
     note.textContent='💡 ממלאים למעלה כמה מוזמנים, כמה צפויים להגיע ומה המתנה הממוצעת, ומתקצבים את המסביב. כאן יופיע מחיר המנה שכדאי לחפש.';return;
   }
-  const left=c.income-c.sup,target=left/c.plates,clean=(left-c.lump-c.g*c.ph)/c.plates,hasX=c.lump>0||c.ph>0;
+  const left=c.income-c.sup,target=left/c.plates;
   rows.innerHTML='<div class="tg-row"><span>התקציב שלכם (מתנות + עזרה)</span><b>'+money(c.income)+' ₪</b></div>'+
     '<div class="tg-row"><span>פחות המסביב (ספקים, תוספות ובלת"מ)</span><b class="minus"><bdi dir="ltr">-'+money(c.sup)+'</bdi> ₪</b></div>'+
     '<div class="tg-row tot"><span>נשאר לאולם</span><b>'+money(left)+' ₪</b></div>'+
@@ -768,14 +790,10 @@ function refreshTarget(c){
     note.className='insight warn';note.textContent='🔴 המסביב לבד עולה יותר ממה שצפוי להיכנס. לפני שמחפשים אולם, שווה לחזור לרשימת הספקים ולהחליט מה מורידים או מוזילים.';return;
   }
   document.getElementById('tgVal').textContent=money(target)+' ₪';
-  document.getElementById('tgSub').textContent='למנה, כולל הכל באולם'+(hasX?' · עם התוספות שסימנתם, מחיר המנה ברשימה צריך להיות עד '+money(Math.max(0,clean))+' ₪':'');
+  document.getElementById('tgSub').textContent='למנה, כולל כל התוספות של האולם';
   let msg,cls='';
-  if(c.plate>0){
-    const all=c.realPlate,diff=all-target;
-    if(diff>0){cls=' warn';msg='🔴 המחיר האמיתי למנה ('+money(all)+' ₪ כולל התוספות) גבוהה ב-'+money(diff)+' ₪ מהיעד. על '+money(c.plates)+' מנות זה '+money(diff*c.plates)+' ₪. אפשר לנסות להוריד מחיר מול האולם, לחפש אולם אחר, או להוריד מהמסביב.';}
-    else{msg='✅ המחיר האמיתי למנה ('+money(all)+' ₪ כולל התוספות) בתוך היעד, '+money(-diff)+' ₪ מתחת למקסימום. על '+money(c.plates)+' מנות זה מרווח של '+money(-diff*c.plates)+' ₪.';}
-  } else if(c.sup<=0){cls=' soft';msg='🟠 עוד לא תקצבתם את המסביב, אז המחיר כאן גבוה מדי - הוא מניח שכל התקציב הולך רק לאולם. כדאי למלא קודם את הספקים.';}
-  else{msg='💡 זה המחיר שסביבו מחפשים אולם: מנה עד '+money(target)+' ₪ כולל אלכוהול, דמי חליצה וכל מה שהאולם גובה לראש. מחיר גבוה יותר אומר לצאת במינוס, אלא אם מורידים מהמסביב.';}
+  if(c.sup<=0){cls=' soft';msg='🟠 עוד לא תקצבתם את המסביב, אז המחיר כאן גבוה מדי - הוא מניח שכל התקציב הולך רק לאולם. כדאי למלא קודם את הספקים.';}
+  else{msg='💡 כשאתם מקבלים הצעה מאולם, משווים למספר הזה את המחיר האמיתי למנה - כלומר המנה ועוד כל מה שהאולם גובה בנפרד (דמי חליצה, דיג\'יי, הגברה, עיצוב). בשלב הבא הכלי מחשב את זה בשבילכם.';}
   note.className='insight'+cls;note.textContent=msg;
 }
 function giftsTotal(){return num(S.b200)*200+num(S.b100)*100+num(S.b50)*50+num(S.gch)+num(S.gtr)+num(S.goth);}

@@ -247,6 +247,14 @@ svg.chart{display:block;width:100%;height:auto}
 .tb-stats .s .v{font-size:14px;font-weight:900;color:var(--pine-deep);margin-top:3px;white-space:nowrap}
 .tb-stats .s.cost .v{color:#8f3a29}
 /* ── rent-vs-buy (6.10.26) ── */
+.sub-lbl{font-size:13.5px;font-weight:900;color:var(--pine-darker);margin:18px 0 10px}
+.cash{margin-top:16px;background:var(--sage-tint);border-radius:14px;padding:14px 16px}
+.cash h4{font-size:14px;font-weight:900;color:var(--pine-darker);margin-bottom:8px}
+.cash .cr{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:700;padding:4px 0}
+.cash .cr b{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.cash .cr.extra{color:var(--ink-soft)}
+.cash .cr.sum{border-top:2px solid rgba(var(--pine-rgb),.3);margin-top:6px;padding-top:9px;font-size:15px;font-weight:900;color:var(--pine-darker)}
+.cash .cn{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-top:8px;line-height:1.5}
 .budget{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .budget .bcol{background:var(--sage-tint);border-radius:14px;padding:12px}
 .budget h4{font-size:13.5px;font-weight:900;color:var(--pine-darker);margin-bottom:6px;text-align:center}
@@ -312,8 +320,8 @@ details.more .fields{margin-top:10px}
         <div class="input-shell"><span class="unit">₪</span><input id="price" type="text" inputmode="numeric" value="2,200,000"></div>
       </div>
       <div class="field">
-        <label for="equity">הון עצמי (כל הכסף שיש לכם לזה)</label>
-        <div class="input-shell"><span class="unit">₪</span><input id="equity" type="text" inputmode="numeric" value="620,000"></div>
+        <label for="equity">הון עצמי לדירה (המקדמה)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="equity" type="text" inputmode="numeric" value="550,000"></div>
       </div>
       <div class="field">
         <label for="rate">ריבית ממוצעת במשכנתא</label>
@@ -332,24 +340,35 @@ details.more .fields{margin-top:10px}
         <div class="input-shell"><span class="unit">₪</span><input id="maint" type="text" inputmode="numeric" value="450"></div>
       </div>
     </div>
-    <div class="idx-note">💡 כאן ריבית ממוצעת אחת לכל המשכנתא. לבנות תמהיל מסלולים מדויק ולראות את הריבית האמיתית שלו: <a href="/mortgage/" style="color:var(--pine-deep);font-weight:800">מחשבון המשכנתא</a>.</div>
-    <details class="more">
-      <summary>עוד הוצאות של קנייה (עו"ד, תיווך, שיפוץ, מכירה)</summary>
-      <div class="fields">
-        <div class="field">
-          <label for="costPct">עו"ד, תיווך, שמאות ויועץ משכנתא</label>
-          <div class="input-shell"><input id="costPct" type="text" inputmode="decimal" value="2"><span class="unit pct">% מהמחיר</span></div>
-        </div>
-        <div class="field">
-          <label for="reno">שיפוץ וריהוט בכניסה</label>
-          <div class="input-shell"><span class="unit">₪</span><input id="reno" type="text" inputmode="numeric" value="0"></div>
-        </div>
-        <div class="field">
-          <label for="sellPct">עלויות מכירה בסוף (תיווך ועו"ד)</label>
-          <div class="input-shell"><input id="sellPct" type="text" inputmode="decimal" value="2"><span class="unit pct">%</span></div>
-        </div>
+    <div class="idx-note">💡 מס הרכישה מחושב לבד לפי המדרגות של 2026. כאן ריבית ממוצעת אחת לכל המשכנתא. לבנות תמהיל מסלולים מדויק ולראות את הריבית האמיתית שלו: <a href="/mortgage/" style="color:var(--pine-deep);font-weight:800">מחשבון המשכנתא</a>.</div>
+    <div class="sub-lbl">🧾 ההוצאות שמעבר למקדמה (הבנק לא מממן אותן)</div>
+    <div class="fields">
+      <div class="field">
+        <label for="lawyerPct">עורך דין (לפני מע"מ)</label>
+        <div class="input-shell"><input id="lawyerPct" type="text" inputmode="decimal" value="0.5"><span class="unit pct">% מהמחיר</span></div>
       </div>
-    </details>
+      <div class="field">
+        <label for="brokerPct">תיווך (לפני מע"מ, 0 אם אין)</label>
+        <div class="input-shell"><input id="brokerPct" type="text" inputmode="decimal" value="2"><span class="unit pct">% מהמחיר</span></div>
+      </div>
+      <div class="field">
+        <label for="appraiser">שמאי</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="appraiser" type="text" inputmode="numeric" value="2,500"></div>
+      </div>
+      <div class="field">
+        <label for="advisor">יועץ משכנתא (0 אם אין)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="advisor" type="text" inputmode="numeric" value="0"></div>
+      </div>
+      <div class="field">
+        <label for="reno">שיפוץ וריהוט בכניסה</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="reno" type="text" inputmode="numeric" value="0"></div>
+      </div>
+      <div class="field">
+        <label for="sellPct">עלויות מכירה בסוף (תיווך ועו"ד)</label>
+        <div class="input-shell"><input id="sellPct" type="text" inputmode="decimal" value="2"><span class="unit pct">%</span></div>
+      </div>
+    </div>
+    <div class="cash" id="cashBox"></div>
   </div>
 
   <div class="card">
@@ -368,7 +387,7 @@ details.more .fields{margin-top:10px}
         <div class="input-shell"><input id="ret" type="text" inputmode="decimal" value="6"><span class="unit pct">%</span></div>
       </div>
     </div>
-    <div class="idx-note">💡 כדי שההשוואה תהיה הוגנת, בשתי הדרכים יוצא מהכיס אותו סכום כל חודש. אם המשכנתא 8,000 ₪ ושכר הדירה 6,000 ₪, בשכירות נשארים 2,000 ₪ בחודש, והם הולכים להשקעה. גם ההון העצמי שלא שימש לקנייה מושקע מהיום הראשון. התחזוקה עולה כל שנה באותו קצב כמו שכר הדירה.</div>
+    <div class="idx-note">💡 כדי שההשוואה תהיה הוגנת, בשתי הדרכים יוצא מהכיס אותו סכום כל חודש. אם המשכנתא 8,000 ₪ ושכר הדירה 6,000 ₪, בשכירות נשארים 2,000 ₪ בחודש, והם הולכים להשקעה. בשכירות, כל הכסף שהיה הולך ביום הקנייה (מקדמה, מס והוצאות) מושקע מהיום הראשון. התחזוקה עולה כל שנה באותו קצב כמו שכר הדירה.</div>
   </div>
 
   <div class="card">
@@ -600,23 +619,27 @@ function purchaseTax(price,single){let t=0,prev=0;for(const [to,r] of (single?BR
 const CAP_GAINS=0.25;
 
 let APT='single',HZ=20,INV=true,LAST=null;
-const MONEY=['price','equity','maint','reno','rent'];
-const PCT=['rate','years','appr','costPct','sellPct','rentG','ret'];
+const MONEY=['price','equity','maint','reno','rent','appraiser','advisor'];
+const VAT=0.18;
+const PCT=['rate','years','appr','lawyerPct','brokerPct','sellPct','rentG','ret'];
 
-function inputs(){return{price:num('price'),equity:num('equity'),rate:num('rate'),years:Math.min(40,Math.max(1,Math.round(num('years'))||25)),appr:num('appr'),maint:num('maint'),costPct:num('costPct'),reno:num('reno'),sellPct:num('sellPct'),rent:num('rent'),rentG:num('rentG'),ret:num('ret'),single:APT==='single',invest:INV};}
+function inputs(){return{price:num('price'),equity:num('equity'),rate:num('rate'),years:Math.min(40,Math.max(1,Math.round(num('years'))||25)),appr:num('appr'),maint:num('maint'),lawyerPct:num('lawyerPct'),brokerPct:num('brokerPct'),appraiser:num('appraiser'),advisor:num('advisor'),reno:num('reno'),sellPct:num('sellPct'),rent:num('rent'),rentG:num('rentG'),ret:num('ret'),single:APT==='single',invest:INV};}
 
 /* the whole model; apprOverride is used by the sensitivity search */
 function simulate(p,apprOverride){const inv=p.invest!==false;
   const appr=(apprOverride!=null?apprOverride:p.appr)/100;
   const tax=purchaseTax(p.price,p.single);
-  const fees=p.price*p.costPct/100+p.reno;
-  const down=p.equity-tax-fees;                 // מה שנשאר מההון העצמי למקדמה
-  const loan=Math.max(0,p.price-down);          // אם ההון גדול מהמחיר, היתרה מושקעת אצל הקונים
-  const extraCash=Math.max(0,down-p.price);
+  // ההון העצמי שהוזן = המקדמה לדירה בלבד. כל השאר בא מעבר לו, מהכיס.
+  const lawyer=p.price*p.lawyerPct/100*(1+VAT),broker=p.price*p.brokerPct/100*(1+VAT);
+  const fees=lawyer+broker+p.appraiser+p.advisor+p.reno;
+  const down=Math.min(Math.max(0,p.equity),p.price);
+  const loan=Math.max(0,p.price-down);
+  const extraCash=0;
+  const cashNeeded=down+tax+fees;             // מה שיוצא מהכיס ביום הקנייה = מה ששוכרים משקיעים
   const n=p.years*12,r=p.rate/100/12;
   const pmt=loan<=0?0:(r===0?loan/n:loan*r/(1-Math.pow(1+r,-n)));
   const mRet=Math.pow(1+p.ret/100,1/12)-1;
-  let bal=loan,bp=extraCash,bBasis=extraCash,rp=Math.max(0,p.equity),rBasis=Math.max(0,p.equity);
+  let bal=loan,bp=extraCash,bBasis=extraCash,rp=cashNeeded,rBasis=cashNeeded;
   const yrs=[{y:0,rIn:0,buy:p.price*(1-p.sellPct/100)-loan+extraCash,rent:rp,home:p.price,bal:loan,bp:extraCash,rp,buyOut:pmt+p.maint,rentOut:p.rent}];
   let firstBuyOut=pmt+p.maint,firstRentOut=p.rent;
   for(let m=1;m<=360;m++){
@@ -630,10 +653,10 @@ function simulate(p,apprOverride){const inv=p.invest!==false;
     if(m%12===0){
       const y=m/12,home=p.price*Math.pow(1+appr,y);
       const bpNet=bp-CAP_GAINS*Math.max(0,bp-bBasis),rpNet=rp-CAP_GAINS*Math.max(0,rp-rBasis);
-      yrs.push({y,home,bal,bp:bpNet,rp:rpNet,rIn:rBasis-Math.max(0,p.equity),buy:home*(1-p.sellPct/100)-bal+bpNet,rent:rpNet,buyOut,rentOut});
+      yrs.push({y,home,bal,bp:bpNet,rp:rpNet,rIn:rBasis-cashNeeded,buy:home*(1-p.sellPct/100)-bal+bpNet,rent:rpNet,buyOut,rentOut});
     }
   }
-  return{tax,fees,down,loan,pmt,extraCash,ltv:p.price>0?loan/p.price:0,firstBuyOut,firstRentOut,yrs};
+  return{tax,fees,lawyer,broker,cashNeeded,down,loan,pmt,extraCash,ltv:p.price>0?loan/p.price:0,firstBuyOut,firstRentOut,yrs};
 }
 
 function breakEven(s){for(let y=1;y<=30;y++){if(s.yrs[y].buy>=s.yrs[y].rent){let ok=true;for(let k=y;k<=30;k++)if(s.yrs[k].buy<s.yrs[k].rent){ok=false;break;}if(ok)return y;}}return null;}
@@ -652,9 +675,9 @@ function calc(){syncLive();
     ${Y.bp>1?`<div class="cc-row"><span>השקעות בצד</span><b>${ils(Y.bp)}</b></div>`:''}
     <div class="cc-row total"><span>ההון שלכם</span><b>${ilsS(Y.buy)}</b></div></div>`;
   const rentCol=`<div class="cmp-col ${!buyWin?'mine win':'alt'}">${!buyWin?'<span class="win-tag">משאיר יותר</span>':''}<h4>🔑 שוכרים ומשקיעים</h4>
-    <div class="cc-row"><span>הון עצמי שהושקע</span><b>${ils(Math.max(0,p.equity))}</b></div>
+    <div class="cc-row"><span>הושקע ביום הראשון</span><b>${ils(s.cashNeeded)}</b></div>
     ${INV?`<div class="cc-row"><span>ההפרש החודשי שהושקע</span><b>${ils(Y.rIn)}</b></div>`:''}
-    <div class="cc-row"><span>רווחי ההשקעה (אחרי מס)</span><b>${ils(Y.rp-Math.max(0,p.equity)-Y.rIn)}</b></div>
+    <div class="cc-row"><span>רווחי ההשקעה (אחרי מס)</span><b>${ils(Y.rp-s.cashNeeded-Y.rIn)}</b></div>
     <div class="cc-row total"><span>ההון שלכם</span><b>${ilsS(Y.rent)}</b></div></div>`;
   $('cmpGrid').innerHTML=buyCol+rentCol;
   const v=$('verdict');
@@ -671,6 +694,13 @@ function calc(){syncLive();
   $('statsStrip').innerHTML=
     `<div class="chip"><div class="k">מס רכישה</div><div class="v">${ils(s.tax)}</div></div>`+
     `<div class="chip"><div class="k">משכנתא (אחוז מימון)</div><div class="v">${ils(s.loan)} · ${Math.round(s.ltv*100)}%</div></div>`;
+  // כמה כסף צריך ביום הקנייה
+  const row=(l,v,c='')=>v>0.5?`<div class="cr ${c}"><span>${l}</span><b>${ils(v)}</b></div>`:'';
+  $('cashBox').innerHTML=`<h4>💰 כמה כסף צריך ביום הקנייה</h4>`+
+    row('מקדמה לדירה (ההון העצמי)',s.down)+row('מס רכישה',s.tax,'extra')+(s.tax<0.5?`<div class="cr extra"><span>מס רכישה</span><b>0 ₪ (פטור)</b></div>`:'')+
+    row('עורך דין, כולל מע"מ',s.lawyer,'extra')+row('תיווך, כולל מע"מ',s.broker,'extra')+row('שמאי',p.appraiser,'extra')+row('יועץ משכנתא',p.advisor,'extra')+row('שיפוץ וריהוט',p.reno,'extra')+
+    `<div class="cr sum"><span>סה"כ מהכיס</span><b>${ils(s.cashNeeded)}</b></div>`+
+    `<div class="cn">כלומר צריך <b>${ils(s.cashNeeded-s.down)}</b> מעבר למקדמה. את הסכום הזה הבנק לא מממן. בשכירות, כל ה-${ils(s.cashNeeded)} מושקעים מהיום הראשון.</div>`;
   // אותו תקציב בשתי הדרכים
   const bud=Math.max(s.firstBuyOut,s.firstRentOut),gapM=Math.abs(diffM),buyCheaper=diffM<0;
   const invRow=(lbl)=>INV?`<div class="br inv"><span>${lbl}</span><b>+${ils(gapM)}</b></div>`:`<div class="br lost"><span>ההפרש (לא מושקע)</span><b>${ils(gapM)}</b></div>`;
@@ -680,8 +710,7 @@ function calc(){syncLive();
     `<div class="budget-note">${gapM<1?'שתי הדרכים עולות בדיוק אותו דבר כל חודש.':INV?`אותם ${ils(bud)} בחודש בשתי הדרכים. ב${buyCheaper?'קנייה':'שכירות'} נשארים ${ils(gapM)}, והם הולכים להשקעה. ככה משווים תפוחים לתפוחים.`:`במצב הזה ה-${ils(gapM)} שנשארים ב${buyCheaper?'קנייה':'שכירות'} לא נחסכים, הם פשוט נעלמים בהוצאות. ככה זה קורה אצל רוב האנשים, ושווה לראות מה זה עושה לתוצאה.`}</div>`;
   // מימון
   const maxLtv=p.single?0.75:0.5,ltv=$('ltv');
-  if(s.down<0){ltv.hidden=false;ltv.className='insight warn';ltv.innerHTML=`ההון העצמי לא מכסה אפילו את מס הרכישה והעלויות (${ils(s.tax+s.fees)}). את אלה הבנק לא מממן.`;}
-  else if(s.ltv>maxLtv+1e-6){ltv.hidden=false;ltv.className='insight warn';ltv.innerHTML=`בנק ישראל מגביל משכנתא ל-<b>${Math.round(maxLtv*100)}%</b> משווי ${p.single?'דירה יחידה':'דירה נוספת'}. כאן היא ${Math.round(s.ltv*100)}%, כלומר חסרים בערך <b>${ils(s.loan-p.price*maxLtv)}</b> בהון העצמי.`;}
+  if(s.ltv>maxLtv+1e-6){ltv.hidden=false;ltv.className='insight warn';ltv.innerHTML=`בנק ישראל מגביל משכנתא ל-<b>${Math.round(maxLtv*100)}%</b> משווי ${p.single?'דירה יחידה':'דירה נוספת'}. כאן היא ${Math.round(s.ltv*100)}%, כלומר צריך מקדמה של לפחות <b>${ils(p.price*(1-maxLtv))}</b>, עוד <b>${ils(s.loan-p.price*maxLtv)}</b>.`;}
   else ltv.hidden=true;
   // נקודת האיזון
   const be=breakEven(s),ib=$('iBreak');

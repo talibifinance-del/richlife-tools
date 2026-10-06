@@ -247,6 +247,18 @@ svg.chart{display:block;width:100%;height:auto}
 .tb-stats .s .v{font-size:14px;font-weight:900;color:var(--pine-deep);margin-top:3px;white-space:nowrap}
 .tb-stats .s.cost .v{color:#8f3a29}
 /* ── rent-vs-buy (6.10.26) ── */
+.budget{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.budget .bcol{background:var(--sage-tint);border-radius:14px;padding:12px}
+.budget h4{font-size:13.5px;font-weight:900;color:var(--pine-darker);margin-bottom:6px;text-align:center}
+.budget .br{display:flex;justify-content:space-between;gap:6px;font-size:13px;font-weight:700;padding:4px 0}
+.budget .br b{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.budget .br.inv b{color:#2f9169}
+.budget .br.lost b{color:#8f3a29}
+.budget .br.sum{border-top:1.5px solid rgba(var(--pine-rgb),.25);margin-top:4px;padding-top:7px;font-weight:900}
+.budget-note{grid-column:1/-1;font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;line-height:1.5}
+.inv-tg{margin-bottom:14px}
+.inv-tg button{font-size:13px}
+@media (max-width:560px){.budget{grid-template-columns:1fr}}
 .insight:not(.soft):not(.warn) b{color:var(--pine-deep)}
 .card+.card,.card+.chart-card{margin-top:16px}
 .sec-lbl{font-size:13px;font-weight:900;color:var(--pine-darker);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
@@ -356,7 +368,21 @@ details.more .fields{margin-top:10px}
         <div class="input-shell"><input id="ret" type="text" inputmode="decimal" value="6"><span class="unit pct">%</span></div>
       </div>
     </div>
-    <div class="idx-note">💡 ההשוואה הוגנת: בשתי הדרכים יוצא מהכיס אותו סכום כל חודש. מי שהדרך שלו זולה יותר באותו חודש משקיע את ההפרש. שוכרים משקיעים גם את ההון העצמי מהיום הראשון. התחזוקה עולה כל שנה באותו קצב כמו שכר הדירה.</div>
+    <div class="idx-note">💡 כדי שההשוואה תהיה הוגנת, בשתי הדרכים יוצא מהכיס אותו סכום כל חודש. אם המשכנתא 8,000 ₪ ושכר הדירה 6,000 ₪, בשכירות נשארים 2,000 ₪ בחודש, והם הולכים להשקעה. גם ההון העצמי שלא שימש לקנייה מושקע מהיום הראשון. התחזוקה עולה כל שנה באותו קצב כמו שכר הדירה.</div>
+  </div>
+
+  <div class="card">
+    <div class="sec-lbl">💸 מה זה אומר כל חודש</div>
+    <div class="budget" id="budget"></div>
+    <div class="mode-tg inv-tg" id="invTg" role="group" aria-label="מה עושים עם ההפרש החודשי">
+      <button type="button" class="on" data-i="1" aria-pressed="true">ההפרש מושקע כל חודש</button>
+      <button type="button" data-i="0" aria-pressed="false">ההפרש לא מושקע</button>
+    </div>
+    <div class="stats-strip" id="statsStrip"></div>
+    <div class="insight" id="ltv" hidden></div>
+    <div class="insight" id="iBreak"></div>
+    <div class="insight soft" id="iSens"></div>
+    <div class="insight" id="iHonest"></div>
   </div>
 
   <div class="card">
@@ -369,15 +395,6 @@ details.more .fields{margin-top:10px}
     <div class="cmp-grid" id="cmpGrid" aria-live="polite"></div>
     <div class="cmp-verdict" id="verdict"></div>
     <div class="hz-table-wrap"><table class="hz-table" id="hzTable" aria-label="השוואה לפי טווח שנים"></table></div>
-  </div>
-
-  <div class="card">
-    <div class="sec-lbl">💸 מה זה אומר כל חודש</div>
-    <div class="stats-strip" id="statsStrip"></div>
-    <div class="insight" id="ltv" hidden></div>
-    <div class="insight" id="iBreak"></div>
-    <div class="insight soft" id="iSens"></div>
-    <div class="insight" id="iHonest"></div>
   </div>
 
   <div class="chart-card">
@@ -582,14 +599,14 @@ const BR_EXTRA=[[6055070,8],[Infinity,10]];
 function purchaseTax(price,single){let t=0,prev=0;for(const [to,r] of (single?BR_SINGLE:BR_EXTRA)){if(price>prev)t+=(Math.min(price,to)-prev)*r/100;prev=to;if(price<=to)break;}return t;}
 const CAP_GAINS=0.25;
 
-let APT='single',HZ=20,LAST=null;
+let APT='single',HZ=20,INV=true,LAST=null;
 const MONEY=['price','equity','maint','reno','rent'];
 const PCT=['rate','years','appr','costPct','sellPct','rentG','ret'];
 
-function inputs(){return{price:num('price'),equity:num('equity'),rate:num('rate'),years:Math.min(40,Math.max(1,Math.round(num('years'))||25)),appr:num('appr'),maint:num('maint'),costPct:num('costPct'),reno:num('reno'),sellPct:num('sellPct'),rent:num('rent'),rentG:num('rentG'),ret:num('ret'),single:APT==='single'};}
+function inputs(){return{price:num('price'),equity:num('equity'),rate:num('rate'),years:Math.min(40,Math.max(1,Math.round(num('years'))||25)),appr:num('appr'),maint:num('maint'),costPct:num('costPct'),reno:num('reno'),sellPct:num('sellPct'),rent:num('rent'),rentG:num('rentG'),ret:num('ret'),single:APT==='single',invest:INV};}
 
 /* the whole model; apprOverride is used by the sensitivity search */
-function simulate(p,apprOverride){
+function simulate(p,apprOverride){const inv=p.invest!==false;
   const appr=(apprOverride!=null?apprOverride:p.appr)/100;
   const tax=purchaseTax(p.price,p.single);
   const fees=p.price*p.costPct/100+p.reno;
@@ -609,7 +626,7 @@ function simulate(p,apprOverride){
     if(m<=n&&bal>0){const intr=bal*r;pay=Math.min(pmt,bal+intr);bal=Math.max(0,bal+intr-pay);}
     const buyOut=pay+maintM,rentOut=rentM,diff=buyOut-rentOut;
     bp*=1+mRet;rp*=1+mRet;
-    if(diff>0){rp+=diff;rBasis+=diff;}else{bp+=-diff;bBasis+=-diff;}
+    if(inv){if(diff>0){rp+=diff;rBasis+=diff;}else{bp+=-diff;bBasis+=-diff;}}
     if(m%12===0){
       const y=m/12,home=p.price*Math.pow(1+appr,y);
       const bpNet=bp-CAP_GAINS*Math.max(0,bp-bBasis),rpNet=rp-CAP_GAINS*Math.max(0,rp-rBasis);
@@ -636,7 +653,7 @@ function calc(){syncLive();
     <div class="cc-row total"><span>ההון שלכם</span><b>${ilsS(Y.buy)}</b></div></div>`;
   const rentCol=`<div class="cmp-col ${!buyWin?'mine win':'alt'}">${!buyWin?'<span class="win-tag">משאיר יותר</span>':''}<h4>🔑 שוכרים ומשקיעים</h4>
     <div class="cc-row"><span>הון עצמי שהושקע</span><b>${ils(Math.max(0,p.equity))}</b></div>
-    <div class="cc-row"><span>ההפרש החודשי שהושקע</span><b>${ils(Y.rIn)}</b></div>
+    ${INV?`<div class="cc-row"><span>ההפרש החודשי שהושקע</span><b>${ils(Y.rIn)}</b></div>`:''}
     <div class="cc-row"><span>רווחי ההשקעה (אחרי מס)</span><b>${ils(Y.rp-Math.max(0,p.equity)-Y.rIn)}</b></div>
     <div class="cc-row total"><span>ההון שלכם</span><b>${ilsS(Y.rent)}</b></div></div>`;
   $('cmpGrid').innerHTML=buyCol+rentCol;
@@ -652,11 +669,15 @@ function calc(){syncLive();
   // חודשי
   const diffM=s.firstBuyOut-s.firstRentOut;
   $('statsStrip').innerHTML=
-    `<div class="chip"><div class="k">החזר משכנתא חודשי</div><div class="v">${ils(s.pmt)}</div></div>`+
-    `<div class="chip"><div class="k">קונים: יוצא כל חודש (עם תחזוקה)</div><div class="v">${ils(s.firstBuyOut)}</div></div>`+
-    `<div class="chip"><div class="k">שוכרים: שכר דירה</div><div class="v">${ils(s.firstRentOut)}</div></div>`+
     `<div class="chip"><div class="k">מס רכישה</div><div class="v">${ils(s.tax)}</div></div>`+
     `<div class="chip"><div class="k">משכנתא (אחוז מימון)</div><div class="v">${ils(s.loan)} · ${Math.round(s.ltv*100)}%</div></div>`;
+  // אותו תקציב בשתי הדרכים
+  const bud=Math.max(s.firstBuyOut,s.firstRentOut),gapM=Math.abs(diffM),buyCheaper=diffM<0;
+  const invRow=(lbl)=>INV?`<div class="br inv"><span>${lbl}</span><b>+${ils(gapM)}</b></div>`:`<div class="br lost"><span>ההפרש (לא מושקע)</span><b>${ils(gapM)}</b></div>`;
+  $('budget').innerHTML=
+    `<div class="bcol"><h4>🏠 קונים</h4><div class="br"><span>החזר משכנתא</span><b>${ils(s.pmt)}</b></div><div class="br"><span>תחזוקה וביטוח</span><b>${ils(p.maint)}</b></div>${buyCheaper&&gapM>=1?invRow('נשאר ומושקע'):''}<div class="br sum"><span>יוצא מהכיס</span><b>${ils(bud)}</b></div></div>`+
+    `<div class="bcol"><h4>🔑 שוכרים</h4><div class="br"><span>שכר דירה</span><b>${ils(p.rent)}</b></div>${!buyCheaper&&gapM>=1?invRow('נשאר ומושקע'):''}<div class="br sum"><span>יוצא מהכיס</span><b>${ils(bud)}</b></div></div>`+
+    `<div class="budget-note">${gapM<1?'שתי הדרכים עולות בדיוק אותו דבר כל חודש.':INV?`אותם ${ils(bud)} בחודש בשתי הדרכים. ב${buyCheaper?'קנייה':'שכירות'} נשארים ${ils(gapM)}, והם הולכים להשקעה. ככה משווים תפוחים לתפוחים.`:`במצב הזה ה-${ils(gapM)} שנשארים ב${buyCheaper?'קנייה':'שכירות'} לא נחסכים, הם פשוט נעלמים בהוצאות. ככה זה קורה אצל רוב האנשים, ושווה לראות מה זה עושה לתוצאה.`}</div>`;
   // מימון
   const maxLtv=p.single?0.75:0.5,ltv=$('ltv');
   if(s.down<0){ltv.hidden=false;ltv.className='insight warn';ltv.innerHTML=`ההון העצמי לא מכסה אפילו את מס הרכישה והעלויות (${ils(s.tax+s.fees)}). את אלה הבנק לא מממן.`;}
@@ -671,7 +692,7 @@ function calc(){syncLive();
   is.innerHTML=ta==null?`הדבר שהכי משנה את התוצאה הוא כמה הדירה תעלה בערכה. בטווח הזה התוצאה לא מתהפכת גם בשינוי גדול שלו.`:
     `הדבר שהכי משנה את התוצאה: כמה הדירה תעלה בערכה. בטווח של ${HZ} שנה, הדרכים נפגשות כשהדירה עולה <b>${ta.toFixed(1)}% בשנה</b>. ${p.appr>ta?'הנחתם יותר מזה, ולכן קנייה מובילה.':'הנחתם פחות מזה, ולכן שכירות מובילה.'} שווה לשחק עם המספר הזה.`;
   // יושר
-  $('iHonest').innerHTML=diffM>0
+  $('iHonest').innerHTML=!INV?`במצב הזה ההפרש החודשי לא מושקע. ההון ${diffM>0?'בשכירות':'בקנייה'} נבנה רק מ${diffM>0?'ההון העצמי':'הדירה'}. לחצו על "ההפרש מושקע כל חודש" כדי לראות כמה ההשקעה של ההפרש שווה לאורך השנים.`:diffM>0
     ?`שימו לב: בהתחלה קונים מוציאים <b>${ils(diffM)}</b> יותר בחודש. דרך השכירות מנצחת רק אם <b>באמת משקיעים את ההפרש הזה כל חודש</b>, ולא מוציאים אותו.`
     :`כאן קנייה זולה יותר כל חודש ב-<b>${ils(-diffM)}</b>. ההשוואה מניחה שהקונים משקיעים את ההפרש. אם הוא מתבזבז, הפער קטן.`;
   renderChart();
@@ -704,11 +725,12 @@ MONEY.forEach(id=>{const el=$(id);el.addEventListener('input',()=>{const p=el.se
 PCT.forEach(id=>$(id).addEventListener('input',calc));
 function setPressed(wrap,attr,val){wrap.querySelectorAll('button').forEach(b=>{const on=b.dataset[attr]===val;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});}
 $('aptTg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{APT=b.dataset.a;setPressed($('aptTg'),'a',APT);calc();}));
+$('invTg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{INV=b.dataset.i==='1';setPressed($('invTg'),'i',INV?'1':'0');calc();}));
 $('hzTg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{HZ=+b.dataset.h;setPressed($('hzTg'),'h',String(HZ));calc();}));
 
 /* ── שמירה ושיתוף (כמו בשאר הכלים) ── */
-function enc(){const o={apt:APT,hz:HZ};MONEY.concat(PCT).forEach(id=>o[id]=$(id).value);return btoa(unescape(encodeURIComponent(JSON.stringify(o))));}
-function dec(str){try{const o=JSON.parse(decodeURIComponent(escape(atob(str))));MONEY.concat(PCT).forEach(id=>{if(o[id]!=null)$(id).value=o[id];});APT=o.apt==='extra'?'extra':'single';HZ=[10,20,30].includes(+o.hz)?+o.hz:20;setPressed($('aptTg'),'a',APT);setPressed($('hzTg'),'h',String(HZ));return true;}catch(e){return false;}}
+function enc(){const o={apt:APT,hz:HZ,inv:INV?1:0};MONEY.concat(PCT).forEach(id=>o[id]=$(id).value);return btoa(unescape(encodeURIComponent(JSON.stringify(o))));}
+function dec(str){try{const o=JSON.parse(decodeURIComponent(escape(atob(str))));MONEY.concat(PCT).forEach(id=>{if(o[id]!=null)$(id).value=o[id];});APT=o.apt==='extra'?'extra':'single';HZ=[10,20,30].includes(+o.hz)?+o.hz:20;INV=o.inv!==0;setPressed($('invTg'),'i',INV?'1':'0');setPressed($('aptTg'),'a',APT);setPressed($('hzTg'),'h',String(HZ));return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#c='+encodeURIComponent(enc());}
 let docId=null,pushT=null;

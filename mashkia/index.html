@@ -124,6 +124,22 @@ fbq('track', 'PageView');
   .cta a{display:inline-block;background:#eef4ef;color:#243a30;text-decoration:none;
     font-weight:800;padding:14px 32px;border-radius:100px;font-size:16px}
   .cta a:hover{background:#dbe8de}
+  /* שתי אפשרויות בתוצאת "יש לך הון" (7.10) */
+  .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;text-align:right}
+  .cta a.opt{display:flex;flex-direction:column;gap:8px;position:relative;background:#fff;color:#1e2b25;border-radius:16px;padding:12px 12px 14px;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.18);transition:transform .2s,box-shadow .2s;font-weight:400}
+  .cta a.opt:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.25);background:#fff}
+  .cta a.opt:focus-visible{outline:3px solid #c1553f;outline-offset:3px}
+  .cta a.opt-main{box-shadow:0 0 0 3px #bcd3bf,0 12px 30px rgba(0,0,0,.22)}
+  .opt-badge{position:absolute;top:10px;right:10px;z-index:2;background:#3e5448;color:#fff;font-size:12px;font-weight:800;border-radius:999px;padding:4px 10px}
+  .opt-img{display:block;border-radius:12px;overflow:hidden;background:#eef4ef;aspect-ratio:4/3}
+  .opt-img img{display:block;width:100%;height:100%;object-fit:contain}
+  .opt-img-portrait img{object-fit:cover;object-position:center 20%}
+  .opt-t{font-weight:900;font-size:18px;color:#1e2b25}
+  .opt-d{font-size:14px;line-height:1.6;color:#51625a;flex:1}
+  .opt-d b{color:#1e2b25}
+  .opt-btn{display:block;text-align:center;background:#3e5448;color:#fff;font-weight:800;font-size:15px;border-radius:12px;padding:11px 10px}
+  .opt:not(.opt-main) .opt-btn{background:#eef4ef;color:#243a30;border:1px solid #bcd3bf}
+  @media (max-width:560px){.opt-grid{grid-template-columns:1fr}}
   .hidden{display:none}
   .center{text-align:center}
   .lead2{font-weight:700;color:var(--ink);font-size:17px;margin:14px 0 12px}
@@ -612,9 +628,22 @@ function showResult(){
         '<a href="'+COURSE_URL+'">רוצה להשקיע לראשונה, בקלות? נתחיל כאן ←</a>';
   } else if(route==='livui-capital'){
     cta='<h2>יש לך הון, אפשר לעשות איתו יותר</h2>'+
-        '<p style="text-align:right">בעיניי, עם סכום כזה אפשר להפיק הרבה יותר מהשקעה פשוטה בשוק ההון. לכן אני מציעה לך <b>תהליך ליווי כלכלי</b> אישי, שבונה תיק ותמונה כלכלית שלמה בדיוק סביב הכסף, המטרות והזמן שלך.</p>'+
-        '<a href="'+CALL_URL+'">רוצה לשמוע על ליווי? לפרטים ←</a>'+
-        '<p style="text-align:right;margin:16px 0 0;font-size:13.5px;color:#cfe0d8;line-height:1.6">ואם בכל זאת בא לך פשוט: לעשות לבד השקעה ראשונה קלה, בלי להתחייב לתהליך, הקורס "להשקיע לראשונה בקלות" <a href="'+COURSE_URL+'" style="display:inline;padding:0;background:none;color:#eef4ef;text-decoration:underline;font-weight:700;border-radius:0">מחכה לך כאן</a>.</p>';
+        '<p style="text-align:right">בעיניי, עם סכום כזה אפשר להפיק הרבה יותר מהשקעה פשוטה בשוק ההון. יש לך שתי דרכים מכאן:</p>'+
+        '<div class="opt-grid">'+
+          '<a class="opt opt-main" href="'+CALL_URL+'">'+
+            '<span class="opt-badge">מומלץ לך</span>'+
+            '<span class="opt-img opt-img-portrait"><img src="images/tali-portrait.jpg" alt="טלי בנימינוב שרעבי"></span>'+
+            '<span class="opt-t">ליווי אישי, יחד איתי</span>'+
+            '<span class="opt-d"><b>תהליך ליווי כלכלי</b> שבונה תיק ותמונה כלכלית שלמה, בדיוק סביב הכסף, המטרות והזמן שלך.</span>'+
+            '<span class="opt-btn">רוצה לשמוע על ליווי ←</span>'+
+          '</a>'+
+          '<a class="opt" href="'+COURSE_URL+'">'+
+            '<span class="opt-img"><img src="images/course-mockup.png" alt="הקורס להשקיע לראשונה בקלות על מחשב, טאבלט ונייד"></span>'+
+            '<span class="opt-t">לבד, בקורס</span>'+
+            '<span class="opt-d">בא לך פשוט? לעשות לבד השקעה ראשונה קלה, בלי להתחייב לתהליך, עם הקורס <b>"להשקיע לראשונה בקלות"</b>.</span>'+
+            '<span class="opt-btn">לקורס ←</span>'+
+          '</a>'+
+        '</div>';
   } else if(route==='livui-base'){
     cta='<h2>רגע לפני שמשקיעים, בואי נדבר על הבסיס</h2>'+
         '<p style="text-align:right">מהתשובות שלך עולה שכרגע עוד אין עודף פנוי שאפשר להשקיע ממנו, וזה בסדר גמור, זו נקודת פתיחה של המון אנשים. אבל זו בדיוק הנקודה: <b>אי אפשר להשקיע מכסף שעוד לא קיים</b>.</p>'+

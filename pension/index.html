@@ -1543,7 +1543,10 @@ function syncLive(){if(!docId)return;clearTimeout(pushT);pushT=setTimeout(functi
   outline:3px solid #ffd479;outline-offset:2px}
 @media (max-width:560px){
   #rl-consent .rl-in{flex-direction:column;align-items:stretch}
-  #rl-consent p{flex:0 0 auto}  /* בעמודה, בסיס 420px הפך לגובה 420px */
+  #rl-consent{padding:11px 14px calc(11px + env(safe-area-inset-bottom))}
+  #rl-consent .rl-in{gap:9px}
+  #rl-consent p{flex:0 0 auto;font-size:13.5px;line-height:1.5}  /* בעמודה, בסיס 420px הפך לגובה 420px */
+  #rl-consent button{font-size:14px;padding:8px 14px}  /* min-height 44 נשאר: יעד מגע נגיש */
   #rl-consent .rl-btns{justify-content:stretch}
   #rl-consent .rl-btns button{flex:1}
 }

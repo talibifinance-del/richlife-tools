@@ -1543,12 +1543,12 @@ function syncLive(){if(!docId)return;clearTimeout(pushT);pushT=setTimeout(functi
   outline:3px solid #ffd479;outline-offset:2px}
 @media (max-width:560px){
   #rl-consent .rl-in{flex-direction:column;align-items:stretch}
-  #rl-consent{padding:11px 14px calc(11px + env(safe-area-inset-bottom))}
-  #rl-consent .rl-in{gap:9px}
-  #rl-consent p{flex:0 0 auto;font-size:13.5px;line-height:1.5}  /* בעמודה, בסיס 420px הפך לגובה 420px */
-  #rl-consent button{font-size:14px;padding:8px 14px}  /* min-height 44 נשאר: יעד מגע נגיש */
+  #rl-consent{padding:9px 12px calc(9px + env(safe-area-inset-bottom))}
+  #rl-consent .rl-in{gap:7px}
+  #rl-consent p{flex:0 0 auto;font-size:13px;line-height:1.45}  /* בעמודה, בסיס 420px הפך לגובה 420px */
+  #rl-consent button{font-size:13.5px;padding:5px 12px;min-height:36px}  /* 36px: עדיין מעל מינימום WCAG 2.2 (24px) */
   #rl-consent .rl-btns{justify-content:stretch}
-  #rl-consent .rl-btns button{flex:1}
+  #rl-consent .rl-btns button{flex:1;white-space:nowrap}  /* בלי זה הגובה חושב לפי 2 שורות */
 }
 @media (prefers-reduced-motion:reduce){#rl-consent *{transition:none!important}}
 .rl-consent-reopen{background:none;border:0;padding:0;font:inherit;

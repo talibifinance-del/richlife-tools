@@ -124,6 +124,23 @@ fbq('track', 'PageView');
   .cta a{display:inline-block;background:#eef4ef;color:#243a30;text-decoration:none;
     font-weight:800;padding:14px 32px;border-radius:100px;font-size:16px}
   .cta a:hover{background:#dbe8de}
+  /* 7.10: תוצאה בנקודות */
+  .sides{list-style:none;margin:10px 0 6px;padding:0;display:flex;flex-direction:column;gap:8px}
+  .sides li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #d3e0df;border-radius:14px;padding:10px 12px;font-size:15.5px;line-height:1.5}
+  .sides li.minus{background:#fbf7ee}
+  .sides-end{margin:6px 0 0;font-weight:700;color:#3e5448;font-size:15.5px}
+  .costinfo .ci-h{font-weight:800;margin-bottom:6px}
+  .costinfo ul{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:4px}
+  .statcard{display:block!important;background:#fff;border:1px solid #d3e0df;border-radius:16px;padding:14px!important}
+  .sc-h{font-weight:800;font-size:16px;margin-bottom:10px}
+  .sc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .sc-cell{background:#eef4ef;border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+  .sc-cell span{font-size:12.5px;color:#51625a}
+  .sc-cell b{font-size:18px;color:#1e2b25;font-variant-numeric:tabular-nums}
+  .sc-cell.sc-neg{background:#f8e3dd}
+  .sc-cell.sc-neg b{color:#b2462f}
+  .sc-note{margin-top:10px;font-size:14px;color:#51625a;line-height:1.55}
+
   /* שתי אפשרויות בתוצאת "יש לך הון" (7.10) */
   .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;text-align:right}
   .cta a.opt{display:flex;flex-direction:column;gap:8px;position:relative;background:#fff;color:#1e2b25;border-radius:16px;padding:12px 12px 14px;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.18);transition:transform .2s,box-shadow .2s;font-weight:400}
@@ -238,7 +255,7 @@ fbq('track', 'PageView');
       <span class="badge" id="r_badge"></span>
       <div class="rmeter"><i id="r_meter"></i></div>
       <p class="read" id="r_read"></p>
-      <div class="costinfo" id="r_costinfo">רק שתדע/י: כסף שיושב בעו"ש מאבד בערך <b>3% מהערך שלו כל שנה</b> בגלל האינפלציה. על 50,000 ₪ זה כ-<b>1,500 ₪ שמתאדים בשנה</b>, בלי שעשית שום דבר. הצד השני, אותו כסף מושקע לאורך שנים, יכול לעבוד <b>בשבילך</b> במקום נגדך.</div>
+      <div class="costinfo" id="r_costinfo"><div class="ci-h">💸 רק שתדע/י</div><ul><li>כסף בעו"ש מאבד כ-<b>3% בשנה</b> בגלל האינפלציה</li><li>על 50,000 ₪ זה כ-<b>1,500 ₪ שמתאדים</b> כל שנה</li><li>מושקע לאורך שנים, הוא עובד <b>בשבילך</b> ולא נגדך</li></ul></div>
       <div class="personal" id="r_personal"></div>
       <div class="gaps" id="r_gaps_box">
         <h3>מה עומד בינך לבין ההשקעה הראשונה?</h3>
@@ -254,6 +271,8 @@ fbq('track', 'PageView');
 <script>
 const COURSE_URL = "https://first-invest.richlife.co.il/";
 const CALL_URL   = "https://richlife.ravpage.co.il/service1one1";
+// תמונת כרטיס הליווי (בשתי התוצאות). TODO: להחליף בתמונה של טלי יושבת עם לקוחה בליווי.
+const LIVUY_IMG  = "images/tali-portrait.jpg";
 
 /* איסוף התשובות ל-Google Sheet דרך ה-Worker (form-capture).
    חי: mashkia-quiz -> טאב "mashkia-invest" בגיליון התשובות. מצבי ?demo/?form לא נשלחים. */
@@ -493,13 +512,13 @@ function showResult(){
   // ----- טיפוס המשקיעה (הזהות שנפתחת בה התוצאה) -----
   const TYPES = {
     'course':        {emoji:"🌱", name:"בעלת פוטנציאל לא ממומש",
-       desc:"<b>מצד אחד</b>, יש לך את הרצון והיכולת להשקיע, ואת/ה כאן, בודק/ת ולומד/ת. <b>מצד שני</b>, זה עוד לא יצא לפועל, הכסף יושב, הזמן רץ, והצעד הראשון עדיין מחכה. וזה בדיוק מה שאפשר לשנות, מהר יותר ממה שנדמה."},
+       plus:"יש לך רצון ויכולת להשקיע", minus:"זה עוד לא יצא לפועל, והכסף יושב", end:"וזה בדיוק מה שאפשר לשנות, מהר יותר ממה שנדמה."},
     'livui-base':    {emoji:"🏗️", name:"בעלת הכנסה שלא נשמרת",
-       desc:"<b>מצד אחד</b>, יש לך הכנסה ושאיפה אמיתית להשקיע. <b>מצד שני</b>, הכסף שנכנס לא נשאר מספיק זמן כדי להתחיל לעבוד בשבילך. וזה דווקא הצעד הכי חכם: קודם עושים סדר שהכסף יישאר, ואז משקיעים מתוך שקט."},
+       plus:"יש לך הכנסה ושאיפה אמיתית להשקיע", minus:"הכסף שנכנס לא נשאר מספיק זמן כדי לעבוד בשבילך", end:"קודם עושים סדר שהכסף יישאר, ואז משקיעים מתוך שקט."},
     'livui-capital': {emoji:"💼", name:"בעלת הון לא מנוצל",
-       desc:"<b>מצד אחד</b>, יש לך כסף אמיתי בצד, את/ה לא מתחיל/ה מאפס. <b>מצד שני</b>, הכסף הזה יושב ולא עובד בשבילך, ואפילו מאבד מהערך שלו. עם הון כזה, השקעה פשוטה היא רק חלק קטן מהתמונה, וכדאי תוכנית שתמצה אותו."},
+       plus:"יש לך כסף אמיתי בצד, את/ה לא מתחיל/ה מאפס", minus:"הכסף הזה יושב, ואפילו מאבד מהערך שלו", end:"עם הון כזה, כדאי תוכנית שתמצה אותו."},
     'livui-adv':     {emoji:"📈", name:"בעלת תיק לא ממוצה",
-       desc:"<b>מצד אחד</b>, את/ה כבר משקיע/ה, הכסף שלך כבר עובד, כל הכבוד. <b>מצד שני</b>, התמונה עדיין חלקית, ויש מרחק בין 'להשקיע' לבין תיק מסודר וממוקסם שמשרת את כל המטרות שלך."}
+       plus:"את/ה כבר משקיע/ה, והכסף שלך עובד", minus:"התמונה עדיין חלקית", end:"יש מרחק בין 'להשקיע' לבין תיק מסודר שמשרת את כל המטרות שלך."}
   };
   const TYPE = TYPES[route];
 
@@ -508,79 +527,55 @@ function showResult(){
   el('r_badge').style.color = tier.color;
   el('r_meter').style.width = pct+"%";
   el('r_meter').style.background = tier.color;
-  el('r_read').innerHTML = (lead.name?("<b>"+lead.name+"</b>, "):"") + TYPE.desc;
+  el('r_read').innerHTML = (lead.name?("<b>"+lead.name+"</b>,"):"")+
+    "<ul class='sides'><li class='plus'><span>✅</span><span><b>מצד אחד:</b> "+TYPE.plus+"</span></li>"+
+    "<li class='minus'><span>⏳</span><span><b>מצד שני:</b> "+TYPE.minus+"</span></li></ul>"+
+    "<p class='sides-end'>"+TYPE.end+"</p>";
 
+  // כרטיס מספרים: כותרת + משבצות + שורה תחתונה
+  function statCard(e,title,rows,note){
+    var g=rows.map(function(r){ return "<div class='sc-cell"+(r[2]?" sc-neg":"")+"'><span>"+r[0]+"</span><b>"+r[1]+"</b></div>"; }).join("");
+    return {raw:"<li class='statcard'><div class='sc-h'>"+e+" "+title+"</div><div class='sc-grid'>"+g+"</div>"+(note?"<div class='sc-note'>"+note+"</div>":"")+"</li>"};
+  }
   // כרטיס "השקיעי את מה שיושב" - רק למסלול הקורס (למי שבמינוס זו עצה שגויה)
   function cardIdleInvest(){
     const lossYr=round10(idleV*0.03), g10=roundNice(grow(idleV,10,0.10)), g20=roundNice(grow(idleV,20,0.10));
-    return {e:"📉",t:"יש לך היום בערך <b>"+fmt(idleV)+" ₪</b> שיושבים בצד ולא מושקעים. <span class='hl'>הכסף הזה מאבד בערך "+fmt(lossYr)+" ₪ כל שנה</span> רק בגלל האינפלציה, וזה קורה עכשיו, בלי שעשית כלום. אותו סכום, אילו היה מושקע בתשואה ממוצעת של כ-10% בשנה, יכול היה להיות בערך <b>"+fmt(g10)+" ₪</b> בעוד 10 שנים, ובערך <b>"+fmt(g20)+" ₪</b> בעוד 20 שנה. <span class='hl'>זה ההבדל בין כסף שעובד נגדך לכסף שעובד בשבילך.</span>"};
+    return statCard("📉","הכסף שיושב בצד",[["היום",fmt(idleV)+" ₪"],["מאבד בשנה","כ-"+fmt(lossYr)+" ₪",1],["מושקע, בעוד 10 שנים","כ-"+fmt(g10)+" ₪"],["מושקע, בעוד 20 שנה","כ-"+fmt(g20)+" ₪"]],"<span class='hl'>זה ההבדל בין כסף שעובד נגדך לכסף שעובד בשבילך.</span>");
   }
   function cardMonthly(){
     const fv10=roundNice(fvMonthly(monV,10,0.10)), fv20=roundNice(fvMonthly(monV,20,0.10)), c=roundNice(monV*12*20);
-    return {e:"📈",t:"אמרת שאת/ה יכול/ה לשים בצד <b>"+fmt(monV)+" ₪</b> בחודש. גם סכום כזה, מושקע בעקביות בתשואה ממוצעת של כ-10% בשנה, יכול לגדול לכ-<b>"+fmt(fv10)+" ₪</b> תוך 10 שנים, ולכ-<b>"+fmt(fv20)+" ₪</b> תוך 20 שנה. מתוך הסכום הזה רק כ-"+fmt(c)+" ₪ זה כסף שהפקדת, כל השאר זו העבודה של הזמן והריבית-דריבית. <span class='hl'>וכל שנה שמחכים, מפספסים בדיוק את החלק הזה.</span>"};
+    return statCard("📈","ההפרשה החודשית",[["כל חודש",fmt(monV)+" ₪"],["בעוד 10 שנים","כ-"+fmt(fv10)+" ₪"],["בעוד 20 שנה","כ-"+fmt(fv20)+" ₪"],["מזה הפקדת","רק "+fmt(c)+" ₪"]],"כל השאר זה הזמן והריבית דריבית. <span class='hl'>וכל שנה שמחכים, מפספסים את החלק הזה.</span>");
   }
   if(route==='course'){
     if(idleV){ items.push(cardIdleInvest()); showDisc=true; }
     if(monV){ items.push(cardMonthly()); showDisc=true; }
-    if(!idleV && !monV) items.push({e:"🤔",t:"עוד לא שמת את המספרים מול העיניים, וזה בדיוק החלק שהכי קל לדחות. <span class='hl'>ברגע שרואים כמה הכסף יכול לעבוד בשבילך, קשה להמשיך לדחות.</span>"});
+    if(!idleV && !monV) items.push({e:"🤔",t:"עוד לא שמת את המספרים מול העיניים. <span class='hl'>ברגע שרואים אותם, קשה להמשיך לדחות.</span>"});
   } else if(route==='livui-capital'){
     const g10=roundNice(grow(idleV,10,0.10)), g20=roundNice(grow(idleV,20,0.10));
-    items.push({e:"💼",t:"יש לך כ-<b>"+fmt(idleV)+" ₪</b> נזילים שיושבים ולא עובדים, וזה סכום משמעותי. אילו היה מושקע נכון בתשואה ממוצעת של כ-10% בשנה, יכול היה להיות בערך <b>"+fmt(g10)+" ₪</b> בעוד 10 שנים, ובערך <b>"+fmt(g20)+" ₪</b> בעוד 20 שנה. <span class='hl'>עם הון כזה אפשר לעשות הרבה יותר מהשקעה פשוטה</span>, ולבנות תיק שמתאים בדיוק לך."});
+    items.push(statCard("💼","ההון שלך",[["יושב בצד",fmt(idleV)+" ₪"],["מושקע, בעוד 10 שנים","כ-"+fmt(g10)+" ₪"],["מושקע, בעוד 20 שנה","כ-"+fmt(g20)+" ₪"]],"<span class='hl'>עם הון כזה אפשר לעשות הרבה יותר מהשקעה פשוטה.</span>"));
     showDisc=true;
     if(monV) items.push(cardMonthly());
   } else if(route==='livui-base'){
     const mUse=(monV!=null && monV>0)?monV:500;
     const f10=roundNice(fvMonthly(mUse,10,0.10)), f20=roundNice(fvMonthly(mUse,20,0.10));
-    const pre=(monV!=null && monV>0)?("אמרת שאת/ה יכול/ה לשים בצד <b>"+fmt(mUse)+" ₪</b> בחודש. גם סכום כזה, "):"בואי נדבר רגע על הפוטנציאל: אפילו <span class='hl'>500 ₪ בחודש</span>, ";
-    items.push({e:"🌱",t:pre+"מושקע בעקביות בתשואה ממוצעת של כ-10% בשנה, יכול להיות כ-<b>"+fmt(f10)+" ₪</b> בעוד 10 שנים, וכ-<b>"+fmt(f20)+" ₪</b> בעוד 20 שנה. <span class='hl'>זה בדיוק מה שנבנה ביחד</span>, אחרי שנסדר את הבסיס."});
+    items.push(statCard("🌱","הפוטנציאל",[["כל חודש",fmt(mUse)+" ₪"+((monV!=null && monV>0)?"":" (לדוגמה)")],["בעוד 10 שנים","כ-"+fmt(f10)+" ₪"],["בעוד 20 שנה","כ-"+fmt(f20)+" ₪"]],"<span class='hl'>זה בדיוק מה שנבנה ביחד</span>, אחרי שנסדר את הבסיס."));
     showDisc=true;
   } else { // livui-adv - כבר משקיע/ה, בלי הטפה למתחילים
-    items.push({e:"🟢",t:"את/ה כבר משקיע/ה, והכסף שלך כבר עובד, כל הכבוד. אם יש מזומן עודף שעדיין לא משובץ בתיק, גם הוא יכול לעבוד חכם יותר. <span class='hl'>השאלה עכשיו היא לא 'איך מתחילים', אלא איך ממקסמים ובונים תמונה כלכלית שלמה.</span>"});
+    items.push({e:"🟢",t:"הכסף שלך כבר עובד, כל הכבוד."});
+    items.push({e:"💡",t:"גם מזומן עודף שלא משובץ בתיק יכול לעבוד חכם יותר."});
+    items.push({e:"🎯",t:"<span class='hl'>השאלה עכשיו: איך ממקסמים ובונים תמונה כלכלית שלמה.</span>"});
   }
 
-  // חסמי-הידע האישיים רלוונטיים רק למי שיש לה כסף להתחיל (הקורס). למי שאין כסף/בסיס - החסם הוא הכסף, לא הידע.
-  if(route==='course'){
-  const cn = answers.concepts;
-  if(cn && cn.val<=1) items.push({e:"🧩",t:"<span class='hl'>עדיין לא ברור לך מה זה בכלל להשקיע</span>, וזה בסדר גמור, אף אחד לא נולד עם זה. רק שתדע/י, אפשר להבין את הבסיס בשעה, זה הרבה יותר פשוט ממה שנדמה."});
-
-  const wh = answers.where;
-  if(wh && wh.val<=1) items.push({e:"🚪",t:"את/ה לא יודע/ת דרך מה בכלל מתחילים להשקיע בפועל, ובלי זה הכל נשאר תיאוריה. <span class='hl'>זה בדיוק הצעד שרוב האנשים נתקעים בו</span>, ואפשר לעבור אותו צעד-אחר-צעד."});
-
-  const tr = answers.tried;
-  if(tr && tr.val<=1) items.push({e:"🔁",t:"כבר ניסית להתחיל, ונתקעת. <span class='hl'>זה לא כי את/ה לא מסוגל/ת</span>, זה כי אף אחד לא הראה לך את הדרך הקצרה. הפעם זה יכול להיראות אחרת."});
-
-  const cf = answers.confidence;
-  if(cf && cf.val<=1) items.push({e:"😬",t:"הפחד לעשות טעות עם הכסף הוא מה שהכי עוצר אותך. וזה מובן, אבל <span class='hl'>הפחד נעלם ברגע שעושים את הצעד הראשון נכון</span>, לא לפני."});
-
-  const inf = answers.inflation;
-  if(inf && inf.val<=1) items.push({e:"💸",t:"עד עכשיו לא ממש הפנמת שכסף שיושב בעו\"ש נשחק כל שנה. <span class='hl'>עכשיו כשאת/ה יודע/ת, קשה יותר להשאיר אותו שם.</span>"});
-
-  const inA = answers.info;
-  if(inA && inA.val<=1) items.push({e:"🌊",t:"את/ה טובע/ה בים של מידע סותר, ולא יודע/ת למי להאמין. <span class='hl'>המידע החינמי הוא בדיוק הבעיה</span>, לא הפתרון, כי הוא מפזר במקום לעשות סדר."});
-
-  const bs = answers.base;
-  if(bs && bs.val===0) items.push({e:"📊",t:"לפני שמשקיעים, כדאי לייצב את הבסיס, כי משקיעים מכסף שלא צריך אותו מיד. <span class='hl'>זה חלק מהתמונה השלמה</span>, ואפשר לסדר גם את זה."});
-  else if(bs && bs.val===1) items.push({e:"📊",t:"יש לך בסיס, אבל עדיין לא חוסך/ת בקביעות. השקעה מתחילה מעודף חודשי קבוע, וגם את זה בונים."});
-
-  const sm = answers.small;
-  if(sm && sm.val<=1) items.push({e:"🪙",t:"את/ה חושב/ת שצריך הרבה כסף כדי שזה ישתלם, וזה בדיוק המיתוס שעוצר הכי הרבה אנשים. <span class='hl'>מתחילים מקטן, והזמן עושה את העבודה.</span>"});
-
-  const gl = answers.goal;
-  if(gl && gl.val<=1) items.push({e:"🎯",t:"עדיין אין לך יעד ברור להשקעה, וכשאין יעד קל לדחות ולוותר. <span class='hl'>ברגע שמחברים את הכסף למשהו שחשוב לך, הכל נהיה קל יותר.</span>"});
-
-  const pr = answers.products;
-  if(pr && pr.val<=1) items.push({e:"🏦",t:"המושגים עדיין מתערבבים, חיסכון, פנסיה, קרן השקעה. זה נשמע מסובך, אבל ההבדלים פשוטים כשמסבירים אותם נכון."});
-  }
 
   let html = "<ul class='insights'>";
-  items.forEach(function(o){ html += "<li><span class='ic'>"+o.e+"</span><span class='tx'>"+o.t+"</span></li>"; });
+  items.forEach(function(o){ html += o.raw ? o.raw : "<li><span class='ic'>"+o.e+"</span><span class='tx'>"+o.t+"</span></li>"; });
   html += "</ul>";
   if(showDisc) html += "<p class='disc'>* המספרים להמחשה בלבד, לפי תשואה שנתית ממוצעת של כ-10% ואינפלציה של כ-3%, בהתבסס על ממוצע השוק לאורך שנים. אלו לא הבטחת תשואה, השוק עולה ויורד.</p>";
   const teaseTxt = route==='course' ? "המסלול המלא, שלב-אחר-שלב עד ההשקעה הראשונה שלך, מחכה לך למטה 👇"
     : route==='livui-capital' ? "יש לך הון שאפשר לעשות איתו הרבה יותר. הצעד הנכון בשבילך למטה 👇"
     : route==='livui-base' ? "רגע לפני שמשקיעים, יש פה משהו חשוב יותר בשבילך למטה 👇"
     : "את/ה בשל/ה. אם בא לך לבנות את התמונה השלמה סביב ההשקעה, הצעד הבא למטה 👇";
-  html += "<div class='tease'>"+teaseTxt+"</div>";
+  // (תיבת ה-tease הוסרה 7.10 - כפילות מול ההודעה והכפתור)
   el('r_personal').innerHTML = html;
 
   // ----- החסם האמיתי לפי מסלול -----
@@ -625,14 +620,28 @@ function showResult(){
           '<li>מה עושים כשהשוק יורד, ומה עושים כשהתקשורת מפחידה</li>'+
           '<li>ובעיקר, <b>תצא/י עם ההשקעה הראשונה שלך, שכבר עשית</b></li>'+
         '</ul>'+
-        '<a href="'+COURSE_URL+'">רוצה להשקיע לראשונה, בקלות? נתחיל כאן ←</a>';
+        '<div class="opt-grid">'+
+          '<a class="opt opt-main" href="'+COURSE_URL+'">'+
+            '<span class="opt-badge">מומלץ לך</span>'+
+            '<span class="opt-img"><img src="images/course-mockup.png" alt="הקורס להשקיע לראשונה בקלות על מחשב, טאבלט ונייד"></span>'+
+            '<span class="opt-t">לבד, בקורס</span>'+
+            '<span class="opt-d">הקורס <b>"להשקיע לראשונה בקלות"</b>: צעד אחר צעד, עד ההשקעה הראשונה שלך.</span>'+
+            '<span class="opt-btn">נתחיל כאן ←</span>'+
+          '</a>'+
+          '<a class="opt" href="'+CALL_URL+'">'+
+            '<span class="opt-img opt-img-portrait"><img src="'+LIVUY_IMG+'" alt="טלי בנימינוב שרעבי בליווי"></span>'+
+            '<span class="opt-t">ליווי אישי, יחד איתי</span>'+
+            '<span class="opt-d">רוצה שנעשה את זה ביחד? <b>ליווי אחד על אחד</b>, שבונה איתך תמונה כלכלית שלמה סביב ההשקעה.</span>'+
+            '<span class="opt-btn">רוצה לשמוע על ליווי ←</span>'+
+          '</a>'+
+        '</div>';
   } else if(route==='livui-capital'){
     cta='<h2>יש לך הון, אפשר לעשות איתו יותר</h2>'+
         '<p style="text-align:right">בעיניי, עם סכום כזה אפשר להפיק הרבה יותר מהשקעה פשוטה בשוק ההון. יש לך שתי דרכים מכאן:</p>'+
         '<div class="opt-grid">'+
           '<a class="opt opt-main" href="'+CALL_URL+'">'+
             '<span class="opt-badge">מומלץ לך</span>'+
-            '<span class="opt-img opt-img-portrait"><img src="images/tali-portrait.jpg" alt="טלי בנימינוב שרעבי"></span>'+
+            '<span class="opt-img opt-img-portrait"><img src="'+LIVUY_IMG+'" alt="טלי בנימינוב שרעבי בליווי"></span>'+
             '<span class="opt-t">ליווי אישי, יחד איתי</span>'+
             '<span class="opt-d"><b>תהליך ליווי כלכלי</b> שבונה תיק ותמונה כלכלית שלמה, בדיוק סביב הכסף, המטרות והזמן שלך.</span>'+
             '<span class="opt-btn">רוצה לשמוע על ליווי ←</span>'+

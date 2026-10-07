@@ -270,6 +270,23 @@ button.gn-tab{cursor:pointer;font-size:14px;padding:10px 18px}
 .i-row a{color:var(--pine-deep);font-weight:800}
 .pick-btn{margin-top:12px;border:1.5px solid var(--pine);background:#fff;color:var(--pine-deep);font-family:var(--font);font-weight:900;font-size:13px;border-radius:100px;padding:8px 16px;cursor:pointer}
 .pick-btn.on{background:var(--pine);color:#fff}
+.fav-hint{background:var(--sage-tint);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;color:var(--ink-soft);line-height:1.55}
+.fav-list{display:grid;gap:8px}
+.fav-row{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);border-radius:14px;padding:10px 12px;transition:all .15s}
+.fav-row.on{border-color:var(--pine);background:var(--sage-tint);box-shadow:0 4px 14px rgba(var(--pine-rgb),.16)}
+.fav-choose{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:transparent;font-family:var(--font);text-align:right;cursor:pointer;padding:0}
+.fav-radio{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid rgba(var(--pine-rgb),.45);position:relative}
+.fav-row.on .fav-radio{border-color:var(--pine)}
+.fav-row.on .fav-radio::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--pine)}
+.fav-emoji{flex:none;font-size:20px}
+.fav-txt{min-width:0}
+.fav-name{display:block;font-weight:900;font-size:14px;color:var(--pine-darker)}
+.fav-sub{display:block;font-weight:600;font-size:12px;color:var(--ink-soft);line-height:1.45;margin-top:1px}
+.fav-row.on .fav-name::after{content:" · הרעיון שלי ✓";color:var(--go);font-size:12px}
+.fav-del{flex:none;width:28px;height:28px;border:0;border-radius:50%;background:transparent;color:rgba(var(--pine-rgb),.6);font-size:15px;font-weight:900;cursor:pointer}
+.fav-del:hover{background:rgba(var(--red-rgb),.1);color:var(--red)}
+#favPill{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9000;border:0;background:var(--pine-deep);color:#fff;font-family:var(--font);font-weight:900;font-size:13.5px;border-radius:100px;padding:11px 20px;box-shadow:0 10px 26px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
+#favPill[hidden]{display:none}
 /* catalog */
 .filter-bar{display:flex;align-items:center;gap:8px;margin:2px 0 6px;flex-wrap:wrap}
 .filter-btn{border:1.5px solid rgba(var(--pine-rgb),.22);background:#fff;font-family:var(--font);font-weight:800;font-size:12.5px;color:var(--ink-soft);border-radius:100px;padding:7px 13px;cursor:pointer;transition:all .15s}
@@ -551,14 +568,12 @@ button.gn-tab{cursor:pointer;font-size:14px;padding:10px 18px}
   </div>
 
 
-  <div class="card commit">
+  <div class="card commit" id="commitCard">
     <span class="sec-lbl">🚀 רעיון אחד, 30 יום</span>
-    <p class="pintro">לא צריך <span id="ideaCount">את כל הרעיונות</span>. צריך אחד. בוחרים רעיון אחד, ומתחייבים (בעיקר לעצמכם) שתוך 30 יום הוא מכניס את השקל הראשון.</p>
-    <div class="field">
-      <label for="pickSel">הרעיון שבחרתי</label>
-      <select id="pickSel"></select>
-    </div>
-    <div class="field">
+    <p class="pintro">לא צריך <span id="ideaCount">את כל הרעיונות</span>. צריך אחד. מסמנים ☆ ליד כל רעיון שמעניין אתכם, כולם מתאספים כאן, ומתוכם בוחרים אחד, ומתחייבים (בעיקר לעצמכם) שתוך 30 יום הוא מכניס את השקל הראשון.</p>
+    <div class="sub-lbl" style="margin-top:2px">⭐ הרעיונות שסימנתם <span id="favCount"></span></div>
+    <div id="favList" role="radiogroup" aria-label="בחירת הרעיון שלי"></div>
+    <div class="field" style="margin-top:14px">
       <label for="stepTxt">הצעד הראשון שאעשה השבוע</label>
       <textarea id="stepTxt" rows="2" placeholder="למשל: לפרסם בקבוצת השכונה על השירות החדש"></textarea>
     </div>
@@ -612,6 +627,7 @@ button.gn-tab{cursor:pointer;font-size:14px;padding:10px 18px}
   </div>
 
 </main>
+  <button id="favPill" type="button" hidden></button>
     <footer>
     ליווי כלכלי לחיים מאושרים ומעושרים
     <div class="socials">
@@ -646,7 +662,7 @@ const CATS=[
   {id:'asset',e:'🌱',n:'הכסף עובד בשבילכם'},
   {id:'build',e:'📦',n:'בונים פעם אחת, מוכרים שוב ושוב'},
   {id:'digital',e:'💻',n:'דיגיטל ועבודה מהבית'},
-  {id:'ai',e:'🤖',n:'שירותי AI לעסקים'},
+  {id:'ai',e:'🤖',n:'להרוויח עם AI'},
   {id:'home',e:'🏡',n:'שירותים בקהילה ובבית'},
   {id:'food',e:'🍰',n:'אוכל ואירוח'},
   {id:'stuff',e:'♻️',n:'כסף ממה שכבר יש'},
@@ -740,6 +756,33 @@ const IDEAS=[
   d:'במקום כלי בודד: בוחרים נישה אחת (מתווכים, רואי חשבון, מרפאות, סוכני ביטוח), מזהים 5-10 משימות שהם עושים כל יום, ובונים מערכת שעושה חלק גדול מהן אוטומטית.',
   m:{k:'note',t:AI_NOTE},w:AI_WHERE,s:'לראיין 3 אנשים מהנישה: מה הכי גוזל להם זמן ביום?'},
 
+ {id:'ai-images',c:'ai',e:'🖼️',n:'תמונות מוצר ועיצובים עם AI',ty:'time',st:'behind',col:['yellow','blue'],tg:['tech','create'],ds:1,dg:2,
+  d:'חנויות אונליין ועסקים קטנים צריכים תמונות מוצר יפות, באנרים ופוסטים מעוצבים, ואין להם תקציב לצלם. עם כלי AI הופכים תמונה פשוטה מהטלפון לתמונת סטודיו או להדמיה, תוך דקות.',
+  m:{k:'note',t:'מתמחרים לפי חבילה (למשל סט תמונות לכל מוצר) או כחבילה חודשית קבועה לעסק.'},w:'חנויות באינסטגרם ובאטסי, עסקים קטנים שמוכרים אונליין, ו-Fiverr.',s:'לקחת מוצר אחד מהבית ולהכין לו 5 תמונות AI לדוגמה.'},
+ {id:'ai-video',c:'ai',e:'🎞️',n:'סרטוני AI ואווטאר מדבר לעסקים',ty:'time',st:'behind',col:['yellow','blue'],tg:['tech','create'],ds:2,dg:2,
+  d:'הרבה בעלי עסקים לא אוהבים להצטלם. עם AI מכינים סרטוני הסבר, מודעות ואווטאר דיגיטלי שמדבר בשמם, בלי מצלמה ובלי אולפן.',
+  m:{k:'note',t:'מתמחרים לסרטון או כחבילה חודשית של סרטונים לרשתות.'},w:'עסקים שמפרסמים ברשתות ולא מצלמים את עצמם, ופנייה ישירה בהודעה פרטית.',s:'להכין סרטון אווטאר אחד של 30 שניות, ולהשתמש בו כדוגמה.'},
+ {id:'ai-dub',c:'ai',e:'🌐',n:'תרגום ודיבוב סרטונים עם AI',ty:'time',st:'behind',col:['blue'],tg:['tech','teach'],ds:2,dg:2,
+  d:'יוצרי תוכן ועסקים רוצים להגיע לקהל בחו"ל. AI מתרגם ומדבב את הסרטון לאנגלית (או לכל שפה) בקול של הדובר עצמו. התפקיד שלכם: לבדוק, לתקן ולהגיש מוכן.',
+  m:{k:'note',t:'מתמחרים לפי דקת וידאו או כחבילה חודשית. מי שיודע את השפה עצמה מבקש יותר, כי הוא גם מבטיח איכות.'},w:'יוצרי תוכן ישראלים, מרצים וחברות שמוכרות לחו"ל.',s:'לדבב סרטון קצר של יוצר שאתם אוהבים, ולשלוח לו כדוגמה.'},
+ {id:'ai-workshop',c:'ai',e:'🧑‍🏫',n:'סדנאות AI לבעלי עסקים',ty:'time',st:'people',col:['yellow','green','blue'],tg:['tech','teach'],ds:2,dg:2,
+  d:'רוב בעלי העסקים יודעים ש-AI חשוב, ולא יודעים מאיפה להתחיל. מי שכבר משתמש בו בביטחון יכול ללמד: סדנה לקבוצה, שיעור פרטי, או הטמעה במשרד.',
+  m:{k:'note',t:'מתמחרים לסדנה, למשתתף או לפגישה פרטית. סדנה אחת לקבוצה יכולה להכניס כמו הרבה שעות עבודה.'},w:'קבוצות של בעלי עסקים, מתנ"סים, ארגוני נשים עסקיות ולינקדאין.',s:'לבנות סדנה של שעה על 3 דברים שאתם עושים עם AI כל יום, ולהעביר אותה לחברים בחינם.'},
+ {id:'ai-sites',c:'ai',e:'🌍',n:'בניית אתרים ודפי נחיתה עם AI',ty:'time',st:'behind',col:['blue','yellow'],tg:['tech','create'],ds:2,dg:2,
+  d:'היום אפשר לבנות אתר או דף נחיתה מקצועי בלי לדעת לתכנת, בעזרת כלי AI. עסקים קטנים (קוסמטיקאיות, מאמנים, נותני שירות) צריכים דף אחד טוב, ומשלמים על זה.',
+  m:{k:'note',t:'מתמחרים לפרויקט, ואפשר להוסיף תשלום חודשי על עדכונים ותחזוקה.'},w:'נותני שירות שעדיין אין להם אתר, וקבוצות בעלי עסקים מתחילים.',s:'לבנות דף נחיתה אחד לעסק של מישהו שאתם מכירים.'},
+ {id:'ai-printables',c:'ai',e:'🗒️',n:'מוצרים דיגיטליים להורדה (Etsy)',ty:'build',st:'behind',col:['yellow','blue'],tg:['tech','create'],ds:2,dg:4,
+  d:'מתכננים להדפסה, לוחות תקציב, דפי צביעה לילדים, תבניות להזמנות. AI עוזר לעצב ולכתוב, מעלים פעם אחת לחנות, וזה נמכר שוב ושוב בלי עבודה נוספת.',
+  m:{k:'note',t:'כל מוצר זול יחסית, אז ההכנסה באה מהרבה מוצרים ומהרבה מכירות. צריך סבלנות עד שהחנות צוברת חשיפה.'},w:L('https://www.etsy.com/sell','Etsy')+' וחנות באינסטגרם.',s:'לבחור נישה אחת (למשל הורים לתינוקות) ולעצב 3 מוצרים ראשונים.'},
+ {id:'ai-cv',c:'ai',e:'📄',n:'קורות חיים ופרופיל לינקדאין',ty:'time',st:'people',col:['blue','green'],tg:['tech','create'],ds:1,dg:2,
+  d:'מחפשי עבודה צריכים קורות חיים שעוברים סינון ופרופיל לינקדאין שמושך מגייסים. עם AI עושים את זה מהר ובאיכות גבוהה, ומוסיפים את המגע האישי.',
+  m:{k:'note',t:'מתמחרים לחבילה (קורות חיים + לינקדאין + מכתב מקדים). כל לקוח מרוצה מביא חברים.'},w:'קבוצות חיפוש עבודה בפייסבוק, משוחררי צבא וסטודנטים בסוף תואר.',s:'לשדרג את קורות החיים של חבר או חברה, ולבקש המלצה.'},
+ {id:'ai-automation',c:'ai',e:'⚙️',n:'אוטומציות לעסקים קטנים',ty:'build',st:'behind',col:['blue','red'],tg:['tech'],ds:3,dg:3,
+  d:'מחברים בין הכלים שהעסק כבר משתמש בהם (טפסים, וואטסאפ, יומן, גוגל שיטס), כך שהודעות, תזכורות ומעקב קורים לבד. לעסק קטן זה חוסך שעות כל שבוע.',
+  m:{k:'note',t:AI_NOTE},w:AI_WHERE,s:'למפות תהליך אחד שעסק עושה ידנית כל יום, ולבנות לו אוטומציה ראשונה.'},
+ {id:'ai-content-pack',c:'ai',e:'🗓️',n:'חבילת תוכן חודשית עם AI',ty:'time',st:'behind',col:['yellow','blue'],tg:['tech','create'],ds:2,dg:2,
+  d:'בונים לעסק פעם בחודש את כל התוכן: רעיונות, פוסטים, כתוביות, מיילים ותמונות. AI עושה את רוב העבודה, ואתם דואגים שזה יישמע כמו העסק ולא כמו מכונה.',
+  m:{k:'note',t:'מתמחרים כחבילה חודשית קבועה לכל עסק, כך שכל לקוח הוא הכנסה חוזרת.'},w:'עסקים קטנים שמפרסמים מעט או לא בכלל, ופנייה ישירה.',s:'להכין לעסק אחד שבוע תוכן לדוגמה, ולשלוח לו.'},
  {id:'nanny',c:'home',e:'👶',n:'נני',ty:'time',st:'people',col:['green'],tg:['care'],ds:1,dg:1,
   d:'טיפול קבוע בילדים, עם יותר מחויבות מבייביסיטר: איסוף מהמסגרות, עזרה בשיעורי בית, ארוחות קלות וניהול סדר היום עד שההורים חוזרים.',
   m:{k:'hour',lo:60,hi:90},w:`${HELPBOOK}, קבוצת הפייסבוק "משרות בייביסיטר ונני", וקבוצות "אמהות ב..." לפי העיר.`,s:'לפרסם בקבוצת ההורים של השכונה אילו שעות פנויות לכם.'},
@@ -828,7 +871,7 @@ const Q_GROUPS=[
 
 /* ---------- state ---------- */
 const SKEY='rl-extra-income-v1';
-function seedState(){return {v:1,target:2000,hours:5,colors:[],style:'both',traits:[],passive:false,years:10,ans:{},pick:'',step:'',start:'',open:{}};}
+function seedState(){return {v:1,target:2000,hours:5,colors:[],style:'both',traits:[],passive:false,years:10,ans:{},pick:'',fav:[],step:'',start:'',open:{}};}
 let S=seedState();
 let typeFilter='all';
 
@@ -878,7 +921,7 @@ function score(i){
 function ideaHTML(i,opts){
   opts=opts||{};
   const n=need(i),open=opts.open,t=TYPES[i.ty];
-  const picked=S.pick===i.id;
+  const faved=S.fav.includes(i.id);
   return `<div class="idea${open?'':' closed'}" data-id="${i.id}">
     <button class="idea-head" type="button" aria-expanded="${open?'true':'false'}">
       <span class="i-emoji" aria-hidden="true">${i.e}</span>
@@ -897,7 +940,7 @@ function ideaHTML(i,opts){
       </div>
       ${i.w?`<div class="i-row"><span class="r-lbl">📍 איפה מוצאים לקוחות: </span>${i.w}</div>`:''}
       <div class="i-row"><span class="r-lbl">👣 צעד ראשון השבוע: </span>${i.s}</div>
-      <button class="pick-btn${picked?' on':''}" type="button" data-pick="${i.id}">${picked?'⭐ זה הרעיון שלי':'☆ זה הרעיון שלי'}</button>
+      <button class="pick-btn${faved?' on':''}" type="button" data-fav="${i.id}" aria-pressed="${faved}">${faved?FAV_ON:FAV_OFF}</button>
     </div>
   </div>`;
 }
@@ -945,8 +988,21 @@ function renderQuestions(){
 function renderQProg(){const done=Object.values(S.ans).filter(v=>v&&v.trim()).length;$('#qProg').textContent=`${done} מתוך 20 תשובות`;$('#qBar').style.width=(done*5)+'%';}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+const FAV_ON='⭐ ברשימה שלי',FAV_OFF='☆ לשמור לרשימה שלי';
+function renderFavs(){
+  if(S.pick&&!S.fav.includes(S.pick))S.fav.push(S.pick);
+  const list=S.fav.map(id=>BY_ID[id]).filter(Boolean);
+  $('#favCount').textContent=list.length?`(${list.length})`:'';
+  $('#favList').innerHTML=list.length?`<div class="fav-list">${list.map(i=>{const on=S.pick===i.id,n=need(i);
+    const sub=n.line.replace(/<br>/g,' · ').replace(/<[^>]+>/g,'');
+    return `<div class="fav-row${on?' on':''}"><button class="fav-choose" type="button" role="radio" aria-checked="${on}" data-choose="${i.id}"><span class="fav-radio" aria-hidden="true"></span><span class="fav-emoji" aria-hidden="true">${i.e}</span><span class="fav-txt"><span class="fav-name">${i.n}</span><span class="fav-sub">${sub}</span></span></button><button class="fav-del" type="button" data-unfav="${i.id}" aria-label="הסרה מהרשימה: ${esc(i.n)}">✕</button></div>`;}).join('')}</div>`
+    :`<div class="fav-hint">עוד לא סימנתם רעיונות. לוחצים על "☆ לשמור לרשימה שלי" ליד כל רעיון שמעניין אתכם, למעלה בהתאמות או ברשימה המלאה, והם יתאספו כאן.</div>`;
+  const pill=$('#favPill');pill.textContent=`⭐ ${list.length} ברשימה שלי ↓`;pill.dataset.n=list.length;updatePill();
+}
+function updatePill(){const pill=$('#favPill');pill.hidden=!(+pill.dataset.n>0)||$('#tabIdeas').hidden||!!window._commitInView;}
+function syncStars(){document.querySelectorAll('[data-fav]').forEach(b=>{const on=S.fav.includes(b.dataset.fav);b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);b.textContent=on?FAV_ON:FAV_OFF;});}
 function renderCommit(){
-  $('#pickSel').innerHTML=`<option value="">בוחרים רעיון אחד...</option>`+CATS.map(c=>`<optgroup label="${c.e} ${c.n}">${IDEAS.filter(i=>i.c===c.id).map(i=>`<option value="${i.id}"${S.pick===i.id?' selected':''}>${i.n}</option>`).join('')}</optgroup>`).join('');
+  renderFavs();
   $('#stepTxt').value=S.step||'';
   renderDeadline();
 }
@@ -969,7 +1025,7 @@ function renderAll(){
   $('#heroAmt').textContent=fmt(S.target)+' ₪';
   renderInputs();renderTop();renderCatalog();renderLadder();renderQuestions();renderCommit();
 }
-function refreshResults(){$('#heroAmt').textContent=fmt(S.target)+' ₪';renderTop();renderCatalog();renderLadder();}
+function refreshResults(){$('#heroAmt').textContent=fmt(S.target)+' ₪';renderTop();renderCatalog();renderLadder();renderFavs();}
 
 /* ---------- events ---------- */
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isFinite(n)?n:0;};
@@ -989,16 +1045,17 @@ document.addEventListener('click',e=>{
   if(ah){const a=ah.parentNode,id=a.dataset.a;S.open[id]=!S.open[id];a.classList.toggle('closed',!S.open[id]);ah.setAttribute('aria-expanded',!!S.open[id]);save();return;}
   const ih=e.target.closest('.idea-head');
   if(ih){const d=ih.parentNode;const c=d.classList.toggle('closed');ih.setAttribute('aria-expanded',!c);return;}
-  const pk=e.target.closest('[data-pick]');
-  if(pk){const id=pk.dataset.pick;S.pick=S.pick===id?'':id;
-    document.querySelectorAll('[data-pick]').forEach(b=>{const on=b.dataset.pick===S.pick;b.classList.toggle('on',on);b.textContent=on?'⭐ זה הרעיון שלי':'☆ זה הרעיון שלי';});
-    $('#pickSel').value=S.pick;renderDeadline();save();
-    if(S.pick)flash(pk,'⭐ נשמר למטה, ב"רעיון אחד, 30 יום"');}
+  const fv=e.target.closest('[data-fav]');
+  if(fv){const id=fv.dataset.fav;if(S.fav.includes(id)){S.fav=S.fav.filter(x=>x!==id);if(S.pick===id)S.pick='';}else S.fav.push(id);
+    syncStars();renderFavs();renderDeadline();save();if(S.fav.includes(id))flash(fv,'⭐ נוסף לרשימה למטה');return;}
+  const ch=e.target.closest('[data-choose]');
+  if(ch){S.pick=S.pick===ch.dataset.choose?'':ch.dataset.choose;renderFavs();renderDeadline();save();return;}
+  const uf=e.target.closest('[data-unfav]');
+  if(uf){const id=uf.dataset.unfav;S.fav=S.fav.filter(x=>x!==id);if(S.pick===id)S.pick='';syncStars();renderFavs();renderDeadline();save();return;}
 });
 $('#questions').addEventListener('input',e=>{const t=e.target.closest('[data-q]');if(!t)return;S.ans[t.dataset.q]=t.value;renderQProg();save();});
-$('#pickSel').addEventListener('change',e=>{S.pick=e.target.value;
-  document.querySelectorAll('[data-pick]').forEach(b=>{const on=b.dataset.pick===S.pick;b.classList.toggle('on',on);b.textContent=on?'⭐ זה הרעיון שלי':'☆ זה הרעיון שלי';});
-  renderDeadline();save();});
+$('#favPill').addEventListener('click',()=>$('#commitCard').scrollIntoView({behavior:'smooth',block:'start'}));
+try{new IntersectionObserver(es=>{window._commitInView=es[0].isIntersecting;updatePill();}).observe($('#commitCard'));}catch(e){}
 $('#stepTxt').addEventListener('input',e=>{S.step=e.target.value;renderDeadline();save();});
 $('#startBtn').addEventListener('click',()=>{const d=new Date();S.start=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');renderDeadline();save();});
 $('#newBtn').addEventListener('click',()=>{if(!confirm('להתחיל מחדש? הבחירות והתשובות כאן יימחקו (קישור ששלחתם קודם נשאר כמו שהוא).'))return;
@@ -1008,7 +1065,7 @@ $('#newBtn').addEventListener('click',()=>{if(!confirm('להתחיל מחדש? �
 /* ---------- tabs (?tab=passion opens the passion questionnaire directly) ---------- */
 function setTab(t,scroll){
   const p=t==='passion';
-  $('#tabIdeas').hidden=p;$('#tabPassion').hidden=!p;
+  $('#tabIdeas').hidden=p;$('#tabPassion').hidden=!p;if(window.updatePill&&$('#favPill').dataset.n!==undefined)updatePill();
   $('#heroH').hidden=p;$('#heroH2').hidden=!p;$('#heroP').hidden=p;$('#heroP2').hidden=!p;
   document.querySelectorAll('[data-tab]').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);});
   try{const u=new URL(location.href);if(p)u.searchParams.set('tab','passion');else u.searchParams.delete('tab');history.replaceState(null,'',u.pathname+u.search+u.hash);}catch(e){}

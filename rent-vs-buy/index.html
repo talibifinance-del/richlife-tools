@@ -247,6 +247,9 @@ svg.chart{display:block;width:100%;height:auto}
 .tb-stats .s .v{font-size:14px;font-weight:900;color:var(--pine-deep);margin-top:3px;white-space:nowrap}
 .tb-stats .s.cost .v{color:#8f3a29}
 /* ── rent-vs-buy (6.10.26) ── */
+.hint{margin-top:7px;font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.55}
+.hint a{color:var(--pine-deep);font-weight:800}
+.hint button{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.35);border-radius:100px;padding:6px 12px;min-height:44px;cursor:pointer;margin-inline-start:4px}
 .maxbox{margin-top:14px;background:linear-gradient(140deg,rgba(var(--sage-rgb),.45),rgba(var(--sage-rgb),.15));border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:16px;padding:14px 16px;text-align:center}
 .maxbox .mk{font-size:13px;font-weight:800;color:var(--pine-darker)}
 .maxbox .mv{font-size:clamp(22px,6vw,28px);font-weight:900;color:var(--pine-darker);margin:4px 0;direction:ltr;unicode-bidi:isolate}
@@ -337,6 +340,7 @@ details.more .fields{margin-top:10px}
       <div class="field">
         <label for="price">מחיר הדירה</label>
         <div class="input-shell"><span class="unit">₪</span><input id="price" type="text" inputmode="numeric" value="2,200,000"></div>
+        <div class="hint">מחירים של מכירות אמיתיות ברחוב: <a href="https://www.nadlan.gov.il/" target="_blank" rel="noopener">אתר הנדל"ן הממשלתי</a> · <a href="https://www.madlan.co.il/" target="_blank" rel="noopener">מדלן</a></div>
       </div>
       <div class="field">
         <label for="rate">ריבית ממוצעת במשכנתא</label>
@@ -393,6 +397,7 @@ details.more .fields{margin-top:10px}
       <div class="field">
         <label for="rent">שכר דירה חודשי (לדירה דומה)</label>
         <div class="input-shell"><span class="unit">₪</span><input id="rent" type="text" inputmode="numeric" value="6,000"></div>
+        <div class="hint" id="rentHint"></div>
       </div>
       <div class="field">
         <label for="rentG">כמה שכר הדירה יעלה בשנה</label>
@@ -736,6 +741,11 @@ function calc(){syncLive();
     `<div class="ms">${mp.limit==='income'?`המגבלה כאן היא ההכנסה: ההחזר החודשי עד ${Math.round(MAX_PTI*100)}% מ-${ils(p.income)} נטו (ככה בנקים בדרך כלל מאשרים).`:`אחרי כל ההוצאות שמסביב, נשארת מקדמה של ${p.single?'25':'50'}% לפחות, המינימום של בנק ישראל ל${p.single?'דירה יחידה':'דירה נוספת'}.${p.income>0?'':' אם תוסיפו הכנסה נטו, נבדוק גם כמה החזר חודשי אפשר לשאת.'}`}</div>`+
     (Math.abs(mpR-p.price)>=10000?`<button type="button" id="useMax">לבדוק דירה ב-${ils(mpR)}</button>`:'');
   const um=$('useMax');if(um)um.onclick=()=>{$('price').value=grp(String(mpR));calc();};
+  // הצעה לשכר דירה: 2.5%-3.5% מהמחיר בשנה (כלל אצבע, לא המחיר באזור)
+  if(p.price>0){const lo=Math.round(p.price*0.025/12/100)*100,hi=Math.round(p.price*0.035/12/100)*100,mid=Math.round(p.price*0.03/12/100)*100;
+    $('rentHint').innerHTML=`💡 דירה ב-${ils(p.price)} מושכרת בדרך כלל בכ-<b>${fmt.format(lo)} עד ${fmt.format(hi)} ₪</b> בחודש. זו הערכה גסה (בתל אביב בדרך כלל פחות, בפריפריה יותר).${Math.abs(mid-p.rent)>=100?` <button type="button" id="useRent">להשתמש ב-${ils(mid)}</button>`:''}<br>לבדוק את האזור שלכם: <a href="https://www.yad2.co.il/realestate/rent" target="_blank" rel="noopener">יד2</a> · <a href="https://www.madlan.co.il/" target="_blank" rel="noopener">מדלן</a>`;
+    const ur=$('useRent');if(ur)ur.onclick=()=>{$('rent').value=grp(String(mid));calc();};}
+  else $('rentHint').innerHTML='';
   // אותו תקציב בשתי הדרכים
   const bud=Math.max(s.firstBuyOut,s.firstRentOut),gapM=Math.abs(diffM),buyCheaper=diffM<0;
   const invRow=(lbl)=>INV?`<div class="br inv"><span>${lbl}</span><b>+${ils(gapM)}</b></div>`:`<div class="br lost"><span>ההפרש (לא מושקע)</span><b>${ils(gapM)}</b></div>`;

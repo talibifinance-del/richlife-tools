@@ -157,6 +157,7 @@ fbq('track', 'PageView');
   .opt-btn{display:block;text-align:center;background:#3e5448;color:#fff;font-weight:800;font-size:15px;border-radius:12px;padding:11px 10px}
   .opt:not(.opt-main) .opt-btn{background:#eef4ef;color:#243a30;border:1px solid #bcd3bf}
   @media (max-width:560px){.opt-grid{grid-template-columns:1fr}}
+  .opt-grid.opt-single{grid-template-columns:1fr;max-width:380px;margin-left:auto;margin-right:auto}
   .hidden{display:none}
   .center{text-align:center}
   .lead2{font-weight:700;color:var(--ink);font-size:17px;margin:14px 0 12px}
@@ -648,14 +649,36 @@ function showResult(){
         '</div>';
   } else if(route==='livui-base'){
     cta='<h2>רגע לפני שמשקיעים, בואי נדבר על הבסיס</h2>'+
-        '<p style="text-align:right">מהתשובות שלך עולה שכרגע עוד אין עודף פנוי שאפשר להשקיע ממנו, וזה בסדר גמור, זו נקודת פתיחה של המון אנשים. אבל זו בדיוק הנקודה: <b>אי אפשר להשקיע מכסף שעוד לא קיים</b>.</p>'+
-        '<p style="text-align:right">הקורס להשקעה מתאים לרגע שכבר יש עודף חודשי פנוי. מה שבאמת יזיז אותך עכשיו זה ליווי אישי, אחד על אחד, שמסדר את התקציב, החובות והחיסכון, ובונה איתך את העודף שממנו משקיעים.</p>'+
-        '<a href="'+CALL_URL+'">רוצה שנעשה סדר ביחד? לפרטים ←</a>';
+        '<ul style="text-align:right;margin:0 0 16px;padding-inline-start:18px;color:#eaf3ef;font-size:15px;line-height:1.85">'+
+          '<li>כרגע עוד אין עודף פנוי להשקיע ממנו, וזו נקודת פתיחה של המון אנשים</li>'+
+          '<li><b>אי אפשר להשקיע מכסף שעוד לא קיים</b></li>'+
+          '<li>מה שיזיז אותך עכשיו: לסדר תקציב, חובות וחיסכון, ולבנות את העודף</li>'+
+        '</ul>'+
+        '<div class="opt-grid opt-single">'+
+          '<a class="opt opt-main" href="'+CALL_URL+'">'+
+            '<span class="opt-badge">מומלץ לך</span>'+
+            '<span class="opt-img opt-img-portrait"><img src="'+LIVUY_IMG+'" alt="טלי בנימינוב שרעבי בפגישת ליווי"></span>'+
+            '<span class="opt-t">ליווי אישי, יחד איתי</span>'+
+            '<span class="opt-d"><b>ליווי אחד על אחד</b> שמסדר את הבסיס, ובונה איתך את העודף שממנו משקיעים.</span>'+
+            '<span class="opt-btn">רוצה שנעשה סדר ביחד? ←</span>'+
+          '</a>'+
+        '</div>';
   } else {
     cta='<h2>את/ה כבר בפנים 🤍</h2>'+
-        '<p style="text-align:right">את/ה מעבר לקורס למתחילים. הצעד הבא הוא לבנות את התמונה השלמה סביב ההשקעה, תקציב, חובות, פנסיה, כרית ביטחון ותיק מסודר שיגדל איתך.</p>'+
-        '<p style="text-align:right">זה בדיוק מה שאני עושה בליווי אישי, אחד על אחד.</p>'+
-        '<a href="'+CALL_URL+'">רוצה לשמוע על ליווי ←</a>';
+        '<ul style="text-align:right;margin:0 0 16px;padding-inline-start:18px;color:#eaf3ef;font-size:15px;line-height:1.85">'+
+          '<li>את/ה מעבר לקורס למתחילים</li>'+
+          '<li>הצעד הבא: <b>התמונה השלמה סביב ההשקעה</b></li>'+
+          '<li>תקציב, חובות, פנסיה, כרית ביטחון ותיק מסודר שגדל איתך</li>'+
+        '</ul>'+
+        '<div class="opt-grid opt-single">'+
+          '<a class="opt opt-main" href="'+CALL_URL+'">'+
+            '<span class="opt-badge">מומלץ לך</span>'+
+            '<span class="opt-img opt-img-portrait"><img src="'+LIVUY_IMG+'" alt="טלי בנימינוב שרעבי בפגישת ליווי"></span>'+
+            '<span class="opt-t">ליווי אישי, יחד איתי</span>'+
+            '<span class="opt-d"><b>ליווי אחד על אחד</b> שבונה את התמונה השלמה סביב התיק שלך.</span>'+
+            '<span class="opt-btn">רוצה לשמוע על ליווי ←</span>'+
+          '</a>'+
+        '</div>';
   }
   el('r_cta').innerHTML = cta;
 

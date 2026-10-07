@@ -222,13 +222,20 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <div class="input-shell"><span class="unit">₪</span><input id="exp" type="text" inputmode="numeric" value="8,000" placeholder="0" aria-label="הוצאות חודשיות חיוניות"></div>
       <div class="hint">רק ההכרחי: שכר דירה או משכנתא, אוכל, חשבונות, ביטוחים, תחבורה. מה שחייבים לשלם גם בחודש בלי הכנסה - בלי מותרות.</div>
     </div>
-    <div class="bills-lbl" style="margin-top:16px;margin-bottom:9px">מה ההרכב בבית? ככל שיש יותר גב ויותר יציבות, צריך כרית קטנה יותר:</div>
+    <div class="bills-lbl" style="margin-top:16px;margin-bottom:9px">מי חי מהכסף הזה?</div>
+    <div class="sit-seg" id="hhSeg" role="group" aria-label="הרכב משק הבית">
+      <button class="sit-btn hh-btn on" type="button" data-hh="couple" aria-pressed="true"><span class="sb-t">אנחנו זוג</span></button>
+      <button class="sit-btn hh-btn" type="button" data-hh="single" aria-pressed="false"><span class="sb-t">אני לבד</span></button>
+    </div>
+    <div class="bills-lbl" style="margin-top:14px;margin-bottom:9px">ומאיפה ההכנסה? ככל שיש יותר גב ויותר יציבות, צריך כרית קטנה יותר:</div>
     <div class="sit-seg" id="sitSeg">
-      <button class="sit-btn" type="button" data-s="two-emp"><span class="sb-t">שתי הכנסות, שתיהן ממשכורת</span><span class="sb-m">3 חודשים</span></button>
-      <button class="sit-btn" type="button" data-s="two-mix"><span class="sb-t">שתי הכנסות, אחת מעסק עצמאי</span><span class="sb-m">6 חודשים</span></button>
-      <button class="sit-btn" type="button" data-s="two-self"><span class="sb-t">שתי הכנסות, שתיהן מעסק</span><span class="sb-m">9 חודשים</span></button>
-      <button class="sit-btn on" type="button" data-s="one-emp"><span class="sb-t">הכנסה אחת, ממשכורת</span><span class="sb-m">6 חודשים</span></button>
-      <button class="sit-btn" type="button" data-s="one-self"><span class="sb-t">הכנסה אחת, מעסק עצמאי</span><span class="sb-m">9 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="two-emp" data-hh="couple"><span class="sb-t">שתי הכנסות, שתיהן ממשכורת</span><span class="sb-m">3 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="two-mix" data-hh="couple"><span class="sb-t">שתי הכנסות, אחת מעסק עצמאי</span><span class="sb-m">6 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="two-self" data-hh="couple"><span class="sb-t">שתי הכנסות, שתיהן מעסק</span><span class="sb-m">9 חודשים</span></button>
+      <button class="sit-btn on" type="button" data-s="one-emp" data-hh="couple"><span class="sb-t">הכנסה אחת, ממשכורת</span><span class="sb-m">6 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="one-self" data-hh="couple"><span class="sb-t">הכנסה אחת, מעסק עצמאי</span><span class="sb-m">9 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="solo-emp" data-hh="single" hidden><span class="sb-t">ממשכורת</span><span class="sb-m">3 חודשים</span></button>
+      <button class="sit-btn" type="button" data-s="solo-self" data-hh="single" hidden><span class="sb-t">מעסק עצמאי</span><span class="sb-m">6 חודשים</span></button>
     </div>
     <div class="sit-note" id="sitNote"></div>
     <div class="sv-badge" style="margin-top:14px"><span class="sv-lbl" id="goalLbl">היעד שלכם לקרן חירום</span><span class="sv-big tabular" id="goalNum">0 ₪</span></div>
@@ -447,13 +454,23 @@ const SCEN=[
  {s:'two-mix', m:6, note:'יש שתי הכנסות, אבל אחת מהן משתנה. שישה חודשי הוצאה מאזנים בין הגב הכפול לחוסר היציבות.'},
  {s:'two-self',m:9, note:'שתי הכנסות, אבל שתיהן משתנות - ולרוב נחלשות יחד בתקופה חלשה. כדאי כרית עבה של תשעה חודשי הוצאה ומעלה.'},
  {s:'one-emp', m:6, note:'כל הבית נשען על משכורת אחת יציבה, בלי גב שני. שישה חודשי הוצאה נותנים מרווח נשימה אמיתי אם היא נעצרת.'},
- {s:'one-self',m:9, note:'הכנסה אחת, משתנה, ובלי רשת מהמעסיק - הסיכון הגבוה ביותר. כדאי להיערך רחב: תשעה חודשי הוצאה ומעלה.'}
+ {s:'one-self',m:9, note:'הכנסה אחת, משתנה, ובלי רשת מהמעסיק - הסיכון הגבוה ביותר. כדאי להיערך רחב: תשעה חודשי הוצאה ומעלה.'},
+ // single household: one income by definition, and only one person lives off it (Tali, 7.10.26: 3 / 6)
+ {s:'solo-emp', m:3, note:'רק אדם אחד חי מהכסף, ומשכורת קבועה מגיעה עם רשת - בדרך כלל גם דמי אבטלה אם העבודה נעצרת. שלושה חודשי הוצאה בדרך כלל מספיקים.'},
+ {s:'solo-self',m:6, note:'ההכנסה משתנה ואין רשת מהמעסיק, אבל רק אדם אחד חי מהכסף. שישה חודשי הוצאה נותנים מרווח לתקופה חלשה בעסק.'}
 ];
+const HH_DEF={couple:'one-emp',single:'solo-emp'};
+function hhOf(){return S.hh||((S.sit||'').indexOf('solo-')===0?'single':'couple');}
+function applyHH(){const hh=hhOf();
+  document.querySelectorAll('#hhSeg .hh-btn').forEach(x=>{const on=x.dataset.hh===hh;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false');});
+  document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>{x.hidden=x.dataset.hh!==hh;});}
 function scenOf(id){return SCEN.find(x=>x.s===id)||SCEN.find(x=>x.s==='one-emp');}
 
 const MONEY=['exp','have','save'];
 MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}S[id]=num(el.value);save();calc();});});
 document.getElementById('sitSeg').addEventListener('click',e=>{const b=e.target.closest('.sit-btn');if(!b)return;S.sit=b.dataset.s;document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x===b));save();calc();});
+document.getElementById('hhSeg').addEventListener('click',e=>{const b=e.target.closest('.hh-btn');if(!b)return;const hh=b.dataset.hh;if(hh===hhOf())return;S.hh=hh;S.sit=HH_DEF[hh];
+  document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x.dataset.s===S.sit));applyHH();save();calc();});
 document.getElementById('irate').addEventListener('input',e=>{S.irate=num(e.target.value);save();calc();});
 
 function monthsText(m){return m===1?'חודש אחד':m+' חודשים';}
@@ -535,6 +552,7 @@ function applyInputs(){
   document.getElementById('save').value=grp(S.save);
   document.getElementById('irate').value=(S.irate!=null?S.irate:7);
   document.querySelectorAll('#sitSeg .sit-btn').forEach(x=>x.classList.toggle('on',x.dataset.s===(S.sit||'one-emp')));
+  applyHH();
 }
 (function boot(){
   const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);

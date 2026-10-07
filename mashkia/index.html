@@ -612,27 +612,20 @@ function showResult(){
   let cta;
   if(route==='course'){
     cta='<h2>אז איך עושים את הצעד הראשון, באמת?</h2>'+
-        '<p style="text-align:right">הקורס "להשקיע לראשונה בקלות" לוקח אותך מ"אין לי מושג" עד השקעה שביצעת בפועל, בשעה וחצי, בקצב שלך:</p>'+
-        '<ul style="text-align:right;margin:0 0 16px;padding-inline-start:18px;color:#eaf3ef;font-size:15px;line-height:1.85">'+
-          '<li>נעשה סדר במושגים, בלי מילים גדולות ובלי סינית</li>'+
-          '<li>למה כסף שיושב בעו"ש עובד נגדך, ומה המחיר של לדחות</li>'+
-          '<li>הבסיס בפשטות: איך מתחילים, <b>גם עם סכום קטן</b></li>'+
-          '<li>מה עושים כשהשוק יורד, ומה עושים כשהתקשורת מפחידה</li>'+
-          '<li>ובעיקר, <b>תצא/י עם ההשקעה הראשונה שלך, שכבר עשית</b></li>'+
-        '</ul>'+
+        '<p style="text-align:right">יש לך שתי דרכים מכאן:</p>'+
         '<div class="opt-grid">'+
-          '<a class="opt opt-main" href="'+COURSE_URL+'">'+
+          '<a class="opt opt-main" href="'+CALL_URL+'">'+
             '<span class="opt-badge">מומלץ לך</span>'+
+            '<span class="opt-img opt-img-portrait"><img src="'+LIVUY_IMG+'" alt="טלי בנימינוב שרעבי בפגישת ליווי"></span>'+
+            '<span class="opt-t">ליווי אישי, יחד איתי</span>'+
+            '<span class="opt-d"><b>ליווי אחד על אחד</b>, שבונה איתך תמונה כלכלית שלמה סביב ההשקעה, ועושה איתך את הצעד הראשון בפועל.</span>'+
+            '<span class="opt-btn">רוצה לשמוע על ליווי ←</span>'+
+          '</a>'+
+          '<a class="opt" href="'+COURSE_URL+'">'+
             '<span class="opt-img"><img src="images/course-mockup.png" alt="הקורס להשקיע לראשונה בקלות על מחשב, טאבלט ונייד"></span>'+
             '<span class="opt-t">לבד, בקורס</span>'+
-            '<span class="opt-d">הקורס <b>"להשקיע לראשונה בקלות"</b>: צעד אחר צעד, עד ההשקעה הראשונה שלך.</span>'+
-            '<span class="opt-btn">נתחיל כאן ←</span>'+
-          '</a>'+
-          '<a class="opt" href="'+CALL_URL+'">'+
-            '<span class="opt-img opt-img-portrait"><img src="'+LIVUY_IMG+'" alt="טלי בנימינוב שרעבי בליווי"></span>'+
-            '<span class="opt-t">ליווי אישי, יחד איתי</span>'+
-            '<span class="opt-d">רוצה שנעשה את זה ביחד? <b>ליווי אחד על אחד</b>, שבונה איתך תמונה כלכלית שלמה סביב ההשקעה.</span>'+
-            '<span class="opt-btn">רוצה לשמוע על ליווי ←</span>'+
+            '<span class="opt-d">בא לך פשוט? לעשות לבד השקעה ראשונה קלה, בלי להתחייב לתהליך, עם הקורס <b>"להשקיע לראשונה בקלות"</b>.</span>'+
+            '<span class="opt-btn">לקורס ←</span>'+
           '</a>'+
         '</div>';
   } else if(route==='livui-capital'){

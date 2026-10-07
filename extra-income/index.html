@@ -199,6 +199,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
 .gn-tab:hover{border-color:var(--pine)}
 .gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+button.gn-tab{cursor:pointer;font-size:14px;padding:10px 18px}
 </style>
 <style>
 .pintro{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.55;margin-bottom:12px}
@@ -461,8 +462,10 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
   </div>
 
   <div class="hero-title">
-    <h1>איך להרוויח עוד <span class="em" id="heroAmt">2,000 ₪</span> בחודש</h1>
-    <p>יש גבול לכמה אפשר לצמצם. אין גבול לכמה אפשר להרוויח. עונים על כמה שאלות קצרות, ומקבלים את הרעיונות שהכי מתאימים לכם, עם החשבון המדויק של מה צריך כדי להגיע ליעד.</p>
+    <h1 id="heroH">איך להרוויח עוד <span class="em" id="heroAmt">2,000 ₪</span> בחודש</h1>
+    <h1 id="heroH2" hidden>למצוא את <span class="em">התשוקה</span> שלכם</h1>
+    <p id="heroP">יש גבול לכמה אפשר לצמצם. אין גבול לכמה אפשר להרוויח. עונים על כמה שאלות קצרות, ומקבלים את הרעיונות שהכי מתאימים לכם, עם החשבון המדויק של מה צריך כדי להגיע ליעד.</p>
+    <p id="heroP2" hidden>הכנסה שמחזיקה לאורך זמן מתחילה במשהו שאתם אוהבים לעשות. 20 שאלות שעוזרות לגלות מה זה, ולהפוך את זה למקור הכנסה אמיתי.</p>
   </div>
 
   <a class="top-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">
@@ -470,6 +473,14 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <span class="tc-link">לתהליכי הליווי שלי ←</span>
   </a>
 
+  <div class="guide-nav">
+    <div class="gn-tabs" role="tablist" aria-label="חלקי הכלי">
+      <button class="gn-tab on" type="button" role="tab" id="tb-ideas" data-tab="ideas" aria-selected="true" aria-controls="tabIdeas">💸 רעיונות להכנסה</button>
+      <button class="gn-tab" type="button" role="tab" id="tb-passion" data-tab="passion" aria-selected="false" aria-controls="tabPassion">❤️ למצוא את התשוקה שלי</button>
+    </div>
+  </div>
+
+  <div id="tabIdeas" role="tabpanel" aria-labelledby="tb-ideas">
   <div class="card">
     <span class="sec-lbl">🎯 שלב 1 · היעד והזמן</span>
     <div class="grid2">
@@ -484,14 +495,9 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     </div>
   </div>
 
-  <div class="card">
-    <span class="sec-lbl">🎨 שלב 2 · מה הצבע שלכם?</span>
-    <p class="pintro">איזה תיאור הכי מרגיש כמוכם? אפשר לבחור צבע אחד או שניים. הצבע עוזר למצוא דרך שגם נהנים ממנה, ולכן גם מתמידים בה.</p>
-    <div class="colors" id="colors"></div>
-  </div>
 
   <div class="card">
-    <span class="sec-lbl">🧭 שלב 3 · קצת עליכם</span>
+    <span class="sec-lbl">🧭 שלב 2 · קצת עליכם</span>
     <div class="sub-lbl">איך הכי נוח לכם לעבוד?</div>
     <div class="seg3" id="styleSeg" role="group" aria-label="סגנון עבודה">
       <button data-v="people">מול אנשים</button>
@@ -511,6 +517,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
       <span class="sec-lbl" style="margin-bottom:6px">✨ ההתאמות הכי טובות בשבילכם</span>
     </div>
     <p class="res-note" id="resNote"></p>
+    <p class="res-note" style="margin-top:6px">לא בטוחים מה אתם אוהבים? <a href="#" data-goto="passion" style="color:var(--pine-deep);font-weight:900">לשאלון התשוקה ←</a></p>
     <div id="topList"></div>
   </div>
 
@@ -542,11 +549,6 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div id="areas"></div>
   </div>
 
-  <div class="card">
-    <span class="sec-lbl">✍️ 20 שאלות לזיקוק</span>
-    <p class="pintro">לא בטוחים מה מתאים? השאלות האלה עוזרות להפוך תשוקות וכישרונות למקור הכנסה אמיתי. התשובות נשמרות כאן, אפשר לחזור אליהן מתי שרוצים. <span class="qprog" id="qProg"></span></p>
-    <div id="questions"></div>
-  </div>
 
   <div class="card commit">
     <span class="sec-lbl">🚀 רעיון אחד, 30 יום</span>
@@ -570,6 +572,23 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
       <li><span>🚩</span><div><b>אין דבר כזה כסף בלי עבודה.</b> מי שמבטיח הכנסה בלי לעשות כלום, או "שעה ביום של מסחר במניות במקום משכורת", כדאי להתרחק ממנו. גם הכנסה פסיבית דורשת עבודה בהתחלה.</div></li>
       <li><span>🧾</span><div><b>הכנסה נוספת צריך לדווח.</b> לפני שמתחילים לגבות, שווה לבדוק פתיחת תיק עוסק (פטור או מורשה) ואיך ההכנסה משפיעה על המס.</div></li>
     </ul>
+  </div>
+
+  </div>
+
+  <div id="tabPassion" role="tabpanel" aria-labelledby="tb-passion" hidden>
+  <div class="card">
+    <span class="sec-lbl">❤️ 20 שאלות לזיקוק</span>
+    <p class="pintro">אין תשובות נכונות. כותבים מה שעולה, גם מילה אחת מספיקה. התשובות נשמרות כאן, ואפשר לחזור אליהן מתי שרוצים.</p>
+    <div class="bar" style="margin-top:2px"><i id="qBar" style="width:0%"></i></div>
+    <div class="bar-note"><span id="qProg">0 מתוך 20 תשובות</span><span>💚</span></div>
+    <div id="questions"></div>
+  </div>
+  <div class="card">
+    <span class="sec-lbl">🧭 ומה עכשיו?</span>
+    <p class="pintro">עברו על התשובות ושימו לב למה שחוזר על עצמו: נושא, כישור, סוג של אנשים. זה הכיוון. עכשיו עוברים לרעיונות, מסמנים ב"קצת עליכם" את מה שגיליתם, ומקבלים רעיונות שמתאימים בדיוק לזה.</p>
+    <button class="act-btn small" type="button" data-goto="ideas" style="background:var(--pine);color:#fff;margin-top:4px">לרעיונות שמתאימים לי ←</button>
+  </div>
   </div>
 
   <div class="updated">התעריפים הם טווחים מקובלים בשוק נכון לאוקטובר 2026, לא התחייבות. רמות הקושי הן הערכה. הקישורים לאתרים חיצוניים לנוחות בלבד.</div>
@@ -608,12 +627,6 @@ const $=s=>document.querySelector(s);
 const fmt=n=>Math.round(n).toLocaleString('he-IL');
 const L=(href,txt)=>`<a href="${href}" target="_blank" rel="noopener">${txt}</a>`;
 
-const COLORS={
-  red:{e:'🔴',n:'אדום',t:'תוצאות, אתגר ושליטה',d:'אוהבים לראות דברים זזים קדימה, להוביל, להחליט ולסגור עניינים.'},
-  yellow:{e:'🟡',n:'צהוב',t:'אנשים, יצירה וביטוי',d:'אוהבים וייב, חוויות, להיות מול אנשים וליצור משהו שכיף לספר עליו.'},
-  green:{e:'🟢',n:'ירוק',t:'שקט, נתינה וקשר',d:'אוהבים משמעות, יציבות, רוגע ולעזור לאנשים מקרוב.'},
-  blue:{e:'🔵',n:'כחול',t:'סדר, דיוק ועומק',d:'אוהבים שיטה, תהליך, פרטים ולעשות דברים טוב באמת.'}
-};
 const TRAITS=[
   {id:'capital',n:'💰 כסף פנוי להשקעה'},
   {id:'home',n:'🏠 דירה או חדר שאפשר להשכיר'},
@@ -851,7 +864,6 @@ const LEVEL=['','קל מאוד','קל','בינוני','קשה','קשה מאוד'
 function score(i){
   if(i.rq&&!S.traits.includes(i.rq))return {s:-99,why:[]};
   let s=0;const why=[];
-  S.colors.forEach(c=>{if(i.col.includes(c)){s+=4;why.push(COLORS[c].e+' '+COLORS[c].t);}});
   S.traits.forEach(t=>{if(i.tg.includes(t)){s+=3;why.push(TRAITS.find(x=>x.id===t).n);}});
   if(S.style!=='both'&&i.st!=='both')s+=(i.st===S.style?2:-2);
   if(S.passive){if(i.ty==='time')s-=2;else{s+=3;why.push('⏳ לא תלוי בזמן שלכם');}}
@@ -890,7 +902,6 @@ function ideaHTML(i,opts){
 }
 
 function renderInputs(){
-  $('#colors').innerHTML=Object.entries(COLORS).map(([k,c])=>`<button class="cbtn${S.colors.includes(k)?' on':''}" type="button" data-c="${k}" aria-pressed="${S.colors.includes(k)}"><span class="c-dot" aria-hidden="true">${c.e}</span><span><span class="c-name">${c.n} · ${c.t}</span><span class="c-desc">${c.d}</span></span></button>`).join('');
   $('#traits').innerHTML=TRAITS.map(t=>`<button class="pchip${S.traits.includes(t.id)?' on':''}" type="button" data-t="${t.id}" aria-pressed="${S.traits.includes(t.id)}">${t.n}</button>`).join('');
   document.querySelectorAll('#styleSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.style));
   const sw=$('#passiveSw');sw.classList.toggle('on',S.passive);sw.setAttribute('aria-pressed',S.passive);
@@ -898,9 +909,9 @@ function renderInputs(){
 
 function renderTop(){
   const ranked=IDEAS.map(i=>({i,...score(i)})).filter(x=>x.s>-50).sort((a,b)=>b.s-a.s).slice(0,6);
-  const any=S.colors.length||S.traits.length||S.passive||S.style!=='both';
+  const any=S.traits.length||S.passive||S.style!=='both';
   $('#resNote').textContent=any?`ששת הרעיונות שהכי מתאימים לבחירות שלכם, עם החשבון של כל אחד ל-${fmt(S.target)} ₪ בחודש. הראשון פתוח, לוחצים על השאר.`
-    :'עדיין לא בחרתם צבע או סימנתם מה יש לכם, אז אלה הרעיונות הכי קלים להתחלה. בוחרים למעלה, והרשימה מתעדכנת.';
+    :'עדיין לא סימנתם מה יש לכם, אז אלה הרעיונות הכי קלים להתחלה. מסמנים למעלה, והרשימה מתעדכנת.';
   $('#topList').innerHTML=ranked.map((x,k)=>ideaHTML(x.i,{rank:k+1,why:x.why,open:k===0})).join('');
 }
 
@@ -930,7 +941,7 @@ function renderQuestions(){
   $('#questions').innerHTML=Q_GROUPS.map(g=>`<div class="qgroup"><h3>${g.e} ${g.n}</h3>${g.q.map(q=>{const id='q'+(k++);return `<div class="q"><label for="${id}">${k}. ${q}</label><textarea id="${id}" rows="1" data-q="${id}">${esc(S.ans[id]||'')}</textarea></div>`;}).join('')}</div>`).join('');
   renderQProg();
 }
-function renderQProg(){const done=Object.values(S.ans).filter(v=>v&&v.trim()).length;$('#qProg').textContent=done?`(${done} מתוך 20 תשובות)`:'';}
+function renderQProg(){const done=Object.values(S.ans).filter(v=>v&&v.trim()).length;$('#qProg').textContent=`${done} מתוך 20 תשובות`;$('#qBar').style.width=(done*5)+'%';}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function renderCommit(){
@@ -965,8 +976,6 @@ $('#target').addEventListener('input',e=>{S.target=Math.max(100,num(e.target.val
 $('#target').addEventListener('blur',e=>{e.target.value=fmt(S.target);});
 $('#hours').addEventListener('input',e=>{S.hours=Math.max(0,num(e.target.value));renderTop();renderCatalog();save();});
 $('#years').addEventListener('input',e=>{S.years=Math.max(1,Math.min(40,num(e.target.value)||10));renderLadder();save();});
-$('#colors').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;const c=b.dataset.c;
-  S.colors=S.colors.includes(c)?S.colors.filter(x=>x!==c):[...S.colors,c].slice(-2);renderInputs();renderTop();save();});
 $('#traits').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;const t=b.dataset.t;
   S.traits=S.traits.includes(t)?S.traits.filter(x=>x!==t):[...S.traits,t];renderInputs();renderTop();save();});
 $('#styleSeg').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b)return;S.style=b.dataset.v;renderInputs();renderTop();save();});
@@ -993,6 +1002,19 @@ $('#stepTxt').addEventListener('input',e=>{S.step=e.target.value;renderDeadline(
 $('#startBtn').addEventListener('click',()=>{const d=new Date();S.start=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');renderDeadline();save();});
 $('#newBtn').addEventListener('click',()=>{if(!confirm('להתחיל מחדש? הבחירות והתשובות כאן יימחקו (קישור ששלחתם קודם נשאר כמו שהוא).'))return;
   docId=null;S=seedState();try{localStorage.removeItem(SKEY);history.replaceState(null,'',location.pathname+location.search);}catch(e){}renderAll();refreshShareUI();$('#actLink').hidden=true;window.scrollTo({top:0,behavior:'smooth'});});
+
+
+/* ---------- tabs (?tab=passion opens the passion questionnaire directly) ---------- */
+function setTab(t,scroll){
+  const p=t==='passion';
+  $('#tabIdeas').hidden=p;$('#tabPassion').hidden=!p;
+  $('#heroH').hidden=p;$('#heroH2').hidden=!p;$('#heroP').hidden=p;$('#heroP2').hidden=!p;
+  document.querySelectorAll('[data-tab]').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);});
+  try{const u=new URL(location.href);if(p)u.searchParams.set('tab','passion');else u.searchParams.delete('tab');history.replaceState(null,'',u.pathname+u.search+u.hash);}catch(e){}
+  if(scroll)window.scrollTo({top:0,behavior:'smooth'});
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-tab],[data-goto]');if(!b)return;e.preventDefault();setTab(b.dataset.tab||b.dataset.goto,!!b.dataset.goto);});
+setTab(new URLSearchParams(location.search).get('tab')==='passion'?'passion':'ideas');
 
 /* ---------- save + live share link ---------- */
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}syncLive();}

@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>איזה סוג משקיעה את? | RichLife</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+<!-- Meta Pixel (RichLife 208911198828875) -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '208911198828875');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=208911198828875&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
+</head>
+<body>
+<style>
+  :root{
+    --ink:#1e2b25; --muted:#51625a; --line:#d3e0df;
+    --cream:#e9f1f2; --card:#ffffff;
+    --green:#3e5448; --green-soft:#e7efe9;
+    --brass:#5f7d6a; --brass-dark:#4d6857;
+    --r1:#c1553f; --r2:#d98a3d; --r3:#c9a94a; --r4:#3e7c5a;
+    --shadow:0 10px 40px rgba(62,84,72,.16);
+  }
+  html,body{margin:0;padding:0}
+  body{
+    direction:rtl;
+    font-family:"Heebo","Assistant","Segoe UI",system-ui,Arial,sans-serif;
+    background:linear-gradient(180deg,#eef4ef 0%,#e9f1f2 100%);
+    color:var(--ink); line-height:1.6; min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  *{box-sizing:border-box}
+  .wrap{max-width:640px;margin:0 auto;padding:22px 18px 60px}
+  .brand{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;
+    color:var(--green);letter-spacing:.5px;margin-bottom:14px;font-size:15px}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--brass)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;
+    box-shadow:var(--shadow);padding:30px 26px}
+  @media(max-width:480px){.card{padding:24px 18px;border-radius:18px}}
+  .progress{height:7px;background:#e9e3d6;border-radius:20px;overflow:hidden;margin-bottom:26px}
+  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--brass));
+    border-radius:20px;transition:width .35s ease}
+  h1{font-size:27px;line-height:1.25;margin:0 0 10px;color:var(--green)}
+  .lead{color:var(--muted);font-size:16px;margin:0 0 22px}
+  .step-kicker{font-size:13px;color:var(--brass-dark);font-weight:700;margin-bottom:8px}
+  .q{font-size:21px;font-weight:700;margin:0 0 6px;color:var(--ink)}
+  .qhint{font-size:14px;color:var(--muted);margin:0 0 16px}
+  .opts{display:flex;flex-direction:column;gap:11px}
+  .opt{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1.5px solid var(--line);
+    border-radius:14px;background:#fff;cursor:pointer;font-size:16px;transition:.15s;text-align:right}
+  .opt:hover{border-color:var(--brass);transform:translateY(-1px)}
+  .opt .tick{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:0 0 auto}
+  .opt.sel{border-color:var(--green);background:var(--green-soft)}
+  .opt.sel .tick{border-color:var(--green);background:var(--green);box-shadow:inset 0 0 0 3px var(--green-soft)}
+  .opt.multi .tick{border-radius:6px}
+  .opt.multi.sel .tick{background:var(--green);border-color:var(--green);box-shadow:none;position:relative}
+  .opt.multi.sel .tick::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .numwrap{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:14px;
+    background:#fff;padding:4px 18px}
+  .numwrap:focus-within{border-color:var(--green)}
+  .numinput{flex:1;border:none;outline:none;font-size:24px;font-weight:800;font-family:inherit;
+    padding:14px 0;background:transparent;text-align:right;color:var(--ink)}
+  .numwrap .cur{font-size:22px;color:var(--muted);font-weight:800}
+  .fearsopen{width:100%;margin-top:12px;border:1.5px solid var(--line);border-radius:14px;
+    padding:12px 14px;font-size:15px;font-family:inherit;line-height:1.6;resize:none;outline:none;
+    color:var(--ink);background:#fff;text-align:right}
+  .fearsopen:focus{border-color:var(--green)}
+  .fearsopen::placeholder{color:var(--muted)}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+  .btn{border:none;border-radius:100px;padding:13px 30px;font-size:16px;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--green);color:#fff}
+  .btn-primary:hover{background:#163a34}
+  .btn-primary:disabled{background:#b9c6c1;cursor:not-allowed}
+  .btn-ghost{background:none;color:var(--muted);padding:13px 6px}
+  .btn-ghost:hover{color:var(--ink)}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+  .field input{width:100%;padding:14px 15px;border:1.5px solid var(--line);border-radius:12px;
+    font-size:16px;font-family:inherit;background:#fff}
+  .field input:focus{outline:none;border-color:var(--green)}
+  .fineprint{font-size:12px;color:var(--muted);margin-top:12px;text-align:center}
+  .ferr{display:none;color:#c1553f;font-size:13px;font-weight:600;margin-top:5px}
+  .ferr.show{display:block}
+  .check{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14px;color:var(--muted);cursor:pointer;line-height:1.55}
+  .check input{margin-top:2px;width:18px;height:18px;flex:0 0 auto;accent-color:var(--green);cursor:pointer}
+  .check a{color:var(--green);font-weight:700;text-decoration:underline}
+  .badge{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:15px;
+    padding:8px 16px;border-radius:30px;margin-bottom:16px}
+  .rmeter{height:12px;background:#ece6da;border-radius:20px;overflow:hidden;margin:6px 0 22px}
+  .rmeter > i{display:block;height:100%;border-radius:20px;transition:width .8s ease}
+  .rkicker{font-size:13px;font-weight:700;color:var(--brass-dark);letter-spacing:.3px;margin-bottom:8px}
+  .read{font-size:16px;margin:0 0 18px}
+  .personal{margin:0 0 20px;font-size:15px}
+  .personal b{color:var(--green)}
+  .gaps{background:#fbf7ee;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 20px}
+  .gaps h3{margin:0 0 10px;font-size:15px;color:var(--brass-dark)}
+  .gaps ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+  .gaps li{display:flex;gap:10px;align-items:flex-start;line-height:1.55}
+  .gaps .ic{font-size:19px;line-height:1.3;flex:0 0 auto}
+  .gaps .tx{flex:1;min-width:0}
+  .gaps .rec{color:#3e7c5a;font-weight:600}
+  .gaps .hl{color:#c1553f;font-weight:800}
+  .personal .hl{color:#c1553f;font-weight:800}
+  .insights{list-style:none;padding:0;margin:0;display:grid;gap:11px}
+  .insights li{display:flex;gap:11px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:15px;line-height:1.6;color:var(--ink)}
+  .insights .ic{font-size:22px;line-height:1.3;flex:0 0 auto}
+  .insights .tx{flex:1;min-width:0}
+  .insights li b{color:var(--green)}
+  .disc{font-size:12px;color:var(--muted);margin:2px 0 0;line-height:1.5}
+  .tease{margin-top:16px;background:var(--green);color:#fff;border-radius:14px;padding:15px 16px;font-size:15.5px;font-weight:700;text-align:center;line-height:1.5}
+  .urg{border-inline-start:4px solid var(--brass);background:#fdf9f0;padding:12px 16px;
+    border-radius:10px;margin:0 0 22px;font-weight:600}
+  .cta{background:var(--green);color:#fff;border-radius:18px;padding:24px 22px;text-align:center}
+  .cta h2{margin:0 0 8px;font-size:21px}
+  .cta p{margin:0 0 16px;color:#d6e6e0;font-size:15px}
+  .cta a{display:inline-block;background:#eef4ef;color:#243a30;text-decoration:none;
+    font-weight:800;padding:14px 32px;border-radius:100px;font-size:16px}
+  .cta a:hover{background:#dbe8de}
+  .hidden{display:none}
+  .center{text-align:center}
+  .lead2{font-weight:700;color:var(--ink);font-size:17px;margin:14px 0 12px}
+  .intro-copy{font-size:16px;color:var(--ink);line-height:1.75;margin:0 0 6px}
+  .intro-copy p{margin:0 0 13px}
+  .intro-copy b{color:var(--green);font-weight:700}
+  .intro-copy .pain{color:#b71c1c;font-weight:800}
+  .intro-flip{background:var(--green-soft);border:1px solid var(--line);border-radius:12px;
+    padding:13px 16px;font-size:16.5px;font-weight:600;color:var(--ink);margin:16px 0 6px !important}
+  .intro-flip b{color:var(--green);font-weight:800}
+  .intro-punch{font-weight:800;font-size:19px;color:var(--green);border-inline-start:4px solid var(--brass);
+    background:#fdf9f0;padding:14px 16px;border-radius:10px;margin-top:14px !important}
+  .punch-sub{font-weight:600;font-size:14px;color:var(--muted)}
+  .hero-img{width:100%;max-width:360px;aspect-ratio:3/2;border-radius:14px;margin:6px auto 20px;
+    background:linear-gradient(135deg,#e7efe9,#eef4ef 55%,#f3ede0);border:1.5px dashed #c9b98f;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center}
+  .hero-img.filled{border:none;background-size:cover;background-position:center}
+  .hero-photo{display:block;width:100%;max-width:300px;aspect-ratio:4/5;object-fit:cover;
+    object-position:center 26%;border-radius:16px;margin:6px auto 20px;box-shadow:var(--shadow)}
+  .hero-img .ph-t{color:var(--brass-dark);font-weight:700;font-size:15px}
+  .hero-img .ph-s{color:var(--muted);font-size:12.5px}
+  .introlist{list-style:none;padding:0;margin:0 0 24px;display:grid;gap:10px}
+  .introlist li{display:flex;align-items:center;gap:10px;background:var(--green-soft);
+    border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15.5px;font-weight:600;color:var(--ink)}
+  .introlist li span{font-size:18px}
+  .costinfo{background:#fdf9f0;border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+    margin:0 0 18px;font-size:14.5px;color:var(--ink);line-height:1.75}
+  .costinfo b{color:var(--brass-dark)}
+  .spinner{width:52px;height:52px;border:5px solid var(--green-soft);border-top-color:var(--green);border-radius:50%;margin:0 auto;animation:qspin .8s linear infinite}
+  @keyframes qspin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.spinner{animation-duration:1.7s}}
+</style>
+
+<div class="wrap">
+  <div class="brand"><span class="dot"></span> RichLife · טלי בנימינוב</div>
+  <div class="card">
+    <div class="progress" id="progbar"><i id="bar"></i></div>
+
+    <section id="intro">
+      <div class="step-kicker">שאלון קצר · כ־3 דקות</div>
+      <h1>איזה סוג משקיעה את?</h1>
+      <p class="lead" style="margin:-2px 0 16px">גם אם עוד לא התחלת. עונים על כמה שאלות, ומגלים איזה סוג משקיעה את, מה עוצר אותך, ומה הצעד הבא שלך.</p>
+      <img class="hero-photo" src="images/hero.jpg" alt="טלי בנימינוב · RichLife"
+           onerror="this.outerHTML='&lt;div class=\'hero-img\'&gt;&lt;div class=\'ph-t\'&gt;📷 מקום לתמונה שלך&lt;/div&gt;&lt;div class=\'ph-s\'&gt;שמרו את התמונה כ-images/hero.jpg&lt;/div&gt;&lt;/div&gt;'">
+
+      <div class="intro-copy">
+        <p>כולם אומרים לך שחשוב להשקיע. שכסף שיושב בבנק <span class="pain">פשוט נשחק</span>. שאם היית מתחיל/ה מזמן, היום זה היה נראה אחרת.</p>
+        <p>וזה נכון.</p>
+        <p>אבל בין <b>לדעת שצריך</b> ל<b>לעשות את זה באמת</b> יש פער אחד גדול:<br>יותר מדי מידע, יותר מדי מושגים, ו<span class="pain">פחד לעשות טעות עם הכסף</span>.</p>
+        <p>אז הכסף ממשיך לשבת. וכל שנה שהוא יושב, את/ה מפספס/ת את הדבר הכי יקר בהשקעה: <b>הזמן</b>.</p>
+        <p class="intro-flip">אבל הנה הבשורה: להתחיל <b>הרבה יותר פשוט</b> ממה שנדמה. הכל מתחיל בלהבין איפה את/ה עומד/ת היום.</p>
+        <p class="intro-punch">אז איזה סוג משקיעה את?<br><span class="punch-sub">(גם אם עוד לא התחלת בכלל)</span></p>
+      </div>
+      <p class="lead2">עונים על כמה שאלות פשוטות, ומקבלים תמונה אישית:</p>
+      <ul class="introlist">
+        <li><span>📍</span> איזה סוג משקיעה את היום</li>
+        <li><span>🔍</span> מה בדיוק עוצר אותך, ואיך פותחים את זה</li>
+        <li><span>💰</span> כמה הכסף שלך יכול לגדול אם תתחיל/י עכשיו</li>
+      </ul>
+      <div class="center"><button class="btn btn-primary" onclick="start()">מתחילים ←</button></div>
+    </section>
+
+    <section id="quiz" class="hidden">
+      <div class="step-kicker" id="qk"></div>
+      <p class="q" id="qtext"></p>
+      <p class="qhint hidden" id="qhint"></p>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <button class="btn btn-ghost" id="back" onclick="back()">→ חזרה</button>
+        <button class="btn btn-primary" id="next" onclick="next()" disabled>הבא ←</button>
+      </div>
+    </section>
+
+    <section id="form" class="hidden">
+      <div class="step-kicker">כמעט שם</div>
+      <h1 style="font-size:23px">עוד רגע, והתוצאה שלך על המסך</h1>
+      <p class="lead">רק נכיר אותך רגע לפני. משאירים פרטים, ומיד רואים איזה סוג משקיעה את, מה עוצר אותך, ומה הכסף שלך יכול לעשות.</p>
+      <div class="field"><label>שם</label><input id="f_name" aria-label="שם מלא" type="text" placeholder="איך קוראים לך?"></div>
+      <div class="field"><label>טלפון</label><input id="f_phone" aria-label="טלפון נייד" type="tel" inputmode="tel" placeholder="050-0000000"><div class="ferr" id="e_phone">מספר טלפון לא תקין (למשל 050-1234567)</div></div>
+      <div class="field"><label>אימייל</label><input id="f_email" aria-label="אימייל" type="email" inputmode="email" placeholder="you@email.com"><div class="ferr" id="e_email">כתובת אימייל לא תקינה</div></div>
+      <label class="check"><input type="checkbox" id="f_consent"><span>אני מאשר/ת לקבל דיוורים מטלי שרעבי בנימינוב.</span></label>
+      <label class="check"><input type="checkbox" id="f_terms"><span>קראתי ואני מסכים/ה ל<a href="https://first-invest.richlife.co.il/terms/" target="_blank" rel="noopener">תקנון</a> ול<a href="https://first-invest.richlife.co.il/privacy/" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</span></label>
+      <div class="center" style="margin-top:20px">
+        <button class="btn btn-primary" id="showres" onclick="goResult()" disabled>הראו לי את התוצאה שלי</button>
+      </div>
+      <p class="fineprint">הפרטים נשמרים אצל טלי בלבד. בלי ספאם.</p>
+    </section>
+
+    <section id="loading" class="hidden center" style="padding:54px 0">
+      <div class="spinner"></div>
+      <div id="loadtext" style="margin-top:22px;font-size:17px;font-weight:700;color:var(--green)">בודקים את התשובות שלך...</div>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="rkicker">סוג המשקיעה שאת:</div>
+      <span class="badge" id="r_badge"></span>
+      <div class="rmeter"><i id="r_meter"></i></div>
+      <p class="read" id="r_read"></p>
+      <div class="costinfo" id="r_costinfo">רק שתדע/י: כסף שיושב בעו"ש מאבד בערך <b>3% מהערך שלו כל שנה</b> בגלל האינפלציה. על 50,000 ₪ זה כ-<b>1,500 ₪ שמתאדים בשנה</b>, בלי שעשית שום דבר. הצד השני, אותו כסף מושקע לאורך שנים, יכול לעבוד <b>בשבילך</b> במקום נגדך.</div>
+      <div class="personal" id="r_personal"></div>
+      <div class="gaps" id="r_gaps_box">
+        <h3>מה עומד בינך לבין ההשקעה הראשונה?</h3>
+        <ul id="r_gaps"></ul>
+      </div>
+      <div class="urg" id="r_urg"></div>
+      <div class="cta" id="r_cta"></div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+const COURSE_URL = "https://first-invest.richlife.co.il/";
+const CALL_URL   = "https://richlife.ravpage.co.il/service1one1";
+
+/* איסוף התשובות ל-Google Sheet דרך ה-Worker (form-capture).
+   חי: mashkia-quiz -> טאב "mashkia-invest" בגיליון התשובות. מצבי ?demo/?form לא נשלחים. */
+const WORKER_URL = "https://mashkia-quiz.tali-bi-finance.workers.dev";
+function captureLead(lead, answers, TYPE, route, score, pct){
+  if(!WORKER_URL) return;                 // לא מוגדר - דילוג שקט
+  var qp = new URLSearchParams(location.search);
+  if(qp.has('demo') || qp.has('form')) return;   // מצב בדיקה - לא לזהם את ה-Sheet
+  var payload = {
+    name: lead.name || "",
+    phone: lead.phone || "",
+    email: lead.email || "",
+    consent: (el('f_consent') && el('f_consent').checked) ? "כן" : "לא",
+    type: TYPE.name,
+    route: route,
+    score: String(score),
+    readiness_pct: pct + "%"
+  };
+  QS.forEach(function(Q){ payload[Q.key] = (answers[Q.key] && answers[Q.key].label) ? answers[Q.key].label : ""; });
+  payload.fears_open = answers.fears_open || "";
+  try {
+    fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(function(){});
+  } catch(e){}
+}
+
+const QS = [
+  { key:"time", type:"ctx", q:"מתי היית רוצה להתחיל להשקיע?",
+    a:["כמה שיותר מהר","בחודשים הקרובים","השנה","עדיין לא בטוח/ה"] },
+
+  { key:"idle", type:"num", q:"כמה כסף פנוי יש לך שסתם יושב ולא מושקע?",
+    hint:"כסף נזיל שאפשר לגעת בו: בחיסכון, בפיקדון או בעו\"ש. לא כולל מינוס. בערך.", ph:"למשל 40,000", zero:"אין לי כסף בצד", skip:"לא בטוח/ה כמה" },
+
+  { key:"monthly", type:"num", q:"כמה היית יכול/ה לשים בצד כל חודש כדי להשקיע?",
+    hint:"גם סכום קטן נחשב. כתבו מספר.", ph:"למשל 500", zero:"אין לי מה להפריש כרגע", skip:"עדיין לא יודע/ת" },
+
+  { key:"concepts", gap:"עדיין לא לגמרי ברור לך <span class='hl'>איך השקעה עובדת</span>", q:"כשמדברים על 'להשקיע את הכסף', עד כמה ברור לך על מה מדובר?",
+    hint:"למשל: מה זה מניה, קרן, תשואה, סיכון",
+    a:[["בכלל לא, זה נשמע לי כמו סינית",0],["שמעתי מושגים אבל מתבלבל/ת",1],["מבין/ה את הבסיס",2],["ברור לי היטב",3]] },
+
+  { key:"where", gap:"לא יודע/ת <span class='hl'>דרך מה מתחילים</span> להשקיע בפועל", q:"את/ה יודע/ת דרך מה בכלל משקיעים בפועל?",
+    hint:"בית השקעות, קרן מחקה, קופת גמל להשקעה, IRA...",
+    a:[["אין לי מושג מאיפה מתחילים",0],["שמעתי שמות אבל לא יודע/ת מה מתאים לי",1],["פחות או יותר יודע/ת",2],["יודע/ת בדיוק",3]] },
+
+  { key:"inflation", gap:"הכסף שלך <span class='hl'>יושב ומאבד ערך</span> בעו\"ש", q:"ידעת שכסף שיושב בעו\"ש מאבד מהערך שלו כל שנה?",
+    a:[["לא ידעתי בכלל",0],["שמעתי אבל לא ממש הפנמתי",1],["יודע/ת, וזה מפריע לי",2],["יודע/ת, ולכן אני כאן",3]] },
+
+  { key:"tried", gap:"כבר ניסית ו<span class='hl'>נתקעת</span>", q:"כבר ניסית להתחיל להשקיע בעבר?",
+    a:[["ניסיתי ונתקעתי, בסוף ויתרתי",0],["התחלתי לקרוא, הצפתי ועזבתי",1],["עשיתי צעד קטן, לא בטוח/ה שנכון",2],["כן, אני כבר משקיע/ה",3]] },
+
+  { key:"confidence", gap:"עדיין <span class='hl'>לא בטוח/ה לבצע</span> השקעה לבד", q:"אם היית צריך/ה לבצע השקעה ראשונה מחר, איך היית מרגיש/ה?",
+    a:[["אין לי מושג איך בכלל מתחילים",0],["אבוד/ה, ומפחד/ת לעשות טעות",1],["אנסה, אבל בחשש",2],["בטוח/ה לגמרי, פשוט עוד לא עשיתי",3]] },
+
+  { key:"goal", gap:"עדיין <span class='hl'>אין לך יעד ברור</span> להשקעה", q:"יש לך יעד ברור שבשבילו את/ה רוצה להשקיע?",
+    hint:"דירה, פנסיה, עתיד לילדים, חופש כלכלי...",
+    a:[["בכלל לא חשבתי על זה",0],["סתם 'שהכסף יגדל'",1],["יש לי כיוון כללי",2],["כן, יעד ברור וזמן",3]] },
+
+  { key:"base", gap:"הבסיס הכלכלי <span class='hl'>עוד לא יציב</span> להשקיע ממנו", q:"איך ההתנהלות הכלכלית שלך היום?",
+    hint:"משקיעים מכסף שלא צריך אותו מיד, אז חשוב שיהיה עודף",
+    a:[["במינוס או הלוואות, אין עודף",0],["מסתדר/ת אבל כמעט לא חוסך/ת",1],["חוסך/ת קצת בצד",2],["יציב/ה, יש עודף חודשי קבוע",3]] },
+
+  { key:"info", gap:"את/ה <span class='hl'>טובע/ה בים של מידע סותר</span>", q:"כשאת/ה מנסה ללמוד על השקעות, איך זה מרגיש?",
+    a:[["ים של מידע סותר, נכנס/ת ללחץ",0],["מוצא/ת המון, אבל לא יודע/ת למי להאמין",1],["מסתדר/ת, מסננ/ת לבד",2],["יודע/ת בדיוק מה רלוונטי לי",3]] },
+
+  { key:"products", gap:"המושגים הפיננסיים <span class='hl'>עוד מעורבבים</span>", q:"את/ה יודע/ת מה ההבדל בין חיסכון, פנסיה וקרן השקעה?",
+    a:[["הכל מתערבב לי",0],["פחות או יותר",1],["יודע/ת את ההבדלים העיקריים",2],["יודע/ת טוב",3]] },
+
+  { key:"small", gap:"נדמה לך ש<span class='hl'>צריך הרבה כסף</span> כדי להתחיל", q:"את/ה מאמין/ה שאפשר להתחיל להשקיע גם עם סכום קטן?",
+    a:[["בטוח/ה שצריך הרבה כסף כדי שזה ישתלם",0],["לא בטוח/ה שסכום קטן שווה את זה",1],["חושב/ת שכן, אפשר בקטן",2],["יודע/ת שכן, וזה בדיוק העניין",3]] },
+
+  { key:"fears", type:"multi", q:"ולסיום, מה הכי עוצר אותך מלהשקיע?", hint:"אפשר לסמן כמה שרוצים",
+    openph:"ואם בא לך, כתבו במילים שלך מה הכי עוצר (לא חובה)",
+    a:["פחד להפסיד את הכסף","שאני לא מבין/ה מספיק ואעשה טעות","שאין לי מספיק כסף כדי שישתלם","שזה מסובך מדי בשבילי","שאין לי זמן ללמוד את זה","שכבר ניסיתי ונתקעתי","האמת, אני די בשל/ה, רק צריך דחיפה"] },
+];
+
+const SCORED = QS.filter(q=>q.type!=="ctx" && q.type!=="num" && q.type!=="multi").length;
+const MAX = SCORED*3;
+let idx = 0;
+const answers = {};
+function el(id){return document.getElementById(id)}
+function setBar(p){el('bar').style.width = p+"%"}
+function fmt(n){ return Math.round(n).toLocaleString('en-US'); }
+function round10(n){ return Math.round(n/10)*10; }
+function round100(n){ return Math.round(n/100)*100; }
+function round1000(n){ return Math.round(n/1000)*1000; }
+function roundNice(n){ return n<10000 ? Math.round(n/100)*100 : Math.round(n/1000)*1000; }
+function fvMonthly(P, years, annual){ var r=annual/12, n=years*12; return P*((Math.pow(1+r,n)-1)/r); }
+function grow(principal, years, annual){ return principal*Math.pow(1+annual, years); }
+function start(){ el('intro').classList.add('hidden'); el('quiz').classList.remove('hidden'); render(); }
+function render(){
+  const Q = QS[idx];
+  el('qk').textContent = "שאלה " + (idx+1) + " מתוך " + QS.length;
+  el('qtext').textContent = Q.q;
+  const hint=el('qhint');
+  if(Q.hint){ hint.textContent=Q.hint; hint.classList.remove('hidden'); } else { hint.classList.add('hidden'); }
+  const box = el('opts'); box.innerHTML="";
+  if(Q.type==="multi"){
+    Q.a.forEach(function(label){
+      const d=document.createElement('div'); d.className='opt multi';
+      d.innerHTML='<span class="tick"></span><span>'+label+'</span>';
+      if(answers[Q.key] && answers[Q.key].labels && answers[Q.key].labels.indexOf(label)>=0) d.classList.add('sel');
+      d.onclick=function(){ toggleMulti(Q.key,label); };
+      box.appendChild(d);
+    });
+    const ta=document.createElement('textarea'); ta.className='fearsopen'; ta.rows=2;
+    ta.placeholder=Q.openph||''; ta.value=answers[Q.key+'_open']||'';
+    ta.oninput=function(){ answers[Q.key+'_open']=ta.value; };
+    box.appendChild(ta);
+  } else if(Q.type==="num"){
+    const w=document.createElement('div'); w.className='numwrap';
+    const inp=document.createElement('input'); inp.type='text'; inp.inputMode='numeric';
+    inp.className='numinput'; inp.placeholder=Q.ph||'סכום בשקלים';
+    inp.value = (answers[Q.key] && answers[Q.key].val>0) ? fmt(answers[Q.key].val) : '';
+    const cur=document.createElement('span'); cur.className='cur'; cur.textContent='₪';
+    w.appendChild(inp); w.appendChild(cur); box.appendChild(w);
+    const none = Q.zero ? document.createElement('div') : null;
+    if(none){ none.className='opt'; none.style.marginTop='8px';
+      none.innerHTML='<span class="tick"></span><span>'+Q.zero+'</span>'; box.appendChild(none); }
+    const sk=document.createElement('div'); sk.className='opt'; sk.style.marginTop='6px';
+    sk.innerHTML='<span class="tick"></span><span>'+(Q.skip||'אני לא בטוח/ה')+'</span>';
+    box.appendChild(sk);
+    function refreshNum(){
+      const a=answers[Q.key];
+      if(none) none.classList.toggle('sel', !!(a && a.none));
+      sk.classList.toggle('sel', !!(a && a.unknown));
+      el('next').disabled = !a;
+    }
+    inp.oninput=()=>{ const digits=inp.value.replace(/[^\d]/g,''); const v=parseInt(digits,10);
+      if(v>0){ answers[Q.key]={label:fmt(v),val:v}; inp.value=fmt(v); } else { delete answers[Q.key]; }
+      refreshNum(); };
+    if(none) none.onclick=()=>{ answers[Q.key]={label:Q.zero,val:0,none:true}; inp.value=''; refreshNum(); };
+    sk.onclick=()=>{ answers[Q.key]={label:'לא בטוח/ה',val:null,unknown:true}; inp.value=''; refreshNum(); };
+    refreshNum();
+  } else {
+    Q.a.forEach((opt)=>{
+      const label = Array.isArray(opt)?opt[0]:opt;
+      const d = document.createElement('div');
+      d.className='opt'; d.innerHTML='<span class="tick"></span><span>'+label+'</span>';
+      if(answers[Q.key] && answers[Q.key].label===label) d.classList.add('sel');
+      d.onclick=()=>{ answers[Q.key]={label,val:(Array.isArray(opt)?opt[1]:null)}; render(); };
+      box.appendChild(d);
+    });
+  }
+  el('back').style.visibility = idx===0 ? 'hidden':'visible';
+  el('next').disabled = !answers[Q.key];
+  el('next').textContent = idx===QS.length-1 ? "לתוצאה ←" : "הבא ←";
+  setBar( Math.round(((idx+1)/QS.length)*100) );
+}
+function next(){
+  if(!answers[QS[idx].key]) return;
+  if(idx < QS.length-1){ idx++; render(); }
+  else { el('quiz').classList.add('hidden'); el('form').classList.remove('hidden'); el('progbar').classList.add('hidden'); }
+}
+function back(){ if(idx>0){ idx--; render(); } }
+function toggleMulti(key,label){
+  var cur = (answers[key] && answers[key].labels) ? answers[key].labels.slice() : [];
+  var i = cur.indexOf(label);
+  if(i>=0) cur.splice(i,1); else cur.push(label);
+  if(cur.length) answers[key]={labels:cur, label:cur.join(', ')}; else delete answers[key];
+  render();
+}
+function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function validPhone(v){ return /^0\d{8,9}$/.test(v.replace(/[-\s]/g,'')); }
+function checkForm(){
+  var nm=el('f_name').value.trim(), em=el('f_email').value.trim(), ph=el('f_phone').value.trim();
+  var okE=validEmail(em), okP=validPhone(ph);
+  el('e_email').classList.toggle('show', em.length>0 && !okE);
+  el('e_phone').classList.toggle('show', ph.length>0 && !okP);
+  el('showres').disabled = !(nm.length>1 && okE && okP && el('f_consent').checked && el('f_terms').checked);
+}
+['f_name','f_email','f_phone'].forEach(function(id){ el(id).addEventListener('input',checkForm); });
+['f_consent','f_terms'].forEach(function(id){ el(id).addEventListener('change',checkForm); });
+
+function goResult(){
+  el('form').classList.add('hidden'); el('loading').classList.remove('hidden'); setBar(94);
+  window.scrollTo({top:0,behavior:'smooth'});
+  var msgs=["בודקים את התשובות שלך...","מחשבים כמה הכסף שלך יכול לגדול...","מכינים תמונה אישית..."];
+  var i=0;
+  var iv=setInterval(function(){ i++; if(i<msgs.length) el('loadtext').textContent=msgs[i]; },650);
+  setTimeout(function(){ clearInterval(iv); el('loading').classList.add('hidden'); showResult(); }, 2100);
+}
+function showResult(){
+  const lead = { name:el('f_name').value, phone:el('f_phone').value, email:el('f_email').value };
+  let score=0; let gaps=[];
+  const REC={
+    concepts:"וזה החלק הכי קל ללמוד, אפשר להבין את הבסיס בשעה.",
+    where:"כאן רוב האנשים נתקעים, ואפשר לעבור את זה צעד-אחר-צעד.",
+    inflation:"מודעות היא הצעד הראשון להפסיק להפסיד כסף בשקט.",
+    tried:"הפעם עם דרך ברורה, בלי לגשש לבד.",
+    confidence:"הביטחון מגיע מעשייה מודרכת, לא מעוד קריאה.",
+    goal:"יעד ברור הופך את ההשקעה מ'משהו שכדאי' ל'משהו שעושים'.",
+    base:"משקיעים מעודף שלא צריך מיד, אז כדאי לסדר את הבסיס.",
+    info:"צריך מקור אחד מסודר במקום עשרה סותרים.",
+    products:"ההבדלים פשוטים ברגע שמסבירים אותם נכון.",
+    small:"מתחילים מקטן, והזמן עושה את השאר."
+  };
+  const GAPIC={concepts:"🧩",where:"🚪",inflation:"💸",tried:"🔁",confidence:"😬",goal:"🎯",base:"📊",info:"🌊",products:"🏦",small:"🪙"};
+  QS.forEach(Q=>{
+    if(Q.type==="ctx"||Q.type==="num"||Q.type==="multi") return;
+    const a=answers[Q.key]; if(!a) return;
+    score+=a.val;
+    if(a.val<=1 && Q.gap) gaps.push({t:Q.gap, rec:REC[Q.key], e:GAPIC[Q.key]||"🔹"});
+  });
+  const pct = Math.round((score/MAX)*100);
+
+  let tier;
+  if(score<=10)      tier={n:1,name:"רק בתחילת הדרך",emoji:"🔴",color:"var(--r1)"};
+  else if(score<=18) tier={n:2,name:"יש רצון, אבל תקוע/ה",emoji:"🟠",color:"var(--r2)"};
+  else if(score<=24) tier={n:3,name:"קרוב/ה מאוד",emoji:"🟡",color:"var(--r3)"};
+  else               tier={n:4,name:"בשל/ה להשקיע",emoji:"🟢",color:"var(--r4)"};
+
+  // ----- סיכום אישי + ניתוב + טיפוס המשקיעה -----
+  const idleV = (answers.idle && !answers.idle.unknown) ? answers.idle.val : null;
+  const monV  = (answers.monthly && !answers.monthly.unknown) ? answers.monthly.val : null;
+  const tm    = answers.time ? answers.time.label : "";
+  const items = [];
+  let showDisc = false;
+
+  // ----- ניתוב: מי שאין לה בסיס/עודף להשקיע ממנו -> ליווי, לא הקורס -----
+  const CAPITAL_LIVUI = 35000;                                             // מעל זה -> להציע ליווי (הקורס נשאר כאופציה). החלטת טלי 20.7
+  const inOverdraft = answers.base && answers.base.val===0;                 // במינוס/הלוואות, אין עודף
+  const noIdle      = (idleV!=null && idleV<2000);                          // אמרה מפורש שאין כמעט כלום בצד
+  const noMonthly   = (monV==null) || (monV<200);                          // אין / זעום להפריש כל חודש
+  const trulyNoCapital = noIdle && noMonthly;
+  const highCapital = (idleV!=null && idleV>CAPITAL_LIVUI);                 // הון נזיל משמעותי בצד
+  const alreadyInvesting = answers.tried && answers.tried.val===3;         // ענתה "כבר משקיע/ה" בפועל
+  let route;
+  if(alreadyInvesting)                    route='livui-adv';               // כבר משקיע/ה בפועל (לא לפי ניקוד גבוה כללי)
+  else if(highCapital)                    route='livui-capital';          // הון משמעותי -> תהליך אישי
+  else if(inOverdraft || trulyNoCapital)  route='livui-base';             // אין בסיס/עודף -> קודם סדר
+  else                                    route='course';                  // מתחיל/ה עם סכום צנוע -> הקורס
+
+  // ----- טיפוס המשקיעה (הזהות שנפתחת בה התוצאה) -----
+  const TYPES = {
+    'course':        {emoji:"🌱", name:"בעלת פוטנציאל לא ממומש",
+       desc:"<b>מצד אחד</b>, יש לך את הרצון והיכולת להשקיע, ואת/ה כאן, בודק/ת ולומד/ת. <b>מצד שני</b>, זה עוד לא יצא לפועל, הכסף יושב, הזמן רץ, והצעד הראשון עדיין מחכה. וזה בדיוק מה שאפשר לשנות, מהר יותר ממה שנדמה."},
+    'livui-base':    {emoji:"🏗️", name:"בעלת הכנסה שלא נשמרת",
+       desc:"<b>מצד אחד</b>, יש לך הכנסה ושאיפה אמיתית להשקיע. <b>מצד שני</b>, הכסף שנכנס לא נשאר מספיק זמן כדי להתחיל לעבוד בשבילך. וזה דווקא הצעד הכי חכם: קודם עושים סדר שהכסף יישאר, ואז משקיעים מתוך שקט."},
+    'livui-capital': {emoji:"💼", name:"בעלת הון לא מנוצל",
+       desc:"<b>מצד אחד</b>, יש לך כסף אמיתי בצד, את/ה לא מתחיל/ה מאפס. <b>מצד שני</b>, הכסף הזה יושב ולא עובד בשבילך, ואפילו מאבד מהערך שלו. עם הון כזה, השקעה פשוטה היא רק חלק קטן מהתמונה, וכדאי תוכנית שתמצה אותו."},
+    'livui-adv':     {emoji:"📈", name:"בעלת תיק לא ממוצה",
+       desc:"<b>מצד אחד</b>, את/ה כבר משקיע/ה, הכסף שלך כבר עובד, כל הכבוד. <b>מצד שני</b>, התמונה עדיין חלקית, ויש מרחק בין 'להשקיע' לבין תיק מסודר וממוקסם שמשרת את כל המטרות שלך."}
+  };
+  const TYPE = TYPES[route];
+
+  el('r_badge').textContent = TYPE.emoji+"  "+TYPE.name;
+  el('r_badge').style.background = tier.color+"22";
+  el('r_badge').style.color = tier.color;
+  el('r_meter').style.width = pct+"%";
+  el('r_meter').style.background = tier.color;
+  el('r_read').innerHTML = (lead.name?("<b>"+lead.name+"</b>, "):"") + TYPE.desc;
+
+  // כרטיס "השקיעי את מה שיושב" - רק למסלול הקורס (למי שבמינוס זו עצה שגויה)
+  function cardIdleInvest(){
+    const lossYr=round10(idleV*0.03), g10=roundNice(grow(idleV,10,0.10)), g20=roundNice(grow(idleV,20,0.10));
+    return {e:"📉",t:"יש לך היום בערך <b>"+fmt(idleV)+" ₪</b> שיושבים בצד ולא מושקעים. <span class='hl'>הכסף הזה מאבד בערך "+fmt(lossYr)+" ₪ כל שנה</span> רק בגלל האינפלציה, וזה קורה עכשיו, בלי שעשית כלום. אותו סכום, אילו היה מושקע בתשואה ממוצעת של כ-10% בשנה, יכול היה להיות בערך <b>"+fmt(g10)+" ₪</b> בעוד 10 שנים, ובערך <b>"+fmt(g20)+" ₪</b> בעוד 20 שנה. <span class='hl'>זה ההבדל בין כסף שעובד נגדך לכסף שעובד בשבילך.</span>"};
+  }
+  function cardMonthly(){
+    const fv10=roundNice(fvMonthly(monV,10,0.10)), fv20=roundNice(fvMonthly(monV,20,0.10)), c=roundNice(monV*12*20);
+    return {e:"📈",t:"אמרת שאת/ה יכול/ה לשים בצד <b>"+fmt(monV)+" ₪</b> בחודש. גם סכום כזה, מושקע בעקביות בתשואה ממוצעת של כ-10% בשנה, יכול לגדול לכ-<b>"+fmt(fv10)+" ₪</b> תוך 10 שנים, ולכ-<b>"+fmt(fv20)+" ₪</b> תוך 20 שנה. מתוך הסכום הזה רק כ-"+fmt(c)+" ₪ זה כסף שהפקדת, כל השאר זו העבודה של הזמן והריבית-דריבית. <span class='hl'>וכל שנה שמחכים, מפספסים בדיוק את החלק הזה.</span>"};
+  }
+  if(route==='course'){
+    if(idleV){ items.push(cardIdleInvest()); showDisc=true; }
+    if(monV){ items.push(cardMonthly()); showDisc=true; }
+    if(!idleV && !monV) items.push({e:"🤔",t:"עוד לא שמת את המספרים מול העיניים, וזה בדיוק החלק שהכי קל לדחות. <span class='hl'>ברגע שרואים כמה הכסף יכול לעבוד בשבילך, קשה להמשיך לדחות.</span>"});
+  } else if(route==='livui-capital'){
+    const g10=roundNice(grow(idleV,10,0.10)), g20=roundNice(grow(idleV,20,0.10));
+    items.push({e:"💼",t:"יש לך כ-<b>"+fmt(idleV)+" ₪</b> נזילים שיושבים ולא עובדים, וזה סכום משמעותי. אילו היה מושקע נכון בתשואה ממוצעת של כ-10% בשנה, יכול היה להיות בערך <b>"+fmt(g10)+" ₪</b> בעוד 10 שנים, ובערך <b>"+fmt(g20)+" ₪</b> בעוד 20 שנה. <span class='hl'>עם הון כזה אפשר לעשות הרבה יותר מהשקעה פשוטה</span>, ולבנות תיק שמתאים בדיוק לך."});
+    showDisc=true;
+    if(monV) items.push(cardMonthly());
+  } else if(route==='livui-base'){
+    const mUse=(monV!=null && monV>0)?monV:500;
+    const f10=roundNice(fvMonthly(mUse,10,0.10)), f20=roundNice(fvMonthly(mUse,20,0.10));
+    const pre=(monV!=null && monV>0)?("אמרת שאת/ה יכול/ה לשים בצד <b>"+fmt(mUse)+" ₪</b> בחודש. גם סכום כזה, "):"בואי נדבר רגע על הפוטנציאל: אפילו <span class='hl'>500 ₪ בחודש</span>, ";
+    items.push({e:"🌱",t:pre+"מושקע בעקביות בתשואה ממוצעת של כ-10% בשנה, יכול להיות כ-<b>"+fmt(f10)+" ₪</b> בעוד 10 שנים, וכ-<b>"+fmt(f20)+" ₪</b> בעוד 20 שנה. <span class='hl'>זה בדיוק מה שנבנה ביחד</span>, אחרי שנסדר את הבסיס."});
+    showDisc=true;
+  } else { // livui-adv - כבר משקיע/ה, בלי הטפה למתחילים
+    items.push({e:"🟢",t:"את/ה כבר משקיע/ה, והכסף שלך כבר עובד, כל הכבוד. אם יש מזומן עודף שעדיין לא משובץ בתיק, גם הוא יכול לעבוד חכם יותר. <span class='hl'>השאלה עכשיו היא לא 'איך מתחילים', אלא איך ממקסמים ובונים תמונה כלכלית שלמה.</span>"});
+  }
+
+  // חסמי-הידע האישיים רלוונטיים רק למי שיש לה כסף להתחיל (הקורס). למי שאין כסף/בסיס - החסם הוא הכסף, לא הידע.
+  if(route==='course'){
+  const cn = answers.concepts;
+  if(cn && cn.val<=1) items.push({e:"🧩",t:"<span class='hl'>עדיין לא ברור לך מה זה בכלל להשקיע</span>, וזה בסדר גמור, אף אחד לא נולד עם זה. רק שתדע/י, אפשר להבין את הבסיס בשעה, זה הרבה יותר פשוט ממה שנדמה."});
+
+  const wh = answers.where;
+  if(wh && wh.val<=1) items.push({e:"🚪",t:"את/ה לא יודע/ת דרך מה בכלל מתחילים להשקיע בפועל, ובלי זה הכל נשאר תיאוריה. <span class='hl'>זה בדיוק הצעד שרוב האנשים נתקעים בו</span>, ואפשר לעבור אותו צעד-אחר-צעד."});
+
+  const tr = answers.tried;
+  if(tr && tr.val<=1) items.push({e:"🔁",t:"כבר ניסית להתחיל, ונתקעת. <span class='hl'>זה לא כי את/ה לא מסוגל/ת</span>, זה כי אף אחד לא הראה לך את הדרך הקצרה. הפעם זה יכול להיראות אחרת."});
+
+  const cf = answers.confidence;
+  if(cf && cf.val<=1) items.push({e:"😬",t:"הפחד לעשות טעות עם הכסף הוא מה שהכי עוצר אותך. וזה מובן, אבל <span class='hl'>הפחד נעלם ברגע שעושים את הצעד הראשון נכון</span>, לא לפני."});
+
+  const inf = answers.inflation;
+  if(inf && inf.val<=1) items.push({e:"💸",t:"עד עכשיו לא ממש הפנמת שכסף שיושב בעו\"ש נשחק כל שנה. <span class='hl'>עכשיו כשאת/ה יודע/ת, קשה יותר להשאיר אותו שם.</span>"});
+
+  const inA = answers.info;
+  if(inA && inA.val<=1) items.push({e:"🌊",t:"את/ה טובע/ה בים של מידע סותר, ולא יודע/ת למי להאמין. <span class='hl'>המידע החינמי הוא בדיוק הבעיה</span>, לא הפתרון, כי הוא מפזר במקום לעשות סדר."});
+
+  const bs = answers.base;
+  if(bs && bs.val===0) items.push({e:"📊",t:"לפני שמשקיעים, כדאי לייצב את הבסיס, כי משקיעים מכסף שלא צריך אותו מיד. <span class='hl'>זה חלק מהתמונה השלמה</span>, ואפשר לסדר גם את זה."});
+  else if(bs && bs.val===1) items.push({e:"📊",t:"יש לך בסיס, אבל עדיין לא חוסך/ת בקביעות. השקעה מתחילה מעודף חודשי קבוע, וגם את זה בונים."});
+
+  const sm = answers.small;
+  if(sm && sm.val<=1) items.push({e:"🪙",t:"את/ה חושב/ת שצריך הרבה כסף כדי שזה ישתלם, וזה בדיוק המיתוס שעוצר הכי הרבה אנשים. <span class='hl'>מתחילים מקטן, והזמן עושה את העבודה.</span>"});
+
+  const gl = answers.goal;
+  if(gl && gl.val<=1) items.push({e:"🎯",t:"עדיין אין לך יעד ברור להשקעה, וכשאין יעד קל לדחות ולוותר. <span class='hl'>ברגע שמחברים את הכסף למשהו שחשוב לך, הכל נהיה קל יותר.</span>"});
+
+  const pr = answers.products;
+  if(pr && pr.val<=1) items.push({e:"🏦",t:"המושגים עדיין מתערבבים, חיסכון, פנסיה, קרן השקעה. זה נשמע מסובך, אבל ההבדלים פשוטים כשמסבירים אותם נכון."});
+  }
+
+  let html = "<ul class='insights'>";
+  items.forEach(function(o){ html += "<li><span class='ic'>"+o.e+"</span><span class='tx'>"+o.t+"</span></li>"; });
+  html += "</ul>";
+  if(showDisc) html += "<p class='disc'>* המספרים להמחשה בלבד, לפי תשואה שנתית ממוצעת של כ-10% ואינפלציה של כ-3%, בהתבסס על ממוצע השוק לאורך שנים. אלו לא הבטחת תשואה, השוק עולה ויורד.</p>";
+  const teaseTxt = route==='course' ? "המסלול המלא, שלב-אחר-שלב עד ההשקעה הראשונה שלך, מחכה לך למטה 👇"
+    : route==='livui-capital' ? "יש לך הון שאפשר לעשות איתו הרבה יותר. הצעד הנכון בשבילך למטה 👇"
+    : route==='livui-base' ? "רגע לפני שמשקיעים, יש פה משהו חשוב יותר בשבילך למטה 👇"
+    : "את/ה בשל/ה. אם בא לך לבנות את התמונה השלמה סביב ההשקעה, הצעד הבא למטה 👇";
+  html += "<div class='tease'>"+teaseTxt+"</div>";
+  el('r_personal').innerHTML = html;
+
+  // ----- החסם האמיתי לפי מסלול -----
+  if(route==='livui-base'){
+    gaps = [];   // אצל מי שאין לה כסף - החסם הוא הכסף/הבסיס, לא הידע
+    if(inOverdraft) gaps.push({e:"🔴",t:"את/ה כרגע במינוס או עם הלוואות, <span class='hl'>ואין עדיין עודף להשקיע ממנו</span>",rec:"וזה הדבר הראשון, כי אי אפשר להשקיע מכסף שעוד לא קיים."});
+    else gaps.push({e:"💰",t:"<span class='hl'>אין לך כרגע כסף פנוי להשקיע ממנו</span>",rec:"וזה הדבר הראשון, כי אי אפשר להשקיע מכסף שעוד לא קיים."});
+    gaps.push({e:"🏦",t:"הכסף שנכנס <span class='hl'>לא נשאר</span>, אין עדיין עודף חודשי קבוע להשקיע ממנו",rec:"וזה מה שבונים קודם: ליווי שמסדר תקציב, חובות וחיסכון."});
+  } else if(route==='livui-capital' || route==='livui-adv'){
+    gaps = [];   // לא 'חסם' - יש הון / כבר משקיע/ה. הפער הוא תוכנית, לא ידע.
+  } else {
+    gaps = gaps.slice(0,5);   // קורס: עד 5 חסמים, שלא יציף
+  }
+
+  const gbox=el('r_gaps_box');
+  if(gaps.length){ el('r_gaps').innerHTML = gaps.map(g=>"<li><span class='ic'>"+(g.e||"🔹")+"</span><span class='tx'>"+g.t+(g.rec?" <span class='rec'>"+g.rec+"</span>":"")+"</span></li>").join(""); gbox.classList.remove('hidden'); }
+  else { gbox.classList.add('hidden'); }
+
+  let urg="";
+  if(route==='livui-base'){
+    urg="הפער האמיתי בינך לבין השקעה הוא לא ידע, אלא עודף שאפשר להשקיע ממנו. וזה בדיוק מה שבונים קודם.";
+  } else if(route==='livui-capital'){
+    urg="היתרון הכי גדול שיש לך עכשיו הוא שכבר יש הון לעבוד איתו. חבל שיישאר בצד ולא יעבוד בשבילך.";
+  } else if(route==='livui-adv'){
+    urg="את/ה כבר בפנים. השאלה היא כמה מהפוטנציאל של הכסף שלך באמת ממומש.";
+  } else {
+    if(tier.n<=2 && tm==="כמה שיותר מהר") urg="רצית להתחיל כמה שיותר מהר, אבל בדיוק הפערים האלה עוצרים אותך. כל חודש עכשיו זה זמן שאי אפשר להחזיר.";
+    else if(tier.n<=2) urg="הפער היחיד בינך לבין ההשקעה הראשונה הוא ידע וביטחון, ושניהם נבנים מהר יותר ממה שנדמה.";
+    else if(tm==="כמה שיותר מהר" || tm==="בחודשים הקרובים") urg="את/ה קרוב/ה, וזה בדיוק הזמן לסגור את הפינות האחרונות ולבצע.";
+    else urg="היתרון הכי גדול שיש לך עכשיו הוא הזמן. שווה לא לבזבז אותו.";
+  }
+  el('r_urg').textContent = urg;
+
+  let cta;
+  if(route==='course'){
+    cta='<h2>אז איך עושים את הצעד הראשון, באמת?</h2>'+
+        '<p style="text-align:right">הקורס "להשקיע לראשונה בקלות" לוקח אותך מ"אין לי מושג" עד השקעה שביצעת בפועל, בשעה וחצי, בקצב שלך:</p>'+
+        '<ul style="text-align:right;margin:0 0 16px;padding-inline-start:18px;color:#eaf3ef;font-size:15px;line-height:1.85">'+
+          '<li>נעשה סדר במושגים, בלי מילים גדולות ובלי סינית</li>'+
+          '<li>למה כסף שיושב בעו"ש עובד נגדך, ומה המחיר של לדחות</li>'+
+          '<li>הבסיס בפשטות: איך מתחילים, <b>גם עם סכום קטן</b></li>'+
+          '<li>מה עושים כשהשוק יורד, ומה עושים כשהתקשורת מפחידה</li>'+
+          '<li>ובעיקר, <b>תצא/י עם ההשקעה הראשונה שלך, שכבר עשית</b></li>'+
+        '</ul>'+
+        '<a href="'+COURSE_URL+'">רוצה להשקיע לראשונה, בקלות? נתחיל כאן ←</a>';
+  } else if(route==='livui-capital'){
+    cta='<h2>יש לך הון, אפשר לעשות איתו יותר</h2>'+
+        '<p style="text-align:right">בעיניי, עם סכום כזה אפשר להפיק הרבה יותר מהשקעה פשוטה בשוק ההון. לכן אני מציעה לך <b>תהליך ליווי כלכלי</b> אישי, שבונה תיק ותמונה כלכלית שלמה בדיוק סביב הכסף, המטרות והזמן שלך.</p>'+
+        '<a href="'+CALL_URL+'">רוצה לשמוע על ליווי? לפרטים ←</a>'+
+        '<p style="text-align:right;margin:16px 0 0;font-size:13.5px;color:#cfe0d8;line-height:1.6">ואם בכל זאת בא לך פשוט: לעשות לבד השקעה ראשונה קלה, בלי להתחייב לתהליך, הקורס "להשקיע לראשונה בקלות" <a href="'+COURSE_URL+'" style="display:inline;padding:0;background:none;color:#eef4ef;text-decoration:underline;font-weight:700;border-radius:0">מחכה לך כאן</a>.</p>';
+  } else if(route==='livui-base'){
+    cta='<h2>רגע לפני שמשקיעים, בואי נדבר על הבסיס</h2>'+
+        '<p style="text-align:right">מהתשובות שלך עולה שכרגע עוד אין עודף פנוי שאפשר להשקיע ממנו, וזה בסדר גמור, זו נקודת פתיחה של המון אנשים. אבל זו בדיוק הנקודה: <b>אי אפשר להשקיע מכסף שעוד לא קיים</b>.</p>'+
+        '<p style="text-align:right">הקורס להשקעה מתאים לרגע שכבר יש עודף חודשי פנוי. מה שבאמת יזיז אותך עכשיו זה ליווי אישי, אחד על אחד, שמסדר את התקציב, החובות והחיסכון, ובונה איתך את העודף שממנו משקיעים.</p>'+
+        '<a href="'+CALL_URL+'">רוצה שנעשה סדר ביחד? לפרטים ←</a>';
+  } else {
+    cta='<h2>את/ה כבר בפנים 🤍</h2>'+
+        '<p style="text-align:right">את/ה מעבר לקורס למתחילים. הצעד הבא הוא לבנות את התמונה השלמה סביב ההשקעה, תקציב, חובות, פנסיה, כרית ביטחון ותיק מסודר שיגדל איתך.</p>'+
+        '<p style="text-align:right">זה בדיוק מה שאני עושה בליווי אישי, אחד על אחד.</p>'+
+        '<a href="'+CALL_URL+'">רוצה לשמוע על ליווי ←</a>';
+  }
+  el('r_cta').innerHTML = cta;
+
+  captureLead(lead, answers, TYPE, route, score, pct);
+  // אירוע Lead למטא - רק במילוי אמיתי (לא במצבי בדיקה)
+  (function(){ var qp=new URLSearchParams(location.search);
+    if(qp.has('demo')||qp.has('form')) return;
+    if(typeof fbq==='function'){ try{ fbq('track','Lead',{content_name:TYPE.name}); }catch(e){} }
+  })();
+
+  el('form').classList.add('hidden');
+  el('result').classList.remove('hidden');
+  setBar(100);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* קיצור בדיקה: ?demo=1..4 קופץ ישר לתוצאה עם פרופיל; ?form קופץ לטופס */
+(function(){
+ var qp=new URLSearchParams(location.search);
+ if(qp.has('form')){ try{ answers.time={label:"בחודשים הקרובים"};answers.idle={label:"40,000",val:40000};answers.monthly={label:"500",val:500};answers.concepts={label:"מבולבל/ת",val:1};answers.where={label:"אין לי מושג",val:0};answers.inflation={label:"שמעתי",val:1};answers.tried={label:"עזבתי",val:1};answers.confidence={label:"אבוד/ה",val:1};answers.goal={label:"סתם שיגדל",val:1};answers.base={label:"לא חוסך/ת",val:1};answers.info={label:"ים של מידע",val:0};answers.products={label:"פחות או יותר",val:1};answers.small={label:"לא בטוח/ה",val:1}; el('intro').classList.add('hidden'); el('form').classList.remove('hidden'); el('progbar').classList.add('hidden'); }catch(e){} return; }
+ var d=qp.get('demo'); if(!d) return;
+ var P={
+  '1':{name:"רמה נמוכה · מתחיל/ה לגמרי, פחד + מינוס",fn:function(){
+    answers.time={label:"כמה שיותר מהר"};answers.idle={label:"אין לי כסף בצד",val:0,none:true};answers.monthly={label:"אין לי מה להפריש כרגע",val:0,none:true};
+    answers.concepts={label:"בכלל לא",val:0};answers.where={label:"אין לי מושג",val:0};answers.inflation={label:"לא ידעתי",val:0};
+    answers.tried={label:"ניסיתי ונתקעתי",val:0};answers.confidence={label:"אין לי מושג",val:0};answers.goal={label:"בכלל לא חשבתי",val:0};
+    answers.base={label:"במינוס",val:0};answers.info={label:"ים של מידע",val:0};answers.products={label:"הכל מתערבב",val:0};answers.small={label:"צריך הרבה כסף",val:0};}},
+  '2':{name:"רמה בינונית · רוצה אבל תקוע/ה",fn:function(){
+    answers.time={label:"בחודשים הקרובים"};answers.idle={label:"60,000",val:60000};answers.monthly={label:"800",val:800};
+    answers.concepts={label:"מבין/ה את הבסיס",val:2};answers.where={label:"שמעתי שמות",val:1};answers.inflation={label:"יודע/ת ומפריע",val:2};
+    answers.tried={label:"הצפתי ועזבתי",val:1};answers.confidence={label:"בחשש",val:2};answers.goal={label:"כיוון כללי",val:2};
+    answers.base={label:"חוסך/ת קצת",val:2};answers.info={label:"לא יודע/ת למי להאמין",val:1};answers.products={label:"פחות או יותר",val:1};answers.small={label:"אפשר בקטן",val:2};}},
+  '3':{name:"הון גדול בצד -> ליווי",fn:function(){
+    answers.time={label:"השנה"};answers.idle={label:"120,000",val:120000};answers.monthly={label:"1,500",val:1500};
+    answers.concepts={label:"מבין/ה טוב",val:3};answers.where={label:"פחות או יותר",val:2};answers.inflation={label:"יודע/ת ומפריע",val:2};
+    answers.tried={label:"צעד קטן",val:2};answers.confidence={label:"בחשש",val:2};answers.goal={label:"יעד ברור",val:3};
+    answers.base={label:"יציב/ה",val:3};answers.info={label:"מסננ/ת לבד",val:2};answers.products={label:"ההבדלים העיקריים",val:2};answers.small={label:"בדיוק העניין",val:3};}},
+  '4':{name:"בשל/ה, כבר משקיע/ה",fn:function(){
+    answers.time={label:"כמה שיותר מהר"};answers.idle={label:"200,000",val:200000};answers.monthly={label:"2,500",val:2500};
+    answers.concepts={label:"מבין/ה טוב",val:3};answers.where={label:"יודע/ת בדיוק",val:3};answers.inflation={label:"ולכן אני כאן",val:3};
+    answers.tried={label:"כבר משקיע/ה",val:3};answers.confidence={label:"בטוח/ה לגמרי",val:3};answers.goal={label:"יעד ברור וזמן",val:3};
+    answers.base={label:"יציב/ה",val:3};answers.info={label:"יודע/ת מה רלוונטי",val:3};answers.products={label:"יודע/ת טוב",val:3};answers.small={label:"בדיוק העניין",val:3};}}
+ };
+ var prof=P[d]||P['1'];
+ try{ prof.fn(); el('f_name').value="טלי"; el('intro').classList.add('hidden'); showResult();
+   var rows=""; QS.forEach(function(Q){ if(answers[Q.key]) rows+="<div>• "+Q.q+" <b>"+answers[Q.key].label+"</b></div>"; });
+   var banner='<div style="background:#fff7e0;border:1px solid #e0c98a;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:#5f5220;line-height:1.6"><b>🔧 מצב בדיקה · פרופיל '+d+': '+prof.name+'</b><div style="margin-top:6px">'+rows+'</div></div>';
+   el('result').insertAdjacentHTML('afterbegin', banner);
+ }catch(e){}
+})();
+</script>
+
+<!-- ═══ רכיב נגישות RichLife - עצמאי, בלי תלות חיצונית. ═══ -->
+<style>
+#a11y-btn { position: fixed; bottom: 20px; left: 16px; z-index: 998; width: 48px; height: 48px; border-radius: 50%; border: 2px solid #fff; background: #3e5448; color: #fff; font-size: 24px; line-height: 1; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; }
+#a11y-btn:focus-visible { outline: 3px solid #c1553f; outline-offset: 2px; }
+#a11y-menu { position: fixed; bottom: 78px; left: 16px; z-index: 998; width: 250px; background: #fff; border: 1px solid #d3e0df; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.25); padding: 14px; display: none; font-family: 'Heebo', Arial, sans-serif; }
+#a11y-menu.open { display: block; }
+#a11y-menu h3 { font-size: 15px; font-weight: 800; color: #1e2b25; margin: 0 0 10px; text-align: right; }
+#a11y-menu button.a11y-opt { display: block; width: 100%; text-align: right; background: #eef4ef; border: 1px solid #d3e0df; border-radius: 10px; padding: 9px 12px; margin-bottom: 6px; font-family: inherit; font-size: 13.5px; font-weight: 600; color: #1e2b25; cursor: pointer; }
+#a11y-menu button.a11y-opt[aria-pressed="true"] { background: #3e5448; color: #fff; border-color: #3e5448; }
+#a11y-menu button.a11y-opt:focus-visible { outline: 3px solid #c1553f; }
+#a11y-menu .a11y-link { display: block; text-align: center; font-size: 12.5px; color: #3e5448; margin-top: 8px; }
+@media (max-width: 880px) { #a11y-btn { bottom: 96px; } #a11y-menu { bottom: 152px; } }
+html.a11y-bigtext body { zoom: 1.18; }
+html.a11y-bigtext2 body { zoom: 1.35; }
+html.a11y-contrast, html.a11y-contrast img { filter: invert(1) hue-rotate(180deg); }
+html.a11y-contrast img, html.a11y-contrast video { filter: invert(1) hue-rotate(180deg); }
+html.a11y-gray { filter: grayscale(1); }
+html.a11y-links a { text-decoration: underline !important; box-shadow: 0 0 0 2px #c1553f !important; }
+html.a11y-font body, html.a11y-font body * { font-family: Arial, Helvetica, sans-serif !important; }
+html.a11y-noanim *, html.a11y-noanim *::before, html.a11y-noanim *::after { animation: none !important; transition: none !important; }
+html.a11y-cursor, html.a11y-cursor * { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="black" stroke="white" stroke-width="1.2" d="M5 2l14 12h-8l-2 8z"/></svg>') 4 2, auto !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+<button id="a11y-btn" aria-label="תפריט נגישות" aria-expanded="false" title="נגישות">&#9855;</button>
+<div id="a11y-menu" role="dialog" aria-label="אפשרויות נגישות">
+ <h3>נגישות</h3>
+ <button class="a11y-opt" data-cls="a11y-bigtext" aria-pressed="false">הגדלת טקסט</button>
+ <button class="a11y-opt" data-cls="a11y-bigtext2" aria-pressed="false">הגדלת טקסט נוספת</button>
+ <button class="a11y-opt" data-cls="a11y-contrast" aria-pressed="false">ניגודיות כהה</button>
+ <button class="a11y-opt" data-cls="a11y-gray" aria-pressed="false">גווני אפור</button>
+ <button class="a11y-opt" data-cls="a11y-links" aria-pressed="false">הדגשת קישורים</button>
+ <button class="a11y-opt" data-cls="a11y-font" aria-pressed="false">פונט קריא</button>
+ <button class="a11y-opt" data-cls="a11y-noanim" aria-pressed="false">עצירת אנימציות</button>
+ <button class="a11y-opt" data-cls="a11y-cursor" aria-pressed="false">סמן גדול</button>
+ <button class="a11y-opt" id="a11y-reset">איפוס נגישות</button>
+ <a class="a11y-link" href="accessibility/">הצהרת נגישות</a>
+</div>
+<script>
+(function(){
+ var KEY = 'richlife-a11y';
+ var root = document.documentElement;
+ var btn = document.getElementById('a11y-btn');
+ var menu = document.getElementById('a11y-menu');
+ var opts = menu.querySelectorAll('.a11y-opt[data-cls]');
+ function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ return []; } }
+ function save(list){ try { localStorage.setItem(KEY, JSON.stringify(list)); } catch(e){} }
+ function apply(){
+  var on = load();
+  opts.forEach(function(o){
+   var c = o.getAttribute('data-cls'), active = on.indexOf(c) > -1;
+   root.classList.toggle(c, active);
+   o.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+ }
+ btn.addEventListener('click', function(){
+  var open = menu.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) menu.querySelector('.a11y-opt').focus();
+ });
+ document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && menu.classList.contains('open')) { menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); btn.focus(); } });
+ opts.forEach(function(o){
+  o.addEventListener('click', function(){
+   var c = o.getAttribute('data-cls'), on = load(), i = on.indexOf(c);
+   if (i > -1) on.splice(i, 1); else on.push(c);
+   if (c === 'a11y-bigtext') { var j = on.indexOf('a11y-bigtext2'); if (j > -1 && i === -1) on.splice(j, 1); }
+   if (c === 'a11y-bigtext2') { var k = on.indexOf('a11y-bigtext'); if (k > -1 && i === -1) on.splice(k, 1); }
+   save(on); apply();
+  });
+ });
+ document.getElementById('a11y-reset').addEventListener('click', function(){ save([]); apply(); });
+ apply();
+})();
+</script>
+<!-- ═══ סוף רכיב נגישות ═══ -->
+
+</body>
+</html>

@@ -59,6 +59,43 @@ footer{margin-top:34px;text-align:center;font-size:12.5px;color:var(--soft);line
 footer a{color:var(--pine-deep)}
 .rl-consent-reopen{background:none;border:0;padding:0;font:inherit;color:var(--pine-deep);text-decoration:underline;cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ===== מחשב: פאנל קבוע מימין + כרטיסים עם תמונה גדולה (19.10) ===== */
+.intro{display:none}
+.lk img{object-position:center}
+@media (min-width:900px){
+  .wrap{max-width:1320px;padding-inline:40px;padding-block:56px 60px;display:grid;grid-template-columns:340px 1fr;gap:52px;align-items:start}
+  header{position:sticky;top:40px;margin:0;background:#fff;border:1px solid var(--line);border-radius:28px;padding:40px 28px 34px;box-shadow:0 20px 50px rgba(62,84,72,.12)}
+  .avatar{width:168px;height:168px;margin-bottom:18px}
+  h1{font-size:30px}
+  .tag{font-size:16px;margin-top:6px}
+  .intro{display:block;margin-top:16px;font-size:16px;line-height:1.7;color:var(--soft)}
+  .socials{margin-top:20px;gap:14px}
+  .socials a{width:48px;height:48px}
+  .socials svg{width:22px;height:22px}
+  .content section:first-child{margin-top:0}
+  section{margin-top:40px}
+  h2{font-size:16px;justify-content:flex-start;margin-bottom:16px}
+  h2::before{display:none}
+  .links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .links.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  a.lk{flex-direction:column;align-items:stretch;gap:0;padding:0;border-radius:22px;overflow:hidden;position:relative}
+  .lk img{width:100%;height:auto;aspect-ratio:3/2;border-radius:0;object-fit:cover}
+  .lk .tx{padding:16px 18px 18px;gap:6px}
+  .lk .t{font-size:19px;line-height:1.3}
+  .lk .s{font-size:15px}
+  .gift{font-size:12.5px;padding:3px 10px;margin-top:4px}
+  .lk .arr{position:absolute;top:12px;left:12px;width:40px;height:40px;font-size:18px;background:rgba(255,255,255,.92);box-shadow:0 4px 12px rgba(0,0,0,.15);margin:0}
+  a.lk.main{grid-column:1 / -1;flex-direction:row;align-items:center;padding:0}
+  a.lk.main img{width:46%;height:auto;aspect-ratio:3/2;border:0;flex-shrink:0;align-self:stretch;object-fit:cover}
+  a.lk.main .tx{padding:28px 32px;gap:10px}
+  a.lk.main .t{font-size:30px}
+  a.lk.main .s{font-size:18px}
+  a.lk.main .arr{position:static;width:54px;height:54px;font-size:22px;margin:0 0 0 30px;background:#eef4ef}
+  .content footer{text-align:right;margin-top:44px}
+}
+@media (min-width:900px) and (max-width:1180px){ .links.three{grid-template-columns:repeat(2,minmax(0,1fr))} }
+}
+
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -207,6 +244,7 @@ footer a{color:var(--pine-deep)}
   <img class="avatar" src="images/avatar.jpg" alt="טלי בנימינוב שרעבי">
   <h1>טלי בנימינוב שרעבי</h1>
   <p class="tag"><b>RICH LIFE</b> · לחיות חיים מעושרים ומאושרים</p>
+  <p class="intro">יועצת פיננסית. מלווה נשים וזוגות לסדר כלכלי, חיסכון והשקעה, בגובה העיניים.</p>
   <div class="socials">
    <a href="https://instagram.com/tali_beniaminov_sharabi" target="_blank" rel="noopener" aria-label="אינסטגרם">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
@@ -217,11 +255,12 @@ footer a{color:var(--pine-deep)}
   </div>
  </header>
 
+ <main class="content">
  <section>
   <h2>איך אפשר לעבוד ביחד</h2>
   <div class="links">
    <a class="lk main" href="https://richlife.ravpage.co.il/service1one1" data-lead="ליווי SWITCH">
-    <img src="images/livuy.jpg" alt="טלי בפגישת ליווי עם לקוחה">
+    <img src="images/livuy-w.jpg" alt="טלי בפגישת ליווי עם לקוחה">
     <span class="tx"><span class="t">SWITCH · ליווי פיננסי אישי יד ביד</span><span class="s">תהליך אחד על אחד, לסדר, לחסוך ולהתחיל לצמוח</span></span>
     <span class="arr">←</span>
    </a>
@@ -232,12 +271,12 @@ footer a{color:var(--pine-deep)}
   <h2>קורסים דיגיטליים</h2>
   <div class="links">
    <a class="lk" href="https://first-invest.richlife.co.il">
-    <img src="images/invest.jpg" alt="הקורס להשקיע לראשונה בקלות">
+    <img src="images/invest-w.jpg" alt="הקורס להשקיע לראשונה בקלות">
     <span class="tx"><span class="t">איך להשקיע לראשונה בקלות ובפשטות?</span><span class="s">מ"אין לי מושג" עד ההשקעה הראשונה שלך</span></span>
     <span class="arr">←</span>
    </a>
    <a class="lk" href="https://lida.richlife.co.il/muchanim-kalkalit">
-    <img src="images/lida.jpg" alt="מוכנים כלכלית ללידה">
+    <img src="images/lida-w.jpg" alt="מוכנים כלכלית ללידה">
     <span class="tx"><span class="t">מוכנים כלכלית ללידה</span><span class="s">כל מה שכדאי לסדר לפני שהוא מגיע</span></span>
     <span class="arr">←</span>
    </a>
@@ -248,22 +287,22 @@ footer a{color:var(--pine-deep)}
   <h2>מתנות קטנות</h2>
   <div class="links">
    <a class="lk" href="https://tools.richlife.co.il/mashkia/">
-    <img src="images/mashkia.jpg" alt="שאלון איזה סוג משקיעה את">
+    <img src="images/mashkia-w.jpg" alt="שאלון איזה סוג משקיעה את">
     <span class="tx"><span class="t">איזה סוג משקיעה את?</span><span class="s">שאלון קצר, ותשובה מה הצעד הבא שלך</span><span class="gift">🎁 בחינם</span></span>
     <span class="arr">←</span>
    </a>
    <a class="lk" href="https://lida.richlife.co.il">
-    <img src="images/muchanut.jpg" alt="שאלון מוכנות כלכלית להרחבת המשפחה">
+    <img src="images/muchanut-w.jpg" alt="שאלון מוכנות כלכלית להרחבת המשפחה">
     <span class="tx"><span class="t">כמה אתם מוכנים כלכלית להרחבת המשפחה?</span><span class="s">שאלון שמראה איפה אתם עומדים</span><span class="gift">🎁 בחינם</span></span>
     <span class="arr">←</span>
    </a>
    <a class="lk" href="https://richlife.ravpage.co.il/MovingHouse">
-    <img src="images/rent.jpg" alt="המדריך יוצאים מהבית לשכירות">
+    <img src="images/rent-w.jpg" alt="המדריך יוצאים מהבית לשכירות">
     <span class="tx"><span class="t">יוצאים מהבית לשכירות</span><span class="s">המדריך למעבר לדירה הראשונה</span><span class="gift">🎁 בחינם</span></span>
     <span class="arr">←</span>
    </a>
    <a class="lk" href="https://chat.whatsapp.com/LExBTGp88xYKgaQ5Isi89V">
-    <img src="images/queens.jpg" alt="קהילת מלכות פיננסיות">
+    <img src="images/queens-w.jpg" alt="קהילת מלכות פיננסיות">
     <span class="tx"><span class="t">הקהילה "מלכות פיננסיות" 👑</span><span class="s">קבוצת וואטסאפ שקטה לטיפים, מדריכים והפתעות</span><span class="gift">🎁 בחינם</span></span>
     <span class="arr">←</span>
    </a>
@@ -272,19 +311,19 @@ footer a{color:var(--pine-deep)}
 
  <section>
   <h2>כלי עזר</h2>
-  <div class="links">
+  <div class="links three">
    <a class="lk" href="https://tools.richlife.co.il/ribit/">
-    <img src="images/ribit.jpg" alt="מחשבון ריבית דה ריבית">
+    <img src="images/ribit-w.jpg" alt="מחשבון ריבית דה ריבית">
     <span class="tx"><span class="t">מחשבון ריבית דה ריבית</span><span class="s">תראו איך הכסף צומח, ומה עולה לכם לחכות</span><span class="gift">🎁 בחינם</span></span>
     <span class="arr">←</span>
    </a>
    <a class="lk" href="https://tools.richlife.co.il/emergency-fund/">
-    <img src="images/emergency.jpg" alt="מחשבון קרן חירום">
+    <img src="images/emergency-w.jpg" alt="מחשבון קרן חירום">
     <span class="tx"><span class="t">כמה צריך בקרן חירום?</span><span class="s">כמה כסף צריך בצד כדי לישון בשקט, לפי המצב שלכם</span><span class="gift">🎁 בחינם</span></span>
     <span class="arr">←</span>
    </a>
    <a class="lk" href="https://tools.richlife.co.il/dream/">
-    <img src="images/dream.jpg" alt="מחשבון החלום">
+    <img src="images/dream-w.jpg" alt="מחשבון החלום">
     <span class="tx"><span class="t">מחשבון החלום</span><span class="s">כמה הון צריך כדי לחיות מהכסף, ואיך מגיעים לשם</span><span class="gift">🎁 בחינם</span></span>
     <span class="arr">←</span>
    </a>
@@ -295,6 +334,7 @@ footer a{color:var(--pine-deep)}
   טלי בנימינוב שרעבי · RichLife<br>
   <a href="https://lida.richlife.co.il/lida/negishut.html">הצהרת נגישות</a> · <a href="https://first-invest.richlife.co.il/privacy/">מדיניות פרטיות</a> · <button type="button" class="rl-consent-reopen" hidden>הגדרות עוגיות</button>
  </footer>
+ </main>
 </div>
 
 <script>

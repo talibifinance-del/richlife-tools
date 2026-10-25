@@ -37,7 +37,7 @@ for(let i=0;i<600;i++){
     if(m&&+m[1]>15.05){over++;if(over<4)console.log("  OVER15:",id,t(r[id]));}
   }
   // no NaN / undefined anywhere visible
-  for(const id of ["m10","lmm15","lmm20","vsRecCar","vMsg","tTot","capIns","breakdown"]){
+  for(const id of ["m10","lmm15","lmm20","vsRecCar","vsLimCar","vsLimMo","vMsg","tTot","capIns","breakdown"]){
     const x=t(r[id]); if(/NaN|undefined|Infinity/.test(x)){errs++;if(errs<6)console.log("  JUNK:",id,x.slice(0,80),JSON.stringify(o));}
   }
 }

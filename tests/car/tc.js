@@ -58,7 +58,7 @@ console.log("\n=== never print a 0 ₪ car ===");
 let zeros=0;
 for(const v of variants) for(const p of profs) for(const pr of ["0","100","60,000"]){
   const r=run(Object.assign({},p,v.o,{price:pr}));
-  for(const id of ["m10","lmm15","lmm20","vsRecCar"]){
+  for(const id of ["m10","lmm15","lmm20","vsRecCar","vsLimCar"]){
     const s=t(r[id]);
     if(/^0(\s|$)/.test(s)||s==="0 ₪"||/\b0 ₪/.test(s.split("·")[0])){zeros++;console.log("  ZERO",id,"=",s,"| inc",p.income,v.tag,"price",pr);}
   }

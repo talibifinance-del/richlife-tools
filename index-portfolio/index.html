@@ -57,6 +57,24 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .diff h4{font-size:14px;font-weight:900;color:var(--pine-darker);margin-bottom:4px}
 .diff li,.diff p{font-size:13.5px;font-weight:600;line-height:1.6}
 .diff ul{padding-inline-start:18px}
+.legal-top{background:#fffaf0;border:1.5px solid rgba(183,121,31,.35);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:700;color:#5c4210;line-height:1.55;margin:0 auto 14px;max-width:980px;text-align:center}
+.legal-top a,.legal-note a,.legal-full a{color:var(--pine-deep);font-weight:800}
+.legal-note,.legal-full{background:#fffaf0;border:1.5px solid rgba(183,121,31,.35);border-radius:14px;padding:12px 16px;font-size:13px;font-weight:600;color:#4a3610;line-height:1.65;margin-top:16px}
+.legal-full{max-width:980px;margin:18px auto 0}
+.fnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;flex-wrap:wrap;gap:7px;align-items:center;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border:1px solid rgba(var(--pine-rgb),.18);border-radius:14px;padding:9px 12px;margin:16px 0;box-shadow:var(--shadow)}
+.fnav-t{font-size:13px;font-weight:900;color:var(--pine-darker);margin-inline-end:4px}
+.fnav-b{border:1.5px solid rgba(var(--pine-rgb),.3);background:#fff;border-radius:100px;padding:5px 12px;font-family:var(--font);font-weight:800;font-size:13px;color:var(--pine-deep);cursor:pointer}
+.fnav-b.ok{background:var(--pine);border-color:var(--pine);color:#fff}
+.next-row{display:flex;justify-content:flex-start;margin-top:12px}
+.flink{display:inline-block;margin-top:4px;font-size:12px;font-weight:800;color:var(--pine-deep)}
+#fundCards .card{scroll-margin-top:80px}
+.pf-preview{margin-top:16px}
+.pf-wait{background:var(--sage-tint);border-radius:12px;padding:12px 14px;font-size:13.5px;font-weight:700;color:var(--ink-soft);text-align:center}
+.pf-h{font-size:18px;font-weight:900;color:var(--pine-darker);margin:4px 0 10px}
+.pf-tiles{margin-bottom:12px}
+.pf-cmp{max-width:620px;margin-bottom:6px}.pf-cmp .pf-me{background:#f3f8f4}.pf-cmp .pf-me th,.pf-cmp .pf-me td{font-weight:900;color:var(--pine-darker)}
+.pf-ex{margin-top:14px}.pf-ex h4,.pf-co h4{font-size:14px;font-weight:900;color:var(--pine-deep);margin-bottom:6px}
+.pf-co{margin-top:14px;max-width:620px}
 .grp+.grp{margin-top:22px;padding-top:18px;border-top:1.5px dashed rgba(var(--pine-rgb),.25)}
 .grp-h{font-size:17px;font-weight:900;color:var(--pine-darker);display:flex;align-items:center;gap:8px}
 .grp-n{font-size:12px;font-weight:800;color:var(--pine-deep);background:var(--sage-tint);border-radius:100px;padding:1px 9px}
@@ -264,6 +282,7 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
     <p>בוחרים מדדים, מחליטים כמה לשים בכל אחד, ומוצאים את הקרן שעוקבת אחריו. בסוף יש לך רשימה מוכנה להעתקה, עם המספרים שמקלידים בבנק או בבית ההשקעות.</p>
   </div>
 
+  <div class="legal-top" role="note">⚖️ הכלי אוסף ומציג נתונים ממקורות ציבוריים, למטרות סקירה והעשרה, ואין בו ייעוץ פרטני. ההחלטה והאחריות על ההשקעה שלך, ואין להסתמך רק על הכלי. <a href="#legalFull" data-legal>לנוסח המלא</a></div>
   <nav class="steps" aria-label="שלבי הבנייה">
     <button type="button" data-s="1" class="on" aria-current="step"><span class="n">1</span><span class="t">בחירת מדדים</span></button>
     <button type="button" data-s="2"><span class="n">2</span><span class="t">חלוקת אחוזים</span></button>
@@ -301,6 +320,7 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
         <div><div class="donut" id="donut" aria-hidden="true"><div class="mid"><span id="tot">0%</span><small>מתוך 100%</small></div></div><div class="sum-ok" id="sumMsg" aria-live="polite"></div><div class="mix" id="mix"></div></div>
       </div>
       <div id="overlap"></div>
+      <div id="pfPreview" class="pf-preview" aria-live="polite"></div>
       <div class="bar-row">
         <button type="button" class="btn ghost" data-go="1">→ חזרה</button>
         <button type="button" class="btn" id="to3" disabled>להמשך: בחירת קרנות ←</button>
@@ -347,7 +367,7 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
         <li><b>דמי משמרת:</b> חלק מהבנקים גובים אחוז שנתי על החזקת ניירות ערך. בבתי השקעות בדרך כלל אין, או שיש דמי טיפול קבועים בשקלים.</li>
         <li><b>המחיר משתנה כל יום:</b> כדאי לבדוק את המחיר העדכני של הקרן ממש לפני הקנייה.</li>
       </ul></div>
-      <div class="legal">[ מקום להבהרה משפטית - נוסח מעורך הדין יגיע לכאן ]</div>
+      <div class="legal-note" role="note"><b>לפני שקונים:</b> הכלי ותוכנו מסופקים "כפי שהם" (AS IS), למטרות סקירה והעשרה, ואין בהם משום ייעוץ פרטני. הכלי אוסף נתונים ממקורות ציבוריים ומציג אותם בצורה נוחה, ואינו ממליץ לקנות או למכור נייר ערך כלשהו. השימוש בכלי ובמידע המוצג בו, וכל החלטת השקעה, מבוצעים על אחריותו הבלעדית של המשתמש. איננו מתחייבים שהכלי והמידע יהיו חפים מטעויות בדין או בעובדה, או שיהיו עדכניים בכל עת, ולכן אין להסתמך עליו בלבד: לפני כל קנייה יש לבדוק את פרטי הקרן במקור הרשמי ובבנק או בבית ההשקעות. <a href="https://first-invest.richlife.co.il/terms/" target="_blank" rel="noopener">לתנאי השימוש המלאים</a></div>
     </div>
     <div class="actions">
       <button type="button" class="act-btn" id="saveBtn">🔖 שמירת הקישור לתיק שלי</button>
@@ -361,6 +381,7 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
     </div>
   </section>
 
+  <div class="legal-full" id="legalFull" role="note"><b>הבהרה:</b> הכלי ותוכנו מסופקים "כפי שהם" (AS IS), למטרות סקירה והעשרה, ואין בהם משום ייעוץ פרטני. הכלי אוסף נתונים ממקורות ציבוריים ומציג אותם בצורה נוחה, ואינו ממליץ לקנות או למכור נייר ערך כלשהו. השימוש בכלי ובמידע המוצג בו, וכל החלטת השקעה, מבוצעים על אחריותו הבלעדית של המשתמש. איננו מתחייבים שהכלי והמידע יהיו חפים מטעויות בדין או בעובדה, או שיהיו עדכניים בכל עת, ולכן אין להסתמך עליו בלבד: לפני כל קנייה יש לבדוק את פרטי הקרן במקור הרשמי ובבנק או בבית ההשקעות. <a href="https://first-invest.richlife.co.il/terms/" target="_blank" rel="noopener">לתנאי השימוש המלאים</a></div>
   <div class="datefoot" id="dateFoot"></div>
 
   <div class="socials">
@@ -612,17 +633,21 @@ function tipAt(box,x,y,html,W){var t=box.querySelector(".tip");t.innerHTML=html;
 function drawLine(){
   var box=$("#lineBox");if(!box)return;var m=idx(box.dataset.id).metrics,a=m.series[detCur],st0=startIdx(m),pts=[];
   for(var i=st0;i<a.length;i++)pts.push({m:monthAt(m.series.start,i),v:a[i]/a[st0]*10000});
+  lineChart(box,pts,detCur);
+}
+function moneyC(cur,v){return(cur==="ils"?"₪":"$")+Math.round(v).toLocaleString("he-IL")}
+function lineChart(box,pts,cur){
   var W=Math.max(280,box.clientWidth),sm=W<520,H=sm?230:300,L=sm?58:72,R=12,T=14,B=26,pw=W-L-R,ph=H-T-B,n=pts.length;
   var vals=pts.map(function(p){return p.v}),lo=Math.min(10000,Math.min.apply(null,vals)),hi=Math.max(10000,Math.max.apply(null,vals));
   var step=niceStep(hi-lo,sm?3:4),y0=Math.floor(lo/step)*step,y1=Math.ceil(hi/step)*step;
   function X(i){return L+i/(n-1)*pw}function Y(v){return T+(y1-v)/(y1-y0)*ph}
   var peak=0,pk=0,dd=0,ddPk=0,ddTr=0,run=[];
   pts.forEach(function(p,i){if(p.v>peak){peak=p.v;pk=i}var d=p.v/peak-1;run.push(d);if(d<dd){dd=d;ddPk=pk;ddTr=i}});
-  var g="";for(var v=y0;v<=y1+1e-6;v+=step){g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+money(v)+'</text>'}
+  var g="";for(var v=y0;v<=y1+1e-6;v+=step){g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+moneyC(cur,v)+'</text>'}
   var yrs=n/12,k=Math.max(1,Math.ceil(yrs/(sm?4:9)));
   pts.forEach(function(p,i){var y=+p.m.slice(0,4);if(p.m.slice(5)==="01"&&y%k===0)g+='<text class="ax" x="'+X(i)+'" y="'+(H-6)+'" text-anchor="middle">'+y+'</text>'});
   var d=pts.map(function(p,i){return(i?"L":"M")+X(i).toFixed(1)+","+Y(p.v).toFixed(1)}).join("");
-  var h=svgEl(W,H,"שווי "+money(10000)+" שהושקעו ב-"+hdate(pts[0].m)+", עד "+hdate(pts[n-1].m)+": "+money(pts[n-1].v)+". הנפילה הגדולה בתקופה: "+pct(dd,0))+g;
+  var h=svgEl(W,H,"שווי "+moneyC(cur,10000)+" שהושקעו ב-"+hdate(pts[0].m)+", עד "+hdate(pts[n-1].m)+": "+moneyC(cur,pts[n-1].v)+". הנפילה הגדולה בתקופה: "+pct(dd,0))+g;
   h+='<line class="base" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(10000)+'" y2="'+Y(10000)+'"/>';
   h+='<path d="'+d+'L'+X(n-1)+','+(T+ph)+'L'+L+','+(T+ph)+'Z" fill="rgba(95,125,106,.10)"/><path d="'+d+'" fill="none" stroke="#5f7d6a" stroke-width="2" stroke-linejoin="round"/>';
   if(dd<-0.05){var tx=X(ddTr),ty=Y(pts[ddTr].v);h+='<circle cx="'+tx+'" cy="'+ty+'" r="5" fill="#c1553f" stroke="#fff" stroke-width="2"/><text class="dl" x="'+(tx<W/2?tx+10:tx-10)+'" y="'+(ty+4)+'" text-anchor="'+(tx<W/2?"end":"start")+'" direction="rtl">הנפילה הגדולה: \u2066'+pct(dd,0)+'\u2069</text>'}
@@ -633,7 +658,7 @@ function drawLine(){
   var svg=box.querySelector("svg"),cur=svg.querySelector(".cur"),dot=svg.querySelector(".cdot"),at=n-1;
   function show(i){at=Math.max(0,Math.min(n-1,i));var p=pts[at],x=X(at),y=Y(p.v),ch=p.v/10000-1;
     cur.setAttribute("x1",x);cur.setAttribute("x2",x);cur.setAttribute("visibility","visible");dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("visibility","visible");
-    tipAt(box,x,y,'<div>'+hdate(p.m)+'</div><b class="tabular">'+money(p.v)+'</b><div>מההתחלה: <span class="tabular'+(ch<0?" neg":"")+'">'+pct(ch)+'</span></div>'+(run[at]<-0.005?'<div>מתחת לשיא: <span class="tabular neg">'+pct(run[at])+'</span></div>':'<div>בשיא</div>'),W)}
+    tipAt(box,x,y,'<div>'+hdate(p.m)+'</div><b class="tabular">'+moneyC(cur,p.v)+'</b><div>מההתחלה: <span class="tabular'+(ch<0?" neg":"")+'">'+pct(ch)+'</span></div>'+(run[at]<-0.005?'<div>מתחת לשיא: <span class="tabular neg">'+pct(run[at])+'</span></div>':'<div>בשיא</div>'),W)}
   function hide(){cur.setAttribute("visibility","hidden");dot.setAttribute("visibility","hidden");box.querySelector(".tip").hidden=true}
   function fromEvt(e){var r=svg.getBoundingClientRect();return Math.round(((e.clientX-r.left)*W/r.width-L)/pw*(n-1))}
   svg.addEventListener("pointermove",function(e){show(fromEvt(e))});svg.addEventListener("pointerdown",function(e){show(fromEvt(e))});
@@ -677,7 +702,7 @@ function drawBars(){
   var t=$("#yrTbl");if(t)t.innerHTML='<table><tr><th scope="col">שנה</th><th scope="col">תשואה</th></tr>'+ys.map(function(y){return '<tr><td>'+y.y+(y.ytd?" (עד כה)":"")+'</td><td class="tabular">'+pct(y.r)+'</td></tr>'}).join("")+'</table>';
 }
 function drawCharts(){drawLine();drawBars()}
-var rsz=null;window.addEventListener("resize",function(){clearTimeout(rsz);rsz=setTimeout(function(){if(!$("#ov").hidden)drawCharts()},150)});
+var rsz=null;window.addEventListener("resize",function(){clearTimeout(rsz);rsz=setTimeout(function(){if(!$("#ov").hidden)drawCharts();if(!$("#s2").hidden)renderPfPreviewNow()},150)});
 
 /* ---------- drawer ---------- */
 function bars(list,scale){return list.map(function(x){return '<div class="hold"><span class="hn" title="'+esc(x[0])+'">'+esc(x[0])+'</span><span class="hb" aria-hidden="true"><i style="width:'+Math.min(100,x[1]*scale)+'%"></i></span><span class="tabular">'+x[1].toFixed(1)+'%</span></div>'}).join("")}
@@ -757,7 +782,61 @@ function updAlloc(){
   var m=$("#sumMsg");if(tot===100){m.textContent="✓ מגיע ל-100%";m.className="sum-ok good"}else{m.textContent=tot>100?("יותר מדי ב-"+(tot-100)+"%"):("חסרים "+(100-tot)+"%");m.className="sum-ok bad"}
   var bond=st.sel.reduce(function(s,id){return s+(idx(id).cat==="bond"?(st.alloc[id]||0):0)},0);
   $("#mix").innerHTML='מניות <b class="tabular">'+(tot-bond)+'%</b> · אג"ח <b class="tabular">'+bond+'%</b>';
-  $("#to3").disabled=tot!==100;renderOverlap();updSteps();save();
+  $("#to3").disabled=tot!==100;renderOverlap();renderPfPreview();updSteps();save();
+}
+/* ---------- step 2: what the split builds ---------- */
+function monthsBetween(a,b){return(+b.slice(0,4)-+a.slice(0,4))*12+(+b.slice(5,7)-+a.slice(5,7))}
+function ddOf(vals){var pk=-Infinity,dd=0;vals.forEach(function(v){if(v>pk)pk=v;var d=v/pk-1;if(d<dd)dd=d});return dd}
+function pfSeries(){
+  var use=st.sel.filter(function(id){return idx(id).metrics&&st.alloc[id]>0}),skip=st.sel.filter(function(id){return !idx(id).metrics&&st.alloc[id]>0});
+  if(!use.length)return{skip:skip,use:[]};
+  var wsum=use.reduce(function(a,id){return a+st.alloc[id]},0),start=use.map(function(id){return idx(id).metrics.series.start}).sort().pop();
+  var S=use.map(function(id){var se=idx(id).metrics.series;return se.ils.slice(monthsBetween(se.start,start))});
+  var n=Math.min.apply(null,S.map(function(a){return a.length})),w=use.map(function(id){return st.alloc[id]/wsum});
+  var h=w.map(function(x){return x*10000}),pts=[{m:start,v:10000}];
+  for(var t=1;t<n;t++){var v=0;for(var k=0;k<S.length;k++){h[k]*=S[k][t]/S[k][t-1];v+=h[k]}
+    var mo=monthAt(start,t);pts.push({m:mo,v:v});
+    if(mo.slice(5)==="12")for(var k2=0;k2<S.length;k2++)h[k2]=v*w[k2];}  // back to the chosen split every December
+  return{pts:pts,use:use,skip:skip,start:start,S:S.map(function(a){return a.slice(0,n)})};
+}
+function cagrOf(a){var n=a.length;return Math.pow(a[n-1]/a[0],12/(n-1))-1}
+function exposure(){
+  var C={},Se={},Co={},unkC=0,unkS=0,IL={ta125:1,ta35:1,ta90:1,re_il:1,gov:1,tb:1};
+  st.sel.forEach(function(id){var x=idx(id),w=(st.alloc[id]||0)/100,h=x.holdings;if(!w)return;
+    var ct=h&&h.countries&&h.countries.length?h.countries:IL[id]?[["ישראל",100]]:null;
+    if(ct){var cs=0;ct.forEach(function(c){C[c[0]]=(C[c[0]]||0)+w*c[1];cs+=c[1]});if(cs<99.5)C["אחרות"]=(C["אחרות"]||0)+w*(100-cs)}else unkC+=w*100;
+    if(h&&h.sectors&&h.sectors.length){var ss=0;h.sectors.forEach(function(c){Se[c[0]]=(Se[c[0]]||0)+w*c[1];ss+=c[1]});if(ss<99.5)Se["אחרים"]=(Se["אחרים"]||0)+w*(100-ss)}else unkS+=w*100;
+    if(h&&h.top10)h.top10.forEach(function(c){var k=c[0].replace(/ [AC]$/,"");Co[k]=(Co[k]||0)+w*c[1]});
+  });
+  var top=function(o,k){return Object.keys(o).map(function(n){return[n,o[n]]}).filter(function(x){return x[1]>=0.05}).sort(function(a,b){return b[1]-a[1]}).slice(0,k)};
+  return{c:top(C,6),s:top(Se,6),co:top(Co,8),unkC:unkC,unkS:unkS};
+}
+var pfTimer=null;
+function renderPfPreview(){clearTimeout(pfTimer);pfTimer=setTimeout(renderPfPreviewNow,120)}
+function renderPfPreviewNow(){
+  var box=$("#pfPreview");if(!box)return;
+  if(total()!==100){box.innerHTML='<div class="pf-wait">כשהחלוקה תגיע ל-100%, יופיע כאן איך התיק כולו היה מתנהג, ואיפה הכסף שלך יושב בפועל.</div>';return}
+  var r=pfSeries(),h='<h3 class="pf-h">מה בנית</h3>';
+  if(r.use.length&&r.pts.length>24){
+    var vals=r.pts.map(function(p){return p.v}),cg=cagrOf(vals),dd=ddOf(vals);
+    h+='<div class="mini-tiles pf-tiles"><div class="tile"><span>התיק שלך, ממוצע לשנה</span><b class="tabular">'+pct(cg)+'</b><span>מאז '+hdate(r.start)+'</span></div>'+
+      '<div class="tile neg"><span>הנפילה הכי גדולה של התיק</span><b class="tabular">'+pct(dd,0)+'</b><span>לפי סגירות חודשיות</span></div>'+
+      '<div class="tile"><span>'+moneyC("ils",10000)+' שהושקעו אז</span><b class="tabular">'+moneyC("ils",vals[vals.length-1])+'</b><span>היו שווים היום</span></div></div>';
+    if(r.use.length>1)h+='<div class="tblwrap" tabindex="0" role="region" aria-label="התיק מול כל מדד לבד"><table class="pf-cmp"><caption class="sr">התיק מול כל מדד לבד, באותה תקופה</caption><tr><th scope="col"></th><th scope="col">ממוצע לשנה</th><th scope="col">הנפילה הכי גדולה</th></tr>'+
+      '<tr class="pf-me"><th scope="row">התיק שלך</th><td class="tabular">'+pct(cg)+'</td><td class="tabular">'+pct(dd,0)+'</td></tr>'+
+      r.use.map(function(id,k){return'<tr><th scope="row">'+esc(idx(id).name)+' לבד</th><td class="tabular">'+pct(cagrOf(r.S[k]))+'</td><td class="tabular">'+pct(ddOf(r.S[k]),0)+'</td></tr>'}).join("")+'</table></div>';
+    h+='<div class="chart-ttl">כמה היו שווים '+moneyC("ils",10000)+' בתיק שלך</div><div class="chart-box" id="pfLine"></div>';
+    h+='<p class="upd">בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. החישוב מניח שבסוף כל שנה מחזירים את התיק לאחוזים שבחרת.'+(r.use.some(function(id){return idx(id).metrics.series.start!==r.start})?' ההיסטוריה המשותפת מתחילה ב-'+hdate(r.start)+', כי זה המדד הכי צעיר שבחרת.':"")+(r.skip.length?' בלי '+r.skip.map(function(id){return esc(idx(id).name)}).join(", ")+': אין לו היסטוריה מאומתת, ולכן החישוב מחלק את התיק בין שאר המדדים לפי אותם יחסים.':"")+' תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
+  }else h+='<div class="na-box">'+(r.use.length?'ההיסטוריה המשותפת של המדדים שבחרת קצרה מדי כדי להציג גרף.':'למדדים שבחרת אין עדיין היסטוריה מאומתת, ולכן אין גרף של התיק.')+'</div>';
+  var ex=exposure(),bl=function(l){var mx=Math.max.apply(null,l.map(function(x){return x[1]}));return bars(l,100/mx)};
+  h+='<div class="splits pf-ex">';
+  h+='<div><h4>לפי מדינות</h4>'+(ex.c.length?bl(ex.c):"")+(ex.unkC>=0.5?'<p class="fsub">'+Math.round(ex.unkC)+'% מהתיק במדדים שלא מפרסמים פילוח לפי מדינות</p>':"")+'</div>';
+  h+='<div><h4>לפי ענפים</h4>'+(ex.s.length?bl(ex.s):"")+(ex.unkS>=0.5?'<p class="fsub">'+Math.round(ex.unkS)+'% מהתיק במדדים בלי פילוח לפי ענפים</p>':"")+'</div></div>';
+  if(ex.co.length){h+='<div class="pf-co"><h4>החברות הגדולות בתיק שלך</h4>'+bl(ex.co)+'<p class="fsub">לפי 10 ההחזקות הגדולות של כל מדד, ולכן זה מינימום: בפועל החלק של כל חברה יכול להיות קצת יותר גבוה.</p>';
+    if(ex.co[0][1]>=4)h+='<div class="explain">כ-'+ex.co[0][1].toFixed(1)+'% מהתיק שלך הולך ל-'+esc(ex.co[0][0])+' לבד, כי היא נמצאת בכמה מהמדדים שבחרת.</div>';
+    h+='</div>';}
+  box.innerHTML=h;
+  var lb=$("#pfLine");if(lb&&r.pts&&r.pts.length>24)lineChart(lb,r.pts,"ils");
 }
 function renderOverlap(){
   var w=[];
@@ -790,14 +869,15 @@ function visibleFunds(id){var F=fundsFor(id);if(!st.taseOnly)return F;var o={};
   ["il","mf","ie"].forEach(function(w){var l=(F[w]||[]).filter(function(f){return w!=="ie"||f.tase_id});if(l.length)o[w]=l});return o}
 function renderFunds(){
   $("#taseOnly").checked=st.taseOnly;
-  $("#fundCards").innerHTML=st.sel.map(function(id){
+  var nav='<nav class="fnav" aria-label="המדדים שבחרת"><span class="fnav-t">לכל מדד בוחרים קרן אחת:</span>'+st.sel.map(function(id){var ok=!!pickedFund(id);return '<button type="button" class="fnav-b'+(ok?" ok":"")+'" data-jump="'+id+'">'+(ok?"✓ ":"")+esc(idx(id).name)+'</button>'}).join("")+'</nav>';
+  $("#fundCards").innerHTML=nav+st.sel.map(function(id,pos){
     var x=idx(id),F=visibleFunds(id),ws=["il","mf","us","ie"].filter(function(k){return F[k]});
     if(!ws.length)return '<div class="card"><span class="sec-lbl">'+esc(x.name)+' · '+st.alloc[id]+'% מהתיק</span><div class="na-box">'+(st.taseOnly&&Object.keys(fundsFor(id)).length?'למדד הזה אין קרן שאומתה ונסחרת בתל אביב. אפשר לבטל למעלה את הסימון "רק קרנות שקונים בחשבון ישראלי" ולראות קרנות שנסחרות בחו"ל.':'עדיין אין למדד הזה קרן שאומתה בשני מקורות. אפשר לחזור לשלב 2 ולהעביר את האחוזים למדד אחר.')+'</div></div>';
     if(!st.wrap[id]||!F[st.wrap[id]])st.wrap[id]=(st.pick[id]&&F[st.pick[id].w])?st.pick[id].w:ws[0];
     var w=st.wrap[id],list=F[w];
     var minTer=Math.min.apply(null,list.map(function(f){return f.ter}));
     var foreign=x.cat!=="il"&&id!=="gov"&&id!=="tb";
-    var h='<div class="card"><span class="sec-lbl">'+esc(x.name)+' · <span class="tabular">'+st.alloc[id]+'%</span> מהתיק</span>';
+    var h='<div class="card" id="fc_'+id+'"><span class="sec-lbl">'+esc(x.name)+' · <span class="tabular">'+st.alloc[id]+'%</span> מהתיק</span>';
     h+='<div class="tabs" role="tablist" aria-label="סוג קרן">'+ws.map(function(k){return '<button type="button" role="tab" class="tab'+(k===w?" on":"")+'" aria-selected="'+(k===w)+'" data-i="'+id+'" data-w="'+k+'">'+WRAPS[k]+' <span class="tabular">('+F[k].length+')</span></button>'}).join("")+'</div>';
     h+='<div class="wrapper-note">'+NOTES[w]+'</div>';
     h+='<div class="tblwrap"><table class="ftable"><caption class="sr">קרנות על '+esc(x.name)+', '+WRAPS[w]+'</caption><tr class="fhead"><th scope="col"><span class="sr">בחירה</span></th><th scope="col">קרן</th><th scope="col">'+idLabel(w)+'</th><th scope="col">דמי ניהול</th><th scope="col">דיבידנד</th><th scope="col">מס דיבידנד בקרן</th><th scope="col">עקיבה</th>'+((w==="il"||w==="mf")&&foreign?'<th scope="col">מט"ח</th>':"")+'<th scope="col">היקף</th></tr>';
@@ -807,7 +887,7 @@ function renderFunds(){
       var lst=(f.listings||[]).slice(0,2).map(function(l){return '<bdi>'+esc(l.ticker)+' · '+l.ex+' · '+l.cur+'</bdi>'}).join(" | ");
       return '<tr class="fund-row'+(on?" pick":"")+'" data-i="'+id+'" data-w="'+w+'" data-f="'+esc(f.id)+'"><td class="rcell"><input type="radio" name="'+nm+'" id="'+nm+'_'+esc(f.id)+'" '+(on?"checked":"")+' aria-label="בחירת '+esc(f.name)+'"></td>'+
         '<td class="fcell"><label class="fname" for="'+nm+'_'+esc(f.id)+'">'+esc(f.name)+'</label>'+(f.ter===minTer&&list.length>1?'<span class="badge low">דמי הניהול הנמוכים ברשימה</span>':"")+(f.kosher?'<span class="badge">כשרה</span>':"")+
-        (sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+'</td>'+
+        (sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+(f.official_url?'<a class="flink" href="'+esc(f.official_url)+'" target="_blank" rel="noopener">לדף הקרן ↗</a>':"")+'</td>'+
         '<td data-label="'+idLabel(w)+'">'+idCell(f)+'</td><td data-label="דמי ניהול"><div>'+feeTxt(f)+'</div></td><td data-label="דיבידנד">'+(f.dist==="acc"?"צוברת":"מחלקת")+(f.dist_single?'<div class="fsub">לפי מקור אחד</div>':"")+'</td><td data-label="מס דיבידנד בקרן" class="tabular">'+whTxt(f)+'</td><td data-label="עקיבה"><div>'+repTxt(f)+'</div></td>'+
         ((w==="il"||w==="mf")&&foreign?'<td data-label="מט&quot;ח">'+(f.hedged===true?"מגודרת":f.hedged===false?"חשופה":"-")+'</td>':"")+
         '<td data-label="היקף"><div>'+aumTxt(f)+'</div></td></tr>';
@@ -816,9 +896,12 @@ function renderFunds(){
     if(w==="us")h+='<div class="insight warn">⚠️ מס עיזבון אמריקאי: למי שאינו אזרח או תושב ארה"ב ומחזיק בנכסים אמריקאיים (כולל קרנות אמריקאיות) מעל 60 אלף דולר, היורשים עלולים לשלם מס עיזבון בארה"ב, בשיעור שמגיע עד 40%. בקרן אירית או ישראלית זה לא חל.</div>';
     if(w==="il"||w==="mf")h+='<div class="insight soft">💡 קרן עם דמי ניהול 0% נשמעת מושלמת, אבל מנהל הקרן יכול להעלות אותם בהמשך, וזה כבר קרה בעבר. אחרי כמה שנים קשה לעבור לקרן אחרת, כי מכירה עם רווח פירושה 25% מס רווח הון.</div>';
     if(list.some(function(f){return f.synthetic}))h+='<div class="insight">קרן סינתטית מקבלת את התשואה של המדד דרך הסכם עם בנק (swap), בלי להחזיק בעצמה את המניות. לא מצאנו מקור רשמי לשיעור המס על הדיבידנדים בדרך הזו.</div>';
-    h+='<p class="upd">כל קרן נבדקה בשני מקורות לפחות, בדיקה אחרונה: '+hdate(list[0].verified_at)+' · '+list.map(function(f){return f.official_url?'<a href="'+esc(f.official_url)+'" target="_blank" rel="noopener"><bdi>'+esc(f.id)+'</bdi> ↗</a>':""}).filter(Boolean).join(" · ")+' · כדאי לבדוק את המחיר העדכני לפני קנייה</p></div>';
+    h+='<p class="upd">כל קרן נבדקה בשני מקורות לפחות, בדיקה אחרונה: '+hdate(list[0].verified_at)+'. לכל קרן יש קישור לדף שלה, כדי לבדוק בעצמך לפני קנייה.</p>';
+    var nxt=st.sel[pos+1];if(nxt)h+='<div class="next-row"><button type="button" class="btn ghost" data-jump="'+nxt+'">למדד הבא: '+esc(idx(nxt).name)+' ↓</button></div>';
+    return h+'</div>';
     return h;
   }).join("");
+  $$("#fundCards [data-jump]").forEach(function(b){b.onclick=function(){var c=$("#fc_"+b.dataset.jump);if(c){c.scrollIntoView({behavior:"smooth",block:"start"});var t=c.querySelector(".tab.on,.tab");if(t)t.focus({preventScroll:true})}}});
   $$(".tab").forEach(function(t){t.onclick=function(){st.wrap[t.dataset.i]=t.dataset.w;renderFunds();var n=$('.tab[data-i="'+t.dataset.i+'"][data-w="'+t.dataset.w+'"]');if(n)n.focus()}});
   $$(".fund-row").forEach(function(r){var pick=function(){st.pick[r.dataset.i]={w:r.dataset.w,id:r.dataset.f};renderFunds();save();var el=document.getElementById("pk_"+r.dataset.i+"_"+r.dataset.f);if(el)el.focus()};r.onclick=function(e){if(e.target.tagName==="A")return;pick()};var inp=r.querySelector("input");inp.onchange=pick;inp.onclick=function(e){e.stopPropagation();pick()}});
   var n=st.sel.filter(function(id){return pickedFund(id)}).length;$("#pickCount").textContent="נבחרו "+n+" מתוך "+st.sel.length+" קרנות";$("#to4").disabled=!allPicked();updSteps();
@@ -868,6 +951,7 @@ function restore(){
 /* ---------- boot ---------- */
 $$(".steps button").forEach(function(b){b.onclick=function(){go(+b.dataset.s)}});
 $$("[data-go]").forEach(function(b){b.onclick=function(){go(+b.dataset.go)}});
+$$("[data-legal]").forEach(function(a){a.onclick=function(e){e.preventDefault();$("#legalFull").scrollIntoView({behavior:"smooth",block:"center"})}});
 fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
   if(!d||!d.indices||!d.funds)throw new Error("bad data");D=d;
   $("#dateFoot").innerHTML="הנתונים מעודכנים ל-"+hdate(D.updated)+" · תשואות נכונות לסוף "+hdate(D.metrics_as_of)+" · מתעדכנים אוטומטית כל רבעון, ורק אחרי בדיקה בשני מקורות";

@@ -322,7 +322,6 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
       </details>
       <div class="tase-only"><label><input type="checkbox" id="taseOnly" checked> רק קרנות שקונים בחשבון מסחר ישראלי בשקלים, לפי מספר נייר או מספר קרן</label>
         <div class="fsub">כשהסימון מבוטל מופיעות גם קרנות שנסחרות רק בחו"ל (בניו יורק או בלונדון), ואותן קונים דרך מסחר בחו"ל.</div></div>
-      <div class="assume"><label for="gross">"עלות אמיתית" מחושבת לפי תשואה שנתית משוערת של</label><div class="input-shell mini"><input id="gross" type="text" inputmode="decimal" aria-describedby="grossNote"><span class="unit" style="padding-inline:0 12px">%</span></div><span id="grossNote">לאורך 20 שנה. זו רק הנחה לצורך החישוב.</span></div>
     </div>
     <div id="fundCards"></div>
     <div class="card"><div class="bar-row" style="margin-top:0">
@@ -527,7 +526,7 @@ var NOTES={
   ie:"רשומה באירלנד. חלק מהקרנות האיריות נסחרות גם בבורסה בתל אביב בשקלים, ואז קונים אותן לפי מספר הנייר בדיוק כמו קרן ישראלית. קרן אירית שלא נסחרת בתל אביב קונים רק דרך מסחר בחו\"ל, לפי הטיקר בלונדון. על דיבידנדים מחברות אמריקאיות הקרן משלמת 15% במקום 25%, ויש גרסאות צוברות שלא מחלקות דיבידנד."
 };
 var P=["שנה","3 שנים","5 שנים","10 שנים","20 שנים"];
-var st={cat:"all",sel:[],alloc:{},pick:{},wrap:{},amt:0,gross:null,taseOnly:true};
+var st={cat:"all",sel:[],alloc:{},pick:{},wrap:{},amt:0,taseOnly:true};
 var detCur="ils",detPer=10,lastFocus=null;
 function $(s){return document.querySelector(s)}
 function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
@@ -773,11 +772,6 @@ $("#to3").onclick=function(){go(3)};
 $("#taseOnly").onchange=function(e){st.taseOnly=e.target.checked;renderFunds();save()};
 
 /* ---------- step 3 ---------- */
-function gross(){var g=st.gross==null?D.assumptions.gross_return_default:st.gross;return Math.max(0,Math.min(20,g))}
-function realCost(f,base){
-  if(f.drag==null)return null;var g=gross()/100,c=f.drag/100,n=D.assumptions.years;
-  return {pct:f.drag,nis:base*(Math.pow(1+g,n)-Math.pow(1+g-c,n))};
-}
 function feeTxt(f){return '<span class="tabular">'+f.ter.toFixed(2)+'%</span>'+(f.var_fee?'<div class="fsub">ועוד עד <span class="tabular">'+f.var_fee.toFixed(2)+'%</span> משתנים</div>':"")+(f.trustee?'<div class="fsub">ועוד <span class="tabular">'+f.trustee.toFixed(3).replace(/0$/,"")+'%</span> דמי נאמנות</div>':"")+(f.entry_load?'<div class="fsub">דמי הוספה <span class="tabular">'+f.entry_load+'%</span> בכל קנייה</div>':"")}
 function whTxt(f){if(f.wh===0)return "0%";if(f.wh!=null)return f.wh+"%";if(f.synthetic)return '<span class="fsub">לפי הסכם ההחלפה</span>';return '<span class="fsub">משתנה לפי מדינה</span>'}
 function aumTxt(f){if(!f.aum||!f.aum.value)return '<span class="fsub">אין נתון</span>';var v=f.aum.value,c=f.aum.cur==="ILS"?"₪":"$";return '<bdi>'+c+(v>=1e9?(v/1e9).toFixed(1)+" מיליארד":Math.round(v/1e6)+" מיליון")+'</bdi>'+(f.aum.two_sources?"":'<div class="fsub">לפי מקור אחד</div>')}
@@ -794,20 +788,19 @@ function visibleFunds(id){var F=fundsFor(id);if(!st.taseOnly)return F;var o={};
   ["il","mf","ie"].forEach(function(w){var l=(F[w]||[]).filter(function(f){return w!=="ie"||f.tase_id});if(l.length)o[w]=l});return o}
 function renderFunds(){
   $("#taseOnly").checked=st.taseOnly;
-  var gIn=$("#gross");if(document.activeElement!==gIn)gIn.value=gross();
   $("#fundCards").innerHTML=st.sel.map(function(id){
     var x=idx(id),F=visibleFunds(id),ws=["il","mf","us","ie"].filter(function(k){return F[k]});
     if(!ws.length)return '<div class="card"><span class="sec-lbl">'+esc(x.name)+' · '+st.alloc[id]+'% מהתיק</span><div class="na-box">'+(st.taseOnly&&Object.keys(fundsFor(id)).length?'למדד הזה אין קרן שאומתה ונסחרת בתל אביב. אפשר לבטל למעלה את הסימון "רק קרנות שקונים בחשבון ישראלי" ולראות קרנות שנסחרות בחו"ל.':'עדיין אין למדד הזה קרן שאומתה בשני מקורות. אפשר לחזור לשלב 2 ולהעביר את האחוזים למדד אחר.')+'</div></div>';
     if(!st.wrap[id]||!F[st.wrap[id]])st.wrap[id]=(st.pick[id]&&F[st.pick[id].w])?st.pick[id].w:ws[0];
-    var w=st.wrap[id],list=F[w],base=st.amt?st.amt*st.alloc[id]/100:D.assumptions.default_amount;
+    var w=st.wrap[id],list=F[w];
     var minTer=Math.min.apply(null,list.map(function(f){return f.ter}));
     var foreign=x.cat!=="il"&&id!=="gov"&&id!=="tb";
     var h='<div class="card"><span class="sec-lbl">'+esc(x.name)+' · <span class="tabular">'+st.alloc[id]+'%</span> מהתיק</span>';
     h+='<div class="tabs" role="tablist" aria-label="סוג קרן">'+ws.map(function(k){return '<button type="button" role="tab" class="tab'+(k===w?" on":"")+'" aria-selected="'+(k===w)+'" data-i="'+id+'" data-w="'+k+'">'+WRAPS[k]+' <span class="tabular">('+F[k].length+')</span></button>'}).join("")+'</div>';
     h+='<div class="wrapper-note">'+NOTES[w]+'</div>';
-    h+='<div class="tblwrap"><table class="ftable"><caption class="sr">קרנות על '+esc(x.name)+', '+WRAPS[w]+'</caption><tr class="fhead"><th scope="col"><span class="sr">בחירה</span></th><th scope="col">קרן</th><th scope="col">'+idLabel(w)+'</th><th scope="col">דמי ניהול</th><th scope="col">דיבידנד</th><th scope="col">מס דיבידנד בקרן</th><th scope="col">עקיבה</th>'+((w==="il"||w==="mf")&&foreign?'<th scope="col">מט"ח</th>':"")+'<th scope="col">היקף</th><th scope="col">עלות אמיתית</th></tr>';
+    h+='<div class="tblwrap"><table class="ftable"><caption class="sr">קרנות על '+esc(x.name)+', '+WRAPS[w]+'</caption><tr class="fhead"><th scope="col"><span class="sr">בחירה</span></th><th scope="col">קרן</th><th scope="col">'+idLabel(w)+'</th><th scope="col">דמי ניהול</th><th scope="col">דיבידנד</th><th scope="col">מס דיבידנד בקרן</th><th scope="col">עקיבה</th>'+((w==="il"||w==="mf")&&foreign?'<th scope="col">מט"ח</th>':"")+'<th scope="col">היקף</th></tr>';
     h+=list.map(function(f){
-      var on=st.pick[id]&&st.pick[id].w===w&&st.pick[id].id===f.id,rc=realCost(f,base),nm="pk_"+id;
+      var on=st.pick[id]&&st.pick[id].w===w&&st.pick[id].id===f.id,nm="pk_"+id;
       var sub=[f.issuer,f.tracks?("עוקבת אחרי "+f.tracks):null].filter(Boolean).map(esc).join(" · ");
       var lst=(f.listings||[]).slice(0,2).map(function(l){return '<bdi>'+esc(l.ticker)+' · '+l.ex+' · '+l.cur+'</bdi>'}).join(" | ");
       return '<tr class="fund-row'+(on?" pick":"")+'" data-i="'+id+'" data-w="'+w+'" data-f="'+esc(f.id)+'"><td class="rcell"><input type="radio" name="'+nm+'" id="'+nm+'_'+esc(f.id)+'" '+(on?"checked":"")+' aria-label="בחירת '+esc(f.name)+'"></td>'+
@@ -815,13 +808,12 @@ function renderFunds(){
         (sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+'</td>'+
         '<td data-label="'+idLabel(w)+'">'+idCell(f)+'</td><td data-label="דמי ניהול"><div>'+feeTxt(f)+'</div></td><td data-label="דיבידנד">'+(f.dist==="acc"?"צוברת":"מחלקת")+(f.dist_single?'<div class="fsub">לפי מקור אחד</div>':"")+'</td><td data-label="מס דיבידנד בקרן" class="tabular">'+whTxt(f)+'</td><td data-label="עקיבה"><div>'+repTxt(f)+'</div></td>'+
         ((w==="il"||w==="mf")&&foreign?'<td data-label="מט&quot;ח">'+(f.hedged===true?"מגודרת":f.hedged===false?"חשופה":"-")+'</td>':"")+
-        '<td data-label="היקף"><div>'+aumTxt(f)+'</div></td><td data-label="עלות אמיתית" class="cost"><div>'+(rc?'<span class="tabular">'+(f.drag_partial?"לפחות ":"~")+rc.pct.toFixed(2)+'%</span> בשנה<small>כ-'+nis(rc.nis)+' ב-20 שנה</small>':"-")+'</div></td></tr>';
+        '<td data-label="היקף"><div>'+aumTxt(f)+'</div></td></tr>';
     }).join("");
     h+='</table></div>';
     if(w==="us")h+='<div class="insight warn">⚠️ מס עיזבון אמריקאי: למי שאינו אזרח או תושב ארה"ב ומחזיק בנכסים אמריקאיים (כולל קרנות אמריקאיות) מעל 60 אלף דולר, היורשים עלולים לשלם מס עיזבון בארה"ב, בשיעור שמגיע עד 40%. בקרן אירית או ישראלית זה לא חל.</div>';
     if(w==="il"||w==="mf")h+='<div class="insight soft">💡 קרן עם דמי ניהול 0% נשמעת מושלמת, אבל מנהל הקרן יכול להעלות אותם בהמשך, וזה כבר קרה בעבר. אחרי כמה שנים קשה לעבור לקרן אחרת, כי מכירה עם רווח פירושה 25% מס רווח הון.</div>';
-    if(list.some(function(f){return f.synthetic}))h+='<div class="insight">קרן סינתטית מקבלת את התשואה של המדד דרך הסכם עם בנק (swap), בלי להחזיק בעצמה את המניות. לא מצאנו מקור רשמי לשיעור המס על הדיבידנדים בדרך הזו, ולכן העלות האמיתית שלה מוצגת כ"לפחות".</div>';
-    h+='<div class="insight">"עלות אמיתית" = דמי הניהול (כולל דמי נאמנות) ועוד המס שהולך לאיבוד על הדיבידנדים בדרך, מחושב על '+nis(base)+' לאורך 20 שנה. '+(x.us_based?"החישוב מניח שכל הדיבידנדים ממוסים כמו דיבידנד מחברה אמריקאית, וזה הכי מדויק במדדים שרובם בארה\"ב. ":"במדד הזה המס על דיבידנדים משתנה לפי מדינה, ולכן החישוב כולל רק את מה שידוע בוודאות. ")+'זו הערכה בלבד.</div>';
+    if(list.some(function(f){return f.synthetic}))h+='<div class="insight">קרן סינתטית מקבלת את התשואה של המדד דרך הסכם עם בנק (swap), בלי להחזיק בעצמה את המניות. לא מצאנו מקור רשמי לשיעור המס על הדיבידנדים בדרך הזו.</div>';
     h+='<p class="upd">כל קרן נבדקה בשני מקורות לפחות, בדיקה אחרונה: '+hdate(list[0].verified_at)+' · '+list.map(function(f){return f.official_url?'<a href="'+esc(f.official_url)+'" target="_blank" rel="noopener"><bdi>'+esc(f.id)+'</bdi> ↗</a>':""}).filter(Boolean).join(" · ")+' · כדאי לבדוק את המחיר העדכני לפני קנייה</p></div>';
     return h;
   }).join("");
@@ -831,7 +823,6 @@ function renderFunds(){
 }
 function pickedFund(id){var p=st.pick[id];return p?fundById(id,p.w,p.id):null}
 function allPicked(){return st.sel.length>0&&st.sel.every(function(id){return pickedFund(id)})}
-$("#gross").addEventListener("input",function(e){var v=parseFloat(e.target.value.replace(",","."));st.gross=isNaN(v)?null:v;renderFunds();save()});
 $("#to4").onclick=function(){go(4)};
 
 /* ---------- step 4 ---------- */
@@ -859,7 +850,7 @@ $("#saveBtn").onclick=function(){save();copyText(location.href,$("#saveBtn"),"�
 function save(){
   var h="s="+st.sel.join(",")+"&a="+st.sel.map(function(id){return st.alloc[id]==null?"":st.alloc[id]}).join(",")+
     "&p="+st.sel.map(function(id){var p=st.pick[id];return p?p.w+"~"+p.id:""}).join(",");
-  if(st.amt)h+="&m="+st.amt;if(st.gross!=null)h+="&g="+st.gross;if(!st.taseOnly)h+="&x=0";
+  if(st.amt)h+="&m="+st.amt;if(!st.taseOnly)h+="&x=0";
   try{history.replaceState(null,"","#"+h)}catch(e){}
 }
 function restore(){
@@ -868,7 +859,7 @@ function restore(){
   var all=q.s.split(",");
   all.forEach(function(id,i){if(!idx(id))return;st.sel.push(id);if(a[i]!==""&&a[i]!=null&&!isNaN(+a[i]))st.alloc[id]=Math.max(0,Math.min(100,+a[i]));var pp=(p[i]||"").split("~");if(pp.length===2&&fundById(id,pp[0],pp[1]))st.pick[id]={w:pp[0],id:pp[1]}});
   if(q.x==="0")st.taseOnly=false;
-  if(q.m&&!isNaN(+q.m))st.amt=Math.min(+q.m,1e9);if(q.g&&!isNaN(+q.g))st.gross=+q.g;
+  if(q.m&&!isNaN(+q.m))st.amt=Math.min(+q.m,1e9);
   return ids.length;
 }
 

@@ -514,8 +514,9 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
 (function(){
 "use strict";
 var D=null;
-var CATS=[["all","הכל"],["world","מניות: עולם, ארה\"ב ואירופה"],["il","מניות: ישראל"],["em","מניות: שווקים מתעוררים"],["bond","אג\"ח"]];
-var GROUPS=[{k:"stock",t:"מדדי מניות",p:"מניות הן חלק קטן מהבעלות על חברות. לאורך שנים רבות זה המקום שבו הכסף גדל הכי הרבה, ובדרך יש גם ירידות חדות.",has:function(c){return c!=="bond"}},
+var CATS=[["all","הכל"],["world","מניות: עולם, ארה\"ב ואירופה"],["theme","ענפים ונושאים"],["il","מניות: ישראל"],["em","מניות: שווקים מתעוררים"],["bond","אג\"ח"]];
+var GROUPS=[{k:"stock",t:"מדדי מניות",p:"מניות הן חלק קטן מהבעלות על חברות. לאורך שנים רבות זה המקום שבו הכסף גדל הכי הרבה, ובדרך יש גם ירידות חדות.",has:function(c){return c!=="bond"&&c!=="theme"}},
+  {k:"theme",t:"מדדי ענפים ונושאים",p:"כל מדד כאן מרוכז בענף אחד או בנושא אחד. זה פחות פיזור ממדד רחב: כשהענף נופל, אין חלקים אחרים במדד שמרככים את הנפילה. בדרך כלל משתמשים בהם כתוספת קטנה ליד מדד רחב, ולא במקומו.",has:function(c){return c==="theme"}},
   {k:"bond",t:"מדדי אג\"ח",p:"אג\"ח הן הלוואות למדינות ולחברות, שמחזירות ריבית. בדרך כלל הן עולות ויורדות פחות ממניות, ולכן מוסיפים אותן לתיק כדי לרכך את הטלטלות.",has:function(c){return c==="bond"}}];
 var COLORS=["#3e5448","#5f7d6a","#8fae98","#bcd3bf","#2f4036","#b7791f","#7d9c88","#a7c1ad","#4f6b5b","#d1a35c","#6e8f7a","#9bb5a2"];
 var WRAPS={il:"קרן סל ישראלית",mf:"קרן מחקה",us:"קרן סל אמריקאית",ie:"קרן סל אירית"};
@@ -567,12 +568,13 @@ function renderIdx(){
   updSteps();
 }
 function cardHtml(x){
-    var on=st.sel.indexOf(x.id)>=0,r=ret10(x);
+    var on=st.sel.indexOf(x.id)>=0,r=ret10(x),yrs=10;
+    if(r==null&&x.metrics&&x.metrics.ret.ils[2]!=null){r=x.metrics.ret.ils[2];yrs=5}
     return '<div class="idx'+(on?" sel":"")+'" data-id="'+x.id+'">'+
       '<button type="button" class="check" role="checkbox" aria-checked="'+on+'" aria-label="בחירת '+esc(x.name)+'"><span aria-hidden="true">'+(on?"✓":"")+'</span></button><h3>'+esc(x.name)+'</h3><div class="what">'+esc(x.short)+'</div>'+
       '<div class="facts"><div class="fact"><b class="tabular">'+esc(x.n||"-")+'</b><span>ניירות</span></div><div class="fact"><b>'+esc(x.geo)+'</b><span>פיזור</span></div>'+
-      '<div class="fact">'+(r!=null?'<b class="tabular">'+pct(r)+'</b><span>ממוצע לשנה, 10 שנים</span>':'<b class="na">אין עדיין נתון מאומת</b><span>תשואה</span>')+'</div></div>'+
-      (x.metrics?sparkline(x.metrics)+(x.metrics.proxy?'<span class="proxy-tag">לפי מדד קרוב: '+esc(x.metrics.proxy.name)+'</span>':'')+volBar(x.metrics.vol_bar)+'<div class="sharpe-mini">מדד שארפ (10 שנים): <b class="tabular">'+x.metrics.sharpe10.toFixed(2)+'</b></div>':"")+
+      '<div class="fact">'+(r!=null?'<b class="tabular">'+pct(r)+'</b><span>ממוצע לשנה, '+yrs+' שנים</span>':'<b class="na">אין עדיין נתון מאומת</b><span>תשואה</span>')+'</div></div>'+
+      (x.metrics?sparkline(x.metrics)+(x.metrics.proxy?'<span class="proxy-tag">לפי מדד קרוב: '+esc(x.metrics.proxy.name)+'</span>':'')+volBar(x.metrics.vol_bar)+(x.metrics.sharpe10!=null?'<div class="sharpe-mini">מדד שארפ (10 שנים): <b class="tabular">'+x.metrics.sharpe10.toFixed(2)+'</b></div>':'<div class="sharpe-mini">עדיין אין 10 שנות היסטוריה</div>'):"")+
       '<button type="button" class="more" data-more="'+x.id+'">מידע מלא על המדד</button></div>';
 }
 function toggleSel(id){var i=st.sel.indexOf(id);if(i>=0){st.sel.splice(i,1);delete st.alloc[id];delete st.pick[id]}else st.sel.push(id);var a=document.activeElement,keep=a&&a.classList&&a.classList.contains("check");renderIdx();save();if(keep){var el=$('.idx[data-id="'+id+'"] .check');if(el)el.focus()}}
@@ -584,7 +586,7 @@ function renderCmp(){
   h+='<tr><th scope="row">מספר ניירות</th>'+rows.map(function(r){return '<td class="tabular">'+esc(r.n||"-")+'</td>'}).join("")+'</tr>';
   h+='<tr><th scope="row">פיזור</th>'+rows.map(function(r){return '<td>'+esc(r.geo)+'</td>'}).join("")+'</tr>';
   [0,1,2,3,4].forEach(function(k){h+='<tr><th scope="row">תשואה '+P[k]+(k?" (ממוצע לשנה)":"")+', ₪</th>'+rows.map(function(r){return cell(r.metrics?pct(r.metrics.ret.ils[k]):null)}).join("")+'</tr>'});
-  h+='<tr><th scope="row">מדד שארפ (10 ש\')</th>'+rows.map(function(r){return cell(r.metrics?r.metrics.sharpe10.toFixed(2):null)}).join("")+'</tr>';
+  h+='<tr><th scope="row">מדד שארפ (10 ש\')</th>'+rows.map(function(r){return cell(r.metrics&&r.metrics.sharpe10!=null?r.metrics.sharpe10.toFixed(2):null)}).join("")+'</tr>';
   h+='<tr><th scope="row">הנפילה הכי גדולה</th>'+rows.map(function(r){return cell(r.metrics?pct(r.metrics.dd.ils.pct,0):null)}).join("")+'</tr>';
   h+='<tr><th scope="row">מי מנהל</th>'+rows.map(function(r){return '<td>'+esc(r.provider)+'</td>'}).join("")+'</tr></table></div>';
   var px=rows.filter(function(r){return r.metrics&&r.metrics.proxy});
@@ -603,7 +605,7 @@ function startIdx(m){var n=m.series[detCur].length;return detPer?Math.max(0,n-1-
 function sparkline(m){
   var a=m.series.ils,n=a.length,st0=Math.max(0,n-121),v=a.slice(st0),lo=Math.min.apply(null,v),hi=Math.max.apply(null,v);
   var d=v.map(function(x,i){return(i?"L":"M")+(i/(v.length-1)*100).toFixed(2)+","+(30-(x-lo)/(hi-lo)*28-1).toFixed(2)}).join("");
-  return '<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path d="'+d+'L100,30L0,30Z" fill="rgba(95,125,106,.12)"/><path d="'+d+'" fill="none" stroke="#5f7d6a" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><div class="spark-lbl">10 השנים האחרונות, בשקלים</div>';
+  return '<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path d="'+d+'L100,30L0,30Z" fill="rgba(95,125,106,.12)"/><path d="'+d+'" fill="none" stroke="#5f7d6a" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><div class="spark-lbl">'+(n>121?"10 השנים האחרונות":"מאז "+hdate(m.since))+', בשקלים</div>';
 }
 function svgEl(W,H,label){return '<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" direction="ltr" role="img" tabindex="0" aria-label="'+esc(label)+'">'}
 function tipAt(box,x,y,html,W){var t=box.querySelector(".tip");t.innerHTML=html;t.hidden=false;var tw=t.offsetWidth;var left=x+14+tw>W?x-14-tw:x+14;t.style.left=Math.max(0,left)+"px";t.style.top=Math.max(0,y-t.offsetHeight/2)+"px"}
@@ -696,7 +698,7 @@ function openDetail(id,opener){
     s+='<div class="explain">איך קוראים את זה? <bdi class="tabular">'+pct(r[r5])+'</bdi>'+(r5?' "בממוצע בכל שנה" ב-'+P[r5]+' אומר שהשקעה של '+money(10000)+' לפני '+P[r5]+' שווה היום בערך '+money(10000*Math.pow(1+r[r5],YR[r5]))+'. זה ממוצע: בפועל היו שנים עם עלייה גדולה ושנים עם ירידה, והגרפים למטה מראים אותן אחת אחת.':' בשנה האחרונה אומר ש-'+money(10000)+' הפכו ל-'+money(10000*(1+r[0]))+'.')+'</div>';
     s+='<p class="upd">כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(detCur==="ils"?"בשקלים: לפי השער היציג של בנק ישראל בסוף כל חודש. ":"")+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p></div>';
     var nAll=m.series[detCur].length;
-    s+='<div class="dsec"><h3>העליות והירידות לאורך השנים</h3><div><div class="seg" role="group" aria-label="תקופה">'+[[5,"5 שנים"],[10,"10 שנים"],[20,"20 שנים"],[0,"מאז "+hdate(m.since)]].filter(function(o){return !o[0]||nAll-1>=o[0]*12}).map(function(o){return '<button type="button" data-p="'+o[0]+'" class="'+(detPer===o[0]?"on":"")+'" aria-pressed="'+(detPer===o[0])+'">'+o[1]+'</button>'}).join("")+'</div></div>'+
+    s+='<div class="dsec"><h3>העליות והירידות לאורך השנים</h3><div><div class="seg" role="group" aria-label="תקופה">'+[[5,"5 שנים"],[10,"10 שנים"],[20,"20 שנים"],[0,"מאז "+hdate(m.since)]].filter(function(o){return !o[0]||nAll-1>=o[0]*12}).map(function(o){var on=detPer===o[0]||(o[0]===0&&detPer&&nAll-1<detPer*12);return '<button type="button" data-p="'+o[0]+'" class="'+(on?"on":"")+'" aria-pressed="'+on+'">'+o[1]+'</button>'}).join("")+'</div></div>'+
       '<div class="chart-ttl">כמה היו שווים '+money(10000)+' לאורך הדרך</div><div class="chart-sub">הקו המקווקו הוא הסכום שהושקע. מעבירים את העכבר או האצבע על הגרף כדי לראות כל חודש.</div><div class="chart-box" id="lineBox" data-id="'+id+'"></div>'+
       '<div class="chart-ttl">התשואה בכל שנה</div><div class="chart-sub">ירוק מעל הקו: שנה של עלייה. אדום מתחת לקו: שנה של ירידה.'+(monthAt(m.series.start,nAll-1).slice(5)!=="12"?' * השנה הנוכחית עד סוף החודש האחרון.':'')+'</div><div class="chart-box" id="barBox" data-id="'+id+'"></div>'+
       '<details class="yr-tbl"><summary>התשואה בכל שנה בטבלה</summary><div id="yrTbl"></div></details></div>';
@@ -709,7 +711,7 @@ function openDetail(id,opener){
       '<div class="explain">השאלה החשובה כאן: האם אפשר להמשיך להחזיק בו כשהוא יורד בחצי. מכירה בזמן נפילה הופכת ירידה זמנית להפסד אמיתי.</div></div>';
   }else s+='<div class="na-box">אין עדיין נתון מאומת על התשואות של המדד הזה. ההיסטוריה שלו לא מתפרסמת בחינם אצל '+esc(x.provider)+', ואנחנו מציגים רק מספרים שנבדקו מול מקור רשמי. כשיהיה מקור כזה, התשואות והגרף יופיעו כאן.</div></div>';
   if(h)s+='<div class="dsec"><h3>איפה הכסף יושב</h3><div class="splits"><div><h4>לפי ענפים</h4>'+bars(h.sectors.slice(0,8),2)+'</div><div><h4>לפי מדינות</h4>'+(h.countries?bars(h.countries,1):'<p class="muted">לא מפורסם</p>')+'</div></div><p class="upd">נכון ל-'+esc(h.as_of)+'.</p></div>';
-  if(m){var pos=Math.max(3,Math.min(97,m.sharpe10/1.5*100));
+  if(m&&m.sharpe10!=null){var pos=Math.max(3,Math.min(97,m.sharpe10/1.5*100));
     s+='<div class="dsec"><h3>מדד שארפ: האם התשואה שווה את הסיכון?</h3><div class="gauge" role="img" aria-label="מדד שארפ '+m.sharpe10.toFixed(2)+'"><span class="pin tabular" style="right:'+pos+'%">'+m.sharpe10.toFixed(2)+'</span></div>'+
       '<div class="gscale" aria-hidden="true"><span>פחות משתלם</span><span>סביר</span><span>טוב</span><span>מצוין</span></div>'+
       '<div class="explain">מדד שארפ בודק כמה תשואה המדד נתן על כל "יחידה" של תנודתיות, מעבר למה שהייתה נותנת ריבית בנק ישראל. ככל שהמספר גבוה יותר, המדד נתן יותר תשואה על כל טלטלה. בערך: מתחת ל-0.5 פחות משתלם, 0.5 עד 1 סביר, מעל 1 טוב. מחושב בשקלים על 10 השנים האחרונות.</div></div>'}
@@ -773,7 +775,7 @@ $("#taseOnly").onchange=function(e){st.taseOnly=e.target.checked;renderFunds();s
 
 /* ---------- step 3 ---------- */
 function feeTxt(f){return '<span class="tabular">'+f.ter.toFixed(2)+'%</span>'+(f.var_fee?'<div class="fsub">ועוד עד <span class="tabular">'+f.var_fee.toFixed(2)+'%</span> משתנים</div>':"")+(f.trustee?'<div class="fsub">ועוד <span class="tabular">'+f.trustee.toFixed(3).replace(/0$/,"")+'%</span> דמי נאמנות</div>':"")+(f.entry_load?'<div class="fsub">דמי הוספה <span class="tabular">'+f.entry_load+'%</span> בכל קנייה</div>':"")}
-function whTxt(f){if(f.wh===0)return "0%";if(f.wh!=null)return f.wh+"%";if(f.synthetic)return '<span class="fsub">לפי הסכם ההחלפה</span>';return '<span class="fsub">משתנה לפי מדינה</span>'}
+function whTxt(f){if(f.wh_note)return '<span class="fsub">'+esc(f.wh_note)+'</span>';if(f.wh===0)return "0%";if(f.wh!=null)return f.wh+"%";if(f.synthetic)return '<span class="fsub">לפי הסכם ההחלפה</span>';return '<span class="fsub">משתנה לפי מדינה</span>'}
 function aumTxt(f){if(!f.aum||!f.aum.value)return '<span class="fsub">אין נתון</span>';var v=f.aum.value,c=f.aum.cur==="ILS"?"₪":"$";return '<bdi>'+c+(v>=1e9?(v/1e9).toFixed(1)+" מיליארד":Math.round(v/1e6)+" מיליון")+'</bdi>'+(f.aum.two_sources?"":'<div class="fsub">לפי מקור אחד</div>')}
 function repTxt(f){var t=f.replication==="physical"?"פיזית":f.synthetic?"סינתטית":null;if(!t)return '<span class="fsub">לא מפורסם</span>';return t+(f.replication_single?'<div class="fsub">לפי מקור אחד</div>':"")}
 function idLabel(w){return w==="il"?"מספר נייר":w==="mf"?"מספר קרן":w==="us"?"טיקר":"מספר לקנייה"}

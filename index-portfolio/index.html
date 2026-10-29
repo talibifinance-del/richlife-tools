@@ -19,7 +19,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
 body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(14px,3vw,40px) 16px 60px}
-.wrap{max-width:860px;margin:0 auto}
+.wrap{max-width:1360px;margin:0 auto}
 .tabular{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
 .brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:20px}
 .brand .avatar{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
@@ -45,7 +45,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
 .chip{border:1.5px solid rgba(var(--pine-rgb),.25);background:#fff;border-radius:100px;padding:6px 13px;font-family:var(--font);font-weight:800;font-size:13px;color:var(--pine-deep);cursor:pointer}
 .chip.on{background:var(--pine);border-color:var(--pine);color:#fff}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
 @media(max-width:620px){.grid{grid-template-columns:1fr}}
 .idx{background:var(--sage-tint);border-radius:16px;padding:14px;border:2px solid transparent;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
 .idx .check:focus-visible{outline:3px solid var(--pine-deep);outline-offset:2px}
@@ -161,7 +161,7 @@ input[type=range]{width:100%;accent-color:var(--pine)}
 .load-err{background:#fff4f1;border:2px solid var(--red);color:#9c3f2c;border-radius:16px;padding:18px;font-weight:800;text-align:center;line-height:1.6}
 /* drawer */
 .ov{position:fixed;inset:0;background:rgba(30,43,37,.45);z-index:50;display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:24px 12px}
-.drawer{background:#fff;border-radius:22px;max-width:740px;width:100%;padding:clamp(18px,3vw,28px);box-shadow:var(--shadow-hi);position:relative}
+.drawer{background:#fff;border-radius:22px;max-width:1080px;width:100%;padding:clamp(18px,3vw,28px);box-shadow:var(--shadow-hi);position:relative}
 .drawer .x{position:absolute;top:14px;left:14px;border:0;background:var(--sage-tint);width:36px;height:36px;border-radius:50%;font-size:17px;cursor:pointer;color:var(--pine-deep)}
 .drawer h2{font-size:24px;font-weight:900;color:var(--pine-darker);padding-left:40px}
 .drawer .prov{font-size:13px;font-weight:700;color:var(--pine);margin-bottom:6px}
@@ -191,6 +191,25 @@ input[type=range]{width:100%;accent-color:var(--pine)}
 .gauge .pin{position:absolute;top:-26px;transform:translateX(50%);font-weight:900;font-size:13px;color:var(--pine-darker);white-space:nowrap}
 .gauge .pin::after{content:"";position:absolute;top:20px;right:50%;transform:translateX(50%);width:4px;height:22px;background:var(--pine-darker);border-radius:2px}
 .gscale{display:flex;justify-content:space-between;font-size:11.5px;font-weight:800;color:var(--ink-soft)}
+.ret .tile em{display:block;font-style:normal;font-size:11px;font-weight:800;color:var(--pine-deep);margin-top:4px;border-top:1px solid rgba(var(--pine-rgb),.18);padding-top:4px}
+.proxy-note{background:#fbf7ec;border:1.5px solid rgba(183,121,31,.35);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;color:#6b4a14;line-height:1.55;margin-bottom:10px}
+.proxy-tag{display:inline-block;font-size:10.5px;font-weight:800;color:#6b4a14;background:#fbf7ec;border:1px solid rgba(183,121,31,.35);border-radius:100px;padding:1px 8px;margin-top:6px}
+.spark{display:block;width:100%;height:34px;margin-top:8px}
+.spark-lbl{font-size:10.5px;font-weight:800;color:var(--ink-soft);margin-top:2px}
+.chart-box{position:relative;margin-top:6px}
+.chart-box svg{display:block;width:100%;overflow:visible;touch-action:pan-y}
+.chart-box svg:focus-visible{outline:3px solid var(--pine-deep);outline-offset:3px;border-radius:6px}
+.chart-box .ax{font:700 11.5px var(--font);fill:#6b7a72}
+.chart-box .gl{stroke:rgba(var(--pine-rgb),.13);stroke-width:1}
+.chart-box .base{stroke:var(--ink-soft);stroke-width:1;stroke-dasharray:4 4}
+.chart-box .dl{font:800 11.5px var(--font);fill:var(--ink)}
+.tip{position:absolute;pointer-events:none;background:#fff;border:1px solid rgba(var(--pine-rgb),.25);box-shadow:0 8px 22px rgba(30,43,37,.16);border-radius:10px;padding:7px 10px;font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;line-height:1.5;z-index:2}
+.tip b{font-size:14px;font-weight:900;color:var(--pine-darker)}
+.tip .neg{color:var(--red)}
+.chart-ttl{font-size:13.5px;font-weight:900;color:var(--pine-darker);margin:14px 0 2px}
+.chart-sub{font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:4px}
+.yr-tbl{margin-top:8px}.yr-tbl summary{cursor:pointer;font-size:12.5px;font-weight:800;color:var(--pine-deep)}
+.yr-tbl table{max-width:360px;margin-top:6px}
 .explain{background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.6;margin-top:10px}
 .mini-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media(max-width:560px){.mini-tiles{grid-template-columns:1fr}}
@@ -479,7 +498,7 @@ var NOTES={
 };
 var P=["שנה","3 שנים","5 שנים","10 שנים","20 שנים"];
 var st={cat:"all",sel:[],alloc:{},pick:{},wrap:{},amt:0,gross:null};
-var detCur="ils",lastFocus=null;
+var detCur="ils",detPer=10,lastFocus=null;
 function $(s){return document.querySelector(s)}
 function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
@@ -514,8 +533,8 @@ function renderIdx(){
     return '<div class="idx'+(on?" sel":"")+'" data-id="'+x.id+'">'+
       '<button type="button" class="check" role="checkbox" aria-checked="'+on+'" aria-label="בחירת '+esc(x.name)+'"><span aria-hidden="true">'+(on?"✓":"")+'</span></button><h3>'+esc(x.name)+'</h3><div class="what">'+esc(x.short)+'</div>'+
       '<div class="facts"><div class="fact"><b class="tabular">'+esc(x.n||"-")+'</b><span>ניירות</span></div><div class="fact"><b>'+esc(x.geo)+'</b><span>פיזור</span></div>'+
-      '<div class="fact">'+(r!=null?'<b class="tabular">'+pct(r)+'</b><span>בשנה, 10 שנים (₪)</span>':'<b class="na">אין עדיין נתון מאומת</b><span>תשואה</span>')+'</div></div>'+
-      (x.metrics?volBar(x.metrics.vol_bar)+'<div class="sharpe-mini">מדד שארפ (10 שנים): <b class="tabular">'+x.metrics.sharpe10.toFixed(2)+'</b></div>':"")+
+      '<div class="fact">'+(r!=null?'<b class="tabular">'+pct(r)+'</b><span>ממוצע לשנה, 10 שנים</span>':'<b class="na">אין עדיין נתון מאומת</b><span>תשואה</span>')+'</div></div>'+
+      (x.metrics?sparkline(x.metrics)+(x.metrics.proxy?'<span class="proxy-tag">לפי מדד קרוב: '+esc(x.metrics.proxy.name)+'</span>':'')+volBar(x.metrics.vol_bar)+'<div class="sharpe-mini">מדד שארפ (10 שנים): <b class="tabular">'+x.metrics.sharpe10.toFixed(2)+'</b></div>':"")+
       '<button type="button" class="more" data-more="'+x.id+'">מידע מלא על המדד</button></div>';
   }).join("");
   $$(".more").forEach(function(b){b.onclick=function(e){e.stopPropagation();openDetail(b.dataset.more,b)}});
@@ -528,19 +547,103 @@ function toggleSel(id){var i=st.sel.indexOf(id);if(i>=0){st.sel.splice(i,1);dele
 function cell(v){return v==null?'<td class="muted">אין נתון</td>':'<td class="tabular">'+v+'</td>'}
 function renderCmp(){
   var rows=st.sel.map(idx);
-  var h='<div class="tblwrap"><table><caption class="sr">השוואה בין המדדים שסומנו</caption><tr><th scope="col"></th>'+rows.map(function(r){return '<th scope="col">'+esc(r.name)+'</th>'}).join("")+'</tr>';
+  var h='<div class="tblwrap" tabindex="0" role="region" aria-label="טבלת השוואה בין המדדים"><table><caption class="sr">השוואה בין המדדים שסומנו</caption><tr><th scope="col"></th>'+rows.map(function(r){return '<th scope="col">'+esc(r.name)+'</th>'}).join("")+'</tr>';
   h+='<tr><th scope="row">מה יש בו</th>'+rows.map(function(r){return '<td>'+esc(r.short)+'</td>'}).join("")+'</tr>';
   h+='<tr><th scope="row">מספר ניירות</th>'+rows.map(function(r){return '<td class="tabular">'+esc(r.n||"-")+'</td>'}).join("")+'</tr>';
   h+='<tr><th scope="row">פיזור</th>'+rows.map(function(r){return '<td>'+esc(r.geo)+'</td>'}).join("")+'</tr>';
-  [0,1,2,3,4].forEach(function(k){h+='<tr><th scope="row">תשואה '+P[k]+(k?" (לשנה)":"")+', ₪</th>'+rows.map(function(r){return cell(r.metrics?pct(r.metrics.ret.ils[k]):null)}).join("")+'</tr>'});
+  [0,1,2,3,4].forEach(function(k){h+='<tr><th scope="row">תשואה '+P[k]+(k?" (ממוצע לשנה)":"")+', ₪</th>'+rows.map(function(r){return cell(r.metrics?pct(r.metrics.ret.ils[k]):null)}).join("")+'</tr>'});
   h+='<tr><th scope="row">מדד שארפ (10 ש\')</th>'+rows.map(function(r){return cell(r.metrics?r.metrics.sharpe10.toFixed(2):null)}).join("")+'</tr>';
   h+='<tr><th scope="row">הנפילה הכי גדולה</th>'+rows.map(function(r){return cell(r.metrics?pct(r.metrics.dd.ils.pct,0):null)}).join("")+'</tr>';
   h+='<tr><th scope="row">מי מנהל</th>'+rows.map(function(r){return '<td>'+esc(r.provider)+'</td>'}).join("")+'</tr></table></div>';
-  h+='<p class="upd">תשואה בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
+  var px=rows.filter(function(r){return r.metrics&&r.metrics.proxy});
+  h+='<p class="upd">תשואה בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(px.length?px.map(function(r){return esc(r.name)+': לפי מדד קרוב, '+esc(r.metrics.proxy.name)}).join(". ")+'. ':'')+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
   $("#cmpBox").innerHTML=h;
 }
 $("#cmpBtn").onclick=function(){var b=$("#cmpBox");b.hidden=!b.hidden;if(!b.hidden)renderCmp()};
 $("#to2").onclick=function(){go(2)};
+
+/* ---------- charts ---------- */
+function pad2(n){return(n<10?"0":"")+n}
+function monthAt(start,i){var y=+start.slice(0,4),mo=+start.slice(5,7)-1+i;return(y+Math.floor(mo/12))+"-"+pad2(mo%12+1)}
+function money(v){return(detCur==="ils"?"₪":"$")+Math.round(v).toLocaleString("he-IL")}
+function niceStep(range,count){var raw=range/count,p=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10)),f=raw/p;return(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p}
+function startIdx(m){var n=m.series[detCur].length;return detPer?Math.max(0,n-1-detPer*12):0}
+function sparkline(m){
+  var a=m.series.ils,n=a.length,st0=Math.max(0,n-121),v=a.slice(st0),lo=Math.min.apply(null,v),hi=Math.max.apply(null,v);
+  var d=v.map(function(x,i){return(i?"L":"M")+(i/(v.length-1)*100).toFixed(2)+","+(30-(x-lo)/(hi-lo)*28-1).toFixed(2)}).join("");
+  return '<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path d="'+d+'L100,30L0,30Z" fill="rgba(95,125,106,.12)"/><path d="'+d+'" fill="none" stroke="#5f7d6a" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><div class="spark-lbl">10 השנים האחרונות, בשקלים</div>';
+}
+function svgEl(W,H,label){return '<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" direction="ltr" role="img" tabindex="0" aria-label="'+esc(label)+'">'}
+function tipAt(box,x,y,html,W){var t=box.querySelector(".tip");t.innerHTML=html;t.hidden=false;var tw=t.offsetWidth;var left=x+14+tw>W?x-14-tw:x+14;t.style.left=Math.max(0,left)+"px";t.style.top=Math.max(0,y-t.offsetHeight/2)+"px"}
+function drawLine(){
+  var box=$("#lineBox");if(!box)return;var m=idx(box.dataset.id).metrics,a=m.series[detCur],st0=startIdx(m),pts=[];
+  for(var i=st0;i<a.length;i++)pts.push({m:monthAt(m.series.start,i),v:a[i]/a[st0]*10000});
+  var W=Math.max(280,box.clientWidth),sm=W<520,H=sm?230:300,L=sm?58:72,R=12,T=14,B=26,pw=W-L-R,ph=H-T-B,n=pts.length;
+  var vals=pts.map(function(p){return p.v}),lo=Math.min(10000,Math.min.apply(null,vals)),hi=Math.max(10000,Math.max.apply(null,vals));
+  var step=niceStep(hi-lo,sm?3:4),y0=Math.floor(lo/step)*step,y1=Math.ceil(hi/step)*step;
+  function X(i){return L+i/(n-1)*pw}function Y(v){return T+(y1-v)/(y1-y0)*ph}
+  var peak=0,pk=0,dd=0,ddPk=0,ddTr=0,run=[];
+  pts.forEach(function(p,i){if(p.v>peak){peak=p.v;pk=i}var d=p.v/peak-1;run.push(d);if(d<dd){dd=d;ddPk=pk;ddTr=i}});
+  var g="";for(var v=y0;v<=y1+1e-6;v+=step){g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+money(v)+'</text>'}
+  var yrs=n/12,k=Math.max(1,Math.ceil(yrs/(sm?4:9)));
+  pts.forEach(function(p,i){var y=+p.m.slice(0,4);if(p.m.slice(5)==="01"&&y%k===0)g+='<text class="ax" x="'+X(i)+'" y="'+(H-6)+'" text-anchor="middle">'+y+'</text>'});
+  var d=pts.map(function(p,i){return(i?"L":"M")+X(i).toFixed(1)+","+Y(p.v).toFixed(1)}).join("");
+  var h=svgEl(W,H,"שווי "+money(10000)+" שהושקעו ב-"+hdate(pts[0].m)+", עד "+hdate(pts[n-1].m)+": "+money(pts[n-1].v)+". הנפילה הגדולה בתקופה: "+pct(dd,0))+g;
+  h+='<line class="base" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(10000)+'" y2="'+Y(10000)+'"/>';
+  h+='<path d="'+d+'L'+X(n-1)+','+(T+ph)+'L'+L+','+(T+ph)+'Z" fill="rgba(95,125,106,.10)"/><path d="'+d+'" fill="none" stroke="#5f7d6a" stroke-width="2" stroke-linejoin="round"/>';
+  if(dd<-0.05){var tx=X(ddTr),ty=Y(pts[ddTr].v);h+='<circle cx="'+tx+'" cy="'+ty+'" r="5" fill="#c1553f" stroke="#fff" stroke-width="2"/><text class="dl" x="'+(tx<W/2?tx+10:tx-10)+'" y="'+(ty+4)+'" text-anchor="'+(tx<W/2?"end":"start")+'" direction="rtl">הנפילה הגדולה: \u2066'+pct(dd,0)+'\u2069</text>'}
+  var ex=X(n-1),ey=Y(pts[n-1].v);h+='<circle cx="'+ex+'" cy="'+ey+'" r="4.5" fill="#5f7d6a" stroke="#fff" stroke-width="2"/>';
+  h+='<line class="cur" x1="0" x2="0" y1="'+T+'" y2="'+(T+ph)+'" stroke="#3e5448" stroke-width="1" visibility="hidden"/><circle class="cdot" r="5" fill="#3e5448" stroke="#fff" stroke-width="2" visibility="hidden"/>';
+  h+='<rect x="'+L+'" y="'+T+'" width="'+pw+'" height="'+ph+'" fill="transparent"/></svg><div class="tip" hidden></div>';
+  box.innerHTML=h;
+  var svg=box.querySelector("svg"),cur=svg.querySelector(".cur"),dot=svg.querySelector(".cdot"),at=n-1;
+  function show(i){at=Math.max(0,Math.min(n-1,i));var p=pts[at],x=X(at),y=Y(p.v),ch=p.v/10000-1;
+    cur.setAttribute("x1",x);cur.setAttribute("x2",x);cur.setAttribute("visibility","visible");dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("visibility","visible");
+    tipAt(box,x,y,'<div>'+hdate(p.m)+'</div><b class="tabular">'+money(p.v)+'</b><div>מההתחלה: <span class="tabular'+(ch<0?" neg":"")+'">'+pct(ch)+'</span></div>'+(run[at]<-0.005?'<div>מתחת לשיא: <span class="tabular neg">'+pct(run[at])+'</span></div>':'<div>בשיא</div>'),W)}
+  function hide(){cur.setAttribute("visibility","hidden");dot.setAttribute("visibility","hidden");box.querySelector(".tip").hidden=true}
+  function fromEvt(e){var r=svg.getBoundingClientRect();return Math.round(((e.clientX-r.left)*W/r.width-L)/pw*(n-1))}
+  svg.addEventListener("pointermove",function(e){show(fromEvt(e))});svg.addEventListener("pointerdown",function(e){show(fromEvt(e))});
+  svg.addEventListener("pointerleave",hide);svg.addEventListener("blur",hide);svg.addEventListener("focus",function(){show(at)});
+  svg.addEventListener("keydown",function(e){var s={ArrowLeft:-1,ArrowRight:1,PageDown:-12,PageUp:12}[e.key];if(s){e.preventDefault();show(at+s)}else if(e.key==="Home"){e.preventDefault();show(0)}else if(e.key==="End"){e.preventDefault();show(n-1)}});
+}
+function yearRets(m){
+  var s=m.series,a=s[detCur],n=a.length,st0=startIdx(m),out=[];
+  for(var i=st0+12;i<n;i++){var mo=monthAt(s.start,i);if(mo.slice(5)==="12")out.push({y:+mo.slice(0,4),r:a[i]/a[i-12]-1})}
+  var last=monthAt(s.start,n-1),lm=+last.slice(5);if(lm!==12&&n-1-lm>=st0)out.push({y:+last.slice(0,4),r:a[n-1]/a[n-1-lm]-1,ytd:lm});
+  return out;
+}
+function drawBars(){
+  var box=$("#barBox");if(!box)return;var m=idx(box.dataset.id).metrics,ys=yearRets(m),n=ys.length;if(!n){box.innerHTML="";return}
+  var W=Math.max(280,box.clientWidth),sm=W<520,H=sm?200:240,L=sm?44:52,R=12,T=22,B=26,pw=W-L-R,ph=H-T-B;
+  var lo=Math.min(0,Math.min.apply(null,ys.map(function(y){return y.r}))),hi=Math.max(0,Math.max.apply(null,ys.map(function(y){return y.r})));
+  var step=niceStep(hi-lo,sm?3:4),y0=Math.floor(lo/step)*step,y1=Math.ceil(hi/step)*step;
+  function Y(v){return T+(y1-v)/(y1-y0)*ph}
+  var slot=pw/n,bw=Math.min(30,Math.max(3,slot-2)),g="",best=0,worst=0;
+  ys.forEach(function(y,i){if(y.r>ys[best].r)best=i;if(y.r<ys[worst].r)worst=i});
+  for(var v=y0;v<=y1+1e-9;v+=step)g+='<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="ax" x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+Math.round(v*100)+'%</text>';
+  var k=Math.max(1,Math.ceil(n/(sm?6:14))),bars="",hits="";
+  ys.forEach(function(y,i){
+    var cx=L+slot*(i+.5),x=cx-bw/2,top=Y(Math.max(0,y.r)),bot=Y(Math.min(0,y.r)),h=Math.max(1,bot-top),rr=Math.min(4,bw/2,h),c=y.r<0?"#c1553f":"#5f7d6a";
+    var d=y.r>=0?"M"+x+","+bot+"V"+(top+rr)+"Q"+x+","+top+" "+(x+rr)+","+top+"H"+(x+bw-rr)+"Q"+(x+bw)+","+top+" "+(x+bw)+","+(top+rr)+"V"+bot+"Z"
+                :"M"+x+","+top+"V"+(bot-rr)+"Q"+x+","+bot+" "+(x+rr)+","+bot+"H"+(x+bw-rr)+"Q"+(x+bw)+","+bot+" "+(x+bw)+","+(bot-rr)+"V"+top+"Z";
+    bars+='<path d="'+d+'" fill="'+c+'"'+(y.ytd?' fill-opacity=".45"':'')+'/>';
+    if((i===best||i===worst)&&n>2)bars+='<text class="dl" x="'+cx+'" y="'+(y.r>=0?top-6:bot+14)+'" text-anchor="'+(cx>W-40?"end":cx<L+40?"start":"middle")+'">'+pct(y.r,0)+'</text>';
+    if((n-1-i)%k===0)g+='<text class="ax" x="'+cx+'" y="'+(H-6)+'" text-anchor="middle">'+(sm&&k>1?"'"+String(y.y).slice(2):y.y)+(y.ytd?"*":"")+'</text>';
+    hits+='<rect data-i="'+i+'" x="'+(L+slot*i)+'" y="'+T+'" width="'+slot+'" height="'+ph+'" fill="transparent"/>';
+  });
+  var up=ys.filter(function(y){return y.r>=0}).length;
+  box.innerHTML=svgEl(W,H,"תשואה בכל שנה: "+up+" שנים בעלייה ו-"+(n-up)+" בירידה. הכי טובה "+ys[best].y+" "+pct(ys[best].r,0)+", הכי גרועה "+ys[worst].y+" "+pct(ys[worst].r,0))+g+'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'" stroke="#51625a" stroke-width="1"/>'+bars+hits+'</svg><div class="tip" hidden></div>';
+  var svg=box.querySelector("svg"),at=n-1;
+  function show(i){at=Math.max(0,Math.min(n-1,i));var y=ys[at],cx=L+slot*(at+.5);tipAt(box,cx,Y(y.r/2),'<div>'+y.y+(y.ytd?' (עד סוף '+["","ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר"][y.ytd]+')':'')+'</div><b class="tabular'+(y.r<0?" neg":"")+'">'+pct(y.r)+'</b>',W)}
+  function hide(){box.querySelector(".tip").hidden=true}
+  svg.addEventListener("pointermove",function(e){var r=e.target.getAttribute&&e.target.getAttribute("data-i");if(r!=null)show(+r)});
+  svg.addEventListener("pointerdown",function(e){var r=e.target.getAttribute&&e.target.getAttribute("data-i");if(r!=null)show(+r)});
+  svg.addEventListener("pointerleave",hide);svg.addEventListener("blur",hide);svg.addEventListener("focus",function(){show(at)});
+  svg.addEventListener("keydown",function(e){var s={ArrowLeft:-1,ArrowRight:1}[e.key];if(s){e.preventDefault();show(at+s)}});
+  var t=$("#yrTbl");if(t)t.innerHTML='<table><tr><th scope="col">שנה</th><th scope="col">תשואה</th></tr>'+ys.map(function(y){return '<tr><td>'+y.y+(y.ytd?" (עד כה)":"")+'</td><td class="tabular">'+pct(y.r)+'</td></tr>'}).join("")+'</table>';
+}
+function drawCharts(){drawLine();drawBars()}
+var rsz=null;window.addEventListener("resize",function(){clearTimeout(rsz);rsz=setTimeout(function(){if(!$("#ov").hidden)drawCharts()},150)});
 
 /* ---------- drawer ---------- */
 function bars(list,scale){return list.map(function(x){return '<div class="hold"><span class="hn" title="'+esc(x[0])+'">'+esc(x[0])+'</span><span class="hb" aria-hidden="true"><i style="width:'+Math.min(100,x[1]*scale)+'%"></i></span><span class="tabular">'+x[1].toFixed(1)+'%</span></div>'}).join("")}
@@ -553,10 +656,18 @@ function openDetail(id,opener){
   else s+='<div class="dsec"><h3>ההחזקות הגדולות</h3><div class="na-box">אין עדיין נתון מאומת על ההחזקות במדד הזה. כשיהיה מקור רשמי שאפשר לבדוק כל רבעון, הוא יופיע כאן.</div></div>';
   s+='<div class="dsec"><h3>כמה המדד עשה</h3>';
   if(m){
-    var r=m.ret[detCur];
+    var r=m.ret[detCur],YR=[1,3,5,10,20];
+    if(m.proxy)s+='<div class="proxy-note">'+esc(m.proxy.note)+'</div>';
     s+='<div><div class="seg" role="group" aria-label="מטבע"><button type="button" data-c="ils" class="'+(detCur==="ils"?"on":"")+'" aria-pressed="'+(detCur==="ils")+'">בשקלים</button><button type="button" data-c="usd" class="'+(detCur==="usd"?"on":"")+'" aria-pressed="'+(detCur==="usd")+'">בדולרים</button></div></div>';
-    s+='<div class="ret">'+r.map(function(v,k){return '<div class="tile"><span>'+P[k]+'</span>'+(v==null?'<b class="na">אין עדיין '+P[k]+' היסטוריה</b>':'<b class="tabular'+(v<0?" neg":"")+'">'+pct(v)+'</b><small>'+(k?"בממוצע לשנה":"מצטבר")+'</small>')+'</div>'}).join("")+'</div>';
+    s+='<div class="ret">'+r.map(function(v,k){return '<div class="tile"><span>'+P[k]+'</span>'+(v==null?'<b class="na">אין עדיין '+P[k]+' היסטוריה</b>':'<b class="tabular'+(v<0?" neg":"")+'">'+pct(v)+'</b><small>'+(k?"בממוצע בכל שנה":"בשנה האחרונה")+'</small><em>'+money(10000)+' ← <bdi class="tabular">'+money(10000*Math.pow(1+v,YR[k]))+'</bdi></em>')+'</div>'}).join("")+'</div>';
+    var r5=r[2]!=null?2:r[1]!=null?1:0;
+    s+='<div class="explain">איך קוראים את זה? <bdi class="tabular">'+pct(r[r5])+'</bdi>'+(r5?' "בממוצע בכל שנה" ב-'+P[r5]+' אומר שהשקעה של '+money(10000)+' לפני '+P[r5]+' שווה היום בערך '+money(10000*Math.pow(1+r[r5],YR[r5]))+'. זה ממוצע: בפועל היו שנים עם עלייה גדולה ושנים עם ירידה, והגרפים למטה מראים אותן אחת אחת.':' בשנה האחרונה אומר ש-'+money(10000)+' הפכו ל-'+money(10000*(1+r[0]))+'.')+'</div>';
     s+='<p class="upd">כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(detCur==="ils"?"בשקלים: לפי השער היציג של בנק ישראל בסוף כל חודש. ":"")+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p></div>';
+    var nAll=m.series[detCur].length;
+    s+='<div class="dsec"><h3>העליות והירידות לאורך השנים</h3><div><div class="seg" role="group" aria-label="תקופה">'+[[5,"5 שנים"],[10,"10 שנים"],[20,"20 שנים"],[0,"מאז "+hdate(m.since)]].filter(function(o){return !o[0]||nAll-1>=o[0]*12}).map(function(o){return '<button type="button" data-p="'+o[0]+'" class="'+(detPer===o[0]?"on":"")+'" aria-pressed="'+(detPer===o[0])+'">'+o[1]+'</button>'}).join("")+'</div></div>'+
+      '<div class="chart-ttl">כמה היו שווים '+money(10000)+' לאורך הדרך</div><div class="chart-sub">הקו המקווקו הוא הסכום שהושקע. מעבירים את העכבר או האצבע על הגרף כדי לראות כל חודש.</div><div class="chart-box" id="lineBox" data-id="'+id+'"></div>'+
+      '<div class="chart-ttl">התשואה בכל שנה</div><div class="chart-sub">ירוק מעל הקו: שנה של עלייה. אדום מתחת לקו: שנה של ירידה.'+(monthAt(m.series.start,nAll-1).slice(5)!=="12"?' * השנה הנוכחית עד סוף החודש האחרון.':'')+'</div><div class="chart-box" id="barBox" data-id="'+id+'"></div>'+
+      '<details class="yr-tbl"><summary>התשואה בכל שנה בטבלה</summary><div id="yrTbl"></div></details></div>';
     var dd=m.dd[detCur],b=m.best[detCur],w=m.worst[detCur];
     s+='<div class="dsec"><h3>כמה זה יכול לטלטל</h3><div class="mini-tiles">'+
       '<div class="tile neg"><span>הנפילה הכי גדולה</span><b class="tabular">'+pct(dd.pct,0)+'</b><span class="tabular">'+hdate(dd.peak)+' עד '+hdate(dd.trough)+'</span></div>'+
@@ -564,7 +675,7 @@ function openDetail(id,opener){
       '<div class="tile"><span>השנה הכי טובה / הכי גרועה</span><b class="tabular">'+pct(b.pct,0)+' / '+pct(w.pct,0)+'</b><span class="tabular">'+b.year+' / '+w.year+'</span></div></div>'+
       '<p class="upd">לפי סגירות חודשיות מאז '+hdate(m.since)+'. בתוך החודש הנפילה יכלה להיות עמוקה יותר.</p>'+
       '<div class="explain">השאלה החשובה כאן: האם אפשר להמשיך להחזיק בו כשהוא יורד בחצי. מכירה בזמן נפילה הופכת ירידה זמנית להפסד אמיתי.</div></div>';
-  }else s+='<div class="na-box">אין עדיין נתון מאומת על התשואות של המדד הזה. אנחנו מציגים רק מספרים שחושבו באותה שיטה לכל המדדים ונבדקו מול המקור הרשמי, ולמדד הזה עוד אין מקור כזה.</div></div>';
+  }else s+='<div class="na-box">אין עדיין נתון מאומת על התשואות של המדד הזה. ההיסטוריה שלו לא מתפרסמת בחינם אצל '+esc(x.provider)+', ואנחנו מציגים רק מספרים שנבדקו מול מקור רשמי. כשיהיה מקור כזה, התשואות והגרף יופיעו כאן.</div></div>';
   if(h)s+='<div class="dsec"><h3>איפה הכסף יושב</h3><div class="splits"><div><h4>לפי ענפים</h4>'+bars(h.sectors.slice(0,8),2)+'</div><div><h4>לפי מדינות</h4>'+(h.countries?bars(h.countries,1):'<p class="muted">לא מפורסם</p>')+'</div></div><p class="upd">נכון ל-'+esc(h.as_of)+'.</p></div>';
   if(m){var pos=Math.max(3,Math.min(97,m.sharpe10/1.5*100));
     s+='<div class="dsec"><h3>מדד שארפ: האם התשואה שווה את הסיכון?</h3><div class="gauge" role="img" aria-label="מדד שארפ '+m.sharpe10.toFixed(2)+'"><span class="pin tabular" style="right:'+pos+'%">'+m.sharpe10.toFixed(2)+'</span></div>'+
@@ -577,8 +688,10 @@ function openDetail(id,opener){
   s+='<div class="bar-row"><span></span><button type="button" class="btn" id="ovPick">'+(inPf?"✓ המדד בתיק שלי":"להוסיף לתיק שלי")+'</button></div>';
   $("#ovBody").innerHTML=s;
   $$("#ovBody .seg button").forEach(function(b){b.onclick=function(){detCur=b.dataset.c;openDetail(id,lastFocus);var f=$('#ovBody .seg [data-c="'+detCur+'"]');if(f)f.focus()}});
+  $$("#ovBody [data-p]").forEach(function(b){b.onclick=function(){detPer=+b.dataset.p;openDetail(id,lastFocus);var f=$('#ovBody [data-p="'+detPer+'"]');if(f)f.focus()}});
   $("#ovPick").onclick=function(){if(st.sel.indexOf(id)<0){st.sel.push(id);renderIdx();save()}closeDetail()};
   var ov=$("#ov");if(ov.hidden){ov.hidden=false;document.body.style.overflow="hidden";$("#ov .x").focus()}
+  if(m)drawCharts();
 }
 function closeDetail(){var ov=$("#ov");if(ov.hidden)return;ov.hidden=true;document.body.style.overflow="";if(lastFocus&&document.body.contains(lastFocus))lastFocus.focus()}
 $("#ov").addEventListener("click",function(e){if(e.target.id==="ov")closeDetail()});

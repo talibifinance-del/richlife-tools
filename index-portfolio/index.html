@@ -45,6 +45,12 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
 .chip{border:1.5px solid rgba(var(--pine-rgb),.25);background:#fff;border-radius:100px;padding:6px 13px;font-family:var(--font);font-weight:800;font-size:13px;color:var(--pine-deep);cursor:pointer}
 .chip.on{background:var(--pine);border-color:var(--pine);color:#fff}
+.grp+.grp{margin-top:22px;padding-top:18px;border-top:1.5px dashed rgba(var(--pine-rgb),.25)}
+.grp-h{font-size:17px;font-weight:900;color:var(--pine-darker);display:flex;align-items:center;gap:8px}
+.grp-n{font-size:12px;font-weight:800;color:var(--pine-deep);background:var(--sage-tint);border-radius:100px;padding:1px 9px}
+.grp-p{font-size:13.5px;font-weight:600;color:var(--ink-soft);margin:3px 0 12px;max-width:760px}
+.grp-bond .idx{background:#e9f1f2}
+.mix{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center;margin-top:6px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
 @media(max-width:620px){.grid{grid-template-columns:1fr}}
 .idx{background:var(--sage-tint);border-radius:16px;padding:14px;border:2px solid transparent;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
@@ -260,7 +266,7 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
       <h2 class="sec-lbl" id="s1h">שלב 1 · קטלוג המדדים</h2>
       <p class="lead">כל כרטיס הוא מדד רחב. אפשר לסמן כמה שרוצים ולהשוות ביניהם. אפשר לבחור כל שילוב שמתאים לך.</p>
       <div class="chips" id="cats" role="group" aria-label="סינון לפי סוג"></div>
-      <div class="grid" id="idxGrid"></div>
+      <div id="idxGrid"></div>
       <div id="cmpBox" class="cmp" hidden></div>
       <div class="bar-row">
         <button type="button" class="btn ghost" id="cmpBtn" disabled>השוואה בין המסומנים</button>
@@ -280,7 +286,7 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
       </div>
       <div class="alloc">
         <div id="sliders"></div>
-        <div><div class="donut" id="donut" aria-hidden="true"><div class="mid"><span id="tot">0%</span><small>מתוך 100%</small></div></div><div class="sum-ok" id="sumMsg" aria-live="polite"></div></div>
+        <div><div class="donut" id="donut" aria-hidden="true"><div class="mid"><span id="tot">0%</span><small>מתוך 100%</small></div></div><div class="sum-ok" id="sumMsg" aria-live="polite"></div><div class="mix" id="mix"></div></div>
       </div>
       <div id="overlap"></div>
       <div class="bar-row">
@@ -488,7 +494,9 @@ details.srcs a{color:var(--pine-deep);word-break:break-all}
 (function(){
 "use strict";
 var D=null;
-var CATS=[["all","הכל"],["world","מניות עולם וארה\"ב"],["il","מניות ישראל"],["em","שווקים מתעוררים"],["bond","אג\"ח"]];
+var CATS=[["all","הכל"],["world","מניות: עולם וארה\"ב"],["il","מניות: ישראל"],["em","מניות: שווקים מתעוררים"],["bond","אג\"ח"]];
+var GROUPS=[{k:"stock",t:"מדדי מניות",p:"מניות הן חלק קטן מהבעלות על חברות. לאורך שנים רבות זה המקום שבו הכסף גדל הכי הרבה, ובדרך יש גם ירידות חדות.",has:function(c){return c!=="bond"}},
+  {k:"bond",t:"מדדי אג\"ח",p:"אג\"ח הן הלוואות למדינות ולחברות, שמחזירות ריבית. בדרך כלל הן עולות ויורדות פחות ממניות, ולכן מוסיפים אותן לתיק כדי לרכך את הטלטלות.",has:function(c){return c==="bond"}}];
 var COLORS=["#3e5448","#5f7d6a","#8fae98","#bcd3bf","#2f4036","#b7791f","#7d9c88","#a7c1ad","#4f6b5b","#d1a35c","#6e8f7a","#9bb5a2"];
 var WRAPS={il:"ישראלית (ת\"א)",us:"אמריקאית",ie:"אירית (UCITS)"};
 var NOTES={
@@ -528,7 +536,16 @@ function renderCats(){
 }
 function volBar(v){if(!v)return"";var s='<div class="vol" aria-label="תנודתיות '+v+' מתוך 5">תנודתיות ';for(var i=1;i<=5;i++)s+='<i class="'+(i<=v?"f":"")+'"></i>';return s+"</div>"}
 function renderIdx(){
-  $("#idxGrid").innerHTML=D.indices.filter(function(x){return st.cat==="all"||x.cat===st.cat}).map(function(x){
+  var shown=D.indices.filter(function(x){return st.cat==="all"||x.cat===st.cat});
+  $("#idxGrid").innerHTML=GROUPS.map(function(g){var l=shown.filter(function(x){return g.has(x.cat)});if(!l.length)return"";
+    return '<div class="grp grp-'+g.k+'"><h3 class="grp-h">'+g.t+' <span class="grp-n">'+l.length+'</span></h3><p class="grp-p">'+g.p+'</p><div class="grid">'+l.map(cardHtml).join("")+'</div></div>'}).join("");
+  $$(".more").forEach(function(b){b.onclick=function(e){e.stopPropagation();openDetail(b.dataset.more,b)}});
+  $$(".idx").forEach(function(c){c.onclick=function(e){if(e.target.closest(".more"))return;toggleSel(c.dataset.id)}});
+  var n=st.sel.length;$("#selCount").textContent=n?("נבחרו "+n+" מדדים"):"לא נבחרו מדדים";$("#to2").disabled=!n;$("#cmpBtn").disabled=n<2;
+  if(n<2)$("#cmpBox").hidden=true;else if(!$("#cmpBox").hidden)renderCmp();
+  updSteps();
+}
+function cardHtml(x){
     var on=st.sel.indexOf(x.id)>=0,r=ret10(x);
     return '<div class="idx'+(on?" sel":"")+'" data-id="'+x.id+'">'+
       '<button type="button" class="check" role="checkbox" aria-checked="'+on+'" aria-label="בחירת '+esc(x.name)+'"><span aria-hidden="true">'+(on?"✓":"")+'</span></button><h3>'+esc(x.name)+'</h3><div class="what">'+esc(x.short)+'</div>'+
@@ -536,12 +553,6 @@ function renderIdx(){
       '<div class="fact">'+(r!=null?'<b class="tabular">'+pct(r)+'</b><span>ממוצע לשנה, 10 שנים</span>':'<b class="na">אין עדיין נתון מאומת</b><span>תשואה</span>')+'</div></div>'+
       (x.metrics?sparkline(x.metrics)+(x.metrics.proxy?'<span class="proxy-tag">לפי מדד קרוב: '+esc(x.metrics.proxy.name)+'</span>':'')+volBar(x.metrics.vol_bar)+'<div class="sharpe-mini">מדד שארפ (10 שנים): <b class="tabular">'+x.metrics.sharpe10.toFixed(2)+'</b></div>':"")+
       '<button type="button" class="more" data-more="'+x.id+'">מידע מלא על המדד</button></div>';
-  }).join("");
-  $$(".more").forEach(function(b){b.onclick=function(e){e.stopPropagation();openDetail(b.dataset.more,b)}});
-  $$(".idx").forEach(function(c){c.onclick=function(e){if(e.target.closest(".more"))return;toggleSel(c.dataset.id)}});
-  var n=st.sel.length;$("#selCount").textContent=n?("נבחרו "+n+" מדדים"):"לא נבחרו מדדים";$("#to2").disabled=!n;$("#cmpBtn").disabled=n<2;
-  if(n<2)$("#cmpBox").hidden=true;else if(!$("#cmpBox").hidden)renderCmp();
-  updSteps();
 }
 function toggleSel(id){var i=st.sel.indexOf(id);if(i>=0){st.sel.splice(i,1);delete st.alloc[id];delete st.pick[id]}else st.sel.push(id);var a=document.activeElement,keep=a&&a.classList&&a.classList.contains("check");renderIdx();save();if(keep){var el=$('.idx[data-id="'+id+'"] .check');if(el)el.focus()}}
 function cell(v){return v==null?'<td class="muted">אין נתון</td>':'<td class="tabular">'+v+'</td>'}
@@ -721,6 +732,8 @@ function updAlloc(){
   if(acc<100)stops.push("#e3ebe5 "+acc+"% 100%");
   $("#donut").style.background=stops.length?"conic-gradient("+stops.join(",")+")":"#e3ebe5";$("#tot").textContent=tot+"%";
   var m=$("#sumMsg");if(tot===100){m.textContent="✓ מגיע ל-100%";m.className="sum-ok good"}else{m.textContent=tot>100?("יותר מדי ב-"+(tot-100)+"%"):("חסרים "+(100-tot)+"%");m.className="sum-ok bad"}
+  var bond=st.sel.reduce(function(s,id){return s+(idx(id).cat==="bond"?(st.alloc[id]||0):0)},0);
+  $("#mix").innerHTML='מניות <b class="tabular">'+(tot-bond)+'%</b> · אג"ח <b class="tabular">'+bond+'%</b>';
   $("#to3").disabled=tot!==100;renderOverlap();updSteps();save();
 }
 function renderOverlap(){

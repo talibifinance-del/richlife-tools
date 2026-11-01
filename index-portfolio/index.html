@@ -50,6 +50,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tase-only input{width:18px;height:18px;accent-color:var(--pine)}
 .idbig{font-size:15px;font-weight:900;color:var(--pine-darker)}
 .badge.tase{background:#e7f0ea;color:var(--pine-deep)}
+.badge.same{background:#e7f0ea;color:var(--pine-deep)}
 .diff{background:var(--sage-tint);border-radius:14px;padding:10px 14px;margin:4px 0 14px}
 .diff summary{cursor:pointer;font-weight:900;font-size:14px;color:var(--pine-deep)}
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0 6px}
@@ -880,6 +881,7 @@ function renderFunds(){
     var h='<div class="card" id="fc_'+id+'"><span class="sec-lbl">'+esc(x.name)+' · <span class="tabular">'+st.alloc[id]+'%</span> מהתיק</span>';
     h+='<div class="tabs" role="tablist" aria-label="סוג קרן">'+ws.map(function(k){return '<button type="button" role="tab" class="tab'+(k===w?" on":"")+'" aria-selected="'+(k===w)+'" data-i="'+id+'" data-w="'+k+'">'+WRAPS[k]+' <span class="tabular">('+F[k].length+')</span></button>'}).join("")+'</div>';
     h+='<div class="wrapper-note">'+NOTES[w]+'</div>';
+    if(x.track_keys)h+='<div class="wrapper-note">הנתונים בכרטיס של '+esc(x.name)+' הם של מדד <bdi>'+esc(x.track_label)+'</bdi>. בתחום הזה יש כמה מדדים שונים, ולא כל קרן כאן עוקבת אחריו. ליד כל קרן מסומן אם זה אותו מדד או מדד דומה, אז ההרכב והתשואות שלה יכולים להיות שונים מהכרטיס.</div>';
     h+='<div class="tblwrap"><table class="ftable"><caption class="sr">קרנות על '+esc(x.name)+', '+WRAPS[w]+'</caption><tr class="fhead"><th scope="col"><span class="sr">בחירה</span></th><th scope="col">קרן</th><th scope="col">'+idLabel(w)+'</th><th scope="col">דמי ניהול</th><th scope="col">דיבידנד</th><th scope="col">מס דיבידנד בקרן</th><th scope="col">עקיבה</th>'+((w==="il"||w==="mf")&&foreign?'<th scope="col">מט"ח</th>':"")+'<th scope="col">היקף</th></tr>';
     h+=list.map(function(f){
       var on=st.pick[id]&&st.pick[id].w===w&&st.pick[id].id===f.id,nm="pk_"+id;
@@ -887,7 +889,7 @@ function renderFunds(){
       var lst=(f.listings||[]).slice(0,2).map(function(l){return '<bdi>'+esc(l.ticker)+' · '+l.ex+' · '+l.cur+'</bdi>'}).join(" | ");
       return '<tr class="fund-row'+(on?" pick":"")+'" data-i="'+id+'" data-w="'+w+'" data-f="'+esc(f.id)+'"><td class="rcell"><input type="radio" name="'+nm+'" id="'+nm+'_'+esc(f.id)+'" '+(on?"checked":"")+' aria-label="בחירת '+esc(f.name)+'"></td>'+
         '<td class="fcell"><label class="fname" for="'+nm+'_'+esc(f.id)+'">'+esc(f.name)+'</label>'+(f.ter===minTer&&list.length>1?'<span class="badge low">דמי הניהול הנמוכים ברשימה</span>':"")+(f.kosher?'<span class="badge">כשרה</span>':"")+
-        (sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+(f.official_url?'<a class="flink" href="'+esc(f.official_url)+'" target="_blank" rel="noopener">לדף הקרן ↗</a>':"")+'</td>'+
+        (x.track_keys?(x.track_keys.some(function(k){return((f.tracks||"")+" "+f.name).toUpperCase().indexOf(k)>=0})?'<span class="badge same">אותו מדד כמו בכרטיס</span>':'<span class="badge">מדד דומה, לא זהה</span>'):"")+(sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+(f.official_url?'<a class="flink" href="'+esc(f.official_url)+'" target="_blank" rel="noopener">לדף הקרן ↗</a>':"")+'</td>'+
         '<td data-label="'+idLabel(w)+'">'+idCell(f)+'</td><td data-label="דמי ניהול"><div>'+feeTxt(f)+'</div></td><td data-label="דיבידנד">'+(f.dist==="acc"?"צוברת":"מחלקת")+(f.dist_single?'<div class="fsub">לפי מקור אחד</div>':"")+'</td><td data-label="מס דיבידנד בקרן" class="tabular">'+whTxt(f)+'</td><td data-label="עקיבה"><div>'+repTxt(f)+'</div></td>'+
         ((w==="il"||w==="mf")&&foreign?'<td data-label="מט&quot;ח">'+(f.hedged===true?"מגודרת":f.hedged===false?"חשופה":"-")+'</td>':"")+
         '<td data-label="היקף"><div>'+aumTxt(f)+'</div></td></tr>';

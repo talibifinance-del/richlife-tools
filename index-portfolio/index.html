@@ -655,11 +655,11 @@ function lineChart(box,pts,cur){
   h+='<line class="cur" x1="0" x2="0" y1="'+T+'" y2="'+(T+ph)+'" stroke="#3e5448" stroke-width="1" visibility="hidden"/><circle class="cdot" r="5" fill="#3e5448" stroke="#fff" stroke-width="2" visibility="hidden"/>';
   h+='<rect x="'+L+'" y="'+T+'" width="'+pw+'" height="'+ph+'" fill="transparent"/></svg><div class="tip" hidden></div>';
   box.innerHTML=h;
-  var svg=box.querySelector("svg"),cur=svg.querySelector(".cur"),dot=svg.querySelector(".cdot"),at=n-1;
+  var svg=box.querySelector("svg"),cursor=svg.querySelector(".cur"),dot=svg.querySelector(".cdot"),at=n-1;
   function show(i){at=Math.max(0,Math.min(n-1,i));var p=pts[at],x=X(at),y=Y(p.v),ch=p.v/10000-1;
-    cur.setAttribute("x1",x);cur.setAttribute("x2",x);cur.setAttribute("visibility","visible");dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("visibility","visible");
+    cursor.setAttribute("x1",x);cursor.setAttribute("x2",x);cursor.setAttribute("visibility","visible");dot.setAttribute("cx",x);dot.setAttribute("cy",y);dot.setAttribute("visibility","visible");
     tipAt(box,x,y,'<div>'+hdate(p.m)+'</div><b class="tabular">'+moneyC(cur,p.v)+'</b><div>מההתחלה: <span class="tabular'+(ch<0?" neg":"")+'">'+pct(ch)+'</span></div>'+(run[at]<-0.005?'<div>מתחת לשיא: <span class="tabular neg">'+pct(run[at])+'</span></div>':'<div>בשיא</div>'),W)}
-  function hide(){cur.setAttribute("visibility","hidden");dot.setAttribute("visibility","hidden");box.querySelector(".tip").hidden=true}
+  function hide(){cursor.setAttribute("visibility","hidden");dot.setAttribute("visibility","hidden");box.querySelector(".tip").hidden=true}
   function fromEvt(e){var r=svg.getBoundingClientRect();return Math.round(((e.clientX-r.left)*W/r.width-L)/pw*(n-1))}
   svg.addEventListener("pointermove",function(e){show(fromEvt(e))});svg.addEventListener("pointerdown",function(e){show(fromEvt(e))});
   svg.addEventListener("pointerleave",hide);svg.addEventListener("blur",hide);svg.addEventListener("focus",function(){show(at)});
@@ -801,15 +801,15 @@ function pfSeries(){
 }
 function cagrOf(a){var n=a.length;return Math.pow(a[n-1]/a[0],12/(n-1))-1}
 function exposure(){
-  var C={},Se={},Co={},unkC=0,unkS=0,IL={ta125:1,ta35:1,ta90:1,re_il:1,gov:1,tb:1};
+  var C={},Se={},Co={},CoN={},unkC=0,unkS=0,IL={ta125:1,ta35:1,ta90:1,re_il:1,gov:1,tb:1};
   st.sel.forEach(function(id){var x=idx(id),w=(st.alloc[id]||0)/100,h=x.holdings;if(!w)return;
     var ct=h&&h.countries&&h.countries.length?h.countries:IL[id]?[["ישראל",100]]:null;
     if(ct){var cs=0;ct.forEach(function(c){C[c[0]]=(C[c[0]]||0)+w*c[1];cs+=c[1]});if(cs<99.5)C["אחרות"]=(C["אחרות"]||0)+w*(100-cs)}else unkC+=w*100;
     if(h&&h.sectors&&h.sectors.length){var ss=0;h.sectors.forEach(function(c){Se[c[0]]=(Se[c[0]]||0)+w*c[1];ss+=c[1]});if(ss<99.5)Se["אחרים"]=(Se["אחרים"]||0)+w*(100-ss)}else unkS+=w*100;
-    if(h&&h.top10)h.top10.forEach(function(c){var k=c[0].replace(/ [AC]$/,"");Co[k]=(Co[k]||0)+w*c[1]});
+    if(h&&h.top10)h.top10.forEach(function(c){var k=c[0].replace(/ [AC]$/,"");Co[k]=(Co[k]||0)+w*c[1];CoN[k]=(CoN[k]||0)+1});
   });
   var top=function(o,k){return Object.keys(o).map(function(n){return[n,o[n]]}).filter(function(x){return x[1]>=0.05}).sort(function(a,b){return b[1]-a[1]}).slice(0,k)};
-  return{c:top(C,6),s:top(Se,6),co:top(Co,8),unkC:unkC,unkS:unkS};
+  return{c:top(C,6),s:top(Se,6),co:top(Co,10),coN:CoN,unkC:unkC,unkS:unkS};
 }
 var pfTimer=null;
 function renderPfPreview(){clearTimeout(pfTimer);pfTimer=setTimeout(renderPfPreviewNow,120)}
@@ -821,19 +821,19 @@ function renderPfPreviewNow(){
     var vals=r.pts.map(function(p){return p.v}),cg=cagrOf(vals),dd=ddOf(vals);
     h+='<div class="mini-tiles pf-tiles"><div class="tile"><span>התיק שלך, ממוצע לשנה</span><b class="tabular">'+pct(cg)+'</b><span>מאז '+hdate(r.start)+'</span></div>'+
       '<div class="tile neg"><span>הנפילה הכי גדולה של התיק</span><b class="tabular">'+pct(dd,0)+'</b><span>לפי סגירות חודשיות</span></div>'+
-      '<div class="tile"><span>'+moneyC("ils",10000)+' שהושקעו אז</span><b class="tabular">'+moneyC("ils",vals[vals.length-1])+'</b><span>היו שווים היום</span></div></div>';
+      '<div class="tile"><span>'+moneyC("ils",10000)+' שהושקעו ב-'+hdate(r.start)+'</span><b class="tabular">'+moneyC("ils",vals[vals.length-1])+'</b><span>היו שווים ב-'+hdate(r.pts[r.pts.length-1].m)+'</span></div></div>';
     if(r.use.length>1)h+='<div class="tblwrap" tabindex="0" role="region" aria-label="התיק מול כל מדד לבד"><table class="pf-cmp"><caption class="sr">התיק מול כל מדד לבד, באותה תקופה</caption><tr><th scope="col"></th><th scope="col">ממוצע לשנה</th><th scope="col">הנפילה הכי גדולה</th></tr>'+
       '<tr class="pf-me"><th scope="row">התיק שלך</th><td class="tabular">'+pct(cg)+'</td><td class="tabular">'+pct(dd,0)+'</td></tr>'+
       r.use.map(function(id,k){return'<tr><th scope="row">'+esc(idx(id).name)+' לבד</th><td class="tabular">'+pct(cagrOf(r.S[k]))+'</td><td class="tabular">'+pct(ddOf(r.S[k]),0)+'</td></tr>'}).join("")+'</table></div>';
-    h+='<div class="chart-ttl">כמה היו שווים '+moneyC("ils",10000)+' בתיק שלך</div><div class="chart-box" id="pfLine"></div>';
+    h+='<div class="chart-ttl">כמה היו שווים '+moneyC("ils",10000)+' שהושקעו בתיק שלך ב-'+hdate(r.start)+'</div><p class="fsub">'+(r.use.length>1?'הקו הוא התיק כולו: כל '+r.use.length+' המדדים יחד, לפי האחוזים שבחרת. הקו המקווקו הוא הסכום שהושקע בהתחלה.':'הקו המקווקו הוא הסכום שהושקע בהתחלה.')+' החישוב הוא על סכום חד-פעמי, בלי הפקדות חודשיות.</p><div class="chart-box" id="pfLine"></div>';
     h+='<p class="upd">בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. החישוב מניח שבסוף כל שנה מחזירים את התיק לאחוזים שבחרת.'+(r.use.some(function(id){return idx(id).metrics.series.start!==r.start})?' ההיסטוריה המשותפת מתחילה ב-'+hdate(r.start)+', כי זה המדד הכי צעיר שבחרת.':"")+(r.skip.length?' בלי '+r.skip.map(function(id){return esc(idx(id).name)}).join(", ")+': אין לו היסטוריה מאומתת, ולכן החישוב מחלק את התיק בין שאר המדדים לפי אותם יחסים.':"")+' תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
   }else h+='<div class="na-box">'+(r.use.length?'ההיסטוריה המשותפת של המדדים שבחרת קצרה מדי כדי להציג גרף.':'למדדים שבחרת אין עדיין היסטוריה מאומתת, ולכן אין גרף של התיק.')+'</div>';
   var ex=exposure(),bl=function(l){var mx=Math.max.apply(null,l.map(function(x){return x[1]}));return bars(l,100/mx)};
   h+='<div class="splits pf-ex">';
   h+='<div><h4>לפי מדינות</h4>'+(ex.c.length?bl(ex.c):"")+(ex.unkC>=0.5?'<p class="fsub">'+Math.round(ex.unkC)+'% מהתיק במדדים שלא מפרסמים פילוח לפי מדינות</p>':"")+'</div>';
   h+='<div><h4>לפי ענפים</h4>'+(ex.s.length?bl(ex.s):"")+(ex.unkS>=0.5?'<p class="fsub">'+Math.round(ex.unkS)+'% מהתיק במדדים בלי פילוח לפי ענפים</p>':"")+'</div></div>';
-  if(ex.co.length){h+='<div class="pf-co"><h4>החברות הגדולות בתיק שלך</h4>'+bl(ex.co)+'<p class="fsub">לפי 10 ההחזקות הגדולות של כל מדד, ולכן זה מינימום: בפועל החלק של כל חברה יכול להיות קצת יותר גבוה.</p>';
-    if(ex.co[0][1]>=4)h+='<div class="explain">כ-'+ex.co[0][1].toFixed(1)+'% מהתיק שלך הולך ל-'+esc(ex.co[0][0])+' לבד, כי היא נמצאת בכמה מהמדדים שבחרת.</div>';
+  if(ex.co.length){h+='<div class="pf-co"><h4>'+ex.co.length+' החברות הגדולות בתיק שלך</h4>'+bl(ex.co)+'<p class="fsub">זו לא רשימת כל החברות: במדדים יש עשרות עד אלפי חברות. החישוב מבוסס על 10 החברות הגדולות של כל מדד, ולכן האחוז של כל חברה הוא מינימום. בפועל הוא יכול להיות קצת יותר גבוה.</p>';
+    if(ex.co[0][1]>=4)h+='<div class="explain">כ-'+ex.co[0][1].toFixed(1)+'% מהתיק שלך הולך ל-'+esc(ex.co[0][0])+' לבד'+(ex.coN[ex.co[0][0]]>1?', כי היא נמצאת ב-'+ex.coN[ex.co[0][0]]+' מהמדדים שבחרת':'')+'. המשמעות: אם המניה הזאת תיפול, התיק שלך ירגיש את זה יותר. אם זה יותר ממה שנוח לך, אפשר לשנות את האחוזים ולראות איך המספר הזה משתנה.</div>';
     h+='</div>';}
   box.innerHTML=h;
   var lb=$("#pfLine");if(lb&&r.pts&&r.pts.length>24)lineChart(lb,r.pts,"ils");

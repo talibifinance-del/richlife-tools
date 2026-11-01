@@ -876,7 +876,7 @@ function renderFunds(){
     if(!ws.length)return '<div class="card"><span class="sec-lbl">'+esc(x.name)+' · '+st.alloc[id]+'% מהתיק</span><div class="na-box">'+(st.taseOnly&&Object.keys(fundsFor(id)).length?'למדד הזה אין קרן שאומתה ונסחרת בתל אביב. אפשר לבטל למעלה את הסימון "רק קרנות שקונים בחשבון ישראלי" ולראות קרנות שנסחרות בחו"ל.':'עדיין אין למדד הזה קרן שאומתה בשני מקורות. אפשר לחזור לשלב 2 ולהעביר את האחוזים למדד אחר.')+'</div></div>';
     if(!st.wrap[id]||!F[st.wrap[id]])st.wrap[id]=(st.pick[id]&&F[st.pick[id].w])?st.pick[id].w:ws[0];
     var w=st.wrap[id],list=F[w];
-    var minTer=Math.min.apply(null,list.map(function(f){return f.ter}));
+    var feeSum=function(f){return f.ter+(f.var_fee||0)},minTer=Math.min.apply(null,list.map(feeSum));
     var foreign=x.cat!=="il"&&id!=="gov"&&id!=="tb";
     var h='<div class="card" id="fc_'+id+'"><span class="sec-lbl">'+esc(x.name)+' · <span class="tabular">'+st.alloc[id]+'%</span> מהתיק</span>';
     h+='<div class="tabs" role="tablist" aria-label="סוג קרן">'+ws.map(function(k){return '<button type="button" role="tab" class="tab'+(k===w?" on":"")+'" aria-selected="'+(k===w)+'" data-i="'+id+'" data-w="'+k+'">'+WRAPS[k]+' <span class="tabular">('+F[k].length+')</span></button>'}).join("")+'</div>';
@@ -888,7 +888,7 @@ function renderFunds(){
       var sub=[f.issuer,f.tracks?("עוקבת אחרי "+f.tracks):null].filter(Boolean).map(esc).join(" · ");
       var lst=(f.listings||[]).slice(0,2).map(function(l){return '<bdi>'+esc(l.ticker)+' · '+l.ex+' · '+l.cur+'</bdi>'}).join(" | ");
       return '<tr class="fund-row'+(on?" pick":"")+'" data-i="'+id+'" data-w="'+w+'" data-f="'+esc(f.id)+'"><td class="rcell"><input type="radio" name="'+nm+'" id="'+nm+'_'+esc(f.id)+'" '+(on?"checked":"")+' aria-label="בחירת '+esc(f.name)+'"></td>'+
-        '<td class="fcell"><label class="fname" for="'+nm+'_'+esc(f.id)+'">'+esc(f.name)+'</label>'+(f.ter===minTer&&list.length>1?'<span class="badge low">דמי הניהול הנמוכים ברשימה</span>':"")+(f.kosher?'<span class="badge">כשרה</span>':"")+
+        '<td class="fcell"><label class="fname" for="'+nm+'_'+esc(f.id)+'">'+esc(f.name)+'</label>'+(feeSum(f)===minTer&&list.length>1?'<span class="badge low">דמי הניהול הנמוכים ברשימה</span>':"")+(f.kosher?'<span class="badge">כשרה</span>':"")+
         (x.track_keys?(x.track_keys.some(function(k){return((f.tracks||"")+" "+f.name).toUpperCase().indexOf(k)>=0})?'<span class="badge same">אותו מדד כמו בכרטיס</span>':'<span class="badge">מדד דומה, לא זהה</span>'):"")+(sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+(f.official_url?'<a class="flink" href="'+esc(f.official_url)+'" target="_blank" rel="noopener">לדף הקרן ↗</a>':"")+'</td>'+
         '<td data-label="'+idLabel(w)+'">'+idCell(f)+'</td><td data-label="דמי ניהול"><div>'+feeTxt(f)+'</div></td><td data-label="דיבידנד">'+(f.dist==="acc"?"צוברת":"מחלקת")+(f.dist_single?'<div class="fsub">לפי מקור אחד</div>':"")+'</td><td data-label="מס דיבידנד בקרן" class="tabular">'+whTxt(f)+'</td><td data-label="עקיבה"><div>'+repTxt(f)+'</div></td>'+
         ((w==="il"||w==="mf")&&foreign?'<td data-label="מט&quot;ח">'+(f.hedged===true?"מגודרת":f.hedged===false?"חשופה":"-")+'</td>':"")+
@@ -921,7 +921,7 @@ function copyText(t,btn,label){
 function renderPf(){
   $("#pfList").innerHTML=st.sel.map(function(id){
     var x=idx(id),p=st.pick[id],f=pickedFund(id);
-    var bits=[x.name,WRAPS[p.w],buyLabel(f),"דמי ניהול "+f.ter.toFixed(2)+"%"];if(st.amt)bits.push(nis(st.amt*st.alloc[id]/100));
+    var bits=[x.name,WRAPS[p.w],buyLabel(f),"דמי ניהול "+f.ter.toFixed(2)+"%"+(f.var_fee?" ועוד עד "+f.var_fee.toFixed(2)+"% משתנים":"")];if(st.amt)bits.push(nis(st.amt*st.alloc[id]/100));
     (f.listings||[]).slice(0,1).forEach(function(l){bits.push(l.ticker+" · "+l.ex)});
     if(f.tase_id)bits.push("ISIN "+f.id);
     return '<div class="pf-row"><div class="pf-pct tabular">'+st.alloc[id]+'%</div><div><div class="pf-name">'+esc(f.name)+'</div><div class="pf-sub">'+bits.map(function(t){return "<bdi>"+esc(t)+"</bdi>"}).join(" · ")+'</div></div>'+

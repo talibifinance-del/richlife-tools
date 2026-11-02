@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- End Meta Pixel Code -->
-<title>מחשבון תמחור · RichLife</title>
+<title>תמחור בשלבים · RichLife</title>
+<meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -12,418 +12,241 @@
 :root{
   --pine:#5f7d6a; --pine-rgb:95,125,106; --pine-deep:#3e5448; --pine-darker:#2f4036;
   --sage:#bcd3bf; --sage-rgb:188,211,191; --paper:#e9f1f2; --sage-tint:#eef4ef;
-  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f;
+  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-deep:#8f3a29; --red-rgb:193,85,63; --amber:#b7791f; --amber-deep:#8a5a12;
   --font:'Heebo',system-ui,Arial,sans-serif;
   --card:#fff; --shadow:0 10px 30px rgba(var(--pine-rgb),.10); --shadow-hi:0 18px 44px rgba(var(--pine-rgb),.22);
+  --line:rgba(var(--pine-rgb),.16);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(14px,3vw,40px) clamp(12px,3vw,28px) 60px}
-.wrap{max-width:720px;margin:0 auto}
-.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:20px}
-.brand .avatar{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
-.brand .by-lead{font-weight:900;font-size:16px;color:var(--pine-darker)}
+body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(14px,2.4vw,30px) clamp(12px,2.6vw,36px) 60px}
+button{font-family:var(--font)}
+a{color:var(--pine-deep)}
+.tabular,.num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* top */
+.app{max-width:1500px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
+.brand .by-lead{font-weight:900;font-size:15px;color:var(--pine-darker)}
 .brand .by-sub{font-weight:700;font-size:12px;color:var(--pine)}
 .brand .by-sub b{color:var(--pine-deep)}
-.hero-title{text-align:center;margin-bottom:22px}
-.hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
-.hero-title h1 .em{color:var(--pine)}
-.hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:520px;margin-inline:auto}
-.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(var(--pine-rgb),.15),rgba(var(--sage-rgb),.34));border:1.5px solid rgba(var(--pine-rgb),.38);border-radius:14px;padding:12px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s,box-shadow .15s}
-.top-cta:hover{border-color:var(--pine);transform:translateY(-1px);box-shadow:0 8px 20px rgba(var(--pine-rgb),.16)}
-.top-cta .tc-txt{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center}
-.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-darker);white-space:nowrap}
-.savecheck{border:1.5px solid rgba(var(--pine-rgb),.28);background:linear-gradient(180deg,#fff, rgba(var(--sage-rgb),.14))}
-/* hero number badge */
-.sv-badge{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);border-radius:16px;padding:15px 18px;color:#fff;box-shadow:0 10px 26px rgba(var(--pine-rgb),.22)}
-.sv-badge .sv-lbl{font-size:12.5px;font-weight:700;opacity:.92}
-.sv-badge .sv-big{font-size:clamp(26px,7vw,34px);font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
-.sv-badge .sv-big small{font-size:15px;font-weight:800;opacity:.85}
-/* the test step */
-.sv-test{display:flex;gap:10px;align-items:flex-start;margin-top:13px;background:var(--sage-tint);border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.55}
-.sv-test .sv-ic{font-size:19px;flex:none;line-height:1.3}
-.sv-test b{color:var(--pine-darker);font-weight:900}
-/* two outcomes, each its own tinted row */
-.sv-outcomes{display:grid;gap:9px;margin-top:11px}
-.sv-out{display:flex;gap:10px;align-items:flex-start;border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;line-height:1.55}
-.sv-out .sv-ic{font-size:18px;flex:none;line-height:1.35}
-.sv-out.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-darker);border:1px solid rgba(var(--pine-rgb),.22)}
-.sv-out.ok b{color:var(--pine-deep);font-weight:900}
-.sv-out.warn{background:rgba(var(--red-rgb),.08);color:var(--red);border:1px solid rgba(var(--red-rgb),.22)}
-.sv-out.warn b{color:var(--red);font-weight:900}
-.sv-empty{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.6}
-/* coaching button (explicit colours so it never falls back to the browser's purple link) */
-.savecheck .sv-cta,.savecheck .sv-cta:link,.savecheck .sv-cta:visited{display:inline-block;margin-top:14px;font-family:var(--font);font-weight:900;font-size:14px;color:var(--pine-deep);text-decoration:none;background:var(--sage-tint);padding:11px 20px;border-radius:100px;transition:background .15s,transform .15s}
-.savecheck .sv-cta:hover{background:rgba(var(--pine-rgb),.14);transform:translateY(-1px)}
-.card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
-.card+.card{margin-top:16px}
-.sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
-.field label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
-.input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
-.input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
-.input-shell .unit{padding-inline-start:13px;color:var(--ink-soft);font-weight:700;font-size:15px;flex:none}
-.input-shell input{font-family:var(--font);width:100%;border:none;background:transparent;outline:none;font-size:16px;font-weight:700;color:var(--ink);padding:12px 13px;min-width:0}
-.input-shell input:focus,.input-shell input:focus-visible{outline:none !important}
-.house{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
-.house .h-item label{font-size:12.5px}
-.house .full{grid-column:1/-1}
-.check{margin-top:14px;border-radius:14px;padding:15px 16px;text-align:center}
-.check.ok{background:rgba(var(--pine-rgb),.10);border:1.5px solid rgba(var(--pine-rgb),.3)}
-.check.over{background:rgba(var(--red-rgb),.08);border:1.5px solid rgba(var(--red-rgb),.3)}
-.check .c-top{font-size:13px;font-weight:700;color:var(--ink-soft)}
-.check .c-num{font-size:clamp(22px,5vw,28px);font-weight:900;margin:3px 0 2px}
-.check.ok .c-num{color:var(--pine-deep)} .check.over .c-num{color:#8f3a29}
-.check .c-msg{font-size:13px;font-weight:800;margin-top:4px}
-.check.ok .c-msg{color:var(--pine-deep)} .check.over .c-msg{color:#8f3a29}
-.rec{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin-top:10px}
-.rec b{color:var(--pine-deep)}
-.rec-house{text-align:center;background:var(--sage-tint);border-radius:14px;padding:15px 16px;margin-bottom:14px;font-size:14.5px;font-weight:700;color:var(--pine-darker);line-height:1.5}
-.rec-house b{color:var(--pine)}
-.rec-house .rh-num{display:block;font-size:clamp(26px,7vw,34px);font-weight:900;color:var(--pine-deep);margin-top:5px}
-.rec-house .rh-sub{font-size:12.5px;font-weight:700;color:var(--ink-soft);display:block;margin-top:3px}
-.incl-tg{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--pine-deep);background:var(--sage-tint);border-radius:12px;padding:12px 14px;margin-bottom:12px;line-height:1.4}
-.incl-tg input{width:19px;height:19px;accent-color:var(--pine);flex:none;cursor:pointer}
-.bills-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:9px}
-.rec-total{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding:13px 18px;background:linear-gradient(135deg,var(--pine),var(--pine-deep));border-radius:14px;box-shadow:0 8px 22px rgba(var(--pine-rgb),.22)}
-.rec-total .rt-lbl{font-size:14px;font-weight:900;color:#fff;line-height:1.3}
-.rec-total .rt-pc{display:block;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.82);margin-top:2px}
-.rec-total .rt-num{font-size:clamp(20px,4.6vw,26px);font-weight:900;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
-#billsBox.hidden{display:none}
-.two-rec{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tr{border-radius:16px;padding:16px 13px;text-align:center;border:1.5px solid rgba(var(--pine-rgb),.22)}
-.tr.rent{background:linear-gradient(180deg,rgba(var(--sage-rgb),.32),rgba(var(--sage-rgb),.1))}
-.tr.bills{background:#fff}
-.tr-h{font-size:14.5px;font-weight:900;color:var(--pine-darker)}
-.tr-pc{font-size:11.5px;font-weight:800;color:var(--pine);margin-top:2px}
-.tr-num{font-size:clamp(23px,6.2vw,32px);font-weight:900;color:var(--pine-deep);margin-top:8px}
-.tr-eg{font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-top:7px;line-height:1.45}
-.cmp{display:flex;flex-direction:column;gap:8px;margin:14px 0}
-.cmp-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:12.5px;font-weight:700;border-radius:11px;padding:10px 13px;line-height:1.4}
-.cmp-row.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-deep)}
-.cmp-row.over{background:rgba(var(--red-rgb),.08);color:#8f3a29}
-.cmp-row .cr-name{font-weight:900}
-.cmp-row .cr-verdict{margin-inline-start:auto;font-weight:900;white-space:nowrap}
-.scen{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
-.sc{border-radius:16px;padding:15px 14px;border:1.5px solid rgba(var(--pine-rgb),.2)}
-.sc.home{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
-.sc.out{background:#fff}
-.sc-h{font-size:14.5px;font-weight:900;color:var(--pine-darker);text-align:center;margin-bottom:3px}
-.sc-sub{font-size:11px;font-weight:700;color:var(--ink-soft);text-align:center;margin-bottom:11px}
-.sc-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:700;color:var(--ink);padding:6px 0;border-top:1px solid rgba(var(--pine-rgb),.12)}
-.sc-row:first-of-type{border-top:none}
-.sc-row .pc{font-size:11px;font-weight:800;color:var(--ink-soft)}
-.sc-row b{white-space:nowrap}
-.sc-row.invest{background:rgba(var(--pine-rgb),.10);margin:6px -8px 0;padding:8px;border-radius:10px;border-top:none}
-.sc-row.invest b,.sc-row.invest span{color:var(--pine-deep);font-weight:900}
-.insight{margin-top:16px;font-size:clamp(15px,3.4vw,18px);font-weight:800;color:var(--pine-darker);background:var(--sage-tint);border-radius:14px;padding:16px 18px;text-align:center;line-height:1.55}
-.insight b{color:var(--pine);font-size:1.1em;font-weight:900}
-.note-tip{margin-top:12px;font-size:12px;font-weight:600;color:var(--ink-soft);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.15);border-radius:12px;padding:11px 13px;line-height:1.55}
-.cta-card{margin-top:18px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,4vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi)}
-.cta-card .cta-emoji{font-size:30px}
-.cta-card h3{font-size:clamp(17px,3.6vw,20px);font-weight:900;margin:6px 0 8px}
-.cta-card p{font-size:14px;font-weight:600;opacity:.94;max-width:460px;margin:0 auto 16px;line-height:1.55}
-.cta-btn{display:inline-block;font-family:var(--font);font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:15px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22);transition:transform .18s}
-.cta-btn:hover{transform:translateY(-2px)}
-.actions{margin-top:18px;text-align:center}
-.act-btn{font-family:var(--font);cursor:pointer;border:none;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;font-size:15.5px;font-weight:800;padding:15px 22px;border-radius:15px;box-shadow:0 12px 30px rgba(var(--pine-rgb),.30);transition:filter .15s;max-width:480px;width:100%}
-.act-btn:hover{filter:brightness(1.06)}
-.act-note{max-width:480px;margin:10px auto 0;font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.5}
-.act-link{max-width:480px;margin:12px auto 0;display:flex;gap:8px}
-.act-link input{flex:1;min-width:0;font-family:var(--font);font-size:13px;font-weight:600;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:11px;padding:11px 13px;direction:ltr;text-align:left}
-.act-link input:focus{outline:none !important}
-.act-link button{flex:none;font-family:var(--font);cursor:pointer;border:none;background:var(--pine-deep);color:#fff;font-size:14px;font-weight:800;padding:0 16px;border-radius:11px}
-.socials{display:flex;gap:12px;justify-content:center;margin-top:22px}
-.socials a{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);color:var(--pine-deep);box-shadow:var(--shadow);transition:all .18s}
-.socials a:hover{border-color:var(--pine);transform:translateY(-2px)}
-.socials svg{width:20px;height:20px}
-.copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:14px;font-weight:800;color:var(--pine-darker);line-height:1.6;max-width:520px;margin-inline:auto;text-align:center}
-.guide-nav{margin-bottom:18px;text-align:center}
-.gn-title{display:inline-block;font-family:var(--font);font-weight:900;font-size:12px;color:var(--pine);text-decoration:none;margin-bottom:9px}
-.gn-title.gn-static{color:var(--ink-soft);cursor:default}
-.gn-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
-.gn-tab:hover{border-color:var(--pine)}
-.gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
-/* ── salary-net (ברוטו→נטו) ── */
-.field .hint{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:6px;line-height:1.5}
-.fields2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:480px){.fields2{grid-template-columns:1fr}}
-/* net hero */
-.net-hero{background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);border-radius:18px;padding:18px;text-align:center;color:#fff;box-shadow:0 12px 30px rgba(var(--pine-rgb),.24);margin-top:4px}
-.net-hero .nh-lbl{font-size:13px;font-weight:800;opacity:.9}
-.net-hero .nh-num{font-size:clamp(30px,8vw,44px);font-weight:900;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
-.net-hero .nh-num small{font-size:.42em;font-weight:800;opacity:.85}
-.net-hero .nh-sub{font-size:12.5px;font-weight:700;opacity:.9;margin-top:5px}
-/* deduction breakdown */
-.ded{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-.ded-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--sage-tint);border-radius:11px;padding:11px 14px}
-.ded-row .dr-l{font-size:13.5px;font-weight:800;color:var(--pine-darker)}
-.ded-row .dr-l small{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);margin-top:1px}
-.ded-row .dr-v{font-size:15.5px;font-weight:900;color:var(--red);font-variant-numeric:tabular-nums;white-space:nowrap}
-.ded-row.plus .dr-v{color:var(--pine-deep)}
-.ded-row.gross{background:rgba(var(--pine-rgb),.1)}
-.ded-row.gross .dr-v{color:var(--pine-deep)}
-.emp-note{margin-top:12px;background:rgba(var(--pine-rgb),.08);border-radius:11px;padding:10px 13px;font-size:12px;font-weight:700;color:var(--pine-deep);line-height:1.55}
-.emp-note b{font-variant-numeric:tabular-nums}
-.disclaimer{display:flex;gap:9px;align-items:flex-start;background:rgba(183,121,31,.10);border:1px solid rgba(183,121,31,.28);color:#8a5a12;border-radius:12px;padding:11px 14px;margin-top:14px;font-size:12px;font-weight:600;line-height:1.55}
-/* editable tax tables */
-.tt-note{font-size:12px;font-weight:700;color:#8a5a12;background:rgba(183,121,31,.1);border-radius:10px;padding:9px 12px;margin-bottom:13px;line-height:1.5}
-.tt-sub{font-size:13px;font-weight:900;color:var(--pine-darker);margin:16px 0 8px}
-.tt-sub:first-of-type{margin-top:4px}
-.tt-head{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;font-weight:800;color:var(--ink-soft);padding:0 4px 4px}
-.tt-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:7px}
-.tt-cell{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px;transition:border-color .15s}
-.tt-cell:focus-within{border-color:var(--pine);background:#fff}
-.tt-cell .u{padding-inline-start:9px;color:var(--ink-soft);font-weight:700;font-size:12px;flex:none}
-.tt-cell .u.suf{padding-inline-start:0;padding-inline-end:9px}
-.tt-cell input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14px;color:var(--ink);padding:8px 8px;outline:none;text-align:center;font-variant-numeric:tabular-nums}
-.tt-cell .rowlbl{flex:1;font-size:11.5px;font-weight:700;color:var(--ink-soft);padding-inline-start:10px}
-.tt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tt-field{display:flex;flex-direction:column;gap:4px}
-.tt-field label{font-size:11.5px;font-weight:700;color:var(--ink-soft)}
-.tt-reset{margin-top:16px;border:1.5px dashed rgba(var(--pine-rgb),.4);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:9px 18px;cursor:pointer}
-.tt-reset:hover{background:var(--sage-tint)}
-details.tt-wrap>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px}
-details.tt-wrap>summary::-webkit-details-marker{display:none}
-details.tt-wrap .chev{margin-inline-start:auto;color:var(--ink-soft);transition:transform .25s;font-size:13px}
-details.tt-wrap[open] .chev{transform:rotate(180deg)}
-/* keren hishtalmut toggle */
-.keren-tg{display:flex;align-items:center;gap:11px;background:var(--sage-tint);border-radius:12px;padding:12px 14px;margin-top:12px;cursor:pointer;line-height:1.35}
-.keren-tg input{width:20px;height:20px;accent-color:var(--pine);flex:none;cursor:pointer;margin-top:1px}
-.keren-tg .kt-t{font-size:14px;font-weight:800;color:var(--pine-darker)}
-.keren-tg .kt-t small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:2px}
-/* employee / self-employed mode toggle */
-.mode-tg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--sage-tint);border-radius:13px;padding:5px;margin:4px 0 15px}
-.mode-btn{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14.5px;color:var(--ink-soft);padding:11px 8px;border-radius:9px;cursor:pointer;transition:all .15s}
-.mode-btn.active{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
-.self-note{background:rgba(var(--pine-rgb),.08);border-radius:12px;padding:12px 14px;margin-top:13px;font-size:12.5px;font-weight:600;color:var(--pine-deep);line-height:1.55}
-.self-note b{font-weight:900}
-.save-note{background:linear-gradient(140deg,rgba(var(--pine-rgb),.14),rgba(var(--pine-rgb),.07));border:1px solid rgba(var(--pine-rgb),.2);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:13px;font-weight:700;color:var(--pine-deep);line-height:1.55}
-.save-note b{font-weight:900}
-.lbl-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
-.unit-tg{display:flex;gap:2px;background:var(--sage-tint);border-radius:8px;padding:2px}
-.unit-tg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:12px;color:var(--ink-soft);padding:3px 10px;border-radius:6px;cursor:pointer;min-width:30px}
-.unit-tg button.active{background:var(--pine);color:#fff}
-.mini-hint{font-size:11px;font-weight:700;color:var(--pine-deep);margin-top:5px;min-height:14px}
-.guide-note{background:var(--sage-tint);border-radius:12px;padding:13px 15px;margin-top:12px;font-size:12.5px;font-weight:600;color:var(--pine-darker);line-height:1.6}
-.guide-note .gt{font-size:13.5px;font-weight:900;color:var(--pine-deep);display:block;margin-bottom:7px}
-.guide-note .grow{display:block;margin-top:5px}
-.guide-note b{font-weight:900;color:var(--pine-deep)}
-.guide-note .ok{color:var(--pine)}
-.guide-note .mand{display:block;margin-top:9px;padding-top:8px;border-top:1px solid rgba(var(--pine-rgb),.15);font-size:11.5px;font-weight:600;color:var(--ink-soft)}
-/* credit-points builder */
-.cp-head{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;font-size:10.5px;font-weight:800;color:var(--ink-soft);padding:0 2px 5px}
-.cp-row{display:grid;grid-template-columns:1fr 78px 66px 24px;gap:6px;margin-bottom:7px;align-items:center}
-.cp-l{border:1.5px solid transparent;background:var(--sage-tint);border-radius:10px;font-family:var(--font);font-weight:700;font-size:12.5px;color:var(--ink);padding:9px 10px;min-width:0;outline:none}
-.cp-l:focus{border-color:var(--pine);background:#fff}
-.cp-mini{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px}
-.cp-mini:focus-within{border-color:var(--pine);background:#fff}
-.cp-mini .cp-u{font-size:10.5px;font-weight:700;color:var(--ink-soft);padding-inline:7px;flex:none}
-.cp-mini input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:13px;color:var(--ink);padding:8px 2px;outline:none;text-align:center;font-variant-numeric:tabular-nums}
-.cp-del{border:0;background:transparent;color:rgba(var(--pine-rgb),.5);font-size:17px;font-weight:900;cursor:pointer;line-height:1;padding:0}
-.cp-del:hover{color:var(--red)}
-.cp-add{margin-top:4px;border:1.5px dashed rgba(var(--pine-rgb),.4);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:8px 16px;cursor:pointer}
-.cp-add:hover{background:var(--sage-tint)}
-.cp-total{margin-top:12px;display:flex;justify-content:space-between;align-items:center;background:rgba(var(--pine-rgb),.1);border-radius:12px;padding:11px 15px}
-.cp-total .ct-l{font-size:14px;font-weight:900;color:var(--pine-darker)}
-.cp-total .ct-v{font-size:19px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
-.cp-note{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:9px;line-height:1.5}
-.ded-row[hidden]{display:none}
+.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.save-state{font-size:12px;font-weight:700;color:var(--ink-soft)}
+.live-badge{font-size:12px;font-weight:800;color:#2f9169}
 
-/* ── pricing tool ── */
-.rate-line{background:rgba(var(--pine-rgb),.1);border-radius:11px;padding:10px 13px;margin:10px 0 4px;font-size:13px;font-weight:800;color:var(--pine-deep);display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:1.4}
-.rate-line b{font-variant-numeric:tabular-nums;white-space:nowrap}
-.rate-line.warn{background:rgba(183,121,31,.12);color:#8a5a12;font-weight:700}
-.p-ded .dr-v{color:var(--pine-deep)}
-.p-ded .ded-row.sum{background:rgba(var(--pine-rgb),.13)}
-.p-ded .ded-row.sum .dr-v{color:var(--pine-deep)}
-.mode-tg.three{grid-template-columns:1fr 1fr 1fr}
+/* layout */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:22px;align-items:start}
+.rail{position:sticky;top:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 12px;box-shadow:var(--shadow)}
+.rail h2{font-size:13px;font-weight:900;color:var(--pine-darker);padding:2px 8px 8px}
+.rail-progress{height:6px;background:var(--sage-tint);border-radius:100px;margin:0 8px 10px;overflow:hidden}
+.rail-progress i{display:block;height:100%;background:var(--pine);border-radius:100px;transition:width .3s}
+.steps{list-style:none;display:grid;gap:2px}
+.step-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:start;border:0;background:transparent;border-radius:11px;padding:8px;cursor:pointer;font-size:13.5px;font-weight:700;color:var(--ink-soft);transition:background .15s}
+.step-btn:hover{background:var(--sage-tint)}
+.step-btn[aria-current="step"]{background:var(--pine);color:#fff}
+.step-num{flex:none;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:var(--sage-tint);color:var(--pine-deep);border:1.5px solid transparent}
+.step-btn[data-state="partial"] .step-num{background:#fff;border-color:var(--amber);color:var(--amber-deep)}
+.step-btn[data-state="done"] .step-num{background:var(--pine-deep);color:#fff}
+.step-btn[aria-current="step"] .step-num{background:#fff;color:var(--pine-deep);border-color:transparent}
+.rail-note{font-size:11.5px;font-weight:600;color:var(--ink-soft);padding:10px 8px 2px;line-height:1.5}
+.mobile-steps{display:none}
 
-/* pricing v2 - explainers + material cards */
-.explain{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.55;margin:3px 0 13px}
+/* step */
+.step-head{margin-bottom:14px}
+.step-kicker{font-size:12.5px;font-weight:800;color:var(--pine)}
+.step-head h1{font-size:clamp(24px,3.4vw,32px);font-weight:900;color:var(--pine-darker);line-height:1.2;margin-top:2px}
+.step-why{font-size:15px;font-weight:600;color:var(--ink-soft);margin-top:7px;max-width:820px;line-height:1.6}
+.card{background:var(--card);border-radius:18px;padding:clamp(15px,2vw,22px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
+.card+.card,.card+.grid2,.grid2+.card{margin-top:14px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+.grid2>.card+.card{margin-top:0}
+.sec-lbl{font-size:13px;font-weight:900;color:var(--pine-deep);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:12px}
+.explain{font-size:13px;font-weight:600;color:var(--ink-soft);line-height:1.6;margin:-3px 0 13px;max-width:780px}
 .explain b{color:var(--pine-deep);font-weight:800}
-.mat-card{background:var(--sage-tint);border-radius:13px;padding:12px 13px;margin-bottom:11px}
-.mat-card .cp-l{width:100%;margin-bottom:9px;background:#fff}
-.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mat-f{display:flex;flex-direction:column;gap:3px}
-.mat-f label{font-size:10.5px;font-weight:800;color:var(--ink-soft)}
-.mat-f .cp-mini{background:#fff}
-.mat-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12.5px;font-weight:800;color:var(--pine-deep)}
-.mat-foot b{font-variant-numeric:tabular-nums}
-.mat-foot .cp-del{font-size:12px;font-weight:800;color:var(--red);border:0;background:transparent;cursor:pointer;padding:0}
-.exp-row{display:grid;grid-template-columns:1fr 110px 24px;gap:7px;margin-bottom:7px;align-items:center}
-.exp-row .cp-l{background:var(--sage-tint)}
-.val-note{background:linear-gradient(140deg,rgba(183,121,31,.13),rgba(183,121,31,.05));border:1px solid rgba(183,121,31,.25);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:12.5px;font-weight:700;color:#8a5a12;line-height:1.55}
-.val-note b{font-weight:900}
 
-/* pricing v3 - full system (tabs + catalog + price list) */
-/* brand focus: kill the a11y indigo outline on fields - the green shell border is the focus indicator */
-.wrap input:focus,.wrap input:focus-visible,.wrap textarea:focus,.wrap textarea:focus-visible{outline:none !important;box-shadow:none !important}
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;background:var(--sage-tint);border-radius:14px;padding:5px;margin-bottom:18px}
-.tab{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:13px;color:var(--ink-soft);padding:11px 4px;border-radius:10px;cursor:pointer}
-.tab.active{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
-.cat-card{background:#fff;border:1.5px solid rgba(var(--pine-rgb),.14);border-radius:15px;padding:14px 15px;margin-bottom:11px;box-shadow:0 6px 18px rgba(var(--pine-rgb),.07)}
-.cc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.cc-name{font-size:15.5px;font-weight:900;color:var(--pine-darker)}
-.cc-price{font-size:18px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
-.cc-sub{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:4px}
-.cc-actions{display:flex;gap:8px;margin-top:11px}
-.cc-actions button{flex:1;border:1.5px solid rgba(var(--pine-rgb),.3);background:transparent;font-family:var(--font);font-weight:800;font-size:12.5px;color:var(--pine-deep);border-radius:9px;padding:7px;cursor:pointer}
-.cc-actions .del{color:var(--red);border-color:rgba(var(--red-rgb),.3)}
-.back-btn{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:13.5px;color:var(--pine-deep);cursor:pointer;padding:4px 0 10px}
-.add-offer{width:100%;border:1.5px dashed rgba(var(--pine-rgb),.4);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:14px;border-radius:12px;padding:13px;cursor:pointer}
-.add-offer:hover{background:var(--sage-tint)}
-.empty-cat{text-align:center;padding:24px 14px;color:var(--ink-soft);font-weight:700;font-size:13.5px;line-height:1.6}
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.ptable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:420px}
-.ptable th,.ptable td{padding:9px 7px;text-align:right;border-bottom:1px solid rgba(var(--pine-rgb),.1);white-space:nowrap}
-.ptable th{font-size:10.5px;font-weight:800;color:var(--ink-soft)}
+/* inputs */
+.field label,.lbl{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:5px}
+.field .hint{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:11px;transition:border-color .18s,box-shadow .18s}
+.input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
+.input-shell .unit{padding-inline-start:11px;color:var(--ink-soft);font-weight:700;font-size:14px;flex:none}
+.input-shell input,.input-shell select{font-family:var(--font);width:100%;border:none;background:transparent;font-size:15px;font-weight:700;color:var(--ink);padding:10px 11px;min-width:0}
+.input-shell input.ltr-num{direction:ltr;text-align:right}
+.app input:focus,.app input:focus-visible,.app select:focus,.app select:focus-visible{outline:none!important;box-shadow:none!important}
+.app .input-shell select{appearance:auto;cursor:pointer}
+
+/* row editors: a table on wide screens, cards on narrow ones */
+.rows{display:grid;gap:7px}
+.row-head,.row{display:grid;gap:8px;align-items:center}
+.row-head{font-size:11.5px;font-weight:800;color:var(--ink-soft);padding:0 2px}
+.row .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.row .val{font-size:14px;font-weight:800;color:var(--pine-deep);font-variant-numeric:tabular-nums}
+.icon-btn{width:30px;height:30px;border:0;border-radius:9px;background:transparent;color:var(--red);font-size:16px;font-weight:900;cursor:pointer;line-height:1}
+.icon-btn:hover{background:rgba(var(--red-rgb),.1)}
+.add-btn{margin-top:10px;width:100%;border:1.5px dashed rgba(var(--pine-rgb),.42);background:transparent;color:var(--pine-deep);font-weight:800;font-size:13.5px;border-radius:11px;padding:10px;cursor:pointer}
+.add-btn:hover{background:var(--sage-tint)}
+.cols-mat{grid-template-columns:minmax(150px,2fr) minmax(95px,1fr) 100px 125px 120px 32px}
+.cols-bom{grid-template-columns:minmax(150px,2fr) 110px 120px 32px}
+.cols-emp{grid-template-columns:minmax(110px,1.3fr) minmax(100px,1.2fr) 120px 86px 100px 120px 32px}
+.cols-hourly{grid-template-columns:minmax(110px,1.3fr) minmax(100px,1.2fr) 100px 90px 86px 120px 32px}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.tile{background:var(--sage-tint);border-radius:14px;padding:13px 15px}
+.tile .t-l{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.tile .t-v{font-size:clamp(20px,2.4vw,25px);font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums;line-height:1.25;margin-top:2px}
+.tile .t-s{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:2px;line-height:1.45}
+.tile.main{background:linear-gradient(140deg,var(--pine),var(--pine-deep));color:#fff}
+.tile.main .t-l,.tile.main .t-s{color:#fff;opacity:.92}
+.tile.main .t-v{color:#fff}
+.tile.hot .t-v{color:var(--red-deep)}
+
+/* breakdown */
+.ledger{display:grid;gap:4px}
+.lg{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 12px;border-radius:10px;background:var(--sage-tint);font-size:13.5px;font-weight:700;color:var(--pine-darker)}
+.lg small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:1px}
+.lg b{font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lg.sum{background:rgba(var(--pine-rgb),.17);color:var(--pine-darker)}
+.lg.big{background:var(--pine-deep);color:#fff}
+.lg.big small{color:#fff;opacity:.88}
+.lg.minus b{color:var(--red-deep)}
+
+/* messages */
+.note{border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:700;line-height:1.55;background:var(--sage-tint);color:var(--pine-darker);margin-top:12px}
+.note b{font-weight:900}
+.note.warn{background:rgba(var(--red-rgb),.09);color:var(--red-deep)}
+.note.soft{background:rgba(183,121,31,.12);color:var(--amber-deep)}
+.note.ok{background:rgba(var(--pine-rgb),.15);color:var(--pine-darker)}
+.note .link-btn{color:inherit}
+.link-btn{border:0;background:none;font-weight:900;text-decoration:underline;cursor:pointer;font-size:inherit;color:var(--pine-deep);padding:0}
+
+/* how was this calculated */
+.how{margin-top:10px;font-size:13px}
+.how summary{cursor:pointer;font-weight:800;color:var(--pine-deep);font-size:12.5px;padding:2px 0;width:fit-content}
+.how .how-b{margin-top:6px;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:10px 13px;font-weight:600;color:var(--ink-soft);line-height:1.7}
+.how .how-b b{color:var(--pine-darker);font-weight:800;font-variant-numeric:tabular-nums}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+.ptable{width:100%;border-collapse:collapse;font-size:13px}
+.ptable th,.ptable td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.ptable th{font-size:11.5px;font-weight:800;color:var(--ink-soft);background:var(--sage-tint);position:sticky;top:0}
 .ptable td{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
-.ptable td.nm{font-weight:900;color:var(--pine-darker);white-space:normal}
-.ptable tfoot td{font-weight:900;color:var(--pine-deep);border-top:2px solid rgba(var(--pine-rgb),.2);border-bottom:0}
+.ptable td.nm{font-weight:900;color:var(--pine-darker);white-space:normal;min-width:120px}
+.ptable tfoot td{font-weight:900;color:var(--pine-deep);border-top:2px solid rgba(var(--pine-rgb),.25);border-bottom:0}
+.ptable .mini{width:78px}
+.ptable .mini .input-shell input{padding:6px 7px;font-size:13.5px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:6px;background:var(--pine)}
+.dot.below-rec{background:var(--amber)}
+.dot.below-min{background:var(--red)}
+
+/* calendar */
+.cal{min-width:1030px}
+.cal th:first-child,.cal td:first-child{position:sticky;right:0;background:#fff;z-index:1;box-shadow:-1px 0 0 var(--line);min-width:104px;white-space:normal}
+.cal th:first-child{background:var(--sage-tint)}
+.cal td{padding:5px 4px;vertical-align:top}
+.cal td.cal-sum{font-weight:900;color:var(--pine-deep);padding:9px 6px}
+.cal textarea{width:100%;font-family:var(--font);border:1.5px solid transparent;background:var(--sage-tint);border-radius:8px;padding:5px;font-size:11.5px;font-weight:700;color:var(--ink);resize:vertical;line-height:1.3;display:block}
+.app .cal textarea:focus,.app .cal textarea:focus-visible{outline:none!important;border-color:var(--pine);background:#fff}
+.cal input{width:100%;font-family:var(--font);border:1.5px solid transparent;background:var(--sage-tint);border-radius:8px;padding:6px;font-size:12.5px;font-weight:700;color:var(--ink);min-width:0}
+.cal input:focus{border-color:var(--pine);background:#fff}
+.cal .cal-group td{background:var(--sage-tint);font-size:11.5px;font-weight:900;color:var(--pine-deep);padding:6px 8px}
+.cal .cal-group td:first-child{background:var(--sage-tint)}
+
+/* product card */
+.prod{border:1.5px solid var(--line);border-radius:15px;padding:0;background:#fff;margin-bottom:12px;overflow:hidden}
+.prod>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;background:var(--sage-tint)}
+.prod>summary::-webkit-details-marker{display:none}
+.prod-name{font-size:15.5px;font-weight:900;color:var(--pine-darker)}
+.prod-sum{font-size:14px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
+.prod-body{padding:14px 16px}
+.prod-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+.pill-red,.pill-amb,.pill-ok{display:inline-block;font-size:11.5px;font-weight:800;border-radius:100px;padding:2px 9px}
+.pill-red{background:rgba(var(--red-rgb),.12);color:var(--red-deep)}
+.pill-amb{background:rgba(183,121,31,.14);color:var(--amber-deep)}
+.pill-ok{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep)}
+
+/* buttons, nav */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:100px;padding:12px 22px;font-size:14.5px;font-weight:900;cursor:pointer;background:var(--pine-deep);color:#fff;text-decoration:none;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;border:1.5px solid rgba(var(--pine-rgb),.4);color:var(--pine-deep)}
+.btn.small{padding:7px 14px;font-size:12.5px}
+.btn:disabled{opacity:.55;cursor:default;transform:none}
+.step-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap;padding-inline-end:58px}
+[data-live]+.card{margin-top:14px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--sage-tint);border-radius:13px;padding:5px;max-width:460px}
+.seg button{border:0;background:transparent;font-weight:800;font-size:14px;color:var(--ink-soft);padding:10px 8px;border-radius:9px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
+.check-line{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;color:var(--pine-darker);cursor:pointer}
+.check-line input{width:18px;height:18px;accent-color:var(--pine-deep)}
+.path-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:12px}
+.path-list li{background:var(--sage-tint);border-radius:12px;padding:10px 13px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.45}
+.path-list b{display:block;font-weight:900;color:var(--pine-deep)}
+.draft-banner{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.act-link{display:flex;gap:8px;margin-top:10px;max-width:620px}
+.act-link input{flex:1;min-width:0;font-family:var(--font);font-size:13px;font-weight:600;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:11px;padding:10px 12px;direction:ltr;text-align:left}
+.bar{height:11px;background:var(--sage-tint);border-radius:100px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--pine);border-radius:100px}
+.bar i.over{background:var(--red)}
+
+/* footer kit */
+.cta-card{margin-top:20px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,3vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi)}
+.cta-card h2{font-size:clamp(17px,2.4vw,20px);font-weight:900;margin:0 0 8px}
+.cta-card p{font-size:14px;font-weight:600;opacity:.94;max-width:520px;margin:0 auto 14px;line-height:1.55}
+.cta-btn{display:inline-block;font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:13px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22)}
+.socials{display:flex;gap:12px;justify-content:center;margin-top:24px}
+.socials a{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);color:var(--pine-deep);box-shadow:var(--shadow)}
+.socials svg{width:20px;height:20px}
+.copyright{margin:16px auto 0;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:13px;font-weight:800;color:var(--pine-darker);line-height:1.6;max-width:560px;text-align:center}
+
+#printRoot{display:none}
+
+@media (max-width:1040px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .rail{display:none}
+  .mobile-steps{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .mobile-steps label{font-size:12px;font-weight:800;color:var(--pine-deep);display:block;margin-bottom:5px}
+  .mobile-steps .rail-progress{margin:8px 0 0}
+}
+@media (max-width:820px){
+  .grid2,.prod-grid{grid-template-columns:minmax(0,1fr)}
+  .row-head{display:none}
+  .row{grid-template-columns:1fr 1fr!important;background:var(--sage-tint);border-radius:12px;padding:10px;position:relative}
+  .row .input-shell{background:#fff}
+  .row .lbl{position:static;width:auto;height:auto;clip:auto;white-space:normal;font-size:11.5px;margin-bottom:3px}
+  .row .wide{grid-column:1/-1;padding-inline-end:30px}
+  .row .icon-btn{position:absolute;top:6px;inset-inline-end:6px}
+  .topbar{justify-content:center}
+  .step-nav .btn{flex:1}
+}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;padding:0;font-size:11pt}
+  .app,.socials,.copyright,.rl-legal-footer,#brain-a11y-btn,#brain-a11y-menu,#rl-consent{display:none!important}
+  #printRoot{display:block}
+  .pr-page{break-after:page}
+  .pr-page:last-child{break-after:auto}
+  .pr-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2.5pt solid var(--pine-deep);padding-bottom:6pt;margin-bottom:10pt}
+  .pr-head h1{font-size:19pt;font-weight:900;color:var(--pine-darker)}
+  .pr-head span{font-size:10pt;font-weight:700;color:var(--pine)}
+  #printRoot h2{font-size:13pt;font-weight:900;color:var(--pine-deep);margin:12pt 0 6pt}
+  #printRoot .tiles{grid-template-columns:repeat(3,1fr);gap:6pt}
+  #printRoot .tile{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:7pt 9pt}
+  #printRoot .tile .t-v{font-size:15pt}
+  #printRoot .ptable{font-size:8.5pt}
+  #printRoot .ptable th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printRoot .ptable th,#printRoot .ptable td{padding:3.5pt 3pt;white-space:normal}
+  #printRoot tr{break-inside:avoid}
+  #printRoot .lg{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:4pt 8pt;font-size:10pt}
+  #printRoot .note{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:10pt;padding:6pt 9pt}
+  .pr-foot{margin-top:12pt;font-size:8.5pt;font-weight:600;color:var(--ink-soft)}
+}
 </style>
-</head>
-<body>
-<div class="wrap">
-
-  <div class="brand">
-    <img class="avatar" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwQDAwQEBAQFBQQFBwsHBwYGBw4KCggLEA4RERAOEA8SFBoWEhMYEw8QFh8XGBsbHR0dERYgIh8cIhocHRz/2wBDAQUFBQcGBw0HBw0cEhASHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBz/wAARCADIAMgDASIAAhEBAxEB/8QAHQAAAAcBAQEAAAAAAAAAAAAAAAECBQYHCAQDCf/EAD4QAAEDAwMBBgQDBwMEAgMAAAECAwQABREGEiExBxMiQVFhMnGBkRShsQgVIzNCUsFi0fAWkqLhQ3KCsvH/xAAaAQEAAwEBAQAAAAAAAAAAAAAAAQIDBQQG/8QAJBEAAgICAwEAAgMBAQAAAAAAAAECAxExBBIhQSJRBTJhExT/2gAMAwEAAhEDEQA/ANFijogaOtSoYox1ohR0AqjBohQoBVChmhQCs0M0mjzQAzzR0nNDNAKoUnNDNAKoUWaGaAOhQzQoAUKFGDQAoqPg0D7UAVChQoAUKFCgOWlZpNGKAOlUmjFAGKVSaFAKo80nNDNAKzREmizXmtxIByqgF7h5GkrdS2nctQSkf1KOB96ojtp7eP8AoZoQrQlDlxWoo79adyG/XAzyfLnjPrisoal7Tb9qwLlXS5zXV7uEqfJSn32DA+2KkH0l7wEApIOemD1owsHBzmvmnp3td1VpxxtMC/zUMJVnuVvFTZ+hzir+0d+1c/hDV9twlNoTy7EA73P+oE4Ix5gA+1QDWIV6UrNVlYO3LRF+WhDV5RHccOAiQkoBPpkjFWKxJRIQlxpaVtKGUqQchX1FCTpo80gHNKBoQKoUVHQB9KPNED60D6igCxR4odaOgE0KM0KA4qVSaMUAoGjpNKFAHmjpNCgFUWQKGa83dhT4xkDyoAlvJTnKuAMkAZqn+1Xtbi6ciXS32+Y0NQsIGErHhaBHOD0K8HgV7dpnapadOd9EakJTIjAuPvMAKLKR/Tn+89AD+dYw1xriTrW/PyGW0xo7oCUMtnJKR03q/qV70LYPLUl5XqEKclPhbilBS1dQP/fWm6C4gthaGmgsgEeHIbT6n1UfTpXnGgSUpUpxCu7PhOCDn7GpBD0q5IY7xCygKA4252kdKhySJUG9DaG4a3MPIMhSvUhIT6kkAYFe6rPau6D8Z9cR0/CrvMoP3GfrXrK0fcmtiu5UUJThW3nd1/KmWWZVtXvdZLiwPCHk5CD64opp6DhJbFLXMtrwKzvQTytJyFfb9at/sy7YbxoeSx3Li51kWf40Jas7Rnkp/tUPtVUWi5N3IiFNIUVnAKmkpIPsU8g/MEU4MxRb5vdNKJQQCCrjJ9vcUYX+n0W0xqi26ttEe6WqQHorw+SkHzSoeRFPYNYk7J+0GVoS9JWD3kCSoCTHGcKT/ekeShW04ctmdGZlRnUuxn0BxtxPRSSMgiieSGsHUDSqQDSgakqHRg0VCgD6mh0oqFAGaFFQoDiFHSAcUpJNAKBoxSaVmgFZoUnNHnigAVAVT3ar2wRNNwZ1vtylP3daQ02lhJWW1KOATjp1qda31KzpjTFzujqhlhlRbRn419E/+RArL3an2jW3TOgjYLV3Zu87YuXK7opdeeBClrJ4xz0JJPSoLIpvtD1y9fZqbfFjqjw4mW1tZ/mLBJK1+qiSTk81F7VBlSZALDR9RkCm2Al2XIKlrOXFZOOpzV16C0gHwiQc8f1E5OPas7LFGOWa1VuyWEOehNCOT3mZE5vO3lKMdB71fln0zFQlCAw2EY5CUU2actwisttoSBgfarBtMb4BgZ9RXCv5EpvZ9Jx+NGuOjmRpG1rb2qgtkH25+9Rm8di9juaHClHdlX9JTuFWwzF8HANdKIgx05rGFli9TNLK65eNGDe17sclaVH7yhNOd22ckt5wkDzHmKhLkqYWIL01IK5SCptWeVLHr6E8H71vzXem27zZJsZSMlTZ6/KsIXS2uKvLdsc3d1D3uEjgV2eHfKaaltHF5/GjXicNM7Y8z8XGYksHLo8XJxyOoPv5fatUfs6a0Nzt0mxPKVtjjvowV1QM+Nv6E5HzNY1t0hVruzsNaz3bilAb+AlXp9atzsyv7um9SQbk2T3SHAVjoVJ6KH2Jr2aZ4MZRuMGliuSHKamsIfZXvbWAoHGODyK6gelXMhVKFIzR0IFUKFCgBQoUKAbhSh1pANGDQHrmhXnRgn1oD0zXhLktxY7jrqgltI5UTgCvUniobrNxy4S7daE7u5dC5L2BwUt4ISfmT09qEoz72odqA1RfXIEFgP2W1/xSgE7XnwcIKz5pB5x8qy5rS+Kul1WtyR3y0EglOdqT6DnpV4du9tVpLUGqIkRQbjS+6kxAgZJDigVJ+4Vz/vWZFblObVZBJ5qrZZkz0bFVImNbUblqPA/zWrdF2kQIzSFcqUMkYqjeyCxFTRuDqfiOEZ8gKvuJd4lqwuVIbaKvCkKPJ+Qrk8u1yfVHb4FShHvIn9vj93hQA5qZWxISlOOariBr/TrDaS+/I2jqsMKwP8/lVk6Xuln1Az3lquEeWE9Utr8SfmnqK5sq57aOqra9ZJCwcpAxx711g4A44xQRCWceRroEVaeMZArSCaRjNrOzklw0yGVJUMpUDWD9WMIteptQsKALrTqkKcA/pB6fY/et8OFTaOnArDPaVby1q7VyFdUy1E/IgHNe/hSXdng50W60VhqS0l9ibIbzuQEPpPoeAf8AFPmjLkZsBYBCnGxhQ89w8vnR29tL8PKgVBSfw6wo55HQ/pUHiypOnLrNdYJAbWUuJA6jyOPPGfrXUONnDNvdhWsVXazrguufx4Cg0Mn4mzyn7cirvSQQCOhrBvZZrdy13OPdUA7HFd3IZCviSSDkfLkitx2mexc7XFmRnA6y6kFKgetTF/CJrHo4UY60gUsdasZigaOk0qgBQoUKAawaMGkZowaA9AaGaQKV50AZPtk1B71cWLZqa4T5jyWoMC0lbjizgJUVK/2qR3e7otjO4hS1qV3bbaPiWs+Q/UnyAzWNO3btbVOnybFDkIcZS5mW8j4XVp+FtHqhPqepqG8F4og3a12qua11X+NbY7q2RGlRmEY8SgTkrV7lXOPIVVjaDd7skJSErdWOEj1p0vCkOw4rKW1B5ZUtWfLJr20Pb+81G0VDKWhvNYzliLZrCHaaiaa7NdNh1EaG2kJZaSMnpUn7QmHtMlqRDszVwjJRhwpwHEHy6jBB+4ru7OkNMtNqx8WPqatpFqj3aOWJLSVtLGNpFcOyzE8v0+lrpzDCMwOdoOp7YiA7KsFkMW4Od21Ex3jiuQnBOQEkkipunSjc0s3a0sP2O6JUd8YqxtUFEHaQTxkEAgkHBHtVqOdk1sStWYzMmOo5LbyAT96c7xYmYlshLd3RGLYMMJSobQjHLeMZwf1wa3V9fX8VhnlfGm5Ls8o69DX65SYTTdxX3jyBjvOPF9qmMrUcG3gIlvIZXt3eLgYHU5qt+yze9bluvIOATtKvMV6dos6NBtzi5UBUxOxSghOM4HXk15YWTcsI9dlUUsfomrep7DeUlMG7wnHP7Q4Ac/I1k3tohi39ot9DoCW5rTTgHqCAD+hp4sGoNJXGGmdNsF0tkRwOKRKQ73qEpQoIUVAE7AFEDxAZ9aZO122pDlrksXBM2DMiqQw+V5O3y+XWuhVBQsT1k5ts3KtreCorcgxn5UdRATuKTzkhaTwfqKYtXxtkpbrIAU+ncBj0H/OK7EKcZac/EZD2UEKz1I8/yrw1n3jURiUo42Obc+mf9iK6RyWhOnLmzGgW8+FP4rwK2HGCPOthdg2rTKjrtT8hBLiS42kjBDicBf8A3ApVx57qwNbXnipsoyUNuEYB6edX92bzpsO925aJPdpU42NxPTcdoOfTBPJ9KjOGWxmJuxOc80umuw3BdytzbzqcPJJbdHo4k4UP+etOgrUwFUBRZo6EB0KKhQDTSs15g0oGgFivGS+GWySvBpTi9qVEEDAyc1GZqV3WU5HU4ruUgd4Qccemf1oSQHtS1M9Asl0nwlKyy0Y0dZV5kZcX9ABz6nFYajrTLuE64zGi4EDcEE/EtR4z9ea2R23lDOi5qI7SDhonbj+Wk9D7ev51kiJOi2uEuPIZS8l9aXVeZTt5GPc5rJ7NVoaZlwXFcmRVNhcuSlLXAyGxkHA9SeOalOg4m92W9swoEI+1QaJcW495aua20ltD+/uepxVmdlTaXvxCUuh5CnjtVjGR8q8/Jb6Hq4eHYaC0DO4ZQo8pIHzrQFgdCgnOBxWeNIRlx5eAMFIyPerpss55LO5KQQkZ5PSuHa8s+lqX4lnhUNpjvHlbdozVJ6+1Yi93tmz25SpHiwrb8KfXmvLWl9ud4tkyJCfLTu0pCmznn51B9MaojWi8wGrhFdZcylkKIGwK+fvTs5rCREa1B9my/NMWz912xprGCByad50BF2jJQVKbcTwFDp9aOJcra9ESkObXCMYPGTRMXNEdxLDoSoHkKqkfxfrIlmXwik3s9jqZnNxm/wAKqcyWZK4oSjv0nyVlJyOazL2xaCe0Da4bLEqY7b2ypDTbrm5DYV1xxW4SWwjeD1HFZ5/aifjM6JQHdpU4+lCc+9exWTU4xyeV1QcZPBk+4tlsoccOG+7BUCPiO3P+aZtXLC7SncfGUgqH/Penq/SEdy20sqS22gIKvPJAA/SmG/SWXbagqBUClKQR5gKruI+fYw6ajlUtllSkguuFQBHxYHP6/rVzWsmA6wWcFDYCkJJ+EhQJTn2PSqYurL1pmR5TCjtY+HHHGefvmrZsMxE+FGlF1J3NpC8eRzgKx9qqyYfo2/ot5MmBKfR8Lz4cyOhUUJJqTg1Beya4R7hoe2Kjkb2Ult5OOUuDg/fg1OM+tarR55LDF0M0QPFHmpKhg0KKhQDODSs4pANKHvQCHfEy6lRAyk59eajMR5KJE1oLJWpxKM+m4Y/QUNTagkRHWrZa45k3aSCpKc4QyjpvWfIelRi6OKs1uceuL7caNFQX5DjZKnFkjkbvXHHryMedQ2WSK77ZdTRGNL3qN/NemLMNlKfhQngFWfMgAk49RWUlQMRpu/YpbLSdwBz5Aj7g1Pe0XVTk/u7wlpbTr2W4EUJ4ZZyTuOOCTkEfc+VVy1JUZzxQpaVy0bV7uQpR55+tZ5ybYx4RV1wLV4QU44x7VbPY3KShTzZOCHQr6Ef+qqeRgPLwNoz0znFSfs9vJtV9bSo/wn/CfY+RrK+PaDRbizULU2bb01HaVNYUr+pGM1ItWMSptjkotMz8LOZA2LICgrjlJ9jUD0peUOsMq37iBxUkiTVyGpiSSckkVwtSyz6jOUhi0tb9cTWHZTLTcppt0MlDSUhW4jONp9vfzqQw1x3pSIeorR3DhP8AMU2U8+4P+DXnZLncrRNaU0+40jfvQsfDuIxkjoePUVekPWFqkQ4H77tq3CgbvFH7xK1EckcEY/3r0xrrs9XhrZO6mKzDvF/Vsh1tmafUWW97KltnwqcB6/Xzro1I+7FMec0nfHbO10J5KR5K+VDUf/RVyZcVFtj7M1ediG0lrxHzOOMe2KY7Dpi9WZhC5l5flNPJKTDW2nu2x5YwMj7mvNbQoepjvlJqLi/9JvFvCH4ySlzPFY7/AGq9fC6aqtmnozm5mDl5/B4KvStNXN4We3uqQAgIQSVdMGvnnrC5Kv2qr/clKK9yiEKz8QJxmteBX3s7P4eL+Qt/51dV9PJq6m4wpCFnc5krHr1GK82FmXBSyUnONiT188mvO3W9x1TgaSFZa8vPHX9DUl0zDjOwLkl/alxpSi3zjp6fQ13UfP4E/hP3hlhwBZMbPi8jjgn2ri0ffjbUi2yCA6nchvJ4Uk+X36V32iYHpMkLRtXDZwF5+JBV5/RVRe/MoYuLbzXibYwCoHqCeoP1o9Fc4eTYPYZrNNuuohvLCYtwQByeN4/z/jNaaHQelfPKw36RC/CymejZQ4kq65Tzk1uLQOqWtV6cgz0J2LW2N7ec7Tjn6ZB69OlK5fBfH3siV+dHSaPOa1MBWaFFQoQMw6ClKUQlRAycdK80HyriuNwQw2oBSdwGcFXJ+gBoSiBWSYq66rvz65Km4iVNoSWx41hKcEA84AOenJzVe9tZjW+JFYdZdW7PSDukOqXgqOM8kgEA+lSfSdzYVcZLSHkhtEdSnig5I6AE+hwDUC7YLgzeNTiO24p93e2nuwPAyho+In3KylI9dqqzb8NFspS/SG7renF78tttAJQgbsK58I9hwMgeVQmPDmMzlviI2/3eBtcSSlKlcJzjzz5VILbJj2wJkzspC1OgtAeYSrw8e/FeNonuSLW6lUqO3PYX+Ej5Hm4SS8pWcEpGUpPlVEjSTx4V7KbLbziVKClBRBUOhru08z3tzb9EgmvK5BDknYynAbSEKIOQSOMj2NPOi4pcmLXjI4FRa+sGyKI9rEi5tFancglEWQr2BPnV2aDuTUy4usuKBJPQn16VSadOOPx0ONJO9I3DHnTlpy6zrJPako3Eo8K0HjcP964049tH0NcmtmuYelmZDZQAkoUM7VDinODZZ1tHdxpkhtjp3aTkY9s9Kjei+0e2XGM2VyEtu7fE2s7SKsCFe4slsqSU7fUkYrKGI/cM9DskvFoZ27HFiPd/3RU91K3Dk0c6YG0YHCvMnyrwvWpoTaihLzexHKllQxn0rK/bZ+0wi3KlWPSpK54y29OUPCyfMIB+JXv0HvSFU7ZdY+lLuQoLvYxf7SfbEm3Q39MWWQkz3k4mOIVyyg+X/wBj+QrK1nUHG5KCeQ0pRHnxjFNxlvSZD8h94uPPblLU7lRWT1yfXnOa9rW4pl14AZKk4PyzzXaoojTDqj56/kyvs7PRP9KS27cl119IKWycA9Ug8/4NcEje/IurLHRO5QwfiBxg/nj7V4gSJMqY0yf4brO9QHI6cH86fLVAZtC50mSdziClOPXakHH3P5VsUGyzSgH5I/8AkkKbZI/0g5UfsKbFR1NiSwofwg6psHrtI6ffNLta3XrhMeQkqc2lIWT8JUMZpRZCrbJ3rJUHVc54UU4FCCYKmIZ0WlbaQpxpKWFBQ5G485/OtJfs13Z5lX4JxalNPMpI3KzknOPl8Ch78VmTT6ESdJOd8tRSp8BKB0UDnr9QKvzsnkLgLjFGUKioDecjkglac/8AkPrVY7Lz9iaw6mjryjyWpjDb7Ktzbg3D1HsfevWvQeQMGhRUKEDA8rYw4v8AtSTUHXd5MmK5IgQVylbQVOrcDTKPQepOfb7V5a91xCt0N63tokPyVlKV/h0g7BnkdeuOPaql1L2sxoelJtvVMi2191kpi7CoLRk8KAIUlXnyDVW1o0UXjJxzNafuq8TokR1EyT3KmHW4gIG5KieSRjqSB14FUmvtQuFpg3IoYBvU+SFJlLKT3SUcdPX3OByaltg7ZrVpayrt9u06ie44lW9yQAlA3AZ5UCVHg8n1qj5kn8TJd2NoKlqKuBkIyc4FUw2X7JD1pafHTOfut2eR+HjMPBLZzvfeUlQTtHqFKyT0AFRx+4OPuvBtx0JfKVOAkeNQ8zj3JpCme6VjzrrtsDvXg4QMZ6Yq3Uo3k9mre66xtbQVvOcAVYekNLPW+ItTqTvyCeKm/Zt2e/j7YzPcaz36jsJHRI4/PmrQkaJDFseIbGSnjiudyb8vovh1eLx+qU3tg0XZkXCA0FJ8hz1xT3P7NQ64XG0BK1evRf8A7ro7M2FNpSwsYUg4q7YkBC0AFKSn0IrnN+nS0ih4uhHGuFsOJI/qSMin+HpKVt2ocf2j+nkCrj/dTSc7AUj0IyKCoyW0H/AxVG2WUkU5d9OCDBddeUVqSkkc8JrAet2lJ1VeQQciSo8+hr6Q63QXYq2WxysYrAXa/a1W3Xc0FOBIQhwfbH+K9v8AHy/Npnh/kot1plcBW0EEZz+Vd9v/AJxVu6jb9xXE8na4RXtDWUOowevnXWZw4+MnGm5CXJENSQouObY6wOp5PT6Zp2u6gRJbCsnKlq565JyPzH2qPWWYq33uC8+2NjakrKkD4uOCffmpDIiqeluoBPeBXhx0Uk8j/P3qD0L0jemnu6uyN6VEEFOB5qFdLu1VumJHHdrJGPUnrXo6yLROi48QEhZWEjy6Z/SnFu1idcJTLQ2lwBYHqkjrihAVlvCYNoMV1rLTigoLHVCq0n2LzoFxuxt8gBTNwjNlBT8W9HOUkefX7VmRlpBcejuA93u2ZPrgjJq2uzKXKs6or8d0okW5xtSMgE7T/wD0/Q1TUjTcMGtbaJVg1A/CTLMmC4GVbFtBKklZKcgj5dMcipnUA0LNOp1vXdaQE98Qsp83EZQlGPRI5+aqn5r0HjawAGhRUKkqfMK5do2qrrGdiOXqW3FeUVOMsL7pKz6nbgn61G24uVFajkq6knrXqhoJxiuhIDad5OEp5JNRgscs10sRwy3gOOcAD09a8GIgjo9T617RUGU6uSsfFwkeiaOWvb4RxUgbXWi5JTjr0qRwmUso3q4ShO5RNN0NjcoKIpynL7m3uAZBdIQKEo1F+z/rO3aitjGn5am2brFTiP0AkN9eP9Q9PMc+tX3Jsjb0ct4HIxivmxZ7jItbzbjSlJKCFJKVYUgjzB8jWk9CftMz2GGoeoI6rg0kAfim8JfA/wBQPC/nwfnXO5PDbfas6fG5iSUbC7rXaP3ZdAUjw7sZFWxDSQwk46jrVQ6Y7R9L6qktph3aOJCj/IkK7l3/ALVYz9M1cUJ5LbCEuJI44JHUVy3FxeJLB0nNSjmLyBa8DNcjzilIJ4xXXJlMoQSCCaa0yFSEr24A8qpL9Fo/sj12hB8LKvOscftM6bMeVAurafhJaWfbqK1nrXVdv0nDVJu8xmKj+kLPiX7JT1J+VYt7aO1FzWrbkOIwY9tSrcFOD+I6R0yP6R7da9XDqsc1JI8/LtgoNSZS0lGUbvPr868GSAoZzjOCB6V1MkPR8HkpriV4VEYrtHAZLYDK7jDeloA3hSkpaJ8gkU7abvC5FygMSCkd07hSieSnPn8jUe0/MWxJbZGe7cQTtHyNdjCUsLTLaJC3AvGOoP8AwVRm0fg+6gSmE7cXSQtbi9iD5JSpzKiPpXVHfXFuVukE8HLBIHUHkZrg1SH1wIilkJC0jvDjzIyKdn2kIgJZ24392W1jyPBz+ZqS30C4zffOoyFOF7JTjBwTmrMt7jMO4pWkYZeYS24gcgeh9uuKrAKWiYoHGRgpz+lS63yAm6stqUsIdjBsLA/rCcgfeqS2ax/qan7DLg3+55lqKgZEaQ66s/3hSuFfnj6VbNZK0LqZyyXdi6JWUOMgB1vH82OThSvmkkH5ZrVkF9MthD6FAodAI5z+da1yysHluhh5OmhQoVoYnyrQgJRzXJPd3raijovlWPQV0y190hIPrTdFJkynXzyPhT7AULDqgBLeQMU3uZcf4BwPWnBwbWwPpXKjG7AoDuix8JBJ4orp4nWmhnahOfqa6IwJUAfhHWm9x0yJC3MZ3K49h5VKB6NNjA4GM12ISE5GOR+Vc7YB6faulA6kY+VWB2tPqACc5GeihmpVZu0fVGm2wi2X65xGxyG25KlNj/8ABWR+VQ9Pv1pWRzVZRjLaySpOOmWmn9oDXhRtVqErHquGzn/9a5ZnblrqUyWjqichChyI6ENH7pTmq38IHuaChnHHTrWa49e1FGn/AKLH45M6LndpdxkLkypD8mSvq8+4XFn5qUc1GZ7Rd3FQPPHNPakAg4zXLIZBGfKt1FYMpZfpDoQ2SXGT0UDXNLb7t0+hrunI/Cz0OY8Oc163KLlJUkD1rBknhZ3iidHPocVMGLd45KmU5ZSUraGc7Qo4V9qgKFlPh8s5qwNJumSz4zhyQoMpOemMHP5H71Ro1qfuBv1JclfvCXEUNzaUoQOeSU+dTCG4J1ttAbJUDnxY6gcioNqF1Mi9JdQ0pBWcLR/dzgn7VPbbGVboqI2cuMqISD1wrHH2NQWRz3xgqLTgIwhQKleZ86f5ctDUy3uNAYDQKhzyQMZphmvlNwDKyASkqKeo488fM08Lh9w4GiAXWvGR5pSePtVJ7RrDTLP0/p4anscRtkqbkjetC0HxJISMZ9vUehq3exbWq3YLmnrpubn29WxJXwFp9j6jBGOnGRVZ9il0QJ8aDJX0UGxuPxJUFJP+Kn0+xJi6mS8y73K5K1NqPGSoK3NLHvnj2zVoeYZSazmLLyGCMg0KZdL3E3O1MPqGF42rTjoocEUK9B5H4fLK9SQghKetdFra7uM2DnJGaFCo+knRJXtHWvKJlwkn6UKFSEOald1GcUD4iNqfrXGy2NvHXNChUlWzrQk8ZOPlXuEDkUKFWz5klPJ6pSfIgfPzoAEKPnzQoUB6AKKTt5x5UgqOBny8qFCgFDBPmc+lIW3xg56ZoUKo9lyM6giEIDmBkelekQCdb21HkpG0/ShQo16VQxTopYWTxinfTcpxlQcSCS0TsPqpXH6UKFZTNK/7Dtf3xKfhSwnbuCUuJAxyPP7edP8AaLoZ6zI5KVvrAAPAUUjA/KhQqqNfo6RGxJvqH3MdyFBCOPix1/Sl21xTt7vrrylAlpZG7okAAgChQrOX01jpEq0NM/ETmkFZZcWQpDo4KFDjP+fpWg9P3F3UMlhb+0yYTZakKSkAbwoeL28OD9aFCph/bBWxfjknvZ28ZVnckf0OSHSk+vjI4oUKFelaPFPZ/9k=" alt="טלי בנימינוב שרעבי">
-    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · תמחור</div></div>
-  </div>
-
-  <div class="hero-title">
-    <h1>מחשבון <span class="em">תמחור</span></h1>
-    <p>המערכת השלמה לתמחור: מגדירים את בסיס העלויות של העסק פעם אחת, בונים קטלוג של כל המוצרים והשירותים, ורואים מחירון עם הרווחיות של כל אחד - עם פירוט מלא איך נבנה כל מחיר.</p>
-  </div>
-
-  <div class="tabs" role="tablist">
-    <button type="button" class="tab active" id="tabSetup" role="tab">⚙️ העסק שלי</button>
-    <button type="button" class="tab" id="tabCatalog" role="tab">📦 המוצרים</button>
-    <button type="button" class="tab" id="tabList" role="tab">📊 מחירון</button>
-  </div>
-
-  <!-- ===== SETUP ===== -->
-  <div id="setupView">
-    <div class="card">
-      <span class="sec-lbl">🧮 בסיס העלויות שלך</span>
-      <div class="explain">ממלאים <b>פעם אחת</b>, וזה משרת את כל המוצרים. הרעיון: <b>הזמן שלך שווה כסף</b>. עלות שעת העבודה = (מה שאת רוצה למשוך + ההוצאות הקבועות) ÷ שעות העבודה בחודש.</div>
-      <div class="tt-sub" style="margin-top:0">כמה את רוצה שהעסק ייתן לך</div>
-      <div class="fields2">
-        <div class="field"><label>משכורת שאת רוצה למשוך (חודשי)</label><div class="input-shell"><span class="unit">₪</span><input id="ownerNet" type="text" inputmode="numeric" value="0" aria-label="משכורת"></div></div>
-        <div class="field"><label>פנסיה + קרן (חודשי)</label><div class="input-shell"><span class="unit">₪</span><input id="ownerSave" type="text" inputmode="numeric" value="0" aria-label="פנסיה וקרן"></div></div>
-      </div>
-      <div class="tt-sub">הוצאות קבועות בחודש (עקיפות)</div>
-      <div class="explain">כל מה שהעסק משלם כל חודש בלי קשר להצעה מסוימת. פרטי לשורות.</div>
-      <div id="expList"></div>
-      <button class="cp-add" id="expAdd" type="button">+ הוספת הוצאה</button>
-      <div class="cp-total"><span class="ct-l">סה"כ הוצאות קבועות</span><span class="ct-v" id="expTotal">0 ₪</span></div>
-      <div class="tt-sub">שעות עבודה</div>
-      <div class="field"><label>סך שעות העבודה שלך בחודש (הכל)</label><div class="input-shell"><input id="workHours" type="text" inputmode="numeric" value="0" aria-label="שעות"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שעות</span></div></div>
-      <div class="rate-line" id="rateLine"><span>עלות שעת עבודה כוללת</span><b id="rateVal">- ₪</b></div>
-      <div class="explain" id="rateExplain"></div>
-    </div>
-
-    <details class="card tt-wrap">
-      <summary><span class="sec-lbl" style="margin:0">⚙️ הגדרות מס ומע"מ</span><span class="chev">▾</span></summary>
-      <div style="margin-top:14px">
-        <div class="tt-note">כאן מחשבים את המס <b>האמיתי</b> שלך, לא הנחה. מזינים <b>נקודות זיכוי</b> ורווח חודשי צפוי, והכלי מחשב כמה מס תשלמי בפועל (מס הכנסה 2026 אחרי נקודות הזיכוי + ביטוח לאומי ובריאות לעצמאי, כולל ניכוי 52%), וכמה יישאר נטו. מזה נגזר שיעור המס שהמחיר מוסיף. משאירים רווח ריק? <b>המחיר לא מוסיף מס בכלל.</b></div>
-        <div class="tt-grid">
-          <div class="tt-field"><label>נקודות זיכוי אישיות</label><div class="tt-cell"><input id="tPoints" inputmode="decimal" aria-label="נקודות זיכוי"><span class="u suf">נק'</span></div></div>
-          <div class="tt-field"><label>רווח חודשי צפוי מהעסק (₪)</label><div class="tt-cell"><span class="u">₪</span><input id="tProfit" inputmode="numeric" aria-label="רווח חודשי"></div></div>
-        </div>
-        <div class="explain" style="margin:6px 0 0">נקודות זיכוי נפוצות: תושב/ת 2.25 · אישה 2.75 · לכל ילד/ה קטן/ה עוד 1-4.5. אפשר לחשב מדויק ב<b>מחשבון שכר נטו</b> שבארגז.</div>
-        <div class="rate-line" id="taxSummary" hidden></div>
-        <div class="tt-grid" style="margin-top:11px">
-          <div class="tt-field"><label>שיעור המס שהמחיר מוסיף (מחושב, ניתן לשנות)</label><div class="tt-cell"><input id="tTax" inputmode="decimal" aria-label="שיעור מס"><span class="u suf">%</span></div></div>
-          <div class="tt-field"><label>מע"מ (%)</label><div class="tt-cell"><input id="tVat" inputmode="decimal" aria-label="מעמ"><span class="u suf">%</span></div></div>
-          <div class="tt-field"><label>עמלת סליקה (%)</label><div class="tt-cell"><input id="tFee" inputmode="decimal" aria-label="סליקה"><span class="u suf">%</span></div></div>
-        </div>
-        <button class="tt-reset" id="ttReset" type="button">↺ איפוס להגדרות ברירת מחדל</button>
-      </div>
-    </details>
-    <div class="cp-note" style="text-align:center;margin-top:4px">אחרי שמילאת את הבסיס - עברי לטאב <b>📦 המוצרים</b> כדי לבנות את הקטלוג.</div>
-  </div>
-
-  <!-- ===== CATALOG ===== -->
-  <div id="catalogView" hidden>
-    <div id="catListWrap">
-      <div id="catList"></div>
-      <button class="add-offer" id="addOffer" type="button">+ הוספת מוצר / שירות / סדנה</button>
-    </div>
-    <div id="editorWrap" hidden>
-      <button class="back-btn" id="backList" type="button">← חזרה לקטלוג</button>
-      <div class="card">
-        <span class="sec-lbl">📋 פרטי ההצעה</span>
-        <div class="mode-tg three" role="tablist" style="margin:4px 0 13px">
-          <button type="button" class="mode-btn" id="mProduct">📦 מוצר</button>
-          <button type="button" class="mode-btn" id="mService">🕐 שירות</button>
-          <button type="button" class="mode-btn" id="mHybrid">🎨 היברידי</button>
-        </div>
-        <div class="cp-note" id="modeHint" style="margin-top:0;margin-bottom:12px"></div>
-        <div class="field"><label>שם ההצעה</label><div class="input-shell"><input id="offerName" type="text" value="" placeholder="לדוגמה: סדנת יצירה" aria-label="שם"></div></div>
-        <div id="materialsBlock" style="margin-top:14px">
-          <div class="tt-sub" style="margin-top:0">חומרים / תשומות (למוצר אחד)</div>
-          <div class="explain">לכל חומר: כמה <b>שילמת בקנייה</b> וכמה יחידות קיבלת, <b>בלאי</b>, וכמה <b>נכנס למוצר אחד</b>.</div>
-          <div id="matList"></div>
-          <button class="cp-add" id="matAdd" type="button">+ הוספת חומר</button>
-          <div class="cp-total"><span class="ct-l">עלות ישירה (חומרים)</span><span class="ct-v" id="matTotal">0 ₪</span></div>
-        </div>
-        <div class="field" id="timeField" style="margin-top:14px"><label>זמן עבודה להצעה</label><div class="input-shell"><input id="offerHours" type="text" inputmode="decimal" value="0" aria-label="זמן"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">שעות</span></div></div>
-        <div class="fields2" style="margin-top:12px">
-          <div class="field"><label>בלת"מ / בלאי כללי</label><div class="input-shell"><input id="contPct" type="text" inputmode="decimal" value="5" aria-label="בלתמ"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div></div>
-          <div class="field"><label>% רווח רצוי (על העלות)</label><div class="input-shell"><input id="profitPct" type="text" inputmode="decimal" value="30" aria-label="רווח"><span class="unit" style="padding-inline-start:0;padding-inline-end:13px">%</span></div></div>
-        </div>
-        <div class="field" style="margin-top:12px"><label>מחיר שוק / מתחרים (רפרנס)</label><div class="input-shell"><span class="unit">₪</span><input id="marketPrice" type="text" inputmode="numeric" value="0" aria-label="מחיר שוק"></div></div>
-      </div>
-      <div class="card">
-        <span class="sec-lbl">🏷️ המחיר המומלץ</span>
-        <div class="net-hero"><div class="nh-lbl">💰 מחיר סופי (כולל מע"מ)</div><div class="nh-num" id="finalNum">0<small> ₪</small></div><div class="nh-sub" id="finalSub"></div></div>
-        <div class="explain" style="margin:12px 0 6px">איך נבנה המחיר:</div>
-        <div class="ded p-ded">
-          <div class="ded-row" id="rDirectRow"><span class="dr-l">עלות ישירה (חומרים)</span><span class="dr-v" id="rDirect">0 ₪</span></div>
-          <div class="ded-row" id="rTimeRow"><span class="dr-l">עלות זמן<small id="rTimeSub"></small></span><span class="dr-v" id="rTime">0 ₪</span></div>
-          <div class="ded-row" id="rContRow"><span class="dr-l">בלת"מ / בלאי</span><span class="dr-v" id="rCont">0 ₪</span></div>
-          <div class="ded-row sum"><span class="dr-l">= מחיר מינימום<small>מכסה הכל, בלי רווח</small></span><span class="dr-v" id="rMin">0 ₪</span></div>
-          <div class="ded-row" id="rProfitRow"><span class="dr-l">+ רווח רצוי<small id="rProfitSub"></small></span><span class="dr-v" id="rProfit">0 ₪</span></div>
-          <div class="ded-row" id="rTaxRow"><span class="dr-l">+ מס<small id="rTaxSub"></small></span><span class="dr-v" id="rTax">0 ₪</span></div>
-          <div class="ded-row sum"><span class="dr-l">= מחיר לפני מע"מ</span><span class="dr-v" id="rPreVat">0 ₪</span></div>
-          <div class="ded-row" id="rVatRow"><span class="dr-l">+ מע"מ<small id="rVatSub"></small></span><span class="dr-v" id="rVat">0 ₪</span></div>
-          <div class="ded-row" id="rFeeRow"><span class="dr-l">+ עמלת סליקה<small id="rFeeSub"></small></span><span class="dr-v" id="rFee">0 ₪</span></div>
-        </div>
-        <div class="save-note" id="marginNote" hidden></div>
-        <div class="val-note" id="valNote" hidden></div>
-        <div class="save-note" id="marketNote" hidden></div>
-        <div class="rate-line warn" id="emptyNote" hidden><span id="emptyTxt"></span></div>
-      </div>
-      <button class="back-btn" id="backList2" type="button" style="text-align:center;width:100%">← חזרה לקטלוג</button>
-    </div>
-  </div>
-
-  <!-- ===== PRICE LIST ===== -->
-  <div id="listView" hidden>
-    <div class="card">
-      <span class="sec-lbl">📊 מחירון ורווחיות</span>
-      <div class="explain">כל המוצרים והשירותים שלך במקום אחד. הרווח הגולמי = המחיר (לפני מע"מ) פחות עלות החומרים - כמה נשאר לכסות זמן, הוצאות ורווח.</div>
-      <div class="tbl-wrap"><table class="ptable" id="priceTable"></table></div>
-    </div>
-  </div>
-
-  <div class="cta-card">
-    <div class="cta-emoji">💸</div>
-    <h3>מחיר נכון זה רק ההתחלה</h3>
-    <p>לתמחר נכון זה קריטי - אבל זה חלק אחד מתמונה שלמה של רווחיות, תזרים והתנהלות. לבנות עסק שגם עובד וגם מרוויח - זה בדיוק מה שאנחנו עושים יחד.</p>
-    <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצה עסק רווחי ומסודר? בואו נדבר ←</a>
-  </div>
-
-  <div class="socials">
-    <a href="https://www.instagram.com/tali_finance" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
-    <a href="https://www.tiktok.com/@tali_beniaminov" target="_blank" rel="noopener" aria-label="טיקטוק"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M16.5 3c.3 2 1.6 3.6 3.5 3.9v2.4c-1.3.1-2.5-.3-3.6-1v6.1c0 3.2-2.6 5.6-5.7 5.4-2.7-.2-4.8-2.4-4.8-5.1 0-3 2.6-5.4 5.6-5.1v2.5c-.4-.1-.9-.2-1.3-.1-1.3.2-2.2 1.3-2 2.6.1 1.2 1.2 2.1 2.4 2 1.3-.1 2.2-1.2 2.2-2.5V3h3.3z"/></svg></a>
-  </div>
-
-  <div class="copyright">© 2026 כל הזכויות שמורות ל-RichLife ולטלי בנימינוב שרעבי. אין לשכפל, להפיץ או לעשות שימוש בתוכן זה ללא אישור מראש ובכתב.</div>
-
-</div>
-
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
      מדביקים פעם אחת בתוך <head> של כל דף באתר.
@@ -560,246 +383,778 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
   else build();
 })();
 </script>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <img class="avatar" src="data:image/jpeg;base64,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" alt="טלי בנימינוב שרעבי">
+      <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · תמחור בשלבים <span id="bizLabel"></span></div></div>
+    </div>
+    <div class="top-actions" aria-live="polite">
+      <span class="live-badge" id="liveBadge" hidden>🟢 קישור חי</span>
+      <span class="save-state" id="saveState"></span>
+      <button type="button" class="btn small ghost" id="newBtn" hidden>התחלה חדשה</button>
+    </div>
+  </header>
+  <div class="layout">
+    <nav class="rail" aria-label="שלבי התמחור">
+      <h2>השלבים</h2>
+      <div class="rail-progress"><i id="railBar" style="width:0"></i></div>
+      <ol class="steps" id="railSteps"></ol>
+      <p class="rail-note" id="railCount"></p>
+    </nav>
+    <div>
+      <nav class="mobile-steps" aria-label="בחירת שלב">
+        <label for="mobSelect">לעבור לשלב</label>
+        <div class="input-shell"><select id="mobSelect"></select></div>
+        <div class="rail-progress"><i id="mobBar" style="width:0"></i></div>
+      </nav>
+      <main id="view"></main>
+    </div>
+  </div>
+  <section aria-label="רשתות חברתיות וזכויות יוצרים">
+  <div class="socials">
+    <a href="https://www.instagram.com/tali_finance" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+    <a href="https://www.tiktok.com/@tali_beniaminov" target="_blank" rel="noopener" aria-label="טיקטוק"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M16.5 3c.3 2 1.6 3.6 3.5 3.9v2.4c-1.3.1-2.5-.3-3.6-1v6.1c0 3.2-2.6 5.6-5.7 5.4-2.7-.2-4.8-2.4-4.8-5.1 0-3 2.6-5.4 5.6-5.1v2.5c-.4-.1-.9-.2-1.3-.1-1.3.2-2.2 1.3-2 2.6.1 1.2 1.2 2.1 2.4 2 1.3-.1 2.2-1.2 2.2-2.5V3h3.3z"/></svg></a>
+  </div>
 
+
+  <div class="copyright">© 2026 כל הזכויות שמורות ל-RichLife ולטלי בנימינוב שרעבי. אין לשכפל, להפיץ או לעשות שימוש בתוכן זה ללא אישור מראש ובכתב.</div>
+  </section>
+</div>
+<div id="printRoot"></div>
+<script src="engine.js?v=1"></script>
 <script>
-const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
-const money=v=>fmt.format(Math.round(+v||0));
-const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
-const grp=v=>{v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');};
-const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const SKEY='rl_pricing_v3';
-function newOffer(){return {name:'',mode:'product',mats:[{l:'',buy:0,pkg:1,waste:10,q:1}],hours:0,contPct:5,profitPct:30,marketPrice:0};}
-const DEF={
-  biz:{ownerNet:0,ownerSave:0,workHours:0,
-    expenses:[{l:'שיווק ופרסום',a:0},{l:'שכ"ד / משרד',a:0},{l:'הנהלת חשבונות',a:0},{l:'תוכנות ומנויים',a:0},{l:'טלפון / אינטרנט',a:0}],
-    vat:18,feePct:1.35,monthlyProfit:0,points:2.75,taxRate:0},
-  offerings:[], tab:'setup', editIdx:null
+/* RichLife pricing tool UI. All math lives in engine.js. */
+(function () {
+'use strict';
+var E = window.PricingEngine;
+var DRAFT_KEY = 'rl_pricing_v4';
+var SHARE_API = 'https://richlife-share.tali-bi-finance.workers.dev';
+var MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+var DEFAULT_DATES = ['שנה אזרחית חדשה','יום המשפחה, ט"ו בשבט','פורים','פסח, ימי זיכרון ועצמאות','ל"ג בעומר','שבועות','חופש גדול','חופש גדול, ט"ו באב','ראש השנה','יום כיפור, סוכות','בלאק פריידי','חנוכה, נובי גוד'];
+var UNITS = ['יחידה','חבילה','קילו','מטר','שעת עבודה','פרויקט'];
+var STEPS = [
+  { t: 'לפני שמתחילים' },
+  { t: 'חומרים וספקים', why: 'כאן רושמים כל מה שקונים כדי לייצר את המוצר או לתת את השירות, פעם אחת. בשלב הבא בוחרים מהרשימה הזו בלי להקליד שוב.' },
+  { t: 'עלות מכר', why: 'כמה עולה לך מוצר אחד בחומרים בלבד, לפני הזמן שלך. זו העלות שמשלמים רק כשמוכרים.' },
+  { t: 'שכר ושעות', why: 'כמה רוצים להרוויח מהעסק, מי עוד עובד בו וכמה שעות. מכאן יוצא כמה עולה שעת עבודה אחת.' },
+  { t: 'עלויות עקיפות', why: 'כל מה שהעסק משלם גם בחודש בלי מכירות. מחלקים את זה על שעות העבודה, כדי שכל מוצר ישא בחלק שלו.' },
+  { t: 'מס', why: 'כמה העסק צריך להרוויח לפני מס כדי שיישאר ביד מה שרוצים. מזינים נקודות זיכוי וחיסכון, והכלי מחשב את השאר.' },
+  { t: 'תמחור', why: 'כאן הכל מתחבר למחיר: קודם מכסים עלויות, אחר כך מוסיפים רווח ומס, ובסוף בוחרים מחיר מול השוק והערך ללקוח.' },
+  { t: 'מחירון ותמהיל', why: 'כל המוצרים במקום אחד, עם הרווח הגולמי של כל אחד. מסמנים מאיזה מוצר צפוי להגיע כמה מהמחזור, וזה קובע את הרווחיות הממוצעת.' },
+  { t: 'רווח רצוי', why: 'מתחילים מהסוף: הרווח שרוצים ביד, ומוסיפים מיסים והוצאות עד שמגיעים למחזור הדרוש. נקודת האיזון מראה מתי העסק מפסיק להפסיד.' },
+  { t: 'יעדים ותוכנית שנתית', why: 'המחזור מתורגם לכמה מכירות צריך מכל מוצר, ואז פורסים אותן על השנה לפי מועדים, השקות ומבצעים.' },
+  { t: 'התמונה המלאה' }
+];
+
+/* ---------- state ---------- */
+function months(v) { var a = []; for (var i = 0; i < 12; i++) a.push(v == null ? '' : v); return a; }
+function uid(p) { return p + Math.random().toString(36).slice(2, 8); }
+function ohRow(name) { return { name: name, m: months() }; }
+function emptyState() {
+  return {
+    v: 4,
+    biz: { name: '', type: 'murshe', noMaterials: false, wastePct: 10, contingencyPct: 15, vatPct: 18, feePct: 1.35 },
+    materials: [],
+    products: [],
+    labor: { net: '', pension: '', fund: '', hours: '', monthly: [], hourly: [] },
+    overhead: {
+      marketing: ['ריטיינר לחברת שיווק', 'ניהול תוכן שוטף', 'פרסום'].map(ohRow),
+      admin: ['שכר דירה', 'ארנונה', 'חשמל', 'טלפון', 'אינטרנט', 'מערכות מידע ותוכנות', 'הוצאות משרד', 'ביטוח עסק', 'דלק ואחזקת רכב', 'רואה חשבון', 'הוצאות משפטיות', 'השתלמויות וקורסים', 'ייעוץ עסקי'].map(ohRow)
+    },
+    tax: { points: '', saving: '', tables: null },
+    plan: { dates: DEFAULT_DATES.slice(), launches: months(), promos: months(), focus: months() }
+  };
+}
+function demoState() {
+  var s = emptyState();
+  s.biz.name = 'הסטודיו של נועה (דוגמה)';
+  s.materials = [
+    { id: 'm1', name: 'שרשרת כסף', unit: 'מטר', pack: 5, cost: 220 },
+    { id: 'm2', name: 'אבן חן', unit: 'חבילה', pack: 50, cost: 300 },
+    { id: 'm3', name: 'אריזת מתנה', unit: 'חבילה', pack: 20, cost: 90 }
+  ];
+  s.products = [
+    { id: 'p1', name: 'שרשרת', lines: [{ mat: 'm1', qty: 0.5 }, { mat: 'm2', qty: 3 }, { mat: 'm3', qty: 1 }], hours: 1.5, specific: '', marginPct: 35, market: 420, chosen: '', mix: 60, plan: months() },
+    { id: 'p2', name: 'עגילים', lines: [{ mat: 'm1', qty: 0.1 }, { mat: 'm2', qty: 2 }, { mat: 'm3', qty: 1 }], hours: 1, specific: '', marginPct: 35, market: 260, chosen: '', mix: 25, plan: months() },
+    { id: 'p3', name: 'סדנת תכשיטים', lines: [{ mat: 'm1', qty: 2 }, { mat: 'm2', qty: 15 }], hours: 5, specific: 40, marginPct: 40, market: 1500, chosen: '', mix: 15, plan: months() }
+  ];
+  s.labor = { net: 11000, pension: 800, fund: 400, hours: 150, monthly: [], hourly: [{ name: 'עזרה באריזה', role: 'משלוחים', rate: 45, hours: 30, factor: 1.35 }] };
+  s.overhead.marketing[2].m = months(1200);
+  s.overhead.marketing[1].m = months(500);
+  s.overhead.admin[0].m = months(1800);
+  s.overhead.admin[3].m = months(120);
+  s.overhead.admin[5].m = months(350);
+  s.overhead.admin[9].m = months(400);
+  s.tax.points = 2.75; s.tax.saving = 1000;
+  return s;
+}
+var S = emptyState();
+var step = 0, R = null;
+var docId = null, docKey = null, pushT = null, draftT = null, howOpen = {}, netFail = false;
+
+function $(id) { return document.getElementById(id); }
+function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function money(v, d) { var n = E.num(v); return n.toLocaleString('he-IL', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+function ils(v, d) { return money(v, d == null ? (Math.abs(E.num(v)) < 1000 ? 2 : 0) : d) + ' ₪'; }
+function pct(f, d) { return (E.num(f) * 100).toFixed(d == null ? 1 : d).replace(/\.0$/, '') + '%'; }
+function units(v) { var n = E.num(v); return n >= 100 ? money(n) : (Math.round(n * 10) / 10).toLocaleString('he-IL'); }
+function grp(v) {
+  var s = String(v == null ? '' : v).replace(/[^\d.]/g, ''); if (!s) return '';
+  var p = s.split('.'), i = p[0].replace(/^0+(?=\d)/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return p.length > 1 ? i + '.' + p.slice(1).join('') : i;
+}
+function getPath(path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, S); }
+function setPath(path, val) {
+  var ks = path.split('.'), o = S;
+  for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]];
+  o[ks[ks.length - 1]] = val;
+}
+
+/* ---------- field builders ---------- */
+var fid = 0;
+function numField(label, path, opts) {
+  opts = opts || {}; var id = 'f' + (++fid), v = getPath(path);
+  return '<div class="field ' + (opts.cls || '') + '"><label for="' + id + '">' + label + '</label><div class="input-shell">' + (opts.unit ? '<span class="unit" aria-hidden="true">' + opts.unit + '</span>' : '') +
+    '<input id="' + id + '" type="text" inputmode="decimal" autocomplete="off" data-num data-path="' + path + '" value="' + esc(grp(v)) + '" placeholder="' + esc(opts.ph || '') + '"></div>' + (opts.hint ? '<div class="hint">' + opts.hint + '</div>' : '') + '</div>';
+}
+function textField(label, path, opts) {
+  opts = opts || {}; var id = 'f' + (++fid);
+  return '<div class="field ' + (opts.cls || '') + '"><label for="' + id + '">' + label + '</label><div class="input-shell"><input id="' + id + '" type="text" autocomplete="off" data-text data-path="' + path + '" value="' + esc(getPath(path)) + '" placeholder="' + esc(opts.ph || '') + '"></div>' + (opts.hint ? '<div class="hint">' + opts.hint + '</div>' : '') + '</div>';
+}
+function cellNum(label, path, unit, ph) {
+  var id = 'f' + (++fid);
+  return '<div><label class="lbl" for="' + id + '">' + label + '</label><div class="input-shell">' + (unit ? '<span class="unit" aria-hidden="true">' + unit + '</span>' : '') + '<input id="' + id + '" type="text" inputmode="decimal" autocomplete="off" data-num data-path="' + path + '" value="' + esc(grp(getPath(path))) + '" placeholder="' + esc(ph || '') + '"></div></div>';
+}
+function cellText(label, path, ph, cls) {
+  var id = 'f' + (++fid);
+  return '<div class="' + (cls || '') + '"><label class="lbl" for="' + id + '">' + label + '</label><div class="input-shell"><input id="' + id + '" type="text" autocomplete="off" data-text data-path="' + path + '" value="' + esc(getPath(path)) + '" placeholder="' + esc(ph || '') + '"></div></div>';
+}
+function live(name, arg) { return '<div data-live="' + name + '"' + (arg != null ? ' data-arg="' + arg + '"' : '') + '></div>'; }
+function liveSpan(name, arg, tag) { tag = tag || 'span'; return '<' + tag + ' data-live="' + name + '"' + (arg != null ? ' data-arg="' + arg + '"' : '') + '></' + tag + '>'; }
+function how(key, body) {
+  return '<details class="how" data-how="' + key + '"' + (howOpen[key] ? ' open' : '') + '><summary>איך זה חושב?</summary><div class="how-b">' + body + '</div></details>';
+}
+function gotoBtn(n, label) { return '<button type="button" class="link-btn" data-goto="' + n + '">' + label + '</button>'; }
+function tile(l, v, s, cls) { return '<div class="tile ' + (cls || '') + '"><div class="t-l">' + l + '</div><div class="t-v">' + v + '</div>' + (s ? '<div class="t-s">' + s + '</div>' : '') + '</div>'; }
+function lg(l, v, sub, cls) { return '<div class="lg ' + (cls || '') + '"><span>' + l + (sub ? '<small>' + sub + '</small>' : '') + '</span><b>' + v + '</b></div>'; }
+
+/* ---------- progress ---------- */
+function stepState(n) {
+  var l = S.labor, p = S.products;
+  switch (n) {
+    case 1: return S.biz.noMaterials || S.materials.some(function (m) { return m.name && E.num(m.cost) > 0; }) ? 'done' : (S.materials.length ? 'partial' : 'empty');
+    case 2: return !p.length ? 'empty' : (p.every(function (x) { return x.name; }) ? 'done' : 'partial');
+    case 3: return E.num(l.net) > 0 && E.num(l.hours) > 0 ? 'done' : (E.num(l.net) > 0 || E.num(l.hours) > 0 ? 'partial' : 'empty');
+    case 4: return R.overhead.annual > 0 ? 'done' : 'empty';
+    case 5: return S.tax.points !== '' && E.num(l.net) > 0 ? 'done' : (S.tax.points !== '' ? 'partial' : 'empty');
+    case 6: if (!p.length) return 'empty'; var c = p.filter(function (x) { return E.num(x.hours) > 0 && x.marginPct !== '' && x.marginPct != null; }).length; return c === p.length ? 'done' : (c ? 'partial' : 'empty');
+    case 7: return !p.length ? 'empty' : (Math.abs(R.mixSum - 100) < 0.01 ? 'done' : (R.mixSum > 0 ? 'partial' : 'empty'));
+    case 8: return R.annual.revenue != null && stepState(3) === 'done' && stepState(6) === 'done' ? 'done' : (R.annual.revenue != null ? 'partial' : 'empty');
+    case 9: return R.goals.some(function (g) { return g.planned > 0; }) ? 'done' : 'empty';
+    case 10: return stepState(9) === 'done' && stepState(8) === 'done' ? 'done' : 'empty';
+    default: return S.biz.name ? 'done' : 'empty';
+  }
+}
+function renderRail() {
+  var h = '';
+  for (var i = 1; i < STEPS.length; i++) {
+    h += '<li><button type="button" class="step-btn" data-goto="' + i + '" data-state="' + stepState(i) + '"' + (step === i ? ' aria-current="step"' : '') + '><span class="step-num" aria-hidden="true">' + (i === 10 ? '★' : (stepState(i) === 'done' ? '✓' : i)) + '</span><span>' + STEPS[i].t + '<span class="vh"> - ' + ({ done: 'הושלם', partial: 'חלקי', empty: 'עוד לא מולא' })[stepState(i)] + '</span></span></button></li>';
+  }
+  $('railSteps').innerHTML = h;
+  var doneCount = 0; for (i = 1; i < 10; i++) if (stepState(i) === 'done') doneCount++;
+  var w = Math.round(doneCount / 9 * 100) + '%';
+  $('railBar').style.width = w; $('mobBar').style.width = w;
+  $('railCount').textContent = doneCount + ' מתוך 9 שלבים מלאים';
+  var sel = $('mobSelect');
+  if (!sel.options.length) STEPS.forEach(function (st, i) { var o = document.createElement('option'); o.value = i; o.textContent = (i && i < 10 ? i + '. ' : '') + st.t; sel.appendChild(o); });
+  sel.value = step;
+}
+
+/* ---------- steps ---------- */
+function stepNav() {
+  var prev = step > 0 ? '<button type="button" class="btn ghost" data-goto="' + (step - 1) + '">→ ' + STEPS[step - 1].t + '</button>' : '<span></span>';
+  var next = step < STEPS.length - 1 ? '<button type="button" class="btn" data-goto="' + (step + 1) + '">' + STEPS[step + 1].t + ' ←</button>' : '';
+  return '<div class="step-nav">' + prev + next + '</div>';
+}
+function head() {
+  var s = STEPS[step];
+  return '<div class="step-head"><div class="step-kicker">' + (step > 0 && step < 10 ? 'שלב ' + step + ' מתוך 9' : (step === 10 ? 'הסיכום' : 'שיטת תמחור בשלבים')) + '</div><h1 tabindex="-1" id="stepTitle">' + s.t + '</h1>' + (s.why ? '<p class="step-why">' + s.why + '</p>' : '') + '</div>';
+}
+var VIEWS = {};
+
+VIEWS[0] = function () {
+  var draft = readDraftMeta();
+  return head() + '<p class="step-why" style="margin-bottom:14px">עוברים יחד 9 שלבים, מהחומר הראשון ועד כמה למכור בכל חודש. בסוף יש מחירון, יעד מחזור ותוכנית שנתית. אפשר לעצור ולחזור מתי שרוצים, הכל נשמר.</p>' +
+    (draft && !docId ? '<div class="card" id="draftCard"><div class="draft-banner"><div><b style="font-weight:900;color:var(--pine-darker)">נמצאה טיוטה: ' + esc(draft.name || 'בלי שם') + '</b><div style="font-size:13px;font-weight:600;color:var(--ink-soft)">נשמרה במכשיר הזה. להמשיך ממנה או להתחיל חדש?</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn small" data-act="resume">להמשיך</button><button type="button" class="btn small ghost" data-act="fresh">להתחיל חדש</button></div></div></div>' : '') +
+    '<div class="card"><span class="sec-lbl">על העסק</span><div class="fields">' + textField('שם העסק', 'biz.name', { ph: 'למשל: הסטודיו של נועה' }) + '</div>' +
+    '<div class="field" style="margin-top:14px"><span class="lbl" id="typeLbl">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl"><button type="button" data-type="murshe" aria-pressed="' + (S.biz.type !== 'patur') + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + (S.biz.type === 'patur') + '">עוסק פטור</button></div><div class="hint">עוסק פטור לא מוסיף מע"מ למחיר, ועלות החומרים נרשמת כולל מע"מ. החישוב מתאים לעוסק יחיד, ולא לחברה בע"מ.</div></div></div>' +
+    '<div class="card"><span class="sec-lbl">מה מקבלים בסוף</span><ul class="path-list"><li><b>מחיר לכל מוצר</b>כולל הזמן שלך, ההוצאות, המס והרווח</li><li><b>מחירון ורווחיות</b>כמה נשאר מכל מוצר</li><li><b>מחזור יעד ונקודת איזון</b>כמה צריך למכור כדי להרוויח, ומתי מפסיקים להפסיד</li><li><b>תוכנית שנתית</b>כמה למכור מכל מוצר בכל חודש</li></ul></div>' +
+    '<div class="step-nav"><button type="button" class="btn ghost" data-act="demo">למלא דוגמה ולהסתכל מסביב</button><button type="button" class="btn" data-goto="1">מתחילים ←</button></div>';
 };
-let S=JSON.parse(JSON.stringify(DEF));
-const MICON={product:'📦',service:'🕐',hybrid:'🎨'};
-const MODE_HINT={
-  product:'📦 מוצר: העלות בעיקר מהחומרים שאת קונה מראש. ממלאים חומרים + זמן אם יש הכנה.',
-  service:'🕐 שירות: העלות בעיקר מהזמן שלך. אבל אם יש חומרים (למשל מחברת שאת נותנת ללקוח) - אפשר להוסיף גם אותם.',
-  hybrid:'🎨 היברידי (סדנה): גם חומרים וגם זמן במשקל דומה. הרווח הגולמי יוצא נמוך יותר כי יש חומרים.'
+
+VIEWS[1] = function () {
+  var rows = S.materials.map(function (m, i) {
+    return '<div class="row cols-mat">' + cellText('סוג', 'materials.' + i + '.name', 'למשל: בד כותנה', 'wide') +
+      unitSelect(i) + cellNum('כמה בחבילה', 'materials.' + i + '.pack', '', '1') + cellNum(S.biz.type === 'patur' ? 'עלות לחבילה, כולל מע"מ' : 'עלות לחבילה, בלי מע"מ', 'materials.' + i + '.cost', '₪') +
+      '<div><span class="lbl">כולל בלאי</span>' + liveSpan('matPrice', i).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-del="materials" data-i="' + i + '" aria-label="מחיקת ' + esc(m.name || 'שורה') + '">×</button></div>';
+  }).join('');
+  return head() + '<div class="card"><label class="check-line"><input type="checkbox" id="noMat"' + (S.biz.noMaterials ? ' checked' : '') + '> העסק שלי נותן שירות בלבד, אין לי חומרים לקנות</label></div>' +
+    '<div class="card" id="matCard"' + (S.biz.noMaterials ? ' hidden' : '') + '><span class="sec-lbl">מה קונים</span><p class="explain">כל שורה היא מה שקונים מהספק. אם קונים חבילה של 12, רושמים 12 בעמודת הכמות ואת מחיר החבילה כולה.</p>' +
+    (rows ? '<div class="row-head cols-mat" aria-hidden="true"><span>סוג</span><span>יחידה</span><span>כמה בחבילה</span><span>' + (S.biz.type === 'patur' ? 'עלות, כולל מע"מ' : 'עלות, בלי מע"מ') + '</span><span>כולל בלאי</span><span></span></div>' : '') +
+    '<div class="rows">' + rows + '</div><button type="button" class="add-btn" data-add="material">+ הוספת חומר</button>' +
+    '<div class="fields" style="margin-top:14px;max-width:260px">' + numField('בלאי ופחת', 'biz.wastePct', { unit: '%', hint: 'כמה הולך לאיבוד בעבודה. ברירת המחדל 10%.' }) + '</div></div>' + stepNav();
 };
-// real personal tax (2026): income tax after credit points + self-employed NI+health, with 52% deduction
-function incMonthly(inc){var br=[[7010,10],[10060,14],[19000,20],[25100,31],[46690,35],[60130,47],[Infinity,50]];var t=0,p=0;for(var i=0;i<br.length;i++){var to=br[i][0];if(inc>p)t+=(Math.min(inc,to)-p)*br[i][1]/100;p=to;if(inc<=to)break;}return t;}
-function personalTax(profit,points){
-  if(profit<=0)return {tax:0,eff:0,net:0,it:0,ni:0};
-  var red=Math.min(profit,7703),full=Math.max(0,Math.min(profit,50695)-7703);
-  var ni=red*0.0287+full*0.1283, health=red*0.0323+full*0.0517;
-  var niDed=ni*0.52;
-  var it=Math.max(0, incMonthly(Math.max(0,profit-niDed)) - num(points)*242);
-  var tax=it+ni+health;
-  return {tax:tax, eff:Math.round(tax/profit*1000)/10, net:profit-tax, it:it, ni:ni+health};
-}
-function recomputeTax(){
-  var pt=personalTax(num(S.biz.monthlyProfit),num(S.biz.points));
-  S.biz.taxRate=pt.eff;
-  var tf=document.getElementById('tTax');if(tf)tf.value=pt.eff;
-  var ts=document.getElementById('taxSummary');
-  if(ts){if(num(S.biz.monthlyProfit)>0){ts.hidden=false;ts.classList.remove('warn');
-    ts.innerHTML='<span>מס בפועל על '+money(S.biz.monthlyProfit)+' ₪: <b>'+money(pt.tax)+' ₪</b> ('+pt.eff+'% אפקטיבי) · נטו ביד <b>'+money(pt.net)+' ₪</b></span>';}
-  else ts.hidden=true;}
+function unitSelect(i) {
+  var id = 'f' + (++fid), cur = S.materials[i].unit || 'יחידה';
+  return '<div><label class="lbl" for="' + id + '">יחידה</label><div class="input-shell"><select id="' + id + '" data-text data-path="materials.' + i + '.unit">' + UNITS.map(function (u) { return '<option' + (u === cur ? ' selected' : '') + '>' + u + '</option>'; }).join('') + '</select></div></div>';
 }
 
-function hourCost(){const b=S.biz;const oh=b.expenses.reduce(function(a,e){return a+num(e.a);},0);const h=num(b.workHours);return h>0?((num(b.ownerNet)+num(b.ownerSave))+oh)/h:0;}
-function matUnit(m){return (num(m.pkg)>0?num(m.buy)/num(m.pkg):0)*(1+num(m.waste)/100);}
-function priceOf(o){
-  const hc=hourCost();
-  const direct=o.mats.reduce(function(a,m){return a+matUnit(m)*num(m.q);},0);
-  const timeCost=num(o.hours)*hc;
-  const baseCost=direct+timeCost;
-  const cont=baseCost*num(o.contPct)/100;
-  const minPrice=baseCost+cont;
-  const profit=minPrice*num(o.profitPct)/100;
-  const tax=profit*num(S.biz.taxRate)/100;
-  const preVat=minPrice+profit+tax;
-  const vat=preVat*num(S.biz.vat)/100;
-  const fee=(preVat+vat)*num(S.biz.feePct)/100;
-  const fin=preVat+vat+fee;
-  const margin=preVat>0?(preVat-direct)/preVat*100:0;
-  return {hc,direct,timeCost,cont,minPrice,profit,tax,preVat,vat,fee,fin,margin};
-}
-function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}}
-function loadLocal(){try{var o=JSON.parse(localStorage.getItem(SKEY));if(o&&typeof o==='object'&&('offerings'in o)&&('biz'in o))return o;}catch(e){}return null;}
-function liveFmt(el){var p=el.selectionStart,old=el.value;el.value=grp(el.value);var d=el.value.length-old.length;try{el.setSelectionRange(p+d,p+d);}catch(e){}}
+VIEWS[2] = function () {
+  var prods = S.products.map(function (p, i) {
+    var hasMats = S.materials.length > 0 && !S.biz.noMaterials;
+    var lines = p.lines.map(function (l, k) {
+      var id = 'f' + (++fid);
+      return '<div class="row cols-bom"><div class="wide"><label class="lbl" for="' + id + '">חומר</label><div class="input-shell"><select id="' + id + '" data-text data-path="products.' + i + '.lines.' + k + '.mat"><option value="">בחירה מהרשימה</option>' + S.materials.map(function (m) { return '<option value="' + m.id + '"' + (m.id === l.mat ? ' selected' : '') + '>' + esc(m.name || 'בלי שם') + '</option>'; }).join('') + '</select></div></div>' +
+        cellNum('כמות למוצר אחד', 'products.' + i + '.lines.' + k + '.qty') + '<div><span class="lbl">עלות</span>' + liveSpan('lineCost', i + ':' + k).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-delline="' + i + ':' + k + '" aria-label="מחיקת שורת חומר">×</button></div>';
+    }).join('');
+    return '<div class="prod" style="padding:14px 16px"><div class="fields" style="align-items:end"><div style="grid-column:1/-1;display:flex;gap:8px;align-items:end"><div style="flex:1">' + textField('שם המוצר או השירות', 'products.' + i + '.name', { ph: 'למשל: שרשרת, שיחת ייעוץ, יום צילום' }) + '</div><button type="button" class="btn small ghost" style="color:var(--red);border-color:rgba(193,85,63,.4);margin-bottom:3px" data-delprod="' + i + '">מחיקה</button></div></div>' +
+      (hasMats ? (lines ? '<div class="row-head cols-bom" style="margin-top:12px" aria-hidden="true"><span>חומר</span><span>כמות למוצר אחד</span><span>עלות</span><span></span></div>' : '') + '<div class="rows" style="margin-top:6px">' + lines + '</div><button type="button" class="add-btn" data-addline="' + i + '">+ הוספת חומר למוצר</button>' : '') +
+      '<div style="margin-top:10px">' + live('prodDirect', i) + '</div></div>';
+  }).join('');
+  var note = S.biz.noMaterials ? '<p class="explain">סימנת שאין חומרים, אז כאן רק נותנים שם לכל שירות. העלות תצא מהזמן בשלב התמחור.</p>' : (!S.materials.length ? '<div class="note soft" style="margin:0 0 12px">עוד אין חומרים ברשימה. ' + gotoBtn(1, 'לחזור לשלב 1') + ', או להמשיך אם המוצר הוא שירות.</div>' : '<p class="explain"><b>כמות למוצר אחד</b> נמדדת באותה יחידה שקונים. אם קונים חבילה של 12 ומוצר משתמש ב-3, רושמים 3, והכלי מחשב רבע מהחבילה.</p>');
+  return head() + '<div class="card"><span class="sec-lbl">המוצרים והשירותים שלך</span>' + note + prods + '<button type="button" class="add-btn" data-add="product">+ הוספת מוצר או שירות</button></div>' + stepNav();
+};
 
-/* ---------- SETUP ---------- */
-function renderExps(){
-  var host=document.getElementById('expList');host.innerHTML='';
-  S.biz.expenses.forEach(function(e,i){
-    var row=document.createElement('div');row.className='exp-row';
-    row.innerHTML='<input class="cp-l" data-i="'+i+'" data-k="l" value="'+esc(e.l)+'" placeholder="שם ההוצאה" aria-label="הוצאה">'+
-      '<div class="cp-mini"><span class="cp-u">₪</span><input data-i="'+i+'" data-k="a" inputmode="numeric" value="'+grp(e.a)+'" aria-label="סכום"></div>'+
-      '<button class="cp-del" data-i="'+i+'" type="button" aria-label="מחיקה">×</button>';
-    host.appendChild(row);
+function empTable(kind) {
+  if (kind === 'monthly') return S.labor.monthly.map(function (e, i) {
+    var b = 'labor.monthly.' + i + '.';
+    return '<div class="row cols-emp">' + cellText('שם', b + 'name', '', 'wide') + cellText('תפקיד', b + 'role') + cellNum('ברוטו', b + 'gross', '₪') + cellNum('מקדם', b + 'factor', '', '1.35') + cellNum('שעות בחודש', b + 'hours') + '<div><span class="lbl">עלות מעסיק</span>' + liveSpan('empCost', 'monthly:' + i).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-del="labor.monthly" data-i="' + i + '" aria-label="מחיקת עובד">×</button></div>';
+  }).join('');
+  return S.labor.hourly.map(function (e, i) {
+    var b = 'labor.hourly.' + i + '.';
+    return '<div class="row cols-hourly">' + cellText('שם', b + 'name', '', 'wide') + cellText('תפקיד', b + 'role') + cellNum('שכר לשעה', b + 'rate', '₪') + cellNum('שעות בחודש', b + 'hours') + cellNum('מקדם', b + 'factor', '', '1.35') + '<div><span class="lbl">עלות מעסיק</span>' + liveSpan('empCost', 'hourly:' + i).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-del="labor.hourly" data-i="' + i + '" aria-label="מחיקת עובד">×</button></div>';
+  }).join('');
+}
+VIEWS[3] = function () {
+  var m = empTable('monthly'), h = empTable('hourly');
+  return head() + '<div class="card"><span class="sec-lbl">השכר שלך</span><p class="explain">שעות העבודה כוללות <b>הכל</b>: ייצור, עבודה מקצועית, שיווק, פיתוח העסק וניירת. כדאי למדוד שבועיים ולא לנחש.</p><div class="fields">' +
+    numField('נטו לבנק בחודש', 'labor.net', { unit: '₪' }) + numField('פנסיה בחודש', 'labor.pension', { unit: '₪' }) + numField('קרן השתלמות בחודש', 'labor.fund', { unit: '₪' }) + numField('שעות עבודה בחודש', 'labor.hours', { ph: '160' }) + '</div></div>' +
+    '<div class="card"><span class="sec-lbl">עובדים בשכר חודשי</span><p class="explain">מקדם 1.35 מוסיף לברוטו את העלויות הנלוות של המעסיק. אפשר לשנות אותו.</p>' + (m ? '<div class="row-head cols-emp" aria-hidden="true"><span>שם</span><span>תפקיד</span><span>ברוטו</span><span>מקדם</span><span>שעות בחודש</span><span>עלות מעסיק</span><span></span></div>' : '') + '<div class="rows">' + m + '</div><button type="button" class="add-btn" data-add="monthly">+ הוספת עובד חודשי</button></div>' +
+    '<div class="card"><span class="sec-lbl">עובדים בשכר שעתי</span>' + (h ? '<div class="row-head cols-hourly" aria-hidden="true"><span>שם</span><span>תפקיד</span><span>שכר לשעה</span><span>שעות בחודש</span><span>מקדם</span><span>עלות מעסיק</span><span></span></div>' : '') + '<div class="rows">' + h + '</div><button type="button" class="add-btn" data-add="hourly">+ הוספת עובד שעתי</button></div>' +
+    '<div class="card"><span class="sec-lbl">מה יצא</span>' + live('laborOut') + '</div>' + stepNav();
+};
+
+function ohRowsHtml(group) {
+  return S.overhead[group].map(function (r, i) {
+    var base = 'overhead.' + group + '.' + i, same = r.m.every(function (x) { return String(x) === String(r.m[0]); });
+    var mInputs = r.m.map(function (v, k) { return '<div><label class="lbl" style="position:static;width:auto;height:auto;clip:auto;font-size:11px;margin-bottom:2px" for="m' + group + i + '_' + k + '">' + MONTHS[k] + '</label><div class="input-shell"><input id="m' + group + i + '_' + k + '" type="text" inputmode="decimal" autocomplete="off" data-num data-month data-path="' + base + '.m.' + k + '" value="' + esc(grp(v)) + '"></div></div>'; }).join('');
+    var qid = 'q' + group + i, nid = 'n' + group + i;
+    return '<div class="oh-row" style="border-bottom:1px solid var(--line);padding:8px 0"><div class="row" style="grid-template-columns:minmax(150px,2fr) 150px 110px 32px"><div class="wide"><label class="lbl" for="' + nid + '">הוצאה</label><div class="input-shell"><input id="' + nid + '" type="text" autocomplete="off" data-text data-path="' + base + '.name" value="' + esc(r.name) + '"></div></div>' +
+      '<div><label class="lbl" for="' + qid + '">סכום בכל חודש</label><div class="input-shell"><span class="unit" aria-hidden="true">₪</span><input id="' + qid + '" type="text" inputmode="decimal" autocomplete="off" data-quick="' + base + '" value="' + (same ? esc(grp(r.m[0])) : '') + '" placeholder="' + (same ? '' : 'משתנה') + '"></div></div>' +
+      '<div><span class="lbl">בשנה</span>' + liveSpan('ohAnnual', group + ':' + i).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-del="overhead.' + group + '" data-i="' + i + '" aria-label="מחיקת ' + esc(r.name) + '">×</button></div>' +
+      '<details class="how" data-how="oh' + group + i + '"' + (howOpen['oh' + group + i] ? ' open' : '') + '><summary>משתנה בין החודשים? פירוט לפי חודש</summary><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px;margin-top:6px">' + mInputs + '</div></details></div>';
+  }).join('');
+}
+VIEWS[4] = function () {
+  return head() + '<div class="grid2"><div class="card"><span class="sec-lbl">שיווק ומכירות</span><p class="explain">רק שורות שרלוונטיות. אפשר להשאיר ריק או למחוק.</p><div>' + ohRowsHtml('marketing') + '</div><button type="button" class="add-btn" data-add="marketing">+ הוספת הוצאת שיווק</button></div>' +
+    '<div class="card"><span class="sec-lbl">הנהלה וכלליות</span><p class="explain">הוצאה שנתית, כמו ביטוח? רושמים אותה בחודש שלה בפירוט, או מחלקים ב-12.</p><div>' + ohRowsHtml('admin') + '</div><button type="button" class="add-btn" data-add="admin">+ הוספת הוצאה</button></div></div>' +
+    '<div class="card"><span class="sec-lbl">מה יצא</span>' + live('ohOut') + '</div>' + stepNav();
+};
+
+VIEWS[5] = function () {
+  var t = S.tax.tables || E.TABLES_2026;
+  var br = t.brackets.map(function (b, i) {
+    return '<tr><td>' + (b.to == null ? 'מעל' : 'עד ' + money(b.to) + ' ₪') + '</td><td><div class="mini"><div class="input-shell"><input aria-label="שיעור מס במדרגה ' + (i + 1) + '" type="text" inputmode="decimal" data-table="brackets.' + i + '.rate" value="' + b.rate + '"></div></div></td></tr>';
+  }).join('');
+  var tf = function (l, k, u) { return '<div class="field"><label for="tt' + k + '">' + l + '</label><div class="input-shell">' + (u ? '<span class="unit" aria-hidden="true">' + u + '</span>' : '') + '<input id="tt' + k + '" type="text" inputmode="decimal" data-table="' + k + '" value="' + t[k] + '"></div></div>'; };
+  return head() + '<div class="card"><span class="sec-lbl">מה ממלאים</span><div class="fields">' +
+    numField('נקודות זיכוי', 'tax.points', { hint: 'תושב או תושבת 2.25 · אישה 2.75 · עוד נקודות לפי ילדים ותארים' }) +
+    numField('חיסכון רצוי בחודש', 'tax.saving', { unit: '₪', hint: 'מעבר לנטו שרשמת בשלב 3. אם אין, אפשר להשאיר ריק.' }) + '</div>' + live('taxNeed') + '</div>' +
+    '<div class="card"><span class="sec-lbl">מה יצא</span>' + live('taxOut') + '</div>' +
+    '<div class="note soft">החישוב הוא הערכה בלבד ואינו ייעוץ מס. לחישוב מדויק כדאי לשבת עם רואה חשבון. הוא גם לא כולל את ההטבה במס על הפקדה לפנסיה ולקרן השתלמות, כך שבפועל המס יכול לצאת מעט נמוך יותר.</div>' +
+    '<details class="how" data-how="taxTables"' + (howOpen.taxTables ? ' open' : '') + '><summary>טבלאות המס של ' + t.year + ' (אפשר לעדכן)</summary><div class="how-b"><div class="grid2"><div><div class="tbl-wrap" tabindex="0" role="region" aria-label="מדרגות מס"><table class="ptable"><thead><tr><th>הכנסה חייבת בחודש</th><th>שיעור %</th></tr></thead><tbody>' + br + '</tbody></table></div></div><div class="fields">' +
+    tf('ערך נקודת זיכוי', 'pointValue', '₪') + tf('ביטוח לאומי מופחת %', 'niReduced') + tf('ביטוח לאומי רגיל %', 'niFull') + tf('בריאות מופחת %', 'healthReduced') + tf('בריאות רגיל %', 'healthFull') + tf('סף שיעור מופחת', 'reducedThreshold', '₪') + tf('תקרת הכנסה', 'ceiling', '₪') + '</div></div><button type="button" class="btn small ghost" style="margin-top:10px" data-act="resetTables">חזרה לטבלאות הרשמיות</button></div></details>' + stepNav();
+};
+
+VIEWS[6] = function () {
+  var prods = S.products.map(function (p, i) {
+    return '<details class="prod" data-how="prod' + i + '"' + ((howOpen['prod' + i] === undefined ? (S.products.length <= 3 || i === 0) : howOpen['prod' + i]) ? ' open' : '') + '><summary><span class="prod-name">' + esc(p.name || 'מוצר ' + (i + 1)) + '</span>' + liveSpan('prodHead', i).replace('<span', '<span class="prod-sum"') + '</summary><div class="prod-body"><div class="prod-grid"><div>' +
+      '<div class="sec-lbl">הנתונים של המוצר</div><div class="fields">' +
+      numField('זמן עבודה למוצר (שעות)', 'products.' + i + '.hours', { hint: 'חצי שעה זה 0.5' }) +
+      numField('רווח רצוי מהמחיר', 'products.' + i + '.marginPct', { unit: '%', hint: 'כמה אחוז מהמחיר יהיה רווח, אחרי שכל העלויות שולמו' }) +
+      numField('עלות ספציפית למוצר', 'products.' + i + '.specific', { unit: '₪', hint: 'רק אם יש. למשל שכירת חלל לסדנה, מחולק למוצר אחד.' }) +
+      numField('מחיר בשוק ללקוח', 'products.' + i + '.market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' }) + '</div>' +
+      '<div style="margin-top:14px"><div class="sec-lbl">המחיר שבחרת</div>' + numField('מחיר ללקוח, כולל הכל', 'products.' + i + '.chosen', { unit: '₪', hint: 'החישוב הוא המלצה, ואת ההחלטה מקבלים פה. אם ריק, המחירון ישתמש במחיר המומלץ.' }) + live('prodChosen', i) + '</div>' +
+      '</div><div>' + live('prodLedger', i) + '</div></div></div></details>';
+  }).join('');
+  return head() + live('need6') + '<div class="card"><span class="sec-lbl">הגדרות לכל המוצרים</span><div class="fields">' +
+    numField('בלת"מ, כרית לבלתי צפוי', 'biz.contingencyPct', { unit: '%', hint: 'ברירת המחדל 15%' }) +
+    (S.biz.type === 'patur' ? '' : numField('מע"מ', 'biz.vatPct', { unit: '%' })) +
+    numField('עמלת סליקה', 'biz.feePct', { unit: '%' }) + '</div>' + live('rates') + '</div>' +
+    '<div class="card">' + (prods || '<div class="note soft" style="margin:0">עוד אין מוצרים. ' + gotoBtn(2, 'להוסיף בשלב 2') + '</div>') + '</div>' + stepNav();
+};
+
+function mixInput(i) { return '<div class="mini"><div class="input-shell"><input aria-label="אחוז מהמחזור של ' + esc(S.products[i].name || 'מוצר') + '" type="text" inputmode="decimal" data-num data-path="products.' + i + '.mix" value="' + esc(grp(S.products[i].mix)) + '"><span class="unit" aria-hidden="true" style="padding-inline:0 7px">%</span></div></div>'; }
+VIEWS[7] = function () {
+  var rows = S.products.map(function (p, i) {
+    return '<tr><td class="nm">' + liveSpan('statusDot', i) + esc(p.name || 'מוצר ' + (i + 1)) + '</td><td>' + mixInput(i) + '</td><td>' + liveSpan('cell', 'customer:' + i) + '</td><td>' + liveSpan('cell', 'net:' + i) + '</td><td>' + liveSpan('cell', 'direct:' + i) + '</td><td>' + liveSpan('cell', 'gross:' + i) + '</td><td>' + liveSpan('cell', 'grossPct:' + i) + '</td></tr>';
+  }).join('');
+  return head() + '<div class="card"><span class="sec-lbl">המחירון שלך</span>' + (rows ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="המחירון"><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחיר ללקוח</th><th>מחיר נטו</th><th>עלות חומרים</th><th>רווח גולמי</th><th>% גולמי</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td class="nm">סך הכל וממוצע</td><td>' + liveSpan('mixTotal') + '</td><td colspan="4"></td><td>' + liveSpan('avgMargin') + '</td></tr></tfoot></table></div>' : '<div class="note soft" style="margin:0">עוד אין מוצרים. ' + gotoBtn(2, 'להוסיף בשלב 2') + '</div>') + live('mixNote') +
+    how('margin', 'רווח גולמי הוא המחיר נטו פחות עלות החומרים. זה מה שנשאר לכסות את הזמן שלך, את ההוצאות ואת הרווח. המחיר נטו הוא מה שנשאר אחרי מע"מ ועמלת סליקה. הממוצע נשקל לפי התמהיל, כי מוצר שמוכרים הרבה משפיע יותר.') + '</div>' + stepNav();
+};
+
+VIEWS[8] = function () { return head() + live('need8') + '<div class="grid2"><div class="card"><span class="sec-lbl">מהרווח למחזור, בשנה</span>' + live('reverse') + '</div><div class="card"><span class="sec-lbl">נקודת איזון</span>' + live('breakEven') + '</div></div>' + stepNav(); };
+
+VIEWS[9] = function () {
+  var gRows = S.products.map(function (p, i) { return '<tr><td class="nm">' + esc(p.name || 'מוצר ' + (i + 1)) + '</td><td>' + mixInput(i) + '</td><td>' + liveSpan('cell', 'turnover:' + i) + '</td><td>' + liveSpan('cell', 'net:' + i) + '</td><td>' + liveSpan('cell', 'unitsYear:' + i) + '</td><td>' + liveSpan('cell', 'unitsMonth:' + i) + '</td></tr>'; }).join('');
+  var textRow = function (l, k) { return '<tr><td class="nm">' + l + '</td>' + MONTHS.map(function (m, i) { return '<td><textarea rows="2" aria-label="' + l + ' ב' + m + '" data-text data-path="plan.' + k + '.' + i + '">' + esc(S.plan[k][i]) + '</textarea></td>'; }).join('') + '<td></td></tr>'; };
+  var pRows = S.products.map(function (p, i) {
+    return '<tr><td class="nm">' + esc(p.name || 'מוצר ' + (i + 1)) + '</td>' + MONTHS.map(function (m, k) { return '<td><input aria-label="מכירות ' + esc(p.name || '') + ' ב' + m + '" type="text" inputmode="decimal" data-num data-path="products.' + i + '.plan.' + k + '" value="' + esc(grp(p.plan && p.plan[k])) + '"></td>'; }).join('') + '<td class="cal-sum">' + liveSpan('planSum', i) + '</td></tr>';
+  }).join('');
+  var mHead = MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('');
+  var mLive = function (l, k) { return '<tr><td class="nm">' + l + '</td>' + MONTHS.map(function (m, i) { return '<td class="cal-sum">' + liveSpan('monthCell', k + ':' + i) + '</td>'; }).join('') + '<td class="cal-sum">' + liveSpan('monthCell', k + ':all') + '</td></tr>'; };
+  return head() + live('need9') + '<div class="card"><span class="sec-lbl">היעד לכל מוצר, בשנה</span>' + live('revHead') + (gRows ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="היעד לכל מוצר"><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחזור</th><th>מחיר נטו</th><th>מכירות בשנה</th><th>מכירות בחודש, בממוצע</th></tr></thead><tbody>' + gRows + '</tbody></table></div>' : '') + live('capacity') + '</div>' +
+    '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="sec-lbl" style="margin:0">התוכנית השנתית</span><button type="button" class="btn small ghost" data-act="spread">לפזר את היעד שווה על 12 חודשים</button></div><p class="explain" style="margin-top:10px">חודש חזק לעסק מקבל יותר מכירות, חודש שקט פחות. המועדים הם הצעה, ואפשר לערוך אותם.</p><div class="tbl-wrap" tabindex="0" role="region" aria-label="התוכנית השנתית"><table class="ptable cal"><thead><tr><th>חודש</th>' + mHead + '<th>בשנה</th></tr></thead><tbody>' +
+    textRow('מועדים מיוחדים', 'dates') + textRow('השקות', 'launches') + textRow('מבצעים', 'promos') + textRow('פוקוס חודשי', 'focus') +
+    '<tr class="cal-group"><td colspan="14">כמה מכירות מכל מוצר</td></tr>' + pRows +
+    '<tr class="cal-group"><td colspan="14">מה יוצא מזה</td></tr>' + mLive('מחזור נטו', 'revenue') + mLive('שעות עבודה', 'hours') + '</tbody></table></div>' + live('planGap') + '</div>' + stepNav();
+};
+
+VIEWS[10] = function () {
+  return head() + live('summaryTop') + '<div class="card"><span class="sec-lbl">המחירון</span>' + live('summaryList') + '</div><div class="card"><span class="sec-lbl">מה כדאי לשים לב אליו</span>' + live('flags') + '</div>' +
+    '<div class="card"><span class="sec-lbl">לקחת את זה איתך</span><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" data-act="pdf">שמירה כ-PDF</button><button type="button" class="btn" data-act="xlsx" id="xlsxBtn">הורדת אקסל ממולא</button><button type="button" class="btn ghost" data-act="share" id="shareBtn">קישור לשליחה</button></div><div id="shareOut"></div><div id="xlsxOut"></div></div>' +
+    '<div class="cta-card"><h2>מחיר נכון זה רק ההתחלה</h2><p>כדי שהתוכנית הזו תהפוך למכירות ולרווח בפועל, אפשר לעבוד עליה יחד.</p><a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">לשיחה על הליווי ←</a></div>' + stepNav();
+};
+
+/* ---------- live regions ---------- */
+function prodCalc(i) { return R.products[i]; }
+function statusPill(p) {
+  if (p.status === 'below-min') return '<span class="pill-red">מתחת למינימום</span>';
+  if (p.status === 'below-rec') return '<span class="pill-amb">מתחת למומלץ</span>';
+  return '<span class="pill-ok">מכסה הכל</span>';
+}
+var LIVE = {
+  matPrice: function (i) { return ils(E.materialUnitPrice(S.materials[i], R.settings.wastePct), 2); },
+  lineCost: function (a) { var p = a.split(':'), prod = S.products[+p[0]]; if (!prod || !prod.lines[+p[1]]) return ''; return ils(E.lineCost(prod.lines[+p[1]], S.materials, R.settings.wastePct), 2); },
+  prodDirect: function (i) { var d = R.products[i].direct; return S.biz.noMaterials ? '' : lg('עלות חומרים למוצר אחד', ils(d, 2), null, 'sum'); },
+  empCost: function (a) { var p = a.split(':'); var e = R.labor[p[0]][+p[1]]; return e ? ils(e.cost, 0) : ''; },
+  laborOut: function () {
+    var l = R.labor;
+    if (!l.totalHours) return '<div class="note soft" style="margin:0">אחרי שממלאים שעות עבודה, יופיע כאן כמה עולה שעה בעסק.</div>';
+    return '<div class="tiles">' + tile('עלות שכר לשעת עבודה', ils(l.costPerHour, 2), 'כל השכר בעסק, חלקי כל השעות', 'main') + tile('סך עלות שכר בחודש', ils(l.totalCost, 0), money(l.totalHours) + ' שעות בחודש') + tile('השכר שלך לשעה, נטו', ils(l.netPerHour, 2), money(l.ownerHours) + ' שעות שלך') + '</div>' +
+      how('labor', 'עלות שכר לשעה: <b>' + ils(l.totalCost, 0) + '</b> (הנטו, הפנסיה, הקרן ועלות העובדים) חלקי <b>' + money(l.totalHours) + '</b> שעות = <b>' + ils(l.costPerHour, 2) + '</b>. עובד עולה ברוטו כפול המקדם.');
+  },
+  ohAnnual: function (a) { var p = a.split(':'), r = S.overhead[p[0]][+p[1]]; return r ? ils(r.m.reduce(function (x, v) { return x + E.num(v); }, 0), 0) : ''; },
+  ohOut: function () {
+    var o = R.overhead;
+    return '<div class="tiles">' + tile('העמסה לשעת עבודה', R.labor.totalHours ? ils(o.perHour, 2) : '-', R.labor.totalHours ? 'כל שעה נושאת את החלק הזה' : 'חסרות שעות עבודה בשלב 3', 'main') + tile('ממוצע בחודש', ils(o.monthly, 0)) + tile('שיווק ומכירות בשנה', ils(o.marketingAnnual, 0)) + tile('הנהלה וכלליות בשנה', ils(o.adminAnnual, 0)) + '</div>' +
+      (R.labor.totalHours ? how('oh', 'ממוצע חודשי <b>' + ils(o.monthly, 0) + '</b> חלקי <b>' + money(R.labor.totalHours) + '</b> שעות עבודה = <b>' + ils(o.perHour, 2) + '</b> לשעה.') : '');
+  },
+  taxNeed: function () {
+    return E.num(S.labor.net) > 0 ? '<div class="note">המטרה: <b>' + ils(R.targetNet, 0) + '</b> ביד בכל חודש (' + ils(R.labor.net, 0) + ' נטו' + (R.saving ? ' + ' + ils(R.saving, 0) + ' חיסכון' : '') + ').</div>' : '<div class="note soft">קודם צריך נטו רצוי. ' + gotoBtn(3, 'לשלב 3') + '</div>';
+  },
+  taxOut: function () {
+    var t = R.tax;
+    return '<div class="tiles">' + tile('רווח דרוש לפני מס, בחודש', ils(R.preTax, 0), 'זה מה שהעסק צריך להשאיר אחרי ההוצאות', 'main') + tile('סך מיסים בחודש', ils(t.total, 0), pct(t.totalRate) + ' מהרווח') + tile('נשאר ביד בחודש', ils(t.net, 0)) + tile('נשאר ביד בשנה', ils(t.net * 12, 0)) + '</div><div class="ledger" style="margin-top:12px">' +
+      lg('ביטוח לאומי', ils(t.ni, 0)) + lg('ביטוח בריאות', ils(t.health, 0)) + lg('מס הכנסה לפני נקודות זיכוי', ils(t.incomeBefore, 0)) + lg('נקודות זיכוי', '- ' + ils(Math.min(t.credit, t.incomeBefore), 0)) + lg('מס הכנסה לתשלום', ils(t.income, 0), null, 'sum') + '</div>' +
+      how('tax', 'הכלי מוצא לבד את הרווח שמשאיר ביד בדיוק את הסכום שרוצים. 52% מהביטוח הלאומי מוכרים כהוצאה, ולכן המס מחושב על <b>' + ils(t.base, 0) + '</b> ולא על כל הרווח. נקודת זיכוי שווה <b>' + R.settings.tables.pointValue + ' ₪</b> בחודש.');
+  },
+  rates: function () {
+    return '<div class="note">שעת עבודה בעסק עולה <b>' + ils(R.labor.costPerHour + R.overhead.perHour, 2) + '</b>: ' + ils(R.labor.costPerHour, 2) + ' שכר + ' + ils(R.overhead.perHour, 2) + ' עלויות עקיפות. שיעור המס שנכנס למחיר: <b>' + pct(R.tax.totalRate) + '</b>.</div>';
+  },
+  need6: function () {
+    var miss = [];
+    if (!R.labor.totalHours) miss.push('שעות עבודה בשלב ' + gotoBtn(3, '3'));
+    if (!E.num(S.labor.net)) miss.push('נטו רצוי בשלב ' + gotoBtn(3, '3'));
+    if (S.tax.points === '') miss.push('נקודות זיכוי בשלב ' + gotoBtn(5, '5'));
+    return miss.length ? '<div class="note soft" style="margin:0 0 12px">כדי שהמחיר יהיה מדויק, עוד חסרים: ' + miss.join(' · ') + '</div>' : '';
+  },
+  prodHead: function (i) { var p = prodCalc(i); return p ? ils(p.customer, 0) + ' ללקוח' : ''; },
+  prodLedger: function (i) {
+    var p = prodCalc(i); if (!p) return '';
+    var c = p.calc, vatRow = R.settings.patur ? '' : lg('מע"מ ' + R.settings.vatPct + '%', ils(c.withVat - c.preVat, 2));
+    var hc = R.labor.costPerHour, ho = R.overhead.perHour;
+    return '<div class="sec-lbl">איך נבנה המחיר</div><div class="ledger">' +
+      lg('חומרים', ils(c.direct, 2)) + lg('עלויות עקיפות', ils(c.overheadCost, 2), c.hours + ' שעות כפול ' + ils(ho, 2)) + lg('שכר', ils(c.laborCost, 2), c.hours + ' שעות כפול ' + ils(hc, 2)) +
+      (c.specific ? lg('עלות ספציפית', ils(c.specific, 2)) : '') + lg('בלת"מ ' + R.settings.contingencyPct + '%', ils(c.contingency, 2)) +
+      lg('מחיר מינימום', ils(c.minPrice, 2), 'מכסה הכל, בלי רווח ובלי מס', 'sum') + lg('רווח רצוי ' + c.marginPct + '%', ils(c.profit, 2)) + lg('ביטוח לאומי ובריאות', ils(c.ni, 2)) + lg('מס הכנסה', ils(c.income, 2)) +
+      lg('מחיר לפני מע"מ', ils(c.preVat, 2), null, 'sum') + vatRow + lg('עמלת סליקה ' + R.settings.feePct + '%', ils(c.recommended - c.withVat, 2)) +
+      lg('המחיר המומלץ ללקוח', ils(c.recommended, 2), null, 'big') + '</div>' +
+      (c.marginCapped ? '<div class="note warn">רווח של 100% מהמחיר לא אפשרי, כי אז לא נשאר כלום לעלויות. הכלי עצר ב-' + E.MAX_MARGIN + '%.</div>' : '') +
+      how('price' + i, 'המס נוסף על הרווח ועל השכר הנטו שלך בזמן הזה (<b>' + ils(c.taxBase, 2) + '</b>), לפי שיעור של <b>' + pct(R.tax.totalRate) + '</b>. כך אחרי תשלום המס נשאר ביד בדיוק מה שתכננת. רווח של ' + c.marginPct + '% מהמחיר אומר: מחיר מינימום חלקי ' + (100 - c.marginPct) + '%.');
+  },
+  prodChosen: function (i) {
+    var p = prodCalc(i); if (!p) return '';
+    var market = p.market > 0 ? '<div class="note">מול השוק: המחיר ללקוח <b>' + ils(p.customer, 0) + '</b>, בשוק <b>' + ils(p.market, 0) + '</b>. ' + (p.customer > p.market * 1.05 ? 'את המחיר הגבוה יותר צריך להצדיק בערך ברור ללקוח.' : (p.customer < p.market * 0.95 ? 'יש כאן מקום לבדוק אם אפשר לגבות יותר.' : 'המחיר קרוב לשוק.')) + '</div>' : '';
+    if (!p.hasChosen) return market;
+    var msg = p.status === 'below-min' ? '<div class="note warn"><b>המחיר הזה לא מכסה את העלויות.</b> כל מכירה מפסידה ' + ils(p.calc.minPrice - p.net, 2) + '.</div>'
+      : p.status === 'below-rec' ? '<div class="note soft">העלויות מכוסות, אבל חסרים <b>' + ils(-p.gapFromRec, 2) + '</b> למוצר כדי להגיע לרווח שרצית.</div>'
+      : '<div class="note ok">המחיר מכסה הכל, ועוד <b>' + ils(p.gapFromRec, 2) + '</b> מעל המומלץ.</div>';
+    return msg + market;
+  },
+  statusDot: function (i) { var p = prodCalc(i); return p ? '<span class="dot ' + p.status + '" aria-hidden="true"></span>' : ''; },
+  cell: function (a) {
+    var q = a.split(':'), i = +q[1], p = R.products[i], g = R.goals[i]; if (!p) return '';
+    switch (q[0]) {
+      case 'customer': return ils(p.customer, 0);
+      case 'net': return ils(p.net, 2);
+      case 'direct': return ils(p.direct, 2);
+      case 'gross': return ils(p.grossProfit, 2);
+      case 'grossPct': return pct(p.grossPct);
+      case 'turnover': return R.annual.revenue == null ? '-' : ils(g.turnover, 0);
+      case 'unitsYear': return R.annual.revenue == null ? '-' : units(g.unitsYear);
+      case 'unitsMonth': return R.annual.revenue == null ? '-' : units(g.unitsMonth);
+    }
+    return '';
+  },
+  avgMargin: function () { return pct(R.grossMargin); },
+  mixTotal: function () { return (Math.round(R.mixSum * 10) / 10) + '%'; },
+  mixNote: function () {
+    if (!S.products.length) return '';
+    if (!R.usingMix) return '<div class="note soft">עוד אין תמהיל, ולכן הממוצע הוא ממוצע פשוט. כדאי למלא מאיזה מוצר צפוי לבוא כמה מהמחזור.</div>';
+    if (Math.abs(R.mixSum - 100) >= 0.01) return '<div class="note soft">התמהיל מסתכם ל-' + (Math.round(R.mixSum * 10) / 10) + '%. צריך להגיע ל-100%.</div>';
+    return '<div class="note ok">התמהיל מסתכם ל-100%. הרווח הגולמי הממוצע: <b>' + pct(R.grossMargin) + '</b>.</div>';
+  },
+  need8: function () {
+    var miss = [];
+    if (!E.num(S.labor.net)) miss.push('נטו רצוי בשלב ' + gotoBtn(3, '3'));
+    if (!R.products.some(function (p) { return p.net > 0; })) miss.push('מוצר עם מחיר בשלב ' + gotoBtn(6, '6'));
+    return miss.length ? '<div class="note soft" style="margin:0 0 12px">כדי לחשב את המחזור, עוד חסרים: ' + miss.join(' · ') + '</div>' : '';
+  },
+  reverse: function () {
+    var a = R.annual;
+    return '<div class="ledger">' + lg('רווח נקי ביד', ils(a.net, 0), 'נטו' + (R.saving ? ' וחיסכון' : '') + ' כפול 12', 'sum') + lg('מיסים', ils(a.taxes, 0)) + lg('רווח לפני מס', ils(a.preTax, 0), null, 'sum') +
+      lg('קרן השתלמות', ils(a.fund, 0)) + lg('פנסיה', ils(a.pension, 0)) + lg('שכר עובדים', ils(a.employees, 0)) + lg('הנהלה וכלליות', ils(a.admin, 0)) + lg('שיווק ומכירות', ils(a.marketing, 0)) +
+      lg('רווח גולמי דרוש', ils(a.grossProfit, 0), pct(R.grossMargin) + ' מהמחזור', 'sum') + (a.revenue == null ? '' : lg('עלות מכר', ils(a.cogs, 0))) +
+      lg('המחזור הדרוש בשנה', a.revenue == null ? '-' : ils(a.revenue, 0), a.revenue == null ? 'חסר מחירון' : 'לפני מע"מ · ' + ils(a.revenue / 12, 0) + ' בחודש', 'big') + '</div>' +
+      (R.paturOver ? '<div class="note warn">המחזור הזה מעל תקרת עוסק פטור (' + money(E.PATUR_CEILING_2026) + ' ₪ ב-2026). כדאי לבדוק עם רואה חשבון מעבר לעוסק מורשה.</div>' : '') +
+      how('reverse', 'רווח גולמי דרוש <b>' + ils(a.grossProfit, 0) + '</b> חלקי רווחיות גולמית ממוצעת <b>' + pct(R.grossMargin) + '</b> = המחזור. הבלת"מ לא נכנס לחישוב, כי הוא כרית ביטחון ולא הוצאה מתוכננת.');
+  },
+  breakEven: function () {
+    var be = R.breakEven, rev = R.annual.revenue;
+    if (be == null) return '<div class="note soft" style="margin:0">תופיע אחרי שיהיה מחירון.</div>';
+    var share = rev ? Math.min(be / rev, 1) : 0;
+    return '<div class="tiles">' + tile('נקודת איזון בשנה', ils(be, 0), ils(be / 12, 0) + ' בחודש', 'main') + tile('הוצאות קבועות בשנה', ils(R.fixedAnnual, 0)) + '</div>' +
+      '<p style="font-size:13.5px;font-weight:700;color:var(--pine-darker);margin-top:12px">נקודת האיזון היא ' + pct(share, 0) + ' מהמחזור הדרוש</p><div class="bar"><i style="width:' + (share * 100).toFixed(1) + '%"></i></div>' +
+      how('be', 'הוצאות קבועות (שכר, פנסיה, עובדים, עקיפות) <b>' + ils(R.fixedAnnual, 0) + '</b> חלקי רווחיות גולמית <b>' + pct(R.grossMargin) + '</b>. עד המחזור הזה העסק עוד לא מרוויח. החישוב לא כולל את המס על השכר שלך.');
+  },
+  need9: function () { return R.annual.revenue == null ? '<div class="note soft" style="margin:0 0 12px">כדי לחשב יעדים צריך מחירון. ' + gotoBtn(6, 'לשלב 6') + '</div>' : ''; },
+  revHead: function () {
+    return R.annual.revenue == null ? '' : '<p class="explain"><b>המחזור הדרוש: ' + ils(R.annual.revenue, 0) + ' בשנה</b>, לפי התמהיל מ' + gotoBtn(7, 'שלב 7') + '. אפשר לשנות כאן את האחוזים, והמחירון יתעדכן גם שם.</p>' + (Math.abs(R.mixSum - 100) >= 0.01 && R.mixSum > 0 ? '<div class="note soft" style="margin:0 0 10px">התמהיל מסתכם ל-' + (Math.round(R.mixSum * 10) / 10) + '%. צריך להגיע ל-100%.</div>' : (R.mixSum === 0 && S.products.length > 1 ? '<div class="note soft" style="margin:0 0 10px">צריך למלא תמהיל כדי לחלק את המחזור בין המוצרים.</div>' : ''));
+  },
+  capacity: function () {
+    if (R.annual.revenue == null || !R.hoursAvailableMonth) return '';
+    var need = R.hoursNeededMonth, have = R.hoursAvailableMonth, over = need > have, ratio = have ? Math.min(need / have, 1) : 0;
+    return '<div class="note ' + (over ? 'warn' : (need > have * 0.8 ? 'soft' : 'ok')) + '"><b>בדיקת שעות:</b> היעד דורש ' + money(need) + ' שעות בחודש, ויש בעסק ' + money(have) + '. ' + (over ? 'אי אפשר להגיע ליעד הזה בשעות שיש. אפשר להעלות מחיר, לקצר זמן עבודה למוצר או לשנות תמהיל.' : (need > have * 0.8 ? 'זה צפוף, כי השעות האלה כוללות גם שיווק וניהול.' : 'יש מקום גם לשיווק ולניהול.')) + '<div class="bar"><i class="' + (over ? 'over' : '') + '" style="width:' + (ratio * 100).toFixed(1) + '%"></i></div></div>';
+  },
+  planSum: function (i) { return R.goals[i] ? money(R.goals[i].planned) : ''; },
+  monthCell: function (a) {
+    var q = a.split(':'), k = q[0];
+    if (q[1] === 'all') return k === 'revenue' ? money(R.plannedRevenue) : money(R.plannedByMonth.reduce(function (x, m) { return x + m.hours; }, 0));
+    return money(R.plannedByMonth[+q[1]][k]);
+  },
+  planGap: function () {
+    if (R.annual.revenue == null) return '';
+    var planned = R.plannedRevenue, rev = R.annual.revenue;
+    if (!planned) return '<div class="note soft">עוד לא תוכננו מכירות. אפשר לפזר שווה בלחיצה, ואז לשנות לפי החודשים החזקים.</div>';
+    var peak = R.plannedByMonth.reduce(function (b, m, i) { return m.hours > b.h ? { h: m.hours, i: i } : b; }, { h: 0, i: 0 });
+    var over = peak.h > R.hoursAvailableMonth && R.hoursAvailableMonth > 0;
+    var gap = planned - rev;
+    return '<div class="note ' + (Math.abs(gap) <= rev * 0.01 ? 'ok' : (gap < 0 ? 'soft' : 'ok')) + '">תכננת מחזור של <b>' + ils(planned, 0) + '</b> מתוך <b>' + ils(rev, 0) + '</b>. ' + (Math.abs(gap) <= rev * 0.01 ? 'התוכנית מגיעה ליעד.' : (gap < 0 ? 'חסרים ' + ils(-gap, 0) + ' כדי להגיע ליעד.' : 'זה ' + ils(gap, 0) + ' מעל היעד.')) + '</div>' +
+      (over ? '<div class="note warn">ב' + MONTHS[peak.i] + ' התוכנית דורשת ' + money(peak.h) + ' שעות, ויש ' + money(R.hoursAvailableMonth) + '.</div>' : '');
+  },
+  summaryTop: function () {
+    var a = R.annual;
+    return '<div class="tiles">' + tile('המחזור הדרוש בשנה', a.revenue == null ? '-' : ils(a.revenue, 0), a.revenue == null ? 'חסר מחירון' : ils(a.revenue / 12, 0) + ' בחודש, לפני מע"מ', 'main') + tile('נקודת איזון בשנה', R.breakEven == null ? '-' : ils(R.breakEven, 0), R.breakEven == null ? '' : ils(R.breakEven / 12, 0) + ' בחודש') + tile('ביד בחודש', ils(R.tax.net, 0), 'אחרי כל המיסים') + tile('רווח גולמי ממוצע', pct(R.grossMargin), R.usingMix ? 'לפי התמהיל' : 'ממוצע פשוט') + '</div>';
+  },
+  summaryList: function () {
+    if (!R.products.length) return '<div class="note soft" style="margin:0">עוד אין מוצרים. ' + gotoBtn(2, 'להוסיף בשלב 2') + '</div>';
+    return '<div class="tbl-wrap" tabindex="0" role="region" aria-label="סיכום המחירון"><table class="ptable"><thead><tr><th>מוצר</th><th>מחיר ללקוח</th><th>מומלץ</th><th>% גולמי</th><th>מכירות בשנה</th><th>בחודש</th></tr></thead><tbody>' + R.products.map(function (p, i) { var g = R.goals[i]; return '<tr><td class="nm"><span class="dot ' + p.status + '" aria-hidden="true"></span>' + esc(p.name || 'מוצר ' + (i + 1)) + '</td><td>' + ils(p.customer, 0) + '</td><td>' + ils(p.calc.recommended, 0) + '</td><td>' + pct(p.grossPct) + '</td><td>' + (R.annual.revenue == null ? '-' : units(g.unitsYear)) + '</td><td>' + (R.annual.revenue == null ? '-' : units(g.unitsMonth)) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  },
+  flags: function () { var f = flagList(); return f.slice(0, 3).map(function (x) { return '<div class="note ' + x.c + '" style="margin-top:8px">' + x.t + '</div>'; }).join(''); }
+};
+function flagList() {
+  var f = [], names = function (st) { return R.products.filter(function (p) { return p.status === st && p.net > 0; }).map(function (p) { return p.name || 'מוצר'; }).join(', '); };
+  for (var i = 1; i < 10; i++) if (stepState(i) === 'empty') { f.push({ c: 'soft', t: 'שלב ' + i + ', ' + STEPS[i].t + ', עוד לא מולא. ' + gotoBtn(i, 'להשלים') }); break; }
+  if (names('below-min')) f.push({ c: 'warn', t: '<b>' + esc(names('below-min')) + ':</b> המחיר שנבחר לא מכסה את העלויות.' });
+  if (R.annual.revenue != null && R.hoursAvailableMonth && R.hoursNeededMonth > R.hoursAvailableMonth) f.push({ c: 'warn', t: 'היעד דורש <b>' + money(R.hoursNeededMonth) + '</b> שעות בחודש, ויש <b>' + money(R.hoursAvailableMonth) + '</b>.' });
+  if (R.paturOver) f.push({ c: 'warn', t: 'המחזור הדרוש מעל תקרת עוסק פטור.' });
+  if (R.mixSum > 0 && Math.abs(R.mixSum - 100) >= 0.01) f.push({ c: 'soft', t: 'התמהיל מסתכם ל-' + (Math.round(R.mixSum * 10) / 10) + '% ולא ל-100%. ' + gotoBtn(7, 'לתקן') });
+  if (names('below-rec')) f.push({ c: 'soft', t: '<b>' + esc(names('below-rec')) + ':</b> מתחת למחיר המומלץ, כך שהרווח נמוך ממה שתכננת.' });
+  var above = R.products.filter(function (p) { return p.market > 0 && p.customer > p.market * 1.15; }).map(function (p) { return p.name; }).join(', ');
+  if (above) f.push({ c: 'soft', t: '<b>' + esc(above) + ':</b> המחיר גבוה מהשוק ביותר מ-15%. כדאי לחדד מה מצדיק אותו.' });
+  if (R.annual.revenue != null && R.plannedRevenue > 0 && R.plannedRevenue < R.annual.revenue * 0.99) f.push({ c: 'soft', t: 'התוכנית השנתית מגיעה ל-' + ils(R.plannedRevenue, 0) + ' מתוך ' + ils(R.annual.revenue, 0) + '.' });
+  if (R.grossMargin > 0 && R.breakEven != null) f.push({ c: 'ok', t: 'מתחת ל-<b>' + ils(R.breakEven / 12, 0) + '</b> מחזור בחודש העסק לא מכסה את ההוצאות הקבועות. כדאי לזכור את המספר הזה.' });
+  if (!f.length) f.push({ c: 'ok', t: 'הכל מלא ועקבי.' });
+  return f;
+}
+
+/* ---------- render ---------- */
+function refreshLive() {
+  R = E.compute(S);
+  document.querySelectorAll('[data-live] details[data-how]').forEach(function (d) { howOpen[d.dataset.how] = d.open; });
+  document.querySelectorAll('[data-live]').forEach(function (el) {
+    var fn = LIVE[el.getAttribute('data-live')];
+    if (!fn) return;
+    var html = fn(el.getAttribute('data-arg'));
+    if (el.innerHTML !== html) el.innerHTML = html;
   });
-  host.querySelectorAll('input[data-i]').forEach(function(inp){inp.addEventListener('input',function(){var i=+inp.dataset.i,k=inp.dataset.k;if(k==='a')liveFmt(inp);S.biz.expenses[i][k]=(k==='l')?inp.value:num(inp.value);save();renderSetup();});});
-  host.querySelectorAll('.cp-del').forEach(function(b){b.onclick=function(){S.biz.expenses.splice(+b.dataset.i,1);if(!S.biz.expenses.length)S.biz.expenses.push({l:'',a:0});save();renderSetup();};});
+  renderRail();
+  $('bizLabel').textContent = S.biz.name ? '· ' + S.biz.name : '';
 }
-function renderSetup(){
-  var b=S.biz;
-  var oh=b.expenses.reduce(function(a,e){return a+num(e.a);},0);
-  document.getElementById('expTotal').textContent=money(oh)+' ₪';
-  var hc=hourCost(),hrs=num(b.workHours);
-  var rl=document.getElementById('rateLine');
-  if(hrs>0&&hc>0){rl.classList.remove('warn');document.getElementById('rateVal').textContent=money(hc)+' ₪ לשעה';
-    document.getElementById('rateExplain').innerHTML='= ('+money(num(b.ownerNet)+num(b.ownerSave))+' משכורת+חיסכון + '+money(oh)+' הוצאות) ÷ '+money(hrs)+' שעות = <b>שכר '+money((num(b.ownerNet)+num(b.ownerSave))/hrs)+' + עקיפות '+money(oh/hrs)+'</b> לשעה.';}
-  else{rl.classList.add('warn');document.getElementById('rateVal').textContent='מלאי משכורת + הוצאות + שעות';document.getElementById('rateExplain').textContent='';}
+function render(focus) {
+  R = E.compute(S); fid = 0;
+  $('view').innerHTML = VIEWS[step]();
+  refreshLive();
+  if (focus) { var t = $('stepTitle'); if (t) { t.focus({ preventScroll: true }); } window.scrollTo({ top: 0, behavior: 'auto' }); }
+}
+function go(n) { step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
+function changed() { refreshLive(); persist(); }
+function hasContent(s) { return !!(s && (s.biz.name || (s.materials && s.materials.length) || (s.products && s.products.length) || E.num(s.labor && s.labor.net))); }
+
+/* ---------- persistence ---------- */
+function persist() {
+  clearTimeout(draftT);
+  draftT = setTimeout(function () {
+    try {
+      localStorage.setItem(docId ? DRAFT_KEY + '_doc_' + docId : DRAFT_KEY, JSON.stringify(S));
+      $('saveState').textContent = docId ? '' : 'נשמר במכשיר הזה';
+    } catch (e) { $('saveState').textContent = 'לא הצלחנו לשמור בדפדפן. כדאי ליצור קישור בשלב האחרון.'; }
+  }, 350);
+  syncLive();
+}
+function readDraftMeta() { try { var s = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); return hasContent(s) && !draftApplied ? { name: s.biz.name, state: s } : null; } catch (e) { return null; } }
+var draftApplied = false;
+function normalize(s) {
+  var base = emptyState();
+  s = s || base;
+  ['biz', 'labor', 'plan', 'overhead', 'tax'].forEach(function (k) { s[k] = Object.assign({}, base[k], s[k] || {}); });
+  s.materials = s.materials || []; s.products = s.products || [];
+  s.products.forEach(function (p) { p.lines = p.lines || []; p.plan = p.plan || months(); });
+  return s;
 }
 
-/* ---------- CATALOG: list + editor ---------- */
-function renderCatalog(){
-  var listing=(S.editIdx===null||S.editIdx===undefined);
-  document.getElementById('catListWrap').hidden=!listing;
-  document.getElementById('editorWrap').hidden=listing;
-  if(listing){renderCatList();}else{renderEditor();}
-}
-function renderCatList(){
-  var host=document.getElementById('catList');host.innerHTML='';
-  if(!S.offerings.length){host.innerHTML='<div class="empty-cat">עדיין אין מוצרים.<br>לחצי על "הוספת מוצר" כדי להתחיל לבנות את הקטלוג שלך.</div>';return;}
-  S.offerings.forEach(function(o,i){
-    var pr=priceOf(o);
-    var card=document.createElement('div');card.className='cat-card';
-    card.innerHTML='<div class="cc-top"><span class="cc-name">'+MICON[o.mode]+' '+(esc(o.name)||'ללא שם')+'</span><span class="cc-price">'+money(pr.fin)+' ₪</span></div>'+
-      '<div class="cc-sub">רווח גולמי '+Math.round(pr.margin)+'% · עלות ישירה '+money(pr.direct)+' ₪ · '+(+num(o.hours))+' שעות</div>'+
-      '<div class="cc-actions"><button data-i="'+i+'" class="edit" type="button">✎ עריכה</button><button data-i="'+i+'" class="dup" type="button">⧉ שכפול</button><button data-i="'+i+'" class="del" type="button">מחיקה</button></div>';
-    host.appendChild(card);
+/* encrypted live link: the key sits after the # and never reaches the server */
+function b64u(buf) { return btoa(String.fromCharCode.apply(null, new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function unb64u(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+function newKey() { return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']); }
+function encryptState(key) {
+  var iv = crypto.getRandomValues(new Uint8Array(12));
+  return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, new TextEncoder().encode(JSON.stringify(S))).then(function (ct) {
+    var out = new Uint8Array(iv.length + ct.byteLength); out.set(iv, 0); out.set(new Uint8Array(ct), iv.length);
+    var chunks = '', a = out, step_ = 8192;
+    for (var i = 0; i < a.length; i += step_) chunks += String.fromCharCode.apply(null, a.subarray(i, i + step_));
+    return 'v4.' + btoa(chunks);
   });
-  host.querySelectorAll('.edit').forEach(function(b){b.onclick=function(){S.editIdx=+b.dataset.i;save();renderCatalog();window.scrollTo(0,0);};});
-  host.querySelectorAll('.dup').forEach(function(b){b.onclick=function(){var o=JSON.parse(JSON.stringify(S.offerings[+b.dataset.i]));o.name=(o.name||'הצעה')+' (עותק)';S.offerings.push(o);S.editIdx=S.offerings.length-1;save();renderCatalog();window.scrollTo(0,0);};});
-  host.querySelectorAll('.del').forEach(function(b){b.onclick=function(){if(!confirm('למחוק את המוצר?'))return;S.offerings.splice(+b.dataset.i,1);save();renderCatList();};});
 }
-function curOffer(){return S.offerings[S.editIdx];}
-function renderMats(){
-  var o=curOffer();if(!o)return;
-  var host=document.getElementById('matList');host.innerHTML='';
-  o.mats.forEach(function(m,i){
-    var unit=matUnit(m),line=unit*num(m.q);
-    var c=document.createElement('div');c.className='mat-card';
-    c.innerHTML='<input class="cp-l" data-i="'+i+'" data-k="l" value="'+esc(m.l)+'" placeholder="שם החומר" aria-label="חומר">'+
-      '<div class="mat-grid">'+
-      '<div class="mat-f"><label>עלות קנייה (₪)</label><div class="cp-mini"><span class="cp-u">₪</span><input data-i="'+i+'" data-k="buy" inputmode="decimal" value="'+m.buy+'" aria-label="עלות"></div></div>'+
-      '<div class="mat-f"><label>כמות שקיבלת (אריזה)</label><div class="cp-mini"><input data-i="'+i+'" data-k="pkg" inputmode="decimal" value="'+m.pkg+'" style="text-align:center" aria-label="אריזה"></div></div>'+
-      '<div class="mat-f"><label>בלאי</label><div class="cp-mini"><input data-i="'+i+'" data-k="waste" inputmode="decimal" value="'+m.waste+'" style="text-align:center" aria-label="בלאי"><span class="cp-u">%</span></div></div>'+
-      '<div class="mat-f"><label>כמות למוצר אחד</label><div class="cp-mini"><input data-i="'+i+'" data-k="q" inputmode="decimal" value="'+m.q+'" style="text-align:center" aria-label="כמות"></div></div>'+
-      '</div>'+
-      '<div class="mat-foot"><span>עלות לייחוס: <b>'+money(line)+' ₪</b>'+(unit>0?' <span style="font-weight:600;color:var(--ink-soft)">('+(Math.round(unit*100)/100)+' ₪ ליחידה × '+(+num(m.q))+')</span>':'')+'</span><button class="cp-del" data-i="'+i+'" type="button">מחיקה</button></div>';
-    host.appendChild(c);
+function decryptBlob(blob, key) {
+  var raw = atob(blob.replace(/^v4\./, '')), a = new Uint8Array(raw.length);
+  for (var i = 0; i < raw.length; i++) a[i] = raw.charCodeAt(i);
+  return crypto.subtle.decrypt({ name: 'AES-GCM', iv: a.slice(0, 12) }, key, a.slice(12)).then(function (pt) { return JSON.parse(new TextDecoder().decode(pt)); });
+}
+function linkUrl() { return location.origin + location.pathname + '#p=' + docId + '.' + docKey.b64; }
+function syncLive() {
+  if (!docId) return;
+  clearTimeout(pushT);
+  pushT = setTimeout(function () {
+    encryptState(docKey.key).then(function (blob) {
+      if (blob.length > 250000) { showSync('הנתונים גדולים מדי לקישור. הטיוטה נשמרה במכשיר.', true); return; }
+      return fetch(SHARE_API + '/?id=' + encodeURIComponent(docId), { method: 'POST', body: blob }).then(function (r) {
+        if (r.status === 404) { docId = null; docKey = null; refreshShareUI(); showSync('הקישור פג. אפשר ליצור חדש.', true); return; }
+        if (!r.ok) throw new Error('sync'); netFail = false; showSync('הקישור החי מעודכן');
+      });
+    }).catch(function () { netFail = true; showSync('אין כרגע חיבור. השינויים נשמרו במכשיר, והקישור יתעדכן בשינוי הבא.', true); });
+  }, 1200);
+}
+function showSync(t, warn) { var el = $('saveState'); el.textContent = t; el.style.color = warn ? 'var(--red-deep)' : ''; }
+function refreshShareUI() {
+  $('liveBadge').hidden = !docId;
+  $('newBtn').hidden = !docId && !hasContent(S);
+  var b = $('shareBtn'); if (b) b.textContent = docId ? 'הצגת הקישור' : 'קישור לשליחה';
+}
+function doShare() {
+  var out = $('shareOut'), btn = $('shareBtn');
+  out.innerHTML = '<div class="note">מכין קישור...</div>'; if (btn) btn.disabled = true;
+  var ready = docId ? Promise.resolve() : newKey().then(function (key) {
+    return crypto.subtle.exportKey('raw', key).then(function (raw) {
+      return encryptState(key).then(function (blob) {
+        if (blob.length > 250000) throw new Error('size');
+        return fetch(SHARE_API + '/', { method: 'POST', body: blob }).then(function (r) { if (!r.ok) throw new Error('net'); return r.json(); }).then(function (j) {
+          docId = j.id; docKey = { key: key, b64: b64u(raw) };
+          history.replaceState(null, '', '#p=' + docId + '.' + docKey.b64);
+        });
+      });
+    });
   });
-  host.querySelectorAll('input[data-i]').forEach(function(inp){inp.addEventListener('input',function(){var i=+inp.dataset.i,k=inp.dataset.k,o=curOffer();o.mats[i][k]=(k==='l')?inp.value:num(inp.value);
-    // update ONLY this row's line total - do NOT rebuild the list (rebuilding kills focus / typing)
-    var m=o.mats[i],unit=matUnit(m),line=unit*num(m.q),card=inp.closest('.mat-card'),foot=card?card.querySelector('.mat-foot span'):null;
-    if(foot)foot.innerHTML='עלות לייחוס: <b>'+money(line)+' ₪</b>'+(unit>0?' <span style="font-weight:600;color:var(--ink-soft)">('+(Math.round(unit*100)/100)+' ₪ ליחידה × '+(+num(m.q))+')</span>':'');
-    save();calcEditor();});});
-  host.querySelectorAll('.cp-del').forEach(function(b){b.onclick=function(){var o=curOffer();o.mats.splice(+b.dataset.i,1);if(!o.mats.length)o.mats.push({l:'',buy:0,pkg:1,waste:10,q:1});save();renderMats();calcEditor();};});
+  ready.then(function () {
+    out.innerHTML = '<div class="act-link"><input id="linkField" aria-label="הקישור" readonly value="' + esc(linkUrl()) + '"><button type="button" class="btn small" data-act="copyLink">העתקה</button></div><div class="note ok">זה קישור חי: כל שינוי מכאן והלאה מתעדכן בו, ואין צורך לשלוח שוב. הוא מוצפן, כך שרק מי שיש לו את הקישור יכול לקרוא. כדאי לשלוח אותו רק למי שצריך לראות את הנתונים.</div>';
+    refreshShareUI();
+  }).catch(function (e) {
+    out.innerHTML = '<div class="note warn">' + (e && e.message === 'size' ? 'הנתונים גדולים מדי לקישור.' : 'לא הצלחנו ליצור קישור. הנתונים שמורים במכשיר, ואפשר לנסות שוב כשיש חיבור.') + '</div>';
+  }).then(function () { if (btn) btn.disabled = false; });
 }
-function applyMode(){
-  var o=curOffer();if(!o)return;
-  [['mProduct','product'],['mService','service'],['mHybrid','hybrid']].forEach(function(a){document.getElementById(a[0]).classList.toggle('active',o.mode===a[1]);});
-  document.getElementById('materialsBlock').hidden=false; // materials available in every mode (e.g. a notebook in a consult)
-  document.getElementById('modeHint').textContent=MODE_HINT[o.mode];
+function bootFromHash() {
+  var m = /^#p=([^.]+)\.(.+)$/.exec(location.hash);
+  if (!m) return Promise.resolve(false);
+  var id = m[1], kb = m[2];
+  $('view').innerHTML = '<div class="card"><div class="note" style="margin:0">טוען את הנתונים...</div></div>';
+  return crypto.subtle.importKey('raw', unb64u(kb), 'AES-GCM', true, ['encrypt', 'decrypt']).then(function (key) {
+    return fetch(SHARE_API + '/?id=' + encodeURIComponent(id)).then(function (r) { if (!r.ok) throw new Error(r.status === 404 ? 'gone' : 'net'); return r.text(); }).then(function (blob) {
+      return decryptBlob(blob, key);
+    }).then(function (st) {
+      S = normalize(st); docId = id; docKey = { key: key, b64: kb }; draftApplied = true; step = hasContent(S) ? 10 : 0; return true;
+    }).catch(function (e) {
+      var local = null; try { local = JSON.parse(localStorage.getItem(DRAFT_KEY + '_doc_' + id) || 'null'); } catch (x) {}
+      if (local && e.message !== 'gone') { S = normalize(local); docId = id; docKey = { key: key, b64: kb }; draftApplied = true; step = 10; netFail = true; return true; }
+      throw e;
+    });
+  }).catch(function (e) {
+    bootError = e && e.message === 'gone' ? 'הקישור הזה כבר לא פעיל. אפשר להתחיל מחדש.' : 'לא הצלחנו לפתוח את הקישור. כדאי לבדוק שהועתק במלואו ושיש חיבור לאינטרנט.';
+    history.replaceState(null, '', location.pathname);
+    return false;
+  });
 }
-function setRow(id,show){var r=document.getElementById(id);if(r)r.hidden=!show;}
-function renderEditor(){
-  var o=curOffer();if(!o)return;
-  document.getElementById('offerName').value=o.name||'';
-  document.getElementById('offerHours').value=o.hours;
-  document.getElementById('contPct').value=o.contPct;
-  document.getElementById('profitPct').value=o.profitPct;
-  document.getElementById('marketPrice').value=grp(o.marketPrice);
-  renderMats();applyMode();calcEditor();
-}
-function calcEditor(){
-  var o=curOffer();if(!o)return;var pr=priceOf(o);var b=S.biz;
-  document.getElementById('matTotal').textContent=money(pr.direct)+' ₪';
-  document.getElementById('finalNum').innerHTML=money(pr.fin)+'<small> ₪</small>';
-  document.getElementById('finalSub').textContent=pr.preVat>0?('לפני מע"מ: '+money(pr.preVat)+' ₪ · רווח גולמי '+Math.round(pr.margin)+'%'):'';
-  document.getElementById('rDirect').textContent=money(pr.direct)+' ₪';
-  document.getElementById('rTime').textContent=money(pr.timeCost)+' ₪';
-  document.getElementById('rTimeSub').textContent=(num(o.hours)>0&&pr.hc>0)?(' ('+(+num(o.hours))+' שעות × '+money(pr.hc)+' ₪)'):'';
-  document.getElementById('rCont').textContent=money(pr.cont)+' ₪';
-  document.getElementById('rMin').textContent=money(pr.minPrice)+' ₪';
-  document.getElementById('rProfit').textContent=money(pr.profit)+' ₪';
-  document.getElementById('rProfitSub').textContent=' ('+(+num(o.profitPct))+'% מהעלות)';
-  document.getElementById('rTax').textContent=money(pr.tax)+' ₪';
-  document.getElementById('rTaxSub').textContent=' (כדי שהרווח יישאר אחרי '+(+num(b.taxRate))+'% מס)';
-  document.getElementById('rPreVat').textContent=money(pr.preVat)+' ₪';
-  document.getElementById('rVat').textContent=money(pr.vat)+' ₪';
-  document.getElementById('rVatSub').textContent=' ('+(+num(b.vat))+'%)';
-  document.getElementById('rFee').textContent=money(pr.fee)+' ₪';
-  document.getElementById('rFeeSub').textContent=' ('+(+num(b.feePct))+'%)';
-  setRow('rDirectRow',pr.direct>0);setRow('rContRow',pr.cont>0);setRow('rTaxRow',pr.tax>0);setRow('rTimeRow',o.mode!=='product'||pr.timeCost>0||num(o.hours)>0);
-  var mn=document.getElementById('marginNote');
-  if(pr.preVat>0){mn.hidden=false;var ex=o.mode==='hybrid'?' בהיברידי זה נורמלי - יש עלות חומרים.':(o.mode==='service'?' בשירות הרווח הגולמי גבוה כי אין חומרים.':'');mn.innerHTML='📊 <b>רווח גולמי: '+Math.round(pr.margin)+'%</b> (המחיר לפני מע"מ פחות עלות החומרים).'+ex;}else mn.hidden=true;
-  var mp=num(o.marketPrice),vn=document.getElementById('valNote'),mk=document.getElementById('marketNote');
-  if(mp>0&&pr.fin>0){mk.hidden=false;mk.innerHTML=(pr.fin<=mp*1.02)?('🟢 מחיר השוק (<b>'+money(mp)+' ₪</b>) גבוה מהמחיר לפי העלות - יש מקום להעלות.'):('🟠 המחיר לפי העלות (<b>'+money(pr.fin)+' ₪</b>) גבוה משוק ('+money(mp)+' ₪) - או שהעלויות גבוהות, או שצריך להצדיק בערך.');
-    vn.hidden=false;vn.innerHTML='💎 <b>ערך נתפס:</b> המחיר הזה הוא רצפה (עלות+רווח). לקוח משלם על הערך שהוא מקבל - אם התוצאה שווה לו יותר, תמחרי לפי הגבוה, כשהערך מצדיק.';}
-  else{mk.hidden=true;if(pr.fin>0){vn.hidden=false;vn.innerHTML='💎 <b>ערך נתפס:</b> המחיר הזה הוא רצפה - עלות + רווח. לקוח משלם על הערך שהוא מקבל, לא על העלות שלך. הזיני מחיר שוק כדי להשוות.';}else vn.hidden=true;}
-  var en=document.getElementById('emptyNote');
-  if(pr.minPrice<=0){en.hidden=false;document.getElementById('emptyTxt').textContent='מלאי חומרים או זמן (וודאי שבסיס העלויות מלא בטאב "העסק שלי").';}
-  else if(num(o.hours)>0&&pr.hc<=0){en.hidden=false;document.getElementById('emptyTxt').textContent='יש זמן עבודה אבל אין עלות שעה - מלאי את בסיס העלויות בטאב "העסק שלי".';}
-  else en.hidden=true;
-  renderCatList();
+var bootError = null;
+
+/* ---------- print view ---------- */
+function buildPrint() {
+  var a = R.annual, name = esc(S.biz.name || 'העסק שלי');
+  var header = function (t) { return '<div class="pr-head"><h1>' + t + '</h1><span>' + name + ' · RichLife</span></div>'; };
+  var foot = '<p class="pr-foot">הערכה בלבד, ואינה ייעוץ מס. טבלאות מס ' + R.settings.tables.year + '.</p>';
+  var p1 = '<section class="pr-page">' + header('תוכנית התמחור') +
+    '<div class="tiles">' + tile('המחזור הדרוש בשנה', a.revenue == null ? '-' : ils(a.revenue, 0), a.revenue == null ? '' : ils(a.revenue / 12, 0) + ' בחודש, לפני מע"מ') + tile('נקודת איזון בשנה', R.breakEven == null ? '-' : ils(R.breakEven, 0), R.breakEven == null ? '' : ils(R.breakEven / 12, 0) + ' בחודש') + tile('ביד בחודש', ils(R.tax.net, 0)) + '</div>' +
+    '<h2>המחירון</h2><table class="ptable"><thead><tr><th>מוצר</th><th>מחיר ללקוח</th><th>מומלץ</th><th>מחיר נטו</th><th>עלות חומרים</th><th>רווח גולמי</th><th>%</th><th>חלק מהמחזור</th></tr></thead><tbody>' + R.products.map(function (p, i) { return '<tr><td>' + esc(p.name || 'מוצר ' + (i + 1)) + '</td><td>' + ils(p.customer, 0) + '</td><td>' + ils(p.calc.recommended, 0) + '</td><td>' + ils(p.net, 2) + '</td><td>' + ils(p.direct, 2) + '</td><td>' + ils(p.grossProfit, 2) + '</td><td>' + pct(p.grossPct) + '</td><td>' + (Math.round(p.mixPct * 10) / 10) + '%</td></tr>'; }).join('') + '</tbody></table>' +
+    '<h2>כמה עולה שעת עבודה</h2><div class="ledger">' + lg('שכר לשעה', ils(R.labor.costPerHour, 2)) + lg('עלויות עקיפות לשעה', ils(R.overhead.perHour, 2)) + lg('סך הכל לשעה', ils(R.labor.costPerHour + R.overhead.perHour, 2), null, 'sum') + '</div>' + foot + '</section>';
+  var p2 = '<section class="pr-page">' + header('מהרווח למחזור') + '<div class="ledger">' + lg('רווח נקי ביד', ils(a.net, 0), null, 'sum') + lg('מיסים', ils(a.taxes, 0)) + lg('רווח לפני מס', ils(a.preTax, 0), null, 'sum') + lg('קרן השתלמות', ils(a.fund, 0)) + lg('פנסיה', ils(a.pension, 0)) + lg('שכר עובדים', ils(a.employees, 0)) + lg('הנהלה וכלליות', ils(a.admin, 0)) + lg('שיווק ומכירות', ils(a.marketing, 0)) + lg('רווח גולמי דרוש', ils(a.grossProfit, 0), pct(R.grossMargin) + ' מהמחזור', 'sum') + (a.revenue == null ? '' : lg('עלות מכר', ils(a.cogs, 0))) + lg('המחזור הדרוש בשנה', a.revenue == null ? '-' : ils(a.revenue, 0), null, 'sum') + '</div>' +
+    '<h2>נקודת איזון</h2><div class="ledger">' + lg('הוצאות קבועות בשנה', ils(R.fixedAnnual, 0)) + lg('נקודת איזון בשנה', R.breakEven == null ? '-' : ils(R.breakEven, 0), R.breakEven == null ? '' : ils(R.breakEven / 12, 0) + ' בחודש', 'sum') + '</div>' +
+    '<h2>היעדים</h2><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחזור</th><th>מחיר נטו</th><th>מכירות בשנה</th><th>בחודש</th></tr></thead><tbody>' + R.goals.map(function (g, i) { return '<tr><td>' + esc(g.name || 'מוצר ' + (i + 1)) + '</td><td>' + (Math.round(g.sharePct * 10) / 10) + '%</td><td>' + ils(g.turnover, 0) + '</td><td>' + ils(g.price, 2) + '</td><td>' + units(g.unitsYear) + '</td><td>' + units(g.unitsMonth) + '</td></tr>'; }).join('') + '</tbody></table>' + foot + '</section>';
+  var planRows = R.goals.map(function (g, i) { return '<tr><td>' + esc(g.name || 'מוצר ' + (i + 1)) + '</td>' + g.plan.map(function (v) { return '<td>' + (v ? money(v) : '') + '</td>'; }).join('') + '<td><b>' + money(g.planned) + '</b></td></tr>'; }).join('');
+  var txt = function (l, k) { return S.plan[k].some(function (x) { return x; }) ? '<tr><td>' + l + '</td>' + S.plan[k].map(function (v) { return '<td>' + esc(v) + '</td>'; }).join('') + '<td></td></tr>' : ''; };
+  var p3 = '<section class="pr-page">' + header('התוכנית השנתית') + '<table class="ptable"><thead><tr><th>חודש</th>' + MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('') + '<th>בשנה</th></tr></thead><tbody>' + txt('מועדים', 'dates') + txt('השקות', 'launches') + txt('מבצעים', 'promos') + txt('פוקוס', 'focus') + planRows +
+    '<tr><td><b>מחזור נטו</b></td>' + R.plannedByMonth.map(function (m) { return '<td><b>' + money(m.revenue) + '</b></td>'; }).join('') + '<td><b>' + money(R.plannedRevenue) + '</b></td></tr></tbody></table>' +
+    '<h2>לשים לב</h2>' + flagList().slice(0, 4).map(function (x) { return '<div class="note ' + x.c + '">' + x.t.replace(/<button[^>]*>.*?<\/button>/g, '') + '</div>'; }).join('') + foot + '</section>';
+  $('printRoot').innerHTML = p1 + p2 + p3;
 }
 
-/* ---------- PRICE LIST ---------- */
-function renderList(){
-  var t=document.getElementById('priceTable');
-  if(!S.offerings.length){t.innerHTML='<tbody><tr><td class="nm" style="text-align:center;padding:22px">אין עדיין מוצרים בקטלוג.</td></tr></tbody>';return;}
-  var head='<thead><tr><th>מוצר / שירות</th><th>מחיר (כולל מע"מ)</th><th>לפני מע"מ</th><th>עלות ישירה</th><th>רווח גולמי</th><th>%</th></tr></thead>';
-  var rows='',sumMargin=0,n=0;
-  S.offerings.forEach(function(o){var pr=priceOf(o);sumMargin+=pr.margin;n++;
-    rows+='<tr><td class="nm">'+MICON[o.mode]+' '+(esc(o.name)||'ללא שם')+'</td><td>'+money(pr.fin)+' ₪</td><td>'+money(pr.preVat)+' ₪</td><td>'+money(pr.direct)+' ₪</td><td>'+money(pr.preVat-pr.direct)+' ₪</td><td>'+Math.round(pr.margin)+'%</td></tr>';});
-  var avg=n?Math.round(sumMargin/n):0;
-  var foot='<tfoot><tr><td class="nm">ממוצע רווח גולמי</td><td></td><td></td><td></td><td></td><td>'+avg+'%</td></tr></tfoot>';
-  t.innerHTML=head+'<tbody>'+rows+'</tbody>'+foot;
+/* ---------- events ---------- */
+document.addEventListener('input', function (e) {
+  var t = e.target;
+  if (t.hasAttribute('data-num') || t.hasAttribute('data-quick')) {
+    var caretDigits = t.value.slice(0, t.selectionStart).replace(/[^\d.]/g, '').length, f = grp(t.value);
+    if (f !== t.value) { t.value = f; var p = 0, c = 0; while (p < f.length && c < caretDigits) { if (/[\d.]/.test(f[p])) c++; p++; } try { t.setSelectionRange(p, p); } catch (x) {} }
+  }
+  if (t.hasAttribute('data-quick')) {
+    var base = t.getAttribute('data-quick'), arr = getPath(base + '.m'), raw = t.value.replace(/,/g, '');
+    for (var i = 0; i < 12; i++) { arr[i] = raw; var mi = document.querySelector('[data-path="' + base + '.m.' + i + '"]'); if (mi) mi.value = grp(raw); }
+    t.placeholder = ''; changed(); return;
+  }
+  if (t.hasAttribute('data-table')) {
+    if (!S.tax.tables) S.tax.tables = JSON.parse(JSON.stringify(E.TABLES_2026));
+    var ks = t.getAttribute('data-table').split('.'), o = S.tax.tables;
+    for (var k = 0; k < ks.length - 1; k++) o = o[ks[k]];
+    o[ks[ks.length - 1]] = E.num(t.value); changed(); return;
+  }
+  if (t.hasAttribute('data-path') && t.tagName !== 'SELECT') {
+    var path = t.getAttribute('data-path');
+    setPath(path, t.hasAttribute('data-num') ? t.value.replace(/,/g, '') : t.value);
+    if (t.hasAttribute('data-month')) { var b = path.replace(/\.m\.\d+$/, ''), q = document.querySelector('[data-quick="' + b + '"]'), a = getPath(b + '.m'), same = a.every(function (x) { return String(x) === String(a[0]); }); if (q) { q.value = same ? grp(a[0]) : ''; q.placeholder = same ? '' : 'משתנה'; } }
+    changed();
+  }
+});
+document.addEventListener('change', function (e) {
+  var t = e.target;
+  if (t.tagName === 'SELECT' && t.hasAttribute('data-path')) { setPath(t.getAttribute('data-path'), t.value); changed(); }
+  if (t.id === 'noMat') { S.biz.noMaterials = t.checked; $('matCard').hidden = t.checked; changed(); }
+  if (t.id === 'mobSelect') go(+t.value);
+});
+document.addEventListener('toggle', function (e) {
+  var t = e.target; if (t.tagName !== 'DETAILS' || !t.dataset.how) return;
+  if (t.classList.contains('prod')) {
+    var i = +t.dataset.how.replace('prod', ''), dflt = S.products.length <= 3 || i === 0;
+    if (t.open === dflt) delete howOpen[t.dataset.how]; else howOpen[t.dataset.how] = t.open;
+  } else howOpen[t.dataset.how] = t.open;
+}, true);
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('button'); if (!t) return;
+  var d = t.dataset;
+  if (d.goto != null) { go(+d.goto); return; }
+  if (d.type) { S.biz.type = d.type; render(); persist(); return; }
+  if (d.add) { addRow(d.add); return; }
+  if (d.del) { var arr = getPath(d.del); arr.splice(+d.i, 1); render(); persist(); return; }
+  if (d.delline) { var q = d.delline.split(':'); S.products[+q[0]].lines.splice(+q[1], 1); render(); persist(); return; }
+  if (d.addline != null) { S.products[+d.addline].lines.push({ mat: '', qty: '' }); render(); persist(); return; }
+  if (d.delprod != null) {
+    if (t.dataset.armed) { S.products.splice(+d.delprod, 1); render(); persist(); return; }
+    t.dataset.armed = '1'; t.textContent = 'בטוח? למחוק'; setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'מחיקה'; } }, 3000); return;
+  }
+  var act = d.act;
+  if (t.id === 'newBtn') act = 'new';
+  if (!act) return;
+  if (act === 'demo') { S = demoState(); draftApplied = true; go(1); persist(); refreshShareUI(); }
+  else if (act === 'resume') { var m = readDraftMeta(); if (m) { S = normalize(m.state); draftApplied = true; go(firstOpenStep()); refreshShareUI(); } }
+  else if (act === 'fresh') { draftApplied = true; try { localStorage.setItem(DRAFT_KEY + '_prev', localStorage.getItem(DRAFT_KEY) || ''); localStorage.removeItem(DRAFT_KEY); } catch (x) {} S = emptyState(); render(); }
+  else if (act === 'new') {
+    if (!t.dataset.armed) { t.dataset.armed = '1'; t.textContent = 'בטוח? להתחיל חדש'; setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'התחלה חדשה'; } }, 3000); return; }
+    delete t.dataset.armed; t.textContent = 'התחלה חדשה';
+    docId = null; docKey = null; history.replaceState(null, '', location.pathname); try { localStorage.setItem(DRAFT_KEY + '_prev', localStorage.getItem(DRAFT_KEY) || ''); localStorage.removeItem(DRAFT_KEY); } catch (x) {}
+    S = emptyState(); draftApplied = true; step = 0; render(true); refreshShareUI(); $('saveState').textContent = '';
+  }
+  else if (act === 'resetTables') { S.tax.tables = null; render(); persist(); }
+  else if (act === 'spread') { spreadPlan(); }
+  else if (act === 'pdf') { buildPrint(); window.print(); }
+  else if (act === 'xlsx') { doExport(t); }
+  else if (act === 'share') { doShare(); }
+  else if (act === 'copyLink') { var lf = $('linkField'); lf.select(); try { navigator.clipboard.writeText(lf.value); } catch (x) { document.execCommand('copy'); } t.textContent = 'הועתק'; setTimeout(function () { if (t.isConnected) t.textContent = 'העתקה'; }, 1500); }
+});
+function firstOpenStep() { for (var i = 1; i < 10; i++) if (stepState(i) !== 'done') return i; return 10; }
+function addRow(kind) {
+  if (kind === 'material') S.materials.push({ id: uid('m'), name: '', unit: 'יחידה', pack: 1, cost: '' });
+  else if (kind === 'product') S.products.push({ id: uid('p'), name: '', lines: [], hours: '', specific: '', marginPct: 30, market: '', chosen: '', mix: S.products.length ? '' : 100, plan: months() });
+  else if (kind === 'monthly') S.labor.monthly.push({ name: '', role: '', gross: '', factor: 1.35, hours: '' });
+  else if (kind === 'hourly') S.labor.hourly.push({ name: '', role: '', rate: '', hours: '', factor: 1.35 });
+  else if (kind === 'marketing' || kind === 'admin') S.overhead[kind].push(ohRow(''));
+  render(); persist();
+  var all = document.querySelectorAll('#view [data-text]'); var added = null;
+  if (kind === 'material' || kind === 'product' || kind === 'monthly' || kind === 'hourly') { all = document.querySelectorAll('#view input[data-text]'); added = all[all.length - 1]; if (kind === 'monthly' || kind === 'hourly') added = document.querySelector('[data-path="labor.' + kind + '.' + (S.labor[kind].length - 1) + '.name"]'); if (kind === 'material') added = document.querySelector('[data-path="materials.' + (S.materials.length - 1) + '.name"]'); if (kind === 'product') added = document.querySelector('[data-path="products.' + (S.products.length - 1) + '.name"]'); }
+  if (added) added.focus();
+}
+function spreadPlan() {
+  R.goals.forEach(function (g, i) {
+    var yearly = Math.ceil(g.unitsYear - 1e-9), base = Math.floor(yearly / 12), extra = yearly - base * 12, plan = [];
+    for (var k = 0; k < 12; k++) plan.push(base + (k < extra ? 1 : 0));
+    S.products[i].plan = plan;
+  });
+  render(); persist();
+}
+function doExport(btn) {
+  var out = $('xlsxOut'), label = btn.textContent;
+  btn.disabled = true; btn.textContent = 'מכין קובץ...'; out.innerHTML = '';
+  var loadLib = function (src, ok) { return new Promise(function (res, rej) { if (ok()) return res(); var sc = document.createElement('script'); sc.src = src; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); }); };
+  loadLib('vendor/exceljs.min.js', function () { return window.ExcelJS; }).then(function () { return loadLib('export-xlsx.js?v=1', function () { return window.PricingExport; }); }).then(function () {
+    return window.PricingExport.build(S, E, window.ExcelJS);
+  }).then(function (buf) {
+    var blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'תמחור - ' + (S.biz.name || 'העסק שלי').replace(/[\\/:*?"<>|]/g, '') + '.xlsx';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
+    out.innerHTML = '<div class="note ok">הקובץ ירד. כל הנוסחאות חיות, ואפשר להמשיך לעבוד בו באקסל או ב-Google Sheets.</div>';
+  }).catch(function () { out.innerHTML = '<div class="note warn">לא הצלחנו להכין את הקובץ. כדאי לנסות שוב.</div>'; }).then(function () { btn.disabled = false; btn.textContent = label; });
 }
 
-/* ---------- TABS ---------- */
-function switchTab(t){
-  S.tab=t;save();
-  document.getElementById('tabSetup').classList.toggle('active',t==='setup');
-  document.getElementById('tabCatalog').classList.toggle('active',t==='catalog');
-  document.getElementById('tabList').classList.toggle('active',t==='list');
-  document.getElementById('setupView').hidden=(t!=='setup');
-  document.getElementById('catalogView').hidden=(t!=='catalog');
-  document.getElementById('listView').hidden=(t!=='list');
-  if(t==='setup')renderSetup();
-  if(t==='catalog')renderCatalog();
-  if(t==='list')renderList();
-}
-
-/* ---------- wiring ---------- */
-[['ownerNet','ownerNet'],['ownerSave','ownerSave'],['workHours','workHours']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){liveFmt(el);S.biz[a[1]]=num(el.value);save();renderSetup();});});
-document.getElementById('expAdd').onclick=function(){S.biz.expenses.push({l:'',a:0});save();renderExps();renderSetup();var r=document.querySelectorAll('#expList .cp-l');if(r.length)r[r.length-1].focus();};
-[['tVat','vat'],['tFee','feePct'],['tTax','taxRate']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){S.biz[a[1]]=num(el.value);save();renderSetup();});});
-document.getElementById('tProfit').addEventListener('input',function(e){liveFmt(e.target);S.biz.monthlyProfit=num(e.target.value);recomputeTax();save();});
-document.getElementById('tPoints').addEventListener('input',function(e){S.biz.points=num(e.target.value);recomputeTax();save();});
-document.getElementById('ttReset').onclick=function(){S.biz.vat=DEF.biz.vat;S.biz.feePct=DEF.biz.feePct;S.biz.monthlyProfit=0;S.biz.points=DEF.biz.points;S.biz.taxRate=0;document.getElementById('tVat').value=S.biz.vat;document.getElementById('tFee').value=S.biz.feePct;document.getElementById('tProfit').value='';document.getElementById('tPoints').value=S.biz.points;recomputeTax();save();renderSetup();};
-
-document.getElementById('addOffer').onclick=function(){S.offerings.push(newOffer());S.editIdx=S.offerings.length-1;save();renderCatalog();window.scrollTo(0,0);};
-function goBack(){S.editIdx=null;save();renderCatalog();window.scrollTo(0,0);}
-document.getElementById('backList').onclick=goBack;
-document.getElementById('backList2').onclick=goBack;
-document.getElementById('offerName').addEventListener('input',function(e){curOffer().name=e.target.value;save();});
-[['offerHours','hours'],['contPct','contPct'],['profitPct','profitPct']].forEach(function(a){var el=document.getElementById(a[0]);el.addEventListener('input',function(){curOffer()[a[1]]=num(el.value);save();calcEditor();});});
-document.getElementById('marketPrice').addEventListener('input',function(e){liveFmt(e.target);curOffer().marketPrice=num(e.target.value);save();calcEditor();});
-document.getElementById('matAdd').onclick=function(){curOffer().mats.push({l:'',buy:0,pkg:1,waste:10,q:1});save();renderMats();calcEditor();var r=document.querySelectorAll('#matList .cp-l');if(r.length)r[r.length-1].focus();};
-[['mProduct','product'],['mService','service'],['mHybrid','hybrid']].forEach(function(a){document.getElementById(a[0]).onclick=function(){curOffer().mode=a[1];save();applyMode();calcEditor();};});
-document.getElementById('tabSetup').onclick=function(){switchTab('setup');};
-document.getElementById('tabCatalog').onclick=function(){switchTab('catalog');};
-document.getElementById('tabList').onclick=function(){switchTab('list');};
-
-(function boot(){var o=loadLocal();if(o)S=Object.assign(JSON.parse(JSON.stringify(DEF)),o);
-  document.getElementById('ownerNet').value=grp(S.biz.ownerNet);document.getElementById('ownerSave').value=grp(S.biz.ownerSave);document.getElementById('workHours').value=grp(S.biz.workHours);
-  document.getElementById('tVat').value=S.biz.vat;document.getElementById('tFee').value=S.biz.feePct;document.getElementById('tProfit').value=S.biz.monthlyProfit?grp(S.biz.monthlyProfit):'';document.getElementById('tPoints').value=(S.biz.points!=null?S.biz.points:2.75);recomputeTax();
-  renderExps();switchTab(S.tab||'setup');})();
+/* ---------- boot ---------- */
+bootFromHash().then(function (loaded) {
+  render();
+  refreshShareUI();
+  if (loaded) { showSync(netFail ? 'אין חיבור, מוצגת השמירה האחרונה במכשיר' : 'הקישור החי מעודכן', netFail); }
+  if (bootError) { var d = document.createElement('div'); d.className = 'note warn'; d.style.marginBottom = '12px'; d.textContent = bootError; $('view').prepend(d); }
+});
+window.__pricing = { get S() { return S; }, get R() { return R; }, go: go };
+})();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון תמחור',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 <footer class="rl-legal-footer" style="max-width:900px;margin:34px auto 0;padding:16px 18px 26px;text-align:center;font-size:12.5px;line-height:1.75;opacity:.72"><div class="footer-legal" style="font-size:12.5px;line-height:1.75;opacity:.78">טלי בנימינוב שרעבי · עוסק מורשה 207381062<br>שדרות נים 2, ראשון לציון · <a href="mailto:tali.bi.finance@gmail.com">tali.bi.finance@gmail.com</a><br><button type="button" class="rl-consent-reopen" hidden>הגדרות עוגיות</button></div></footer>
-
 <style id="rl-consent-css">
 /* ===== באנר הסכמת עוגיות - RichLife ===== */
 #rl-consent{position:fixed;inset-inline:0;bottom:0;z-index:2147482000;

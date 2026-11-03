@@ -732,7 +732,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.waitForTimeout(60);
   const fcAfter = await p.evaluate(ym => window.PricingEngine.salesForecast(window.__pricing.S, ym, 1).total, ymNow);
   near('V a cancelled sale leaves the forecast', fcBefore - fcAfter, 1500);
-  await p.locator('[data-live="salesForecast"] .f-col').first().hover();
+  await p.locator('[data-live="salesForecast"] .f-col').nth(2).hover();
   ok('V hovering a month lists it', (await p.locator('#hTip').innerText()).includes('צפוי להיכנס'));
   ok('V monthly counts table', (await p.locator('[data-live="salesCounts"]').innerText()).includes('נמכרו'));
   // the home screen and the monthly fill see it
@@ -767,6 +767,68 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   near('X the target grows', after.t - before.t, 2000); ok('X so does the sales target', after.r > before.r);
   await go(p, 5); ok('X the tax step says so', (await p.locator('[data-live="taxNeed"]').innerText()).includes('לקידום העסק'));
   await clean(p, 'X'); await axe(p, 'X'); await ctx.close();
+}
+/* ---- Z. what came in and what is late ---- */
+{
+  const { ctx, p } = await newPage({ width: 1440, height: 800 }); await open(p);
+  await p.click('[data-act="demo"]'); await go(p, 14); await p.waitForTimeout(80);
+  const late = () => p.evaluate(() => window.PricingEngine.receivables(window.__pricing.S, new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jerusalem', year: 'numeric', month: '2-digit' }).format(new Date()).slice(0, 7)));
+  let r = await late();
+  near('Z the demo has a late payment', r.lateTotal, 600);
+  ok('Z the sentence says how much', (await p.locator('[data-live="salesHero"]').innerText()).includes('600'));
+  ok('Z and with whom to talk', (await p.locator('[data-live="salesHero"]').innerText()).includes('דנה'));
+  ok('Z the late card warns', (await p.locator('[data-live="salesTiles"]').innerText()).includes('באיחור'));
+  ok('Z retainer counts by itself', (await p.locator('[data-live="payList"]').innerText()).includes('נכנס לבד'));
+  await clean(p, 'Z list'); await axe(p, 'Z list');
+  // a part
+  await p.locator('[data-live="payList"] .pay.late [data-pay$="|part"]').click();
+  ok('Z part opens a field in focus', await p.evaluate(() => document.activeElement.id === 'payIn'));
+  await p.keyboard.type('9999'); await p.locator('[data-pay$="|savepart"]').click();
+  ok('Z too much is refused', (await p.locator('.pay-err').innerText()).includes('600'));
+  await axe(p, 'Z error');
+  await p.locator('#payIn').fill('200'); await p.locator('[data-pay$="|savepart"]').click(); await p.waitForTimeout(60);
+  r = await late(); near('Z a part leaves the rest', r.lateTotal, 400);
+  ok('Z the row says what came in', (await p.locator('[data-live="payList"] .pay.late').first().innerText()).includes('200'));
+  ok('Z the status can be heard', (await p.locator('[data-live="payStatus"]').innerText()).includes('200'));
+  await p.locator('[data-payundo]').click(); await p.waitForTimeout(60);
+  r = await late(); near('Z undo brings it back', r.lateTotal, 600);
+  // moved
+  await p.locator('[data-live="payList"] .pay.late [data-pay$="|move"]').click();
+  await p.locator('[data-pay$="|savemove"]').click(); await p.waitForTimeout(60);
+  r = await late(); near('Z moved is no longer late', r.lateTotal, 0);
+  ok('Z nothing late is said', (await p.locator('[data-live="salesHero"]').innerText()).includes('נכנס'));
+  await p.locator('[data-payundo]').click(); await p.waitForTimeout(60);
+  // paid, keeps the scroll and the focus in the list
+  await p.evaluate(() => { document.getElementById('contentCol').scrollTop = 300; });
+  const before = await p.evaluate(() => document.getElementById('contentCol').scrollTop);
+  await p.locator('[data-live="payList"] .pay.late [data-pay$="|paid"]').click(); await p.waitForTimeout(60);
+  r = await late(); near('Z paid clears it', r.lateTotal, 0);
+  near('Z the screen does not jump', await p.evaluate(() => document.getElementById('contentCol').scrollTop), before);
+  ok('Z focus stays in the list', await p.evaluate(() => !!document.activeElement.closest('[data-live="payList"]')));
+  ok('Z the mark is kept on the sale', await p.evaluate(() => Object.values(window.__pricing.S.sales[0].marks)[0].paid === true));
+  // collected on its own, and the choice in the sale
+  await p.locator('[data-live="payList"] [data-pay$="|failed"]').first().click(); await p.waitForTimeout(60);
+  ok('Z failed comes back to the list', (await p.locator('[data-live="payList"]').innerText()).includes('סומן שלא נכנס'));
+  const gotBefore = (await late()).monthGot;
+  await p.evaluate(() => document.querySelector('[data-saleauto="1:1"]').click()); await p.waitForTimeout(60);
+  ok('Z a sale can be set to arrive by itself', await p.evaluate(() => window.__pricing.S.sales[1].auto === true));
+  ok('Z and its month counts as in', (await late()).monthGot > gotBefore, [gotBefore, (await late()).monthGot]);
+  // several at once asks first
+  const m = await newPage({ width: 1440, height: 800 }); await open(m.p); await m.p.click('[data-act="demo"]');
+  await m.p.evaluate(() => { const y = window.__pricing.S; y.sales.push({ id: 'x', client: 'נועה', kind: 'equal', total: 2000, n: 2, start: '2020-01', month: '2020-01' }); }); await go(m.p, 14); await m.p.waitForTimeout(80);
+  await m.p.locator('[data-payall]').click();
+  ok('Z all at once asks first', (await m.p.locator('[data-payall]').innerText()).includes('בטוח'));
+  await m.p.locator('[data-payall]').click(); await m.p.waitForTimeout(60);
+  ok('Z all at once clears the list', !(await m.p.locator('[data-live="payList"]').innerText()).includes('היה צריך'));
+  await m.p.locator('[data-payundo]').click(); await m.p.waitForTimeout(60);
+  ok('Z and can be undone', (await m.p.locator('[data-live="payList"]').innerText()).includes('היה צריך'));
+  await m.ctx.close();
+  await go(p, 12); ok('Z home mentions nothing false', !(await p.locator('[data-live="homeForecast"]').innerText()).includes('undefined'));
+  await ctx.close();
+  const ph = await newPage({ width: 400, height: 800 }); await open(ph.p); await ph.p.click('[data-act="demo"]'); await go(ph.p, 14); await ph.p.waitForTimeout(80);
+  ok('Z fits a phone', await ph.p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), await ph.p.evaluate(() => document.documentElement.scrollWidth));
+  await axe(ph.p, 'Z phone');
+  await ph.ctx.close();
 }
 /* ---- Y. tabs stay, only the content scrolls ---- */
 {

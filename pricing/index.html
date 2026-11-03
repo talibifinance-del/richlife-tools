@@ -370,6 +370,40 @@ a{color:var(--pine-deep)}
 .f-a{background:repeating-linear-gradient(45deg,#5f7d6a 0 3px,#dfe8e1 3px 7px);border-radius:6px 6px 0 0}
 .f-val{font-size:12.5px;font-weight:700;color:var(--pine-darker);font-variant-numeric:tabular-nums;white-space:nowrap}
 .f-m{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:5px}
+.f-m.now{font-weight:900;color:var(--pine-darker)}
+.f-stack .f-s{border-radius:0}
+.f-stack>:first-child{border-radius:6px 6px 0 0}
+.f-l{background:repeating-linear-gradient(45deg,#c98a3a 0 4px,#ecd2ad 4px 8px)}
+.f-w{background:#c7d6ca}
+.h-legend i.l{background:repeating-linear-gradient(45deg,#c98a3a 0 3px,#ecd2ad 3px 6px)}
+.h-legend i.w{background:#c7d6ca}
+.pay-main,.pay-side{display:grid;gap:14px;grid-template-columns:minmax(0,1fr);align-items:start}
+.pay-main{margin-bottom:14px}
+.pay-who{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:17px;font-weight:900;color:var(--pine-darker);margin:12px 0 4px}
+.pay-who b{color:var(--amber-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pay{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 12px;border-radius:12px;background:var(--sage-tint);margin-bottom:6px;font-size:15.5px;font-weight:600}
+.pay.late{background:rgba(183,121,31,.12)}
+.pay-t{flex:1 1 170px;min-width:0}
+.pay-t small{display:block;font-size:13.5px;font-weight:600;color:var(--ink-soft)}
+.pay.late .pay-t small{color:var(--amber-deep);font-weight:700}
+.pay-a{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pay-b{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pay-done{font-size:13.5px;font-weight:800;color:var(--pine-deep)}
+.pay-sec{font-size:16px;font-weight:900;color:var(--pine-darker);margin:14px 0 6px;padding-top:12px;border-top:1px solid rgba(var(--pine-rgb),.18)}
+.pay-form{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.pay-form .field{flex:0 1 200px;margin:0}
+.pay-err{flex:1 1 100%;font-size:13.5px;font-weight:700;color:var(--red-deep)}
+.pay-prog{height:9px;background:var(--sage-tint);border-radius:9px;overflow:hidden;margin:6px 0 4px}
+.pay-prog i{display:block;height:100%;background:var(--pine-deep);border-radius:9px}
+.pay-of{font-size:16px;font-weight:700;color:var(--ink-soft)}
+.pay-status:empty{display:none}
+.h-tile .h-st{align-self:flex-start}
+.pay-status{font-size:14px;font-weight:700;color:var(--pine-darker);background:var(--sage-tint);border-radius:10px;padding:7px 12px;margin-top:8px}
+.plan-list{margin-top:12px}
+.plan-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto 76px;gap:4px 10px;align-items:center;padding:4px 0;font-size:14.5px;font-weight:600;border-bottom:1px solid rgba(var(--pine-rgb),.12)}
+.plan-row b{font-variant-numeric:tabular-nums}
+.plan-st{font-size:13.5px;color:var(--ink-soft)}
+.plan-st.late{color:var(--amber-deep);font-weight:800}
 @media (max-width:640px){.seg.seg4{grid-template-columns:repeat(2,minmax(0,1fr))}.f-val{font-size:10.5px}.f-bars{gap:3px}}
 .sub-h{font-size:16.5px;font-weight:900;color:var(--pine-darker);margin:14px 0 2px}
 .cols-ev{grid-template-columns:minmax(120px,2fr) 110px 120px 90px 30px}
@@ -505,7 +539,8 @@ a{color:var(--pine-deep)}
   .h-toprow .step-head{margin-bottom:0}
   .h-ctrl{margin-bottom:0}
   .h-board{display:grid;grid-template-columns:minmax(220px,270px) minmax(0,1fr);gap:14px;align-items:stretch}
-  .h-tiles{grid-template-columns:minmax(0,1fr);margin-bottom:0;align-content:stretch}
+  .h-board .h-tiles{grid-template-columns:minmax(0,1fr);margin-bottom:0;align-content:stretch}
+  .h-tiles{margin-bottom:12px}
   .h-tile{padding:10px 14px;display:flex;flex-direction:column;justify-content:center}
   .h-tile p{font-size:13.5px;line-height:1.4}
   .h-v{font-size:23px;margin:4px 0 1px;white-space:nowrap}
@@ -516,8 +551,13 @@ a{color:var(--pine-deep)}
   .h-two{grid-template-columns:repeat(auto-fit,minmax(330px,1fr));margin-top:0}
   .h-svg{max-height:250px}
   .h-tips{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  #view:has([data-live="salesHero"]) .step-why{display:none}
+  .pay-main .card{padding:14px 18px}
+  .pay-main .h-t{font-size:20px}
+  .pay-main .h-sub{font-size:14.5px;line-height:1.4;margin:1px 0 8px}
+  .pay-main .f-bars{height:170px}
 }
-@media screen and (min-width:1400px){.app{zoom:1.14}}
+@media screen and (min-width:1400px){.app{zoom:1.14}.pay-main{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}}
 @media screen and (min-width:1650px){.app{zoom:1.2}}
 @media screen and (min-width:2000px){.app{zoom:1.36}}
 @media print{html,body{height:auto;overflow:visible;display:block}.app{zoom:1}}
@@ -699,7 +739,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=11"></script>
+<script src="engine.js?v=12"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -747,7 +787,7 @@ var GUIDE = {
   8: { ic: '🎯', todo: ['בשלב הזה לא ממלאים כלום, רק קוראים.', 'רואים כמה צריך למכור בשנה כדי להגיע לרווח שרציתם.', 'נראה לא אפשרי? חוזרים לשכר, להוצאות או למחיר ומשנים.'], have: 'שום דבר, הכול כבר מולא', get: 'מחזור היעד, ומתי מפסיקים להפסיד' },
   9: { ic: '🗓️', todo: ['רואים כמה צריך למכור מכל מוצר בשנה.', 'מפזרים על החודשים בלחיצה, או לבד לפי העונות של העסק.', 'מוסיפים השקות, מבצעים ומועדים.'], have: 'לוח השנה של העסק', get: 'תוכנית: כמה למכור בכל חודש' },
   11: { ic: '✏️', todo: ['בוחרים חודש אחד, או את כל השנה בטבלה.', 'רושמים מה נכנס ומה יצא, כמו שרואים בבנק ובאשראי. שורה בלי סכום נשארת ריקה.', 'בסוף כותבים כמה יש בבנק, והכלי בודק שזה מסתדר.'], have: 'עו"ש ופירוט אשראי של החודש', get: 'כמה העסק הרוויח וכמה נשאר בחשבון' },
-  14: { ic: '🤝', todo: ['לוחצים על "מכירה חדשה" ובוחרים מה נמכר.', 'בוחרים איך משלמים: תשלום אחד, תשלומים, מקדמה ופגישות, או מנוי.', 'קוראים כמה צפוי להיכנס בכל חודש, ומה חסר כדי להגיע ליעד.'], have: 'רשימת המכירות וההסכמים האחרונים', get: 'כמה כסף צפוי להיכנס, וכמה כבר מובטח', ex: 'ליווי ב-6,600 ₪: מקדמה של 1,000 ₪, ועוד 5 פגישות של 1,120 ₪ בחודשים הבאים.' },
+  14: { ic: '🤝', todo: ['לוחצים על "מכירה חדשה" ובוחרים מה נמכר.', 'בוחרים איך משלמים: תשלום אחד, תשלומים, מקדמה ופגישות, או מנוי.', 'כשכסף נכנס לוחצים "נכנס", ורואים מה באיחור ומה עוד צפוי.'], have: 'רשימת המכירות וההסכמים האחרונים', get: 'כמה כסף צפוי להיכנס, וכמה כבר מובטח', ex: 'ליווי ב-6,600 ₪: מקדמה של 1,000 ₪, ועוד 5 פגישות של 1,120 ₪ בחודשים הבאים.' },
   13: { ic: '🧮', todo: ['בוחרים נקודות זיכוי מהרשימה.', 'מוסיפים דמי לידה, פחת או תרומות, אם יש.', 'קוראים כמה מס צפוי לשנה, ומשווים למה ששולם.'], have: 'אישור דמי לידה, אם היו', get: 'הערכת מס לשנה, ואחוז מקדמות שמתאים לה' }
 };
 /* Which guides were already shown is a matter of this device, not of the saved business. */
@@ -846,9 +886,9 @@ function demoState() {
   o.home = true; o.car = true; three(o.private[0].m, 600); three(o.private[6].m, 800); o.seeded = true; o.edit = 2;
   var thisM = currentYm();
   s.sales = [
-    { id: 's1', client: 'דנה', product: 'p3', month: thisM, kind: 'custom', total: 1800, parts: [{ ym: thisM, amount: 600 }, { ym: E.ymAdd(thisM, 1), amount: 600 }, { ym: E.ymAdd(thisM, 2), amount: 600 }] },
+    { id: 's1', client: 'דנה', product: 'p3', month: E.ymAdd(thisM, -1), kind: 'custom', total: 1800, parts: [{ ym: E.ymAdd(thisM, -1), amount: 600 }, { ym: thisM, amount: 600 }, { ym: E.ymAdd(thisM, 1), amount: 600 }] },
     { id: 's2', client: 'מיכל', product: 'p1', month: thisM, kind: 'equal', total: 3000, n: 6, start: thisM },
-    { id: 's3', client: 'חנות השכונה', label: 'ריטיינר', product: '', month: thisM, kind: 'sub', monthly: 1200, start: thisM, end: '' }
+    { id: 's3', client: 'חנות השכונה', label: 'ריטיינר', product: '', month: thisM, kind: 'sub', monthly: 1200, start: thisM, end: '', auto: true }
   ];
   return s;
 }
@@ -1604,20 +1644,88 @@ function saleEditor(x, i) {
   return '<details class="sale" data-how="' + esc(key) + '"' + (open ? ' open' : '') + '><summary><b>' + esc(saleName(x)) + '</b>' + liveSpan('saleLine', i).replace('<span', '<span class="sale-sum"') + '</summary><div class="sale-b"><div class="fields">' + textField('מי קנה', b + 'client') +
     '<div class="field"><label for="sProd' + i + '">מה נמכר</label><div class="input-shell"><select id="sProd' + i + '" data-text data-rerender data-path="' + b + 'product">' + prods + '</select></div></div>' + ymField('sMonth' + i, 'מתי נמכר', b + 'month', x.month) + '</div>' +
     '<div class="field" style="margin-top:12px"><span class="lbl" id="sKind' + i + '">איך משלמים</span><div class="seg seg4" role="group" aria-labelledby="sKind' + i + '">' + SALE_KINDS.map(function (k) { return '<button type="button" data-salekind="' + i + ':' + k[0] + '" aria-pressed="' + (k[0] === kind) + '">' + k[1] + '</button>'; }).join('') + '</div></div>' +
+    '<div class="field" style="margin-top:12px"><span class="lbl" id="sAuto' + i + '">איך הכסף מגיע</span><div class="seg" role="group" aria-labelledby="sAuto' + i + '"><button type="button" data-saleauto="' + i + ':0" aria-pressed="' + !x.auto + '">אני גובה בעצמי</button><button type="button" data-saleauto="' + i + ':1" aria-pressed="' + !!x.auto + '">נכנס לבד</button></div><div class="hint">' + (x.auto ? 'אשראי או הוראת קבע: לא צריך לסמן כל חודש. רק אם תשלום נכשל, לוחצים "לא נכנס".' : 'העברה, ביט או מזומן: התשלום נשאר ברשימה עד הלחיצה על "נכנס".') + '</div></div>' +
     (fields ? '<div class="fields" style="margin-top:12px">' + fields + '</div>' : '') + (kind === 'custom' ? '<div class="fields" style="margin-top:12px;max-width:280px">' + numField('סך הכל שסוכם', b + 'total', { unit: '₪', hint: 'לא חובה. עוזר לבדוק שהתשלומים מסתכמים.' }) + '</div>' : '') + extra + live('salePlan', i) +
     '<div class="sale-foot">' + ymField('sCancel' + i, 'התבטל או הוקפא מחודש', b + 'cancelled', x.cancelled, 'לא') + '<button type="button" class="btn small ghost" style="color:var(--red);border-color:rgba(193,85,63,.4)" data-delsale="' + i + '">מחיקה</button></div></div></details>';
 }
 VIEWS[14] = function () {
   var list = S.sales.map(function (x, i) { return { x: x, i: i }; }).reverse().map(function (o) { return saleEditor(o.x, o.i); }).join('');
-  return head() + '<div class="card">' + live('salesForecast') + '</div>' +
+  var board = S.sales.length ? live('salesHero') + live('salesTiles') + '<div class="pay-main"><div class="card">' + live('payList') + '<div class="pay-status" role="status" data-live="payStatus"></div></div><div class="pay-side"><div class="card">' + live('salesForecast') + '</div><div class="card"><h3 class="h-t">איך הכסף מגיע?</h3><p class="h-sub" style="margin-bottom:6px">בוחרים בכל מכירה, בתוך העריכה שלה.</p><p class="explain" style="margin:0"><b>נכנס לבד:</b> אשראי או הוראת קבע. לא צריך לסמן כל חודש.<br><b>אני גובה בעצמי:</b> העברה, ביט או מזומן. התשלום נשאר ברשימה עד הלחיצה על "נכנס".</p></div></div></div>' : '<div class="card">' + live('salesForecast') + '</div>';
+  return head() + board +
     '<div class="card"><span class="sec-lbl">המכירות שלך</span><button type="button" class="btn" data-act="newSale">+ מכירה חדשה</button><div class="sale-list">' + list + '</div></div>' +
     '<div class="card"><span class="sec-lbl">כמה מכרתי בכל חודש, ' + opsYear() + '</span>' + live('salesCounts') + '</div>' + stepNav();
 };
+/* Marking payments: one open small form at a time, and the last action can be taken back. */
+var payEdit = null, lastPay = null;
+function recv() { return E.receivables(S, currentYm()); }
+function payWhen(ym) { return ym.slice(0, 4) === currentYm().slice(0, 4) ? MONTHS[+ym.slice(5, 7) - 1] : ymLabel(ym); }
+function payLabel(x, p) { return (x.kind || 'once') === 'sub' ? 'מנוי' : (p.of === 1 ? 'תשלום אחד' : 'תשלום ' + p.no + ' מתוך ' + p.of); }
+function payCount(n) { return n === 1 ? 'תשלום אחד' : n + ' תשלומים'; }
+function payForm(p, name) {
+  var code = p.sale + '|' + p.key + '|', field;
+  if (payEdit.mode === 'part') field = '<div class="field"><label for="payIn">כמה נכנס עכשיו?</label><div class="input-shell"><span class="unit" aria-hidden="true">₪</span><input id="payIn" type="text" inputmode="decimal" autocomplete="off" value="' + esc(payEdit.val || '') + '"' + (payEdit.err ? ' aria-describedby="payErr"' : '') + '></div></div>';
+  else {
+    var opts = '', i; for (i = 1; i <= 12; i++) { var ym = E.ymAdd(currentYm(), i); opts += '<option value="' + ym + '">' + ymLabel(ym) + '</option>'; }
+    field = '<div class="field"><label for="payIn">לאיזה חודש נדחה?</label><div class="input-shell"><select id="payIn">' + opts + '</select></div></div>';
+  }
+  return '<div class="pay-form">' + field + '<button type="button" class="btn small" data-pay="' + code + (payEdit.mode === 'part' ? 'savepart' : 'savemove') + '">אישור</button><button type="button" class="btn small ghost" data-pay="' + code + 'close">ביטול</button>' + (payEdit.err ? '<div class="pay-err" id="payErr" role="alert">' + payEdit.err + '</div>' : '') + '</div>';
+}
+function payRow(x, p, withName) {
+  var name = saleName(x), code = p.sale + '|' + p.key + '|', late = p.state === 'late', main, sub, btns;
+  var what = name + ', ' + payLabel(x, p);
+  if (p.got > 0 && p.left > 0) main = 'נכנסו ' + ils(p.got, 0) + ' מתוך ' + ils(p.amount, 0);
+  else main = withName ? name : payLabel(x, p);
+  if (late) sub = (p.moved ? 'נדחה ל' : 'היה צריך להיכנס ב') + payWhen(p.due);
+  else if (p.left > 0) sub = (withName && !(p.got > 0) ? payLabel(x, p) + ', ' : '') + (p.failed ? 'סומן שלא נכנס' : (p.moved ? 'נדחה מ' + payWhen(p.ym) : 'עוד לא באיחור'));
+  else sub = p.self ? 'נכנס לבד, אשראי או הוראת קבע' : 'סומן שנכנס';
+  if (payEdit && payEdit.i === p.sale && payEdit.key === p.key) btns = payForm(p, name);
+  else if (p.left > 0) btns = '<div class="pay-b"><button type="button" class="btn small" data-pay="' + code + 'paid" aria-label="' + esc('נכנס: ' + what) + '">✓ נכנס</button><button type="button" class="btn small ghost" data-pay="' + code + 'part" aria-label="' + esc('רק חלק: ' + what) + '">רק חלק</button><button type="button" class="btn small ghost" data-pay="' + code + 'move" aria-label="' + esc('נדחה: ' + what) + '">נדחה</button></div>';
+  else if (p.self) btns = '<div class="pay-b"><span class="pay-done"><span aria-hidden="true">🔁</span> נכנס לבד</span><button type="button" class="btn small ghost" data-pay="' + code + 'failed" aria-label="' + esc('לא נכנס: ' + what) + '">לא נכנס</button></div>';
+  else btns = '<div class="pay-b"><span class="pay-done"><span aria-hidden="true">✓</span> נכנס</span><button type="button" class="btn small ghost" data-pay="' + code + 'undo" aria-label="' + esc('ביטול הסימון: ' + what) + '">ביטול</button></div>';
+  return '<div class="pay' + (late ? ' late' : '') + '"><div class="pay-t">' + esc(main) + '<small>' + esc(sub) + '</small></div><div class="pay-a">' + ils(p.left > 0 ? p.left : p.amount, 0) + '</div>' + btns + '</div>';
+}
+function payAct(t, code) {
+  var c = code.split('|'), i = +c[0], key = c[1], act = c[2], x = S.sales[i]; if (!x) return;
+  var now = currentYm(), inList = t.closest('[data-live="payList"]'), all = inList ? Array.prototype.slice.call(inList.querySelectorAll('[data-pay]')) : [], at = all.indexOf(t);
+  var p = E.paymentStates(x, now, E.ymAdd(now, 12)).filter(function (q) { return q.key === key; })[0]; if (!p) return;
+  var marks = x.marks = x.marks || {}, prev = marks[key], name = x.client || saleName(x), txt = '', next = Object.assign({}, prev || {});
+  var focusBack = function () {
+    var inp = $('payIn'); if (inp && payEdit) { inp.focus(); return; }
+    var now_ = inList ? document.querySelectorAll('[data-live="payList"] [data-pay]') : [];
+    if (now_.length) now_[Math.min(Math.max(at, 0), now_.length - 1)].focus();
+    else { var un = document.querySelector('[data-payundo]'); if (un) un.focus(); }
+  };
+  if (act === 'part' || act === 'move') { payEdit = { i: i, key: key, mode: act, err: '', val: '' }; refreshLive(); focusBack(); return; }
+  if (act === 'close') { payEdit = null; refreshLive(); focusBack(); return; }
+  if (act === 'savepart') {
+    var raw = $('payIn').value, val = E.num(String(raw).replace(/,/g, ''));
+    if (!(val > 0) || val > p.left + 0.005) { payEdit.val = raw; payEdit.err = 'כותבים סכום בין 1 ל-' + ils(p.left, 0) + '. אם נכנס הכול, לוחצים על "נכנס".'; refreshLive(); focusBack(); return; }
+    if (p.got + val >= p.amount - 0.005) { next.paid = true; delete next.got; } else next.got = p.got + val;
+    delete next.failed; txt = 'סומן שנכנסו ' + ils(val, 0) + ' מ' + name + '.';
+  } else if (act === 'savemove') {
+    var to = $('payIn').value; if (to === p.ym) delete next.to; else next.to = to;
+    delete next.failed; txt = name + ': התשלום נדחה ל' + ymLabel(to) + '.';
+  } else if (act === 'paid') { next.paid = true; delete next.got; delete next.failed; txt = 'סומן שנכנסו ' + ils(p.left, 0) + ' מ' + name + '.'; }
+  else if (act === 'failed') { next.failed = true; txt = 'סומן שהתשלום של ' + name + ' לא נכנס.'; }
+  else if (act === 'undo') { next = null; txt = 'הסימון בוטל.'; }
+  else return;
+  if (next && Object.keys(next).length) marks[key] = next; else delete marks[key];
+  lastPay = { txt: txt, undo: [{ i: i, key: key, prev: prev }] }; payEdit = null;
+  refreshLive(); persist(); focusBack();
+}
+function moneyBars(r) {
+  var now = currentYm(), tot = function (m) { return m.got + m.late + m.wait; }, max = Math.max.apply(null, r.months.map(tot).concat([1])), h = function (v) { return (v / max * 100).toFixed(1) + '%'; };
+  return '<div class="f-bars" role="img" aria-label="' + esc(r.months.map(function (m) { return ymLabel(m.ym) + ': נכנס ' + money(m.got) + (m.late ? ', באיחור ' + money(m.late) : '') + (m.wait ? ', צפוי ' + money(m.wait) : ''); }).join('. ')) + '">' + r.months.map(function (m) {
+    var tip = ymLabel(m.ym) + (m.got ? '|נכנס: ' + ils(m.got, 0) : '') + (m.late ? '|באיחור: ' + ils(m.late, 0) : '') + (m.wait ? '|צפוי להיכנס: ' + ils(m.wait, 0) : '') + (m.assumed ? '|מתוכו מנוי בלי תאריך סיום: ' + ils(m.assumed, 0) : '') + (m.items.length ? '|' + m.items.slice(0, 4).map(function (it) { return (it.name || 'מכירה') + ': ' + ils(it.amount, 0); }).join('|') : '');
+    var stack = (m.wait - m.assumed > 0 ? '<div class="f-w" style="height:' + h(m.wait - m.assumed) + '"></div>' : '') + (m.assumed ? '<div class="f-a" style="height:' + h(m.assumed) + '"></div>' : '') + (m.late ? '<div class="f-l" style="height:' + h(m.late) + '"></div>' : '') + (m.got ? '<div class="f-s" style="height:' + h(m.got) + '"></div>' : '');
+    return '<div class="f-col" data-tip="' + esc(tip) + '"><span class="f-val">' + (tot(m) ? money(tot(m)) : '') + '</span><div class="f-track f-stack">' + stack + '</div><span class="f-m' + (m.ym === now ? ' now' : '') + '">' + MONTHS[+m.ym.slice(5, 7) - 1].slice(0, 3) + '</span></div>';
+  }).join('') + '</div>';
+}
 function forecastBars(fc) {
-  var max = Math.max.apply(null, fc.months.map(function (m) { return m.total; }).concat([1])), now = currentYm();
-  return '<div class="f-bars" role="img" aria-label="' + esc(fc.months.map(function (m) { return ymLabel(m.ym) + ': ' + money(m.total); }).join(', ')) + '">' + fc.months.map(function (m) {
-    var tip = ymLabel(m.ym) + '|צפוי להיכנס: ' + ils(m.total, 0) + (m.assumed ? '|מתוכו מנוי בלי תאריך סיום: ' + ils(m.assumed, 0) : '') + (m.items.length ? '|' + m.items.slice(0, 4).map(function (it) { return (it.name || 'מכירה') + ': ' + ils(it.amount, 0); }).join('|') : '');
-    return '<div class="f-col" data-tip="' + esc(tip) + '"><span class="f-val">' + (m.total ? money(m.total) : '') + '</span><div class="f-track"><div class="f-a" style="height:' + (m.assumed / max * 100).toFixed(1) + '%"></div><div class="f-s" style="height:' + (m.sure / max * 100).toFixed(1) + '%"></div></div><span class="f-m">' + MONTHS[+m.ym.slice(5, 7) - 1].slice(0, 3) + '</span></div>';
+  var max = Math.max.apply(null, fc.months.map(function (m) { return m.left; }).concat([1])), now = currentYm();
+  return '<div class="f-bars" role="img" aria-label="' + esc(fc.months.map(function (m) { return ymLabel(m.ym) + ': ' + money(m.left); }).join(', ')) + '">' + fc.months.map(function (m) {
+    var tip = ymLabel(m.ym) + '|צפוי להיכנס: ' + ils(m.left, 0) + (m.assumed ? '|מתוכו מנוי בלי תאריך סיום: ' + ils(m.assumed, 0) : '') + (m.items.length ? '|' + m.items.slice(0, 4).map(function (it) { return (it.name || 'מכירה') + ': ' + ils(it.amount, 0); }).join('|') : '');
+    return '<div class="f-col" data-tip="' + esc(tip) + '"><span class="f-val">' + (m.left ? money(m.left) : '') + '</span><div class="f-track"><div class="f-a" style="height:' + (m.assumed / max * 100).toFixed(1) + '%"></div><div class="f-s" style="height:' + (m.sure / max * 100).toFixed(1) + '%"></div></div><span class="f-m">' + MONTHS[+m.ym.slice(5, 7) - 1].slice(0, 3) + '</span></div>';
   }).join('') + '</div>';
 }
 function targetMonth() { return R.annual.revenue != null ? R.annual.revenue / 12 * (1 + R.settings.vatPct / 100) : null; }
@@ -1634,14 +1742,55 @@ var LIVE_OPS = {
     if (!pays.length) return '';
     var sum_ = pays.reduce(function (a, p) { return a + p.amount; }, 0), note = '';
     if (x.kind === 'custom' && E.num(x.total) > 0 && Math.abs(sum_ - E.num(x.total)) >= 1) note = '<div class="note soft">התשלומים מסתכמים ל-' + ils(sum_, 0) + ', וסוכם על ' + ils(x.total, 0) + '.</div>';
-    var shown = pays.slice(0, 6).map(function (p) { return ymLabel(p.ym) + ': ' + ils(p.amount, 0); }).join(' · ') + (pays.length > 6 ? ' · ועוד ' + (pays.length - 6) : '');
-    return '<div class="note" style="font-weight:500">' + shown + '</div>' + note;
+    var now = currentYm(), marks = x.marks || {}, states = E.paymentStates(x, now, E.ymAdd(now, 11)), from = E.ymAdd(now, -6), near_ = states.filter(function (p) { return p.due >= from || p.state === 'late'; }), rows = near_.slice(0, 12).map(function (p) {
+      var st = p.state === 'paid' ? (p.self ? '🔁 נכנס לבד' : '✓ נכנס') : (p.got > 0 ? 'נכנסו ' + ils(p.got, 0) : (p.state === 'late' ? 'באיחור' : (p.state === 'due' ? 'החודש' : (p.moved ? 'נדחה' : 'עתידי'))));
+      var code = i + '|' + p.key + '|', label = esc(ymLabel(p.due) + ', ' + saleName(x));
+      var btn = marks[p.key] ? '<button type="button" class="link-btn" data-pay="' + code + 'undo" aria-label="' + esc('ביטול הסימון: ') + label + '">ביטול</button>' : (p.left > 0 ? '<button type="button" class="link-btn" data-pay="' + code + 'paid" aria-label="' + esc('נכנס: ') + label + '">נכנס</button>' : '<span></span>');
+      return '<div class="plan-row"><span>' + ymLabel(p.due) + '</span><b>' + ils(p.amount, 0) + '</b><span class="plan-st' + (p.state === 'late' ? ' late' : '') + '">' + st + '</span>' + btn + '</div>';
+    }).join('');
+    return '<div class="plan-list">' + rows + (near_.length > 12 ? '<p class="explain" style="margin:6px 0 0">ועוד ' + (near_.length - 12) + ' תשלומים</p>' : '') + '</div>' + note;
+  },
+  salesHero: function () {
+    var r = recv(), title, sub, n = r.lateNames, names;
+    if (r.lateTotal > 0) {
+      title = ils(r.lateTotal, 0) + ' היו אמורים כבר להיכנס, ועוד לא נכנסו.';
+      names = n.length === 1 ? n[0] : n.length === 2 ? n[0] + ' ועם ' + n[1] : n.length > 2 ? n[0] + ', ' + n[1] + ' ועוד ' + (n.length - 2) : '';
+      sub = names ? 'כדאי לדבר החודש עם ' + names + '.' : 'כדאי לבדוק מה קרה עם התשלומים האלה.';
+    } else {
+      title = 'כל מה שהיה אמור להיכנס עד עכשיו, נכנס.';
+      sub = r.monthLeft > 0 ? 'החודש צפויים עוד ' + ils(r.monthLeft, 0) + '.' : 'החודש אין תשלומים שמחכים.';
+    }
+    return '<div class="hero"><h2>' + esc(title) + '</h2><p>' + esc(sub) + '</p></div>';
+  },
+  salesTiles: function () {
+    var r = recv(), c = r.lateClients, who = c === 1 ? 'מלקוח אחד' : c === 2 ? 'משני לקוחות' : 'מ-' + c + ' לקוחות';
+    var late = r.lateTotal > 0 ? '<div class="h-tile"><span class="h-st warn"><span aria-hidden="true">!</span> באיחור</span><div class="h-v w">' + ils(r.lateTotal, 0) + '</div><p>' + who + ', ' + payCount(r.lateCount) + '</p></div>' : '<div class="h-tile"><span class="h-st good"><span aria-hidden="true">✓</span> אין איחורים</span><div class="h-v">0 ₪</div><p>אין תשלום שעבר את החודש שלו.</p></div>';
+    var pct = r.monthDue > 0 ? Math.round(r.monthGot / r.monthDue * 100) : 0;
+    var month = '<div class="h-tile"><span class="h-st good">החודש</span><div class="h-v">' + ils(r.monthGot, 0) + (r.monthDue ? ' <span class="pay-of">מתוך ' + ils(r.monthDue, 0) + '</span>' : '') + '</div>' + (r.monthDue ? '<div class="pay-prog"><i style="width:' + pct + '%"></i></div>' : '') + '<p>' + (r.monthLeft > 0 ? 'עוד ' + ils(r.monthLeft, 0) + ' צפויים עד סוף החודש' : (r.monthDue ? 'כל התשלומים של החודש נכנסו' : 'החודש לא צפוי תשלום')) + '</p></div>';
+    var next = '<div class="h-tile"><span class="h-st good">בחודשים הבאים</span><div class="h-v">' + ils(r.nextLeft, 0) + '</div><p>צפויים מ' + payWhen(r.nextFrom) + ' עד ' + payWhen(r.nextTo) + (r.nextAssumed ? ', מתוכם ' + ils(r.nextAssumed, 0) + ' ממנוי בלי תאריך סיום' : '') + '</p></div>';
+    return '<div class="h-tiles">' + late + month + next + '</div>';
+  },
+  payList: function () {
+    var r = recv(), h = '<h3 class="h-t">מה עוד לא נכנס</h3><p class="h-sub">לחיצה אחת כשהכסף נכנס. זה כל מה שצריך לעשות כאן.</p>', order = [], groups = {};
+    r.late.forEach(function (p) { if (!groups[p.sale]) { groups[p.sale] = []; order.push(p.sale); } groups[p.sale].push(p); });
+    order.forEach(function (n) {
+      var x = S.sales[n], total = groups[n].reduce(function (a, p) { return a + p.left; }, 0);
+      h += '<div class="pay-who"><span>' + esc(saleName(x)) + '</span><b>' + ils(total, 0) + '</b></div>' + groups[n].map(function (p) { return payRow(x, p, false); }).join('');
+    });
+    if (r.lateCount > 1) h += '<button type="button" class="link-btn" style="margin-top:4px" data-payall="1">הכול כבר נכנס</button>';
+    if (r.month.length) h += '<div class="pay-sec">החודש, ' + MONTHS[+currentYm().slice(5, 7) - 1] + '</div>' + r.month.map(function (p) { return payRow(S.sales[p.sale], p, true); }).join('');
+    if (!r.late.length && !r.month.length) h += '<p class="explain" style="margin:0">כרגע אין תשלום שמחכה.</p>';
+    return h;
+  },
+  payStatus: function () {
+    return lastPay ? esc(lastPay.txt) + (lastPay.undo && lastPay.undo.length ? ' <button type="button" class="link-btn" data-payundo="1">ביטול</button>' : '') : '';
   },
   salesForecast: function () {
     if (!S.sales.length) return '<span class="sec-lbl">כמה צפוי להיכנס</span><p class="explain" style="margin:0">אחרי שרושמים מכירה, יופיע כאן כמה כסף צפוי להיכנס בכל חודש.</p>';
-    var fc = E.salesForecast(S, currentYm(), 12), tgt = targetMonth(), next = fc.months[1], say = '';
-    if (tgt && next) say = next.total < tgt ? 'ב' + ymLabel(next.ym) + ' כבר צפויים ' + ils(next.total, 0) + ', ולפי התמחור צריך כ-' + ils(tgt, 0) + ' כולל מע"מ. חסרים כ-' + ils(tgt - next.total, 0) + ' במכירות חדשות.' : 'ב' + ymLabel(next.ym) + ' כבר צפויים ' + ils(next.total, 0) + ', וזה מכסה את היעד של כ-' + ils(tgt, 0) + ' כולל מע"מ.';
-    return '<span class="sec-lbl">כמה צפוי להיכנס, 12 חודשים קדימה</span><div class="h-v" style="margin:2px 0 4px">' + ils(fc.total, 0) + '</div><p class="explain" style="margin:0 0 10px">מהמכירות שכבר נעשו, כמו שייכנס לבנק, כולל מע"מ. זו תחזית ולא הבטחה: לקוח יכול לאחר או לבטל.' + (fc.assumed ? ' ' + ils(fc.assumed, 0) + ' מזה ממנויים בלי תאריך סיום, בהנחה שימשיכו.' : '') + '</p>' + forecastBars(fc) + '<div class="h-legend"><span><i class="a"></i>מובטח לפי המכירות</span>' + (fc.assumed ? '<span><i class="f"></i>מנוי בלי תאריך סיום</span>' : '') + '</div>' + (say ? '<div class="note">' + say + '</div>' : '');
+    var r = recv(), tgt = targetMonth(), next = E.salesForecast(S, currentYm(), 2, currentYm()).months[1], say = '';
+    if (tgt && next) say = next.left < tgt ? 'ב' + ymLabel(next.ym) + ' כבר צפויים ' + ils(next.left, 0) + ', ולפי התמחור צריך כ-' + ils(tgt, 0) + ' כולל מע"מ. חסרים כ-' + ils(tgt - next.left, 0) + ' במכירות חדשות.' : 'ב' + ymLabel(next.ym) + ' כבר צפויים ' + ils(next.left, 0) + ', וזה מכסה את היעד של כ-' + ils(tgt, 0) + ' כולל מע"מ.';
+    var hasLate = r.months.some(function (m) { return m.late > 0; }), hasA = r.months.some(function (m) { return m.assumed > 0; });
+    return '<h3 class="h-t">חודש אחרי חודש</h3><p class="h-sub">מה נכנס, מה נתקע ומה עוד צפוי, כולל מע"מ. זו תחזית ולא הבטחה: לקוח יכול לאחר או לבטל.</p>' + moneyBars(r) + '<div class="h-legend"><span><i class="a"></i>נכנס</span>' + (hasLate ? '<span><i class="l"></i>באיחור</span>' : '') + '<span><i class="w"></i>עוד צפוי</span>' + (hasA ? '<span><i class="f"></i>מנוי בלי תאריך סיום</span>' : '') + '</div>' + (say ? '<div class="note">' + say + '</div>' : '');
   },
   salesCounts: function () {
     var rows = E.salesCounts(S, opsYear()), keys = Object.keys(rows), now = israelYear() === opsYear() ? israelMonth() : 11;
@@ -1656,13 +1805,13 @@ var LIVE_OPS = {
   },
   homeForecast: function () {
     if (!S.sales.length) return '';
-    var fc = E.salesForecast(S, currentYm(), 6);
-    return '<div class="card"><h3 class="h-t">כמה צפוי להיכנס</h3><p class="h-sub">מהמכירות שכבר נעשו, כולל מע"מ. ' + gotoBtn(14, 'למכירות') + '</p>' + forecastBars(fc) + '</div>';
+    var fc = E.salesForecast(S, currentYm(), 6, currentYm()), rc = recv();
+    return '<div class="card"><h3 class="h-t">כמה צפוי להיכנס</h3><p class="h-sub">מהמכירות שכבר נעשו, כולל מע"מ. ' + gotoBtn(14, 'למכירות') + '</p>' + forecastBars(fc) + (rc.lateTotal > 0 ? '<div class="note soft">ועוד ' + ils(rc.lateTotal, 0) + ' באיחור, שעוד לא נכנסו. ' + gotoBtn(14, 'לראות ממי') + '</div>' : '') + '</div>';
   },
   opsExpected: function () {
     if (!S.sales.length) return '';
-    var ym = opsYear() + '-' + (S.ops.edit < 9 ? '0' : '') + (S.ops.edit + 1), m = E.salesForecast(S, ym, 1).months[0];
-    return m.total ? '<div class="note">לפי המכירות, ב' + MONTHS[S.ops.edit] + ' צפויים להיכנס ' + ils(m.total, 0) + '. כאן רושמים מה נכנס בפועל.</div>' : '';
+    var ym = opsYear() + '-' + (S.ops.edit < 9 ? '0' : '') + (S.ops.edit + 1), m = E.salesForecast(S, ym, 1, currentYm()).months[0];
+    return m.total ? '<div class="note">לפי המכירות, ב' + MONTHS[S.ops.edit] + ' צפויים להיכנס ' + ils(m.total, 0) + (m.got ? ', ולפי הסימונים נכנסו כבר ' + ils(m.got, 0) : '') + '. כאן רושמים מה נכנס בפועל, לפי הבנק.</div>' : '';
   },
   homeHero: function () {
     if (!O.k) return '';
@@ -1918,7 +2067,7 @@ function render(focus) {
   refreshLive();
   if (focus) { var t = $('stepTitle'); if (t) { t.focus({ preventScroll: true }); } window.scrollTo({ top: 0, behavior: 'auto' }); var col = $('contentCol'); if (col) col.scrollTop = 0; }
 }
-function go(n) { guideVisit = null; step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
+function go(n) { guideVisit = null; payEdit = null; lastPay = null; step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
 function changed() { refreshLive(); persist(); }
 function hasContent(s) { return !!(s && (s.biz.name || (s.materials && s.materials.length) || (s.products && s.products.length) || E.num(s.labor && s.labor.net) || (s.ops && E.ops(s).k))); }
 
@@ -2166,8 +2315,21 @@ document.addEventListener('click', function (e) {
   if (d.salekind) { var ks = d.salekind.split(':'), sl = S.sales[+ks[0]]; sl.kind = ks[1]; if (ks[1] === 'custom' && !(sl.parts && sl.parts.length)) sl.parts = [{ ym: sl.start || sl.month, amount: '' }]; if (ks[1] === 'equal' && !sl.n) sl.n = 6; if (!sl.start) sl.start = sl.month; render(); persist(); return; }
   if (d.addpart != null) { var sp = S.sales[+d.addpart]; sp.parts = sp.parts || []; var lastP = sp.parts[sp.parts.length - 1]; sp.parts.push({ ym: lastP && lastP.ym ? E.ymAdd(lastP.ym, 1) : (sp.start || sp.month), amount: '' }); render(); persist(); return; }
   if (d.delpart) { var dp = d.delpart.split(':'); S.sales[+dp[0]].parts.splice(+dp[1], 1); render(); persist(); return; }
+  if (d.saleauto) { var au = d.saleauto.split(':'); S.sales[+au[0]].auto = au[1] === '1'; lastPay = null; render(); persist(); return; }
+  if (d.pay) { payAct(t, d.pay); return; }
+  if (d.payundo != null) {
+    if (lastPay && lastPay.undo) lastPay.undo.forEach(function (u) { var xu = S.sales[u.i]; if (!xu) return; xu.marks = xu.marks || {}; if (u.prev) xu.marks[u.key] = u.prev; else delete xu.marks[u.key]; });
+    lastPay = { txt: 'הסימון בוטל.' }; refreshLive(); persist(); var firstPay = document.querySelector('[data-live="payList"] [data-pay]'); if (firstPay) firstPay.focus(); return;
+  }
+  if (d.payall != null) {
+    var ra = recv();
+    if (!t.dataset.armed) { t.dataset.armed = '1'; t.textContent = 'בטוח? ' + payCount(ra.lateCount) + ', ' + ils(ra.lateTotal, 0); setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'הכול כבר נכנס'; } }, 5000); return; }
+    var undoAll = ra.late.map(function (p) { var xs = S.sales[p.sale]; xs.marks = xs.marks || {}; var pv = xs.marks[p.key]; xs.marks[p.key] = { paid: true }; if (pv && pv.to) xs.marks[p.key].to = pv.to; return { i: p.sale, key: p.key, prev: pv }; });
+    lastPay = { txt: 'סומנו ' + payCount(undoAll.length) + ' שנכנסו, ' + ils(ra.lateTotal, 0) + '.', undo: undoAll }; payEdit = null; refreshLive(); persist();
+    var st_ = document.querySelector('[data-payundo]'); if (st_) st_.focus(); return;
+  }
   if (d.delsale != null) {
-    if (t.dataset.armed) { S.sales.splice(+d.delsale, 1); render(); persist(); return; }
+    if (t.dataset.armed) { lastPay = null; payEdit = null; S.sales.splice(+d.delsale, 1); render(); persist(); return; }
     t.dataset.armed = '1'; t.textContent = 'בטוח? למחוק'; setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'מחיקה'; } }, 3000); return;
   }
   if (d.sell) { S.biz.sells = S.biz.sells || {}; S.biz.sells[d.sell] = !S.biz.sells[d.sell]; render(); persist(); return; }

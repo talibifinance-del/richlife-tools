@@ -238,17 +238,56 @@
     return out;
   }
   function saleTotal(sale, horizon) { return sum(salePayments(sale, horizon), function (p) { return p.amount; }); }
-  function salesForecast(state, startYm, count) {
+  /* What became of each payment. A mark sits on the sale, under the month the payment was first due.
+     Collected by hand, a payment waits for a mark; collected on its own, it counts as in once its month arrives. */
+  function paymentStates(sale, nowYm, horizon) {
+    var seen = {}, marks = (sale && sale.marks) || {}, all = salePayments(sale, horizon);
+    return all.map(function (p, i) {
+      var key = p.ym + (seen[p.ym] ? '#' + seen[p.ym] : ''); seen[p.ym] = (seen[p.ym] || 0) + 1;
+      var m = marks[key] || {}, due = m.to || p.ym, got = 0, self = false;
+      if (m.paid) got = p.amount;
+      else if (pos(m.got) > 0) got = Math.min(pos(m.got), p.amount);
+      else if (sale.auto && !m.failed && nowYm && due <= nowYm) { got = p.amount; self = true; }
+      var left = Math.max(0, p.amount - got);
+      return { key: key, ym: p.ym, due: due, amount: p.amount, got: got, left: left, self: self, assumed: !!p.assumed, no: i + 1, of: all.length, moved: !!m.to, failed: !!m.failed,
+        state: left < 0.005 ? 'paid' : (nowYm && due < nowYm ? 'late' : (due === nowYm ? 'due' : 'future')) };
+    });
+  }
+  function salesForecast(state, startYm, count, nowYm) {
     var last = ymAdd(startYm, count - 1), months = [], i, map = {};
-    for (i = 0; i < count; i++) { var ym = ymAdd(startYm, i); map[ym] = { ym: ym, total: 0, sure: 0, assumed: 0, items: [] }; months.push(map[ym]); }
+    for (i = 0; i < count; i++) { var ym = ymAdd(startYm, i); map[ym] = { ym: ym, total: 0, got: 0, left: 0, sure: 0, assumed: 0, items: [] }; months.push(map[ym]); }
     ((state && state.sales) || []).forEach(function (s) {
-      salePayments(s, last).forEach(function (p) {
-        var m = map[p.ym]; if (!m) return;
-        m.total += p.amount; if (p.assumed) m.assumed += p.amount; else m.sure += p.amount;
-        m.items.push({ name: s.client || s.label || '', amount: p.amount, assumed: !!p.assumed });
+      paymentStates(s, nowYm, last).forEach(function (p) {
+        var m = map[p.due]; if (!m) return;
+        m.total += p.amount; m.got += p.got; m.left += p.left;
+        if (p.assumed) m.assumed += p.left; else m.sure += p.left;
+        m.items.push({ name: s.client || s.label || '', amount: p.left, assumed: p.assumed });
       });
     });
-    return { months: months, total: sum(months, function (m) { return m.total; }), assumed: sum(months, function (m) { return m.assumed; }) };
+    return { months: months, total: sum(months, function (m) { return m.total; }), left: sum(months, function (m) { return m.left; }), assumed: sum(months, function (m) { return m.assumed; }) };
+  }
+  /* The money still owed: what is late, what this month holds, and two months back to five ahead for the chart. */
+  function receivables(state, nowYm) {
+    var to = ymAdd(nowYm, 5), map = {}, names = [], seen = {}, i;
+    var out = { late: [], month: [], lateTotal: 0, lateCount: 0, lateClients: 0, lateNames: names, monthDue: 0, monthGot: 0, monthLeft: 0, nextLeft: 0, nextAssumed: 0, nextFrom: ymAdd(nowYm, 1), nextTo: to, months: [] };
+    for (i = -2; i <= 5; i++) { var ym = ymAdd(nowYm, i); map[ym] = { ym: ym, got: 0, late: 0, wait: 0, assumed: 0, items: [] }; out.months.push(map[ym]); }
+    ((state && state.sales) || []).forEach(function (s, n) {
+      paymentStates(s, nowYm, ymAdd(nowYm, 12)).forEach(function (p) {
+        p.sale = n;
+        var who = s.client || s.label || '';
+        if (p.state === 'late') {
+          out.late.push(p); out.lateTotal += p.left; out.lateCount++;
+          var id = who || '#' + n; if (!seen[id]) { seen[id] = true; out.lateClients++; if (who) names.push(who); }
+        }
+        if (p.due === nowYm) { out.month.push(p); out.monthDue += p.amount; out.monthGot += p.got; out.monthLeft += p.left; }
+        if (p.due > nowYm && p.due <= to) { out.nextLeft += p.left; if (p.assumed) out.nextAssumed += p.left; }
+        var m = map[p.due]; if (!m) return;
+        m.got += p.got;
+        if (p.state === 'late') m.late += p.left; else { m.wait += p.left; if (p.assumed) m.assumed += p.left; }
+        if (p.left > 0) m.items.push({ name: who, amount: p.left });
+      });
+    });
+    return out;
   }
   /* How many of each product were sold in each month of a year. A group sold is one whole event. */
   function salesCounts(state, year) {
@@ -645,7 +684,7 @@
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
     expandProduct: expandProduct, expandState: expandState, groupView: groupView, eventCost: eventCost,
     launchCase: launchCase, raiseCase: raiseCase, midYearCase: midYearCase,
-    ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, salesForecast: salesForecast, salesCounts: salesCounts,
+    ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, paymentStates: paymentStates, receivables: receivables, salesForecast: salesForecast, salesCounts: salesCounts,
     mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, hasTables: hasTables, tablesFor: tablesFor,
     yearList: yearList, yearOps: yearOps, switchYear: switchYear, closeYear: closeYear, agePick: agePick, compareYears: compareYears, productRank: productRank, whatIf: whatIf
   };

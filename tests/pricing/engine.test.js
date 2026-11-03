@@ -325,6 +325,34 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('forecast, first month', fc.months[0].total, 3600); near('forecast, second month', fc.months[1].total, 3720); near('forecast, third month', fc.months[2].total, 3720);
   near('forecast separates what is assumed', fc.months[0].assumed, 1500); near('forecast adds up', fc.total, 11040);
   ok('forecast ignores past months', E.salesForecast({ sales: [{ kind: 'once', total: 5, start: '2020-01' }] }, '2026-11', 3).total === 0);
+  // marking what came in
+  const rs = { sales: [
+    { client: 'שירה', kind: 'equal', total: 6000, n: 6, start: '2026-08', marks: { '2026-08': { paid: true }, '2026-09': { got: 400 }, '2026-10': { to: '2026-12' } } },
+    { client: 'טל', kind: 'equal', total: 3000, n: 3, start: '2026-10', auto: true, marks: { '2026-11': { failed: true } } },
+    { client: 'רוני', kind: 'sub', monthly: 500, start: '2026-11', auto: true },
+    { client: 'בוטל', kind: 'equal', total: 3000, n: 3, start: '2026-09', cancelled: '2026-10' }
+  ] };
+  const st0 = E.paymentStates(rs.sales[0], '2026-11', '2027-11');
+  ok('a marked payment is in', st0[0].state === 'paid' && st0[0].left === 0);
+  ok('a part payment leaves the rest late', st0[1].state === 'late' && st0[1].got === 400 && st0[1].left === 600);
+  ok('a moved payment waits for its new month', st0[2].state === 'future' && st0[2].due === '2026-12' && st0[2].moved);
+  ok('a payment this month is not late', st0[3].state === 'due');
+  const st1 = E.paymentStates(rs.sales[1], '2026-11', '2027-11');
+  ok('collected on its own counts as in', st1[0].state === 'paid' && st1[0].self);
+  ok('collected on its own can fail', st1[1].state === 'due' && st1[1].failed && st1[1].got === 0);
+  ok('collected on its own waits for its month', st1[2].state === 'future' && st1[2].got === 0);
+  const rcv = E.receivables(rs, '2026-11');
+  near('late total', rcv.lateTotal, 600 + 1000); ok('late counted by person', rcv.lateCount === 2 && rcv.lateClients === 2, rcv.lateNames);
+  near('this month due', rcv.monthDue, 1000 + 1000 + 500); near('this month in', rcv.monthGot, 500); near('this month left', rcv.monthLeft, 2000);
+  near('due, in and left agree', rcv.monthDue - rcv.monthGot - rcv.monthLeft, 0);
+  near('coming months', rcv.nextLeft, 3000 + 1000 + 2500); near('assumed part', rcv.nextAssumed, 2500);
+  ok('the chart runs from two months back to five ahead', rcv.months.length === 8 && rcv.months[0].ym === '2026-09' && rcv.months[7].ym === '2027-04');
+  near('chart adds up, late', rcv.months.reduce((a, m) => a + m.late, 0), rcv.lateTotal);
+  ok('a cancelled sale is never late after it stopped', !rcv.late.some(p => rs.sales[p.sale].client === 'בוטל' && p.due >= '2026-10'));
+  const f2 = E.salesForecast(rs, '2026-12', 1, '2026-11');
+  near('a moved payment lands in its new month', f2.months[0].left, 1000 + 1000 + 1000 + 500);
+  const noMarks = { sales: [{ kind: 'equal', total: 600, n: 2, start: '2026-11' }] };
+  near('no marks: left equals total', E.salesForecast(noMarks, '2026-11', 2, '2026-11').left, E.salesForecast(noMarks, '2026-11', 2).total);
   const cnt = E.salesCounts({ sales: [{ product: 'a', month: '2026-03' }, { product: 'a', month: '2026-03' }, { product: 'b', month: '2026-04' }, { product: 'a', month: '2025-03' }] }, 2026);
   ok('monthly counts', cnt.a.m[2] === 2 && cnt.a.total === 2 && cnt.b.m[3] === 1);
   const closedS = E.closeYear(Object.assign({}, opsState(), { sales: fcs.sales }));

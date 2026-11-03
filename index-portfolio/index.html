@@ -609,8 +609,9 @@ function renderCmp(){
   h+='<tr><th scope="row">פיזור</th>'+rows.map(function(r){return '<td>'+esc(r.geo)+'</td>'}).join("")+'</tr>';
   [0,1,2,3,4].forEach(function(k){h+='<tr><th scope="row">תשואה '+P[k]+(k?" (ממוצע לשנה)":"")+', ₪</th>'+rows.map(function(r){return cell(r.metrics?pct(r.metrics.ret.ils[k]):null)}).join("")+'</tr>'});
   h+='<tr><th scope="row">מדד שארפ (10 ש\')</th>'+rows.map(function(r){return cell(r.metrics&&r.metrics.sharpe10!=null?r.metrics.sharpe10.toFixed(2):null)}).join("")+'</tr>';
-  h+='<tr><th scope="row">הנפילה הכי גדולה</th>'+rows.map(function(r){return cell(r.metrics?pct(r.metrics.dd.ils.pct,0):null)}).join("")+'</tr>';
+  h+='<tr><th scope="row">הנפילה הכי גדולה</th>'+rows.map(function(r){return r.metrics?'<td class="tabular">'+pct(r.metrics.dd.ils.pct,0)+'<div class="fsub">בנתונים מאז '+r.metrics.since.slice(0,4)+'</div></td>':cell(null)}).join("")+'</tr>';
   h+='<tr><th scope="row">מי מנהל</th>'+rows.map(function(r){return '<td>'+esc(r.provider)+'</td>'}).join("")+'</tr></table></div>';
+  if(rows.some(function(r){return r.metrics&&r.metrics.since>"2008-01"}))h+='<p class="upd">לא לכל מדד יש היסטוריה באותו אורך. מדד שהנתונים שלו מתחילים אחרי 2008 לא כולל את המשבר הפיננסי הגדול, ולכן הנפילה שלו עשויה להיראות קטנה יותר מהסיכון האמיתי.</p>';
   var px=rows.filter(function(r){return r.metrics&&r.metrics.proxy});
   h+='<p class="upd">תשואה בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(px.length?px.map(function(r){return esc(r.name)+': לפי מדד קרוב, '+esc(r.metrics.proxy.name)}).join(". ")+'. ':'')+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
   $("#cmpBox").innerHTML=h;
@@ -854,7 +855,8 @@ $("#to3").onclick=function(){go(3)};
 $("#taseOnly").onchange=function(e){st.taseOnly=e.target.checked;renderFunds();save()};
 
 /* ---------- step 3 ---------- */
-function feeTxt(f){return '<span class="tabular">'+f.ter.toFixed(2)+'%</span>'+(f.var_fee?'<div class="fsub">ועוד עד <span class="tabular">'+f.var_fee.toFixed(2)+'%</span> משתנים</div>':"")+(f.trustee?'<div class="fsub">ועוד <span class="tabular">'+f.trustee.toFixed(3).replace(/0$/,"")+'%</span> דמי נאמנות</div>':"")+(f.entry_load?'<div class="fsub">דמי הוספה <span class="tabular">'+f.entry_load+'%</span> בכל קנייה</div>':"")}
+function varUnknown(f){return (f.wrapper==="il"||f.wrapper==="mf")&&f.var_fee==null}
+function feeTxt(f){return '<span class="tabular">'+f.ter.toFixed(2)+'%</span>'+(f.var_fee?'<div class="fsub">ועוד עד <span class="tabular">'+f.var_fee.toFixed(2)+'%</span> משתנים</div>':varUnknown(f)?'<div class="fsub">דמי ניהול משתנים: אין נתון</div>':"")+(f.trustee?'<div class="fsub">ועוד <span class="tabular">'+f.trustee.toFixed(3).replace(/0$/,"")+'%</span> דמי נאמנות</div>':"")+(f.entry_load?'<div class="fsub">דמי הוספה <span class="tabular">'+f.entry_load+'%</span> בכל קנייה</div>':"")}
 function whTxt(f){if(f.wh_note)return '<span class="fsub">'+esc(f.wh_note)+'</span>';if(f.wh===0)return "0%";if(f.wh!=null)return f.wh+"%";if(f.synthetic)return '<span class="fsub">לפי הסכם ההחלפה</span>';return '<span class="fsub">משתנה לפי מדינה</span>'}
 function aumTxt(f){if(!f.aum||!f.aum.value)return '<span class="fsub">אין נתון</span>';var v=f.aum.value,c=f.aum.cur==="ILS"?"₪":"$";return '<bdi>'+c+(v>=1e9?(v/1e9).toFixed(1)+" מיליארד":Math.round(v/1e6)+" מיליון")+'</bdi>'+(f.aum.two_sources?"":'<div class="fsub">לפי מקור אחד</div>')}
 function repTxt(f){var t=f.replication==="physical"?"פיזית":f.synthetic?"סינתטית":null;if(!t)return '<span class="fsub">לא מפורסם</span>';return t+(f.replication_single?'<div class="fsub">לפי מקור אחד</div>':"")}
@@ -876,7 +878,7 @@ function renderFunds(){
     if(!ws.length)return '<div class="card"><span class="sec-lbl">'+esc(x.name)+' · '+st.alloc[id]+'% מהתיק</span><div class="na-box">'+(st.taseOnly&&Object.keys(fundsFor(id)).length?'למדד הזה אין קרן שאומתה ונסחרת בתל אביב. אפשר לבטל למעלה את הסימון "רק קרנות שקונים בחשבון ישראלי" ולראות קרנות שנסחרות בחו"ל.':'עדיין אין למדד הזה קרן שאומתה בשני מקורות. אפשר לחזור לשלב 2 ולהעביר את האחוזים למדד אחר.')+'</div></div>';
     if(!st.wrap[id]||!F[st.wrap[id]])st.wrap[id]=(st.pick[id]&&F[st.pick[id].w])?st.pick[id].w:ws[0];
     var w=st.wrap[id],list=F[w];
-    var feeSum=function(f){return f.ter+(f.var_fee||0)},minTer=Math.min.apply(null,list.map(feeSum));
+    var feeSum=function(f){return f.ter+(f.var_fee||0)},minTer=Math.min.apply(null,list.filter(function(f){return !varUnknown(f)}).map(feeSum));
     var foreign=x.cat!=="il"&&id!=="gov"&&id!=="tb";
     var h='<div class="card" id="fc_'+id+'"><span class="sec-lbl">'+esc(x.name)+' · <span class="tabular">'+st.alloc[id]+'%</span> מהתיק</span>';
     h+='<div class="tabs" role="tablist" aria-label="סוג קרן">'+ws.map(function(k){return '<button type="button" role="tab" class="tab'+(k===w?" on":"")+'" aria-selected="'+(k===w)+'" data-i="'+id+'" data-w="'+k+'">'+WRAPS[k]+' <span class="tabular">('+F[k].length+')</span></button>'}).join("")+'</div>';
@@ -888,7 +890,7 @@ function renderFunds(){
       var sub=[f.issuer,f.tracks?("עוקבת אחרי "+f.tracks):null].filter(Boolean).map(esc).join(" · ");
       var lst=(f.listings||[]).slice(0,2).map(function(l){return '<bdi>'+esc(l.ticker)+' · '+l.ex+' · '+l.cur+'</bdi>'}).join(" | ");
       return '<tr class="fund-row'+(on?" pick":"")+'" data-i="'+id+'" data-w="'+w+'" data-f="'+esc(f.id)+'"><td class="rcell"><input type="radio" name="'+nm+'" id="'+nm+'_'+esc(f.id)+'" '+(on?"checked":"")+' aria-label="בחירת '+esc(f.name)+'"></td>'+
-        '<td class="fcell"><label class="fname" for="'+nm+'_'+esc(f.id)+'">'+esc(f.name)+'</label>'+(feeSum(f)===minTer&&list.length>1?'<span class="badge low">דמי הניהול הנמוכים ברשימה</span>':"")+(f.kosher?'<span class="badge">כשרה</span>':"")+
+        '<td class="fcell"><label class="fname" for="'+nm+'_'+esc(f.id)+'">'+esc(f.name)+'</label>'+(feeSum(f)===minTer&&!varUnknown(f)&&list.length>1?'<span class="badge low">דמי הניהול הנמוכים ברשימה</span>':"")+(f.kosher?'<span class="badge">כשרה</span>':"")+
         (x.track_keys?(x.track_keys.some(function(k){return((f.tracks||"")+" "+f.name).toUpperCase().indexOf(k)>=0})?'<span class="badge same">אותו מדד כמו בכרטיס</span>':'<span class="badge">מדד דומה, לא זהה</span>'):"")+(sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+(f.official_url?'<a class="flink" href="'+esc(f.official_url)+'" target="_blank" rel="noopener">לדף הקרן ↗</a>':"")+'</td>'+
         '<td data-label="'+idLabel(w)+'">'+idCell(f)+'</td><td data-label="דמי ניהול"><div>'+feeTxt(f)+'</div></td><td data-label="דיבידנד">'+(f.dist==="acc"?"צוברת":"מחלקת")+(f.dist_single?'<div class="fsub">לפי מקור אחד</div>':"")+'</td><td data-label="מס דיבידנד בקרן" class="tabular">'+whTxt(f)+'</td><td data-label="עקיבה"><div>'+repTxt(f)+'</div></td>'+
         ((w==="il"||w==="mf")&&foreign?'<td data-label="מט&quot;ח">'+(f.hedged===true?"מגודרת":f.hedged===false?"חשופה":"-")+'</td>':"")+

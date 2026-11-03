@@ -373,6 +373,16 @@ a{color:var(--pine-deep)}
 @media (max-width:640px){.seg.seg4{grid-template-columns:repeat(2,minmax(0,1fr))}.f-val{font-size:10.5px}.f-bars{gap:3px}}
 .sub-h{font-size:16.5px;font-weight:900;color:var(--pine-darker);margin:14px 0 2px}
 .cols-ev{grid-template-columns:minmax(120px,2fr) 110px 120px 90px 30px}
+.seg.seg3{grid-template-columns:repeat(3,minmax(0,1fr));max-width:560px}
+.wi-say{margin-top:12px;border-radius:14px;padding:13px 16px;background:var(--sage-tint)}
+.wi-say.good{background:rgba(var(--pine-rgb),.15)}
+.wi-say.warn{background:rgba(183,121,31,.14)}
+.wi-say b{display:block;font-size:clamp(17px,1.9vw,20px);font-weight:900;color:var(--pine-darker);line-height:1.35}
+.wi-say.warn b{color:var(--amber-deep)}
+.wi-say span{display:block;font-size:15px;font-weight:500;color:var(--ink-soft);margin-top:3px;line-height:1.5}
+.wi-goal{margin-top:10px;font-size:15px;line-height:1.55;font-weight:500;color:var(--ink-soft)}
+.wi-goal b{font-weight:800;color:var(--pine-deep)}
+@media (max-width:520px){.seg.seg3{grid-template-columns:minmax(0,1fr)}}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -626,7 +636,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=9"></script>
+<script src="engine.js?v=10"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -731,7 +741,7 @@ function emptyState() {
     },
     tax: { points: '', saving: '', tables: null, pick: null },
     plan: { dates: DEFAULT_DATES.slice(), launches: months(), promos: months(), focus: months() },
-    whatIf: { i: '0', pct: '-10' },
+    whatIf: { i: '0', mode: 'launch', launchPct: '-20', launchUnits: '', baseUnits: '', raisePct: '10', midPct: '10', midFrom: String(israelMonth()) },
     years: {},
     sales: [],
     ops: opsDefaults()
@@ -1013,6 +1023,17 @@ VIEWS[6] = function () {
     '<div class="card">' + (prods || '<div class="note soft" style="margin:0">עוד אין מוצרים. ' + gotoBtn(2, 'להוסיף בשלב 2') + '</div>') + '</div>' + stepNav();
 };
 
+function pctOptions(list, cur) { return list.map(function (v) { return '<option value="' + v + '"' + (String(cur) === String(v) ? ' selected' : '') + '>' + (v < 0 ? 'הנחה של ' + (-v) + '%' : 'העלאה של ' + v + '%') + '</option>'; }).join(''); }
+function whatIfForm() {
+  var w = S.whatIf, sel = function (id, label, path, opts) { return '<div class="field"><label for="' + id + '">' + label + '</label><div class="input-shell"><select id="' + id + '" data-text data-path="' + path + '">' + opts + '</select></div></div>'; };
+  var prods = S.products.map(function (p, i) { return '<option value="' + i + '"' + (String(w.i) === String(i) ? ' selected' : '') + '>' + esc(p.name || 'מוצר ' + (i + 1)) + '</option>'; }).join('');
+  var modes = [['launch', 'השקה עם הנחה'], ['raise', 'העלאת מחיר'], ['mid', 'שינוי באמצע השנה']].map(function (m) { return '<button type="button" data-wimode="' + m[0] + '" aria-pressed="' + (w.mode === m[0]) + '">' + m[1] + '</button>'; }).join('');
+  var fields = sel('wiProd', 'מוצר', 'whatIf.i', prods);
+  if (w.mode === 'launch') fields += sel('wiLaunch', 'כמה הנחה', 'whatIf.launchPct', pctOptions([-5, -10, -15, -20, -25, -30, -40, -50], w.launchPct)) + numField('כמה צפויים למכור בהשקה', 'whatIf.launchUnits', { hint: 'ההערכה שלך, במחיר עם ההנחה' }) + numField('כמה היו נמכרים בלי הנחה', 'whatIf.baseUnits', { hint: 'באותה תקופה, במחיר הרגיל' });
+  if (w.mode === 'raise') fields += sel('wiRaise', 'כמה להעלות', 'whatIf.raisePct', pctOptions([5, 10, 15, 20, 25, 30], w.raisePct));
+  if (w.mode === 'mid') fields += sel('wiMid', 'איזה שינוי', 'whatIf.midPct', pctOptions([-30, -20, -10, -5, 5, 10, 15, 20, 30], w.midPct)) + sel('wiFrom', 'מאיזה חודש', 'whatIf.midFrom', MONTHS.map(function (m, i) { return '<option value="' + i + '"' + (String(w.midFrom) === String(i) ? ' selected' : '') + '>' + m + '</option>'; }).join(''));
+  return '<div class="seg seg3" role="group" aria-label="איזו שאלה">' + modes + '</div><div class="fields" style="margin-top:14px">' + fields + '</div>';
+}
 function mixInput(i) { return '<div class="mini"><div class="input-shell"><input aria-label="אחוז מהמחזור של ' + esc(S.products[i].name || 'מוצר') + '" type="text" inputmode="decimal" data-num data-path="products.' + i + '.mix" value="' + esc(grp(S.products[i].mix)) + '"><span class="unit" aria-hidden="true" style="padding-inline:0 7px">%</span></div></div>'; }
 VIEWS[7] = function () {
   var rows = S.products.map(function (p, i) {
@@ -1020,7 +1041,7 @@ VIEWS[7] = function () {
   }).join('');
   return head() + '<div class="card"><span class="sec-lbl">המחירון שלך</span>' + groupNote() + (rows ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="המחירון"><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחיר ללקוח</th><th>מחיר נטו</th><th>עלות חומרים</th><th>רווח גולמי</th><th>% גולמי</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td class="nm">סך הכל וממוצע</td><td>' + liveSpan('mixTotal') + '</td><td colspan="4"></td><td>' + liveSpan('avgMargin') + '</td></tr></tfoot></table></div>' : '<div class="note soft" style="margin:0">עוד אין מוצרים. ' + gotoBtn(2, 'להוסיף בשלב 2') + '</div>') + live('mixNote') +
     how('margin', 'רווח גולמי הוא המחיר נטו פחות עלות החומרים. זה מה שנשאר לכסות את הזמן שלך, את ההוצאות ואת הרווח. המחיר נטו הוא מה שנשאר אחרי מע"מ ועמלת סליקה. הממוצע נשקל לפי התמהיל, כי מוצר שמוכרים הרבה משפיע יותר.') + '</div>' +
-    (S.products.length ? '<div class="card"><span class="sec-lbl">מה הכי משתלם לזמן שלך?</span>' + live('rankOut') + '</div><div class="card"><span class="sec-lbl">מה אם אשנה מחיר?</span><div class="fields"><div class="field"><label for="wiProd">מוצר</label><div class="input-shell"><select id="wiProd" data-text data-path="whatIf.i">' + S.products.map(function (p, i) { return '<option value="' + i + '"' + (String(S.whatIf.i) === String(i) ? ' selected' : '') + '>' + esc(p.name || 'מוצר ' + (i + 1)) + '</option>'; }).join('') + '</select></div></div><div class="field"><label for="wiPct">שינוי במחיר</label><div class="input-shell"><select id="wiPct" data-text data-path="whatIf.pct">' + [-30, -25, -20, -15, -10, -5, 5, 10, 15, 20, 25, 30].map(function (v) { return '<option value="' + v + '"' + (String(S.whatIf.pct) === String(v) ? ' selected' : '') + '>' + (v < 0 ? 'הנחה של ' + (-v) + '%' : 'העלאה של ' + v + '%') + '</option>'; }).join('') + '</select></div></div></div>' + live('whatIfOut') + '</div>' : '') + stepNav();
+    (S.products.length ? '<div class="card"><span class="sec-lbl">מה הכי משתלם לזמן שלך?</span>' + live('rankOut') + '</div><div class="card"><span class="sec-lbl">מה אם?</span><p class="explain">בוחרים מוצר ושאלה, ורואים מה זה עושה לכסף ולדרך ליעד.</p>' + whatIfForm() + live('whatIfOut') + '</div>' : '') + stepNav();
 };
 
 VIEWS[8] = function () { return head() + live('need8') + '<div class="grid2"><div class="card"><span class="sec-lbl">מהרווח למחזור, בשנה</span>' + live('reverse') + '</div><div class="card"><span class="sec-lbl">נקודת איזון</span>' + live('breakEven') + '</div></div>' + stepNav(); };
@@ -1734,12 +1755,33 @@ var LIVE_OPS = {
     return '<div class="tbl-wrap" tabindex="0" role="region" aria-label="רווחיות לפי זמן"><table class="ptable"><thead><tr><th>מוצר</th><th>נשאר ממכירה</th><th>שעות</th><th>נשאר לשעה</th><th>מכירות בשנה</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + msg + how('rank', 'נשאר ממכירה הוא המחיר נטו פחות חומרים ועלות ספציפית, לפני השכר שלך וההוצאות. כשמחלקים בשעות רואים כמה כל שעה עבודה מכניסה.');
   },
   whatIfOut: function () {
-    var w = E.whatIf(R, +S.whatIf.i, S.whatIf.pct);
-    if (!w) return '<div class="note soft" style="margin:0">קודם צריך מחיר למוצר הזה.</div>';
-    var up = w.change > 0, line = '';
-    if (w.losing) line = '<div class="note warn">במחיר הזה מפסידים על כל מכירה, עוד לפני הזמן שלך.</div>';
-    else if (w.unitsNeeded != null && w.unitsNow) line = '<div class="note ' + (up ? 'ok' : 'soft') + '">' + (up ? 'אפשר למכור' : 'כדי להישאר עם אותו סכום צריך למכור') + ' <b>' + money(w.unitsNeeded) + '</b> במקום ' + money(w.unitsNow) + ' בשנה. ' + (up ? 'אם המכירות לא ירדו, נוספים' : 'אם המכירות לא יעלו, יורדים') + ' <b>' + ils(Math.abs(w.yearEffect), 0) + '</b> בשנה.</div>';
-    return '<div class="tiles" style="margin-top:12px">' + tile('מחיר ללקוח', ils(w.customer, 0), 'היום ' + ils(w.oldCustomer, 0), 'main') + tile('נשאר ממכירה', ils(w.newLeft, 0), 'היום ' + ils(w.oldLeft, 0)) + tile('השינוי בכל מכירה', (w.perSale >= 0 ? '+' : '') + ils(w.perSale, 0)) + '</div>' + line + (w.belowMin && !w.losing ? '<div class="note warn">המחיר הזה מתחת למינימום שמכסה את העלויות.</div>' : '');
+    var w = S.whatIf, idx = +w.i, signed = function (v) { return (v >= 0 ? '+' : '-') + ils(Math.abs(v), 0); }, share = function (f) { return f == null ? '' : (Math.abs(f * 100) < 0.05 ? 'פחות מ-0.1%' : (Math.round(Math.abs(f) * 1000) / 10) + '%'); };
+    var say = function (h, cls, rest) { return '<div class="wi-say ' + (cls || '') + '"><b>' + h + '</b>' + (rest ? '<span>' + rest + '</span>' : '') + '</div>'; };
+    var toward = function (amount, f) { if (f == null) return ''; return '<p class="wi-goal"><b>איך זה מקדם אותך:</b> ' + (amount >= 0 ? 'זה מוסיף למחזור ' + ils(amount, 0) : 'זה מוריד מהמחזור ' + ils(-amount, 0)) + ', שהם ' + share(f) + ' מיעד המחזור לשנה (' + ils(R.annual.revenue, 0) + ' לפני מע"מ).</p>'; };
+    if (w.mode === 'raise') {
+      var c = E.raiseCase(R, idx, w.raisePct);
+      if (!c) return '<div class="note soft">קודם צריך מחיר למוצר הזה.</div>';
+      var above = R.products[idx].market > 0 && c.w.customer > R.products[idx].market * 1.15;
+      return '<div class="tiles" style="margin-top:14px">' + tile('מחיר חדש ללקוח', ils(c.w.customer, 0), 'היום ' + ils(c.w.oldCustomer, 0), 'main') + tile('נשאר ממכירה', ils(c.w.newLeft, 0), 'היום ' + ils(c.w.oldLeft, 0)) + (c.w.unitsNow ? tile('אם המכירות לא משתנות', signed(c.w.yearEffect), 'בשנה') : '') + '</div>' +
+        (c.canLose != null && c.w.unitsNow ? say('אפשר לאבד עד ' + money(c.canLose) + ' מכירות בשנה, ועדיין להישאר עם אותו סכום.', 'good', 'זה ' + Math.round(c.canLosePct * 100) + '% מ-' + money(c.w.unitsNow) + ' המכירות ביעד.') : '') +
+        (above ? '<div class="note soft">המחיר החדש גבוה מהשוק ביותר מ-15%. כדאי לחדד מה מצדיק אותו.</div>' : '') + toward(c.turnover, c.targetShare);
+    }
+    if (w.mode === 'mid') {
+      var m = E.midYearCase(R, idx, w.midPct, w.midFrom);
+      if (!m) return '<div class="note soft">קודם צריך מחיר למוצר הזה.</div>';
+      if (!m.unitsLeft) return '<div class="note soft">עוד אין כמה מכירות צפויות למוצר הזה. ממלאים תמהיל בשלב הזה או תוכנית בשלב 9.</div>';
+      return '<div class="tiles" style="margin-top:14px">' + tile('מחיר מ' + MONTHS[m.from], ils(m.w.customer, 0), 'היום ' + ils(m.w.oldCustomer, 0), 'main') + tile('ההשפעה השנה', signed(m.effect), 'על ' + money(m.unitsLeft) + ' המכירות שנשארו') + tile('אילו זה היה כל השנה', signed(m.fullYear)) + '</div>' +
+        say('מ' + MONTHS[m.from] + ' ועד סוף השנה ' + (m.usePlan ? 'מתוכננות' : 'צפויות בממוצע') + ' ' + money(m.unitsLeft) + ' מכירות.', m.effect >= 0 ? 'good' : 'warn', m.usePlan ? 'לפי התוכנית השנתית בשלב 9.' : 'אין עדיין תוכנית חודשית, אז החלוקה שווה. בשלב 9 אפשר לדייק.') + toward(m.turnover, m.targetShare);
+    }
+    var l = E.launchCase(R, idx, w.launchPct, w.launchUnits, w.baseUnits);
+    if (!l) return '<div class="note soft">קודם צריך מחיר למוצר הזה.</div>';
+    var tiles = '<div class="tiles" style="margin-top:14px">' + tile('מחיר בהשקה', ils(l.w.customer, 0), 'היום ' + ils(l.w.oldCustomer, 0), 'main') + tile('נשאר ממכירה', ils(l.w.newLeft, 0), 'היום ' + ils(l.w.oldLeft, 0)) + '</div>';
+    if (l.w.losing) return tiles + say('במחיר הזה מפסידים על כל מכירה, עוד לפני הזמן שלך.', 'warn');
+    var min = l.w.belowMin ? '<div class="note warn">המחיר הזה מתחת למינימום שמכסה את העלויות, כולל הזמן שלך.</div>' : '';
+    if (!l.units) return tiles + min + say(l.baseline ? 'כדי שההשקה תשתלם, צריך למכור לפחות ' + money(l.breakEven) + ' במקום ' + money(l.baseline) + '.' : 'כותבים כמה צפויים למכור, ורואים אם זה משתלם.', '');
+    var hrs = l.hours > 0 ? '<p class="wi-goal"><b>זמן:</b> ' + money(l.units) + ' מכירות דורשות ' + money(l.hours) + ' שעות' + (l.hoursMonth > 0 ? ', ובחודש יש לך ' + money(l.hoursMonth) + '.' : '.') + '</p>' : '';
+    var verdict = l.gain >= 0 ? say('ההשקה משתלמת: נשארים ' + ils(l.gain, 0) + ' יותר מאשר בלי הנחה.', 'good', ils(l.withLaunch, 0) + ' עם ההשקה, מול ' + ils(l.without, 0) + ' בלעדיה.' + (l.baseline ? ' היא משתלמת מ-' + money(l.breakEven) + ' מכירות.' : '')) : say('בכמות הזו ההשקה לא משתלמת: נשארים ' + ils(-l.gain, 0) + ' פחות.', 'warn', 'כדי שתשתלם, צריך למכור לפחות ' + money(l.breakEven) + ' במקום ' + money(l.units) + '. השקה יכולה להשתלם גם אם היא מביאה לקוחות שחוזרים, וזה לא נכלל כאן.');
+    return tiles + verdict + min + hrs + (l.targetShare != null ? '<p class="wi-goal"><b>איך זה מקדם אותך:</b> ההשקה מכניסה ' + ils(l.turnover, 0) + ' לפני מע"מ, שהם ' + share(l.targetShare) + ' מיעד המחזור לשנה (' + ils(R.annual.revenue, 0) + ').</p>' : '');
   }
 };
 Object.keys(LIVE_OPS).forEach(function (k) { LIVE[k] = LIVE_OPS[k]; });
@@ -1832,7 +1874,7 @@ function normalize(s) {
     p.lines = p.lines || []; p.plan = p.plan || months();
     if (p.type === 'group' && E.num(p.specific) > 0 && !(p.eventCosts && p.eventCosts.length)) { p.eventCosts = [{ name: 'עלות לכל הסדנה', price: p.specific, qty: '' }]; p.specific = ''; }
   });
-  s.whatIf = s.whatIf || base.whatIf;
+  s.whatIf = Object.assign({}, base.whatIf, s.whatIf || {});
   s.years = s.years || {};
   s.sales = s.sales || [];
   /* a link saved before years existed holds 2026 */
@@ -2040,6 +2082,7 @@ document.addEventListener('click', function (e) {
   if (d.add) { addRow(d.add); return; }
   if (d.addevent != null) { var pe = S.products[+d.addevent]; pe.eventCosts = pe.eventCosts || []; pe.eventCosts.push({ name: '', price: '', qty: '' }); render(); persist(); var evs = document.querySelectorAll('[data-path^="products.' + d.addevent + '.eventCosts."][data-text]'); if (evs.length) evs[evs.length - 1].focus(); return; }
   if (d.delevent) { var de = d.delevent.split(':'); S.products[+de[0]].eventCosts.splice(+de[1], 1); render(); persist(); return; }
+  if (d.wimode) { S.whatIf.mode = d.wimode; render(); persist(); return; }
   if (d.salekind) { var ks = d.salekind.split(':'), sl = S.sales[+ks[0]]; sl.kind = ks[1]; if (ks[1] === 'custom' && !(sl.parts && sl.parts.length)) sl.parts = [{ ym: sl.start || sl.month, amount: '' }]; if (ks[1] === 'equal' && !sl.n) sl.n = 6; if (!sl.start) sl.start = sl.month; render(); persist(); return; }
   if (d.addpart != null) { var sp = S.sales[+d.addpart]; sp.parts = sp.parts || []; var lastP = sp.parts[sp.parts.length - 1]; sp.parts.push({ ym: lastP && lastP.ym ? E.ymAdd(lastP.ym, 1) : (sp.start || sp.month), amount: '' }); render(); persist(); return; }
   if (d.delpart) { var dp = d.delpart.split(':'); S.sales[+dp[0]].parts.splice(+dp[1], 1); render(); persist(); return; }

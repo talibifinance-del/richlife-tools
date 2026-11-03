@@ -340,6 +340,27 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('group: the room is not multiplied', evR.products[0].calc.specific, 300);
   near('group: more people, same room', E.groupView(evR, ev0, Object.assign({}, ev0.products[0], { size: 20 })).eventCost, 300);
 
+  // what if
+  const wiR = E.compute(example()), wi0 = E.whatIf(wiR, 0, -20);
+  const lc = E.launchCase(wiR, 0, -20, 50, 30);
+  near('launch: gain against no discount', lc.gain, 50 * wi0.newLeft - 30 * wi0.oldLeft);
+  near('launch: sales needed', lc.breakEven, Math.ceil(30 * wi0.oldLeft / wi0.newLeft));
+  ok('launch: at the break-even it pays', E.launchCase(wiR, 0, -20, lc.breakEven, 30).gain >= -1e-6);
+  ok('launch: one less does not', E.launchCase(wiR, 0, -20, lc.breakEven - 1, 30).gain < 0);
+  near('launch: hours', lc.hours, 100);
+  near('launch: turnover', lc.turnover, 50 * wi0.net);
+  const rc = E.raiseCase(wiR, 0, 10);
+  near('raise: losing exactly this many keeps the money', (rc.w.unitsNow - rc.canLose) * rc.w.newLeft, rc.w.unitsNow * rc.w.oldLeft, 0.01);
+  near('raise: effect', rc.w.yearEffect, rc.w.unitsNow * rc.w.perSale);
+  ok('raise: a discount has nothing to lose', E.raiseCase(wiR, 0, -10).canLose === 0);
+  const mc = E.midYearCase(wiR, 0, 10, 6);
+  near('mid year: half the year by average', mc.unitsLeft, wiR.goals[0].unitsYear / 2); ok('mid year: no plan yet', mc.usePlan === false);
+  near('mid year: effect on what is left', mc.effect, mc.fullYear / 2);
+  const planned = example(); planned.products[0].plan = [10, 10, 10, 10, 10, 10, 5, 5, 5, 5, 5, 5];
+  const pmc = E.midYearCase(E.compute(planned), 0, 10, 6);
+  near('mid year: by the plan', pmc.unitsLeft, 30); ok('mid year: says it used the plan', pmc.usePlan === true);
+  near('mid year: December only', E.midYearCase(E.compute(planned), 0, 10, 11).unitsLeft, 5);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

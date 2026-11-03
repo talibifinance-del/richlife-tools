@@ -612,11 +612,39 @@
     };
   }
 
+  /* A launch at a discount, against what would have sold anyway at the full price. */
+  function launchCase(R, index, pct, units, baseline) {
+    var w = whatIf(R, index, pct); if (!w) return null;
+    var n = pos(units), base = pos(baseline), target = R.annual.revenue, p = R.products[index];
+    return {
+      w: w, units: n, baseline: base,
+      withLaunch: n * w.newLeft, without: base * w.oldLeft, gain: n * w.newLeft - base * w.oldLeft,
+      breakEven: w.newLeft > 0 ? Math.ceil(base * w.oldLeft / w.newLeft - 1e-9) : null,
+      turnover: n * w.net, targetShare: target > 0 ? n * w.net / target : null, hours: n * p.hours, hoursMonth: R.hoursAvailableMonth
+    };
+  }
+  /* A price rise: what it adds if nothing else changes, and how many sales it can afford to lose. */
+  function raiseCase(R, index, pct) {
+    var w = whatIf(R, index, pct); if (!w) return null;
+    var target = R.annual.revenue, turnover = w.unitsNow * (w.net - w.oldNet);
+    var canLose = w.unitsNeeded != null ? Math.max(0, w.unitsNow - w.unitsNeeded) : null;
+    return { w: w, turnover: turnover, targetShare: target > 0 ? turnover / target : null, canLose: canLose, canLosePct: canLose != null && w.unitsNow > 0 ? canLose / w.unitsNow : null };
+  }
+  /* A price change from some month on: only the months left count, by the yearly plan if there is one. */
+  function midYearCase(R, index, pct, fromMonth) {
+    var w = whatIf(R, index, pct), g = R.goals[index]; if (!w || !g) return null;
+    var from = Math.min(11, Math.max(0, Math.floor(pos(fromMonth)))), usePlan = g.planned > 0, left = 0, i;
+    for (i = from; i < 12; i++) left += usePlan ? g.plan[i] : g.unitsYear / 12;
+    var target = R.annual.revenue, turnover = left * (w.net - w.oldNet);
+    return { w: w, from: from, usePlan: usePlan, unitsLeft: left, effect: left * w.perSale, fullYear: (usePlan ? g.planned : g.unitsYear) * w.perSale, turnover: turnover, targetShare: target > 0 ? turnover / target : null };
+  }
+
   return {
     TABLES_2026: TABLES_2026, PATUR_CEILING_2026: PATUR_CEILING_2026, MAX_MARGIN: MAX_MARGIN, OPS_2026: OPS_2026,
     num: num, materialUnitPrice: materialUnitPrice, lineCost: lineCost, productDirect: productDirect,
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
     expandProduct: expandProduct, expandState: expandState, groupView: groupView, eventCost: eventCost,
+    launchCase: launchCase, raiseCase: raiseCase, midYearCase: midYearCase,
     ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, salesForecast: salesForecast, salesCounts: salesCounts,
     mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, hasTables: hasTables, tablesFor: tablesFor,
     yearList: yearList, yearOps: yearOps, switchYear: switchYear, closeYear: closeYear, agePick: agePick, compareYears: compareYears, productRank: productRank, whatIf: whatIf

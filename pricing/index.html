@@ -458,6 +458,35 @@ a{color:var(--pine-deep)}
 .road b{display:block;font-size:19px;font-weight:900;color:var(--pine-darker);margin:2px 0 3px}
 .road-n{font-size:13px;font-weight:800;color:var(--pine-deep)}
 @media (max-width:640px){.g-two{grid-template-columns:minmax(0,1fr)}.road{grid-template-columns:minmax(0,1fr)}.g-b{padding:0 16px 16px}.guide summary{padding:13px 16px}}
+
+/* the whole screen, and big enough to read without glasses */
+.app{max-width:none;width:100%}
+.footer-legal{font-size:13.5px}
+@media screen and (min-width:1100px){
+  .app{zoom:1.12}
+  .g-b{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 26px;align-items:start}
+  .g-list{grid-row:1 / span 2}
+  .g-ex{margin-top:2px}
+  .h-tips{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .ops-sec .rows{grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:8px 18px}
+  .road{gap:14px}
+  .oh-row .row{grid-template-columns:minmax(0,2fr) 118px 88px 30px!important}
+  .sale-list{grid-template-columns:repeat(auto-fit,minmax(520px,1fr));align-items:start}
+}
+@media screen and (min-width:1400px){.app{zoom:1.22}}
+@media screen and (min-width:1650px){.app{zoom:1.32}}
+@media screen and (min-width:2000px){.app{zoom:1.5}}
+@media screen and (min-width:1100px){
+  .hero h2{font-size:28px}
+  .hero p{font-size:16.5px}
+  .h-v{font-size:27px;white-space:nowrap}
+  .step-head h1{font-size:28px}
+  .rail{overflow-y:auto;max-height:calc((100vh - 24px) / 1.12)}
+}
+@media screen and (min-width:1400px){.rail{max-height:calc((100vh - 24px) / 1.22)}}
+@media screen and (min-width:1650px){.rail{max-height:calc((100vh - 24px) / 1.32)}}
+@media screen and (min-width:2000px){.rail{max-height:calc((100vh - 24px) / 1.5)}}
+@media print{.app{zoom:1}}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף

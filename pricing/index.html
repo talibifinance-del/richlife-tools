@@ -1757,7 +1757,7 @@ var LIVE_OPS = {
       names = n.length === 1 ? n[0] : n.length === 2 ? n[0] + ' ועם ' + n[1] : n.length > 2 ? n[0] + ', ' + n[1] + ' ועוד ' + (n.length - 2) : '';
       sub = names ? 'כדאי לדבר החודש עם ' + names + '.' : 'כדאי לבדוק מה קרה עם התשלומים האלה.';
     } else {
-      title = 'כל מה שהיה אמור להיכנס עד עכשיו, נכנס.';
+      title = 'אין תשלום באיחור.';
       sub = r.monthLeft > 0 ? 'החודש צפויים עוד ' + ils(r.monthLeft, 0) + '.' : 'החודש אין תשלומים שמחכים.';
     }
     return '<div class="hero"><h2>' + esc(title) + '</h2><p>' + esc(sub) + '</p></div>';

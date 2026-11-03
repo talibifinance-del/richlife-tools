@@ -796,7 +796,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.locator('[data-live="payList"] .pay.late [data-pay$="|move"]').click();
   await p.locator('[data-pay$="|savemove"]').click(); await p.waitForTimeout(60);
   r = await late(); near('Z moved is no longer late', r.lateTotal, 0);
-  ok('Z nothing late is said', (await p.locator('[data-live="salesHero"]').innerText()).includes('נכנס'));
+  ok('Z nothing late is said', (await p.locator('[data-live="salesHero"]').innerText()).includes('אין תשלום באיחור'));
   await p.locator('[data-payundo]').click(); await p.waitForTimeout(60);
   // paid, keeps the scroll and the focus in the list
   await p.evaluate(() => { document.getElementById('contentCol').scrollTop = 300; });

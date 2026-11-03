@@ -268,6 +268,12 @@ a{color:var(--pine-deep)}
 .pick summary:focus-visible{outline:2px solid var(--pine-deep);outline-offset:2px;border-radius:10px}
 .pick-b{padding:0 14px 14px}
 .pick-kids{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.grid-tbl td.nm,.grid-tbl thead th:first-child{position:sticky;inset-inline-start:0;background:#fff;z-index:2}
+.grid-tbl thead th:first-child{background:var(--sage-tint)}
+.grid-tbl td.nm{min-width:150px;max-width:190px}
+.grid-tbl input{min-width:62px}
+.grid-sum td{background:var(--sage-tint);font-weight:900}
+.grid-sum td.nm{background:var(--sage-tint)}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -1025,6 +1031,39 @@ function opsSection(title, key, explain, addLabel) {
   var open = howOpen[how_] === undefined ? (key === 'income' || hasData) : howOpen[how_];
   return '<details class="card ops-sec" data-how="' + how_ + '"' + (open ? ' open' : '') + '><summary><span class="sec-lbl" style="margin:0">' + title + '</span>' + liveSpan('opsSumShort', key).replace('<span', '<span class="ops-short"') + '</summary><div style="margin-top:10px">' + (explain ? '<p class="explain">' + explain + '</p>' : '') + '<div class="rows">' + S.ops.rows[key].map(function (r, i) { return opsRow('ops.rows.' + key, r, i, e); }).join('') + '</div><button type="button" class="add-btn" data-addops="' + key + '">+ ' + addLabel + '</button></div></details>';
 }
+function gridGroups() {
+  var o = S.ops, list = function (key, title) { return { key: key, t: title, rows: o.rows[key].map(function (r, i) { return { name: r.name, m: r.m, refund: r.refund, path: 'ops.rows.' + key + '.' + i + '.m' }; }) }; };
+  var named = function (key, title, obj, base, names) { return { key: key, t: title, rows: names.map(function (n) { return { name: n[1], m: obj[n[0]], path: base + '.' + n[0] }; }) }; };
+  var priv = [];
+  o.private.forEach(function (r, i) { if (privateVisible(r)) priv.push({ name: r.name, m: r.m, path: 'ops.private.' + i + '.m' }); });
+  var paid = [['income', 'מקדמות מס הכנסה'], ['ni', 'ביטוח לאומי ובריאות']];
+  if (S.biz.type !== 'patur') paid.push(['vat', 'תשלום מע"מ']);
+  return [list('income', 'מה נכנס לעסק'), list('direct', 'עלויות ישירות'), list('marketing', 'שיווק ומכירה'), list('admin', 'הנהלה וכלליות'), list('finance', 'עמלות וריבית'),
+    { key: 'private', t: 'הוצאות פרטיות שמוכרות במס', rows: priv },
+    named('draw', 'מה לקחת מהרווח', o.draw, 'ops.draw', [['salary', 'משכורת לעצמי'], ['pension', 'פנסיה'], ['fund', 'קרן השתלמות'], ['savings', 'חיסכון והשקעות'], ['loan', 'החזר הלוואה, בלי הריבית']]),
+    named('paid', 'מה שולם לרשויות', o.paid, 'ops.paid', paid)];
+}
+function gridRowTotal(r) { return (r.m || []).reduce(function (a, v) { return a + E.num(v); }, 0); }
+function gridGroupMonth(g, k) { return g.rows.reduce(function (a, r) { return a + (r.refund ? -1 : 1) * E.num((r.m || [])[k]); }, 0); }
+function gridGroupTotal(g) { return g.rows.reduce(function (a, r) { return a + (r.refund ? -1 : 1) * gridRowTotal(r); }, 0); }
+function opsGridHtml(editable) {
+  var head_ = '<thead><tr><th>שורה</th>' + MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('') + '<th>סך הכל</th></tr></thead>';
+  var body = gridGroups().map(function (g) {
+    var rows = editable ? g.rows : g.rows.filter(function (r) { return gridRowTotal(r) !== 0; });
+    if (!rows.length) return '';
+    var lines = rows.map(function (r) {
+      var nm = esc(r.name || 'שורה');
+      var cells = MONTHS.map(function (m, k) {
+        var v = (r.m || [])[k];
+        return editable ? '<td><input aria-label="' + nm + ' ב' + m + '" type="text" inputmode="decimal" autocomplete="off" data-num data-path="' + r.path + '.' + k + '" value="' + esc(grp(v)) + '"></td>' : '<td>' + (E.num(v) ? money(v) : '') + '</td>';
+      }).join('');
+      return '<tr><td class="nm">' + nm + '</td>' + cells + '<td class="cal-sum">' + (editable ? liveSpan('gridRow', r.path) : money(gridRowTotal(r))) + '</td></tr>';
+    }).join('');
+    var sums = MONTHS.map(function (m, k) { return '<td class="cal-sum">' + (editable ? liveSpan('gridGroup', g.key + ':' + k) : money(gridGroupMonth(g, k))) + '</td>'; }).join('');
+    return '<tr class="cal-group"><td colspan="14">' + g.t + '</td></tr>' + lines + '<tr class="grid-sum"><td class="nm">סך הכל</td>' + sums + '<td class="cal-sum">' + (editable ? liveSpan('gridGroup', g.key + ':all') : money(gridGroupTotal(g))) + '</td></tr>';
+  }).join('');
+  return '<div class="tbl-wrap" tabindex="0" role="region" aria-label="כל השורות לפי חודשים"><table class="ptable cal grid-tbl">' + head_ + '<tbody>' + body + '</tbody></table></div>';
+}
 function privateVisible(r) { return r.group === 'home' ? S.ops.home : (r.group === 'car' ? S.ops.car : true); }
 function signedInput(id, path, label) {
   var v = getPath(path), neg = E.num(v) < 0;
@@ -1065,7 +1104,8 @@ VIEWS[11] = function () {
   var paidRow = function (l, k) { return numField(l + ' ב' + MONTHS[e], 'ops.paid.' + k + '.' + e, { unit: '₪' }); };
   return head() + '<div class="card"><span class="sec-lbl">על העסק</span><div class="field"><span class="lbl" id="typeLbl2">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl2"><button type="button" data-type="murshe" aria-pressed="' + !patur + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + patur + '">עוסק פטור</button></div><div class="hint">' + (patur ? 'בעוסק פטור אין מע"מ בכלל, וממלאים כמו בבנק.' : 'ממלאים כמו בבנק, כולל מע"מ. הכלי מנטרל אותו לבד לפי סוג השורה.') + '</div></div>' +
     '<label class="check-line" style="margin-top:12px"><input type="checkbox" data-check="ops.home" data-rerender' + (S.ops.home ? ' checked' : '') + '> העסק עובד מהבית</label><label class="check-line" style="margin-top:6px"><input type="checkbox" data-check="ops.car" data-rerender' + (S.ops.car ? ' checked' : '') + '> הרכב הפרטי משמש גם לעסק</label></div>' +
-    '<div class="card"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') + '</div>' +
+    '<div class="card"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') +
+    '<details class="how" data-how="opsGridEdit"' + (howOpen.opsGridEdit ? ' open' : '') + '><summary>כל השנה בטבלה אחת, כמו באקסל: לראות ולערוך</summary><div class="how-b"><p class="explain">כל שינוי כאן נשמר לבד. הסכומים כמו בבנק.</p>' + (howOpen.opsGridEdit ? opsGridHtml(true) : '') + '</div></details></div>' +
     opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה. החזר ללקוחה נרשם בשורה שלו, והוא מוריד את ההכנסות.', 'הוספת מקור הכנסה') +
     opsSection('עלויות ישירות', 'direct', 'מה שעולה לספק את המוצר או השירות עצמו.', 'הוספת עלות') +
     opsSection('שיווק ומכירה', 'marketing', '', 'הוספת הוצאת שיווק') +
@@ -1079,7 +1119,7 @@ VIEWS[11] = function () {
 };
 VIEWS[12] = function () {
   return head() + live('opsEmpty') + '<div class="card"><span class="sec-lbl">איזו תקופה לראות?</span>' + opsTabs(S.ops.view, 'data-opsview', true) + '</div><div class="ops-grid"><div class="card"><span class="sec-lbl">העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">נשאר לי כסף?</span>' + live('opsDrawn') + '</div>' +
-    '<div class="ops-side">' + live('opsSide') + '</div></div><div class="card"><span class="sec-lbl">כל השנה</span>' + live('opsTable') + live('opsPlan') + '</div>' + stepNav();
+    '<div class="ops-side">' + live('opsSide') + '</div></div><div class="card"><span class="sec-lbl">כל השנה</span>' + live('opsTable') + '<details class="how" data-how="opsGridRO"' + (howOpen.opsGridRO ? ' open' : '') + '><summary>לפתוח את כל ההכנסות וההוצאות, שורה שורה, כמו באקסל</summary><div class="how-b"><p class="explain">הסכומים כמו שמולאו, כלומר כמו בבנק' + (S.biz.type === 'patur' ? '' : ' וכולל מע"מ. הטבלה שלמעלה כבר בלי מע"מ') + '. לעריכה: ' + gotoBtn(11, 'מילוי החודש') + '.</p>' + live('opsGridRO') + '</div></details>' + live('opsPlan') + '</div>' + stepNav();
 };
 VIEWS[13] = function () {
   var opts = '<option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('');
@@ -1092,6 +1132,13 @@ VIEWS[13] = function () {
 };
 
 var LIVE_OPS = {
+  opsGridRO: function () { return O.k ? opsGridHtml(false) : ''; },
+  gridRow: function (path) { var m = getPath(path); return money((m || []).reduce(function (a, v) { return a + E.num(v); }, 0)); },
+  gridGroup: function (arg) {
+    var p = arg.split(':'), g = gridGroups().filter(function (x) { return x.key === p[0]; })[0];
+    if (!g) return '';
+    return money(p[1] === 'all' ? gridGroupTotal(g) : gridGroupMonth(g, +p[1]));
+  },
   opsSumShort: function (key) { var t = S.ops.rows[key].reduce(function (a, r) { return a + (r.refund ? -1 : 1) * E.num(r.m[S.ops.edit]); }, 0); return t ? ils(t, 0) : ''; },
   opsBank: function () {
     var b = O.bank;
@@ -1260,15 +1307,28 @@ function decryptBlob(blob, key) {
   return crypto.subtle.decrypt({ name: 'AES-GCM', iv: a.slice(0, 12) }, key, a.slice(12)).then(function (pt) { return JSON.parse(new TextDecoder().decode(pt)); });
 }
 function linkUrl() { return location.origin + location.pathname + '#p=' + docId + '.' + docKey.b64; }
+var lastBlob = null, unsynced = false;
+/* Coming back to an open tab: take what another tab or device saved, unless this tab has edits of its own still going out. */
+function pullLive() {
+  if (!docId || unsynced || document.hidden) return;
+  fetch(SHARE_API + '/?id=' + encodeURIComponent(docId)).then(function (r) { if (!r.ok) throw new Error('net'); return r.text(); }).then(function (blob) {
+    if (unsynced || blob === lastBlob) return;
+    if (lastBlob === null) { lastBlob = blob; return; }
+    return decryptBlob(blob, docKey.key).then(function (st) { lastBlob = blob; S = normalize(st); render(); showSync('עודכן עם השינויים האחרונים'); });
+  }).catch(function () {});
+}
+document.addEventListener('visibilitychange', pullLive);
+window.addEventListener('focus', pullLive);
 function syncLive() {
   if (!docId) return;
+  unsynced = true;
   clearTimeout(pushT);
   pushT = setTimeout(function () {
     encryptState(docKey.key).then(function (blob) {
       if (blob.length > 250000) { showSync('הנתונים גדולים מדי לקישור. הטיוטה נשמרה במכשיר.', true); return; }
       return fetch(SHARE_API + '/?id=' + encodeURIComponent(docId), { method: 'POST', body: blob }).then(function (r) {
         if (r.status === 404) { docId = null; docKey = null; refreshShareUI(); showSync('הקישור פג. אפשר ליצור חדש.', true); return; }
-        if (!r.ok) throw new Error('sync'); netFail = false; showSync('הקישור החי מעודכן');
+        if (!r.ok) throw new Error('sync'); lastBlob = blob; unsynced = false; netFail = false; showSync('הקישור החי מעודכן');
       });
     }).catch(function () { netFail = true; showSync('אין כרגע חיבור. השינויים נשמרו במכשיר, והקישור יתעדכן בשינוי הבא.', true); });
   }, 1200);
@@ -1307,6 +1367,7 @@ function bootFromHash() {
   $('view').innerHTML = '<div class="card"><div class="note" style="margin:0">טוען את הנתונים...</div></div>';
   return crypto.subtle.importKey('raw', unb64u(kb), 'AES-GCM', true, ['encrypt', 'decrypt']).then(function (key) {
     return fetch(SHARE_API + '/?id=' + encodeURIComponent(id)).then(function (r) { if (!r.ok) throw new Error(r.status === 404 ? 'gone' : 'net'); return r.text(); }).then(function (blob) {
+      lastBlob = blob;
       return decryptBlob(blob, key);
     }).then(function (st) {
       S = normalize(st); docId = id; docKey = { key: key, b64: kb }; draftApplied = true; step = hasContent(S) ? 10 : 0; return true;
@@ -1370,6 +1431,7 @@ document.addEventListener('input', function (e) {
   if (t.hasAttribute('data-path') && t.tagName !== 'SELECT') {
     var path = t.getAttribute('data-path');
     setPath(path, t.hasAttribute('data-num') ? t.value.replace(/,/g, '') : t.value);
+    document.querySelectorAll('[data-path="' + path + '"]').forEach(function (x) { if (x !== t) x.value = t.value; });
     if (/^ops\..*\.m\.\d+$/.test(path)) { var wrap = t.closest('.ops-rowwrap'), fl = wrap && wrap.querySelector('.row-flags'); if (fl) fl.hidden = false; }
     if (t.hasAttribute('data-month')) { var b = path.replace(/\.m\.\d+$/, ''), q = document.querySelector('[data-quick="' + b + '"]'), a = getPath(b + '.m'), same = a.every(function (x) { return String(x) === String(a[0]); }); if (q) { q.value = same ? grp(a[0]) : ''; q.placeholder = same ? '' : 'משתנה'; } }
     changed();
@@ -1389,6 +1451,7 @@ document.addEventListener('toggle', function (e) {
     var i = +t.dataset.how.replace('prod', ''), dflt = S.products.length <= 3 || i === 0;
     if (t.open === dflt) delete howOpen[t.dataset.how]; else howOpen[t.dataset.how] = t.open;
   } else howOpen[t.dataset.how] = t.open;
+  if (t.dataset.how === 'opsGridEdit' && t.open !== !!t.querySelector('table')) render();
 }, true);
 document.addEventListener('click', function (e) {
   var t = e.target.closest('button'); if (!t) return;

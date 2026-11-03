@@ -413,6 +413,11 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.click('.ti summary >> nth=0');
   ok('O explanation opens', (await p.locator('.ti-b').first().innerText()).includes('המכירות'));
   ok('O explanation survives typing refresh', await p.evaluate(() => document.querySelector('.ti').open));
+  await p.click('details[data-how="opsGridRO"] summary');
+  const grid = await p.locator('details[data-how="opsGridRO"]').innerText();
+  ok('O yearly table shows the rows as entered', grid.includes('7,080') && grid.includes('47,200') && grid.includes('מנויים ומערכות'), grid.slice(0, 300));
+  ok('O yearly table hides empty rows', !grid.includes('ריטיינר'));
+  await axe(p, 'O12 yearly table');
   await p.screenshot({ path: OUT + '/o12-desktop.png', fullPage: true });
   await go(p, 13); await clean(p, 'O13 no points');
   const noPts = await p.locator('[data-live="opsTaxOut"]').innerText();
@@ -445,6 +450,18 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('O private expense lowers tax', after[0] < before[0], [before, after]);
   near('O private expense leaves profit alone', after[1], before[1]);
 
+  // yearly table on the fill step: every row, editable, stays in step with the month inputs
+  await p.click('details[data-how="opsGridEdit"] summary');
+  await p.waitForSelector('details[data-how="opsGridEdit"] table');
+  ok('O grid shows empty rows too', (await p.locator('details[data-how="opsGridEdit"]').innerText()).includes('ריטיינר'));
+  await p.locator('details[data-how="opsGridEdit"] [data-path="ops.rows.admin.11.m.0"]').pressSequentially('590');
+  ok('O grid edit reaches the month input', (await p.locator('.ops-rowwrap [data-path="ops.rows.admin.11.m.0"]').inputValue()) === '590');
+  ok('O grid totals update', (await p.locator('[data-live="gridRow"][data-arg="ops.rows.admin.11.m"]').innerText()) === '590');
+  await axe(p, 'O11 grid open');
+  await p.click('details[data-how="opsGridEdit"] summary');
+  await p.waitForFunction(() => !document.querySelector('details[data-how="opsGridEdit"] table'));
+  await p.locator('.ops-rowwrap [data-path="ops.rows.admin.11.m.0"]').fill('');
+  await p.locator('.ops-rowwrap [data-path="ops.rows.admin.11.m.0"]').pressSequentially('0');
   // February, copy from January
   await p.click('[data-opsedit="1"]');
   await p.click('[data-act="copyPrev"]');
@@ -500,6 +517,8 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
 {
   const { ctx, p } = await newPage({ width: 400, height: 800 }); await open(p);
   await p.click('[data-act="demo"]');
+  await go(p, 12); await p.click('details[data-how="opsGridRO"] summary'); await clean(p, 'Q12 yearly table'); await p.click('details[data-how="opsGridRO"] summary');
+  await go(p, 11); await p.click('details[data-how="opsGridEdit"] summary'); await p.waitForSelector('details[data-how="opsGridEdit"] table'); await clean(p, 'Q11 grid'); await p.click('details[data-how="opsGridEdit"] summary'); await p.waitForFunction(() => !document.querySelector('details[data-how="opsGridEdit"] table'));
   for (const n of [7, 11, 12, 13]) { await go(p, n); await clean(p, 'Q' + n + ' phone'); await p.screenshot({ path: OUT + '/q' + n + '-phone.png', fullPage: true }); }
   await go(p, 12);
   const l = await p.locator('[data-live="opsLadder"]').innerText();

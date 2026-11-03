@@ -459,34 +459,68 @@ a{color:var(--pine-deep)}
 .road-n{font-size:13px;font-weight:800;color:var(--pine-deep)}
 @media (max-width:640px){.g-two{grid-template-columns:minmax(0,1fr)}.road{grid-template-columns:minmax(0,1fr)}.g-b{padding:0 16px 16px}.guide summary{padding:13px 16px}}
 
-/* the whole screen, and big enough to read without glasses */
+/* the whole screen: tabs stay put on the right, only the content scrolls, and the buttons to the next step never hide */
 .app{max-width:none;width:100%}
-.footer-legal{font-size:13.5px}
+.h-board{display:block}
+.ft-sep{display:none}
 @media screen and (min-width:1100px){
-  .app{zoom:1.12}
+  html,body{height:100%;overflow:hidden}
+  body{height:100vh;min-height:0;display:flex;flex-direction:column;padding:10px 16px}
+  .app{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;zoom:1.08}
+  .topbar{flex:none;margin-bottom:8px}
+  .topbar .avatar,.brand .avatar{width:38px;height:38px}
+  .layout{flex:1 1 auto;min-height:0;grid-template-rows:minmax(0,1fr);gap:16px;align-items:stretch}
+  .rail{position:relative;height:100%;max-height:none;overflow-y:auto;padding:10px;display:flex;flex-direction:column}
+  .rail h2{padding:0 8px 5px}
+  .rail-progress{flex:none;margin-bottom:5px}
+  .steps{flex:1 1 auto;gap:1px;align-content:space-between}
+  .step-btn{padding:clamp(1px,calc(.75vh - 4.5px),8px) 8px;line-height:1.35}
+  .step-num{width:22px;height:22px;font-size:11.5px}
+  .rail-group{font-size:12.5px;padding:3px 8px 1px;margin-top:3px}
+  .rail-note{display:none}
+  #contentCol{position:relative;height:100%;min-width:0;overflow-y:auto;overflow-x:hidden;padding:2px 4px 0}
+  .step-nav{position:sticky;bottom:0;z-index:3;margin-top:14px;padding:6px 10px;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+  .step-nav .btn{padding-block:8px}
+  .step-head{margin-bottom:10px}
+  .step-head h1{font-size:27px}
+  .step-why{font-size:15.5px;margin-top:3px}
+  .app>.rl-legal-footer{flex:none;max-width:none!important;margin:6px 0 0!important;padding:0!important;opacity:.85!important}
+  .app>.rl-legal-footer .footer-legal{font-size:12px!important;line-height:1.4!important;opacity:1!important}
+  .app>.rl-legal-footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 6px}
+  .app>.rl-legal-footer br{display:none}
+  .ft-sep{display:inline}
+  .socials{margin-top:18px}
   .g-b{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0 26px;align-items:start}
   .g-list{grid-row:1 / span 2}
   .g-ex{margin-top:2px}
-  .h-tips{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .guide summary{padding:9px 16px}
+  .g-ic{width:32px;height:32px;font-size:16px}
   .ops-sec .rows{grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:8px 18px}
-  .road{gap:14px}
   .oh-row .row{grid-template-columns:minmax(0,2fr) 118px 88px 30px!important}
   .sale-list{grid-template-columns:repeat(auto-fit,minmax(520px,1fr));align-items:start}
+  .hero{margin-bottom:12px}
+  .hero h2{font-size:26px}
+  .hero p{font-size:15.5px;margin-top:4px}
+  .h-toprow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:6px 18px;margin-bottom:10px}
+  .h-toprow .step-head{margin-bottom:0}
+  .h-ctrl{margin-bottom:0}
+  .h-board{display:grid;grid-template-columns:minmax(220px,270px) minmax(0,1fr);gap:14px;align-items:stretch}
+  .h-tiles{grid-template-columns:minmax(0,1fr);margin-bottom:0;align-content:stretch}
+  .h-tile{padding:10px 14px;display:flex;flex-direction:column;justify-content:center}
+  .h-tile p{font-size:13.5px;line-height:1.4}
+  .h-v{font-size:23px;margin:4px 0 1px;white-space:nowrap}
+  .h-board .card{padding:12px 16px;margin:0}
+  .h-board .h-t{font-size:18px}
+  .h-board .h-sub{font-size:13.5px;line-height:1.4;margin:1px 0 6px}
+  .h-board .h-legend{margin-top:4px;font-size:13px}
+  .h-two{grid-template-columns:repeat(auto-fit,minmax(330px,1fr));margin-top:0}
+  .h-svg{max-height:250px}
+  .h-tips{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 }
-@media screen and (min-width:1400px){.app{zoom:1.22}}
-@media screen and (min-width:1650px){.app{zoom:1.32}}
-@media screen and (min-width:2000px){.app{zoom:1.5}}
-@media screen and (min-width:1100px){
-  .hero h2{font-size:28px}
-  .hero p{font-size:16.5px}
-  .h-v{font-size:27px;white-space:nowrap}
-  .step-head h1{font-size:28px}
-  .rail{overflow-y:auto;max-height:calc((100vh - 24px) / 1.12)}
-}
-@media screen and (min-width:1400px){.rail{max-height:calc((100vh - 24px) / 1.22)}}
-@media screen and (min-width:1650px){.rail{max-height:calc((100vh - 24px) / 1.32)}}
-@media screen and (min-width:2000px){.rail{max-height:calc((100vh - 24px) / 1.5)}}
-@media print{.app{zoom:1}}
+@media screen and (min-width:1400px){.app{zoom:1.14}}
+@media screen and (min-width:1650px){.app{zoom:1.2}}
+@media screen and (min-width:2000px){.app{zoom:1.36}}
+@media print{html,body{height:auto;overflow:visible;display:block}.app{zoom:1}}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -645,7 +679,7 @@ a{color:var(--pine-deep)}
       <ol class="steps" id="railSteps"></ol>
       <p class="rail-note" id="railCount"></p>
     </nav>
-    <div>
+    <div id="contentCol">
       <nav class="mobile-steps" aria-label="בחירת שלב">
         <label for="mobSelect">לעבור לשלב</label>
         <div class="input-shell"><select id="mobSelect"></select></div>
@@ -716,6 +750,11 @@ var GUIDE = {
   14: { ic: '🤝', todo: ['לוחצים על "מכירה חדשה" ובוחרים מה נמכר.', 'בוחרים איך משלמים: תשלום אחד, תשלומים, מקדמה ופגישות, או מנוי.', 'קוראים כמה צפוי להיכנס בכל חודש, ומה חסר כדי להגיע ליעד.'], have: 'רשימת המכירות וההסכמים האחרונים', get: 'כמה כסף צפוי להיכנס, וכמה כבר מובטח', ex: 'ליווי ב-6,600 ₪: מקדמה של 1,000 ₪, ועוד 5 פגישות של 1,120 ₪ בחודשים הבאים.' },
   13: { ic: '🧮', todo: ['בוחרים נקודות זיכוי מהרשימה.', 'מוסיפים דמי לידה, פחת או תרומות, אם יש.', 'קוראים כמה מס צפוי לשנה, ומשווים למה ששולם.'], have: 'אישור דמי לידה, אם היו', get: 'הערכת מס לשנה, ואחוז מקדמות שמתאים לה' }
 };
+/* Which guides were already shown is a matter of this device, not of the saved business. */
+var guideChoice = {}, guideVisit = null, GUIDE_KEY = 'rl_pricing_guides';
+function guideSeen() { try { return JSON.parse(localStorage.getItem(GUIDE_KEY) || '{}'); } catch (e) { return guideMemory; } }
+var guideMemory = {};
+function markGuideSeen(n) { guideMemory[n] = true; try { var o = JSON.parse(localStorage.getItem(GUIDE_KEY) || '{}'); o[n] = true; localStorage.setItem(GUIDE_KEY, JSON.stringify(o)); } catch (e) {} }
 function guideExample(n, g) {
   var o = S.biz.sells || {};
   if (n === 1 && o.service && !o.product) return "בקבוק לק ב-60 ₪ שמספיק בערך ל-20 טיפולים? בחבילה כותבים 20, ובעלות 60.";
@@ -726,7 +765,10 @@ function guideExample(n, g) {
 }
 function guideHtml(n) {
   var g = GUIDE[n]; if (!g) return '';
-  var key = 'guide' + n, open = howOpen[key] === undefined ? true : howOpen[key];
+  var key = 'guide' + n, open;
+  if (guideChoice[n] !== undefined) open = guideChoice[n];
+  else if (!guideSeen()[n]) { markGuideSeen(n); guideVisit = n; open = true; }
+  else open = guideVisit === n;
   return '<details class="guide" data-how="' + key + '"' + (open ? ' open' : '') + '><summary><span class="g-ic" aria-hidden="true">' + g.ic + '</span><span class="g-t">מה עושים כאן</span></summary><div class="g-b"><ol class="g-list">' + g.todo.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ol>' +
     (guideExample(n, g) ? '<p class="g-ex"><b>דוגמה:</b> ' + guideExample(n, g) + '</p>' : '') + '<div class="g-two"><div><b>כדאי שיהיה לידך</b>' + g.have + '</div><div><b>בסוף השלב יודעים</b>' + g.get + '</div></div></div></details>';
 }
@@ -1454,10 +1496,9 @@ VIEWS[12] = function () {
   var seg = [['year', 'כל השנה'], ['q', 'רבעון'], ['m', 'חודש']].map(function (o) { return '<button type="button" data-opsperiod="' + o[0] + '" aria-pressed="' + (mode === o[0]) + '">' + o[1] + '</button>'; }).join('');
   var picker = mode === 'q' ? [0, 1, 2, 3].map(function (q) { return '<button type="button" data-opsview="q' + q + '" aria-pressed="' + (v === 'q' + q) + '">רבעון ' + (q + 1) + '</button>'; }).join('') : (mode === 'm' ? MONTHS.map(function (m, i) { return '<button type="button" data-opsview="' + i + '" aria-pressed="' + (v === String(i)) + '"' + (O && i < O.k ? ' class="has"' : '') + '>' + m + '</button>'; }).join('') : '');
   var uptoOpts = '<option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('');
-  return head() + live('opsEmpty') +
-    '<div class="month-tabs h-ctrl" role="group" aria-label="איזו שנה ותקופה לראות">' + yearPills + '<span class="h-sep" aria-hidden="true"></span>' + seg + '</div>' + (picker ? '<div class="month-tabs" role="group" aria-label="בחירת תקופה" style="margin-bottom:18px">' + picker + '</div>' : '') +
-    live('homeHero') + live('homeTiles') +
-    '<div class="h-two"><div class="card">' + live('homeBars') + '</div><div class="card">' + live('homeBalance') + '</div></div>' + '<div style="margin-top:14px">' + live('homeForecast') + '</div>' + live('homeTrend') + '<div class="card" style="margin-top:14px">' + live('homeTips') + '</div>' +
+  return '<div class="h-toprow">' + head() + '<div class="month-tabs h-ctrl" role="group" aria-label="איזו שנה ותקופה לראות">' + yearPills + '<span class="h-sep" aria-hidden="true"></span>' + seg + '</div></div>' + live('opsEmpty') + (picker ? '<div class="month-tabs" role="group" aria-label="בחירת תקופה" style="margin-bottom:18px">' + picker + '</div>' : '') +
+    live('homeHero') + '<div class="h-board">' + live('homeTiles') +
+    '<div class="h-two"><div class="card">' + live('homeBars') + '</div><div class="card">' + live('homeBalance') + '</div></div></div>' + '<div style="margin-top:14px">' + live('homeForecast') + '</div>' + live('homeTrend') + '<div class="card" style="margin-top:14px">' + live('homeTips') + '</div>' +
     '<div class="h-actions"><button type="button" class="btn" data-goto="11">למלא את החודש</button></div>' +
     '<details class="h-more" data-how="opsNumbers"' + (howOpen.opsNumbers ? ' open' : '') + '><summary>לראות את המספרים</summary><div style="margin-top:14px"><div class="field" style="max-width:260px;margin-bottom:14px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto">' + uptoOpts + '</select></div></div>' +
     '<div class="card">' + live('opsPlain') + '</div>' + '<div class="ops-grid"><div class="card"><span class="sec-lbl">רווח והפסד: העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">מה לקחת מהרווח</span>' + live('opsDrawn') + '</div>' +
@@ -1875,9 +1916,9 @@ function render(focus) {
   R = E.compute(S); O = E.ops(S, R); fid = 0;
   $('view').innerHTML = VIEWS[step]();
   refreshLive();
-  if (focus) { var t = $('stepTitle'); if (t) { t.focus({ preventScroll: true }); } window.scrollTo({ top: 0, behavior: 'auto' }); }
+  if (focus) { var t = $('stepTitle'); if (t) { t.focus({ preventScroll: true }); } window.scrollTo({ top: 0, behavior: 'auto' }); var col = $('contentCol'); if (col) col.scrollTop = 0; }
 }
-function go(n) { step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
+function go(n) { guideVisit = null; step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
 function changed() { refreshLive(); persist(); }
 function hasContent(s) { return !!(s && (s.biz.name || (s.materials && s.materials.length) || (s.products && s.products.length) || E.num(s.labor && s.labor.net) || (s.ops && E.ops(s).k))); }
 
@@ -2050,7 +2091,13 @@ function showTip(el, e) {
 }
 document.addEventListener('mousemove', function (e) { var t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t, e); else hideTip(); });
 document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t, e); else if (!e.target.closest('button,a,input,select,summary')) hideTip(); });
-window.addEventListener('scroll', hideTip, { passive: true });
+window.addEventListener('scroll', hideTip, { passive: true, capture: true });
+/* Social links and copyright end the scrolling content; the legal line stays in sight below it. */
+document.addEventListener('DOMContentLoaded', function () {
+  var col = $('contentCol'), app = document.querySelector('.app'), soc = document.querySelector('section[aria-label^="רשתות"]'), foot = document.querySelector('.rl-legal-footer');
+  if (soc && col) col.appendChild(soc);
+  if (foot && app) app.appendChild(foot);
+});
 
 /* ---------- events ---------- */
 document.addEventListener('input', function (e) {
@@ -2096,8 +2143,12 @@ document.addEventListener('change', function (e) {
   if (t.id === 'noMat') { S.biz.noMaterials = t.checked; $('matCard').hidden = t.checked; changed(); }
   if (t.id === 'mobSelect') go(+t.value);
 });
+document.addEventListener('click', function (e) {
+  var sum_ = e.target.closest && e.target.closest('.guide > summary'); if (!sum_) return;
+  var g = sum_.parentNode; guideChoice[+g.dataset.how.replace('guide', '')] = !g.open;
+}, true);
 document.addEventListener('toggle', function (e) {
-  var t = e.target; if (t.tagName !== 'DETAILS' || !t.dataset.how) return;
+  var t = e.target; if (t.tagName !== 'DETAILS' || !t.dataset.how || t.classList.contains('guide')) return;
   if (t.classList.contains('prod')) {
     var i = +t.dataset.how.replace('prod', ''), dflt = S.products.length <= 3 || i === 0;
     if (t.open === dflt) delete howOpen[t.dataset.how]; else howOpen[t.dataset.how] = t.open;
@@ -2226,7 +2277,7 @@ window.__pricing = { get S() { return S; }, get R() { return R; }, get O() { ret
 })();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון תמחור',content_category:'RichLife כלים'});}catch(e){}});});});</script>
-<footer class="rl-legal-footer" style="max-width:900px;margin:34px auto 0;padding:16px 18px 26px;text-align:center;font-size:12.5px;line-height:1.75;opacity:.72"><div class="footer-legal" style="font-size:12.5px;line-height:1.75;opacity:.78">טלי בנימינוב שרעבי · עוסק מורשה 207381062<br>שדרות נים 2, ראשון לציון · <a href="mailto:tali.bi.finance@gmail.com">tali.bi.finance@gmail.com</a><br><button type="button" class="rl-consent-reopen" hidden>הגדרות עוגיות</button></div></footer>
+<footer class="rl-legal-footer" style="max-width:900px;margin:34px auto 0;padding:16px 18px 26px;text-align:center;font-size:12.5px;line-height:1.75;opacity:.72"><div class="footer-legal" style="font-size:12.5px;line-height:1.75;opacity:.78">טלי בנימינוב שרעבי · עוסק מורשה 207381062<span class="ft-sep"> · </span><br>שדרות נים 2, ראשון לציון · <a href="mailto:tali.bi.finance@gmail.com">tali.bi.finance@gmail.com</a><span class="ft-sep"> · </span><br><button type="button" class="rl-consent-reopen" hidden>הגדרות עוגיות</button></div></footer>
 <style id="rl-consent-css">
 /* ===== באנר הסכמת עוגיות - RichLife ===== */
 #rl-consent{position:fixed;inset-inline:0;bottom:0;z-index:2147482000;

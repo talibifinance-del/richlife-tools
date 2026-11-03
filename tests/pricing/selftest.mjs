@@ -609,10 +609,13 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   const rec = await p.evaluate(() => Math.round(window.__pricing.R.products[0].calc.recommended).toLocaleString('he-IL'));
   ok('T the recommended price is on top', top.includes(rec), [top, rec]);
   await axe(p, 'T step 6'); await p.screenshot({ path: OUT + '/t6.png', fullPage: true });
-  await go(p, 3); await p.locator('details.guide > summary').click();
-  ok('T a guide can be closed', !(await p.locator('details.guide').evaluate(d => d.open)));
-  await p.waitForTimeout(80); await go(p, 4); await p.waitForTimeout(80); await go(p, 3);
-  ok('T it stays closed when coming back', !(await p.locator('details.guide').evaluate(d => d.open)));
+  await go(p, 3);
+  ok('T a guide already seen starts closed', !(await p.locator('details.guide').evaluate(d => d.open)));
+  await p.locator('details.guide > summary').click(); await p.waitForTimeout(60);
+  ok('T a click opens it', await p.locator('details.guide').evaluate(d => d.open));
+  await go(p, 4); await go(p, 3);
+  ok('T it stays as chosen', await p.locator('details.guide').evaluate(d => d.open));
+  await p.locator('details.guide > summary').click(); await p.waitForTimeout(60);
   await axe(p, 'T closed guide');
   ok('T no page errors', p.errs.length === 0, p.errs);
   await ctx.close();
@@ -764,6 +767,40 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   near('X the target grows', after.t - before.t, 2000); ok('X so does the sales target', after.r > before.r);
   await go(p, 5); ok('X the tax step says so', (await p.locator('[data-live="taxNeed"]').innerText()).includes('לקידום העסק'));
   await clean(p, 'X'); await axe(p, 'X'); await ctx.close();
+}
+/* ---- Y. tabs stay, only the content scrolls ---- */
+{
+  const { ctx, p } = await newPage({ width: 1440, height: 800 }); await open(p);
+  await p.click('[data-act="demo"]');
+  for (const n of [3, 6, 11, 12, 14]) {
+    await go(p, n); await p.waitForTimeout(80);
+    const m = await p.evaluate(() => { const r = document.querySelector('.rail').getBoundingClientRect(), c = document.getElementById('contentCol'), nav = document.querySelector('.step-nav'); c.scrollTop = 200; return { page: document.documentElement.scrollHeight - innerHeight, railTop: Math.round(r.top), railAfter: Math.round(document.querySelector('.rail').getBoundingClientRect().top), inner: c.scrollHeight - c.clientHeight, navVisible: nav ? nav.getBoundingClientRect().bottom <= innerHeight + 1 : true, foot: document.querySelector('.rl-legal-footer').getBoundingClientRect().bottom <= innerHeight + 1 }; });
+    ok('Y step ' + n + ': the page itself does not scroll', m.page <= 0, m);
+    ok('Y step ' + n + ': tabs do not move', m.railTop === m.railAfter, m);
+    ok('Y step ' + n + ': next and back are in sight', m.navVisible, m);
+    ok('Y step ' + n + ': the legal line is in sight', m.foot, m);
+    await p.evaluate(() => { document.getElementById('contentCol').scrollTop = 0; });
+  }
+  ok('Y every tab fits without scrolling the list', await p.evaluate(() => { const r = document.querySelector('.rail'); return r.scrollHeight <= r.clientHeight; }));
+  await go(p, 6); ok('Y a long step scrolls inside', await p.evaluate(() => { const c = document.getElementById('contentCol'); return c.scrollHeight > c.clientHeight; }));
+  await p.evaluate(() => { document.getElementById('contentCol').scrollTop = 500; }); await go(p, 7);
+  near('Y a new step starts at the top', await p.evaluate(() => document.getElementById('contentCol').scrollTop), 0);
+  await axe(p, 'Y step 7');
+  await ctx.close();
+  const ph = await newPage({ width: 400, height: 800 }); await open(ph.p); await ph.p.click('[data-act="demo"]'); await go(ph.p, 6);
+  ok('Y a phone scrolls as usual', await ph.p.evaluate(() => document.documentElement.scrollHeight > innerHeight));
+  await ph.ctx.close();
+  const big = await newPage({ width: 1698, height: 860 }); await open(big.p); await big.p.click('[data-act="demo"]'); await go(big.p, 12); await big.p.waitForTimeout(100);
+  ok('Y on a big screen the home cards and charts fit one look', await big.p.evaluate(() => document.querySelector('.h-board').getBoundingClientRect().bottom <= document.querySelector('.step-nav').getBoundingClientRect().top), await big.p.evaluate(() => [document.querySelector('.h-board').getBoundingClientRect().bottom, document.querySelector('.step-nav').getBoundingClientRect().top]));
+  ok('Y on a big screen every tab fits too', await big.p.evaluate(() => { const r = document.querySelector('.rail'); return r.scrollHeight <= r.clientHeight; }));
+  await axe(big.p, 'Y home on a big screen');
+  await big.ctx.close();
+  const f = await newPage({ width: 1440, height: 800 }); await open(f.p);
+  await f.p.evaluate(() => localStorage.removeItem('rl_pricing_guides')); await f.p.click('[data-act="demo"]');
+  ok('Y a new step opens its guide once', await f.p.locator('details.guide').evaluate(d => d.open));
+  await go(f.p, 2); await go(f.p, 1);
+  ok('Y and closes it after that', !(await f.p.locator('details.guide').evaluate(d => d.open)));
+  await f.ctx.close();
 }
 /* ---- W. a group saved with the old single field keeps its money ---- */
 {

@@ -295,13 +295,7 @@ a{color:var(--pine-deep)}
 .h-tile p{font-size:15.5px;line-height:1.5;color:var(--ink-soft);font-weight:500}
 .h-t{font-size:clamp(19px,2vw,23px);font-weight:900;color:var(--pine-darker)}
 .h-sub{font-size:15.5px;line-height:1.5;color:var(--ink-soft);font-weight:500;margin:3px 0 14px}
-.h-bar{display:flex;height:54px;border-radius:13px;overflow:hidden;max-width:100%}
-.h-bar>div{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:clamp(14px,1.7vw,19px);color:#fff;white-space:nowrap}
-.h-bar .a,.h-legend i.a{background:var(--pine)}
-.h-bar .b{background:#8fa797;color:#16241c}
-.h-legend i.b{background:#8fa797}
-.h-bar .c,.h-legend i.c{background:#c98f35}
-.h-bar .c{color:#2b1c03}
+.h-legend i.a{background:var(--pine)}
 .h-legend i.d{background:#c7d6ca}
 .h-legend i.f{background:repeating-linear-gradient(45deg,#5f7d6a 0 3px,#dfe8e1 3px 7px)}
 .h-legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin:10px 0 0;font-size:14.5px;font-weight:600;color:var(--ink-soft)}
@@ -332,16 +326,6 @@ a{color:var(--pine-deep)}
 [data-tip]{cursor:default}
 .h-hit{fill:transparent;cursor:pointer}
 .h-hit:hover{fill:rgba(95,125,106,.12)}
-.h-eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
-.h-chip{background:var(--sage-tint);border-radius:13px;padding:9px 16px;min-width:92px;text-align:center}
-.h-chip b{display:block;font-size:clamp(20px,2.2vw,25px);font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums;line-height:1.2}
-.h-chip span{font-size:14px;font-weight:600;color:var(--ink-soft)}
-.h-chip.strong{background:rgba(var(--pine-rgb),.2)}
-.h-chip.warn{background:rgba(183,121,31,.16)}
-.h-chip.warn b{color:var(--amber-deep)}
-.h-chip.good{background:rgba(var(--pine-rgb),.2)}
-.h-op{font-size:24px;font-weight:800;color:var(--ink-soft);padding-inline:2px}
-.h-say{margin-top:14px;font-size:16.5px;line-height:1.55;font-weight:700;color:var(--pine-darker)}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -1207,7 +1191,7 @@ VIEWS[12] = function () {
   return head() + live('opsEmpty') +
     '<div class="month-tabs h-ctrl" role="group" aria-label="איזו שנה ותקופה לראות">' + yearPills + '<span class="h-sep" aria-hidden="true"></span>' + seg + '</div>' + (picker ? '<div class="month-tabs" role="group" aria-label="בחירת תקופה" style="margin-bottom:18px">' + picker + '</div>' : '') +
     live('homeHero') + live('homeTiles') +
-    '<div class="card">' + live('homeShare') + '</div><div class="h-two"><div class="card">' + live('homeBars') + '</div><div class="card">' + live('homeBalance') + '</div></div>' + live('homeTrend') + '<div class="card" style="margin-top:14px">' + live('homeTips') + '</div>' +
+    '<div class="h-two"><div class="card">' + live('homeBars') + '</div><div class="card">' + live('homeBalance') + '</div></div>' + live('homeTrend') + '<div class="card" style="margin-top:14px">' + live('homeTips') + '</div>' +
     '<div class="h-actions"><button type="button" class="btn" data-goto="11">למלא את החודש</button></div>' +
     '<details class="h-more" data-how="opsNumbers"' + (howOpen.opsNumbers ? ' open' : '') + '><summary>לראות את המספרים</summary><div style="margin-top:14px"><div class="field" style="max-width:260px;margin-bottom:14px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto">' + uptoOpts + '</select></div></div>' +
     '<div class="card">' + live('opsPlain') + '</div>' + '<div class="ops-grid"><div class="card"><span class="sec-lbl">רווח והפסד: העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">מה לקחת מהרווח</span>' + live('opsDrawn') + '</div>' +
@@ -1316,24 +1300,6 @@ var LIVE_OPS = {
     var left = x.left >= 0 ? card(true, 'מה שלקחת מכוסה', approx(x.left), 'זה מה שנשאר מהרווח אחרי מה שלקחת.') : card(false, 'לקחת יותר מהרווח', approx(-x.left), 'מעבר לרווח: משכורת, פנסיה, קרן, הלוואה ותשלומים ישנים.');
     var bank = end >= 0 ? card(true, 'יש כסף בחשבון', approx(end), 'היתרה בסוף ' + MONTHS[periodLast() - 1] + ', לפי מה שמולא.') : card(false, 'החשבון במינוס', approx(end), 'היתרה בסוף ' + MONTHS[periodLast() - 1] + ', לפי מה שמולא.');
     return '<div class="h-tiles">' + profit + left + bank + '</div>';
-  },
-  homeShare: function () {
-    if (!O.k) return '';
-    var x = opsPeriod();
-    if (!x.n || x.revenue <= 0) return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">עוד אין הכנסות בתקופה הזו.</p>';
-    var costs = x.revenue - x.preTax, c = Math.round(costs / x.revenue * 100), t = Math.round(x.tax / x.revenue * 100), n = 100 - c - t, took = Math.round(x.drawn / x.revenue * 100);
-    if (n <= 0) return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">ההוצאות והמס גדולים מההכנסות בתקופה הזו: על כל 100 ₪ שנכנסו, יצאו ' + (c + t) + ' ₪.</p>';
-    var seg = function (v, cls, txt, tip) { return '<div class="' + cls + '" style="width:' + v + '%" data-tip="' + esc(tip) + '">' + (v >= 9 ? txt : '') + '</div>'; };
-    var chip = function (v, l, cls, tip) { return '<div class="h-chip ' + (cls || '') + '" data-tip="' + esc(tip) + '"><b>' + v + ' ₪</b><span>' + l + '</span></div>'; };
-    var op = function (o) { return '<span class="h-op" aria-hidden="true">' + o + '</span>'; };
-    var diff = n - took, more = diff < 0;
-    var left = more ? chip(-diff, 'מעבר למה שנשאר', 'warn', 'יורד מהחשבון|בסך הכל ' + ils(-x.left, 0)) : chip(diff, 'נשארו בעסק', 'good', 'נשארו מהרווח|בסך הכל ' + ils(x.left, 0));
-    var keptChip = chip(n, 'נשארו לך', 'strong', 'הרווח אחרי מס|בסך הכל ' + ils(x.net, 0)), tookChip = chip(took, 'לקחת לעצמך', '', 'משכורת, פנסיה, קרן, הלוואה ותשלומים ישנים|בסך הכל ' + ils(x.drawn, 0));
-    return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">תרגיל פשוט: מה קרה לכל 100 ₪' + (O.patur ? '' : ' בלי מע"מ') + '. ' + (x.n > 1 ? 'מעבר עכבר מראה את הסכום האמיתי.' : '') + '</p>' +
-      '<div class="h-bar" role="img" aria-label="מכל 100 שקלים: ' + n + ' נשארו, ' + c + ' הוצאות, ' + t + ' מס">' + seg(n, 'a', n + ' ₪ נשארו', 'נשארו אחרי הוצאות ומס|' + n + ' ₪ מכל 100|בסך הכל ' + ils(x.net, 0)) + seg(c, 'b', c + ' ₪ הוצאות', 'הוצאות העסק|' + c + ' ₪ מכל 100|בסך הכל ' + ils(costs, 0)) + seg(t, 'c', t + ' ₪ מס', 'מס, הערכה|' + t + ' ₪ מכל 100|בסך הכל ' + ils(x.tax, 0)) + '</div>' +
-      '<div class="h-eq">' + chip(100, 'נכנסו', '', 'הכנסות|בסך הכל ' + ils(x.revenue, 0)) + op('−') + chip(c, 'הוצאות', '', 'הוצאות העסק|בסך הכל ' + ils(costs, 0)) + op('−') + chip(t, 'מס', '', 'מס, הערכה|בסך הכל ' + ils(x.tax, 0)) + op('=') + chip(n, 'נשארו לך', 'strong', 'הרווח אחרי מס|בסך הכל ' + ils(x.net, 0)) + '</div>' +
-      '<div class="h-eq">' + (more ? tookChip + op('−') + keptChip : keptChip + op('−') + tookChip) + op('=') + left + '</div>' +
-      '<p class="h-say">' + (more ? 'כלומר: על כל 100 ₪ שנכנסו נשארו לך ' + n + ' ₪, אבל לקחת ' + took + ' ₪. ' + (-diff) + ' ₪ מכל 100 יורדים מהחשבון.' : 'כלומר: על כל 100 ₪ שנכנסו נשארו לך ' + n + ' ₪, ולקחת ' + took + ' ₪. ' + diff + ' ₪ מכל 100 נשארים בעסק.') + '</p>';
   },
   homeBars: function () {
     if (!O.k) return '';

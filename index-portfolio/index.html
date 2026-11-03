@@ -613,7 +613,7 @@ function renderCmp(){
   h+='<tr><th scope="row">מי מנהל</th>'+rows.map(function(r){return '<td>'+esc(r.provider)+'</td>'}).join("")+'</tr></table></div>';
   if(rows.some(function(r){return r.metrics&&r.metrics.since>"2008-01"}))h+='<p class="upd">לא לכל מדד יש היסטוריה באותו אורך. מדד שהנתונים שלו מתחילים אחרי 2008 לא כולל את המשבר הפיננסי הגדול, ולכן הנפילה שלו עשויה להיראות קטנה יותר מהסיכון האמיתי.</p>';
   var px=rows.filter(function(r){return r.metrics&&r.metrics.proxy});
-  h+='<p class="upd">תשואה בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(px.length?px.map(function(r){return esc(r.name)+': לפי מדד קרוב, '+esc(r.metrics.proxy.name)}).join(". ")+'. ':'')+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
+  h+='<p class="upd">תשואה בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(px.length?px.map(function(r){return esc(r.name)+': לפי מדד קרוב, '+esc(r.metrics.proxy.name)}).join(". ")+'. ':'')+fundNote(rows)+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
   $("#cmpBox").innerHTML=h;
 }
 $("#cmpBtn").onclick=function(){var b=$("#cmpBox");b.hidden=!b.hidden;if(!b.hidden)renderCmp()};
@@ -719,11 +719,12 @@ function openDetail(id,opener){
   if(m){
     var r=m.ret[detCur],YR=[1,3,5,10,20];
     if(m.proxy)s+='<div class="proxy-note">'+esc(m.proxy.note)+'</div>';
+    if(m.fund_series)s+='<div class="proxy-note">ההיסטוריה של המדד הזה מחושבת לפי קרן שעוקבת אחריו, <bdi>'+esc(m.fund_series)+'</bdi>, ולא לפי המדד עצמו. לכן היא כוללת את דמי הניהול של הקרן, והתשואה יכולה להיות שונה מעט מהמדד.</div>';
     s+='<div><div class="seg" role="group" aria-label="מטבע"><button type="button" data-c="ils" class="'+(detCur==="ils"?"on":"")+'" aria-pressed="'+(detCur==="ils")+'">בשקלים</button><button type="button" data-c="usd" class="'+(detCur==="usd"?"on":"")+'" aria-pressed="'+(detCur==="usd")+'">בדולרים</button></div></div>';
     s+='<div class="ret">'+r.map(function(v,k){return '<div class="tile"><span>'+P[k]+'</span>'+(v==null?'<b class="na">אין עדיין '+P[k]+' היסטוריה</b>':'<b class="tabular'+(v<0?" neg":"")+'">'+pct(v)+'</b><small>'+(k?"בממוצע בכל שנה":"בשנה האחרונה")+'</small><em>'+money(10000)+' ← <bdi class="tabular">'+money(10000*Math.pow(1+v,YR[k]))+'</bdi></em>')+'</div>'}).join("")+'</div>';
     var r5=r[2]!=null?2:r[1]!=null?1:0;
     s+='<div class="explain">איך קוראים את זה? <bdi class="tabular">'+pct(r[r5])+'</bdi>'+(r5?' "בממוצע בכל שנה" ב-'+P[r5]+' אומר שהשקעה של '+money(10000)+' לפני '+P[r5]+' שווה היום בערך '+money(10000*Math.pow(1+r[r5],YR[r5]))+'. זה ממוצע: בפועל היו שנים עם עלייה גדולה ושנים עם ירידה, והגרפים למטה מראים אותן אחת אחת.':' בשנה האחרונה אומר ש-'+money(10000)+' הפכו ל-'+money(10000*(1+r[0]))+'.')+'</div>';
-    s+='<p class="upd">כולל דיבידנדים, לפני דמי ניהול ומס. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(detCur==="ils"?"בשקלים: לפי השער היציג של בנק ישראל בסוף כל חודש. ":"")+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p></div>';
+    s+='<p class="upd">כולל דיבידנדים, '+(m.fund_series?'אחרי דמי הניהול של הקרן, לפני מס':'לפני דמי ניהול ומס')+'. נכון לסוף '+hdate(D.metrics_as_of)+'. '+(detCur==="ils"?"בשקלים: לפי השער היציג של בנק ישראל בסוף כל חודש. ":"")+'תשואת עבר אינה מבטיחה תשואה בעתיד.</p></div>';
     var nAll=m.series[detCur].length;
     s+='<div class="dsec"><h3>העליות והירידות לאורך השנים</h3><div><div class="seg" role="group" aria-label="תקופה">'+[[5,"5 שנים"],[10,"10 שנים"],[20,"20 שנים"],[0,"מאז "+hdate(m.since)]].filter(function(o){return !o[0]||nAll-1>=o[0]*12}).map(function(o){var on=detPer===o[0]||(o[0]===0&&detPer&&nAll-1<detPer*12);return '<button type="button" data-p="'+o[0]+'" class="'+(on?"on":"")+'" aria-pressed="'+on+'">'+o[1]+'</button>'}).join("")+'</div></div>'+
       '<div class="chart-ttl">כמה היו שווים '+money(10000)+' לאורך הדרך</div><div class="chart-sub">הקו המקווקו הוא הסכום שהושקע. מעבירים את העכבר או האצבע על הגרף כדי לראות כל חודש.</div><div class="chart-box" id="lineBox" data-id="'+id+'"></div>'+
@@ -828,7 +829,7 @@ function renderPfPreviewNow(){
       '<tr class="pf-me"><th scope="row">התיק שלך</th><td class="tabular">'+pct(cg)+'</td><td class="tabular">'+pct(dd,0)+'</td></tr>'+
       r.use.map(function(id,k){return'<tr><th scope="row">'+esc(idx(id).name)+' לבד</th><td class="tabular">'+pct(cagrOf(r.S[k]))+'</td><td class="tabular">'+pct(ddOf(r.S[k]),0)+'</td></tr>'}).join("")+'</table></div>';
     h+='<div class="chart-ttl">כמה היו שווים '+moneyC("ils",10000)+' שהושקעו בתיק שלך ב-'+hdate(r.start)+'</div><p class="fsub">'+(r.use.length>1?'הקו הוא התיק כולו: כל '+r.use.length+' המדדים יחד, לפי האחוזים שבחרת. הקו המקווקו הוא הסכום שהושקע בהתחלה.':'הקו המקווקו הוא הסכום שהושקע בהתחלה.')+' החישוב הוא על סכום חד-פעמי, בלי הפקדות חודשיות.</p><div class="chart-box" id="pfLine"></div>';
-    h+='<p class="upd">בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. החישוב מניח שבסוף כל שנה מחזירים את התיק לאחוזים שבחרת.'+(r.use.some(function(id){return idx(id).metrics.series.start!==r.start})?' ההיסטוריה המשותפת מתחילה ב-'+hdate(r.start)+', כי זה המדד הכי צעיר שבחרת.':"")+(r.skip.length?' בלי '+r.skip.map(function(id){return esc(idx(id).name)}).join(", ")+': אין לו היסטוריה מאומתת, ולכן החישוב מחלק את התיק בין שאר המדדים לפי אותם יחסים.':"")+' תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
+    h+='<p class="upd">בשקלים, כולל דיבידנדים, לפני דמי ניהול ומס. '+fundNote(r.use.map(function(id){return idx(id)}))+'החישוב מניח שבסוף כל שנה מחזירים את התיק לאחוזים שבחרת.'+(r.use.some(function(id){return idx(id).metrics.series.start!==r.start})?' ההיסטוריה המשותפת מתחילה ב-'+hdate(r.start)+', כי זה המדד הכי צעיר שבחרת.':"")+(r.skip.length?' בלי '+r.skip.map(function(id){return esc(idx(id).name)}).join(", ")+': אין לו היסטוריה מאומתת, ולכן החישוב מחלק את התיק בין שאר המדדים לפי אותם יחסים.':"")+' תשואת עבר אינה מבטיחה תשואה בעתיד.</p>';
   }else h+='<div class="na-box">'+(r.use.length?'ההיסטוריה המשותפת של המדדים שבחרת קצרה מדי כדי להציג גרף.':'למדדים שבחרת אין עדיין היסטוריה מאומתת, ולכן אין גרף של התיק.')+'</div>';
   var ex=exposure(),bl=function(l){var mx=Math.max.apply(null,l.map(function(x){return x[1]}));return bars(l,100/mx)};
   h+='<div class="splits pf-ex">';
@@ -855,10 +856,12 @@ $("#to3").onclick=function(){go(3)};
 $("#taseOnly").onchange=function(e){st.taseOnly=e.target.checked;renderFunds();save()};
 
 /* ---------- step 3 ---------- */
+function fundNote(list){return list.filter(function(r){return r.metrics&&r.metrics.fund_series}).map(function(r){return esc(r.name)+': מחושב לפי הקרן <bdi>'+esc(r.metrics.fund_series)+'</bdi>, ולכן אחרי דמי הניהול שלה. '}).join("")}
+function sameIndex(x,f){var hay=((f.tracks||"")+" "+f.name).toUpperCase(),has=function(k){return hay.indexOf(k)>=0};return x.track_keys.some(has)&&!(x.track_not||[]).some(has)}
 function varUnknown(f){return (f.wrapper==="il"||f.wrapper==="mf")&&f.var_fee==null}
 function feeTxt(f){return '<span class="tabular">'+f.ter.toFixed(2)+'%</span>'+(f.var_fee?'<div class="fsub">ועוד עד <span class="tabular">'+f.var_fee.toFixed(2)+'%</span> משתנים</div>':varUnknown(f)?'<div class="fsub">דמי ניהול משתנים: אין נתון</div>':"")+(f.trustee?'<div class="fsub">ועוד <span class="tabular">'+f.trustee.toFixed(3).replace(/0$/,"")+'%</span> דמי נאמנות</div>':"")+(f.entry_load?'<div class="fsub">דמי הוספה <span class="tabular">'+f.entry_load+'%</span> בכל קנייה</div>':"")}
 function whTxt(f){if(f.wh_note)return '<span class="fsub">'+esc(f.wh_note)+'</span>';if(f.wh===0)return "0%";if(f.wh!=null)return f.wh+"%";if(f.synthetic)return '<span class="fsub">לפי הסכם ההחלפה</span>';return '<span class="fsub">משתנה לפי מדינה</span>'}
-function aumTxt(f){if(!f.aum||!f.aum.value)return '<span class="fsub">אין נתון</span>';var v=f.aum.value,c=f.aum.cur==="ILS"?"₪":"$";return '<bdi>'+c+(v>=1e9?(v/1e9).toFixed(1)+" מיליארד":Math.round(v/1e6)+" מיליון")+'</bdi>'+(f.aum.two_sources?"":'<div class="fsub">לפי מקור אחד</div>')}
+function aumTxt(f){if(!f.aum||!f.aum.value)return '<span class="fsub">אין נתון</span>';var v=f.aum.value,c=f.aum.cur==="ILS"?"₪":"$";return '<bdi>'+c+(v>=1e9?(v/1e9).toFixed(1)+" מיליארד":Math.round(v/1e6)+" מיליון")+'</bdi>'+(f.aum.two_sources?"":'<div class="fsub">לפי מקור אחד, בקירוב</div>')}
 function repTxt(f){var t=f.replication==="physical"?"פיזית":f.synthetic?"סינתטית":null;if(!t)return '<span class="fsub">לא מפורסם</span>';return t+(f.replication_single?'<div class="fsub">לפי מקור אחד</div>':"")}
 function idLabel(w){return w==="il"?"מספר נייר":w==="mf"?"מספר קרן":w==="us"?"טיקר":"מספר לקנייה"}
 function buyId(f){return f.tase_id||f.id}
@@ -883,15 +886,16 @@ function renderFunds(){
     var h='<div class="card" id="fc_'+id+'"><span class="sec-lbl">'+esc(x.name)+' · <span class="tabular">'+st.alloc[id]+'%</span> מהתיק</span>';
     h+='<div class="tabs" role="tablist" aria-label="סוג קרן">'+ws.map(function(k){return '<button type="button" role="tab" class="tab'+(k===w?" on":"")+'" aria-selected="'+(k===w)+'" data-i="'+id+'" data-w="'+k+'">'+WRAPS[k]+' <span class="tabular">('+F[k].length+')</span></button>'}).join("")+'</div>';
     h+='<div class="wrapper-note">'+NOTES[w]+'</div>';
+    if(w==="il"||w==="mf")h+='<div class="wrapper-note">בקרנות ישראליות "צוברת" אומר שהקרן לא מחלקת דיבידנד כרגע. לא כל קרן מתחייבת שזה יישאר כך. אם זה חשוב לך, כדאי לבדוק בתשקיף של הקרן.</div>';
     if(x.track_keys)h+='<div class="wrapper-note">הנתונים בכרטיס של '+esc(x.name)+' הם של מדד <bdi>'+esc(x.track_label)+'</bdi>. בתחום הזה יש כמה מדדים שונים, ולא כל קרן כאן עוקבת אחריו. ליד כל קרן מסומן אם זה אותו מדד או מדד דומה, אז ההרכב והתשואות שלה יכולים להיות שונים מהכרטיס.</div>';
     h+='<div class="tblwrap"><table class="ftable"><caption class="sr">קרנות על '+esc(x.name)+', '+WRAPS[w]+'</caption><tr class="fhead"><th scope="col"><span class="sr">בחירה</span></th><th scope="col">קרן</th><th scope="col">'+idLabel(w)+'</th><th scope="col">דמי ניהול</th><th scope="col">דיבידנד</th><th scope="col">מס דיבידנד בקרן</th><th scope="col">עקיבה</th>'+((w==="il"||w==="mf")&&foreign?'<th scope="col">מט"ח</th>':"")+'<th scope="col">היקף</th></tr>';
     h+=list.map(function(f){
       var on=st.pick[id]&&st.pick[id].w===w&&st.pick[id].id===f.id,nm="pk_"+id;
-      var sub=[f.issuer,f.tracks?("עוקבת אחרי "+f.tracks):null].filter(Boolean).map(esc).join(" · ");
+      var sub=[f.issuer,f.tracks?("עוקבת אחרי "+f.tracks):"המדד מופיע בשם הקרן"].filter(Boolean).map(esc).join(" · ");
       var lst=(f.listings||[]).slice(0,2).map(function(l){return '<bdi>'+esc(l.ticker)+' · '+l.ex+' · '+l.cur+'</bdi>'}).join(" | ");
       return '<tr class="fund-row'+(on?" pick":"")+'" data-i="'+id+'" data-w="'+w+'" data-f="'+esc(f.id)+'"><td class="rcell"><input type="radio" name="'+nm+'" id="'+nm+'_'+esc(f.id)+'" '+(on?"checked":"")+' aria-label="בחירת '+esc(f.name)+'"></td>'+
         '<td class="fcell"><label class="fname" for="'+nm+'_'+esc(f.id)+'">'+esc(f.name)+'</label>'+(feeSum(f)===minTer&&!varUnknown(f)&&list.length>1?'<span class="badge low">דמי הניהול הנמוכים ברשימה</span>':"")+(f.kosher?'<span class="badge">כשרה</span>':"")+
-        (x.track_keys?(x.track_keys.some(function(k){return((f.tracks||"")+" "+f.name).toUpperCase().indexOf(k)>=0})?'<span class="badge same">אותו מדד כמו בכרטיס</span>':'<span class="badge">מדד דומה, לא זהה</span>'):"")+(sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+(f.official_url?'<a class="flink" href="'+esc(f.official_url)+'" target="_blank" rel="noopener">לדף הקרן ↗</a>':"")+'</td>'+
+        (x.track_keys?(sameIndex(x,f)?'<span class="badge same">אותו מדד כמו בכרטיס</span>':'<span class="badge">מדד דומה, לא זהה</span>'):"")+(sub?'<div class="fsub">'+sub+'</div>':"")+(lst?'<div class="fsub">'+lst+'</div>':"")+(f.tase_id?'<span class="badge tase">נסחרת בתל אביב בשקלים</span>':"")+(f.cutoff?'<div class="fsub">הוראות עד <span class="ltr">'+esc(f.cutoff)+'</span> בימי חול</div>':"")+(f.official_url?'<a class="flink" href="'+esc(f.official_url)+'" target="_blank" rel="noopener">לדף הקרן ↗</a>':"")+'</td>'+
         '<td data-label="'+idLabel(w)+'">'+idCell(f)+'</td><td data-label="דמי ניהול"><div>'+feeTxt(f)+'</div></td><td data-label="דיבידנד">'+(f.dist==="acc"?"צוברת":"מחלקת")+(f.dist_single?'<div class="fsub">לפי מקור אחד</div>':"")+'</td><td data-label="מס דיבידנד בקרן" class="tabular">'+whTxt(f)+'</td><td data-label="עקיבה"><div>'+repTxt(f)+'</div></td>'+
         ((w==="il"||w==="mf")&&foreign?'<td data-label="מט&quot;ח">'+(f.hedged===true?"מגודרת":f.hedged===false?"חשופה":"-")+'</td>':"")+
         '<td data-label="היקף"><div>'+aumTxt(f)+'</div></td></tr>';

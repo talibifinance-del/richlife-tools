@@ -330,6 +330,16 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   const closedS = E.closeYear(Object.assign({}, opsState(), { sales: fcs.sales }));
   near('a new year keeps the sales', closedS.sales.length, 3);
 
+  // a room by the hour is the same money as one amount, and is not multiplied by the people
+  const ev0 = JSON.parse(JSON.stringify(gs0)); ev0.products[0].specific = ''; ev0.products[0].eventCosts = [{ name: 'חדר', price: 100, qty: 3 }];
+  const evR = E.compute(ev0), evV = E.groupView(evR, ev0, ev0.products[0]);
+  near('group: room by the hour', E.eventCost(ev0.products[0]), 300);
+  near('group: empty amount counts once', E.eventCost({ eventCosts: [{ price: 40, qty: '' }] }), 40);
+  near('group: event costs give the same answer', evV.minHeads, 12);
+  near('group: event costs give the same left', evV.rows.filter(r => r.n === 20)[0].left, 725, 1);
+  near('group: the room is not multiplied', evR.products[0].calc.specific, 300);
+  near('group: more people, same room', E.groupView(evR, ev0, Object.assign({}, ev0.products[0], { size: 20 })).eventCost, 300);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

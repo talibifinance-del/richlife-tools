@@ -371,6 +371,8 @@ a{color:var(--pine-deep)}
 .f-val{font-size:12.5px;font-weight:700;color:var(--pine-darker);font-variant-numeric:tabular-nums;white-space:nowrap}
 .f-m{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:5px}
 @media (max-width:640px){.seg.seg4{grid-template-columns:repeat(2,minmax(0,1fr))}.f-val{font-size:10.5px}.f-bars{gap:3px}}
+.sub-h{font-size:16.5px;font-weight:900;color:var(--pine-darker);margin:14px 0 2px}
+.cols-ev{grid-template-columns:minmax(120px,2fr) 110px 120px 90px 30px}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -624,7 +626,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=8"></script>
+<script src="engine.js?v=9"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -680,7 +682,7 @@ function guideExample(n, g) {
   if (n === 1 && o.service && !o.product) return "בקבוק לק ב-60 ₪ שמספיק בערך ל-20 טיפולים? בחבילה כותבים 20, ובעלות 60.";
   if (n === 1 && o.group && !o.product) return 'מחברת ב-12 ₪? בחבילה כותבים 1, ובעלות 12.';
   if (n === 2 && o.service && !o.product) return 'לק ג\'ל: בוחרים את הבקבוק, וכותבים 1. טיפול אחד, חלק אחד מהבקבוק.';
-  if (n === 2 && o.group && !o.product) return 'סדנה: כותבים כמה הולך על משתתף אחד, למשל מחברת אחת, והכלי יכפיל במספר המשתתפים.';
+  if (n === 2 && o.group && !o.product) return 'מחברת היא "לכל משתתף", וחדר הוא "לכל הסדנה". הכלי מכפיל רק את מה שלכל משתתף.';
   return g.ex;
 }
 function guideHtml(n) {
@@ -746,7 +748,7 @@ function demoState() {
   s.products = [
     { id: 'p1', name: 'שרשרת', lines: [{ mat: 'm1', qty: 0.5 }, { mat: 'm2', qty: 3 }, { mat: 'm3', qty: 1 }], hours: 1.5, specific: '', marginPct: 35, market: 420, chosen: '', mix: 60, plan: months() },
     { id: 'p2', name: 'עגילים', lines: [{ mat: 'm1', qty: 0.1 }, { mat: 'm2', qty: 2 }, { mat: 'm3', qty: 1 }], hours: 1, specific: '', marginPct: 35, market: 260, chosen: '', mix: 25, plan: months() },
-    { id: 'p3', type: 'group', size: 8, name: 'סדנת תכשיטים', lines: [{ mat: 'm1', qty: 0.25 }, { mat: 'm2', qty: 2 }], hours: 5, specific: 40, marginPct: 40, market: 190, chosen: '', mix: 15, plan: months() }
+    { id: 'p3', type: 'group', size: 8, name: 'סדנת תכשיטים', lines: [{ mat: 'm1', qty: 0.25 }, { mat: 'm2', qty: 2 }], hours: 5, specific: '', eventCosts: [{ name: 'שכירת חדר', price: 40, qty: 1 }], marginPct: 40, market: 190, chosen: '', mix: 15, plan: months() }
   ];
   s.labor = { net: 11000, pension: 800, fund: 400, hours: 150, monthly: [], hourly: [{ name: 'עזרה באריזה', role: 'משלוחים', rate: 45, hours: 30, factor: 1.35 }] };
   s.overhead.marketing[2].m = months(1200);
@@ -903,6 +905,12 @@ function unitSelect(i) {
   return '<div><label class="lbl" for="' + id + '">יחידה</label><div class="input-shell"><select id="' + id + '" data-text data-path="materials.' + i + '.unit">' + UNITS.map(function (u) { return '<option' + (u === cur ? ' selected' : '') + '>' + u + '</option>'; }).join('') + '</select></div></div>';
 }
 
+function eventRows(p, i) {
+  var b = 'products.' + i + '.eventCosts.', rows = (p.eventCosts || []).map(function (e, k) {
+    return '<div class="row cols-ev">' + cellText('מה', b + k + '.name', 'למשל: שכירת חדר') + cellNum('מחיר', b + k + '.price', '₪') + cellNum('כמה, למשל שעות', b + k + '.qty', '', '1') + '<div><span class="lbl">סך הכל</span>' + liveSpan('eventRow', i + ':' + k).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-delevent="' + i + ':' + k + '" aria-label="מחיקת ' + esc(e.name || 'שורה') + '">×</button></div>';
+  }).join('');
+  return '<h2 class="sub-h" style="margin-top:18px">לכל הסדנה</h2><p class="explain" style="margin-bottom:8px">עולה אותו דבר אם יש 5 משתתפים או 20: חדר, ציוד, כיבוד משותף. חדר לפי שעות? כותבים מחיר לשעה, וכמה שעות.</p>' + (rows ? '<div class="row-head cols-ev" aria-hidden="true"><span>מה</span><span>מחיר</span><span>כמה, למשל שעות</span><span>סך הכל</span><span></span></div>' : '') + '<div class="rows">' + rows + '</div><button type="button" class="add-btn" data-addevent="' + i + '">+ הוספת עלות לכל הסדנה</button><div style="margin-top:10px">' + live('eventSum', i) + '</div>';
+}
 VIEWS[2] = function () {
   var prods = S.products.map(function (p, i) {
     var kind = p.type || 'product', qtyLbl = kind === 'group' ? 'כמות למשתתף אחד' : (kind === 'service' ? 'כמות לטיפול אחד' : 'כמות למוצר אחד');
@@ -915,10 +923,12 @@ VIEWS[2] = function () {
     return '<div class="prod" style="padding:14px 16px"><div class="fields" style="align-items:end"><div style="grid-column:1/-1;display:flex;gap:8px;align-items:end"><div style="flex:1">' + textField('שם המוצר או השירות', 'products.' + i + '.name', { ph: 'למשל: שרשרת, שיחת ייעוץ, יום צילום' }) + '</div><button type="button" class="btn small ghost" style="margin-bottom:3px" data-dupprod="' + i + '">שכפול</button><button type="button" class="btn small ghost" style="color:var(--red);border-color:rgba(193,85,63,.4);margin-bottom:3px" data-delprod="' + i + '">מחיקה</button></div>' +
       '<div class="field" style="grid-column:1/-1;max-width:280px"><label for="ptype' + i + '">סוג</label><div class="input-shell"><select id="ptype' + i + '" data-text data-rerender data-path="products.' + i + '.type">' + SELLS.map(function (x) { return '<option value="' + x.k + '"' + (x.k === kind ? ' selected' : '') + '>' + x.t + '</option>'; }).join('') + '</select></div></div>' +
       (kind === 'group' ? '<div style="grid-column:1/-1;max-width:280px">' + numField('כמה משתתפים בדרך כלל', 'products.' + i + '.size', { hint: 'בשלב התמחור רואים גם מה קורה עם יותר או פחות.' }) + '</div>' : '') + '</div>' +
-      (hasMats ? (lines ? '<div class="row-head cols-bom" style="margin-top:12px" aria-hidden="true"><span>חומר</span><span>' + qtyLbl + '</span><span>עלות</span><span></span></div>' : '') + '<div class="rows" style="margin-top:6px">' + lines + '</div><button type="button" class="add-btn" data-addline="' + i + '">+ הוספת חומר למוצר</button>' : '') +
-      '<div style="margin-top:10px">' + live('prodDirect', i) + '</div></div>';
+      (kind === 'group' ? '<h2 class="sub-h">לכל משתתף</h2><p class="explain" style="margin-bottom:8px">גדל עם מספר המשתתפים: מחברת, חומרים, כיבוד אישי.</p>' + (!hasMats ? '<div class="note soft" style="margin:0 0 8px">חומרים לכל משתתף בוחרים מהרשימה של ' + gotoBtn(1, 'שלב 1') + '.</div>' : '') : '') +
+      (hasMats ? (lines ? '<div class="row-head cols-bom" style="margin-top:12px" aria-hidden="true"><span>חומר</span><span>' + qtyLbl + '</span><span>עלות</span><span></span></div>' : '') + '<div class="rows" style="margin-top:6px">' + lines + '</div><button type="button" class="add-btn" data-addline="' + i + '">+ ' + (kind === 'group' ? 'הוספת עלות למשתתף' : 'הוספת חומר למוצר') + '</button>' : '') +
+      '<div style="margin-top:10px">' + live('prodDirect', i) + '</div>' + (kind === 'group' ? eventRows(p, i) : '') + '</div>';
   }).join('');
-  var note = S.biz.noMaterials ? '<p class="explain">סימנת שאין חומרים, אז כאן רק נותנים שם לכל שירות. העלות תצא מהזמן בשלב התמחור.</p>' : (!S.materials.length ? '<div class="note soft" style="margin:0 0 12px">עוד אין חומרים ברשימה. ' + gotoBtn(1, 'לחזור לשלב 1') + ', או להמשיך אם המוצר הוא שירות.</div>' : '<p class="explain"><b>כמות למוצר אחד</b> נמדדת באותה יחידה שקונים. אם קונים חבילה של 12 ומוצר משתמש ב-3, רושמים 3, והכלי מחשב רבע מהחבילה.</p>');
+  var allGroups = S.products.length && S.products.every(function (p) { return p.type === 'group'; });
+  var note = allGroups ? '<p class="explain">בכל סדנה יש שני סוגי עלות: מה שעולה על כל משתתף, ומה שעולה בכל מקרה. כל אחד נכנס לחלק שלו, והכלי מכפיל רק את הראשון.</p>' : S.biz.noMaterials ? '<p class="explain">סימנת שאין חומרים, אז כאן רק נותנים שם לכל שירות. העלות תצא מהזמן בשלב התמחור.</p>' : (!S.materials.length ? '<div class="note soft" style="margin:0 0 12px">עוד אין חומרים ברשימה. ' + gotoBtn(1, 'לחזור לשלב 1') + ', או להמשיך אם המוצר הוא שירות.</div>' : '<p class="explain"><b>כמות למוצר אחד</b> נמדדת באותה יחידה שקונים. אם קונים חבילה של 12 ומוצר משתמש ב-3, רושמים 3, והכלי מחשב רבע מהחבילה.</p>');
   return head() + '<div class="card"><span class="sec-lbl">המוצרים והשירותים שלך</span>' + note + prods + SELLS.filter(function (x) { return sellsOn(x.k); }).map(function (x) { return '<button type="button" class="add-btn" ' + (x.k === 'product' ? 'data-add="product"' : 'data-addtype="' + x.k + '"') + '>+ ' + x.add + '</button>'; }).join('') + '<p class="explain" style="margin:12px 0 0">אותו מוצר בכמה גרסאות, למשל שמלה מכותנה ושמלה ממשי? רושמים אחת, לוחצים "שכפול", ומחליפים רק את הבד.</p></div>' + stepNav();
 };
 
@@ -977,9 +987,9 @@ function prodFields(p, i) {
   var b = 'products.' + i + '.', kind = p.type || 'product', margin = numField('רווח רצוי מהמחיר', b + 'marginPct', { unit: '%', hint: 'כמה אחוז מהמחיר יהיה רווח, אחרי שכל העלויות שולמו' });
   var open = '', chosen;
   if (kind === 'group') {
-    open = numField('כמה שעות לכל הסדנה, כולל הכנה', b + 'hours', { hint: 'חצי שעה זה 0.5' }) + margin + numField('עלות לכל הסדנה', b + 'specific', { unit: '₪', hint: 'מה שעולה בכל מקרה, כמו שכירת חדר' }) + numField('מחיר בשוק למשתתף', b + 'market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' });
+    open = numField('כמה שעות לכל הסדנה, כולל הכנה', b + 'hours', { hint: 'חצי שעה זה 0.5' }) + margin + numField('מחיר בשוק למשתתף', b + 'market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' });
     chosen = numField('מחיר למשתתף, כולל הכל', b + 'chosen', { unit: '₪', hint: 'כותבים מחיר, ורואים כמה משתתפים צריך. אם ריק, הכלי משתמש במחיר המומלץ.' }) + live('prodGroupHero', i);
-    return open + '</div><div style="margin-top:14px"><div class="sec-lbl">המחיר שבחרת</div>' + chosen + live('prodGroup', i) + '</div>' ;
+    return open + '</div><div style="margin-top:12px">' + live('eventInSix', i) + '</div><div style="margin-top:14px"><div class="sec-lbl">המחיר שבחרת</div>' + chosen + live('prodGroup', i) + '</div>' ;
   }
   if (kind === 'digital') {
     open = numField('כמה שעות לקח לבנות', b + 'devHours', { hint: 'פעם אחת, בכל המוצר' }) + numField('עלות חד-פעמית', b + 'devCost', { unit: '₪', hint: 'צילום, עריכה, עיצוב' }) + numField('כמה מכירות צפויות בשנה', b + 'expected', { hint: 'ההשקעה מתחלקת על המכירות האלה' }) + margin + numField('מחיר בשוק ללקוח', b + 'market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' });
@@ -1083,6 +1093,20 @@ var LIVE = {
     if (!E.num(S.labor.net)) miss.push('נטו רצוי בשלב ' + gotoBtn(3, '3'));
     if (S.tax.points === '') miss.push('נקודות זיכוי בשלב ' + gotoBtn(5, '5'));
     return miss.length ? '<div class="note soft" style="margin:0 0 12px">כדי שהמחיר יהיה מדויק, עוד חסרים: ' + miss.join(' · ') + '</div>' : '';
+  },
+  eventRow: function (a) {
+    var q = a.split(':'), p = S.products[+q[0]], e = p && p.eventCosts && p.eventCosts[+q[1]];
+    if (!e) return '';
+    return ils(E.num(e.price) * (e.qty === '' || e.qty == null ? 1 : E.num(e.qty)), 0);
+  },
+  eventSum: function (i) {
+    var p = S.products[i]; if (!p) return '';
+    var ev = E.eventCost(p), n = E.num(p.size) || 1;
+    return lg('עלות לכל הסדנה', ils(ev, 0), n + ' משתתפים: ' + ils(ev / n, 0) + ' לכל אחד', 'sum');
+  },
+  eventInSix: function (i) {
+    var p = S.products[i]; if (!p) return '';
+    return lg('עלות לכל הסדנה', ils(E.num(p.specific) + E.eventCost(p), 0), 'חדר, ציוד וכיבוד משותף. משנים בשלב 2.');
   },
   prodGroupHero: function (i) {
     var raw = S.products[i], p = prodCalc(i); if (!raw || !p) return '';
@@ -1804,7 +1828,10 @@ function normalize(s) {
   s = s || base;
   ['biz', 'labor', 'plan', 'overhead', 'tax'].forEach(function (k) { s[k] = Object.assign({}, base[k], s[k] || {}); });
   s.materials = s.materials || []; s.products = s.products || [];
-  s.products.forEach(function (p) { p.lines = p.lines || []; p.plan = p.plan || months(); });
+  s.products.forEach(function (p) {
+    p.lines = p.lines || []; p.plan = p.plan || months();
+    if (p.type === 'group' && E.num(p.specific) > 0 && !(p.eventCosts && p.eventCosts.length)) { p.eventCosts = [{ name: 'עלות לכל הסדנה', price: p.specific, qty: '' }]; p.specific = ''; }
+  });
   s.whatIf = s.whatIf || base.whatIf;
   s.years = s.years || {};
   s.sales = s.sales || [];
@@ -2011,6 +2038,8 @@ document.addEventListener('click', function (e) {
   if (d.goto != null) { go(+d.goto); return; }
   if (d.type) { S.biz.type = d.type; render(); persist(); return; }
   if (d.add) { addRow(d.add); return; }
+  if (d.addevent != null) { var pe = S.products[+d.addevent]; pe.eventCosts = pe.eventCosts || []; pe.eventCosts.push({ name: '', price: '', qty: '' }); render(); persist(); var evs = document.querySelectorAll('[data-path^="products.' + d.addevent + '.eventCosts."][data-text]'); if (evs.length) evs[evs.length - 1].focus(); return; }
+  if (d.delevent) { var de = d.delevent.split(':'); S.products[+de[0]].eventCosts.splice(+de[1], 1); render(); persist(); return; }
   if (d.salekind) { var ks = d.salekind.split(':'), sl = S.sales[+ks[0]]; sl.kind = ks[1]; if (ks[1] === 'custom' && !(sl.parts && sl.parts.length)) sl.parts = [{ ym: sl.start || sl.month, amount: '' }]; if (ks[1] === 'equal' && !sl.n) sl.n = 6; if (!sl.start) sl.start = sl.month; render(); persist(); return; }
   if (d.addpart != null) { var sp = S.sales[+d.addpart]; sp.parts = sp.parts || []; var lastP = sp.parts[sp.parts.length - 1]; sp.parts.push({ ym: lastP && lastP.ym ? E.ymAdd(lastP.ym, 1) : (sp.start || sp.month), amount: '' }); render(); persist(); return; }
   if (d.delpart) { var dp = d.delpart.split(':'); S.sales[+dp[0]].parts.splice(+dp[1], 1); render(); persist(); return; }
@@ -2019,7 +2048,7 @@ document.addEventListener('click', function (e) {
     t.dataset.armed = '1'; t.textContent = 'בטוח? למחוק'; setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'מחיקה'; } }, 3000); return;
   }
   if (d.sell) { S.biz.sells = S.biz.sells || {}; S.biz.sells[d.sell] = !S.biz.sells[d.sell]; render(); persist(); return; }
-  if (d.addtype) { S.products.push({ id: uid('p'), type: d.addtype, name: '', lines: [], hours: '', specific: '', marginPct: 30, market: '', chosen: '', size: d.addtype === 'group' ? 10 : '', mix: S.products.length ? '' : 100, plan: months() }); render(); persist(); return; }
+  if (d.addtype) { S.products.push({ id: uid('p'), type: d.addtype, name: '', lines: [], hours: '', specific: '', marginPct: 30, market: '', chosen: '', size: d.addtype === 'group' ? 10 : '', eventCosts: d.addtype === 'group' ? [{ name: 'שכירת חדר', price: '', qty: '' }] : [], mix: S.products.length ? '' : 100, plan: months() }); render(); persist(); return; }
   if (d.dupprod != null) {
     var src = S.products[+d.dupprod], copy = JSON.parse(JSON.stringify(src));
     copy.id = uid('p'); copy.name = (src.name || 'מוצר') + ', עותק'; copy.chosen = ''; copy.mix = ''; copy.plan = months();

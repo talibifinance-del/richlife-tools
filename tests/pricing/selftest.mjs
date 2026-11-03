@@ -623,10 +623,20 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.click('[data-addline="0"]');
   await p.selectOption('[data-path="products.0.lines.0.mat"]', { label: 'מחברת' }); await type(p, 'products.0.lines.0.qty', '1');
   ok('U materials count per person', (await p.locator('[data-live="prodDirect"]').first().innerText()).includes('למשתתף'));
+  // the room belongs to the whole event
+  ok('U a new group starts with a room', (await p.inputValue('[data-path="products.0.eventCosts.0.name"]')) === 'שכירת חדר');
+  await type(p, 'products.0.eventCosts.0.price', '100'); await type(p, 'products.0.eventCosts.0.qty', '3');
+  ok('U price times hours', (await p.locator('[data-live="eventRow"]').first().innerText()).includes('300'));
+  const evs = await p.locator('[data-live="eventSum"]').first().innerText();
+  ok('U the room is split, not multiplied', evs.includes('300') && evs.includes('30'), evs);
+  await p.click('[data-addevent="0"]'); ok('U adding a shared cost focuses it', await p.evaluate(() => document.activeElement.getAttribute('data-path') === 'products.0.eventCosts.1.name'));
+  await p.click('[data-delevent="0:1"]'); near('U removing a shared cost', await p.evaluate(() => window.__pricing.S.products[0].eventCosts.length), 1);
+  await axe(p, 'U group costs'); await clean(p, 'U group costs'); await p.screenshot({ path: OUT + '/u-step2.png', fullPage: true });
   // the rates of the approved picture
   await p.evaluate(() => { const S = window.__pricing.S; S.labor = { net: 11000, pension: 800, fund: 400, hours: 150, monthly: [], hourly: [{ name: 'x', role: '', rate: 45, hours: 30, factor: 1.35 }] }; S.tax.points = 2.75; S.tax.saving = 1000; S.overhead.marketing[2].m = S.overhead.marketing[2].m.map(() => 1200); S.overhead.marketing[1].m = S.overhead.marketing[1].m.map(() => 500); S.overhead.admin[0].m = S.overhead.admin[0].m.map(() => 1800); S.overhead.admin[3].m = S.overhead.admin[3].m.map(() => 120); S.overhead.admin[5].m = S.overhead.admin[5].m.map(() => 350); S.overhead.admin[9].m = S.overhead.admin[9].m.map(() => 400); });
   await go(p, 6);
-  await type(p, 'products.0.hours', '5'); await p.fill('[data-path="products.0.marginPct"]', '40'); await type(p, 'products.0.specific', '300'); await type(p, 'products.0.chosen', '150');
+  await type(p, 'products.0.hours', '5'); await p.fill('[data-path="products.0.marginPct"]', '40'); await type(p, 'products.0.chosen', '150');
+  ok('U the event cost is shown, not asked again', await p.locator('[data-path="products.0.specific"]').count() === 0 && (await p.locator('[data-live="eventInSix"]').innerText()).includes('300'));
   await p.waitForTimeout(100);
   const hero = await p.locator('[data-live="prodGroupHero"]').innerText();
   ok('U the screen says how many are needed', hero.includes('12 משתתפים') && hero.includes('150'), hero);
@@ -727,6 +737,16 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   const d = await newPage(); await open(d.p); await d.p.click('[data-act="demo"]'); await go(d.p, 14);
   await d.p.locator('details.sale > summary').first().click(); await d.p.waitForTimeout(80);
   await d.p.screenshot({ path: OUT + '/v-desk.png', fullPage: true }); await d.ctx.close();
+}
+/* ---- W. a group saved with the old single field keeps its money ---- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  await p.evaluate(() => localStorage.setItem('rl_pricing_v4', JSON.stringify({ v: 4, biz: { name: 'ישן', type: 'murshe' }, materials: [], products: [{ id: 'g', type: 'group', size: 10, name: 'סדנה', lines: [], hours: 5, specific: 300, marginPct: 40, plan: [] }], labor: { net: 9000, hours: 150, monthly: [], hourly: [] }, overhead: { marketing: [], admin: [] }, tax: { points: 2.75, saving: 0, tables: null } })));
+  await p.reload(); await p.waitForFunction(() => window.__pricing); await p.waitForTimeout(150); await p.click('[data-act="resume"]');
+  const st = await p.evaluate(() => window.__pricing.S.products[0]);
+  ok('W the old amount became a row', st.eventCosts.length === 1 && +st.eventCosts[0].price === 300 && st.specific === '', st);
+  near('W the money is counted once', await p.evaluate(() => window.__pricing.R.products[0].calc.specific), 300);
+  await ctx.close();
 }
 /* ---- S. the home screen says the right thing, and years work ---- */
 {

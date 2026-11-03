@@ -164,6 +164,8 @@
   /* ---------- product types ----------
      A group is priced as one whole event, a digital product spreads what it took to make over the expected sales.
      After this step everything downstream is the ordinary product model. A product without a type passes through untouched. */
+  /* What a group costs whoever comes: a room by the hour, shared refreshments. No wastage here, a room is not wasted. */
+  function eventCost(p) { return sum(p.eventCosts, function (e) { return pos(e.price) * (e.qty === '' || e.qty == null ? 1 : pos(e.qty)); }); }
   function expandProduct(p) {
     if (!p || (p.type !== 'group' && p.type !== 'digital')) return p;
     var q = {}; for (var k in p) q[k] = p[k];
@@ -172,6 +174,7 @@
       q.lines = (p.lines || []).map(function (l) { return { mat: l.mat, qty: pos(l.qty) * size }; });
       q.chosen = pos(p.chosen) > 0 ? pos(p.chosen) * size : '';
       q.market = pos(p.market) > 0 ? pos(p.market) * size : '';
+      q.specific = pos(p.specific) + eventCost(p);
     } else {
       var expected = pos(p.expected);
       q.lines = [];
@@ -191,7 +194,7 @@
     var set = R.settings, perHead = productDirect(raw, state.materials, set.wastePct), size = pos(raw.size) || 1;
     var calc = function (n) {
       return priceProduct({
-        direct: perHead * n, hours: raw.hours, specific: raw.specific, marginPct: raw.marginPct,
+        direct: perHead * n, hours: raw.hours, specific: pos(raw.specific) + eventCost(raw), marginPct: raw.marginPct,
         overheadPerHour: R.overhead.perHour, laborPerHour: R.labor.costPerHour, netPerHour: R.labor.netPerHour,
         contingencyPct: set.contingencyPct, socialRate: R.tax.socialRate, incomeRate: R.tax.incomeRate, vatPct: set.vatPct, feePct: set.feePct
       });
@@ -206,7 +209,7 @@
     });
     var minHeads = null;
     for (var n = 1; n <= 1000; n++) if (netHead * n >= calc(n).minPrice) { minHeads = n; break; }
-    return { size: size, perHead: perHead, price: price, hasChosen: hasChosen, recHere: recHere, minHeads: minHeads, rows: rows };
+    return { size: size, perHead: perHead, eventCost: pos(raw.specific) + eventCost(raw), price: price, hasChosen: hasChosen, recHere: recHere, minHeads: minHeads, rows: rows };
   }
 
   /* ---------- sales and how they get paid ----------
@@ -613,7 +616,7 @@
     TABLES_2026: TABLES_2026, PATUR_CEILING_2026: PATUR_CEILING_2026, MAX_MARGIN: MAX_MARGIN, OPS_2026: OPS_2026,
     num: num, materialUnitPrice: materialUnitPrice, lineCost: lineCost, productDirect: productDirect,
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
-    expandProduct: expandProduct, expandState: expandState, groupView: groupView,
+    expandProduct: expandProduct, expandState: expandState, groupView: groupView, eventCost: eventCost,
     ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, salesForecast: salesForecast, salesCounts: salesCounts,
     mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, hasTables: hasTables, tablesFor: tablesFor,
     yearList: yearList, yearOps: yearOps, switchYear: switchYear, closeYear: closeYear, agePick: agePick, compareYears: compareYears, productRank: productRank, whatIf: whatIf

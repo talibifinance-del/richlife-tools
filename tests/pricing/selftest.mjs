@@ -450,18 +450,20 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('O private expense lowers tax', after[0] < before[0], [before, after]);
   near('O private expense leaves profit alone', after[1], before[1]);
 
-  // yearly table on the fill step: every row, editable, stays in step with the month inputs
-  await p.click('details[data-how="opsGridEdit"] summary');
-  await p.waitForSelector('details[data-how="opsGridEdit"] table');
-  ok('O grid shows empty rows too', (await p.locator('details[data-how="opsGridEdit"]').innerText()).includes('ריטיינר'));
-  await p.locator('details[data-how="opsGridEdit"] [data-path="ops.rows.admin.11.m.0"]').pressSequentially('590');
-  ok('O grid edit reaches the month input', (await p.locator('.ops-rowwrap [data-path="ops.rows.admin.11.m.0"]').inputValue()) === '590');
+  // one way to fill at a time: the yearly table replaces the month rows, and both hold the same data
+  ok('O month mode has no yearly table', await p.locator('#view .grid-tbl').count() === 0);
+  await p.click('[data-fillmode="year"]');
+  ok('O yearly mode hides the month rows', await p.locator('.ops-rowwrap').count() === 0);
+  ok('O yearly mode hides the month tabs', await p.locator('[data-opsedit]').count() === 0);
+  ok('O grid shows empty rows too', (await p.locator('#view .grid-tbl').innerText()).includes('ריטיינר'));
+  ok('O a cell exists once', await p.locator('[data-path="ops.rows.admin.11.m.0"]').count() === 1);
+  await p.locator('[data-path="ops.rows.admin.11.m.0"]').pressSequentially('590');
   ok('O grid totals update', (await p.locator('[data-live="gridRow"][data-arg="ops.rows.admin.11.m"]').innerText()) === '590');
-  await axe(p, 'O11 grid open');
-  await p.click('details[data-how="opsGridEdit"] summary');
-  await p.waitForFunction(() => !document.querySelector('details[data-how="opsGridEdit"] table'));
-  await p.locator('.ops-rowwrap [data-path="ops.rows.admin.11.m.0"]').fill('');
-  await p.locator('.ops-rowwrap [data-path="ops.rows.admin.11.m.0"]').pressSequentially('0');
+  await axe(p, 'O11 yearly mode');
+  await p.click('[data-fillmode="month"]');
+  ok('O the month view shows what the table got', (await p.inputValue('[data-path="ops.rows.admin.11.m.0"]')) === '590');
+  await p.locator('[data-path="ops.rows.admin.11.m.0"]').fill('');
+  await p.locator('[data-path="ops.rows.admin.11.m.0"]').pressSequentially('0');
   // February, copy from January
   await p.click('[data-opsedit="1"]');
   await p.click('[data-act="copyPrev"]');
@@ -518,7 +520,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   const { ctx, p } = await newPage({ width: 400, height: 800 }); await open(p);
   await p.click('[data-act="demo"]');
   await go(p, 12); await p.click('details[data-how="opsGridRO"] summary'); await clean(p, 'Q12 yearly table'); await p.click('details[data-how="opsGridRO"] summary');
-  await go(p, 11); await p.click('details[data-how="opsGridEdit"] summary'); await p.waitForSelector('details[data-how="opsGridEdit"] table'); await clean(p, 'Q11 grid'); await p.click('details[data-how="opsGridEdit"] summary'); await p.waitForFunction(() => !document.querySelector('details[data-how="opsGridEdit"] table'));
+  await go(p, 11); await p.click('[data-fillmode="year"]'); await clean(p, 'Q11 yearly mode'); await axe(p, 'Q11 yearly mode'); await p.screenshot({ path: OUT + '/q11-year-phone.png' }); await p.click('[data-fillmode="month"]');
   for (const n of [7, 11, 12, 13]) { await go(p, n); await clean(p, 'Q' + n + ' phone'); await p.screenshot({ path: OUT + '/q' + n + '-phone.png', fullPage: true }); }
   await go(p, 12);
   await p.click('[data-opsview="q0"]');

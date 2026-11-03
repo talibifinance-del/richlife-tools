@@ -506,7 +506,7 @@ function opsRowNew(name, opts) { return Object.assign({ name: name, m: months() 
 function opsDefaults() {
   var nv = { vat: false };
   return {
-    edit: 0, view: 'year', tableBy: 'months', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '', otherIncome: '', otherWithheld: '',
+    edit: 0, fillMode: 'month', view: 'year', tableBy: 'months', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '', otherIncome: '', otherWithheld: '',
     rows: {
       income: ['סליקה', 'ביט', 'פייבוקס', 'העברה בנקאית', 'אחר'].map(function (n) { return opsRowNew(n); }).concat([opsRowNew('החזרים ללקוחות, יורד מההכנסות', { refund: true })]),
       direct: ['קבלני משנה', 'חומרי גלם', 'חומרי אריזה', 'שילוח, מכס ויבוא', 'אחר'].map(function (n) { return opsRowNew(n); }),
@@ -1074,12 +1074,13 @@ function settingsTable() {
   var patur = S.biz.type === 'patur';
   var line = function (list, path) {
     return list.map(function (r, i) {
+      if (path === 'ops.private' && !privateVisible(r)) return '';
       var b = path + '.' + i, nm = esc(r.name || 'שורה');
       var rec = r.rule === 'phone' ? '<span class="val">לפי הכלל</span>' : (r.rule === 'gift' ? '<div class="mini"><div class="input-shell"><input aria-label="כמה אנשים קיבלו מתנה" placeholder="אנשים" type="text" inputmode="decimal" data-num data-path="' + b + '.people" value="' + esc(grp(r.people)) + '"></div></div>' : '<div class="mini"><div class="input-shell"><input aria-label="אחוז מוכר במס של ' + nm + '" type="text" inputmode="decimal" data-num data-path="' + b + '.rec" value="' + esc(grp(r.rec == null ? 100 : r.rec)) + '"></div></div>');
       return '<tr><td class="nm">' + nm + '</td>' + (patur ? '' : '<td><input type="checkbox" aria-label="' + nm + ' כולל מע&quot;מ" data-check="' + b + '.vat"' + (r.vat === false ? '' : ' checked') + '></td>') + '<td>' + rec + '</td><td><input type="checkbox" aria-label="' + nm + ' חד-פעמית" data-check="' + b + '.oneOff"' + (r.oneOff ? ' checked' : '') + '></td></tr>';
     }).join('');
   };
-  var body = ['direct', 'marketing', 'admin', 'finance'].map(function (k) { return line(S.ops.rows[k], 'ops.rows.' + k); }).join('');
+  var body = ['direct', 'marketing', 'admin', 'finance'].map(function (k) { return line(S.ops.rows[k], 'ops.rows.' + k); }).join('') + line(S.ops.private, 'ops.private');
   return '<details class="how" data-how="opsSettings"' + (howOpen.opsSettings ? ' open' : '') + '><summary>הגדרות נוספות: אחוז שמוכר במס, מע"מ והוצאה חד-פעמית לכל השורות</summary><div class="how-b"><p class="explain">הוצאה חד-פעמית נספרת פעם אחת בהערכה השנתית, וכל השאר נחשב כאילו ימשיך כך עד סוף השנה. במתנות רושמים כמה אנשים קיבלו, כי ההכרה היא עד ' + E.OPS_2026.giftCap + ' ₪ לאדם בשנה.</p><div class="tbl-wrap" tabindex="0" role="region" aria-label="הגדרות שורות"><table class="ptable"><thead><tr><th>שורה</th>' + (patur ? '' : '<th>כולל מע"מ</th>') + '<th>מוכר במס %</th><th>חד-פעמית</th></tr></thead><tbody>' + body + '</tbody></table></div></div></details>';
 }
 function seedOps() {
@@ -1094,7 +1095,7 @@ function seedOps() {
 }
 VIEWS[11] = function () {
   seedOps();
-  var e = S.ops.edit, patur = S.biz.type === 'patur';
+  var e = S.ops.edit, patur = S.biz.type === 'patur', year = S.ops.fillMode === 'year';
   var privRows = S.ops.private.map(function (r, i) { return { r: r, i: i }; }).filter(function (x) { return privateVisible(x.r); }).map(function (x) {
     var b = 'ops.private.' + x.i;
     return '<div class="row cols-priv">' + cellText('שם השורה', b + '.name') + cellNum(esc(x.r.name || 'סכום') + ' ב' + MONTHS[e], b + '.m.' + e, '₪') +
@@ -1105,18 +1106,19 @@ VIEWS[11] = function () {
   var paidRow = function (l, k) { return numField(l + ' ב' + MONTHS[e], 'ops.paid.' + k + '.' + e, { unit: '₪' }); };
   return head() + '<div class="card"><span class="sec-lbl">על העסק</span><div class="field"><span class="lbl" id="typeLbl2">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl2"><button type="button" data-type="murshe" aria-pressed="' + !patur + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + patur + '">עוסק פטור</button></div><div class="hint">' + (patur ? 'בעוסק פטור אין מע"מ בכלל, וממלאים כמו בבנק.' : 'ממלאים כמו בבנק, כולל מע"מ. הכלי מנטרל אותו לבד לפי סוג השורה.') + '</div></div>' +
     '<label class="check-line" style="margin-top:12px"><input type="checkbox" data-check="ops.home" data-rerender' + (S.ops.home ? ' checked' : '') + '> העסק עובד מהבית</label><label class="check-line" style="margin-top:6px"><input type="checkbox" data-check="ops.car" data-rerender' + (S.ops.car ? ' checked' : '') + '> הרכב הפרטי משמש גם לעסק</label></div>' +
-    '<div class="card"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') +
-    '<details class="how" data-how="opsGridEdit"' + (howOpen.opsGridEdit ? ' open' : '') + '><summary>כל השנה בטבלה אחת, כמו באקסל: לראות ולערוך</summary><div class="how-b"><p class="explain">כל שינוי כאן נשמר לבד. הסכומים כמו בבנק.</p>' + (howOpen.opsGridEdit ? opsGridHtml(true) : '') + '</div></details></div>' +
+    '<div class="card"><span class="sec-lbl">איך נוח למלא?</span><div class="seg" role="group" aria-label="איך למלא"><button type="button" data-fillmode="month" aria-pressed="' + !year + '">חודש אחד</button><button type="button" data-fillmode="year" aria-pressed="' + year + '">כל השנה בטבלה</button></div><div class="hint">אלה אותם נתונים בשתי תצוגות, אז ממלאים רק באחת. אפשר לעבור ביניהן מתי שרוצים.</div>' +
+    (year ? '' : '<div style="margin-top:14px"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') + '</div>') + '</div>' +
+    (year ? '<div class="card"><span class="sec-lbl">כל השנה, כמו בבנק</span><p class="explain">כל שינוי נשמר לבד. מע"מ, חד-פעמית ואחוז שמוכר במס נמצאים בהגדרות למטה. להוספת שורה חדשה עוברים ל"חודש אחד".</p>' + opsGridHtml(true) + '</div>' :
     opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה. החזר ללקוחה נרשם בשורה שלו, והוא מוריד את ההכנסות.', 'הוספת מקור הכנסה') +
     opsSection('עלויות ישירות', 'direct', 'מה שעולה לספק את המוצר או השירות עצמו.', 'הוספת עלות') +
     opsSection('שיווק ומכירה', 'marketing', '', 'הוספת הוצאת שיווק') +
     opsSection('הנהלה וכלליות', 'admin', 'רק מה שיוצא מחשבון העסק. הוצאה נחשבת חוזרת כל חודש, אלא אם מסמנים שהיא חד-פעמית. תשלומים על חשבונית משנה קודמת נרשמים למטה, ב"מה לקחת מהרווח".', 'הוספת הוצאה') +
-    opsSection('עמלות וריבית', 'finance', 'בהלוואה נכנסת לכאן רק הריבית. החזר הקרן נמצא למטה.', 'הוספת שורה') +
+    opsSection('עמלות וריבית', 'finance', 'בהלוואה נכנסת לכאן רק הריבית. החזר הקרן נמצא למטה.', 'הוספת שורה')) +
     '<div class="card">' + settingsTable() + '</div>' +
-    '<div class="card" style="border:2px dashed var(--pine)"><span class="sec-lbl">הוצאות פרטיות שמוכרות במס</span><p class="explain">הכסף יצא מהחשבון הפרטי ולא מהעסק, ולכן זה לא נכנס לרווח והפסד. זה רק מוריד את המס. האחוזים הם ברירת מחדל, ומה שרואה החשבון מכיר קובע.</p>' + '<div class="rows">' + privRows + '</div><button type="button" class="add-btn" data-addops="private">+ הוספת הוצאה פרטית</button></div>' +
+    (year ? '' : '<div class="card" style="border:2px dashed var(--pine)"><span class="sec-lbl">הוצאות פרטיות שמוכרות במס</span><p class="explain">הכסף יצא מהחשבון הפרטי ולא מהעסק, ולכן זה לא נכנס לרווח והפסד. זה רק מוריד את המס. האחוזים הם ברירת מחדל, ומה שרואה החשבון מכיר קובע.</p>' + '<div class="rows">' + privRows + '</div><button type="button" class="add-btn" data-addops="private">+ הוספת הוצאה פרטית</button></div>' +
     '<div class="card"><span class="sec-lbl">מה לקחת מהרווח</span><p class="explain">לא הוצאות של העסק. זה מה שעשית עם הרווח הנקי.</p><div class="fields">' + drawRow('משכורת לעצמי', 'salary') + drawRow('פנסיה', 'pension') + drawRow('קרן השתלמות', 'fund') + drawRow('חיסכון והשקעות', 'savings') + drawRow('החזר הלוואה, בלי הריבית', 'loan') + drawRow('תשלומים על חשבונית משנה קודמת', 'prior', 'קנית ב-' + (opsYear() - 1) + ' וקיבלת חשבונית על הכל, ועכשיו יורד באשראי בתשלומים? רושמים כאן. הכסף יוצא השנה, אבל ההוצאה והמע"מ שייכים לשנה של החשבונית.') + '</div></div>' +
-    '<div class="card"><span class="sec-lbl">מה שולם לרשויות</span><p class="explain">התשלומים בפועל. בעזרתם הכלי משווה להערכת המס ובודק מול הבנק.</p><div class="fields">' + paidRow('מקדמות מס הכנסה', 'income') + paidRow('ביטוח לאומי ובריאות', 'ni') + (patur ? '' : paidRow('תשלום מע"מ', 'vat')) + '</div></div>' +
-    '<div class="card"><span class="sec-lbl">בדיקה מול הבנק</span><div class="fields">' + signedInput('bankOpen', 'ops.bank.opening', 'יתרה ב-1 בינואר') + signedInput('bankEnd', 'ops.bank.end.' + e, 'יתרה בסוף ' + MONTHS[e]) + '</div>' + live('opsBank') + '</div>' + stepNav();
+    '<div class="card"><span class="sec-lbl">מה שולם לרשויות</span><p class="explain">התשלומים בפועל. בעזרתם הכלי משווה להערכת המס ובודק מול הבנק.</p><div class="fields">' + paidRow('מקדמות מס הכנסה', 'income') + paidRow('ביטוח לאומי ובריאות', 'ni') + (patur ? '' : paidRow('תשלום מע"מ', 'vat')) + '</div></div>') +
+    '<div class="card"><span class="sec-lbl">בדיקה מול הבנק</span><div class="fields">' + signedInput('bankOpen', 'ops.bank.opening', 'יתרה ב-1 בינואר') + (year ? (O.k ? signedInput('bankEnd', 'ops.bank.end.' + (O.k - 1), 'יתרה בסוף ' + MONTHS[O.k - 1]) : '') : signedInput('bankEnd', 'ops.bank.end.' + e, 'יתרה בסוף ' + MONTHS[e])) + '</div>' + live('opsBank') + '</div>' + stepNav();
 };
 VIEWS[12] = function () {
   return head() + live('opsEmpty') + '<div class="card"><span class="sec-lbl">איזו תקופה לראות?</span>' + opsTabs(S.ops.view, 'data-opsview', true) + '<div class="field" style="margin-top:12px;max-width:260px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto"><option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('') + '</select></div></div></div><div class="card" style="margin-top:14px">' + live('opsAvg') + '</div><div class="ops-grid"><div class="card"><span class="sec-lbl">העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">נשאר לי כסף?</span>' + live('opsDrawn') + '</div>' +
@@ -1473,7 +1475,6 @@ document.addEventListener('toggle', function (e) {
     var i = +t.dataset.how.replace('prod', ''), dflt = S.products.length <= 3 || i === 0;
     if (t.open === dflt) delete howOpen[t.dataset.how]; else howOpen[t.dataset.how] = t.open;
   } else howOpen[t.dataset.how] = t.open;
-  if (t.dataset.how === 'opsGridEdit' && t.open !== !!t.querySelector('table')) render();
 }, true);
 document.addEventListener('click', function (e) {
   var t = e.target.closest('button'); if (!t) return;
@@ -1482,6 +1483,7 @@ document.addEventListener('click', function (e) {
   if (d.type) { S.biz.type = d.type; render(); persist(); return; }
   if (d.add) { addRow(d.add); return; }
   if (d.opsedit != null) { S.ops.edit = +d.opsedit; render(); persist(); return; }
+  if (d.fillmode) { S.ops.fillMode = d.fillmode; render(); persist(); return; }
   if (d.tableby) { S.ops.tableBy = d.tableby; render(); persist(); return; }
   if (d.opsview != null) { S.ops.view = d.opsview; render(); persist(); return; }
   if (d.addops) { var fresh = opsRowNew(''); if (d.addops === 'private') { fresh.group = 'general'; fresh.rec = 100; fresh.vat = false; S.ops.private.push(fresh); } else S.ops.rows[d.addops].push(fresh); render(); persist(); return; }

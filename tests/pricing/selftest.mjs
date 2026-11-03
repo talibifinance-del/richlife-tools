@@ -534,6 +534,17 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   const qt = await p.locator('[data-live="opsTable"]').innerText();
   ok('Q table by quarters', qt.includes('רבעון 4') && !qt.includes('אוגוסט') && qt.includes('ממוצע בחודש'), qt.slice(0, 200));
   await axe(p, 'Q12 quarters'); await clean(p, 'Q12 quarters');
+  const plain = await p.locator('[data-live="opsPlain"]').innerText();
+  ok('Q plain words', plain.includes('העסק הרוויח') && plain.includes('חשבון הבנק'), plain);
+  await p.click('details[data-how="t_cashNet"] summary');
+  ok('Q table row explains itself', (await p.locator('details[data-how="t_cashNet"] .ti-b').innerText()).includes('החשבון'));
+  await axe(p, 'Q12 row explanation'); await clean(p, 'Q12 row explanation');
+  await p.click('details[data-how="t_cashNet"] summary');
+  await p.selectOption('#opsUpto2', '2');
+  const lim = await p.locator('[data-live="opsPlain"]').innerText();
+  ok('Q says when months are left out', lim.includes('לא נספר') && lim.includes('רק עד פברואר'), lim);
+  ok('Q total header names the month', (await p.locator('[data-live="opsTable"]').innerText()).includes('סך הכל עד פברואר'));
+  await p.selectOption('#opsUpto2', '');
   const cash = await p.locator('[data-live="opsCash"]').innerText();
   ok('Q cash section', cash.includes('נכנס לחשבון') && cash.includes('יצא מהחשבון') && cash.includes('תזרים'), cash);
   ok('Q table has the cash rows', qt.includes('נכנס לחשבון') && qt.includes('תזרים'));

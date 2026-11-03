@@ -568,6 +568,81 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await ctx.close();
 }
 
+/* ---- R. the client board, against a stand-in share server ---- */
+{
+  const store = new Map(); let seq = 0;
+  const mock = async route => {
+    const req = route.request(), url = new URL(req.url()), id = url.searchParams.get('id');
+    const headers = { 'access-control-allow-origin': '*' };
+    if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
+    if (req.method() === 'POST') {
+      if (id) { if (!store.has(id)) return route.fulfill({ status: 404, headers, body: '{}' }); store.set(id, req.postData()); return route.fulfill({ status: 200, headers, body: JSON.stringify({ id }) }); }
+      const nid = 'b' + (++seq); store.set(nid, req.postData()); return route.fulfill({ status: 200, headers, contentType: 'application/json', body: JSON.stringify({ id: nid }) });
+    }
+    if (!store.has(id)) return route.fulfill({ status: 404, headers, body: 'gone' });
+    return route.fulfill({ status: 200, headers, body: store.get(id) });
+  };
+  const BOARD = BASE.replace(/\/$/, '') + '/pricing/clients/';
+  const { ctx, p } = await newPage(); await ctx.route(/richlife-share/, mock);
+  await p.goto(BOARD); await p.waitForSelector('[data-act="createBoard"]');
+  const dec = p.locator('#rl-consent .rl-no'); if (await dec.isVisible().catch(() => false)) await dec.click();
+  await axe(p, 'R start');
+  await p.click('[data-act="createBoard"]'); await p.waitForSelector('#addForm');
+  ok('R board gets its own link', /#p=b1\./.test(p.url()), p.url());
+  await p.fill('#cName', 'דנה <b>כהן</b>'); await p.fill('#cBiz', 'סטודיו דנה'); await p.click('#addForm [type=submit]');
+  await p.waitForFunction(() => document.querySelectorAll('#list tbody tr').length === 1);
+  ok('R a name with markup stays text', (await p.locator('#list tbody tr td.nm').innerHTML()).includes('&lt;b&gt;'));
+  await p.fill('#cName', 'נועה'); await p.fill('#cBiz', ''); await p.click('[data-ctype="patur"]'); await p.click('#addForm [type=submit]');
+  await p.waitForFunction(() => document.querySelectorAll('#list tbody tr').length === 2);
+  await axe(p, 'R board'); await p.screenshot({ path: OUT + '/r-board.png', fullPage: true });
+  const clean2 = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth); ok('R no page overflow', clean2 <= 0, clean2);
+  const link = await p.locator('#list tbody tr').first().locator('a.btn').getAttribute('href');
+
+  // the client opens her own link
+  const cl = await newPage({ width: 400, height: 800 }); await cl.ctx.route(/richlife-share/, mock);
+  await cl.p.goto(link); await cl.p.waitForFunction(() => window.__pricing); await cl.p.waitForTimeout(300);
+  const d2 = cl.p.locator('#rl-consent .rl-no'); if (await d2.isVisible().catch(() => false)) await d2.click();
+  ok('R client lands on the welcome step', (await cl.p.textContent('#stepTitle')).includes('לפני שמתחילים'));
+  ok('R client sees her business', (await cl.p.inputValue('[data-path="biz.name"]')) === 'סטודיו דנה');
+  ok('R no demo on a personal link', await cl.p.locator('[data-act="demo"]').count() === 0);
+  await go(cl.p, 11);
+  await type(cl.p, 'ops.rows.income.3.m.0', '11800');
+  await cl.p.waitForTimeout(2200);
+  await cl.ctx.close();
+
+  // the board shows what she filled
+  await p.reload(); await p.waitForSelector('#list tbody tr'); await p.waitForFunction(() => !document.querySelector('#list').innerText.includes('טוען'));
+  const rows = await p.locator('#list').innerText();
+  ok('R board shows the month filled', rows.includes('ינואר'), rows);
+  ok('R board shows the profit', rows.includes('10,000'), rows);
+  ok('R the second client is still empty', rows.includes('עוד לא מילאו'));
+
+  // archive keeps the data
+  await p.locator('[data-archive]').nth(1).click();
+  await p.waitForFunction(() => document.querySelectorAll('#list tbody tr').length === 1);
+  await p.click('[data-act="toggleArchive"]'); ok('R archive lists it', (await p.locator('.arch').innerText()).includes('נועה'));
+  await p.click('[data-restore]'); await p.waitForFunction(() => document.querySelectorAll('#list tbody tr').length === 2);
+
+  // existing link, wrong link, same link twice
+  await p.click('#addForm details summary');
+  await p.fill('#cLink', 'https://example.com/nope'); await p.click('[data-act="addExisting"]');
+  ok('R a wrong link is refused', (await p.locator('#addOut').innerText()).includes('לא נראה'));
+  await p.fill('#cLink', link); await p.click('[data-act="addExisting"]');
+  ok('R the same link is not added twice', (await p.locator('#addOut').innerText()).includes('כבר בלוח'));
+
+  // the plain address returns to the board on this device
+  await p.goto(BOARD); await p.waitForSelector('#addForm');
+  await p.waitForSelector('#list tbody tr');
+  ok('R remembered board keeps the clients', await p.locator('#list tbody tr').count() === 2);
+  ok('R no page errors', p.errs.length === 0, p.errs);
+  const ph = await newPage({ width: 400, height: 800 }); await ph.ctx.route(/richlife-share/, mock);
+  const bu = await p.inputValue('#boardLink'); await ph.p.goto(bu); await ph.p.waitForSelector('#list tbody tr');
+  const d3 = ph.p.locator('#rl-consent .rl-no'); if (await d3.isVisible().catch(() => false)) await d3.click();
+  const over = await ph.p.evaluate(() => document.documentElement.scrollWidth - innerWidth); ok('R phone no overflow', over <= 0, over);
+  await axe(ph.p, 'R phone'); await ph.ctx.close();
+  await ctx.close();
+}
+
 await browser.close();
 console.log(`\n${pass} passed, ${fail} failed`);
 if (failures.length) console.log('FAILURES:\n' + failures.join('\n'));

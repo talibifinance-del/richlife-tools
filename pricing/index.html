@@ -531,7 +531,7 @@ function opsDefaults() {
 function emptyState() {
   return {
     v: 4,
-    biz: { name: '', type: 'murshe', noMaterials: false, wastePct: 10, contingencyPct: 15, vatPct: 18, feePct: 1.35 },
+    biz: { name: '', client: '', type: 'murshe', noMaterials: false, wastePct: 10, contingencyPct: 15, vatPct: 18, feePct: 1.35 },
     materials: [],
     products: [],
     labor: { net: '', pension: '', fund: '', hours: '', monthly: [], hourly: [] },
@@ -675,10 +675,10 @@ VIEWS[0] = function () {
   var draft = readDraftMeta();
   return head() + '<p class="step-why" style="margin-bottom:14px">עוברים יחד 9 שלבים, מהחומר הראשון ועד כמה למכור בכל חודש. בסוף יש מחירון, יעד מחזור ותוכנית שנתית. אפשר לעצור ולחזור מתי שרוצים, הכל נשמר.</p>' +
     (draft && !docId ? '<div class="card" id="draftCard"><div class="draft-banner"><div><b style="font-weight:900;color:var(--pine-darker)">נמצאה טיוטה: ' + esc(draft.name || 'בלי שם') + '</b><div style="font-size:13px;font-weight:600;color:var(--ink-soft)">נשמרה במכשיר הזה. להמשיך ממנה או להתחיל חדש?</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn small" data-act="resume">להמשיך</button><button type="button" class="btn small ghost" data-act="fresh">להתחיל חדש</button></div></div></div>' : '') +
-    '<div class="card"><span class="sec-lbl">על העסק</span><div class="fields">' + textField('שם העסק', 'biz.name', { ph: 'למשל: הסטודיו של נועה' }) + '</div>' +
+    '<div class="card"><span class="sec-lbl">על העסק</span><div class="fields">' + textField('השם שלך', 'biz.client') + textField('שם העסק', 'biz.name', { ph: 'למשל: הסטודיו של נועה' }) + '</div>' +
     '<div class="field" style="margin-top:14px"><span class="lbl" id="typeLbl">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl"><button type="button" data-type="murshe" aria-pressed="' + (S.biz.type !== 'patur') + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + (S.biz.type === 'patur') + '">עוסק פטור</button></div><div class="hint">עוסק פטור לא מוסיף מע"מ למחיר, ועלות החומרים נרשמת כולל מע"מ. החישוב מתאים לעוסק יחיד, ולא לחברה בע"מ.</div></div></div>' +
     '<div class="card"><span class="sec-lbl">מה מקבלים בסוף</span><ul class="path-list"><li><b>מחיר לכל מוצר</b>כולל הזמן שלך, ההוצאות, המס והרווח</li><li><b>מחירון ורווחיות</b>כמה נשאר מכל מוצר</li><li><b>מחזור יעד ונקודת איזון</b>כמה צריך למכור כדי להרוויח, ומתי מפסיקים להפסיד</li><li><b>תוכנית שנתית</b>כמה למכור מכל מוצר בכל חודש</li><li><b>ניהול שוטף</b>רווח והפסד, כמה נשאר בעסק והערכת מס. ' + gotoBtn(11, 'אפשר להתחיל ישר מכאן') + '</li></ul></div>' +
-    '<div class="step-nav"><button type="button" class="btn ghost" data-act="demo">למלא דוגמה ולהסתכל מסביב</button><button type="button" class="btn" data-goto="1">מתחילים ←</button></div>';
+    '<div class="step-nav">' + (docId ? '<span></span>' : '<button type="button" class="btn ghost" data-act="demo">למלא דוגמה ולהסתכל מסביב</button>') + '<button type="button" class="btn" data-goto="1">מתחילים ←</button></div>';
 };
 
 VIEWS[1] = function () {
@@ -1311,7 +1311,8 @@ function refreshLive() {
     if (el.innerHTML !== html) el.innerHTML = html;
   });
   renderRail();
-  $('bizLabel').textContent = S.biz.name ? '· ' + S.biz.name : '';
+  var who = [S.biz.client, S.biz.name].filter(function (x) { return x; }).join(', ');
+  $('bizLabel').textContent = who ? '· ' + who : '';
 }
 function render(focus) {
   R = E.compute(S); O = E.ops(S, R); fid = 0;
@@ -1431,7 +1432,7 @@ function bootFromHash() {
       lastBlob = blob;
       return decryptBlob(blob, key);
     }).then(function (st) {
-      S = normalize(st); docId = id; docKey = { key: key, b64: kb }; draftApplied = true; step = hasContent(S) ? 10 : 0; return true;
+      S = normalize(st); docId = id; docKey = { key: key, b64: kb }; draftApplied = true; step = S.products.length || E.num(S.labor.net) ? 10 : (E.ops(S).k ? 12 : 0); return true;
     }).catch(function (e) {
       var local = null; try { local = JSON.parse(localStorage.getItem(DRAFT_KEY + '_doc_' + id) || 'null'); } catch (x) {}
       if (local && e.message !== 'gone') { S = normalize(local); docId = id; docKey = { key: key, b64: kb }; draftApplied = true; step = 10; netFail = true; return true; }

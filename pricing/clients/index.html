@@ -455,7 +455,7 @@ a{color:var(--pine-deep)}
   </header>
   <main id="view"></main>
 </div>
-<script src="../engine.js?v=5"></script>
+<script src="../engine.js?v=6"></script>
 <script>
 (function () {
 'use strict';
@@ -513,8 +513,10 @@ function loadClient(c) {
     return fetch(SHARE_API + '/?id=' + encodeURIComponent(c.id)).then(function (r) { if (r.status === 404) throw new Error('gone'); if (!r.ok) throw new Error('net'); return r.text(); }).then(function (blob) { return decrypt(blob, key); });
   }).then(function (st) {
     st.ops = st.ops || {}; st.ops.upto = '';
-    var o = E.ops(st), t = o.total, run = o.bank.opening + t.cashNet;
-    data[c.id] = { k: o.k, avgPreTax: o.k ? t.preTax / o.k : 0, net: t.net, left: t.left, cashNet: t.cashNet, balance: run, name: st.biz && st.biz.client, biz: st.biz && st.biz.name };
+    var o = E.ops(st), t = o.total, run = o.bank.opening + t.cashNet, trend = null;
+    var prevYears = Object.keys(st.years || {}).map(Number).sort();
+    if (prevYears.length) { st.tax = st.tax || {}; var cmp = E.compareYears(o, E.yearOps(st, prevYears[prevYears.length - 1])); if (cmp.n && cmp.preTax[2] != null) trend = cmp.preTax[2]; }
+    data[c.id] = { trend: trend, year: o.year, k: o.k, avgPreTax: o.k ? t.preTax / o.k : 0, net: t.net, left: t.left, cashNet: t.cashNet, balance: run, name: st.biz && st.biz.client, biz: st.biz && st.biz.name };
   }).catch(function (e) { data[c.id] = { error: e && e.message === 'gone' ? 'הקישור פג' : 'לא נטען' }; });
 }
 function loadAll() { return Promise.all(B.clients.filter(function (c) { return !c.archived; }).map(function (c) { return loadClient(c).then(renderList); })); }
@@ -523,19 +525,20 @@ function statusOf(d) {
   if (d.loading) return '<span class="pill-amb">טוען</span>';
   if (d.error) return '<span class="pill-red">' + esc(d.error) + '</span>';
   if (!d.k) return '<span class="pill-amb">עוד לא מילאו</span>';
-  var exp = expectedMonths();
-  if (d.k < exp) return '<span class="pill-red">עד ' + MONTHS[d.k - 1] + ', חסר ' + MONTHS[exp - 1] + '</span>';
-  return '<span class="pill-ok">עד ' + MONTHS[d.k - 1] + '</span>';
+  var nowY = +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', year: 'numeric' }).format(new Date());
+  var exp = d.year < nowY ? 12 : (d.year > nowY ? 0 : expectedMonths()), label = 'עד ' + MONTHS[d.k - 1] + ' ' + d.year;
+  if (d.k < exp) return '<span class="pill-red">' + label + ', חסר ' + MONTHS[exp - 1] + '</span>';
+  return '<span class="pill-ok">' + label + '</span>';
 }
 function rowHtml(c) {
   var d = data[c.id] || {}, has = d.k > 0, num = function (v) { return has ? money(v) : ''; };
-  return '<tr><td class="nm">' + esc(d.name || c.name || 'בלי שם') + '<small>' + esc(d.biz || c.biz || '') + '</small></td><td>' + statusOf(d) + '</td><td>' + num(d.avgPreTax) + '</td><td>' + num(d.net) + '</td><td>' + num(d.left) + '</td><td>' + num(d.cashNet) + '</td><td>' + num(d.balance) + '</td>' +
+  return '<tr><td class="nm">' + esc(d.name || c.name || 'בלי שם') + '<small>' + esc(d.biz || c.biz || '') + '</small></td><td>' + statusOf(d) + '</td><td>' + num(d.avgPreTax) + '</td><td>' + (d.trend == null ? '' : (d.trend >= 0 ? '▲ ' : '▼ ') + Math.abs(Math.round(d.trend)) + '%') + '</td><td>' + num(d.net) + '</td><td>' + num(d.left) + '</td><td>' + num(d.cashNet) + '</td><td>' + num(d.balance) + '</td>' +
     '<td class="acts"><a class="btn small" href="' + esc(clientUrl(c)) + '" target="_blank" rel="noopener">לפתוח</a> <button type="button" class="btn small ghost" data-copy="' + esc(c.id) + '">העתקת קישור</button> <button type="button" class="link-btn" data-archive="' + esc(c.id) + '">לארכיון</button></td></tr>';
 }
 function renderList() {
   var el = $('list'); if (!el) return;
   var active = B.clients.filter(function (c) { return !c.archived; }), arch = B.clients.filter(function (c) { return c.archived; });
-  var table = active.length ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="הלקוחות"><table class="ptable"><thead><tr><th>מי</th><th>מולא</th><th>רווח לפני מס, ממוצע בחודש</th><th>רווח נקי</th><th>נשאר מהרווח</th><th>תזרים</th><th>יתרה לפי המילוי</th><th>פעולות</th></tr></thead><tbody>' + active.map(rowHtml).join('') + '</tbody></table></div>' : '<p class="explain" style="margin:0">עוד אין כאן אף אחד. מוסיפים למעלה.</p>';
+  var table = active.length ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="הלקוחות"><table class="ptable"><thead><tr><th>מי</th><th>מולא</th><th>רווח לפני מס, ממוצע בחודש</th><th>מול השנה הקודמת</th><th>רווח נקי</th><th>נשאר מהרווח</th><th>תזרים</th><th>יתרה לפי המילוי</th><th>פעולות</th></tr></thead><tbody>' + active.map(rowHtml).join('') + '</tbody></table></div>' : '<p class="explain" style="margin:0">עוד אין כאן אף אחד. מוסיפים למעלה.</p>';
   var archHtml = arch.length ? '<button type="button" class="link-btn" data-act="toggleArchive" style="margin-top:12px">' + (showArchive ? 'להסתיר את הארכיון' : 'ארכיון (' + arch.length + ')') + '</button>' + (showArchive ? '<ul class="arch">' + arch.map(function (c) { return '<li>' + esc(c.name || 'בלי שם') + (c.biz ? ' · ' + esc(c.biz) : '') + ' <button type="button" class="link-btn" data-restore="' + esc(c.id) + '">להחזיר</button></li>'; }).join('') + '</ul>' : '') : '';
   el.innerHTML = table + archHtml;
 }

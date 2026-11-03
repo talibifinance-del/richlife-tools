@@ -19,6 +19,12 @@
     reducedThreshold: 7703, ceiling: 51910,
     niDeductible: 52
   };
+  var TABLES_BY_YEAR = { 2026: TABLES_2026 };
+  function hasTables(year) { return !!TABLES_BY_YEAR[year]; }
+  function tablesFor(year) {
+    if (TABLES_BY_YEAR[year]) return TABLES_BY_YEAR[year];
+    var ys = Object.keys(TABLES_BY_YEAR).map(Number).sort(); return TABLES_BY_YEAR[ys[ys.length - 1]];
+  }
   var PATUR_CEILING_2026 = 122833;
   var MAX_MARGIN = 95;
 
@@ -304,7 +310,7 @@
   }
 
   function ops(state, computed) {
-    var s = state || {}, o = s.ops || {}, t = (s.tax && s.tax.tables) || TABLES_2026, biz = s.biz || {};
+    var s = state || {}, o = s.ops || {}, t = (s.tax && s.tax.tables) || tablesFor(o.year || 2026), biz = s.biz || {};
     var patur = biz.type === 'patur', vatRate = patur ? 0 : (biz.vatPct == null ? 18 : pos(biz.vatPct)) / 100;
     var rows = o.rows || {}, draw = o.draw || {}, paid = o.paid || {}, bank = o.bank || {};
     var auto = lastFilled(o), k = pos(o.upto) >= 1 ? Math.min(12, Math.floor(pos(o.upto))) : auto;
@@ -403,12 +409,79 @@
 
     var mandatory = mandatoryPension(taxable / 12) * 12;
     return {
-      k: k, auto: auto, patur: patur, months: months, total: total, annual: annual, taxRate: taxRate,
+      year: o.year || 2026, notes: o.notes || [], k: k, auto: auto, patur: patur, months: months, total: total, annual: annual, taxRate: taxRate,
       due: due, gapIncome: gapIncome, gapSocial: gapSocial, vatOwed: vatOwed,
       bank: { opening: opening, expected: expected, actual: actual, gap: hasBank ? actual - expected : null, reserved: reserved, free: hasBank ? actual - reserved : null },
       mandatory: mandatory, pensionShort: Math.max(0, mandatory - annual.pension),
       planRevenueMonth: computed && computed.annual && computed.annual.revenue != null ? computed.annual.revenue / 12 : null
     };
+  }
+
+  /* ---------- several years: state.ops is always the year in use, the others wait in state.years ---------- */
+  function clone(x) { return JSON.parse(JSON.stringify(x)); }
+  function emptyMonths() { var a = []; for (var i = 0; i < 12; i++) a.push(''); return a; }
+  function yearList(state) {
+    var ys = Object.keys((state && state.years) || {}).map(Number);
+    ys.push((state.ops && state.ops.year) || 2026);
+    return ys.sort(function (a, b) { return a - b; });
+  }
+  /* The year in use, with the credit points kept for that year. */
+  function yearOps(state, year) {
+    var cur = (state.ops && state.ops.year) || 2026, o = year === cur ? state.ops : state.years[year];
+    var taxOf = year === cur ? state.tax : (o._tax || {});
+    var copy = clone(o); copy.upto = '';
+    return ops({ biz: state.biz, tax: { points: taxOf.points, tables: year === cur ? state.tax.tables : null }, ops: copy });
+  }
+  function switchYear(state, year) {
+    var cur = (state.ops && state.ops.year) || 2026;
+    if (year === cur || !state.years || !state.years[year]) return state;
+    state.ops._tax = { points: state.tax.points, pick: state.tax.pick || null, tables: state.tax.tables || null };
+    state.ops.year = cur;
+    state.years[cur] = state.ops;
+    state.ops = state.years[year];
+    delete state.years[year];
+    var t = state.ops._tax || {};
+    state.tax.points = t.points == null ? '' : t.points; state.tax.pick = t.pick || null; state.tax.tables = t.tables || null;
+    delete state.ops._tax;
+    return state;
+  }
+  /* Children grow a year; reserve duty is counted again; a deferred point arrives. Nothing is deleted. */
+  function agePick(p) {
+    if (!p) return null;
+    var q = clone(p), n = function (k) { return pos(q[k]); };
+    var k3 = n('k3'), k2 = n('k2'), k1 = n('k1'), k0 = n('k0');
+    q.deferredLast = !!q.defer; q.defer = false; q.miluim = '';
+    q.k45 = (n('k45') + k3) || ''; q.k3 = k2 || ''; q.k2 = k1 || ''; q.k1 = k0 || ''; q.k0 = '';
+    return q;
+  }
+  function closeYear(state) {
+    var s = clone(state), o = s.ops, year = o.year || 2026, res = yearOps(s, year);
+    var last = (o.bank && o.bank.end || [])[11];
+    var opening = last !== '' && last != null ? num(last) : res.bank.expected;
+    var fresh = clone(o), wipe = function (r) { r.m = emptyMonths(); };
+    Object.keys(fresh.rows || {}).forEach(function (k) { fresh.rows[k].forEach(wipe); });
+    (fresh.private || []).forEach(wipe);
+    Object.keys(fresh.draw || {}).forEach(function (k) { fresh.draw[k] = emptyMonths(); });
+    Object.keys(fresh.paid || {}).forEach(function (k) { fresh.paid[k] = emptyMonths(); });
+    fresh.bank = { opening: opening, end: emptyMonths() };
+    fresh.notes = emptyMonths();
+    fresh.year = year + 1; fresh.edit = 0; fresh.view = 'year'; fresh.upto = ''; fresh.seeded = false;
+    fresh.depreciation = ''; fresh.donations = ''; fresh.otherIncome = ''; fresh.otherWithheld = '';
+    delete fresh._tax;
+    o._tax = { points: s.tax.points, pick: s.tax.pick || null, tables: s.tax.tables || null };
+    o.year = year;
+    s.years = s.years || {}; s.years[year] = o;
+    s.ops = fresh;
+    if (s.tax.pick) { s.tax.pick = agePick(s.tax.pick); s.tax.points = creditPoints(s.tax.pick); }
+    s.tax.tables = null;
+    return s;
+  }
+  /* The same months in both years, so a half-filled year never looks like a drop. */
+  function compareYears(cur, prev) {
+    var n = Math.min(cur.k, prev.k), pct = function (a, b) { return b > 0 ? (a - b) / b * 100 : null; };
+    var sum = function (o, key) { var t = 0; for (var i = 0; i < n; i++) t += o.months[i][key]; return t; };
+    var line = function (key) { var a = sum(cur, key), b = sum(prev, key); return [a, b, pct(a, b)]; };
+    return { n: n, revenue: line('revenue'), preTax: line('preTax'), net: line('net') };
   }
 
   /* ---------- decision helpers on the price list ---------- */
@@ -442,6 +515,7 @@
     TABLES_2026: TABLES_2026, PATUR_CEILING_2026: PATUR_CEILING_2026, MAX_MARGIN: MAX_MARGIN, OPS_2026: OPS_2026,
     num: num, materialUnitPrice: materialUnitPrice, lineCost: lineCost, productDirect: productDirect,
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
-    mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, productRank: productRank, whatIf: whatIf
+    mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, hasTables: hasTables, tablesFor: tablesFor,
+    yearList: yearList, yearOps: yearOps, switchYear: switchYear, closeYear: closeYear, agePick: agePick, compareYears: compareYears, productRank: productRank, whatIf: whatIf
   };
 });

@@ -34,6 +34,7 @@ async function open(p, hash = '') {
   if (await dec.isVisible().catch(() => false)) await dec.click();
 }
 const go = (p, n) => p.evaluate(x => window.__pricing.go(x), n);
+const go12 = async p => { await go(p, 12); await p.evaluate(() => { const d = document.querySelector('details[data-how="opsNumbers"]'); if (d && !d.open) d.open = true; }); await p.waitForTimeout(60); };
 const R = p => p.evaluate(() => JSON.parse(JSON.stringify(window.__pricing.R)));
 const St = p => p.evaluate(() => JSON.parse(JSON.stringify(window.__pricing.S)));
 const type = async (p, path, v) => { const l = p.locator(`[data-path="${path}"]`).first(); await l.fill(''); await l.pressSequentially(String(v)); };
@@ -405,7 +406,10 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await type(p, 'ops.rows.finance.1.m.0', '500');
   await type(p, 'ops.draw.salary.0', '12000');
   await p.waitForTimeout(450);
-  await go(p, 12); await clean(p, 'O12'); await axe(p, 'O12');
+  await go12(p); await clean(p, 'O12'); await axe(p, 'O12');
+  const heroO = await p.locator('[data-live="homeHero"]').innerText();
+  ok('O hero speaks in words', heroO.includes('העסק מרוויח'), heroO);
+  ok('O chart has a text description', (await p.locator('.h-svg').first().getAttribute('aria-label')).includes('ינואר'));
   const ladder = await p.locator('[data-live="opsLadder"]').innerText();
   ok('O ladder revenue without VAT', ladder.includes('40,000'), ladder);
   ok('O ladder gross', ladder.includes('36,000'));
@@ -486,7 +490,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   // type switch and settings
   await p.click('[data-type="patur"]');
   ok('O patur hides the VAT payment', await p.locator('[data-path="ops.paid.vat.1"]').count() === 0);
-  await go(p, 12);
+  await go12(p);
   ok('O patur keeps the full amount', (await p.locator('[data-live="opsLadder"]').innerText()).includes('47,200'));
   await go(p, 11); await p.click('[data-type="murshe"]');
   await p.click('[data-how="opsSettings"] summary');
@@ -499,8 +503,8 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.waitForTimeout(500); await p.reload(); await p.waitForFunction(() => window.__pricing);
   await p.waitForTimeout(150);
   await p.click('[data-act="resume"]');
-  ok('O resume lands on the results', (await p.textContent('#stepTitle')).includes('רווח ותזרים'));
-  ok('O data survived', (await p.locator('[data-live="opsLadder"]').innerText()).includes('40,000'));
+  ok('O resume lands on the results', (await p.textContent('#stepTitle')).includes('איך העסק שלי'));
+  await go12(p); ok('O data survived', (await p.locator('[data-live="opsLadder"]').innerText()).includes('40,000'));
   await ctx.close();
 }
 /* ---- P. a draft saved before this feature still opens ---- */
@@ -519,17 +523,18 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
 {
   const { ctx, p } = await newPage({ width: 400, height: 800 }); await open(p);
   await p.click('[data-act="demo"]');
-  await go(p, 12); await p.click('details[data-how="opsGridRO"] summary'); await clean(p, 'Q12 yearly table'); await p.click('details[data-how="opsGridRO"] summary');
+  await go12(p); await p.click('details[data-how="opsGridRO"] summary'); await clean(p, 'Q12 yearly table'); await p.click('details[data-how="opsGridRO"] summary');
   await go(p, 11); await p.click('[data-fillmode="year"]'); await clean(p, 'Q11 yearly mode'); await axe(p, 'Q11 yearly mode'); await p.screenshot({ path: OUT + '/q11-year-phone.png' }); await p.click('[data-fillmode="month"]');
   for (const n of [7, 11, 12, 13]) { await go(p, n); await clean(p, 'Q' + n + ' phone'); await p.screenshot({ path: OUT + '/q' + n + '-phone.png', fullPage: true }); }
-  await go(p, 12);
+  await go12(p);
+  await p.click('[data-opsperiod="q"]');
   await p.click('[data-opsview="q0"]');
   const avgQ = await p.locator('[data-live="opsPlain"]').innerText();
   ok('Q average for a quarter', avgQ.includes('24,500') && avgQ.includes('רבעון 1'), avgQ);
   ok('Q quarter ladder', (await p.locator('[data-live="opsLadder"]').innerText()).includes('120,000'));
   await p.click('[data-opsview="q1"]');
   ok('Q empty quarter says so', (await p.locator('[data-live="opsPlain"]').innerText()).includes('אין נתונים'));
-  await p.click('[data-opsview="year"]');
+  await p.click('[data-opsperiod="year"]');
   await p.click('[data-tableby="quarters"]');
   const qt = await p.locator('[data-live="opsTable"]').innerText();
   ok('Q table by quarters', qt.includes('רבעון 4') && !qt.includes('אוגוסט') && qt.includes('ממוצע בחודש'), qt.slice(0, 200));
@@ -543,6 +548,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.selectOption('#opsUpto2', '2');
   const lim = await p.locator('[data-live="opsPlain"]').innerText();
   ok('Q says when months are left out', lim.includes('לא נספר') && lim.includes('רק עד פברואר'), lim);
+  ok('Q the hero says it too', (await p.locator('[data-live="homeHero"]').innerText()).includes('רק עד פברואר'));
   ok('Q total header names the month', (await p.locator('[data-live="opsTable"]').innerText()).includes('סך הכל עד פברואר'));
   await p.selectOption('#opsUpto2', '');
   const bank = await p.locator('[data-live="opsBankTable"]').innerText();
@@ -568,6 +574,59 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await ctx.close();
 }
 
+/* ---- S. the home screen says the right thing, and years work ---- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  await p.click('[data-act="demo"]');
+  await go12(p);
+  // three states of the sentence, checked against the numbers
+  const hero = () => p.locator('[data-live="homeHero"]').innerText();
+  const O_ = () => p.evaluate(() => { const o = window.__pricing.O; return { net: o.total.net, left: o.total.left }; });
+  let n = await O_(); ok('S demo covers what was taken', n.left > 0 && (await hero()).includes('מכוסה'), [n, await hero()]);
+  await p.evaluate(() => { const S = window.__pricing.S; S.ops.draw.salary = S.ops.draw.salary.map(v => v === '' ? '' : 30000); });
+  await go12(p); n = await O_(); ok('S taking too much is said', n.left < 0 && n.net > 0 && (await hero()).includes('יותר ממה שהרווחת'), [n, await hero()]);
+  ok('S the tile warns', (await p.locator('[data-live="homeTiles"]').innerText()).includes('לקחת יותר מהרווח'));
+  await p.evaluate(() => { const S = window.__pricing.S; S.ops.rows.admin[0].m = S.ops.rows.admin[0].m.map(v => v === '' ? '' : 90000); });
+  await go12(p); n = await O_(); ok('S a loss is said', n.net <= 0 && (await hero()).includes('הפסיד'), [n, await hero()]);
+  ok('S a loss has no broken share bar', (await p.locator('[data-live="homeShare"]').innerText()).includes('גדולים מההכנסות'));
+  await clean(p, 'S loss'); await axe(p, 'S loss');
+  await p.evaluate(() => { const S = window.__pricing.S; S.ops.rows.admin[0].m = S.ops.rows.admin[0].m.map(v => v === '' ? '' : 5000); S.ops.draw.salary = S.ops.draw.salary.map(v => v === '' ? '' : 12000); S.ops.notes[1] = 'חופשת לידה'; });
+  await go12(p);
+  ok('S the month note reaches the chart', (await p.locator('[data-live="homeBars"]').innerHTML()).includes('חופשת לידה'));
+  // a month view
+  await p.click('[data-opsperiod="m"]'); await p.click('[data-opsview="0"]');
+  ok('S a month speaks about that month', (await hero()).includes('בינואר'), await hero());
+  await p.click('[data-opsview="7"]'); ok('S an empty month says so', (await hero()).includes('אין נתונים'));
+  await p.click('[data-opsperiod="year"]');
+  await p.screenshot({ path: OUT + '/s-home.png', fullPage: true });
+  // close the year
+  const before = await p.evaluate(() => { const o = window.__pricing.O; return { pre: o.total.preTax, end: o.bank.expected, y: o.year }; });
+  await p.click('[data-act="closeYear"]');
+  ok('S closing asks first', (await p.locator('[data-act="closeYear"]').innerText()).includes('בטוח'));
+  await p.click('[data-act="closeYear"]');
+  ok('S lands on filling the new year', (await p.textContent('#stepTitle')).includes('מילוי החודש'));
+  const after = await p.evaluate(() => { const P = window.__pricing; return { y: P.S.ops.year, open: P.S.ops.bank.opening, k: P.O.k, old: !!P.S.years[2026] || Object.keys(P.S.years).length }; });
+  near('S next year', after.y, before.y + 1); near('S balance carried', after.open, before.end); near('S empty', after.k, 0); ok('S old year kept', !!after.old);
+  await clean(p, 'S new year 11');
+  await p.locator('[data-path="ops.rows.income.3.m.0"]').pressSequentially('11800');
+  await go12(p); await clean(p, 'S new year 12');
+  const hasTbl = await p.evaluate(y => window.PricingEngine.hasTables(y), after.y);
+  if (!hasTbl) ok('S says the tables are not updated', (await hero()).includes('עוד לא עודכנו'));
+  ok('S trend appears', (await p.locator('[data-live="homeTrend"]').innerText()).includes('מול ' + before.y), await p.locator('[data-live="homeTrend"]').innerText());
+  await axe(p, 'S trend');
+  // back to the old year, change it, and it stays
+  await p.click('[data-opsyear="' + before.y + '"]');
+  near('S old year numbers are back', await p.evaluate(() => window.__pricing.O.total.preTax), before.pre);
+  await go(p, 11); await p.click('[data-opsedit="0"]'); await p.evaluate(() => document.querySelectorAll('details.ops-sec').forEach(d => { d.open = true; })); await p.locator('[data-path="ops.rows.finance.1.m.0"]').fill('');
+  await p.locator('[data-path="ops.rows.finance.1.m.0"]').pressSequentially('100');
+  await p.waitForTimeout(450);
+  await p.reload(); await p.waitForFunction(() => window.__pricing); await p.waitForTimeout(150); await p.click('[data-act="resume"]');
+  near('S the year in use survives a reload', await p.evaluate(() => window.__pricing.S.ops.year), before.y);
+  near('S the edit in the old year stayed', +(await p.evaluate(() => window.__pricing.S.ops.rows.finance[1].m[0])), 100);
+  await go12(p); ok('S both years listed', await p.locator('[data-opsyear]').count() === 2);
+  ok('S no page errors', p.errs.length === 0, p.errs);
+  await ctx.close();
+}
 /* ---- R. the client board, against a stand-in share server ---- */
 {
   const store = new Map(); let seq = 0;
@@ -617,6 +676,17 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('R board shows the profit', rows.includes('10,000'), rows);
   ok('R the second client is still empty', rows.includes('עוד לא מילאו'));
 
+  // a new year on her link reaches the board, with the comparison
+  const c2 = await newPage(); await c2.ctx.route(/richlife-share/, mock);
+  await c2.p.goto(link); await c2.p.waitForFunction(() => window.__pricing); await c2.p.waitForTimeout(300);
+  const d4 = c2.p.locator('#rl-consent .rl-no'); if (await d4.isVisible().catch(() => false)) await d4.click();
+  await go(c2.p, 12); await c2.p.click('[data-act="closeYear"]'); await c2.p.click('[data-act="closeYear"]');
+  await type(c2.p, 'ops.rows.income.3.m.0', '11800'); await c2.p.waitForTimeout(2200); await c2.ctx.close();
+  await p.reload(); await p.waitForSelector('#list tbody tr'); await p.waitForFunction(() => !document.querySelector('#list').innerText.includes('טוען'));
+  const rows2 = await p.locator('#list').innerText();
+  ok('R board shows the comparison with last year', rows2.includes('0%'), rows2);
+  ok('R board names the year', /ינואר 20\d\d/.test(rows2), rows2);
+  ok('R the board reads the new year', rows2.includes('10,000'), rows2);
   // archive keeps the data
   await p.locator('[data-archive]').nth(1).click();
   await p.waitForFunction(() => document.querySelectorAll('#list tbody tr').length === 1);

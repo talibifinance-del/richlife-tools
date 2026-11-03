@@ -279,6 +279,60 @@ a{color:var(--pine-deep)}
 .ptable td.nm .ti-b{min-width:220px;white-space:normal}
 .plain{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:14.5px;font-weight:600;line-height:1.6;color:var(--ink)}
 .plain b{font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums}
+.hero{margin-bottom:18px}
+.hero h2{font-size:clamp(25px,3.4vw,38px);font-weight:900;line-height:1.22;color:var(--pine-darker);letter-spacing:-.2px}
+.hero p{font-size:clamp(16px,1.8vw,19px);line-height:1.55;color:var(--ink-soft);margin-top:8px;font-weight:500}
+.h-ctrl{margin-bottom:12px;align-items:center}
+.h-ctrl button{font-size:14.5px;padding:7px 16px}
+.h-sep{width:1px;height:22px;background:var(--line);margin-inline:4px}
+.h-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.h-tile{background:var(--card);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
+.h-st{display:inline-block;font-size:14px;font-weight:800;padding:4px 12px;border-radius:100px}
+.h-st.good{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep)}
+.h-st.warn{background:rgba(183,121,31,.14);color:var(--amber-deep)}
+.h-v{font-size:clamp(28px,3.2vw,38px);font-weight:900;color:var(--pine-darker);margin:12px 0 4px;letter-spacing:-.4px;font-variant-numeric:tabular-nums}
+.h-v.w{color:var(--amber-deep)}
+.h-tile p{font-size:15.5px;line-height:1.5;color:var(--ink-soft);font-weight:500}
+.h-t{font-size:clamp(19px,2vw,23px);font-weight:900;color:var(--pine-darker)}
+.h-sub{font-size:15.5px;line-height:1.5;color:var(--ink-soft);font-weight:500;margin:3px 0 14px}
+.h-bar{display:flex;height:54px;border-radius:13px;overflow:hidden;max-width:100%}
+.h-bar>div{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:clamp(14px,1.7vw,19px);color:#fff;white-space:nowrap}
+.h-bar .a,.h-legend i.a{background:var(--pine)}
+.h-bar .b{background:#8fa797;color:#16241c}
+.h-legend i.b{background:#8fa797}
+.h-bar .c,.h-legend i.c{background:#c98f35}
+.h-bar .c{color:#2b1c03}
+.h-legend i.d{background:#c7d6ca}
+.h-legend i.f{background:repeating-linear-gradient(45deg,#5f7d6a 0 3px,#dfe8e1 3px 7px)}
+.h-legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin:10px 0 22px;font-size:14.5px;font-weight:600;color:var(--ink-soft)}
+.h-legend i{display:inline-block;width:13px;height:13px;border-radius:4px;margin-inline-end:7px;vertical-align:-1px}
+.h-take{position:relative;margin-top:30px}
+.h-track{position:relative;height:42px}
+.h-fill{height:100%;border-radius:11px;background:repeating-linear-gradient(135deg,#d9a24a 0 9px,#e5b76a 9px 18px);display:flex;align-items:center;justify-content:center;color:#3a2706;font-weight:900;font-size:16px;white-space:nowrap}
+.h-fill.ok{background:rgba(var(--pine-rgb),.28);color:var(--pine-darker)}
+.h-mark{position:absolute;top:-8px;bottom:-8px;width:3px;background:var(--pine-darker)}
+.h-marklbl{position:absolute;top:-30px;transform:translateX(50%);font-size:13.5px;font-weight:800;color:var(--pine-darker);white-space:nowrap}
+.h-two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;margin-top:14px;align-items:stretch}
+.h-two>.card+.card{margin-top:0}
+.h-svg{display:block;width:100%;height:auto}
+.h-svg text{font-family:var(--font)}
+.h-tips{display:grid;gap:10px;margin-top:12px}
+.h-tip{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.5;font-weight:500;color:var(--ink);padding:12px 14px;background:var(--sage-tint);border-radius:13px}
+.h-tip b{font-weight:800}
+.h-tip .ic{flex:none;width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:15px}
+.h-actions{margin-top:16px}
+.h-more{margin-top:12px}
+.h-more>summary{display:inline-block;cursor:pointer;font-weight:800;font-size:15px;padding:11px 20px;border-radius:12px;background:#fff;color:var(--pine-deep);border:1.5px solid rgba(var(--pine-rgb),.42);list-style:none}
+.h-more>summary::-webkit-details-marker{display:none}
+.h-more>summary:focus-visible{outline:2px solid var(--pine-darker);outline-offset:2px}
+.h-cmp{display:grid;grid-template-columns:minmax(110px,1fr) minmax(0,1.6fr) minmax(120px,1fr);gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15.5px;font-weight:600;color:var(--ink-soft)}
+.h-cmp b{font-weight:800;color:var(--pine-darker)}
+.h-cmp .up{color:var(--pine-deep);font-weight:800}
+.h-cmp .down{color:var(--amber-deep);font-weight:800}
+.hint{font-size:13.5px}
+.explain{font-size:14.5px}
+.ti-b{font-size:14px}
+@media (max-width:820px){.h-tiles{grid-template-columns:minmax(0,1fr)}.h-two{grid-template-columns:minmax(0,1fr)}.h-cmp{grid-template-columns:minmax(0,1fr)}}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -474,7 +528,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=5"></script>
+<script src="engine.js?v=6"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -498,7 +552,7 @@ var STEPS = [
   { t: 'יעדים ותוכנית שנתית', why: 'המחזור מתורגם לכמה מכירות צריך מכל מוצר, ואז פורסים אותן על השנה לפי מועדים, השקות ומבצעים.' },
   { t: 'התמונה המלאה' },
   { t: 'מילוי החודש', why: 'פעם בחודש ממלאים מה נכנס ומה יצא, כמו שזה מופיע בבנק. כל השאר מחושב מזה. הנתונים נשמרים, וכל חודש ממשיכים מאיפה שעצרת.' },
-  { t: 'רווח ותזרים', why: 'שתי שאלות שונות על אותם נתונים: כמה העסק הרוויח, וכמה כסף באמת נכנס ויצא מהחשבון.' },
+  { t: 'איך העסק שלי?' },
   { t: 'הערכת מס', why: 'כמה מס צפוי לכל השנה לפי מה שמילאת, וכמה היה צריך לשלם עד עכשיו.' }
 ];
 
@@ -510,7 +564,7 @@ function opsRowNew(name, opts) { return Object.assign({ name: name, m: months() 
 function opsDefaults() {
   var nv = { vat: false };
   return {
-    edit: 0, fillMode: 'month', view: 'year', tableBy: 'months', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '', otherIncome: '', otherWithheld: '',
+    year: israelYear(), notes: months(), edit: 0, fillMode: 'month', view: 'year', tableBy: 'months', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '', otherIncome: '', otherWithheld: '',
     rows: {
       income: ['סליקה', 'ביט', 'פייבוקס', 'העברה בנקאית', 'אחר'].map(function (n) { return opsRowNew(n); }).concat([opsRowNew('החזרים ללקוחות, יורד מההכנסות', { refund: true })]),
       direct: ['קבלני משנה', 'חומרי גלם', 'חומרי אריזה', 'שילוח, מכס ויבוא', 'אחר'].map(function (n) { return opsRowNew(n); }),
@@ -542,6 +596,7 @@ function emptyState() {
     tax: { points: '', saving: '', tables: null, pick: null },
     plan: { dates: DEFAULT_DATES.slice(), launches: months(), promos: months(), focus: months() },
     whatIf: { i: '0', pct: '-10' },
+    years: {},
     ops: opsDefaults()
   };
 }
@@ -573,6 +628,8 @@ function demoState() {
   o.home = true; o.car = true; three(o.private[0].m, 600); three(o.private[6].m, 800); o.seeded = true; o.edit = 2;
   return s;
 }
+function israelYear() { return +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', year: 'numeric' }).format(new Date()); }
+function israelMonth() { return +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', month: 'numeric' }).format(new Date()) - 1; }
 var S = emptyState();
 var step = 0, R = null, O = null;
 var docId = null, docKey = null, pushT = null, draftT = null, howOpen = {}, netFail = false;
@@ -997,7 +1054,7 @@ var INFO = {
 };
 function tableInfo(key, title) { return ' <details class="ti" data-how="t_' + key + '"' + (howOpen['t_' + key] ? ' open' : '') + '><summary aria-label="מה זה ' + title + '?">i</summary><div class="ti-b">' + INFO[key] + '</div></details>'; }
 function info(key, title) { return ' <details class="ti" data-how="i_' + key + '"' + (howOpen['i_' + key] ? ' open' : '') + '><summary aria-label="מה זה ' + title + '?">i</summary><div class="ti-b">' + INFO[key] + '</div></details>'; }
-function opsYear() { return (S.tax.tables || E.TABLES_2026).year; }
+function opsYear() { return S.ops.year || 2026; }
 var MILUIM = [['', 'לא'], ['0.5', '30 עד 39 ימים'], ['0.75', '40 עד 49 ימים'], ['1', '50 עד 54 ימים'], ['1.25', '55 עד 59 ימים'], ['1.5', '60 עד 64 ימים'], ['1.75', '65 עד 69 ימים'], ['2', '70 עד 74 ימים'], ['2.25', '75 עד 79 ימים'], ['2.5', '80 עד 84 ימים'], ['2.75', '85 עד 89 ימים'], ['3', '90 עד 94 ימים'], ['3.25', '95 עד 99 ימים'], ['3.5', '100 עד 104 ימים'], ['3.75', '105 עד 109 ימים'], ['4', '110 ימים ומעלה']];
 function pickDefaults() { return { gender: 'woman', k0: '', k1: '', k2: '', k3: '', k45: '', k612: '', k1317: '', k18: '', defer: false, deferredLast: false, miluim: '', soldier: '', degree: '', single: false, disabled: '', immigrant: '', extra: '' }; }
 function pointsText() { var v = E.num(S.tax.points); return v ? v + ' נקודות · ' + ils(v * (S.tax.tables || E.TABLES_2026).pointValue, 0) + ' בחודש' : 'עוד לא נבחר'; }
@@ -1119,7 +1176,7 @@ VIEWS[11] = function () {
   return head() + '<div class="card"><span class="sec-lbl">על העסק</span><div class="field"><span class="lbl" id="typeLbl2">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl2"><button type="button" data-type="murshe" aria-pressed="' + !patur + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + patur + '">עוסק פטור</button></div><div class="hint">' + (patur ? 'בעוסק פטור אין מע"מ בכלל, וממלאים כמו בבנק.' : 'ממלאים כמו בבנק, כולל מע"מ. הכלי מנטרל אותו לבד לפי סוג השורה.') + '</div></div>' +
     '<label class="check-line" style="margin-top:12px"><input type="checkbox" data-check="ops.home" data-rerender' + (S.ops.home ? ' checked' : '') + '> העסק עובד מהבית</label><label class="check-line" style="margin-top:6px"><input type="checkbox" data-check="ops.car" data-rerender' + (S.ops.car ? ' checked' : '') + '> הרכב הפרטי משמש גם לעסק</label></div>' +
     '<div class="card"><span class="sec-lbl">איך נוח למלא?</span><div class="seg" role="group" aria-label="איך למלא"><button type="button" data-fillmode="month" aria-pressed="' + !year + '">חודש אחד</button><button type="button" data-fillmode="year" aria-pressed="' + year + '">כל השנה בטבלה</button></div><div class="hint">אלה אותם נתונים בשתי תצוגות, אז ממלאים רק באחת. אפשר לעבור ביניהן מתי שרוצים.</div>' +
-    (year ? '' : '<div style="margin-top:14px"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') + '</div>') + '</div>' +
+    (year ? '' : '<div style="margin-top:14px"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') + '<div class="fields" style="margin-top:12px"><div class="field"><label for="opsNote">הערה ל' + MONTHS[e] + ', לא חובה</label><div class="input-shell"><input id="opsNote" type="text" autocomplete="off" data-text data-path="ops.notes.' + e + '" value="' + esc((S.ops.notes || [])[e]) + '" placeholder="למשל: חופשת לידה, השקה, מילואים"></div><div class="hint">מופיעה בגרפים ובהשוואה לשנה הבאה.</div></div></div></div>') + '</div>' +
     (year ? '<div class="card"><span class="sec-lbl">כל השנה, כמו בבנק</span><p class="explain">כל שינוי נשמר לבד. מע"מ, חד-פעמית ואחוז שמוכר במס נמצאים בהגדרות למטה. להוספת שורה חדשה עוברים ל"חודש אחד".</p>' + opsGridHtml(true) + '</div>' :
     opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה. החזר ללקוחה נרשם בשורה שלו, והוא מוריד את ההכנסות.', 'הוספת מקור הכנסה') +
     opsSection('עלויות ישירות', 'direct', 'מה שעולה לספק את המוצר או השירות עצמו.', 'הוספת עלות') +
@@ -1133,8 +1190,20 @@ VIEWS[11] = function () {
     '<div class="card"><span class="sec-lbl">בדיקה מול הבנק</span><div class="fields">' + signedInput('bankOpen', 'ops.bank.opening', 'יתרה ב-1 בינואר') + (year ? (O.k ? signedInput('bankEnd', 'ops.bank.end.' + (O.k - 1), 'יתרה בסוף ' + MONTHS[O.k - 1]) : '') : signedInput('bankEnd', 'ops.bank.end.' + e, 'יתרה בסוף ' + MONTHS[e])) + '</div>' + live('opsBank') + '</div>' + stepNav();
 };
 VIEWS[12] = function () {
-  return head() + live('opsEmpty') + '<div class="card"><span class="sec-lbl">איזו תקופה לראות?</span>' + opsTabs(S.ops.view, 'data-opsview', true) + '<div class="field" style="margin-top:12px;max-width:260px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto"><option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('') + '</select></div></div></div><div class="card" style="margin-top:14px">' + live('opsPlain') + '</div><div class="ops-grid"><div class="card"><span class="sec-lbl">רווח והפסד: העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">מה לקחת מהרווח</span>' + live('opsDrawn') + '</div>' +
-    '<div class="ops-side">' + live('opsSide') + '</div></div><div class="card"><span class="sec-lbl">כמה הרווחתי? בלי מע"מ</span>' + live('opsTable') + '</div><div class="card"><span class="sec-lbl">מה קרה בחשבון הבנק? כל הכסף, כולל מע"מ</span>' + live('opsBankTable') + '</div><div class="card"><details class="how" style="margin-top:0" data-how="opsGridRO"' + (howOpen.opsGridRO ? ' open' : '') + '><summary>לפתוח את כל ההכנסות וההוצאות, שורה שורה, כמו באקסל</summary><div class="how-b"><p class="explain">הסכומים כמו שמולאו, כלומר כמו בבנק' + (S.biz.type === 'patur' ? '' : ' וכולל מע"מ. הטבלה שלמעלה כבר בלי מע"מ') + '. לעריכה: ' + gotoBtn(11, 'מילוי החודש') + '.</p>' + live('opsGridRO') + '</div></details>' + live('opsPlan') + '</div>' + stepNav();
+  var v = String(S.ops.view), mode = v === 'year' || v === '' || v === 'null' ? 'year' : (v.charAt(0) === 'q' ? 'q' : 'm');
+  var years = E.yearList(S), yearPills = years.map(function (y) { return '<button type="button" data-opsyear="' + y + '" aria-pressed="' + (y === opsYear()) + '">' + y + '</button>'; }).join('');
+  var seg = [['year', 'כל השנה'], ['q', 'רבעון'], ['m', 'חודש']].map(function (o) { return '<button type="button" data-opsperiod="' + o[0] + '" aria-pressed="' + (mode === o[0]) + '">' + o[1] + '</button>'; }).join('');
+  var picker = mode === 'q' ? [0, 1, 2, 3].map(function (q) { return '<button type="button" data-opsview="q' + q + '" aria-pressed="' + (v === 'q' + q) + '">רבעון ' + (q + 1) + '</button>'; }).join('') : (mode === 'm' ? MONTHS.map(function (m, i) { return '<button type="button" data-opsview="' + i + '" aria-pressed="' + (v === String(i)) + '"' + (O && i < O.k ? ' class="has"' : '') + '>' + m + '</button>'; }).join('') : '');
+  var uptoOpts = '<option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('');
+  return head() + live('opsEmpty') +
+    '<div class="month-tabs h-ctrl" role="group" aria-label="איזו שנה ותקופה לראות">' + yearPills + '<span class="h-sep" aria-hidden="true"></span>' + seg + '</div>' + (picker ? '<div class="month-tabs" role="group" aria-label="בחירת תקופה" style="margin-bottom:18px">' + picker + '</div>' : '') +
+    live('homeHero') + live('homeTiles') +
+    '<div class="card">' + live('homeShare') + '</div><div class="h-two"><div class="card">' + live('homeBars') + '</div><div class="card">' + live('homeBalance') + '</div></div>' + live('homeTrend') + '<div class="card" style="margin-top:14px">' + live('homeTips') + '</div>' +
+    '<div class="h-actions"><button type="button" class="btn" data-goto="11">למלא את החודש</button></div>' +
+    '<details class="h-more" data-how="opsNumbers"' + (howOpen.opsNumbers ? ' open' : '') + '><summary>לראות את המספרים</summary><div style="margin-top:14px"><div class="field" style="max-width:260px;margin-bottom:14px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto">' + uptoOpts + '</select></div></div>' +
+    '<div class="card">' + live('opsPlain') + '</div>' + '<div class="ops-grid"><div class="card"><span class="sec-lbl">רווח והפסד: העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">מה לקחת מהרווח</span>' + live('opsDrawn') + '</div>' +
+    '<div class="ops-side">' + live('opsSide') + '</div></div><div class="card"><span class="sec-lbl">כמה הרווחתי? בלי מע"מ</span>' + live('opsTable') + '</div><div class="card"><span class="sec-lbl">מה קרה בחשבון הבנק? כל הכסף, כולל מע"מ</span>' + live('opsBankTable') + '</div><div class="card"><details class="how" style="margin-top:0" data-how="opsGridRO"' + (howOpen.opsGridRO ? ' open' : '') + '><summary>לפתוח את כל ההכנסות וההוצאות, שורה שורה, כמו באקסל</summary><div class="how-b"><p class="explain">הסכומים כמו שמולאו, כלומר כמו בבנק' + (S.biz.type === 'patur' ? '' : ' וכולל מע"מ. הטבלה שלמעלה כבר בלי מע"מ') + '. לעריכה: ' + gotoBtn(11, 'מילוי החודש') + '.</p>' + live('opsGridRO') + '</div></details>' + live('opsPlan') + '</div></div></details>' +
+    '<div class="card" style="margin-top:14px"><span class="sec-lbl">שנה חדשה</span><p class="explain">סוגרים את ' + opsYear() + ' כשהשנה נגמרת. הנתונים נשמרים, היתרה עוברת, והשורות נשארות ריקות למילוי. אפשר לחזור לכל שנה ולתקן.</p>' + (years[years.length - 1] > opsYear() ? '<p class="explain" style="margin:0">' + (opsYear() + 1) + ' כבר פתוחה. אפשר לעבור אליה למעלה.</p>' : '<button type="button" class="btn small ghost" data-act="closeYear">לסגור את ' + opsYear() + ' ולפתוח את ' + (opsYear() + 1) + '</button>') + '</div>' + stepNav();
 };
 VIEWS[13] = function () {
   var opts = '<option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('');
@@ -1146,7 +1215,139 @@ VIEWS[13] = function () {
     live('opsTaxOut') + '<div class="note soft">החישוב הוא הערכה בלבד ואינו ייעוץ מס. הוא מניח שהעסק הוא מקור ההכנסה היחיד. לחישוב מדויק כדאי לשבת עם רואה חשבון.</div>' + stepNav();
 };
 
+function periodFirst() { var v = String(S.ops.view); if (v === 'year' || v === '' || v === 'null') return 0; return v.charAt(0) === 'q' ? +v.slice(1) * 3 : +v; }
+function periodLast() { var v = String(S.ops.view); if (v === 'year' || v === '' || v === 'null') return O.k; return v.charAt(0) === 'q' ? Math.min(O.k || 0, (+v.slice(1) + 1) * 3) : +v + 1; }
+function balanceAt(n) { var b = O.bank.opening; for (var i = 0; i < n; i++) b += O.months[i].cashNet; return b; }
+function noteOf(i) { return (S.ops.notes || [])[i] || ''; }
+function periodWord() {
+  var v = String(S.ops.view);
+  if (v === 'year' || v === '' || v === 'null') return O.k === 12 ? 'השנה' : 'עד ' + MONTHS[O.k - 1];
+  return v.charAt(0) === 'q' ? 'ברבעון ' + (+v.slice(1) + 1) : 'ב' + MONTHS[+v];
+}
+/* Rounded for reading; the exact numbers wait behind the button. */
+function approx(n) {
+  var a = Math.abs(E.num(n)), neg = E.num(n) < 0, t;
+  if (a >= 50000) t = 'כ-' + Math.round(a / 1000) + ' אלף ₪';
+  else if (a >= 1000) t = 'כ-' + money(Math.round(a / 100) * 100) + ' ₪';
+  else t = money(a) + ' ₪';
+  return neg ? 'מינוס ' + t : t;
+}
+function expectedFilled() { return opsYear() === israelYear() ? israelMonth() : (opsYear() < israelYear() ? 12 : 0); }
+function futureFrom() { return opsYear() === israelYear() ? israelMonth() : (opsYear() < israelYear() ? 12 : 0); }
+function barsSvg() {
+  var W = 640, H = 300, b = 34, t = 34, pad = 50, gw = (W - pad) / 12, bw = 17, ms = O.months;
+  var max = Math.max(1000, Math.max.apply(null, ms.map(function (m) { return Math.max(m.revenue, m.revenue - m.preTax); })));
+  var y = function (v) { return H - b - (H - b - t) * Math.max(0, v) / max; }, step = max > 40000 ? 20000 : (max > 15000 ? 10000 : 5000), out = '', v;
+  for (v = step; v <= max; v += step) out += '<line x1="0" x2="' + W + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#e6ece7"/><text x="' + (W - 2) + '" y="' + (y(v) - 5) + '" text-anchor="start" font-size="13" font-weight="600" fill="#6b7a71">' + (v / 1000) + ' אלף</text>';
+  var fut = futureFrom(), desc = [];
+  ms.forEach(function (m, i) {
+    var cx = W - pad - gw * (i + 0.5), cost = m.revenue - m.preTax, on = m.i < O.auto || m.revenue > 0 || cost > 0;
+    if (on) {
+      out += '<rect x="' + cx + '" y="' + y(m.revenue) + '" width="' + bw + '" height="' + Math.max(0, y(0) - y(m.revenue)) + '" rx="4" fill="' + (i >= fut ? 'url(#hatch)' : '#5f7d6a') + '"/>';
+      out += '<rect x="' + (cx - bw - 1) + '" y="' + y(cost) + '" width="' + bw + '" height="' + Math.max(0, y(0) - y(cost)) + '" rx="4" fill="#c7d6ca"/>';
+      desc.push(MONTHS[i] + ': הכנסות ' + money(m.revenue) + ', הוצאות ' + money(cost));
+    }
+    out += '<text x="' + cx + '" y="' + (H - 10) + '" text-anchor="middle" font-size="14" font-weight="600" fill="#51625a">' + MONTHS[i].slice(0, 3) + '</text>';
+    if (noteOf(i)) out += '<text x="' + cx + '" y="' + (y(Math.max(m.revenue, cost)) - 22) + '" text-anchor="middle" font-size="13.5" font-weight="800" fill="#7d5310">' + esc(noteOf(i)) + '</text><line x1="' + cx + '" x2="' + cx + '" y1="' + (y(Math.max(m.revenue, cost)) - 18) + '" y2="' + (y(Math.max(m.revenue, cost)) - 4) + '" stroke="#b7791f" stroke-width="1.5"/>';
+  });
+  return '<svg class="h-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(desc.join('. ')) + '"><defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#dfe8e1"/><rect width="3" height="7" fill="#5f7d6a"/></pattern></defs>' + out + '</svg>';
+}
+function lineSvg() {
+  var W = 490, H = 320, b = 46, t = 30, last = O.k, vals = [], i;
+  for (i = 0; i < last; i++) vals.push(balanceAt(i + 1));
+  var hi = Math.max.apply(null, vals.concat([0])), lo = Math.min.apply(null, vals.concat([0])); if (hi === lo) hi = lo + 1000;
+  var y = function (v) { return t + (H - b - t) * (hi - v) / (hi - lo); }, x = function (n) { return W - 22 - (W - 70) * n / 11; };
+  var pts = vals.map(function (v, n) { return x(n) + ',' + y(v); }).join(' '), area = x(0) + ',' + y(0) + ' ' + pts + ' ' + x(vals.length - 1) + ',' + y(0);
+  var out = '<defs><clipPath id="clipUp"><rect x="0" y="0" width="' + W + '" height="' + y(0) + '"/></clipPath><clipPath id="clipDn"><rect x="0" y="' + y(0) + '" width="' + W + '" height="' + (H - y(0)) + '"/></clipPath></defs>' +
+    '<polygon points="' + area + '" fill="rgba(95,125,106,.18)" clip-path="url(#clipUp)"/><polygon points="' + area + '" fill="rgba(183,121,31,.22)" clip-path="url(#clipDn)"/>' +
+    '<line x1="0" x2="' + W + '" y1="' + y(0) + '" y2="' + y(0) + '" stroke="#2f4036" stroke-width="1.5"/><text x="' + (W - 4) + '" y="' + (y(0) - 6) + '" text-anchor="start" font-size="13.5" font-weight="800" fill="#2f4036">0 ₪</text>' +
+    '<polyline points="' + pts + '" fill="none" stroke="#3e5448" stroke-width="3" clip-path="url(#clipUp)"/><polyline points="' + pts + '" fill="none" stroke="#b7791f" stroke-width="3" clip-path="url(#clipDn)"/>';
+  var maxI = 0, minI = 0;
+  vals.forEach(function (v, n) { if (v > vals[maxI]) maxI = n; if (v < vals[minI]) minI = n; });
+  vals.forEach(function (v, n) { out += '<circle cx="' + x(n) + '" cy="' + y(v) + '" r="4.5" fill="' + (v < 0 ? '#b7791f' : '#3e5448') + '" stroke="#fff" stroke-width="1.5"/>'; });
+  for (i = 0; i < 12; i += 1) if (i % 3 === 2 || i === 0) out += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="14" font-weight="600" fill="#51625a">' + MONTHS[i].slice(0, 3) + '</text>';
+  var k = function (v) { return (Math.abs(v) >= 1000 ? Math.round(Math.abs(v) / 1000) + ' אלף' : money(Math.abs(v))) + (v < 0 ? '-' : ''); };
+  var lab = function (n, dy) { return '<text x="' + x(n) + '" y="' + (y(vals[n]) + dy) + '" text-anchor="middle" font-size="14.5" font-weight="800" fill="' + (vals[n] < 0 ? '#7d5310' : '#2f4036') + '">' + k(vals[n]) + '</text>'; };
+  out += lab(maxI, -12);
+  if (minI !== maxI) out += lab(minI, vals[minI] < 0 ? 20 : -12);
+  var lastI = vals.length - 1; if (lastI !== maxI && lastI !== minI) out += lab(lastI, vals[lastI] < 0 ? 22 : -12);
+  return '<svg class="h-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc('היתרה בסוף כל חודש: ' + vals.map(function (v, n) { return MONTHS[n] + ' ' + money(v); }).join(', ')) + '">' + out + '</svg>';
+}
 var LIVE_OPS = {
+  homeHero: function () {
+    if (!O.k) return '';
+    var x = opsPeriod(), w = periodWord();
+    if (!x.n) return '<div class="hero"><h2>אין נתונים ' + w + '.</h2></div>';
+    var title;
+    if (x.net <= 0) title = 'העסק הפסיד ' + w + '.';
+    else if (x.left < 0) title = 'העסק מרוויח, אבל ' + w + ' לקחת ממנו יותר ממה שהרווחת.';
+    else title = 'העסק מרוויח, ומה שלקחת ממנו ' + w + ' מכוסה ברווח.';
+    var worst = null, last = periodLast();
+    O.months.slice(periodFirst(), last).forEach(function (m) { if (m.filled && (!worst || m.cashNet < worst.cashNet)) worst = m; });
+    var lead = '';
+    if (worst && x.n > 1 && worst.cashNet < 0) lead += 'החודש שבו ירד הכי הרבה כסף מהחשבון הוא ' + MONTHS[worst.i] + ': ' + ils(-worst.cashNet, 0) + (noteOf(worst.i) ? ' (' + esc(noteOf(worst.i)) + ')' : '') + '. ';
+    var end = balanceAt(last);
+    if (end < 0) lead += 'לפי מה שמולא, החשבון מסיים את התקופה במינוס.';
+    else if (x.cashNet >= 0) lead += 'לפי מה שמולא, החשבון גדל בתקופה הזו.';
+    var skipped = O.auto > O.k ? '<div class="note soft" style="margin:0 0 14px">מוצג רק עד ' + MONTHS[O.k - 1] + ', כי זה מה שנבחר ב"מחשבים עד חודש". גם ' + (O.auto - O.k === 1 ? MONTHS[O.k] + ' מולא' : MONTHS[O.k] + ' עד ' + MONTHS[O.auto - 1] + ' מולאו') + ', אבל לא נספר כאן.</div>' : '';
+    var tbl = !E.hasTables(opsYear()) ? '<div class="note soft" style="margin:0 0 14px">טבלאות המס של ' + opsYear() + ' עוד לא עודכנו בכלי, אז הערכת המס לפי הטבלאות האחרונות. אפשר לעדכן בשלב המס.</div>' : '';
+    return skipped + tbl + '<div class="hero"><h2>' + title + '</h2>' + (lead ? '<p>' + lead + '</p>' : '') + '</div>';
+  },
+  homeTiles: function () {
+    if (!O.k) return '';
+    var x = opsPeriod(); if (!x.n) return '';
+    var end = balanceAt(periodLast()), card = function (good, st, v, txt) { return '<div class="h-tile"><span class="h-st ' + (good ? 'good' : 'warn') + '"><span aria-hidden="true">' + (good ? '✓' : '!') + '</span> ' + st + '</span><div class="h-v' + (good ? '' : ' w') + '">' + v + '</div><p>' + txt + '</p></div>'; };
+    var profit = x.net > 0 ? card(true, 'העסק מרוויח', approx(x.net), 'רווח אחרי מס' + (x.n > 1 ? ', ' + approx(x.net / x.n) + ' בחודש' : '') + '.') : card(false, 'העסק הפסיד', approx(-x.net), 'הפסד אחרי מס.');
+    var left = x.left >= 0 ? card(true, 'מה שלקחת מכוסה', approx(x.left), 'זה מה שנשאר מהרווח אחרי מה שלקחת.') : card(false, 'לקחת יותר מהרווח', approx(-x.left), 'מעבר לרווח: משכורת, פנסיה, קרן, הלוואה ותשלומים ישנים.');
+    var bank = end >= 0 ? card(true, 'יש כסף בחשבון', approx(end), 'היתרה בסוף ' + MONTHS[periodLast() - 1] + ', לפי מה שמולא.') : card(false, 'החשבון במינוס', approx(end), 'היתרה בסוף ' + MONTHS[periodLast() - 1] + ', לפי מה שמולא.');
+    return '<div class="h-tiles">' + profit + left + bank + '</div>';
+  },
+  homeShare: function () {
+    if (!O.k) return '';
+    var x = opsPeriod();
+    if (!x.n || x.revenue <= 0) return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">עוד אין הכנסות בתקופה הזו.</p>';
+    var costs = x.revenue - x.preTax, c = Math.round(costs / x.revenue * 100), t = Math.round(x.tax / x.revenue * 100), n = 100 - c - t, took = Math.round(x.drawn / x.revenue * 100);
+    if (n <= 0) return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">ההוצאות והמס גדולים מההכנסות בתקופה הזו: על כל 100 ₪ שנכנסו, יצאו ' + (c + t) + ' ₪.</p>';
+    var scale = Math.max(100, took), w = function (v) { return (v / scale * 100).toFixed(1) + '%'; };
+    var seg = function (v, cls, txt) { return '<div class="' + cls + '" style="width:' + w(v) + '">' + (v >= 9 ? txt : '') + '</div>'; };
+    return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">כך נראית התקופה הזו' + (O.patur ? '' : ', בלי מע"מ') + '.</p>' +
+      '<div class="h-bar" role="img" aria-label="מכל 100 שקלים: ' + n + ' נשארו, ' + c + ' הוצאות, ' + t + ' מס">' + seg(n, 'a', n + ' ₪ נשארו') + seg(c, 'b', c + ' ₪ הוצאות') + seg(t, 'c', t + ' ₪ מס') + '</div>' +
+      '<div class="h-legend"><span><i class="a"></i>נשאר לך, ' + n + ' ₪</span><span><i class="b"></i>הוצאות העסק, ' + c + ' ₪</span><span><i class="c"></i>מס, ' + t + ' ₪</span></div>' +
+      '<div class="h-take"><div class="h-track"><div class="h-fill' + (took > n ? '' : ' ok') + '" style="width:' + w(took) + '" role="img" aria-label="לקחת ' + took + ' שקלים מתוך 100">' + (took >= 12 ? 'לקחת ' + took + ' ₪' : '') + '</div><div class="h-mark" style="inset-inline-start:' + w(n) + '"></div></div><div class="h-marklbl" style="inset-inline-start:' + w(n) + '">נשארו ' + n + ' ₪</div></div>' +
+      '<p class="h-sub" style="margin:12px 0 0">' + (took > n ? 'הפס עובר את הקו: לקחת יותר ממה שהעסק הרוויח, וההפרש יורד מהחשבון.' : 'הפס לפני הקו: מה שלקחת מכוסה ברווח.') + '</p>';
+  },
+  homeBars: function () {
+    if (!O.k) return '';
+    return '<h3 class="h-t">חודש מול חודש, ' + opsYear() + '</h3><p class="h-sub">עמודה כהה גבוהה מהבהירה? באותו חודש נכנס יותר ממה שיצא על הוצאות העסק.</p>' + barsSvg() + '<div class="h-legend" style="margin-bottom:0"><span><i class="a"></i>הכנסות</span><span><i class="d"></i>הוצאות העסק</span>' + (futureFrom() < 12 ? '<span><i class="f"></i>חודש שעוד לא הסתיים</span>' : '') + '</div>';
+  },
+  homeBalance: function () {
+    if (!O.k) return '';
+    return '<h3 class="h-t">כמה יש בבנק</h3><p class="h-sub">היתרה בסוף כל חודש, לפי מה שמולא.' + (O.bank.opening ? '' : ' כדי שזה יהיה מדויק, צריך למלא את היתרה ב-1 בינואר.') + '</p>' + lineSvg();
+  },
+  homeTrend: function () {
+    var ys = E.yearList(S), cur = opsYear(), prevY = ys.filter(function (y) { return y < cur; }).pop();
+    if (!prevY || !O.k) return '';
+    var prev = E.yearOps(S, prevY), c = E.compareYears(O, prev);
+    if (!c.n) return '';
+    var pct = function (p) { return p == null ? 'אין השוואה' : (p > 0 ? 'עלייה של ' : (p < 0 ? 'ירידה של ' : 'ללא שינוי')) + (p ? Math.abs(Math.round(p)) + '%' : ''); };
+    var line = function (l, a, b, p) { return '<div class="h-cmp"><b>' + l + '</b><span>' + approx(a) + ' מול ' + approx(b) + '</span><span class="' + (p == null ? '' : (p >= 0 ? 'up' : 'down')) + '">' + (p == null ? '' : (p > 0 ? '▲ ' : (p < 0 ? '▼ ' : ''))) + pct(p) + '</span></div>'; };
+    var notes = [];
+    for (var i = 0; i < c.n; i++) { var nt = (prev.notes && prev.notes[i]) || ''; if (nt) notes.push(MONTHS[i] + ' ' + prevY + ': ' + esc(nt)); }
+    return '<div class="card"><h3 class="h-t">' + cur + ' מול ' + prevY + '</h3><p class="h-sub">משווים רק את ' + (c.n === 12 ? 'כל 12 החודשים' : c.n === 1 ? MONTHS[0] : MONTHS[0] + ' עד ' + MONTHS[c.n - 1]) + ' בשתי השנים, כדי שההשוואה תהיה הוגנת.</p>' + line('הכנסות', c.revenue[0], c.revenue[1], c.revenue[2]) + line('רווח לפני מס', c.preTax[0], c.preTax[1], c.preTax[2]) + line('רווח נקי', c.net[0], c.net[1], c.net[2]) + (notes.length ? '<p class="h-sub" style="margin:10px 0 0">כדאי לזכור: ' + notes.join(' · ') + '.</p>' : '') + '</div>';
+  },
+  homeTips: function () {
+    if (!O.k) return '';
+    var tips = [], a = O.annual, pick = S.tax.pick || {}, exp = expectedFilled();
+    if (exp && O.k < exp) tips.push(['🗓️', '<b>חסר חודש:</b> מולא עד ' + MONTHS[O.k - 1] + '. כדי שהתמונה תהיה נכונה, כדאי למלא גם את ' + MONTHS[exp - 1] + '.']);
+    if (O.k >= 3 && O.total.paidNi > a.social * 1.2 && O.total.paidNi - a.social > 1000) tips.push(['🏦', '<b>ביטוח לאומי:</b> שולמו ' + ils(O.total.paidNi, 0) + ', וההערכה ל' + (O.k === 12 ? 'שנה' : 'תקופה') + ' היא כ-' + ils(O.k === 12 ? a.social : O.due.social, 0) + '. כדאי לשאול את רואה החשבון אם אפשר לעדכן את המקדמות.']);
+    else if (O.k >= 3 && O.total.paidNi && O.due.social - O.total.paidNi > 1000) tips.push(['🏦', '<b>ביטוח לאומי:</b> שולמו ' + ils(O.total.paidNi, 0) + ', וההערכה עד עכשיו היא כ-' + ils(O.due.social, 0) + '. כדאי לבדוק עם רואה החשבון, שלא יישאר חוב בסוף השנה.']);
+    if (S.tax.points === '') tips.push(['🧾', '<b>נקודות זיכוי:</b> עוד לא נבחרו, ובלעדיהן הערכת המס גבוהה מהאמת. ' + gotoBtn(13, 'לבחור')]);
+    else if (a.unusedCredits > 1 && E.num(pick.k0) > 0 && !pick.defer) tips.push(['🎁', '<b>נקודות זיכוי:</b> יש יותר ממה שנוצל השנה. כדאי לבדוק עם רואה החשבון דחיית נקודה אחת לשנה הבאה.']);
+    if (O.pensionShort > 1) tips.push(['🛟', '<b>פנסיה:</b> לפי ההכנסה, חובת ההפקדה היא כ-' + ils(O.mandatory, 0) + ' בשנה, ולפי המילוי מופקדים ' + ils(a.pension, 0) + '. כדאי לבדוק.']);
+    if (tips.length < 3 && !E.yearList(S).some(function (y) { return y < opsYear(); })) tips.push(['📈', '<b>בשנה הבאה:</b> כאן יופיע גם "' + (opsYear() + 1) + ' מול ' + opsYear() + '", כדי לראות אם העסק משתפר.']);
+    return '<h3 class="h-t">שווה לשים לב</h3><div class="h-tips">' + tips.slice(0, 3).map(function (t) { return '<div class="h-tip"><span class="ic" aria-hidden="true">' + t[0] + '</span><div>' + t[1] + '</div></div>'; }).join('') + '</div>';
+  },
+
   opsGridRO: function () { return O.k ? opsGridHtml(false) : ''; },
   gridRow: function (path) { var m = getPath(path); return money((m || []).reduce(function (a, v) { return a + E.num(v); }, 0)); },
   gridGroup: function (arg) {
@@ -1344,6 +1545,9 @@ function normalize(s) {
   s.materials = s.materials || []; s.products = s.products || [];
   s.products.forEach(function (p) { p.lines = p.lines || []; p.plan = p.plan || months(); });
   s.whatIf = s.whatIf || base.whatIf;
+  s.years = s.years || {};
+  /* a link saved before years existed holds 2026 */
+  if (s.ops && !s.ops.year) s.ops.year = 2026;
   s.ops = Object.assign({}, base.ops, s.ops || {});
   ['rows', 'draw', 'paid', 'bank'].forEach(function (k) { s.ops[k] = Object.assign({}, base.ops[k], s.ops[k]); });
   if (!s.ops.rows.income.some(function (r) { return r.refund; })) s.ops.rows.income.push(opsRowNew('החזרים ללקוחות, יורד מההכנסות', { refund: true }));
@@ -1521,6 +1725,11 @@ document.addEventListener('click', function (e) {
   if (d.add) { addRow(d.add); return; }
   if (d.opsedit != null) { S.ops.edit = +d.opsedit; render(); persist(); return; }
   if (d.fillmode) { S.ops.fillMode = d.fillmode; render(); persist(); return; }
+  if (d.opsyear) { E.switchYear(S, +d.opsyear); S.ops.view = 'year'; render(); persist(); return; }
+  if (d.opsperiod) {
+    S.ops.view = d.opsperiod === 'year' ? 'year' : (d.opsperiod === 'q' ? 'q' + Math.floor(Math.max(0, (O.k || 1) - 1) / 3) : String(Math.max(0, (O.k || 1) - 1)));
+    render(); persist(); return;
+  }
   if (d.tableby) { S.ops.tableBy = d.tableby; render(); persist(); return; }
   if (d.opsview != null) { S.ops.view = d.opsview; render(); persist(); return; }
   if (d.addops) { var fresh = opsRowNew(''); if (d.addops === 'private') { fresh.group = 'general'; fresh.rec = 100; fresh.vat = false; S.ops.private.push(fresh); } else S.ops.rows[d.addops].push(fresh); render(); persist(); return; }
@@ -1546,6 +1755,10 @@ document.addEventListener('click', function (e) {
   else if (act === 'resetTables') { S.tax.tables = null; render(); persist(); }
   else if (act === 'spread') { spreadPlan(); }
   else if (act === 'copyPrev') { copyPrev(); }
+  else if (act === 'closeYear') {
+    if (!t.dataset.armed) { t.dataset.armed = '1'; t.textContent = 'בטוח? לסגור את ' + opsYear() + ' ולפתוח שנה חדשה'; setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'לסגור את ' + opsYear() + ' ולפתוח את ' + (opsYear() + 1); } }, 4000); return; }
+    S = normalize(E.closeYear(S)); go(11); persist();
+  }
   else if (act === 'pdf') { buildPrint(); window.print(); }
   else if (act === 'xlsx') { doExport(t); }
   else if (act === 'share') { doShare(); }

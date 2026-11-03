@@ -253,6 +253,32 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('cash net sums to the bank movement', prr.total.cashNet, prr.bank.expected - prr.bank.opening);
   near('prior-year instalment counts in cash', prr.months[0].cashOut - base0.months[0].cashOut, 1836);
 
+  // years
+  const yb = opsState(); yb.ops.year = 2026; yb.tax.pick = { k0: 1, miluim: '2', defer: true }; yb.ops.bank.end = Array(12).fill('');
+  const yBefore = E.ops(yb), closed = E.closeYear(yb);
+  near('a new year starts next year', closed.ops.year, 2027);
+  near('opening is the computed balance', closed.ops.bank.opening, yBefore.bank.expected);
+  near('the new year starts empty', E.ops(closed).k, 0);
+  ok('row names stay', closed.ops.rows.income[0].name === 'a');
+  near('the closed year is intact', E.yearOps(closed, 2026).total.preTax, yBefore.total.preTax);
+  ok('the source state is untouched', yb.ops.year === 2026 && !yb.years);
+  ok('a deferred point arrives next year', closed.tax.pick.deferredLast === true && closed.tax.pick.defer === false);
+  near('a baby is one year old', +closed.tax.pick.k1, 1); ok('reserve duty is not carried', closed.tax.pick.miluim === '');
+  near('next year points follow the ages', closed.tax.points, 2.75 + 4.5 + 1);
+  const endSet = opsState(); endSet.ops.year = 2026; endSet.ops.bank.end = Array(12).fill(''); endSet.ops.bank.end[11] = '-500';
+  near('a real December balance wins', E.closeYear(endSet).ops.bank.opening, -500);
+  const sw = E.closeYear(yb); E.switchYear(sw, 2026);
+  near('switching back brings the year', sw.ops.year, 2026); near('switching back brings its points', sw.tax.points, 2.75);
+  ok('the other year waits', !!sw.years[2027] && !sw.years[2026]);
+  E.switchYear(sw, 2027); near('and forward again', sw.ops.year, 2027);
+  near('year list', E.yearList(sw).length, 2);
+  ok('2026 has tables, 2027 does not yet', E.hasTables(2026) && !E.hasTables(2027));
+  ok('a year without tables uses the latest', E.tablesFor(2027).year === 2026);
+  const a2 = E.ops(opsState()), half = opsState({ upto: 1 });
+  const cy = E.compareYears(E.ops(half), a2);
+  near('comparison uses the same months only', cy.n, 1);
+  near('comparison revenue flat when equal', cy.revenue[2], 0);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

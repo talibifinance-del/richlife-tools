@@ -251,9 +251,176 @@
     };
   }
 
+  /* ---------- ongoing management: P&L, cash and the tax estimate ---------- */
+  /* 2026. Booklet: phone, gifts, pension income ceiling. More Gemel 2026: study fund. TheMarker 2026: compulsory pension. Update yearly with TABLES_2026. */
+  var OPS_2026 = {
+    phoneCap: 115, giftCap: 240, penIncomeMonth: 19400, penDedPct: 11, penCreditPct: 5.5, creditRate: 35,
+    fundPct: 4.5, fundCapYear: 13203, avgWage: 13769, mandLowPct: 4.45, mandHighPct: 12.55, donationRate: 35
+  };
+
+  function mandatoryPension(incomeMonth) {
+    var o = OPS_2026, z = pos(incomeMonth), half = o.avgWage / 2;
+    return (Math.min(z, half) * o.mandLowPct + Math.max(0, Math.min(z, o.avgWage) - half) * o.mandHighPct) / 100;
+  }
+
+  /* Monthly. The deductible deposits come off the income before national insurance and income tax; a third of the pension earns a credit instead. */
+  function depositTax(income, pension, fund, points, tables, extraCredit) {
+    var o = OPS_2026, t = tables || TABLES_2026, z = Math.max(0, num(income)), pen = pos(pension), fnd = pos(fund);
+    var penBase = Math.min(z, o.penIncomeMonth);
+    var fundDed = Math.min(fnd, z * o.fundPct / 100, o.fundCapYear / 12);
+    var penDed = Math.min(pen * 2 / 3, penBase * o.penDedPct / 100);
+    var penCredit = Math.min(pen / 3, penBase * o.penCreditPct / 100) * o.creditRate / 100;
+    var base = niBase(z - fundDed - penDed, t);
+    var ni = niOn(base, t), health = healthOn(base, t), before = incomeTaxBeforeCredits(base, t);
+    var pointsCredit = pos(points) * t.pointValue;
+    var incomeTax = Math.max(0, before - pointsCredit - penCredit - pos(extraCredit));
+    return {
+      income: z, fundDed: fundDed, penDed: penDed, penCredit: penCredit, base: base, ni: ni, health: health, social: ni + health,
+      incomeBefore: before, pointsCredit: pointsCredit, incomeTax: incomeTax, total: ni + health + incomeTax
+    };
+  }
+
+  function exVat(v, row, vatRate) { return pos(v) / (1 + (row.vat === false ? 0 : vatRate)); }
+  /* What the tax authority recognises of one month's amount, before the yearly gift cap. */
+  function recognisedMonth(row, ex) {
+    if (row.rule === 'phone') return Math.max(ex * 0.5, ex - OPS_2026.phoneCap);
+    return ex * (row.rec == null || row.rec === '' ? 100 : pos(row.rec)) / 100;
+  }
+  function lastFilled(o) {
+    var last = 0, scan = function (rows) { (rows || []).forEach(function (r) { (r.m || []).forEach(function (v, i) { if (pos(v) > 0 && i + 1 > last) last = i + 1; }); }); };
+    ['income', 'direct', 'marketing', 'admin', 'finance'].forEach(function (k) { scan(o.rows && o.rows[k]); });
+    return last;
+  }
+
+  function ops(state, computed) {
+    var s = state || {}, o = s.ops || {}, t = (s.tax && s.tax.tables) || TABLES_2026, biz = s.biz || {};
+    var patur = biz.type === 'patur', vatRate = patur ? 0 : (biz.vatPct == null ? 18 : pos(biz.vatPct)) / 100;
+    var rows = o.rows || {}, draw = o.draw || {}, paid = o.paid || {}, bank = o.bank || {};
+    var auto = lastFilled(o), k = pos(o.upto) >= 1 ? Math.min(12, Math.floor(pos(o.upto))) : auto;
+    var factor = k ? 12 / k : 0;
+    var visible = (o.private || []).filter(function (r) { return r.group === 'home' ? o.home : (r.group === 'car' ? o.car : true); });
+
+    function monthly(list, i, fn) { return sum(list, function (r) { return fn(r, (r.m || [])[i]); }); }
+    var ex = function (r, v) { return exVat(v, r, vatRate); }, rawV = function (r, v) { return pos(v); };
+    var vatOf = function (r, v) { return pos(v) - exVat(v, r, vatRate); };
+    var val = function (a, i) { return pos((a || [])[i]); };
+
+    var months = [];
+    for (var i = 0; i < 12; i++) {
+      var m = { i: i, revenue: monthly(rows.income, i, ex), direct: monthly(rows.direct, i, ex), marketing: monthly(rows.marketing, i, ex), admin: monthly(rows.admin, i, ex), finance: monthly(rows.finance, i, ex) };
+      m.gross = m.revenue - m.direct;
+      m.operating = m.gross - m.marketing - m.admin;
+      m.preTax = m.operating - m.finance;
+      m.salary = val(draw.salary, i); m.pension = val(draw.pension, i); m.fund = val(draw.fund, i); m.savings = val(draw.savings, i); m.loan = val(draw.loan, i);
+      m.drawn = m.salary + m.pension + m.fund + m.savings + m.loan;
+      m.vatOut = monthly(rows.income, i, vatOf);
+      m.vatIn = monthly(rows.direct, i, vatOf) + monthly(rows.marketing, i, vatOf) + monthly(rows.admin, i, vatOf) + monthly(rows.finance, i, vatOf);
+      m.paidIncome = val(paid.income, i); m.paidNi = val(paid.ni, i); m.paidVat = val(paid.vat, i);
+      m.cashIn = monthly(rows.income, i, rawV);
+      m.cashOut = monthly(rows.direct, i, rawV) + monthly(rows.marketing, i, rawV) + monthly(rows.admin, i, rawV) + monthly(rows.finance, i, rawV) + m.drawn + m.paidIncome + m.paidNi + m.paidVat;
+      months.push(m);
+    }
+
+    /* The year so far, projected to twelve months. A row marked one-off is counted once. */
+    function project(list) {
+      return sum(list, function (r) {
+        var total = 0; for (var j = 0; j < k; j++) total += ex(r, (r.m || [])[j]);
+        return r.oneOff || r.rule === 'gift' ? total : total * factor;
+      });
+    }
+    function projectRec(list) {
+      return sum(list, function (r) {
+        var total = 0; for (var j = 0; j < k; j++) total += recognisedMonth(r, ex(r, (r.m || [])[j]));
+        var year = r.oneOff || r.rule === 'gift' ? total : total * factor;
+        if (r.rule === 'gift' && pos(r.people) > 0) year = Math.min(year, pos(r.people) * OPS_2026.giftCap);
+        return year;
+      });
+    }
+    var costLists = [rows.direct, rows.marketing, rows.admin, rows.finance];
+    var income = project(rows.income);
+    var pnlCosts = sum(costLists, project);
+    var bizRecognised = sum(costLists, projectRec);
+    var privateRecognised = projectRec(visible);
+    var depreciation = pos(o.depreciation);
+    var taxable = income - bizRecognised - privateRecognised - depreciation;
+    var sumTo = function (key) { var a = 0; for (var j = 0; j < k; j++) a += months[j][key]; return a; };
+    var pensionMonth = k ? sumTo('pension') / k : 0, fundMonth = k ? sumTo('fund') / k : 0;
+    var donations = pos(o.donations) * OPS_2026.donationRate / 100 / 12;
+    var points = s.tax && s.tax.points;
+    var est = depositTax(taxable / 12, pensionMonth, fundMonth, points, t, donations);
+    var estLess = depositTax((taxable - 1000) / 12, pensionMonth, fundMonth, points, t, donations);
+    var annual = {
+      income: income, pnlCosts: pnlCosts, profit: income - pnlCosts, bizRecognised: bizRecognised, privateRecognised: privateRecognised, depreciation: depreciation,
+      taxable: taxable, pension: pensionMonth * 12, fund: fundMonth * 12, fundDed: est.fundDed * 12, penDed: est.penDed * 12, penCredit: est.penCredit * 12,
+      base: est.base * 12, ni: est.ni * 12, health: est.health * 12, social: est.social * 12, incomeBefore: est.incomeBefore * 12, pointsCredit: est.pointsCredit * 12, donations: donations * 12,
+      incomeTax: est.incomeTax * 12, total: est.total * 12, perMonth: est.total,
+      advancePct: income > 0 ? est.incomeTax * 12 / income : 0,
+      savedPer1000: k && taxable > 1000 ? (est.total - estLess.total) * 12 : 0
+    };
+    var taxRate = annual.profit > 0 ? Math.min(annual.total / annual.profit, 0.95) : 0;
+
+    /* The estimate is the tax line: low advances must not inflate the profit. */
+    months.forEach(function (x) {
+      x.tax = x.preTax * taxRate;
+      x.net = x.preTax - x.tax;
+      x.left = x.net - x.drawn;
+      x.filled = x.i < k;
+    });
+    var keys = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'drawn', 'left', 'vatOut', 'vatIn', 'paidIncome', 'paidNi', 'paidVat', 'cashIn', 'cashOut'];
+    var total = {}; keys.forEach(function (key) { total[key] = sumTo(key); });
+
+    var shareOfYear = k / 12;
+    var due = { income: annual.incomeTax * shareOfYear, social: annual.social * shareOfYear };
+    var gapIncome = due.income - total.paidIncome, gapSocial = due.social - total.paidNi;
+    var vatOwed = patur ? 0 : total.vatOut - total.vatIn - total.paidVat;
+
+    var opening = num(bank.opening), enteredClose = k ? (bank.end || [])[k - 1] : '';
+    var expected = opening + total.cashIn - total.cashOut;
+    var hasBank = enteredClose !== '' && enteredClose != null;
+    var actual = hasBank ? num(enteredClose) : null;
+    var reserved = Math.max(0, vatOwed) + Math.max(0, gapIncome) + Math.max(0, gapSocial);
+
+    var mandatory = mandatoryPension(taxable / 12) * 12;
+    return {
+      k: k, auto: auto, patur: patur, months: months, total: total, annual: annual, taxRate: taxRate,
+      due: due, gapIncome: gapIncome, gapSocial: gapSocial, vatOwed: vatOwed,
+      bank: { opening: opening, expected: expected, actual: actual, gap: hasBank ? actual - expected : null, reserved: reserved, free: hasBank ? actual - reserved : null },
+      mandatory: mandatory, pensionShort: Math.max(0, mandatory - annual.pension),
+      planRevenueMonth: computed && computed.annual && computed.annual.revenue != null ? computed.annual.revenue / 12 : null
+    };
+  }
+
+  /* ---------- decision helpers on the price list ---------- */
+  function productRank(R) {
+    var list = R.products.map(function (p, i) {
+      var left = p.net - p.direct - p.calc.specific, goal = R.goals[i];
+      return { i: i, name: p.name, left: left, hours: p.hours, perHour: p.hours > 0 ? left / p.hours : null, unitsYear: goal ? goal.unitsYear : 0, status: p.status, net: p.net };
+    }).filter(function (x) { return x.net > 0; });
+    list.sort(function (a, b) { return (b.perHour == null ? -Infinity : b.perHour) - (a.perHour == null ? -Infinity : a.perHour); });
+    var withHours = list.filter(function (x) { return x.perHour != null; });
+    var best = withHours.length ? withHours[0].perHour : null, worst = withHours.length > 1 ? withHours[withHours.length - 1] : null;
+    return { list: list, best: best, worst: worst, weak: !!(worst && (worst.status === 'below-min' || worst.perHour < best * 0.6)) };
+  }
+
+  /* A negative percent is a discount, a positive one a price rise. */
+  function whatIf(R, index, pctChange) {
+    var p = R.products[index]; if (!p || !(p.net > 0)) return null;
+    var set = R.settings, change = num(pctChange), customer = p.customer * (1 + change / 100);
+    var net = chosenNet(customer, set.vatPct, set.feePct), oldNet = chosenNet(p.customer, set.vatPct, set.feePct);
+    var cost = p.direct + p.calc.specific, oldLeft = oldNet - cost, newLeft = net - cost;
+    var goal = R.goals[index], units = goal ? goal.unitsYear : 0;
+    return {
+      change: change, customer: customer, oldCustomer: p.customer, net: net, oldNet: oldNet, oldLeft: oldLeft, newLeft: newLeft,
+      perSale: newLeft - oldLeft, losing: newLeft <= 0, belowMin: net < p.calc.minPrice - 0.005,
+      unitsNow: units, unitsNeeded: newLeft > 0 && oldLeft > 0 ? units * oldLeft / newLeft : null,
+      yearEffect: units * (newLeft - oldLeft)
+    };
+  }
+
   return {
-    TABLES_2026: TABLES_2026, PATUR_CEILING_2026: PATUR_CEILING_2026, MAX_MARGIN: MAX_MARGIN,
+    TABLES_2026: TABLES_2026, PATUR_CEILING_2026: PATUR_CEILING_2026, MAX_MARGIN: MAX_MARGIN, OPS_2026: OPS_2026,
     num: num, materialUnitPrice: materialUnitPrice, lineCost: lineCost, productDirect: productDirect,
-    labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute
+    labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
+    mandatoryPension: mandatoryPension, depositTax: depositTax, ops: ops, productRank: productRank, whatIf: whatIf
   };
 });

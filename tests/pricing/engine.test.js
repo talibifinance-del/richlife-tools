@@ -162,5 +162,79 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   ok('fuzz clean', bad === 0, bad);
 }
 
+/* ---------- ongoing management ---------- */
+{
+  near('BTL example: 12,000 a month is 1,288 a month', E.depositTax(12000, 0, 0, 0).social, 3864 / 3, 1);
+  // Worked by hand: 10,000 income, 600 pension, 300 fund, 2.75 points.
+  const d = E.depositTax(10000, 600, 300, 2.75);
+  near('fund deduction', d.fundDed, 300); near('pension deduction is two thirds', d.penDed, 400); near('pension credit is a third at 35%', d.penCredit, 70);
+  near('base after deposits and 52% of NI', d.base, 9032.31, 0.1); near('NI', d.ni, 514.87, 0.1); near('health', d.health, 317.54, 0.1);
+  near('income tax', d.incomeTax, 248.62, 0.1);
+  near('fund capped at 4.5%', E.depositTax(10000, 0, 1500, 0).fundDed, 450);
+  near('fund capped at the yearly ceiling', E.depositTax(40000, 0, 5000, 0).fundDed, 13203 / 12);
+  near('pension capped at the income ceiling', E.depositTax(40000, 12000, 0, 0).penDed, 19400 * 0.11);
+  near('compulsory pension below half the wage', E.mandatoryPension(5000), 222.5);
+  near('compulsory pension tops out near 1,170', E.mandatoryPension(50000) * 12, 14044, 2);
+
+  const empty = () => ({ income: [], direct: [], marketing: [], admin: [], finance: [] });
+  const three = v => [v, v, v, '', '', '', '', '', '', '', '', ''];
+  const opsState = (extra = {}) => ({
+    biz: { type: 'murshe', vatPct: 18 }, tax: { points: 2.75 },
+    ops: Object.assign({
+      rows: { income: [{ name: 'a', m: three(47200) }], direct: [{ name: 'b', m: three(4720) }], marketing: [{ name: 'c', m: three(5900) }], admin: [{ name: 'd', m: three(7080) }], finance: [{ name: 'e', m: three(500), vat: false }] },
+      private: [], draw: { salary: three(12000), pension: three(1400), fund: three(600), savings: three(2000), loan: three(1000) }, paid: { income: three(1000), ni: three(2000), vat: three(1000) }, bank: { opening: 10000, end: [] }
+    }, extra)
+  });
+  const a = E.ops(opsState());
+  near('filled three months', a.k, 3);
+  near('revenue without VAT', a.months[0].revenue, 40000); near('gross profit', a.months[0].gross, 36000); near('operating profit', a.months[0].operating, 25000); near('pre-tax profit', a.months[0].preTax, 24500);
+  near('annual income is projected', a.annual.income, 480000);
+  near('net plus tax is pre-tax', a.months[0].net + a.months[0].tax, a.months[0].preTax);
+  near('left is net less what was drawn', a.months[0].left, a.months[0].net - 17000 + 0);
+  near('total tax across the months equals the share of the year', a.total.tax, a.annual.total / 4, 1);
+  near('due to date is a quarter of the year', a.due.income, a.annual.incomeTax / 4);
+  near('VAT left to pay', a.vatOwed, 3 * (7200 - 720 - 900 - 1080) - 3000);
+  near('bank: expected balance', a.bank.expected, 10000 + 3 * (47200 - 4720 - 5900 - 7080 - 500 - 17000 - 4000));
+
+  const priv = opsState({ home: true, private: [{ name: 'חשמל', group: 'home', rec: 25, vat: false, m: three(1000) }] });
+  const b = E.ops(priv);
+  near('private expense leaves profit alone', b.months[0].preTax, a.months[0].preTax);
+  near('private expense is recognised at its percent', b.annual.privateRecognised, 3000);
+  ok('private expense lowers the tax', b.annual.total < a.annual.total);
+  near('private group switched off does not count', E.ops(opsState({ home: false, private: priv.ops.private })).annual.total, a.annual.total);
+  near('private expense leaves the bank alone', b.bank.expected, a.bank.expected);
+
+  const pat = opsState(); pat.biz.type = 'patur'; const c = E.ops(pat);
+  near('patur keeps the amounts', c.months[0].revenue, 47200); near('patur has no VAT', c.vatOwed, 0);
+
+  const noAdmin = () => { const st = opsState(); st.ops.rows.admin = []; return E.ops(st).annual.bizRecognised; };
+  const phone = v => { const st = opsState(); st.ops.rows.admin = [{ name: 't', rule: 'phone', vat: false, m: three(v) }]; return E.ops(st).annual.bizRecognised - noAdmin(); };
+  near('phone above the cap: over 115 wins', phone(300), 185 * 12); near('phone below: half wins', phone(150), 75 * 12);
+  const gift = { name: 'g', rule: 'gift', vat: false, people: 2, m: three(500) };
+  const gs = opsState(); gs.ops.rows.admin = [gift]; near('gifts capped per person and not projected', E.ops(gs).annual.bizRecognised - noAdmin(), 480);
+  const os = opsState(); os.ops.rows.admin = [{ name: 'x', vat: false, oneOff: true, m: ['900', '', '', '', '', '', '', '', '', '', '', ''] }]; near('one-off counted once', E.ops(os).annual.pnlCosts - E.ops(opsState({ rows: { ...opsState().ops.rows, admin: [] } })).annual.pnlCosts, 900);
+  const up = opsState({ upto: 1 }); near('choosing a month limits the period', E.ops(up).annual.income, 480000); near('choosing a month sets k', E.ops(up).k, 1);
+  near('nothing filled', E.ops({ biz: {}, tax: {}, ops: { rows: empty(), private: [], draw: {}, paid: {}, bank: {} } }).annual.total, 0);
+  ok('saving per 1,000 is plausible', a.annual.savedPer1000 > 250 && a.annual.savedPer1000 < 700, a.annual.savedPer1000);
+
+  const R = E.compute(example());
+  const w = E.whatIf(R, 0, 10);
+  near('what-if raises the customer price', w.customer, R.products[0].customer * 1.1);
+  near('what-if at zero changes nothing', E.whatIf(R, 0, 0).perSale, 0);
+  near('units needed keep the same money', w.unitsNeeded * w.newLeft, w.unitsNow * w.oldLeft, 0.01);
+  ok('rank has the product', E.productRank(R).list.length === 1);
+
+  let badOps = 0;
+  for (let n = 0; n < 1000; n++) {
+    const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);
+    const arr = () => Array.from({ length: 12 }, r);
+    const st = { biz: { type: Math.random() < 0.3 ? 'patur' : 'murshe' }, tax: { points: Math.random() * 5 }, ops: { home: true, rows: { income: [{ m: arr() }], direct: [{ m: arr() }], marketing: [{ m: arr() }], admin: [{ m: arr(), rule: 'phone' }, { m: arr(), rule: 'gift', people: 3 }], finance: [{ m: arr(), vat: false }] }, private: [{ group: 'home', rec: 25, m: arr() }], draw: { salary: arr(), pension: arr(), fund: arr(), savings: arr(), loan: arr() }, paid: { income: arr(), ni: arr(), vat: arr() }, bank: { opening: r(), end: arr() } } };
+    const x = E.ops(st), f = v => typeof v === 'number' && isFinite(v);
+    if (![x.annual.total, x.total.net, x.total.left, x.bank.expected, x.annual.advancePct].every(f) || x.annual.total < 0) badOps++;
+    if (Math.abs(x.total.net + x.total.tax - x.total.preTax) > 0.01) badOps++;
+  }
+  ok('ops fuzz clean', badOps === 0, badOps);
+}
+
 console.log(`${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

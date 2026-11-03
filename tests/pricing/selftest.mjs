@@ -389,6 +389,123 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await ctx.close();
 }
 
+/* ---- O. ongoing management, typed like a real month ---- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  await go(p, 11); await clean(p, 'O11 empty'); await axe(p, 'O11 empty');
+  ok('O only income is open at first', await p.evaluate(() => [...document.querySelectorAll('details.ops-sec')].filter(d => d.open).length) === 1);
+  await p.evaluate(() => document.querySelectorAll('details.ops-sec').forEach(d => { d.open = true; }));
+  ok('O starts on January', await p.locator('[data-opsedit="0"][aria-pressed="true"]').count() === 1);
+  await type(p, 'ops.rows.income.0.m.0', '47200');
+  await type(p, 'ops.rows.direct.1.m.0', '4720');
+  await type(p, 'ops.rows.marketing.0.m.0', '5900');
+  await type(p, 'ops.rows.admin.5.m.0', '7080');
+  await type(p, 'ops.rows.finance.1.m.0', '500');
+  await type(p, 'ops.draw.salary.0', '12000');
+  await p.waitForTimeout(450);
+  await go(p, 12); await clean(p, 'O12'); await axe(p, 'O12');
+  const ladder = await p.locator('[data-live="opsLadder"]').innerText();
+  ok('O ladder revenue without VAT', ladder.includes('40,000'), ladder);
+  ok('O ladder gross', ladder.includes('36,000'));
+  ok('O ladder operating', ladder.includes('25,000'));
+  await p.click('.ti summary >> nth=0');
+  ok('O explanation opens', (await p.locator('.ti-b').first().innerText()).includes('המכירות'));
+  ok('O explanation survives typing refresh', await p.evaluate(() => document.querySelector('.ti').open));
+  await p.screenshot({ path: OUT + '/o12-desktop.png', fullPage: true });
+  await go(p, 13); await clean(p, 'O13 no points');
+  const noPts = await p.locator('[data-live="opsTaxOut"]').innerText();
+  await type(p, 'tax.points', '2.75'); await p.waitForTimeout(100);
+  const pts = await p.locator('[data-live="opsTaxOut"]').innerText();
+  ok('O points change the estimate', noPts !== pts);
+  ok('O saving line shows', pts.includes('חוסכים'));
+  await axe(p, 'O13'); await p.screenshot({ path: OUT + '/o13-desktop.png', fullPage: true });
+
+  // private expense lowers tax only
+  const before = await p.evaluate(() => { const E = window.PricingEngine, S = window.__pricing.S; const o = E.ops(S); return [o.annual.total, o.months[0].preTax]; });
+  await go(p, 11);
+  ok('O home rows hidden until asked', await p.locator('[data-path="ops.private.0.m.0"]').count() === 0);
+  await p.click('[data-check="ops.home"]');
+  ok('O home rows appear', await p.locator('[data-path="ops.private.0.m.0"]').count() === 1);
+  ok('O home box keeps its state', await p.locator('[data-check="ops.home"]').isChecked());
+  await type(p, 'ops.private.0.m.0', '1000');
+  const after = await p.evaluate(() => { const E = window.PricingEngine, S = window.__pricing.S; const o = E.ops(S); return [o.annual.total, o.months[0].preTax]; });
+  ok('O private expense lowers tax', after[0] < before[0], [before, after]);
+  near('O private expense leaves profit alone', after[1], before[1]);
+
+  // February, copy from January
+  await p.click('[data-opsedit="1"]');
+  await p.click('[data-act="copyPrev"]');
+  ok('O a section with data opens by itself', await p.locator('details[data-how="sec_admin"]').evaluate(d => d.open));
+  ok('O copied expense', (await p.inputValue('[data-path="ops.rows.admin.5.m.1"]')) === '7,080');
+  ok('O income is not copied', (await p.inputValue('[data-path="ops.rows.income.0.m.1"]')) === '');
+  ok('O salary copied', (await p.inputValue('[data-path="ops.draw.salary.1"]')) === '12,000');
+
+  // bank, including an overdraft
+  await p.click('[data-opsedit="0"]');
+  await p.locator('#bankOpen').fill('5000');
+  const exp = await p.evaluate(() => window.PricingEngine.ops(window.__pricing.S).bank.expected);
+  ok('O bank asks for the real balance', (await p.locator('[data-live="opsBank"]').innerText()).includes('אמורים'));
+  await p.click('[data-opsedit="1"]'); await p.locator('#bankEnd').pressSequentially('-300');
+  ok('O overdraft keeps the minus', (await p.inputValue('#bankEnd')) === '-300');
+  const gap = await p.evaluate(() => window.PricingEngine.ops(window.__pricing.S).bank);
+  near('O bank gap', gap.gap, -300 - gap.expected);
+  ok('O bank gap shown', (await p.locator('[data-live="opsBank"]').innerText()).includes('פער'));
+
+  // type switch and settings
+  await p.click('[data-type="patur"]');
+  ok('O patur hides the VAT payment', await p.locator('[data-path="ops.paid.vat.1"]').count() === 0);
+  await go(p, 12);
+  ok('O patur keeps the full amount', (await p.locator('[data-live="opsLadder"]').innerText()).includes('47,200'));
+  await go(p, 11); await p.click('[data-type="murshe"]');
+  await p.click('[data-how="opsSettings"] summary');
+  await p.locator('[data-check="ops.rows.admin.5.vat"]').uncheck();
+  near('O row VAT switch', await p.evaluate(() => window.PricingEngine.ops(window.__pricing.S).months[0].admin), 7080);
+  await axe(p, 'O11 settings open');
+
+  // saved across a reload
+  await p.waitForTimeout(500); await p.reload(); await p.waitForFunction(() => window.__pricing);
+  await p.waitForTimeout(150);
+  await p.click('[data-act="resume"]');
+  ok('O resume lands on the results', (await p.textContent('#stepTitle')).includes('רווח ותזרים'));
+  ok('O data survived', (await p.locator('[data-live="opsLadder"]').innerText()).includes('40,000'));
+  await ctx.close();
+}
+/* ---- P. a draft saved before this feature still opens ---- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  await p.evaluate(() => { localStorage.setItem('rl_pricing_v4', JSON.stringify({ v: 4, biz: { name: 'ישן', type: 'murshe' }, materials: [], products: [], labor: { net: 9000, pension: 600, fund: 200, hours: 150, monthly: [], hourly: [] }, overhead: { marketing: [], admin: [] }, tax: { points: 2.75, saving: 0, tables: null }, plan: { dates: [], launches: [], promos: [], focus: [] } })); });
+  await p.reload(); await p.waitForFunction(() => window.__pricing); await p.waitForTimeout(150);
+  await p.click('[data-act="resume"]');
+  await go(p, 11); await clean(p, 'P old draft');
+  ok('P pension arrives from the salary step', (await p.inputValue('[data-path="ops.draw.pension.0"]')) === '600');
+  ok('P fund arrives in every month', String(await p.evaluate(() => window.__pricing.S.ops.draw.fund[5])) === '200');
+  ok('P no page errors', p.errs.length === 0, p.errs);
+  await ctx.close();
+}
+/* ---- Q. phone, demo, decision tools ---- */
+{
+  const { ctx, p } = await newPage({ width: 400, height: 800 }); await open(p);
+  await p.click('[data-act="demo"]');
+  for (const n of [7, 11, 12, 13]) { await go(p, n); await clean(p, 'Q' + n + ' phone'); await p.screenshot({ path: OUT + '/q' + n + '-phone.png', fullPage: true }); }
+  await go(p, 12);
+  const l = await p.locator('[data-live="opsLadder"]').innerText();
+  ok('Q demo ladder, three months', l.includes('120,000') && l.includes('108,000') && l.includes('75,000'), l);
+  await axe(p, 'Q12 phone');
+  await go(p, 7);
+  ok('Q rank renders', (await p.locator('[data-live="rankOut"]').innerText()).includes('לשעה'));
+  await p.selectOption('#wiPct', '10');
+  const up = await p.locator('[data-live="whatIfOut"]').innerText();
+  await p.selectOption('#wiPct', '-20');
+  const down = await p.locator('[data-live="whatIfOut"]').innerText();
+  ok('Q what-if reacts', up !== down);
+  ok('Q discount says sell more', down.includes('צריך למכור') || down.includes('מפסידים'), down);
+  await axe(p, 'Q7 phone');
+  await go(p, 3);
+  ok('Q demo pension alert', (await p.locator('[data-live="pensionAlert"]').innerText()).includes('חובת ההפקדה'));
+  ok('Q no page errors', p.errs.length === 0, p.errs);
+  await ctx.close();
+}
+
 await browser.close();
 console.log(`\n${pass} passed, ${fail} failed`);
 if (failures.length) console.log('FAILURES:\n' + failures.join('\n'));

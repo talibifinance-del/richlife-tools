@@ -325,7 +325,9 @@
       m.operating = m.gross - m.marketing - m.admin;
       m.preTax = m.operating - m.finance;
       m.salary = val(draw.salary, i); m.pension = val(draw.pension, i); m.fund = val(draw.fund, i); m.savings = val(draw.savings, i); m.loan = val(draw.loan, i);
-      m.drawn = m.salary + m.pension + m.fund + m.savings + m.loan;
+      /* Instalments on an invoice from an earlier year: cash leaves now, but the expense and its VAT belong to that year. */
+      m.prior = val(draw.prior, i);
+      m.drawn = m.salary + m.pension + m.fund + m.savings + m.loan + m.prior;
       m.vatOut = monthly(rows.income, i, sign(vatOf));
       m.vatIn = monthly(rows.direct, i, vatOf) + monthly(rows.marketing, i, vatOf) + monthly(rows.admin, i, vatOf) + monthly(rows.finance, i, vatOf);
       m.paidIncome = val(paid.income, i); m.paidNi = val(paid.ni, i); m.paidVat = val(paid.vat, i);
@@ -384,7 +386,7 @@
       x.left = x.net - x.drawn;
       x.filled = x.i < k;
     });
-    var keys = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'drawn', 'left', 'vatOut', 'vatIn', 'paidIncome', 'paidNi', 'paidVat', 'cashIn', 'cashOut'];
+    var keys = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'prior', 'drawn', 'left', 'vatOut', 'vatIn', 'paidIncome', 'paidNi', 'paidVat', 'cashIn', 'cashOut'];
     var total = {}; keys.forEach(function (key) { total[key] = sumTo(key); });
 
     var shareOfYear = k / 12;

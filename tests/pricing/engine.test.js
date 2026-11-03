@@ -242,6 +242,13 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   const low = E.ops({ biz: { type: 'patur' }, tax: { points: 7.25 }, ops: { rows: { income: [{ m: three(10000) }] }, private: [], draw: {}, paid: {}, bank: {} } });
   ok('unused credits are reported', low.annual.unusedCredits > 0 && low.annual.incomeTax === 0, low.annual.unusedCredits);
 
+  const pr = opsState(); pr.ops.draw.prior = three(1836); const prr = E.ops(pr), base0 = E.ops(opsState());
+  near('prior-year instalment leaves profit alone', prr.months[0].preTax, base0.months[0].preTax);
+  near('prior-year instalment leaves tax alone', prr.annual.total, base0.annual.total);
+  near('prior-year instalment leaves VAT alone', prr.vatOwed, base0.vatOwed);
+  near('prior-year instalment lowers what is left', prr.months[0].left, base0.months[0].left - 1836);
+  near('prior-year instalment leaves the account', prr.bank.expected, base0.bank.expected - 3 * 1836);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

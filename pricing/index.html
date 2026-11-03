@@ -470,7 +470,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=3"></script>
+<script src="engine.js?v=4"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -519,7 +519,7 @@ function opsDefaults() {
       opsRowNew('דלק', { group: 'car', rec: 45, vat: false }), opsRowNew('ביטוח רכב', { group: 'car', rec: 45, vat: false }), opsRowNew('טיפולים ותיקונים', { group: 'car', rec: 45, vat: false }), opsRowNew('רישוי', { group: 'car', rec: 45, vat: false }), opsRowNew('ליסינג', { group: 'car', rec: 45, vat: false }),
       opsRowNew('טלפון נייד, אם משולם מהחשבון הפרטי', { group: 'general', rule: 'phone', vat: false })
     ],
-    draw: { salary: months(), pension: months(), fund: months(), savings: months(), loan: months() },
+    draw: { salary: months(), pension: months(), fund: months(), savings: months(), loan: months(), prior: months() },
     paid: { income: months(), ni: months(), vat: months() },
     bank: { opening: '', end: months() }
   };
@@ -1041,7 +1041,7 @@ function gridGroups() {
   if (S.biz.type !== 'patur') paid.push(['vat', 'תשלום מע"מ']);
   return [list('income', 'מה נכנס לעסק'), list('direct', 'עלויות ישירות'), list('marketing', 'שיווק ומכירה'), list('admin', 'הנהלה וכלליות'), list('finance', 'עמלות וריבית'),
     { key: 'private', t: 'הוצאות פרטיות שמוכרות במס', rows: priv },
-    named('draw', 'מה לקחת מהרווח', o.draw, 'ops.draw', [['salary', 'משכורת לעצמי'], ['pension', 'פנסיה'], ['fund', 'קרן השתלמות'], ['savings', 'חיסכון והשקעות'], ['loan', 'החזר הלוואה, בלי הריבית']]),
+    named('draw', 'מה לקחת מהרווח', o.draw, 'ops.draw', [['salary', 'משכורת לעצמי'], ['pension', 'פנסיה'], ['fund', 'קרן השתלמות'], ['savings', 'חיסכון והשקעות'], ['loan', 'החזר הלוואה, בלי הריבית'], ['prior', 'תשלומים על חשבונית משנה קודמת']]),
     named('paid', 'מה שולם לרשויות', o.paid, 'ops.paid', paid)];
 }
 function gridRowTotal(r) { return (r.m || []).reduce(function (a, v) { return a + E.num(v); }, 0); }
@@ -1110,11 +1110,11 @@ VIEWS[11] = function () {
     opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה. החזר ללקוחה נרשם בשורה שלו, והוא מוריד את ההכנסות.', 'הוספת מקור הכנסה') +
     opsSection('עלויות ישירות', 'direct', 'מה שעולה לספק את המוצר או השירות עצמו.', 'הוספת עלות') +
     opsSection('שיווק ומכירה', 'marketing', '', 'הוספת הוצאת שיווק') +
-    opsSection('הנהלה וכלליות', 'admin', 'רק מה שיוצא מחשבון העסק. הוצאה נחשבת חוזרת כל חודש, אלא אם מסמנים שהיא חד-פעמית.', 'הוספת הוצאה') +
+    opsSection('הנהלה וכלליות', 'admin', 'רק מה שיוצא מחשבון העסק. הוצאה נחשבת חוזרת כל חודש, אלא אם מסמנים שהיא חד-פעמית. תשלומים על חשבונית משנה קודמת נרשמים למטה, ב"מה לקחת מהרווח".', 'הוספת הוצאה') +
     opsSection('עמלות וריבית', 'finance', 'בהלוואה נכנסת לכאן רק הריבית. החזר הקרן נמצא למטה.', 'הוספת שורה') +
     '<div class="card">' + settingsTable() + '</div>' +
     '<div class="card" style="border:2px dashed var(--pine)"><span class="sec-lbl">הוצאות פרטיות שמוכרות במס</span><p class="explain">הכסף יצא מהחשבון הפרטי ולא מהעסק, ולכן זה לא נכנס לרווח והפסד. זה רק מוריד את המס. האחוזים הם ברירת מחדל, ומה שרואה החשבון מכיר קובע.</p>' + '<div class="rows">' + privRows + '</div><button type="button" class="add-btn" data-addops="private">+ הוספת הוצאה פרטית</button></div>' +
-    '<div class="card"><span class="sec-lbl">מה לקחת מהרווח</span><p class="explain">לא הוצאות של העסק. זה מה שעשית עם הרווח הנקי.</p><div class="fields">' + drawRow('משכורת לעצמי', 'salary') + drawRow('פנסיה', 'pension') + drawRow('קרן השתלמות', 'fund') + drawRow('חיסכון והשקעות', 'savings') + drawRow('החזר הלוואה, בלי הריבית', 'loan') + '</div></div>' +
+    '<div class="card"><span class="sec-lbl">מה לקחת מהרווח</span><p class="explain">לא הוצאות של העסק. זה מה שעשית עם הרווח הנקי.</p><div class="fields">' + drawRow('משכורת לעצמי', 'salary') + drawRow('פנסיה', 'pension') + drawRow('קרן השתלמות', 'fund') + drawRow('חיסכון והשקעות', 'savings') + drawRow('החזר הלוואה, בלי הריבית', 'loan') + drawRow('תשלומים על חשבונית משנה קודמת', 'prior', 'קנית ב-' + (opsYear() - 1) + ' וקיבלת חשבונית על הכל, ועכשיו יורד באשראי בתשלומים? רושמים כאן. הכסף יוצא השנה, אבל ההוצאה והמע"מ שייכים לשנה של החשבונית.') + '</div></div>' +
     '<div class="card"><span class="sec-lbl">מה שולם לרשויות</span><p class="explain">התשלומים בפועל. בעזרתם הכלי משווה להערכת המס ובודק מול הבנק.</p><div class="fields">' + paidRow('מקדמות מס הכנסה', 'income') + paidRow('ביטוח לאומי ובריאות', 'ni') + (patur ? '' : paidRow('תשלום מע"מ', 'vat')) + '</div></div>' +
     '<div class="card"><span class="sec-lbl">בדיקה מול הבנק</span><div class="fields">' + signedInput('bankOpen', 'ops.bank.opening', 'יתרה ב-1 בינואר') + signedInput('bankEnd', 'ops.bank.end.' + e, 'יתרה בסוף ' + MONTHS[e]) + '</div>' + live('opsBank') + '</div>' + stepNav();
 };
@@ -1163,7 +1163,7 @@ var LIVE_OPS = {
   },
   opsDrawn: function () {
     var x = opsPeriod(), row = function (l, v) { return lg(l, ils(v, 0)); }, neg = x.left < 0;
-    return '<div class="ledger">' + row('משכורת לעצמי', x.salary) + row('פנסיה וקרן השתלמות', x.pension + x.fund) + row('חיסכון והשקעות', x.savings) + row('החזר הלוואה, בלי הריבית', x.loan) +
+    return '<div class="ledger">' + row('משכורת לעצמי', x.salary) + row('פנסיה וקרן השתלמות', x.pension + x.fund) + row('חיסכון והשקעות', x.savings) + row('החזר הלוואה, בלי הריבית', x.loan) + (x.prior ? row('תשלומים על חשבונית משנה קודמת', x.prior) : '') +
       '<div class="lg big' + (neg ? ' neg' : '') + '"><span>נשאר בעסק' + info('left', 'נשאר בעסק') + '<small>' + (neg ? 'לקחת יותר ממה שהעסק הרוויח' : 'אחרי כל מה שלקחת מהרווח') + '</small></span><b>' + ils(x.left, 0) + '</b></div></div>';
   },
   opsSide: function () {
@@ -1235,7 +1235,7 @@ var LIVE_OPS = {
   }
 };
 Object.keys(LIVE_OPS).forEach(function (k) { LIVE[k] = LIVE_OPS[k]; });
-var PERIOD_KEYS = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'drawn', 'left'];
+var PERIOD_KEYS = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'prior', 'drawn', 'left'];
 function quarterOf(q) {
   var out = { n: 0 }; PERIOD_KEYS.forEach(function (k) { out[k] = 0; });
   O.months.slice(q * 3, q * 3 + 3).forEach(function (m) { if (!m.filled) return; out.n++; PERIOD_KEYS.forEach(function (k) { out[k] += m[k]; }); });
@@ -1258,7 +1258,7 @@ function copyPrev() {
   var copyList = function (list) { list.forEach(function (r) { if (r.m[e] === '' || r.m[e] == null) r.m[e] = r.m[e - 1]; }); };
   ['direct', 'marketing', 'admin', 'finance'].forEach(function (k) { copyList(S.ops.rows[k]); });
   copyList(S.ops.private);
-  ['salary', 'pension', 'fund', 'savings', 'loan'].forEach(function (k) { var a = S.ops.draw[k]; if (a[e] === '' || a[e] == null) a[e] = a[e - 1]; });
+  ['salary', 'pension', 'fund', 'savings', 'loan', 'prior'].forEach(function (k) { var a = S.ops.draw[k]; if (a[e] === '' || a[e] == null) a[e] = a[e - 1]; });
   render(); persist();
 }
 

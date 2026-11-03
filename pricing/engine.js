@@ -264,20 +264,31 @@
   }
 
   /* Monthly. The deductible deposits come off the income before national insurance and income tax; a third of the pension earns a credit instead. */
-  function depositTax(income, pension, fund, points, tables, extraCredit) {
+  function depositTax(income, pension, fund, points, tables, extraCredit, otherIncome) {
     var o = OPS_2026, t = tables || TABLES_2026, z = Math.max(0, num(income)), pen = pos(pension), fnd = pos(fund);
     var penBase = Math.min(z, o.penIncomeMonth);
     var fundDed = Math.min(fnd, z * o.fundPct / 100, o.fundCapYear / 12);
     var penDed = Math.min(pen * 2 / 3, penBase * o.penDedPct / 100);
     var penCredit = Math.min(pen / 3, penBase * o.penCreditPct / 100) * o.creditRate / 100;
     var base = niBase(z - fundDed - penDed, t);
-    var ni = niOn(base, t), health = healthOn(base, t), before = incomeTaxBeforeCredits(base, t);
+    /* Maternity pay and the like are taxed with the business income, but national insurance on them is withheld by the payer. */
+    var ni = niOn(base, t), health = healthOn(base, t), before = incomeTaxBeforeCredits(base + pos(otherIncome), t);
     var pointsCredit = pos(points) * t.pointValue;
     var incomeTax = Math.max(0, before - pointsCredit - penCredit - pos(extraCredit));
     return {
       income: z, fundDed: fundDed, penDed: penDed, penCredit: penCredit, base: base, ni: ni, health: health, social: ni + health,
       incomeBefore: before, pointsCredit: pointsCredit, incomeTax: incomeTax, total: ni + health + incomeTax
     };
+  }
+
+  /* Credit points for one tax year. Kol Zchut 2026 for children and reserve duty; taxes-refund.co.il for the rest, marked in the module doc. */
+  function creditPoints(p) {
+    p = p || {};
+    var man = p.gender === 'man', k = function (key) { return pos(p[key]); };
+    var points = (man ? 2.25 : 2.75) + k('k0') * 2.5 + k('k1') * 4.5 + k('k2') * 4.5 + k('k3') * 3.5 + k('k45') * 2.5 + (k('k612') + k('k1317')) * (man ? 1 : 2) + k('k18') * (man ? 0 : 0.5);
+    if (!man && p.defer && k('k0') > 0) points -= 1;
+    if (!man && p.deferredLast && k('k1') > 0) points += 1;
+    return points + k('miluim') + k('soldier') + k('degree') + (p.single ? 1 : 0) + k('disabled') * 2 + k('immigrant') + k('extra');
   }
 
   function exVat(v, row, vatRate) { return pos(v) / (1 + (row.vat === false ? 0 : vatRate)); }
@@ -303,20 +314,22 @@
     function monthly(list, i, fn) { return sum(list, function (r) { return fn(r, (r.m || [])[i]); }); }
     var ex = function (r, v) { return exVat(v, r, vatRate); }, rawV = function (r, v) { return pos(v); };
     var vatOf = function (r, v) { return pos(v) - exVat(v, r, vatRate); };
+    /* A refund to a client is less income, not an expense. */
+    var sign = function (fn) { return function (r, v) { return (r.refund ? -1 : 1) * fn(r, v); }; };
     var val = function (a, i) { return pos((a || [])[i]); };
 
     var months = [];
     for (var i = 0; i < 12; i++) {
-      var m = { i: i, revenue: monthly(rows.income, i, ex), direct: monthly(rows.direct, i, ex), marketing: monthly(rows.marketing, i, ex), admin: monthly(rows.admin, i, ex), finance: monthly(rows.finance, i, ex) };
+      var m = { i: i, revenue: monthly(rows.income, i, sign(ex)), direct: monthly(rows.direct, i, ex), marketing: monthly(rows.marketing, i, ex), admin: monthly(rows.admin, i, ex), finance: monthly(rows.finance, i, ex) };
       m.gross = m.revenue - m.direct;
       m.operating = m.gross - m.marketing - m.admin;
       m.preTax = m.operating - m.finance;
       m.salary = val(draw.salary, i); m.pension = val(draw.pension, i); m.fund = val(draw.fund, i); m.savings = val(draw.savings, i); m.loan = val(draw.loan, i);
       m.drawn = m.salary + m.pension + m.fund + m.savings + m.loan;
-      m.vatOut = monthly(rows.income, i, vatOf);
+      m.vatOut = monthly(rows.income, i, sign(vatOf));
       m.vatIn = monthly(rows.direct, i, vatOf) + monthly(rows.marketing, i, vatOf) + monthly(rows.admin, i, vatOf) + monthly(rows.finance, i, vatOf);
       m.paidIncome = val(paid.income, i); m.paidNi = val(paid.ni, i); m.paidVat = val(paid.vat, i);
-      m.cashIn = monthly(rows.income, i, rawV);
+      m.cashIn = monthly(rows.income, i, sign(rawV));
       m.cashOut = monthly(rows.direct, i, rawV) + monthly(rows.marketing, i, rawV) + monthly(rows.admin, i, rawV) + monthly(rows.finance, i, rawV) + m.drawn + m.paidIncome + m.paidNi + m.paidVat;
       months.push(m);
     }
@@ -325,7 +338,7 @@
     function project(list) {
       return sum(list, function (r) {
         var total = 0; for (var j = 0; j < k; j++) total += ex(r, (r.m || [])[j]);
-        return r.oneOff || r.rule === 'gift' ? total : total * factor;
+        return (r.refund ? -1 : 1) * (r.oneOff || r.rule === 'gift' ? total : total * factor);
       });
     }
     function projectRec(list) {
@@ -347,17 +360,22 @@
     var pensionMonth = k ? sumTo('pension') / k : 0, fundMonth = k ? sumTo('fund') / k : 0;
     var donations = pos(o.donations) * OPS_2026.donationRate / 100 / 12;
     var points = s.tax && s.tax.points;
-    var est = depositTax(taxable / 12, pensionMonth, fundMonth, points, t, donations);
-    var estLess = depositTax((taxable - 1000) / 12, pensionMonth, fundMonth, points, t, donations);
+    var otherIncome = pos(o.otherIncome), otherWithheld = pos(o.otherWithheld);
+    var est = depositTax(taxable / 12, pensionMonth, fundMonth, points, t, donations, otherIncome / 12);
+    var estLess = depositTax((taxable - 1000) / 12, pensionMonth, fundMonth, points, t, donations, otherIncome / 12);
+    /* The profit and loss carries only the business's own tax, without what the maternity pay adds. */
+    var estBiz = depositTax(taxable / 12, pensionMonth, fundMonth, points, t, donations);
     var annual = {
       income: income, pnlCosts: pnlCosts, profit: income - pnlCosts, bizRecognised: bizRecognised, privateRecognised: privateRecognised, depreciation: depreciation,
       taxable: taxable, pension: pensionMonth * 12, fund: fundMonth * 12, fundDed: est.fundDed * 12, penDed: est.penDed * 12, penCredit: est.penCredit * 12,
       base: est.base * 12, ni: est.ni * 12, health: est.health * 12, social: est.social * 12, incomeBefore: est.incomeBefore * 12, pointsCredit: est.pointsCredit * 12, donations: donations * 12,
+      otherIncome: otherIncome, otherWithheld: otherWithheld, incomeTaxLeft: Math.max(0, est.incomeTax * 12 - otherWithheld), overWithheld: Math.max(0, otherWithheld - est.incomeTax * 12),
+      unusedCredits: Math.max(0, (est.pointsCredit + est.penCredit + donations - est.incomeBefore) * 12),
       incomeTax: est.incomeTax * 12, total: est.total * 12, perMonth: est.total,
-      advancePct: income > 0 ? est.incomeTax * 12 / income : 0,
+      advancePct: income > 0 ? Math.max(0, est.incomeTax * 12 - otherWithheld) / income : 0,
       savedPer1000: k && taxable > 1000 ? (est.total - estLess.total) * 12 : 0
     };
-    var taxRate = annual.profit > 0 ? Math.min(annual.total / annual.profit, 0.95) : 0;
+    var taxRate = annual.profit > 0 ? Math.min(estBiz.total * 12 / annual.profit, 0.95) : 0;
 
     /* The estimate is the tax line: low advances must not inflate the profit. */
     months.forEach(function (x) {
@@ -370,7 +388,7 @@
     var total = {}; keys.forEach(function (key) { total[key] = sumTo(key); });
 
     var shareOfYear = k / 12;
-    var due = { income: annual.incomeTax * shareOfYear, social: annual.social * shareOfYear };
+    var due = { income: annual.incomeTaxLeft * shareOfYear, social: annual.social * shareOfYear };
     var gapIncome = due.income - total.paidIncome, gapSocial = due.social - total.paidNi;
     var vatOwed = patur ? 0 : total.vatOut - total.vatIn - total.paidVat;
 
@@ -421,6 +439,6 @@
     TABLES_2026: TABLES_2026, PATUR_CEILING_2026: PATUR_CEILING_2026, MAX_MARGIN: MAX_MARGIN, OPS_2026: OPS_2026,
     num: num, materialUnitPrice: materialUnitPrice, lineCost: lineCost, productDirect: productDirect,
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
-    mandatoryPension: mandatoryPension, depositTax: depositTax, ops: ops, productRank: productRank, whatIf: whatIf
+    mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, productRank: productRank, whatIf: whatIf
   };
 });

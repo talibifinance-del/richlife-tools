@@ -259,6 +259,15 @@ a{color:var(--pine-deep)}
 .ops-sec:not([open]) summary::after{transform:rotate(90deg)}
 .ops-sec summary:focus-visible{outline:2px solid var(--pine-deep);outline-offset:3px;border-radius:8px}
 .ops-short{margin-inline-start:auto;font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums}
+.ops-rowwrap{display:grid;gap:3px}
+.row-flags{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;font-weight:700;color:var(--ink-soft);padding-inline-start:4px}
+.row-flags label{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.pick{margin-top:12px;border:1.5px solid var(--line);border-radius:12px;background:#fff}
+.pick summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;padding:11px 14px;cursor:pointer;font-weight:800;color:var(--pine-deep);font-size:14px}
+.pick summary b{font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums}
+.pick summary:focus-visible{outline:2px solid var(--pine-deep);outline-offset:2px;border-radius:10px}
+.pick-b{padding:0 14px 14px}
+.pick-kids{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -454,7 +463,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=2"></script>
+<script src="engine.js?v=3"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -490,12 +499,12 @@ function opsRowNew(name, opts) { return Object.assign({ name: name, m: months() 
 function opsDefaults() {
   var nv = { vat: false };
   return {
-    edit: 0, view: 'year', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '',
+    edit: 0, view: 'year', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '', otherIncome: '', otherWithheld: '',
     rows: {
-      income: ['סליקה', 'ביט', 'פייבוקס', 'העברה בנקאית', 'אחר'].map(function (n) { return opsRowNew(n); }),
+      income: ['סליקה', 'ביט', 'פייבוקס', 'העברה בנקאית', 'אחר'].map(function (n) { return opsRowNew(n); }).concat([opsRowNew('החזרים ללקוחות, יורד מההכנסות', { refund: true })]),
       direct: ['קבלני משנה', 'חומרי גלם', 'חומרי אריזה', 'שילוח, מכס ויבוא', 'אחר'].map(function (n) { return opsRowNew(n); }),
-      marketing: ['פרסום בפייסבוק ואינסטגרם', 'פרסום בגוגל', 'ריטיינר לחברת שיווק', 'אתר ודפי נחיתה', 'מיתוג', 'עמלות לאנשי מכירות'].map(function (n) { return opsRowNew(n); }),
-      admin: [opsRowNew('שכר עובדים כולל סוציאליות', nv), opsRowNew('שכירות משרד'), opsRowNew('ארנונה למשרד', nv), opsRowNew('חשמל ומים למשרד'), opsRowNew('קורסים והכשרות מקצועיות'), opsRowNew('מערכות מידע'), opsRowNew('מתנות ללקוחות, ספקים ועובדים', { rule: 'gift', oneOff: true }), opsRowNew('אגרות ורישיונות', nv), opsRowNew('ביטוח עסק', nv), opsRowNew('הוצאות משפטיות'), opsRowNew('רואה חשבון'), opsRowNew('הוצאות משרד'), opsRowNew('כיבוד קל במשרד', { rec: 80 }), opsRowNew('טלפון, אם משולם מהעסק', { rule: 'phone' }), opsRowNew('אינטרנט'), opsRowNew('רכב, אם משולם מהעסק', { rec: 45 }), opsRowNew('ייעוץ עסקי')],
+      marketing: [opsRowNew('פרסום בפייסבוק ואינסטגרם, בלי מע"מ', nv)].concat(['פרסום בגוגל', 'ריטיינר לחברת שיווק', 'אתר ודפי נחיתה', 'מיתוג', 'עמלות לאנשי מכירות'].map(function (n) { return opsRowNew(n); })),
+      admin: [opsRowNew('שכר עובדים כולל סוציאליות', nv), opsRowNew('שכירות משרד'), opsRowNew('ארנונה למשרד', nv), opsRowNew('חשמל ומים למשרד'), opsRowNew('קורסים והכשרות מקצועיות'), opsRowNew('מנויים ומערכות, כולל מע"מ'), opsRowNew('מנויים בחו"ל, בלי מע"מ', nv), opsRowNew('מתנות ללקוחות, ספקים ועובדים', { rule: 'gift', oneOff: true }), opsRowNew('אגרות ורישיונות', nv), opsRowNew('ביטוח עסק', nv), opsRowNew('הוצאות משפטיות'), opsRowNew('רואה חשבון'), opsRowNew('הוצאות משרד'), opsRowNew('כיבוד קל במשרד', { rec: 80 }), opsRowNew('טלפון, אם משולם מהעסק', { rule: 'phone' }), opsRowNew('אינטרנט'), opsRowNew('רכב, אם משולם מהעסק', { rec: 45 }), opsRowNew('ייעוץ עסקי')],
       finance: [opsRowNew('עמלות סליקה'), opsRowNew('עמלות בנק', nv), opsRowNew('ריבית על הלוואה', nv)]
     },
     private: [
@@ -519,7 +528,7 @@ function emptyState() {
       marketing: ['ריטיינר לחברת שיווק', 'ניהול תוכן שוטף', 'פרסום'].map(ohRow),
       admin: ['שכר דירה', 'ארנונה', 'חשמל', 'טלפון', 'אינטרנט', 'מערכות מידע ותוכנות', 'הוצאות משרד', 'ביטוח עסק', 'דלק ואחזקת רכב', 'רואה חשבון', 'הוצאות משפטיות', 'השתלמויות וקורסים', 'ייעוץ עסקי'].map(ohRow)
     },
-    tax: { points: '', saving: '', tables: null },
+    tax: { points: '', saving: '', tables: null, pick: null },
     plan: { dates: DEFAULT_DATES.slice(), launches: months(), promos: months(), focus: months() },
     whatIf: { i: '0', pct: '-10' },
     ops: opsDefaults()
@@ -547,8 +556,8 @@ function demoState() {
   s.overhead.admin[9].m = months(400);
   s.tax.points = 2.75; s.tax.saving = 1000;
   var o = s.ops, three = function (a, v) { a[0] = v; a[1] = v; a[2] = v; };
-  three(o.rows.income[0].m, 30000); three(o.rows.income[3].m, 17200); three(o.rows.direct[1].m, 4720); three(o.rows.marketing[0].m, 3540);
-  three(o.rows.admin[0].m, 5000); three(o.rows.admin[5].m, 2360); three(o.rows.admin[10].m, 1180); three(o.rows.finance[0].m, 590);
+  three(o.rows.income[0].m, 30000); three(o.rows.income[3].m, 17200); three(o.rows.direct[1].m, 4720); three(o.rows.marketing[0].m, 3000);
+  three(o.rows.admin[0].m, 5000); three(o.rows.admin[5].m, 2360); three(o.rows.admin[11].m, 1180); three(o.rows.finance[0].m, 590);
   three(o.draw.salary, 12000); three(o.draw.pension, 1400); three(o.draw.fund, 600); three(o.draw.savings, 2000); three(o.draw.loan, 1000);
   o.home = true; o.car = true; three(o.private[0].m, 600); three(o.private[6].m, 800); o.seeded = true; o.edit = 2;
   return s;
@@ -737,8 +746,8 @@ VIEWS[5] = function () {
   }).join('');
   var tf = function (l, k, u) { return '<div class="field"><label for="tt' + k + '">' + l + '</label><div class="input-shell">' + (u ? '<span class="unit" aria-hidden="true">' + u + '</span>' : '') + '<input id="tt' + k + '" type="text" inputmode="decimal" data-table="' + k + '" value="' + t[k] + '"></div></div>'; };
   return head() + '<div class="card"><span class="sec-lbl">מה ממלאים</span><div class="fields">' +
-    numField('נקודות זיכוי', 'tax.points', { hint: 'תושב או תושבת 2.25 · אישה 2.75 · עוד נקודות לפי ילדים ותארים' }) +
-    numField('חיסכון רצוי בחודש', 'tax.saving', { unit: '₪', hint: 'מעבר לנטו שרשמת בשלב 3. אם אין, אפשר להשאיר ריק.' }) + '</div>' + live('taxNeed') + '</div>' +
+    numField('נקודות זיכוי לשנת מס ' + t.year, 'tax.points', { hint: 'אפשר להקליד, או לבחור מהרשימה למטה' }) +
+    numField('חיסכון רצוי בחודש', 'tax.saving', { unit: '₪', hint: 'מעבר לנטו שרשמת בשלב 3. אם אין, אפשר להשאיר ריק.' }) + '</div>' + pointsPicker() + live('taxNeed') + '</div>' +
     '<div class="card"><span class="sec-lbl">מה יצא</span>' + live('taxOut') + live('fundCap') + '</div>' +
     '<div class="note soft">החישוב הוא הערכה בלבד ואינו ייעוץ מס. לחישוב מדויק כדאי לשבת עם רואה חשבון. הפנסיה וקרן ההשתלמות נספרות לפני המס, כך שההטבה עליהן כבר בפנים. הטבלאות של ' + t.year + ' נבדקו מול ביטוח לאומי ורשות המסים ב-2.11.2026.</div>' +
     '<details class="how" data-how="taxTables"' + (howOpen.taxTables ? ' open' : '') + '><summary>טבלאות המס של ' + t.year + ' (אפשר לעדכן)</summary><div class="how-b"><div class="grid2"><div><div class="tbl-wrap" tabindex="0" role="region" aria-label="מדרגות מס"><table class="ptable"><thead><tr><th>הכנסה חייבת בחודש</th><th>שיעור %</th></tr></thead><tbody>' + br + '</tbody></table></div></div><div class="fields">' +
@@ -968,16 +977,47 @@ var INFO = {
   left: 'הרווח הנקי פחות מה שלקחת ממנו: משכורת, פנסיה וקרן, חיסכון והחזר הלוואה. במינוס? לקחת יותר ממה שהעסק הרוויח.'
 };
 function info(key, title) { return ' <details class="ti" data-how="i_' + key + '"' + (howOpen['i_' + key] ? ' open' : '') + '><summary aria-label="מה זה ' + title + '?">i</summary><div class="ti-b">' + INFO[key] + '</div></details>'; }
-function opsSumAll() { return E.ops(S, R); }
+function opsYear() { return (S.tax.tables || E.TABLES_2026).year; }
+var MILUIM = [['', 'לא'], ['0.5', '30 עד 39 ימים'], ['0.75', '40 עד 49 ימים'], ['1', '50 עד 54 ימים'], ['1.25', '55 עד 59 ימים'], ['1.5', '60 עד 64 ימים'], ['1.75', '65 עד 69 ימים'], ['2', '70 עד 74 ימים'], ['2.25', '75 עד 79 ימים'], ['2.5', '80 עד 84 ימים'], ['2.75', '85 עד 89 ימים'], ['3', '90 עד 94 ימים'], ['3.25', '95 עד 99 ימים'], ['3.5', '100 עד 104 ימים'], ['3.75', '105 עד 109 ימים'], ['4', '110 ימים ומעלה']];
+function pickDefaults() { return { gender: 'woman', k0: '', k1: '', k2: '', k3: '', k45: '', k612: '', k1317: '', k18: '', defer: false, deferredLast: false, miluim: '', soldier: '', degree: '', single: false, disabled: '', immigrant: '', extra: '' }; }
+function pointsText() { var v = E.num(S.tax.points); return v ? v + ' נקודות · ' + ils(v * (S.tax.tables || E.TABLES_2026).pointValue, 0) + ' בחודש' : 'עוד לא נבחר'; }
+function pointsPicker() {
+  var p = Object.assign(pickDefaults(), S.tax.pick || {}), year = opsYear();
+  var sel = function (key, label, opts, hint) {
+    return '<div class="field"><label for="pk_' + key + '">' + label + '</label><div class="input-shell"><select id="pk_' + key + '" data-pick="' + key + '">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (String(p[key]) === String(o[0]) ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>' + (hint ? '<div class="hint">' + hint + '</div>' : '') + '</div>';
+  };
+  var cnt = function (key, label) { return '<div class="field"><label for="pk_' + key + '">' + label + '</label><div class="input-shell"><input id="pk_' + key + '" type="text" inputmode="numeric" autocomplete="off" data-pick="' + key + '" value="' + esc(p[key]) + '" placeholder="0"></div></div>'; };
+  var chk = function (key, label) { return '<label class="check-line"><input type="checkbox" data-pick="' + key + '"' + (p[key] ? ' checked' : '') + '> ' + label + '</label>'; };
+  return '<details class="pick" data-how="pickPoints"' + (howOpen.pickPoints ? ' open' : '') + '><summary><span>מה מגיע לי? לבחור מהרשימה</span><b id="pickTotal">' + esc(pointsText()) + '</b></summary><div class="pick-b"><p class="explain">הגיל של הילד הוא הגיל שהוא מגיע אליו בשנת המס ' + year + '. המספרים לפי הכללים של ' + year + ', ורואה החשבון יאשר את הסופי.</p><div class="fields">' +
+    sel('gender', 'מי ממלאים', [['woman', 'אישה, תושבת ישראל (2.75)'], ['man', 'גבר, תושב ישראל (2.25)']], 'בהורים פרודים, הטבלה של אמא חלה על ההורה שמקבל את קצבת הילדים.') +
+    sel('miluim', 'מילואים כלוחם או לוחמת בשנה הקודמת', MILUIM, 'לפי ימי המילואים ב-' + (year - 1) + '. עצמאים מצרפים אישור לדוח השנתי.') +
+    sel('soldier', 'שירות צבאי או לאומי ב-3 השנים האחרונות', [['', 'לא'], ['1', 'שירות קצר (נקודה אחת)'], ['2', 'שירות מלא (2 נקודות)']]) +
+    sel('degree', 'לימודים שהסתיימו בשנה האחרונה', [['', 'לא'], ['1', 'תואר ראשון או לימודי מקצוע (נקודה)'], ['0.5', 'תואר שני (חצי נקודה)']]) +
+    sel('immigrant', 'עלייה לישראל', [['', 'לא'], ['3', '18 החודשים הראשונים (3 נקודות)'], ['2', '12 החודשים הבאים (2 נקודות)'], ['1', '12 החודשים האחרונים (נקודה)']]) +
+    '</div><span class="sec-lbl" style="margin-top:14px">כמה ילדים בכל גיל</span><div class="fields pick-kids">' +
+    cnt('k0', 'נולד השנה') + cnt('k1', 'בן או בת שנה') + cnt('k2', 'בני שנתיים') + cnt('k3', 'בני 3') + cnt('k45', 'בני 4 עד 5') + cnt('k612', 'בני 6 עד 12') + cnt('k1317', 'בני 13 עד 17') + cnt('k18', 'בני 18') + '</div><div style="display:grid;gap:6px;margin-top:12px">' +
+    chk('defer', 'לידה השנה: לדחות נקודה אחת לשנה הבאה') + chk('deferredLast', 'ילד בן שנה: דחיתי נקודה מהשנה שעברה') + chk('single', 'הורה יחיד') + '</div><div class="fields" style="margin-top:12px">' + cnt('disabled', 'ילדים עם מוגבלות שמזכה (2 נקודות לכל אחד)') + cnt('extra', 'עוד נקודות שרואה החשבון אישר') + '</div></div></details>';
+}
+function pickChange(t) {
+  var key = t.getAttribute('data-pick');
+  S.tax.pick = Object.assign(pickDefaults(), S.tax.pick || {});
+  S.tax.pick[key] = t.type === 'checkbox' ? t.checked : t.value;
+  S.tax.points = E.creditPoints(S.tax.pick);
+  document.querySelectorAll('[data-path="tax.points"]').forEach(function (x) { x.value = grp(S.tax.points); });
+  $('pickTotal').textContent = pointsText();
+  changed();
+}
 function opsTabs(active, attr, withYear) {
   var filled = O ? O.k : 0;
   return '<div class="month-tabs" role="group" aria-label="בחירת חודש">' + (withYear ? '<button type="button" ' + attr + '="year" aria-pressed="' + (active === 'year') + '">מתחילת השנה</button>' : '') +
     MONTHS.map(function (m, i) { return '<button type="button" ' + attr + '="' + i + '" aria-pressed="' + (String(active) === String(i)) + '"' + (i < filled ? ' class="has"' : '') + '>' + m + '</button>'; }).join('') + '</div>';
 }
 function opsRow(listPath, r, i, e) {
-  var base = listPath + '.' + i;
-  return '<div class="row cols-ops">' + cellText('שם השורה', base + '.name') + cellNum(esc(r.name || 'סכום') + ' ב' + MONTHS[e], base + '.m.' + e, '₪') +
-    '<button type="button" class="icon-btn" data-del="' + listPath + '" data-i="' + i + '" aria-label="מחיקת ' + esc(r.name || 'שורה') + '">×</button></div>';
+  var base = listPath + '.' + i, nm = esc(r.name || 'שורה'), isIncome = listPath === 'ops.rows.income';
+  var has = (r.m || []).some(function (v) { return E.num(v) > 0; });
+  var flags = isIncome ? '' : '<div class="row-flags"' + (has ? '' : ' hidden') + '>' + (S.biz.type === 'patur' ? '' : '<label><input type="checkbox" aria-label="' + nm + ' כולל מע&quot;מ" data-check="' + base + '.vat"' + (r.vat === false ? '' : ' checked') + '> כולל מע"מ</label>') + '<label><input type="checkbox" aria-label="' + nm + ' הוצאה חד-פעמית" data-check="' + base + '.oneOff"' + (r.oneOff ? ' checked' : '') + '> חד-פעמית, לא חוזרת כל חודש</label></div>';
+  return '<div class="ops-rowwrap"><div class="row cols-ops">' + cellText('שם השורה', base + '.name') + cellNum(nm + ' ב' + MONTHS[e], base + '.m.' + e, '₪') +
+    '<button type="button" class="icon-btn" data-del="' + listPath + '" data-i="' + i + '" aria-label="מחיקת ' + nm + '">×</button></div>' + flags + '</div>';
 }
 function opsSection(title, key, explain, addLabel) {
   var e = S.ops.edit;
@@ -1000,7 +1040,7 @@ function settingsTable() {
     }).join('');
   };
   var body = ['direct', 'marketing', 'admin', 'finance'].map(function (k) { return line(S.ops.rows[k], 'ops.rows.' + k); }).join('');
-  return '<details class="how" data-how="opsSettings"' + (howOpen.opsSettings ? ' open' : '') + '><summary>הגדרות לכל שורה: מע"מ, אחוז שמוכר במס, הוצאה חד-פעמית</summary><div class="how-b"><p class="explain">הוצאה חד-פעמית נספרת פעם אחת בהערכה השנתית, וכל השאר נחשב כאילו ימשיך כך עד סוף השנה. במתנות רושמים כמה אנשים קיבלו, כי ההכרה היא עד ' + E.OPS_2026.giftCap + ' ₪ לאדם בשנה.</p><div class="tbl-wrap" tabindex="0" role="region" aria-label="הגדרות שורות"><table class="ptable"><thead><tr><th>שורה</th>' + (patur ? '' : '<th>כולל מע"מ</th>') + '<th>מוכר במס %</th><th>חד-פעמית</th></tr></thead><tbody>' + body + '</tbody></table></div></div></details>';
+  return '<details class="how" data-how="opsSettings"' + (howOpen.opsSettings ? ' open' : '') + '><summary>הגדרות נוספות: אחוז שמוכר במס, מע"מ והוצאה חד-פעמית לכל השורות</summary><div class="how-b"><p class="explain">הוצאה חד-פעמית נספרת פעם אחת בהערכה השנתית, וכל השאר נחשב כאילו ימשיך כך עד סוף השנה. במתנות רושמים כמה אנשים קיבלו, כי ההכרה היא עד ' + E.OPS_2026.giftCap + ' ₪ לאדם בשנה.</p><div class="tbl-wrap" tabindex="0" role="region" aria-label="הגדרות שורות"><table class="ptable"><thead><tr><th>שורה</th>' + (patur ? '' : '<th>כולל מע"מ</th>') + '<th>מוכר במס %</th><th>חד-פעמית</th></tr></thead><tbody>' + body + '</tbody></table></div></div></details>';
 }
 function seedOps() {
   if (S.ops.seeded) return;
@@ -1026,10 +1066,10 @@ VIEWS[11] = function () {
   return head() + '<div class="card"><span class="sec-lbl">על העסק</span><div class="field"><span class="lbl" id="typeLbl2">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl2"><button type="button" data-type="murshe" aria-pressed="' + !patur + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + patur + '">עוסק פטור</button></div><div class="hint">' + (patur ? 'בעוסק פטור אין מע"מ בכלל, וממלאים כמו בבנק.' : 'ממלאים כמו בבנק, כולל מע"מ. הכלי מנטרל אותו לבד לפי סוג השורה.') + '</div></div>' +
     '<label class="check-line" style="margin-top:12px"><input type="checkbox" data-check="ops.home" data-rerender' + (S.ops.home ? ' checked' : '') + '> העסק עובד מהבית</label><label class="check-line" style="margin-top:6px"><input type="checkbox" data-check="ops.car" data-rerender' + (S.ops.car ? ' checked' : '') + '> הרכב הפרטי משמש גם לעסק</label></div>' +
     '<div class="card"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') + '</div>' +
-    opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה.', 'הוספת מקור הכנסה') +
+    opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה. החזר ללקוחה נרשם בשורה שלו, והוא מוריד את ההכנסות.', 'הוספת מקור הכנסה') +
     opsSection('עלויות ישירות', 'direct', 'מה שעולה לספק את המוצר או השירות עצמו.', 'הוספת עלות') +
     opsSection('שיווק ומכירה', 'marketing', '', 'הוספת הוצאת שיווק') +
-    opsSection('הנהלה וכלליות', 'admin', 'רק מה שיוצא מחשבון העסק.', 'הוספת הוצאה') +
+    opsSection('הנהלה וכלליות', 'admin', 'רק מה שיוצא מחשבון העסק. הוצאה נחשבת חוזרת כל חודש, אלא אם מסמנים שהיא חד-פעמית.', 'הוספת הוצאה') +
     opsSection('עמלות וריבית', 'finance', 'בהלוואה נכנסת לכאן רק הריבית. החזר הקרן נמצא למטה.', 'הוספת שורה') +
     '<div class="card">' + settingsTable() + '</div>' +
     '<div class="card" style="border:2px dashed var(--pine)"><span class="sec-lbl">הוצאות פרטיות שמוכרות במס</span><p class="explain">הכסף יצא מהחשבון הפרטי ולא מהעסק, ולכן זה לא נכנס לרווח והפסד. זה רק מוריד את המס. האחוזים הם ברירת מחדל, ומה שרואה החשבון מכיר קובע.</p>' + '<div class="rows">' + privRows + '</div><button type="button" class="add-btn" data-addops="private">+ הוספת הוצאה פרטית</button></div>' +
@@ -1043,14 +1083,16 @@ VIEWS[12] = function () {
 };
 VIEWS[13] = function () {
   var opts = '<option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('');
-  return head() + '<div class="card"><span class="sec-lbl">מה ממלאים</span><div class="fields">' + numField('נקודות זיכוי', 'tax.points', { hint: 'תושב או תושבת 2.25 · אישה 2.75 · עוד נקודות לפי ילדים ותארים' }) +
+  return head() + '<div class="card"><span class="sec-lbl">מה ממלאים לשנת מס ' + opsYear() + '</span><div class="fields">' + numField('נקודות זיכוי לשנת מס ' + opsYear(), 'tax.points', { hint: 'אפשר להקליד, או לבחור מהרשימה למטה' }) +
     '<div class="field"><label for="opsUpto">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto" data-text data-path="ops.upto">' + opts + '</select></div></div>' +
-    numField('פחת בשנה', 'ops.depreciation', { unit: '₪', hint: 'רואה החשבון יודע. אפשר להשאיר ריק.' }) + numField('תרומות בשנה', 'ops.donations', { unit: '₪', hint: 'למוסד מוכר. מזכה ב-35%.' }) + '</div></div>' +
+    numField('פחת בשנה', 'ops.depreciation', { unit: '₪', hint: 'רואה החשבון יודע. אפשר להשאיר ריק.' }) + numField('תרומות בשנה', 'ops.donations', { unit: '₪', hint: 'למוסד מוכר. מזכה ב-35%.' }) +
+    numField('דמי לידה, ברוטו בשנה', 'ops.otherIncome', { unit: '₪', hint: 'נחשב הכנסה ומשפיע על מס ההכנסה, אבל לא נכנס לרווח של העסק. גם תגמולי מילואים מביטוח לאומי נכנסים לכאן.' }) +
+    numField('מס הכנסה שנוכה מהם', 'ops.otherWithheld', { unit: '₪', hint: 'כתוב באישור של ביטוח לאומי.' }) + '</div>' + pointsPicker() + '</div>' +
     live('opsTaxOut') + '<div class="note soft">החישוב הוא הערכה בלבד ואינו ייעוץ מס. הוא מניח שהעסק הוא מקור ההכנסה היחיד. לחישוב מדויק כדאי לשבת עם רואה חשבון.</div>' + stepNav();
 };
 
 var LIVE_OPS = {
-  opsSumShort: function (key) { var t = S.ops.rows[key].reduce(function (a, r) { return a + E.num(r.m[S.ops.edit]); }, 0); return t ? ils(t, 0) : ''; },
+  opsSumShort: function (key) { var t = S.ops.rows[key].reduce(function (a, r) { return a + (r.refund ? -1 : 1) * E.num(r.m[S.ops.edit]); }, 0); return t ? ils(t, 0) : ''; },
   opsBank: function () {
     var b = O.bank;
     if (!O.k) return '<div class="note soft">אחרי שממלאים הכנסות או הוצאות, הכלי יבדוק אם זה מסתדר עם הבנק.</div>';
@@ -1097,10 +1139,12 @@ var LIVE_OPS = {
       return '<tr><td class="nm">' + l + '</td><td>' + ils(due, 0) + '</td><td>' + ils(paid, 0) + '</td><td>' + (Math.abs(d) < 1 ? 'מדויק' : (d > 0 ? 'חסרים ' + ils(d, 0) : 'שולם יותר ב-' + ils(-d, 0))) + '</td></tr>';
     };
     var penNote = O.pensionShort > 1 ? '<div class="note soft">לפי ההכנסה הזו, חובת ההפקדה לפנסיה לעצמאים היא כ-<b>' + ils(O.mandatory, 0) + '</b> בשנה. לפי מה שמילאת מופקדים ' + ils(a.pension, 0) + ' בשנה. החובה חלה מגיל 21 עד 60, אחרי חצי שנה מפתיחת העסק, והפקדות דרך מעסיק נספרות.</div>' : '';
-    return '<div class="card"><span class="sec-lbl">התוצאה</span><div class="tiles">' + tile('הערכת מס לשנה', ils(a.total, 0), 'לפי ' + O.k + (O.k === 1 ? ' חודש' : ' חודשים') + ', כאילו השנה תמשיך כך', 'main') + tile('בממוצע בחודש', ils(a.perMonth, 0)) + tile('מקדמות מס הכנסה', pct(a.advancePct), 'אחוז מהמחזור שמתאים להערכה') + (a.savedPer1000 ? tile('כל 1,000 ₪ הוצאה נוספת', 'חוסכים כ-' + ils(a.savedPer1000, 0), 'השאר עדיין יוצא מהכיס') : '') + '</div></div>' +
+    return '<div class="card"><span class="sec-lbl">התוצאה</span><div class="tiles">' + tile('הערכת מס לשנת ' + opsYear(), ils(a.total, 0), 'לפי ' + O.k + (O.k === 1 ? ' חודש' : ' חודשים') + ', כאילו השנה תמשיך כך', 'main') + tile('בממוצע בחודש', ils(a.perMonth, 0)) + tile('מקדמות מס הכנסה', pct(a.advancePct), 'אחוז מהמחזור שמתאים להערכה') + (a.savedPer1000 ? tile('כל 1,000 ₪ הוצאה נוספת', 'חוסכים כ-' + ils(a.savedPer1000, 0), 'השאר עדיין יוצא מהכיס') : '') + '</div></div>' +
       '<div class="card"><span class="sec-lbl">עד סוף ' + MONTHS[O.k - 1] + ': מה היה צריך לשלם</span><div class="tbl-wrap" tabindex="0" role="region" aria-label="השוואת מקדמות"><table class="ptable"><thead><tr><th>תשלום</th><th>לפי ההערכה</th><th>שולם</th><th>הפער</th></tr></thead><tbody>' + gapLine('מס הכנסה', O.due.income, O.total.paidIncome) + gapLine('ביטוח לאומי ובריאות', O.due.social, O.total.paidNi) + '</tbody></table></div>' + penNote + '</div>' +
-      '<div class="card"><span class="sec-lbl">איך הגענו לזה, בשנה</span><div class="ledger">' + lg('הכנסות' + (O.patur ? '' : ', בלי מע"מ'), ils(a.income, 0)) + lg('פחות הוצאות העסק שמוכרות במס', ils(a.bizRecognised, 0)) + lg('פחות הוצאות פרטיות שמוכרות במס', ils(a.privateRecognised, 0)) + (a.depreciation ? lg('פחות פחת', ils(a.depreciation, 0)) : '') + lg('הכנסה לפני ניכויים', ils(a.taxable, 0), null, 'sum') +
-      lg('ניכוי פנסיה', ils(a.penDed, 0), 'מתוך הפקדה של ' + ils(a.pension, 0)) + lg('ניכוי קרן השתלמות', ils(a.fundDed, 0), 'מתוך הפקדה של ' + ils(a.fund, 0)) + lg('ביטוח לאומי', ils(a.ni, 0)) + lg('ביטוח בריאות', ils(a.health, 0)) + lg('מס הכנסה לפני זיכויים', ils(a.incomeBefore, 0)) + lg('נקודות זיכוי', '- ' + ils(a.pointsCredit, 0)) + lg('זיכוי פנסיה', '- ' + ils(a.penCredit, 0)) + (a.donations ? lg('זיכוי תרומות', '- ' + ils(a.donations, 0)) : '') + lg('מס הכנסה לתשלום', ils(a.incomeTax, 0), null, 'sum') + lg('סך הכל מס, ביטוח לאומי ובריאות', ils(a.total, 0), null, 'big') + '</div>' +
+      '<div class="card"><span class="sec-lbl">איך הגענו לזה, בשנה</span><div class="ledger">' + lg('הכנסות' + (O.patur ? '' : ', בלי מע"מ'), ils(a.income, 0)) + lg('פחות הוצאות העסק שמוכרות במס', ils(a.bizRecognised, 0)) + lg('פחות הוצאות פרטיות שמוכרות במס', ils(a.privateRecognised, 0)) + (a.depreciation ? lg('פחות פחת', ils(a.depreciation, 0)) : '') + lg('הכנסה מהעסק לפני ניכויים', ils(a.taxable, 0), null, 'sum') + (a.otherIncome ? lg('דמי לידה', ils(a.otherIncome, 0), 'נכנסים למס הכנסה בלבד') : '') +
+      lg('ניכוי פנסיה', ils(a.penDed, 0), 'מתוך הפקדה של ' + ils(a.pension, 0)) + lg('ניכוי קרן השתלמות', ils(a.fundDed, 0), 'מתוך הפקדה של ' + ils(a.fund, 0)) + lg('ביטוח לאומי', ils(a.ni, 0)) + lg('ביטוח בריאות', ils(a.health, 0)) + lg('מס הכנסה לפני זיכויים', ils(a.incomeBefore, 0)) + lg('נקודות זיכוי', '- ' + ils(a.pointsCredit, 0)) + lg('זיכוי פנסיה', '- ' + ils(a.penCredit, 0)) + (a.donations ? lg('זיכוי תרומות', '- ' + ils(a.donations, 0)) : '') + lg('מס הכנסה לשנה', ils(a.incomeTax, 0), null, 'sum') + (a.otherWithheld ? lg('כבר נוכה מדמי הלידה', '- ' + ils(a.otherWithheld, 0)) : '') + lg('סך הכל מס, ביטוח לאומי ובריאות', ils(a.total, 0), null, 'big') + '</div>' +
+      (a.unusedCredits > 1 ? '<div class="note soft">נקודות הזיכוי גדולות מהמס השנה, ולכן <b>' + ils(a.unusedCredits, 0) + '</b> מהזיכויים לא מנוצלים. זיכוי שלא נוצל לא חוזר ככסף.' + (E.num((S.tax.pick || {}).k0) > 0 && !(S.tax.pick || {}).defer ? ' בשנת לידה אפשר לדחות נקודה אחת לשנה הבאה, ששווה ' + ils((S.tax.tables || E.TABLES_2026).pointValue * 12, 0) + '. כדאי לבדוק את זה עם רואה החשבון.' : '') + '</div>' : '') +
+      (a.overWithheld > 1 ? '<div class="note ok">נוכה מדמי הלידה יותר ממה שיוצא במס: כ-<b>' + ils(a.overWithheld, 0) + '</b> יכולים לחזור אחרי הדוח השנתי.</div>' : '') +
       how('opsTax', 'הכל מוכפל ל-12 חודשים, חוץ משורות שסומנו כחד-פעמיות. 52% מהביטוח הלאומי מנוכים ממס ההכנסה. מהפקדה לפנסיה, שני שלישים הם ניכוי ושליש הוא זיכוי של 35%. קרן השתלמות מנוכה עד 4.5% מההכנסה ועד ' + money(E.OPS_2026.fundCapYear) + ' ₪ בשנה.') + '</div>';
   },
   pensionAlert: function () {
@@ -1193,6 +1237,7 @@ function normalize(s) {
   s.whatIf = s.whatIf || base.whatIf;
   s.ops = Object.assign({}, base.ops, s.ops || {});
   ['rows', 'draw', 'paid', 'bank'].forEach(function (k) { s.ops[k] = Object.assign({}, base.ops[k], s.ops[k]); });
+  if (!s.ops.rows.income.some(function (r) { return r.refund; })) s.ops.rows.income.push(opsRowNew('החזרים ללקוחות, יורד מההכנסות', { refund: true }));
   return s;
 }
 
@@ -1310,6 +1355,7 @@ document.addEventListener('input', function (e) {
     var caretDigits = t.value.slice(0, t.selectionStart).replace(/[^\d.]/g, '').length, f = (t.hasAttribute('data-signed') && /^\s*-/.test(t.value) ? '-' : '') + grp(t.value);
     if (f !== t.value) { t.value = f; var p = 0, c = 0; while (p < f.length && c < caretDigits) { if (/[\d.]/.test(f[p])) c++; p++; } try { t.setSelectionRange(p, p); } catch (x) {} }
   }
+  if (t.hasAttribute('data-pick') && t.type !== 'checkbox' && t.tagName !== 'SELECT') { pickChange(t); return; }
   if (t.hasAttribute('data-quick')) {
     var base = t.getAttribute('data-quick'), arr = getPath(base + '.m'), raw = t.value.replace(/,/g, '');
     for (var i = 0; i < 12; i++) { arr[i] = raw; var mi = document.querySelector('[data-path="' + base + '.m.' + i + '"]'); if (mi) mi.value = grp(raw); }
@@ -1324,6 +1370,7 @@ document.addEventListener('input', function (e) {
   if (t.hasAttribute('data-path') && t.tagName !== 'SELECT') {
     var path = t.getAttribute('data-path');
     setPath(path, t.hasAttribute('data-num') ? t.value.replace(/,/g, '') : t.value);
+    if (/^ops\..*\.m\.\d+$/.test(path)) { var wrap = t.closest('.ops-rowwrap'), fl = wrap && wrap.querySelector('.row-flags'); if (fl) fl.hidden = false; }
     if (t.hasAttribute('data-month')) { var b = path.replace(/\.m\.\d+$/, ''), q = document.querySelector('[data-quick="' + b + '"]'), a = getPath(b + '.m'), same = a.every(function (x) { return String(x) === String(a[0]); }); if (q) { q.value = same ? grp(a[0]) : ''; q.placeholder = same ? '' : 'משתנה'; } }
     changed();
   }
@@ -1331,7 +1378,8 @@ document.addEventListener('input', function (e) {
 document.addEventListener('change', function (e) {
   var t = e.target;
   if (t.tagName === 'SELECT' && t.hasAttribute('data-path')) { setPath(t.getAttribute('data-path'), t.value); changed(); }
-  if (t.hasAttribute('data-check')) { setPath(t.getAttribute('data-check'), t.checked); if (t.hasAttribute('data-rerender')) { render(); persist(); } else changed(); return; }
+  if (t.hasAttribute('data-pick')) { pickChange(t); return; }
+  if (t.hasAttribute('data-check')) { setPath(t.getAttribute('data-check'), t.checked); document.querySelectorAll('[data-check="' + t.getAttribute('data-check') + '"]').forEach(function (x) { x.checked = t.checked; }); if (t.hasAttribute('data-rerender')) { render(); persist(); } else changed(); return; }
   if (t.id === 'noMat') { S.biz.noMaterials = t.checked; $('matCard').hidden = t.checked; changed(); }
   if (t.id === 'mobSelect') go(+t.value);
 });

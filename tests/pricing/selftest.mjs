@@ -398,7 +398,9 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('O starts on January', await p.locator('[data-opsedit="0"][aria-pressed="true"]').count() === 1);
   await type(p, 'ops.rows.income.0.m.0', '47200');
   await type(p, 'ops.rows.direct.1.m.0', '4720');
-  await type(p, 'ops.rows.marketing.0.m.0', '5900');
+  await type(p, 'ops.rows.marketing.1.m.0', '5900');
+  ok('O flags appear with an amount', await p.locator('[data-check="ops.rows.marketing.1.oneOff"]').first().isVisible());
+  ok('O Facebook starts without VAT', (await p.evaluate(() => window.__pricing.S.ops.rows.marketing[0].vat)) === false);
   await type(p, 'ops.rows.admin.5.m.0', '7080');
   await type(p, 'ops.rows.finance.1.m.0', '500');
   await type(p, 'ops.draw.salary.0', '12000');
@@ -418,6 +420,17 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   const pts = await p.locator('[data-live="opsTaxOut"]').innerText();
   ok('O points change the estimate', noPts !== pts);
   ok('O saving line shows', pts.includes('חוסכים'));
+  ok('O tax year is written', (await p.locator('#view').innerText()).includes('לשנת מס 2026'));
+  await p.click('[data-how="pickPoints"] summary');
+  await p.locator('#pk_k0').pressSequentially('1');
+  await p.selectOption('#pk_miluim', '2');
+  ok('O picker fills the points', (await p.inputValue('[data-path="tax.points"]')) === '7.25', await p.inputValue('[data-path="tax.points"]'));
+  ok('O picker shows the total', (await p.textContent('#pickTotal')).includes('7.25'));
+  ok('O picker stays open while choosing', await p.locator('details[data-how="pickPoints"]').evaluate(d => d.open));
+  await p.locator('[data-path="ops.otherIncome"]').pressSequentially('42000');
+  const m = await p.evaluate(() => window.__pricing.O.annual);
+  near('O maternity pay counted', m.otherIncome, 42000);
+  await axe(p, 'O13 picker open');
   await axe(p, 'O13'); await p.screenshot({ path: OUT + '/o13-desktop.png', fullPage: true });
 
   // private expense lowers tax only
@@ -458,7 +471,8 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('O patur keeps the full amount', (await p.locator('[data-live="opsLadder"]').innerText()).includes('47,200'));
   await go(p, 11); await p.click('[data-type="murshe"]');
   await p.click('[data-how="opsSettings"] summary');
-  await p.locator('[data-check="ops.rows.admin.5.vat"]').uncheck();
+  await p.locator('[data-check="ops.rows.admin.5.vat"]').first().uncheck();
+  ok('O both VAT boxes follow each other', !(await p.locator('[data-check="ops.rows.admin.5.vat"]').last().isChecked()));
   near('O row VAT switch', await p.evaluate(() => window.PricingEngine.ops(window.__pricing.S).months[0].admin), 7080);
   await axe(p, 'O11 settings open');
 

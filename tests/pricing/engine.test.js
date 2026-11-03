@@ -224,6 +224,24 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('units needed keep the same money', w.unitsNeeded * w.newLeft, w.unitsNow * w.oldLeft, 0.01);
   ok('rank has the product', E.productRank(R).list.length === 1);
 
+  near('credit points: woman, birth this year, 70 days of reserve duty', E.creditPoints({ k0: 1, miluim: '2' }), 7.25);
+  near('credit points: defer moves one out', E.creditPoints({ k0: 1, defer: true }), 4.25);
+  near('credit points: man with a 7 year old', E.creditPoints({ gender: 'man', k612: 1 }), 3.25);
+  near('credit points: woman with a 7 year old', E.creditPoints({ k612: 1 }), 4.75);
+  near('credit points: age table', E.creditPoints({ k1: 1, k2: 1, k3: 1, k45: 1, k18: 1 }), 2.75 + 4.5 + 4.5 + 3.5 + 2.5 + 0.5);
+  const refund = opsState(); refund.ops.rows.income.push({ name: 'r', refund: true, m: three(2360) });
+  const rr = E.ops(refund);
+  near('a refund lowers revenue', rr.months[0].revenue, 38000); near('a refund lowers cash in', rr.months[0].cashIn, 44840); near('a refund lowers VAT', rr.months[0].vatOut, 7200 - 360); near('a refund lowers the projected income', rr.annual.income, 456000);
+  const matS = opsState(); matS.ops.otherIncome = 42000; const mat = E.ops(matS), noMat = E.ops(opsState());
+  ok('maternity pay raises income tax', mat.annual.incomeTax > noMat.annual.incomeTax);
+  near('maternity pay leaves NI alone', mat.annual.ni, noMat.annual.ni);
+  near('maternity pay stays out of the business tax line', mat.months[0].tax, noMat.months[0].tax);
+  near('maternity pay stays out of the profit', mat.total.net, noMat.total.net);
+  const wh = opsState(); wh.ops.otherIncome = 42000; wh.ops.otherWithheld = 3000; const wr = E.ops(wh);
+  near('withheld tax comes off what is left', wr.annual.incomeTaxLeft, mat.annual.incomeTax - 3000);
+  const low = E.ops({ biz: { type: 'patur' }, tax: { points: 7.25 }, ops: { rows: { income: [{ m: three(10000) }] }, private: [], draw: {}, paid: {}, bank: {} } });
+  ok('unused credits are reported', low.annual.unusedCredits > 0 && low.annual.incomeTax === 0, low.annual.unusedCredits);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

@@ -279,6 +279,57 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('comparison uses the same months only', cy.n, 1);
   near('comparison revenue flat when equal', cy.revenue[2], 0);
 
+  // product types: the numbers from the approved picture
+  const m12 = v => Array(12).fill(v);
+  const gs0 = { biz: { type: 'murshe', wastePct: 0 }, materials: [{ id: 'k', name: 'לכל ילד', unit: 'יחידה', pack: 1, cost: 37 }],
+    products: [{ id: 'g', type: 'group', size: 10, name: 'סדנה', lines: [{ mat: 'k', qty: 1 }], hours: 5, specific: 300, marginPct: 40, chosen: 150, mix: 100 }],
+    labor: { net: 11000, pension: 800, fund: 400, hours: 150, monthly: [], hourly: [{ name: 'x', rate: 45, hours: 30, factor: 1.35 }] },
+    overhead: { marketing: [{ m: m12(1200) }, { m: m12(500) }], admin: [{ m: m12(1800) }, { m: m12(120) }, { m: m12(350) }, { m: m12(400) }] }, tax: { points: 2.75, saving: 1000 } };
+  const gR = E.compute(gs0), gv = E.groupView(gR, gs0, gs0.products[0]);
+  near('group: people needed to cover costs', gv.minHeads, 12);
+  const gRow = n => gv.rows.filter(r => r.n === n)[0];
+  near('group: 5 people lose', gRow(5).left, -518, 1); near('group: 10 people lose', gRow(10).left, -104, 1); near('group: 15 people leave', gRow(15).left, 311, 1); near('group: 20 people leave', gRow(20).left, 725, 1);
+  near('group: recommended per person at 10', gRow(10).recPerHead, 311, 1); near('group: recommended per person at 20', gRow(20).recPerHead, 202, 1);
+  near('group: the event carries all the materials', gR.products[0].direct, 370);
+  near('group: the chosen price is per person', gR.products[0].customer, 1500);
+  near('group: size changes nothing but the count', E.expandProduct(gs0.products[0]).lines[0].qty, 10);
+  ok('expanding twice changes nothing', E.expandProduct(E.expandProduct(gs0.products[0])).lines[0].qty === 10);
+  const plainP = { id: 'a', name: 'x', lines: [{ mat: 'k', qty: 2 }], hours: 1, marginPct: 30 };
+  ok('a product without a type passes through', E.expandProduct(plainP) === plainP);
+  const svc = { id: 's', type: 'service', lines: [{ mat: 'k', qty: 1 }], hours: 1, marginPct: 30 };
+  ok('a service is an ordinary product', E.expandProduct(svc) === svc);
+  const dg = E.expandProduct({ id: 'd', type: 'digital', devHours: 40, devCost: 2000, expected: 100, marginPct: 50 });
+  near('digital: hours spread over sales', dg.hours, 0.4); near('digital: cost spread over sales', dg.specific, 20);
+  near('digital: no expected sales is safe', E.expandProduct({ type: 'digital', devHours: 40 }).hours, 0);
+  const noneUp = E.groupView(gR, gs0, Object.assign({}, gs0.products[0], { chosen: 20 }));
+  ok('group: a price below the cost per person never covers', noneUp.minHeads === null);
+
+  // sales and payments
+  near('month arithmetic over a year', +E.ymAdd('2026-11', 3).slice(0, 4), 2027); ok('month arithmetic', E.ymAdd('2026-11', 3) === '2027-02' && E.ymAdd('2026-01', -1) === '2025-12');
+  const once = E.salePayments({ kind: 'once', total: 3000, start: '2026-11' });
+  ok('one payment', once.length === 1 && once[0].ym === '2026-11' && once[0].amount === 3000);
+  const eqp = E.salePayments({ kind: 'equal', total: 6600, n: 6, start: '2026-11' });
+  ok('equal payments', eqp.length === 6 && eqp[0].amount === 1100 && eqp[5].ym === '2027-04');
+  const lump = E.salePayments({ kind: 'equal', total: 6600, n: 6, lump: true, start: '2026-11' });
+  ok('card installments paid at once', lump.length === 1 && lump[0].amount === 6600);
+  const parts = E.salePayments({ kind: 'custom', parts: [{ ym: '2026-11', amount: 1000 }, { ym: '2026-12', amount: 1120 }, { ym: '', amount: 5 }, { ym: '2027-01', amount: '' }] });
+  ok('varied payments, skipping empty rows', parts.length === 2 && parts[1].amount === 1120);
+  const subO = E.salePayments({ kind: 'sub', monthly: 1500, start: '2026-11' }, '2027-10');
+  ok('open retainer counts to the horizon and is marked', subO.length === 12 && subO[0].assumed === true);
+  const subE = E.salePayments({ kind: 'sub', monthly: 1500, start: '2026-11', end: '2027-01' }, '2027-10');
+  ok('retainer with an end', subE.length === 3 && !subE[0].assumed);
+  const canc = E.salePayments({ kind: 'equal', total: 6000, n: 6, start: '2026-11', cancelled: '2027-01' });
+  ok('a cancelled sale stops there', canc.length === 2);
+  const fcs = { sales: [{ kind: 'equal', total: 6600, n: 6, start: '2026-11', client: 'א' }, { kind: 'custom', client: 'ב', parts: [{ ym: '2026-11', amount: 1000 }, { ym: '2026-12', amount: 1120 }, { ym: '2027-01', amount: 1120 }] }, { kind: 'sub', monthly: 1500, start: '2026-11', client: 'ג' }] };
+  const fc = E.salesForecast(fcs, '2026-11', 3);
+  near('forecast, first month', fc.months[0].total, 3600); near('forecast, second month', fc.months[1].total, 3720); near('forecast, third month', fc.months[2].total, 3720);
+  near('forecast separates what is assumed', fc.months[0].assumed, 1500); near('forecast adds up', fc.total, 11040);
+  ok('forecast ignores past months', E.salesForecast({ sales: [{ kind: 'once', total: 5, start: '2020-01' }] }, '2026-11', 3).total === 0);
+  const cnt = E.salesCounts({ sales: [{ product: 'a', month: '2026-03' }, { product: 'a', month: '2026-03' }, { product: 'b', month: '2026-04' }, { product: 'a', month: '2025-03' }] }, 2026);
+  ok('monthly counts', cnt.a.m[2] === 2 && cnt.a.total === 2 && cnt.b.m[3] === 1);
+  const closedS = E.closeYear(Object.assign({}, opsState(), { sales: fcs.sales }));
+  near('a new year keeps the sales', closedS.sales.length, 3);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

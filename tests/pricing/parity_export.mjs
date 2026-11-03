@@ -26,6 +26,11 @@ const base = (over = {}) => Object.assign({
 }, over);
 const cases = {
   full: base(),
+  types: base({ products: [
+    { id: 'g', type: 'group', size: 12, name: 'סדנה', lines: [{ mat: 'm2', qty: 2 }], hours: 5, specific: 300, marginPct: 40, market: 200, chosen: 180, mix: 50, plan: months(2) },
+    { id: 'd', type: 'digital', name: 'קורס', devHours: 40, devCost: 2000, expected: 100, marginPct: 60, market: '', chosen: '', mix: 25, plan: months(8) },
+    { id: 's', type: 'service', name: 'טיפול', lines: [{ mat: 'm1', qty: 1 }], hours: 1, specific: '', marginPct: 35, market: 150, chosen: '', mix: 25, plan: months(20) }
+  ] }),
   patur: (() => { const s = base(); s.biz.type = 'patur'; return s; })(),
   service: base({ materials: [], products: [{ id: 'p', name: 'שירות', lines: [], hours: 3, marginPct: 25, mix: '', plan: months('') }], labor: { net: 9000, pension: '', fund: '', hours: 120, monthly: [], hourly: [] }, overhead: { marketing: [], admin: [{ name: 'כללי', m: months(800) }] }, tax: { points: 2.75, saving: '' } }),
   high: (() => { const s = base(); s.labor.net = 90000; s.tax.points = 0; return s; })(),

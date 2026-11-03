@@ -326,6 +326,51 @@ a{color:var(--pine-deep)}
 [data-tip]{cursor:default}
 .h-hit{fill:transparent;cursor:pointer}
 .h-hit:hover{fill:rgba(95,125,106,.12)}
+.sell-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.sell{font-family:var(--font);text-align:start;border:2px solid var(--line);border-radius:16px;padding:14px 15px;background:#fff;cursor:pointer;color:var(--ink-soft);display:flex;flex-direction:column;gap:3px}
+.sell:hover{border-color:var(--pine)}
+.sell.on{border-color:var(--pine-deep);background:var(--sage-tint)}
+.sell:focus-visible{outline:3px solid var(--pine-deep);outline-offset:2px}
+.sell b{font-size:17px;font-weight:900;color:var(--pine-darker);margin-top:6px}
+.s-top{display:flex;justify-content:space-between;align-items:center}
+.s-ic{font-size:25px;line-height:1}
+.s-chk{width:23px;height:23px;border-radius:7px;border:2px solid rgba(var(--pine-rgb),.5);display:grid;place-items:center;font-size:14px;font-weight:900;color:#fff}
+.sell.on .s-chk{background:var(--pine-deep);border-color:var(--pine-deep)}
+.s-d{font-size:14.5px;line-height:1.45;font-weight:500}
+.s-eg{font-size:13.5px;font-weight:700;color:var(--pine-deep);margin-top:4px}
+.g-hero{background:linear-gradient(140deg,var(--pine),var(--pine-deep));color:#fff;border-radius:15px;padding:15px 18px;margin:12px 0}
+.g-hero .q{font-size:15px;font-weight:600}
+.g-hero .q b{background:#fff;color:var(--pine-deep);padding:1px 9px;border-radius:7px;font-weight:900;margin-inline:2px}
+.g-hero .a{font-size:clamp(19px,2.2vw,25px);font-weight:900;margin-top:3px;line-height:1.3}
+.g-kids{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.g-kid{border-radius:13px;padding:11px 13px}
+.g-kid.good{background:rgba(var(--pine-rgb),.15)}
+.g-kid.warn{background:rgba(183,121,31,.14)}
+.g-kid .kn{font-size:14px;font-weight:800;color:var(--ink-soft)}
+.g-kid .kv{font-size:20px;font-weight:900;color:var(--pine-darker);margin:1px 0}
+.g-kid.warn .kv{color:var(--amber-deep)}
+.g-kid .ks{font-size:13px;font-weight:500;color:var(--ink-soft)}
+.seg.seg4{grid-template-columns:repeat(4,minmax(0,1fr));max-width:680px}
+.sale-list{display:grid;gap:10px;margin-top:14px}
+.sale{border:1.5px solid var(--line);border-radius:14px;background:#fff}
+.sale summary{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;padding:12px 15px;cursor:pointer;list-style:none;font-size:15.5px}
+.sale summary::-webkit-details-marker{display:none}
+.sale summary b{font-weight:800;color:var(--pine-darker)}
+.sale summary:focus-visible{outline:2px solid var(--pine-deep);outline-offset:-2px;border-radius:14px}
+.sale-sum{font-weight:600;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.sale-b{padding:2px 15px 15px}
+.sale-foot{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-top:14px}
+.sale-foot .field{flex:1 1 220px;max-width:280px}
+.cols-part{grid-template-columns:minmax(0,1fr) 140px 30px!important}
+.cols-part .lbl{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important}
+.f-bars{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;align-items:end;height:190px;direction:rtl}
+.f-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;cursor:pointer}
+.f-track{flex:1;width:100%;max-width:42px;display:flex;flex-direction:column;justify-content:flex-end;min-height:0}
+.f-s{background:var(--pine);border-radius:6px 6px 0 0}
+.f-a{background:repeating-linear-gradient(45deg,#5f7d6a 0 3px,#dfe8e1 3px 7px);border-radius:6px 6px 0 0}
+.f-val{font-size:12.5px;font-weight:700;color:var(--pine-darker);font-variant-numeric:tabular-nums;white-space:nowrap}
+.f-m{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:5px}
+@media (max-width:640px){.seg.seg4{grid-template-columns:repeat(2,minmax(0,1fr))}.f-val{font-size:10.5px}.f-bars{gap:3px}}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -579,7 +624,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=6"></script>
+<script src="engine.js?v=8"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -589,7 +634,14 @@ var DRAFT_KEY = 'rl_pricing_v4';
 var SHARE_API = 'https://richlife-share.tali-bi-finance.workers.dev';
 var MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
 var DEFAULT_DATES = ['שנה אזרחית חדשה','יום המשפחה, ט"ו בשבט','פורים','פסח, ימי זיכרון ועצמאות','ל"ג בעומר','שבועות','חופש גדול','חופש גדול, ט"ו באב','ראש השנה','יום כיפור, סוכות','בלאק פריידי','חנוכה, נובי גוד'];
-var UNITS = ['יחידה','חבילה','קילו','מטר','שעת עבודה','פרויקט'];
+var UNITS = ['יחידה','חבילה','קילו','מטר','שעת עבודה','פרויקט','טיפול'];
+var SELLS = [
+  { k: 'product', ic: '👗', t: 'מוצר שמייצרים או קונים', d: 'כל יחידה עולה חומרים, ומוכרים אותה לאדם אחד.', eg: 'שמלה, תכשיט, עוגה', add: 'הוספת מוצר' },
+  { k: 'service', ic: '💅', t: 'טיפול או שירות', d: 'בעיקר זמן. חומרים, אם יש, מתחלקים על הרבה לקוחות.', eg: "לק ג'ל, גבות, ייעוץ", add: 'הוספת טיפול או שירות' },
+  { k: 'group', ic: '👩‍👧‍👦', t: 'סדנה או קבוצה', d: 'חלק מהעלות לכל המפגש, וחלק לכל משתתף.', eg: 'סדנת ילדים, חוג, הרצאה', add: 'הוספת סדנה או קבוצה' },
+  { k: 'digital', ic: '💻', t: 'מוצר דיגיטלי', d: 'עולה לייצר פעם אחת, ואז כמעט בלי עלות לכל מכירה.', eg: 'קורס מוקלט, מדריך', add: 'הוספת מוצר דיגיטלי' }
+];
+function sellsOn(k) { var o = S.biz.sells; return !o || !Object.keys(o).some(function (x) { return o[x]; }) ? true : !!o[k]; }
 var STEPS = [
   { t: 'לפני שמתחילים' },
   { t: 'חומרים וספקים', why: 'כאן רושמים כל מה שקונים כדי לייצר את המוצר או לתת את השירות, פעם אחת. בשלב הבא בוחרים מהרשימה הזו בלי להקליד שוב.' },
@@ -604,7 +656,8 @@ var STEPS = [
   { t: 'התמונה המלאה' },
   { t: 'מילוי החודש', why: 'פעם בחודש ממלאים מה נכנס ומה יצא, כמו שזה מופיע בבנק. כל השאר מחושב מזה. הנתונים נשמרים, וכל חודש ממשיכים מאיפה שעצרת.' },
   { t: 'איך העסק שלי?' },
-  { t: 'הערכת מס', why: 'כמה מס צפוי לכל השנה לפי מה שמילאת, וכמה היה צריך לשלם עד עכשיו.' }
+  { t: 'הערכת מס', why: 'כמה מס צפוי לכל השנה לפי מה שמילאת, וכמה היה צריך לשלם עד עכשיו.' },
+  { t: 'מכירות ותשלומים', why: 'רושמים כל מכירה ואיך משלמים עליה, ורואים כמה צפוי להיכנס בחודשים הבאים.' }
 ];
 
 /* What to do in each step, in plain words. The examples follow the demo business, so they match what the demo button fills in. */
@@ -619,13 +672,22 @@ var GUIDE = {
   8: { ic: '🎯', todo: ['בשלב הזה לא ממלאים כלום, רק קוראים.', 'רואים כמה צריך למכור בשנה כדי להגיע לרווח שרציתם.', 'נראה לא אפשרי? חוזרים לשכר, להוצאות או למחיר ומשנים.'], have: 'שום דבר, הכול כבר מולא', get: 'מחזור היעד, ומתי מפסיקים להפסיד' },
   9: { ic: '🗓️', todo: ['רואים כמה צריך למכור מכל מוצר בשנה.', 'מפזרים על החודשים בלחיצה, או לבד לפי העונות של העסק.', 'מוסיפים השקות, מבצעים ומועדים.'], have: 'לוח השנה של העסק', get: 'תוכנית: כמה למכור בכל חודש' },
   11: { ic: '✏️', todo: ['בוחרים חודש אחד, או את כל השנה בטבלה.', 'רושמים מה נכנס ומה יצא, כמו שרואים בבנק ובאשראי. שורה בלי סכום נשארת ריקה.', 'בסוף כותבים כמה יש בבנק, והכלי בודק שזה מסתדר.'], have: 'עו"ש ופירוט אשראי של החודש', get: 'כמה העסק הרוויח וכמה נשאר בחשבון' },
+  14: { ic: '🤝', todo: ['לוחצים על "מכירה חדשה" ובוחרים מה נמכר.', 'בוחרים איך משלמים: תשלום אחד, תשלומים, מקדמה ופגישות, או מנוי.', 'קוראים כמה צפוי להיכנס בכל חודש, ומה חסר כדי להגיע ליעד.'], have: 'רשימת המכירות וההסכמים האחרונים', get: 'כמה כסף צפוי להיכנס, וכמה כבר מובטח', ex: 'ליווי ב-6,600 ₪: מקדמה של 1,000 ₪, ועוד 5 פגישות של 1,120 ₪ בחודשים הבאים.' },
   13: { ic: '🧮', todo: ['בוחרים נקודות זיכוי מהרשימה.', 'מוסיפים דמי לידה, פחת או תרומות, אם יש.', 'קוראים כמה מס צפוי לשנה, ומשווים למה ששולם.'], have: 'אישור דמי לידה, אם היו', get: 'הערכת מס לשנה, ואחוז מקדמות שמתאים לה' }
 };
+function guideExample(n, g) {
+  var o = S.biz.sells || {};
+  if (n === 1 && o.service && !o.product) return "בקבוק לק ב-60 ₪ שמספיק בערך ל-20 טיפולים? בחבילה כותבים 20, ובעלות 60.";
+  if (n === 1 && o.group && !o.product) return 'מחברת ב-12 ₪? בחבילה כותבים 1, ובעלות 12.';
+  if (n === 2 && o.service && !o.product) return 'לק ג\'ל: בוחרים את הבקבוק, וכותבים 1. טיפול אחד, חלק אחד מהבקבוק.';
+  if (n === 2 && o.group && !o.product) return 'סדנה: כותבים כמה הולך על משתתף אחד, למשל מחברת אחת, והכלי יכפיל במספר המשתתפים.';
+  return g.ex;
+}
 function guideHtml(n) {
   var g = GUIDE[n]; if (!g) return '';
   var key = 'guide' + n, open = howOpen[key] === undefined ? true : howOpen[key];
   return '<details class="guide" data-how="' + key + '"' + (open ? ' open' : '') + '><summary><span class="g-ic" aria-hidden="true">' + g.ic + '</span><span class="g-t">מה עושים כאן</span></summary><div class="g-b"><ol class="g-list">' + g.todo.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ol>' +
-    (g.ex ? '<p class="g-ex"><b>דוגמה:</b> ' + g.ex + '</p>' : '') + '<div class="g-two"><div><b>כדאי שיהיה לידך</b>' + g.have + '</div><div><b>בסוף השלב יודעים</b>' + g.get + '</div></div></div></details>';
+    (guideExample(n, g) ? '<p class="g-ex"><b>דוגמה:</b> ' + guideExample(n, g) + '</p>' : '') + '<div class="g-two"><div><b>כדאי שיהיה לידך</b>' + g.have + '</div><div><b>בסוף השלב יודעים</b>' + g.get + '</div></div></div></details>';
 }
 
 /* ---------- state ---------- */
@@ -657,7 +719,7 @@ function opsDefaults() {
 function emptyState() {
   return {
     v: 4,
-    biz: { name: '', client: '', type: 'murshe', noMaterials: false, wastePct: 10, contingencyPct: 15, vatPct: 18, feePct: 1.35 },
+    biz: { name: '', client: '', sells: null, type: 'murshe', noMaterials: false, wastePct: 10, contingencyPct: 15, vatPct: 18, feePct: 1.35 },
     materials: [],
     products: [],
     labor: { net: '', pension: '', fund: '', hours: '', monthly: [], hourly: [] },
@@ -669,12 +731,13 @@ function emptyState() {
     plan: { dates: DEFAULT_DATES.slice(), launches: months(), promos: months(), focus: months() },
     whatIf: { i: '0', pct: '-10' },
     years: {},
+    sales: [],
     ops: opsDefaults()
   };
 }
 function demoState() {
   var s = emptyState();
-  s.biz.name = 'הסטודיו של נועה (דוגמה)';
+  s.biz.name = 'הסטודיו של נועה (דוגמה)'; s.biz.sells = { product: true, group: true };
   s.materials = [
     { id: 'm1', name: 'שרשרת כסף', unit: 'מטר', pack: 5, cost: 220 },
     { id: 'm2', name: 'אבן חן', unit: 'חבילה', pack: 50, cost: 300 },
@@ -683,7 +746,7 @@ function demoState() {
   s.products = [
     { id: 'p1', name: 'שרשרת', lines: [{ mat: 'm1', qty: 0.5 }, { mat: 'm2', qty: 3 }, { mat: 'm3', qty: 1 }], hours: 1.5, specific: '', marginPct: 35, market: 420, chosen: '', mix: 60, plan: months() },
     { id: 'p2', name: 'עגילים', lines: [{ mat: 'm1', qty: 0.1 }, { mat: 'm2', qty: 2 }, { mat: 'm3', qty: 1 }], hours: 1, specific: '', marginPct: 35, market: 260, chosen: '', mix: 25, plan: months() },
-    { id: 'p3', name: 'סדנת תכשיטים', lines: [{ mat: 'm1', qty: 2 }, { mat: 'm2', qty: 15 }], hours: 5, specific: 40, marginPct: 40, market: 1500, chosen: '', mix: 15, plan: months() }
+    { id: 'p3', type: 'group', size: 8, name: 'סדנת תכשיטים', lines: [{ mat: 'm1', qty: 0.25 }, { mat: 'm2', qty: 2 }], hours: 5, specific: 40, marginPct: 40, market: 190, chosen: '', mix: 15, plan: months() }
   ];
   s.labor = { net: 11000, pension: 800, fund: 400, hours: 150, monthly: [], hourly: [{ name: 'עזרה באריזה', role: 'משלוחים', rate: 45, hours: 30, factor: 1.35 }] };
   s.overhead.marketing[2].m = months(1200);
@@ -698,10 +761,18 @@ function demoState() {
   three(o.rows.admin[0].m, 5000); three(o.rows.admin[5].m, 2360); three(o.rows.admin[11].m, 1180); three(o.rows.finance[0].m, 590);
   three(o.draw.salary, 12000); three(o.draw.pension, 1400); three(o.draw.fund, 600); three(o.draw.savings, 2000); three(o.draw.loan, 1000);
   o.home = true; o.car = true; three(o.private[0].m, 600); three(o.private[6].m, 800); o.seeded = true; o.edit = 2;
+  var thisM = currentYm();
+  s.sales = [
+    { id: 's1', client: 'דנה', product: 'p3', month: thisM, kind: 'custom', total: 1800, parts: [{ ym: thisM, amount: 600 }, { ym: E.ymAdd(thisM, 1), amount: 600 }, { ym: E.ymAdd(thisM, 2), amount: 600 }] },
+    { id: 's2', client: 'מיכל', product: 'p1', month: thisM, kind: 'equal', total: 3000, n: 6, start: thisM },
+    { id: 's3', client: 'חנות השכונה', label: 'ריטיינר', product: '', month: thisM, kind: 'sub', monthly: 1200, start: thisM, end: '' }
+  ];
   return s;
 }
 function israelYear() { return +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', year: 'numeric' }).format(new Date()); }
 function israelMonth() { return +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', month: 'numeric' }).format(new Date()) - 1; }
+function currentYm() { var m = israelMonth() + 1; return israelYear() + '-' + (m < 10 ? '0' : '') + m; }
+function ymLabel(ym) { return ym ? MONTHS[+ym.slice(5, 7) - 1] + ' ' + ym.slice(0, 4) : ''; }
 var S = emptyState();
 var step = 0, R = null, O = null;
 var docId = null, docKey = null, pushT = null, draftT = null, howOpen = {}, netFail = false;
@@ -761,7 +832,7 @@ function stepState(n) {
     case 3: return E.num(l.net) > 0 && E.num(l.hours) > 0 ? 'done' : (E.num(l.net) > 0 || E.num(l.hours) > 0 ? 'partial' : 'empty');
     case 4: return R.overhead.annual > 0 ? 'done' : 'empty';
     case 5: return S.tax.points !== '' && E.num(l.net) > 0 ? 'done' : (S.tax.points !== '' ? 'partial' : 'empty');
-    case 6: if (!p.length) return 'empty'; var c = p.filter(function (x) { return E.num(x.hours) > 0 && x.marginPct !== '' && x.marginPct != null; }).length; return c === p.length ? 'done' : (c ? 'partial' : 'empty');
+    case 6: if (!p.length) return 'empty'; var c = p.filter(function (x) { return E.expandProduct(x).hours > 0 && x.marginPct !== '' && x.marginPct != null; }).length; return c === p.length ? 'done' : (c ? 'partial' : 'empty');
     case 7: return !p.length ? 'empty' : (Math.abs(R.mixSum - 100) < 0.01 ? 'done' : (R.mixSum > 0 ? 'partial' : 'empty'));
     case 8: return R.annual.revenue != null && stepState(3) === 'done' && stepState(6) === 'done' ? 'done' : (R.annual.revenue != null ? 'partial' : 'empty');
     case 9: return R.goals.some(function (g) { return g.planned > 0; }) ? 'done' : 'empty';
@@ -809,6 +880,7 @@ VIEWS[0] = function () {
     (draft && !docId ? '<div class="card" id="draftCard"><div class="draft-banner"><div><b style="font-weight:900;color:var(--pine-darker)">נמצאה טיוטה: ' + esc(draft.name || 'בלי שם') + '</b><div style="font-size:13px;font-weight:600;color:var(--ink-soft)">נשמרה במכשיר הזה. להמשיך ממנה או להתחיל חדש?</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn small" data-act="resume">להמשיך</button><button type="button" class="btn small ghost" data-act="fresh">להתחיל חדש</button></div></div></div>' : '') +
     '<div class="card"><span class="sec-lbl">על העסק</span><div class="fields">' + textField('השם שלך', 'biz.client') + textField('שם העסק', 'biz.name', { ph: 'למשל: הסטודיו של נועה' }) + '</div>' +
     '<div class="field" style="margin-top:14px"><span class="lbl" id="typeLbl">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl"><button type="button" data-type="murshe" aria-pressed="' + (S.biz.type !== 'patur') + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + (S.biz.type === 'patur') + '">עוסק פטור</button></div><div class="hint">עוסק פטור לא מוסיף מע"מ למחיר, ועלות החומרים נרשמת כולל מע"מ. החישוב מתאים לעוסק יחיד, ולא לחברה בע"מ.</div></div></div>' +
+    '<div class="card"><span class="sec-lbl">מה העסק מוכר?</span><p class="explain">מסמנים מה יש אצלך, גם כמה דברים. הכלי יציג לכל סוג רק את השאלות שמתאימות לו.</p><div class="sell-grid">' + SELLS.map(function (x) { var on = !!(S.biz.sells && S.biz.sells[x.k]); return '<button type="button" class="sell' + (on ? ' on' : '') + '" data-sell="' + x.k + '" aria-pressed="' + on + '"><span class="s-top"><span class="s-ic" aria-hidden="true">' + x.ic + '</span><span class="s-chk" aria-hidden="true">' + (on ? '✓' : '') + '</span></span><b>' + x.t + '</b><span class="s-d">' + x.d + '</span><span class="s-eg">' + x.eg + '</span></button>'; }).join('') + '</div></div>' +
     '<div class="card"><span class="sec-lbl">איך זה עובד</span><div class="road"><div><span class="road-n">שלבים 1 עד 5</span><b>מה עולה לי?</b>חומרים, שכר, הוצאות ומס. בסוף יודעים כמה עולה שעת עבודה.</div><div><span class="road-n">שלבים 6 ו-7</span><b>כמה לגבות?</b>מחיר לכל מוצר, ומה הכי משתלם לזמן שלכם.</div><div><span class="road-n">שלבים 8 ו-9</span><b>כמה למכור?</b>מחזור יעד, ותוכנית מכירות לכל חודש בשנה.</div></div><p class="explain" style="margin:12px 0 0">אחר כך, בכל חודש: <b>ניהול שוטף</b>, עם רווח, בנק והערכת מס. ' + gotoBtn(11, 'אפשר להתחיל ישר מכאן') + '</p></div>' +
     '<div class="step-nav">' + (docId ? '<span></span>' : '<button type="button" class="btn ghost" data-act="demo">למלא דוגמה ולהסתכל מסביב</button>') + '<button type="button" class="btn" data-goto="1">מתחילים ←</button></div>';
 };
@@ -823,7 +895,8 @@ VIEWS[1] = function () {
     '<div class="card" id="matCard"' + (S.biz.noMaterials ? ' hidden' : '') + '><span class="sec-lbl">מה קונים</span><p class="explain">כל שורה היא מה שקונים מהספק. אם קונים חבילה של 12, רושמים 12 בעמודת הכמות ואת מחיר החבילה כולה.</p>' +
     (rows ? '<div class="row-head cols-mat" aria-hidden="true"><span>סוג</span><span>יחידה</span><span>כמה בחבילה</span><span>' + (S.biz.type === 'patur' ? 'עלות, כולל מע"מ' : 'עלות, בלי מע"מ') + '</span><span>כולל בלאי</span><span></span></div>' : '') +
     '<div class="rows">' + rows + '</div><button type="button" class="add-btn" data-add="material">+ הוספת חומר</button>' +
-    '<div class="fields" style="margin-top:14px;max-width:260px">' + numField('בלאי ופחת', 'biz.wastePct', { unit: '%', hint: 'כמה הולך לאיבוד בעבודה. ברירת המחדל 10%.' }) + '</div></div>' + stepNav();
+    '<div class="fields" style="margin-top:14px;max-width:260px">' + numField('בלאי ופחת', 'biz.wastePct', { unit: '%', hint: 'כמה הולך לאיבוד בעבודה. ברירת המחדל 10%.' }) + '</div>' +
+    (sellsOn('service') ? '<details class="how" data-how="shared"' + (howOpen.shared ? ' open' : '') + '><summary>חומר שמתחלק על הרבה לקוחות, כמו לק או שעווה? לחשב בקלות</summary><div class="how-b"><p class="explain">לא צריך לדעת כמה הלך על כל לקוחה. מספיק כמה קנית בחודש וכמה טיפולים עשית באותו חודש.</p><div class="fields"><div class="field"><label for="shName">מה קונים</label><div class="input-shell"><input id="shName" type="text" autocomplete="off" placeholder="למשל: חומרים ללק ג\'ל"></div></div><div class="field"><label for="shSpent">כמה קנית בחודש</label><div class="input-shell"><span class="unit" aria-hidden="true">₪</span><input id="shSpent" type="text" inputmode="decimal" autocomplete="off"></div></div><div class="field"><label for="shCount">כמה טיפולים עשית בחודש</label><div class="input-shell"><input id="shCount" type="text" inputmode="decimal" autocomplete="off"></div></div></div><button type="button" class="btn small" style="margin-top:10px" data-act="addShared">להוסיף לרשימה</button><div id="shOut"></div></div></details>' : '') + '</div>' + stepNav();
 };
 function unitSelect(i) {
   var id = 'f' + (++fid), cur = S.materials[i].unit || 'יחידה';
@@ -832,18 +905,21 @@ function unitSelect(i) {
 
 VIEWS[2] = function () {
   var prods = S.products.map(function (p, i) {
-    var hasMats = S.materials.length > 0 && !S.biz.noMaterials;
+    var kind = p.type || 'product', qtyLbl = kind === 'group' ? 'כמות למשתתף אחד' : (kind === 'service' ? 'כמות לטיפול אחד' : 'כמות למוצר אחד');
+    var hasMats = S.materials.length > 0 && !S.biz.noMaterials && kind !== 'digital';
     var lines = p.lines.map(function (l, k) {
       var id = 'f' + (++fid);
       return '<div class="row cols-bom"><div class="wide"><label class="lbl" for="' + id + '">חומר</label><div class="input-shell"><select id="' + id + '" data-text data-path="products.' + i + '.lines.' + k + '.mat"><option value="">בחירה מהרשימה</option>' + S.materials.map(function (m) { return '<option value="' + m.id + '"' + (m.id === l.mat ? ' selected' : '') + '>' + esc(m.name || 'בלי שם') + '</option>'; }).join('') + '</select></div></div>' +
-        cellNum('כמות למוצר אחד', 'products.' + i + '.lines.' + k + '.qty') + '<div><span class="lbl">עלות</span>' + liveSpan('lineCost', i + ':' + k).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-delline="' + i + ':' + k + '" aria-label="מחיקת שורת חומר">×</button></div>';
+        cellNum(qtyLbl, 'products.' + i + '.lines.' + k + '.qty') + '<div><span class="lbl">עלות</span>' + liveSpan('lineCost', i + ':' + k).replace('<span', '<span class="val"') + '</div><button type="button" class="icon-btn" data-delline="' + i + ':' + k + '" aria-label="מחיקת שורת חומר">×</button></div>';
     }).join('');
-    return '<div class="prod" style="padding:14px 16px"><div class="fields" style="align-items:end"><div style="grid-column:1/-1;display:flex;gap:8px;align-items:end"><div style="flex:1">' + textField('שם המוצר או השירות', 'products.' + i + '.name', { ph: 'למשל: שרשרת, שיחת ייעוץ, יום צילום' }) + '</div><button type="button" class="btn small ghost" style="color:var(--red);border-color:rgba(193,85,63,.4);margin-bottom:3px" data-delprod="' + i + '">מחיקה</button></div></div>' +
-      (hasMats ? (lines ? '<div class="row-head cols-bom" style="margin-top:12px" aria-hidden="true"><span>חומר</span><span>כמות למוצר אחד</span><span>עלות</span><span></span></div>' : '') + '<div class="rows" style="margin-top:6px">' + lines + '</div><button type="button" class="add-btn" data-addline="' + i + '">+ הוספת חומר למוצר</button>' : '') +
+    return '<div class="prod" style="padding:14px 16px"><div class="fields" style="align-items:end"><div style="grid-column:1/-1;display:flex;gap:8px;align-items:end"><div style="flex:1">' + textField('שם המוצר או השירות', 'products.' + i + '.name', { ph: 'למשל: שרשרת, שיחת ייעוץ, יום צילום' }) + '</div><button type="button" class="btn small ghost" style="margin-bottom:3px" data-dupprod="' + i + '">שכפול</button><button type="button" class="btn small ghost" style="color:var(--red);border-color:rgba(193,85,63,.4);margin-bottom:3px" data-delprod="' + i + '">מחיקה</button></div>' +
+      '<div class="field" style="grid-column:1/-1;max-width:280px"><label for="ptype' + i + '">סוג</label><div class="input-shell"><select id="ptype' + i + '" data-text data-rerender data-path="products.' + i + '.type">' + SELLS.map(function (x) { return '<option value="' + x.k + '"' + (x.k === kind ? ' selected' : '') + '>' + x.t + '</option>'; }).join('') + '</select></div></div>' +
+      (kind === 'group' ? '<div style="grid-column:1/-1;max-width:280px">' + numField('כמה משתתפים בדרך כלל', 'products.' + i + '.size', { hint: 'בשלב התמחור רואים גם מה קורה עם יותר או פחות.' }) + '</div>' : '') + '</div>' +
+      (hasMats ? (lines ? '<div class="row-head cols-bom" style="margin-top:12px" aria-hidden="true"><span>חומר</span><span>' + qtyLbl + '</span><span>עלות</span><span></span></div>' : '') + '<div class="rows" style="margin-top:6px">' + lines + '</div><button type="button" class="add-btn" data-addline="' + i + '">+ הוספת חומר למוצר</button>' : '') +
       '<div style="margin-top:10px">' + live('prodDirect', i) + '</div></div>';
   }).join('');
   var note = S.biz.noMaterials ? '<p class="explain">סימנת שאין חומרים, אז כאן רק נותנים שם לכל שירות. העלות תצא מהזמן בשלב התמחור.</p>' : (!S.materials.length ? '<div class="note soft" style="margin:0 0 12px">עוד אין חומרים ברשימה. ' + gotoBtn(1, 'לחזור לשלב 1') + ', או להמשיך אם המוצר הוא שירות.</div>' : '<p class="explain"><b>כמות למוצר אחד</b> נמדדת באותה יחידה שקונים. אם קונים חבילה של 12 ומוצר משתמש ב-3, רושמים 3, והכלי מחשב רבע מהחבילה.</p>');
-  return head() + '<div class="card"><span class="sec-lbl">המוצרים והשירותים שלך</span>' + note + prods + '<button type="button" class="add-btn" data-add="product">+ הוספת מוצר או שירות</button></div>' + stepNav();
+  return head() + '<div class="card"><span class="sec-lbl">המוצרים והשירותים שלך</span>' + note + prods + SELLS.filter(function (x) { return sellsOn(x.k); }).map(function (x) { return '<button type="button" class="add-btn" ' + (x.k === 'product' ? 'data-add="product"' : 'data-addtype="' + x.k + '"') + '>+ ' + x.add + '</button>'; }).join('') + '<p class="explain" style="margin:12px 0 0">אותו מוצר בכמה גרסאות, למשל שמלה מכותנה ושמלה ממשי? רושמים אחת, לוחצים "שכפול", ומחליפים רק את הבד.</p></div>' + stepNav();
 };
 
 function empTable(kind) {
@@ -897,15 +973,27 @@ VIEWS[5] = function () {
     tf('ערך נקודת זיכוי', 'pointValue', '₪') + tf('ביטוח לאומי מופחת %', 'niReduced') + tf('ביטוח לאומי רגיל %', 'niFull') + tf('בריאות מופחת %', 'healthReduced') + tf('בריאות רגיל %', 'healthFull') + tf('סף שיעור מופחת', 'reducedThreshold', '₪') + tf('תקרת הכנסה', 'ceiling', '₪') + '</div></div><button type="button" class="btn small ghost" style="margin-top:10px" data-act="resetTables">חזרה לטבלאות הרשמיות</button></div></details>' + stepNav();
 };
 
+function prodFields(p, i) {
+  var b = 'products.' + i + '.', kind = p.type || 'product', margin = numField('רווח רצוי מהמחיר', b + 'marginPct', { unit: '%', hint: 'כמה אחוז מהמחיר יהיה רווח, אחרי שכל העלויות שולמו' });
+  var open = '', chosen;
+  if (kind === 'group') {
+    open = numField('כמה שעות לכל הסדנה, כולל הכנה', b + 'hours', { hint: 'חצי שעה זה 0.5' }) + margin + numField('עלות לכל הסדנה', b + 'specific', { unit: '₪', hint: 'מה שעולה בכל מקרה, כמו שכירת חדר' }) + numField('מחיר בשוק למשתתף', b + 'market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' });
+    chosen = numField('מחיר למשתתף, כולל הכל', b + 'chosen', { unit: '₪', hint: 'כותבים מחיר, ורואים כמה משתתפים צריך. אם ריק, הכלי משתמש במחיר המומלץ.' }) + live('prodGroupHero', i);
+    return open + '</div><div style="margin-top:14px"><div class="sec-lbl">המחיר שבחרת</div>' + chosen + live('prodGroup', i) + '</div>' ;
+  }
+  if (kind === 'digital') {
+    open = numField('כמה שעות לקח לבנות', b + 'devHours', { hint: 'פעם אחת, בכל המוצר' }) + numField('עלות חד-פעמית', b + 'devCost', { unit: '₪', hint: 'צילום, עריכה, עיצוב' }) + numField('כמה מכירות צפויות בשנה', b + 'expected', { hint: 'ההשקעה מתחלקת על המכירות האלה' }) + margin + numField('מחיר בשוק ללקוח', b + 'market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' });
+  } else {
+    open = numField(kind === 'service' ? 'זמן לטיפול אחד (שעות)' : 'זמן עבודה למוצר (שעות)', b + 'hours', { hint: 'חצי שעה זה 0.5' }) + margin + numField('עלות ספציפית למוצר', b + 'specific', { unit: '₪', hint: 'רק אם יש, ורק מה ששייך למוצר הזה.' }) + numField('מחיר בשוק ללקוח', b + 'market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' });
+  }
+  return open + '</div><div style="margin-top:14px"><div class="sec-lbl">המחיר שבחרת</div>' + numField('מחיר ללקוח, כולל הכל', b + 'chosen', { unit: '₪', hint: 'החישוב הוא המלצה, ואת ההחלטה מקבלים פה. אם ריק, המחירון ישתמש במחיר המומלץ.' }) + live('prodChosen', i) + '</div>';
+}
+function groupNote() { return S.products.some(function (p) { return p.type === 'group'; }) ? '<p class="explain">בסדנה, מכירה אחת היא סדנה שלמה, והמחיר כאן הוא לכל הסדנה.</p>' : ''; }
 VIEWS[6] = function () {
   var prods = S.products.map(function (p, i) {
     return '<details class="prod" data-how="prod' + i + '"' + ((howOpen['prod' + i] === undefined ? (S.products.length <= 3 || i === 0) : howOpen['prod' + i]) ? ' open' : '') + '><summary><span class="prod-name">' + esc(p.name || 'מוצר ' + (i + 1)) + '</span>' + liveSpan('prodHead', i).replace('<span', '<span class="prod-sum"') + '</summary><div class="prod-body">' + live('prodPriceTop', i) + '<div class="prod-grid"><div>' +
       '<div class="sec-lbl">הנתונים של המוצר</div><div class="fields">' +
-      numField('זמן עבודה למוצר (שעות)', 'products.' + i + '.hours', { hint: 'חצי שעה זה 0.5' }) +
-      numField('רווח רצוי מהמחיר', 'products.' + i + '.marginPct', { unit: '%', hint: 'כמה אחוז מהמחיר יהיה רווח, אחרי שכל העלויות שולמו' }) +
-      numField('עלות ספציפית למוצר', 'products.' + i + '.specific', { unit: '₪', hint: 'רק אם יש. למשל שכירת חלל לסדנה, מחולק למוצר אחד.' }) +
-      numField('מחיר בשוק ללקוח', 'products.' + i + '.market', { unit: '₪', hint: 'כמה גובים אחרים על דבר דומה' }) + '</div>' +
-      '<div style="margin-top:14px"><div class="sec-lbl">המחיר שבחרת</div>' + numField('מחיר ללקוח, כולל הכל', 'products.' + i + '.chosen', { unit: '₪', hint: 'החישוב הוא המלצה, ואת ההחלטה מקבלים פה. אם ריק, המחירון ישתמש במחיר המומלץ.' }) + live('prodChosen', i) + '</div>' +
+      prodFields(p, i) +
       '</div></div><details class="how" data-how="ledger' + i + '"' + (howOpen['ledger' + i] ? ' open' : '') + '><summary>איך הגענו למחיר, שורה שורה</summary><div style="margin-top:8px">' + live('prodLedger', i) + '</div></details></div></details>';
   }).join('');
   return head() + live('need6') + '<div class="card"><span class="sec-lbl">הגדרות לכל המוצרים</span><div class="fields">' +
@@ -920,7 +1008,7 @@ VIEWS[7] = function () {
   var rows = S.products.map(function (p, i) {
     return '<tr><td class="nm">' + liveSpan('statusDot', i) + esc(p.name || 'מוצר ' + (i + 1)) + '</td><td>' + mixInput(i) + '</td><td>' + liveSpan('cell', 'customer:' + i) + '</td><td>' + liveSpan('cell', 'net:' + i) + '</td><td>' + liveSpan('cell', 'direct:' + i) + '</td><td>' + liveSpan('cell', 'gross:' + i) + '</td><td>' + liveSpan('cell', 'grossPct:' + i) + '</td></tr>';
   }).join('');
-  return head() + '<div class="card"><span class="sec-lbl">המחירון שלך</span>' + (rows ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="המחירון"><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחיר ללקוח</th><th>מחיר נטו</th><th>עלות חומרים</th><th>רווח גולמי</th><th>% גולמי</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td class="nm">סך הכל וממוצע</td><td>' + liveSpan('mixTotal') + '</td><td colspan="4"></td><td>' + liveSpan('avgMargin') + '</td></tr></tfoot></table></div>' : '<div class="note soft" style="margin:0">עוד אין מוצרים. ' + gotoBtn(2, 'להוסיף בשלב 2') + '</div>') + live('mixNote') +
+  return head() + '<div class="card"><span class="sec-lbl">המחירון שלך</span>' + groupNote() + (rows ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="המחירון"><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחיר ללקוח</th><th>מחיר נטו</th><th>עלות חומרים</th><th>רווח גולמי</th><th>% גולמי</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td class="nm">סך הכל וממוצע</td><td>' + liveSpan('mixTotal') + '</td><td colspan="4"></td><td>' + liveSpan('avgMargin') + '</td></tr></tfoot></table></div>' : '<div class="note soft" style="margin:0">עוד אין מוצרים. ' + gotoBtn(2, 'להוסיף בשלב 2') + '</div>') + live('mixNote') +
     how('margin', 'רווח גולמי הוא המחיר נטו פחות עלות החומרים. זה מה שנשאר לכסות את הזמן שלך, את ההוצאות ואת הרווח. המחיר נטו הוא מה שנשאר אחרי מע"מ ועמלת סליקה. הממוצע נשקל לפי התמהיל, כי מוצר שמוכרים הרבה משפיע יותר.') + '</div>' +
     (S.products.length ? '<div class="card"><span class="sec-lbl">מה הכי משתלם לזמן שלך?</span>' + live('rankOut') + '</div><div class="card"><span class="sec-lbl">מה אם אשנה מחיר?</span><div class="fields"><div class="field"><label for="wiProd">מוצר</label><div class="input-shell"><select id="wiProd" data-text data-path="whatIf.i">' + S.products.map(function (p, i) { return '<option value="' + i + '"' + (String(S.whatIf.i) === String(i) ? ' selected' : '') + '>' + esc(p.name || 'מוצר ' + (i + 1)) + '</option>'; }).join('') + '</select></div></div><div class="field"><label for="wiPct">שינוי במחיר</label><div class="input-shell"><select id="wiPct" data-text data-path="whatIf.pct">' + [-30, -25, -20, -15, -10, -5, 5, 10, 15, 20, 25, 30].map(function (v) { return '<option value="' + v + '"' + (String(S.whatIf.pct) === String(v) ? ' selected' : '') + '>' + (v < 0 ? 'הנחה של ' + (-v) + '%' : 'העלאה של ' + v + '%') + '</option>'; }).join('') + '</select></div></div></div>' + live('whatIfOut') + '</div>' : '') + stepNav();
 };
@@ -935,7 +1023,7 @@ VIEWS[9] = function () {
   }).join('');
   var mHead = MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('');
   var mLive = function (l, k) { return '<tr><td class="nm">' + l + '</td>' + MONTHS.map(function (m, i) { return '<td class="cal-sum">' + liveSpan('monthCell', k + ':' + i) + '</td>'; }).join('') + '<td class="cal-sum">' + liveSpan('monthCell', k + ':all') + '</td></tr>'; };
-  return head() + live('need9') + '<div class="card"><span class="sec-lbl">היעד לכל מוצר, בשנה</span>' + live('revHead') + (gRows ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="היעד לכל מוצר"><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחזור</th><th>מחיר נטו</th><th>מכירות בשנה</th><th>מכירות בחודש, בממוצע</th></tr></thead><tbody>' + gRows + '</tbody></table></div>' : '') + live('capacity') + '</div>' +
+  return head() + live('need9') + '<div class="card"><span class="sec-lbl">היעד לכל מוצר, בשנה</span>' + groupNote() + live('revHead') + (gRows ? '<div class="tbl-wrap" tabindex="0" role="region" aria-label="היעד לכל מוצר"><table class="ptable"><thead><tr><th>מוצר</th><th>חלק מהמחזור</th><th>מחזור</th><th>מחיר נטו</th><th>מכירות בשנה</th><th>מכירות בחודש, בממוצע</th></tr></thead><tbody>' + gRows + '</tbody></table></div>' : '') + live('capacity') + '</div>' +
     '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="sec-lbl" style="margin:0">התוכנית השנתית</span><button type="button" class="btn small ghost" data-act="spread">לפזר את היעד שווה על 12 חודשים</button></div><p class="explain" style="margin-top:10px">חודש חזק לעסק מקבל יותר מכירות, חודש שקט פחות. המועדים הם הצעה, ואפשר לערוך אותם.</p><div class="tbl-wrap" tabindex="0" role="region" aria-label="התוכנית השנתית"><table class="ptable cal"><thead><tr><th>חודש</th>' + mHead + '<th>בשנה</th></tr></thead><tbody>' +
     textRow('מועדים מיוחדים', 'dates') + textRow('השקות', 'launches') + textRow('מבצעים', 'promos') + textRow('פוקוס חודשי', 'focus') +
     '<tr class="cal-group"><td colspan="14">כמה מכירות מכל מוצר</td></tr>' + pRows +
@@ -958,7 +1046,12 @@ function statusPill(p) {
 var LIVE = {
   matPrice: function (i) { return ils(E.materialUnitPrice(S.materials[i], R.settings.wastePct), 2); },
   lineCost: function (a) { var p = a.split(':'), prod = S.products[+p[0]]; if (!prod || !prod.lines[+p[1]]) return ''; return ils(E.lineCost(prod.lines[+p[1]], S.materials, R.settings.wastePct), 2); },
-  prodDirect: function (i) { var d = R.products[i].direct; return S.biz.noMaterials ? '' : lg('עלות חומרים למוצר אחד', ils(d, 2), null, 'sum'); },
+  prodDirect: function (i) {
+    var raw = S.products[i], d = R.products[i].direct;
+    if (S.biz.noMaterials || raw.type === 'digital') return '';
+    if (raw.type === 'group') { var n = E.num(raw.size) || 1; return lg('עלות חומרים למשתתף', ils(d / n, 2), n + ' משתתפים: ' + ils(d, 0), 'sum'); }
+    return lg(raw.type === 'service' ? 'עלות חומרים לטיפול' : 'עלות חומרים למוצר אחד', ils(d, 2), null, 'sum');
+  },
   empCost: function (a) { var p = a.split(':'); var e = R.labor[p[0]][+p[1]]; return e ? ils(e.cost, 0) : ''; },
   laborOut: function () {
     var l = R.labor;
@@ -991,12 +1084,24 @@ var LIVE = {
     if (S.tax.points === '') miss.push('נקודות זיכוי בשלב ' + gotoBtn(5, '5'));
     return miss.length ? '<div class="note soft" style="margin:0 0 12px">כדי שהמחיר יהיה מדויק, עוד חסרים: ' + miss.join(' · ') + '</div>' : '';
   },
+  prodGroupHero: function (i) {
+    var raw = S.products[i], p = prodCalc(i); if (!raw || !p) return '';
+    var v = E.groupView(R, S, raw);
+    return '<div class="g-hero"><div class="q">במחיר של <b>' + ils(v.price, 0) + '</b> למשתתף' + (v.hasChosen ? '' : ', המחיר המומלץ ל-' + v.size + ' משתתפים') + '</div><div class="a">' + (v.minHeads == null ? 'המחיר הזה לא מכסה את העלויות, גם עם הרבה משתתפים.' : 'צריך לפחות ' + v.minHeads + ' משתתפים כדי לכסות את כל העלויות.') + '</div></div>';
+  },
+  prodGroup: function (i) {
+    var raw = S.products[i]; if (!raw) return '';
+    var v = E.groupView(R, S, raw);
+    return '<div class="g-kids">' + v.rows.map(function (r) { var up = r.left >= 0; return '<div class="g-kid ' + (up ? 'good' : 'warn') + '"><div class="kn">' + r.n + ' משתתפים</div><div class="kv">' + (up ? 'נשאר ' : 'הפסד ') + ils(Math.abs(r.left), 0) + '</div><div class="ks">נכנסים ' + ils(r.net, 0) + (R.settings.patur ? '' : ', בלי מע"מ') + '</div></div>'; }).join('') + '</div><p class="explain" style="margin:10px 0 14px">"נשאר" הוא מה שנשאר אחרי כל העלויות, כולל הזמן שלך וכרית לבלתי צפוי, לפני מס.</p>' +
+      '<div class="sec-lbl">כמה כדאי לגבות למשתתף?</div><div class="tbl-wrap" tabindex="0" role="region" aria-label="מחיר מומלץ לפי מספר משתתפים"><table class="ptable"><thead><tr><th>כמה משתתפים</th><th>מחיר מומלץ למשתתף</th><th>כל הסדנה יחד</th></tr></thead><tbody>' + v.rows.map(function (r) { return '<tr><td class="nm">' + r.n + ' משתתפים</td><td><b>' + ils(r.recPerHead, 0) + '</b></td><td>' + ils(r.recTotal, 0) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  },
   prodPriceTop: function (i) {
     var p = prodCalc(i); if (!p) return '';
-    var c = p.calc;
+    var c = p.calc, raw0 = S.products[i];
+    if (raw0.type === 'group') { var sz = E.num(raw0.size) || 1; return '<div class="tiles" style="margin-bottom:14px">' + tile('המחיר המומלץ למשתתף', ils(c.recommended / sz, 0), sz + ' משתתפים, כולל הכול' + (R.settings.patur ? '' : ' ומע"מ'), 'main') + tile('לכסות את כל הסדנה', ils(c.minPrice, 0), 'בלי רווח ובלי מס, עם ' + sz + ' משתתפים') + tile('מחיר בשוק למשתתף', E.num(raw0.market) > 0 ? ils(raw0.market, 0) : 'עוד לא מולא', 'כמה גובים אחרים') + '</div>'; }
     return '<div class="tiles" style="margin-bottom:14px">' + tile('המחיר המומלץ ללקוח', ils(c.recommended, 0), 'כולל הכול: זמן, הוצאות, רווח, מס' + (R.settings.patur ? '' : ' ומע"מ'), 'main') + tile('לא כדאי לרדת מתחת', ils(c.minPrice, 0), 'מכסה את העלויות, בלי רווח ובלי מס') + tile('מחיר בשוק', p.market > 0 ? ils(p.market, 0) : 'עוד לא מולא', 'כמה גובים אחרים') + '</div>';
   },
-  prodHead: function (i) { var p = prodCalc(i); return p ? ils(p.customer, 0) + ' ללקוח' : ''; },
+  prodHead: function (i) { var p = prodCalc(i), raw = S.products[i]; if (!p) return ''; if (raw.type === 'group') return ils(p.customer / (E.num(raw.size) || 1), 0) + ' למשתתף'; return ils(p.customer, 0) + ' ללקוח'; },
   prodLedger: function (i) {
     var p = prodCalc(i); if (!p) return '';
     var c = p.calc, vatRow = R.settings.patur ? '' : lg('מע"מ ' + R.settings.vatPct + '%', ils(c.withVat - c.preVat, 2));
@@ -1256,7 +1361,7 @@ VIEWS[11] = function () {
   return head() + '<div class="card"><span class="sec-lbl">על העסק</span><div class="field"><span class="lbl" id="typeLbl2">סוג העסק</span><div class="seg" role="group" aria-labelledby="typeLbl2"><button type="button" data-type="murshe" aria-pressed="' + !patur + '">עוסק מורשה</button><button type="button" data-type="patur" aria-pressed="' + patur + '">עוסק פטור</button></div><div class="hint">' + (patur ? 'בעוסק פטור אין מע"מ בכלל, וממלאים כמו בבנק.' : 'ממלאים כמו בבנק, כולל מע"מ. הכלי מנטרל אותו לבד לפי סוג השורה.') + '</div></div>' +
     '<label class="check-line" style="margin-top:12px"><input type="checkbox" data-check="ops.home" data-rerender' + (S.ops.home ? ' checked' : '') + '> העסק עובד מהבית</label><label class="check-line" style="margin-top:6px"><input type="checkbox" data-check="ops.car" data-rerender' + (S.ops.car ? ' checked' : '') + '> הרכב הפרטי משמש גם לעסק</label></div>' +
     '<div class="card"><span class="sec-lbl">איך נוח למלא?</span><div class="seg" role="group" aria-label="איך למלא"><button type="button" data-fillmode="month" aria-pressed="' + !year + '">חודש אחד</button><button type="button" data-fillmode="year" aria-pressed="' + year + '">כל השנה בטבלה</button></div><div class="hint">אלה אותם נתונים בשתי תצוגות, אז ממלאים רק באחת. אפשר לעבור ביניהן מתי שרוצים.</div>' +
-    (year ? '' : '<div style="margin-top:14px"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') + '<div class="fields" style="margin-top:12px"><div class="field"><label for="opsNote">הערה ל' + MONTHS[e] + ', לא חובה</label><div class="input-shell"><input id="opsNote" type="text" autocomplete="off" data-text data-path="ops.notes.' + e + '" value="' + esc((S.ops.notes || [])[e]) + '" placeholder="למשל: חופשת לידה, השקה, מילואים"></div><div class="hint">מופיעה בגרפים ובהשוואה לשנה הבאה.</div></div></div></div>') + '</div>' +
+    (year ? '' : '<div style="margin-top:14px"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + (e > 0 ? '<button type="button" class="btn small ghost" style="margin-top:10px" data-act="copyPrev">להעתיק הוצאות מ' + MONTHS[e - 1] + ' לשורות הריקות</button>' : '') + live('opsExpected') + '<div class="fields" style="margin-top:12px"><div class="field"><label for="opsNote">הערה ל' + MONTHS[e] + ', לא חובה</label><div class="input-shell"><input id="opsNote" type="text" autocomplete="off" data-text data-path="ops.notes.' + e + '" value="' + esc((S.ops.notes || [])[e]) + '" placeholder="למשל: חופשת לידה, השקה, מילואים"></div><div class="hint">מופיעה בגרפים ובהשוואה לשנה הבאה.</div></div></div></div>') + '</div>' +
     (year ? '<div class="card"><span class="sec-lbl">כל השנה, כמו בבנק</span><p class="explain">כל שינוי נשמר לבד. מע"מ, חד-פעמית ואחוז שמוכר במס נמצאים בהגדרות למטה. להוספת שורה חדשה עוברים ל"חודש אחד".</p>' + opsGridHtml(true) + '</div>' :
     opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה. החזר ללקוחה נרשם בשורה שלו, והוא מוריד את ההכנסות.', 'הוספת מקור הכנסה') +
     opsSection('עלויות ישירות', 'direct', 'מה שעולה לספק את המוצר או השירות עצמו.', 'הוספת עלות') +
@@ -1278,7 +1383,7 @@ VIEWS[12] = function () {
   return head() + live('opsEmpty') +
     '<div class="month-tabs h-ctrl" role="group" aria-label="איזו שנה ותקופה לראות">' + yearPills + '<span class="h-sep" aria-hidden="true"></span>' + seg + '</div>' + (picker ? '<div class="month-tabs" role="group" aria-label="בחירת תקופה" style="margin-bottom:18px">' + picker + '</div>' : '') +
     live('homeHero') + live('homeTiles') +
-    '<div class="h-two"><div class="card">' + live('homeBars') + '</div><div class="card">' + live('homeBalance') + '</div></div>' + live('homeTrend') + '<div class="card" style="margin-top:14px">' + live('homeTips') + '</div>' +
+    '<div class="h-two"><div class="card">' + live('homeBars') + '</div><div class="card">' + live('homeBalance') + '</div></div>' + '<div style="margin-top:14px">' + live('homeForecast') + '</div>' + live('homeTrend') + '<div class="card" style="margin-top:14px">' + live('homeTips') + '</div>' +
     '<div class="h-actions"><button type="button" class="btn" data-goto="11">למלא את החודש</button></div>' +
     '<details class="h-more" data-how="opsNumbers"' + (howOpen.opsNumbers ? ' open' : '') + '><summary>לראות את המספרים</summary><div style="margin-top:14px"><div class="field" style="max-width:260px;margin-bottom:14px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto">' + uptoOpts + '</select></div></div>' +
     '<div class="card">' + live('opsPlain') + '</div>' + '<div class="ops-grid"><div class="card"><span class="sec-lbl">רווח והפסד: העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">מה לקחת מהרווח</span>' + live('opsDrawn') + '</div>' +
@@ -1359,7 +1464,91 @@ function lineSvg() {
   });
   return '<svg class="h-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc('היתרה בסוף כל חודש: ' + vals.map(function (v, n) { return MONTHS[n] + ' ' + money(v); }).join(', ')) + '">' + out + '</svg>';
 }
+function ymOptions(cur, emptyLabel) {
+  var base = E.ymAdd(currentYm(), -24), out = emptyLabel != null ? '<option value="">' + emptyLabel + '</option>' : '', i, ym, seen = false;
+  for (i = 0; i <= 60; i++) { ym = E.ymAdd(base, i); if (ym === cur) seen = true; out += '<option value="' + ym + '"' + (ym === cur ? ' selected' : '') + '>' + ymLabel(ym) + '</option>'; }
+  if (cur && !seen) out += '<option value="' + esc(cur) + '" selected>' + esc(ymLabel(cur)) + '</option>';
+  return out;
+}
+function ymField(id, label, path, cur, emptyLabel, hint) { return '<div class="field"><label for="' + id + '">' + label + '</label><div class="input-shell"><select id="' + id + '" data-text data-path="' + path + '">' + ymOptions(cur, emptyLabel) + '</select></div>' + (hint ? '<div class="hint">' + hint + '</div>' : '') + '</div>'; }
+var SALE_KINDS = [['once', 'תשלום אחד'], ['equal', 'תשלומים שווים'], ['custom', 'תשלומים משתנים'], ['sub', 'מנוי או ריטיינר']];
+function saleName(x) {
+  var p = S.products.filter(function (q) { return q.id === x.product; })[0];
+  return [x.client, p ? p.name : x.label].filter(function (v) { return v; }).join(', ') || 'מכירה';
+}
+function saleEditor(x, i) {
+  var b = 'sales.' + i + '.', kind = x.kind || 'once', key = 'sale' + (x.id || i), open = howOpen[key] === undefined ? !x.client && !x.product : howOpen[key];
+  var prods = '<option value="">אחר</option>' + S.products.map(function (p) { return '<option value="' + p.id + '"' + (p.id === x.product ? ' selected' : '') + '>' + esc(p.name || 'מוצר') + '</option>'; }).join('');
+  var fields = '';
+  if (kind === 'once') fields = numField('הסכום', b + 'total', { unit: '₪', hint: 'כמו שנכנס לבנק, כולל מע"מ.' }) + ymField('sStart' + i, 'באיזה חודש נכנס', b + 'start', x.start);
+  if (kind === 'equal') fields = numField('סך הכל', b + 'total', { unit: '₪' }) + numField('כמה תשלומים', b + 'n') + ymField('sStart' + i, 'חודש התשלום הראשון', b + 'start', x.start);
+  if (kind === 'sub') fields = numField('כמה בכל חודש', b + 'monthly', { unit: '₪' }) + ymField('sStart' + i, 'מאיזה חודש', b + 'start', x.start) + ymField('sEnd' + i, 'עד איזה חודש', b + 'end', x.end, 'בלי תאריך סיום', 'בלי תאריך סיום נספר עד 12 חודשים קדימה, וזו הנחה.');
+  var extra = '';
+  if (kind === 'equal') extra = '<label class="check-line" style="margin-top:10px"><input type="checkbox" data-check="' + b + 'lump" data-rerender' + (x.lump ? ' checked' : '') + '> ללקוח זה בתשלומים, אבל אליי הכסף נכנס בבת אחת</label><div class="hint">תלוי בסוג הסליקה. כדאי לבדוק אם יש ספק.</div>';
+  if (kind === 'custom') extra = '<div class="rows" style="margin-top:6px">' + (x.parts || []).map(function (p, k) { return '<div class="row cols-part">' + '<div class="input-shell"><select aria-label="חודש התשלום" data-text data-path="' + b + 'parts.' + k + '.ym">' + ymOptions(p.ym) + '</select></div>' + cellNum('סכום התשלום', b + 'parts.' + k + '.amount', '₪') + '<button type="button" class="icon-btn" data-delpart="' + i + ':' + k + '" aria-label="מחיקת תשלום">×</button></div>'; }).join('') + '</div><button type="button" class="add-btn" data-addpart="' + i + '">+ הוספת תשלום</button>';
+  return '<details class="sale" data-how="' + esc(key) + '"' + (open ? ' open' : '') + '><summary><b>' + esc(saleName(x)) + '</b>' + liveSpan('saleLine', i).replace('<span', '<span class="sale-sum"') + '</summary><div class="sale-b"><div class="fields">' + textField('מי קנה', b + 'client') +
+    '<div class="field"><label for="sProd' + i + '">מה נמכר</label><div class="input-shell"><select id="sProd' + i + '" data-text data-rerender data-path="' + b + 'product">' + prods + '</select></div></div>' + ymField('sMonth' + i, 'מתי נמכר', b + 'month', x.month) + '</div>' +
+    '<div class="field" style="margin-top:12px"><span class="lbl" id="sKind' + i + '">איך משלמים</span><div class="seg seg4" role="group" aria-labelledby="sKind' + i + '">' + SALE_KINDS.map(function (k) { return '<button type="button" data-salekind="' + i + ':' + k[0] + '" aria-pressed="' + (k[0] === kind) + '">' + k[1] + '</button>'; }).join('') + '</div></div>' +
+    (fields ? '<div class="fields" style="margin-top:12px">' + fields + '</div>' : '') + (kind === 'custom' ? '<div class="fields" style="margin-top:12px;max-width:280px">' + numField('סך הכל שסוכם', b + 'total', { unit: '₪', hint: 'לא חובה. עוזר לבדוק שהתשלומים מסתכמים.' }) + '</div>' : '') + extra + live('salePlan', i) +
+    '<div class="sale-foot">' + ymField('sCancel' + i, 'התבטל או הוקפא מחודש', b + 'cancelled', x.cancelled, 'לא') + '<button type="button" class="btn small ghost" style="color:var(--red);border-color:rgba(193,85,63,.4)" data-delsale="' + i + '">מחיקה</button></div></div></details>';
+}
+VIEWS[14] = function () {
+  var list = S.sales.map(function (x, i) { return { x: x, i: i }; }).reverse().map(function (o) { return saleEditor(o.x, o.i); }).join('');
+  return head() + '<div class="card">' + live('salesForecast') + '</div>' +
+    '<div class="card"><span class="sec-lbl">המכירות שלך</span><button type="button" class="btn" data-act="newSale">+ מכירה חדשה</button><div class="sale-list">' + list + '</div></div>' +
+    '<div class="card"><span class="sec-lbl">כמה מכרתי בכל חודש, ' + opsYear() + '</span>' + live('salesCounts') + '</div>' + stepNav();
+};
+function forecastBars(fc) {
+  var max = Math.max.apply(null, fc.months.map(function (m) { return m.total; }).concat([1])), now = currentYm();
+  return '<div class="f-bars" role="img" aria-label="' + esc(fc.months.map(function (m) { return ymLabel(m.ym) + ': ' + money(m.total); }).join(', ')) + '">' + fc.months.map(function (m) {
+    var tip = ymLabel(m.ym) + '|צפוי להיכנס: ' + ils(m.total, 0) + (m.assumed ? '|מתוכו מנוי בלי תאריך סיום: ' + ils(m.assumed, 0) : '') + (m.items.length ? '|' + m.items.slice(0, 4).map(function (it) { return (it.name || 'מכירה') + ': ' + ils(it.amount, 0); }).join('|') : '');
+    return '<div class="f-col" data-tip="' + esc(tip) + '"><span class="f-val">' + (m.total ? money(m.total) : '') + '</span><div class="f-track"><div class="f-a" style="height:' + (m.assumed / max * 100).toFixed(1) + '%"></div><div class="f-s" style="height:' + (m.sure / max * 100).toFixed(1) + '%"></div></div><span class="f-m">' + MONTHS[+m.ym.slice(5, 7) - 1].slice(0, 3) + '</span></div>';
+  }).join('') + '</div>';
+}
+function targetMonth() { return R.annual.revenue != null ? R.annual.revenue / 12 * (1 + R.settings.vatPct / 100) : null; }
 var LIVE_OPS = {
+  saleLine: function (i) {
+    var x = S.sales[i]; if (!x) return '';
+    var total = E.saleTotal(x, E.ymAdd(currentYm(), 11)), kind = x.kind || 'once';
+    var how = kind === 'once' ? 'תשלום אחד' : kind === 'equal' ? (x.lump ? 'נכנס בבת אחת' : (E.num(x.n) || 1) + ' תשלומים') : kind === 'custom' ? (x.parts || []).length + ' תשלומים' : 'מנוי, ' + ils(x.monthly, 0) + ' בחודש';
+    return (x.cancelled ? 'בוטל · ' : '') + ils(total, 0) + ' · ' + how;
+  },
+  salePlan: function (i) {
+    var x = S.sales[i]; if (!x) return '';
+    var pays = E.salePayments(x, E.ymAdd(currentYm(), 11));
+    if (!pays.length) return '';
+    var sum_ = pays.reduce(function (a, p) { return a + p.amount; }, 0), note = '';
+    if (x.kind === 'custom' && E.num(x.total) > 0 && Math.abs(sum_ - E.num(x.total)) >= 1) note = '<div class="note soft">התשלומים מסתכמים ל-' + ils(sum_, 0) + ', וסוכם על ' + ils(x.total, 0) + '.</div>';
+    var shown = pays.slice(0, 6).map(function (p) { return ymLabel(p.ym) + ': ' + ils(p.amount, 0); }).join(' · ') + (pays.length > 6 ? ' · ועוד ' + (pays.length - 6) : '');
+    return '<div class="note" style="font-weight:500">' + shown + '</div>' + note;
+  },
+  salesForecast: function () {
+    if (!S.sales.length) return '<span class="sec-lbl">כמה צפוי להיכנס</span><p class="explain" style="margin:0">אחרי שרושמים מכירה, יופיע כאן כמה כסף צפוי להיכנס בכל חודש.</p>';
+    var fc = E.salesForecast(S, currentYm(), 12), tgt = targetMonth(), next = fc.months[1], say = '';
+    if (tgt && next) say = next.total < tgt ? 'ב' + ymLabel(next.ym) + ' כבר צפויים ' + ils(next.total, 0) + ', ולפי התמחור צריך כ-' + ils(tgt, 0) + ' כולל מע"מ. חסרים כ-' + ils(tgt - next.total, 0) + ' במכירות חדשות.' : 'ב' + ymLabel(next.ym) + ' כבר צפויים ' + ils(next.total, 0) + ', וזה מכסה את היעד של כ-' + ils(tgt, 0) + ' כולל מע"מ.';
+    return '<span class="sec-lbl">כמה צפוי להיכנס, 12 חודשים קדימה</span><div class="h-v" style="margin:2px 0 4px">' + ils(fc.total, 0) + '</div><p class="explain" style="margin:0 0 10px">מהמכירות שכבר נעשו, כמו שייכנס לבנק, כולל מע"מ. זו תחזית ולא הבטחה: לקוח יכול לאחר או לבטל.' + (fc.assumed ? ' ' + ils(fc.assumed, 0) + ' מזה ממנויים בלי תאריך סיום, בהנחה שימשיכו.' : '') + '</p>' + forecastBars(fc) + '<div class="h-legend"><span><i class="a"></i>מובטח לפי המכירות</span>' + (fc.assumed ? '<span><i class="f"></i>מנוי בלי תאריך סיום</span>' : '') + '</div>' + (say ? '<div class="note">' + say + '</div>' : '');
+  },
+  salesCounts: function () {
+    var rows = E.salesCounts(S, opsYear()), keys = Object.keys(rows), now = israelYear() === opsYear() ? israelMonth() : 11;
+    if (!keys.length) return '<p class="explain" style="margin:0">עוד אין מכירות ב-' + opsYear() + '.</p>';
+    var heads = MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join(''), goal = {};
+    R.goals.forEach(function (g) { goal[g.id] = g; });
+    var body = keys.map(function (k) {
+      var r = rows[k], p = S.products.filter(function (q) { return q.id === k; })[0], g = goal[k], planned = g ? g.plan.slice(0, now + 1).reduce(function (a, v) { return a + v; }, 0) : 0;
+      return '<tr><td class="nm">' + esc(p ? p.name : 'אחר') + '</td>' + r.m.map(function (v) { return '<td>' + (v || '') + '</td>'; }).join('') + '<td><b>' + r.total + '</b></td><td>' + (planned ? money(planned) : '') + '</td></tr>';
+    }).join('');
+    return '<div class="tbl-wrap" tabindex="0" role="region" aria-label="מכירות לפי חודשים"><table class="ptable"><thead><tr><th>מוצר</th>' + heads + '<th>נמכרו</th><th>בתוכנית עד עכשיו</th></tr></thead><tbody>' + body + '</tbody></table></div>' + (R.goals.some(function (g) { return g.planned > 0; }) ? '' : '<p class="explain" style="margin:10px 0 0">כדי להשוות לתוכנית, ממלאים את שלב 9. ' + gotoBtn(9, 'לתוכנית השנתית') + '</p>');
+  },
+  homeForecast: function () {
+    if (!S.sales.length) return '';
+    var fc = E.salesForecast(S, currentYm(), 6);
+    return '<div class="card"><h3 class="h-t">כמה צפוי להיכנס</h3><p class="h-sub">מהמכירות שכבר נעשו, כולל מע"מ. ' + gotoBtn(14, 'למכירות') + '</p>' + forecastBars(fc) + '</div>';
+  },
+  opsExpected: function () {
+    if (!S.sales.length) return '';
+    var ym = opsYear() + '-' + (S.ops.edit < 9 ? '0' : '') + (S.ops.edit + 1), m = E.salesForecast(S, ym, 1).months[0];
+    return m.total ? '<div class="note">לפי המכירות, ב' + MONTHS[S.ops.edit] + ' צפויים להיכנס ' + ils(m.total, 0) + '. כאן רושמים מה נכנס בפועל.</div>' : '';
+  },
   homeHero: function () {
     if (!O.k) return '';
     var x = opsPeriod(), w = periodWord();
@@ -1618,6 +1807,7 @@ function normalize(s) {
   s.products.forEach(function (p) { p.lines = p.lines || []; p.plan = p.plan || months(); });
   s.whatIf = s.whatIf || base.whatIf;
   s.years = s.years || {};
+  s.sales = s.sales || [];
   /* a link saved before years existed holds 2026 */
   if (s.ops && !s.ops.year) s.ops.year = 2026;
   s.ops = Object.assign({}, base.ops, s.ops || {});
@@ -1793,7 +1983,16 @@ document.addEventListener('input', function (e) {
 });
 document.addEventListener('change', function (e) {
   var t = e.target;
-  if (t.tagName === 'SELECT' && t.hasAttribute('data-path')) { setPath(t.getAttribute('data-path'), t.value); changed(); }
+  if (t.tagName === 'SELECT' && t.hasAttribute('data-path')) {
+    setPath(t.getAttribute('data-path'), t.value);
+    if (t.hasAttribute('data-rerender')) {
+      var ms = /^sales\.(\d+)\.product$/.exec(t.getAttribute('data-path'));
+      if (ms) { var sl2 = S.sales[+ms[1]], pr = R.products.filter(function (q) { return q.id === t.value; })[0]; if (pr && !E.num(sl2.total)) sl2.total = Math.round(pr.customer); }
+      var mp = /^products\.(\d+)\.type$/.exec(t.getAttribute('data-path'));
+      if (mp && t.value === 'group' && !E.num(S.products[+mp[1]].size)) S.products[+mp[1]].size = 10;
+      render(); persist();
+    } else changed();
+  }
   if (t.hasAttribute('data-pick')) { pickChange(t); return; }
   if (t.hasAttribute('data-check')) { setPath(t.getAttribute('data-check'), t.checked); document.querySelectorAll('[data-check="' + t.getAttribute('data-check') + '"]').forEach(function (x) { x.checked = t.checked; }); if (t.hasAttribute('data-rerender')) { render(); persist(); } else changed(); return; }
   if (t.id === 'noMat') { S.biz.noMaterials = t.checked; $('matCard').hidden = t.checked; changed(); }
@@ -1812,6 +2011,22 @@ document.addEventListener('click', function (e) {
   if (d.goto != null) { go(+d.goto); return; }
   if (d.type) { S.biz.type = d.type; render(); persist(); return; }
   if (d.add) { addRow(d.add); return; }
+  if (d.salekind) { var ks = d.salekind.split(':'), sl = S.sales[+ks[0]]; sl.kind = ks[1]; if (ks[1] === 'custom' && !(sl.parts && sl.parts.length)) sl.parts = [{ ym: sl.start || sl.month, amount: '' }]; if (ks[1] === 'equal' && !sl.n) sl.n = 6; if (!sl.start) sl.start = sl.month; render(); persist(); return; }
+  if (d.addpart != null) { var sp = S.sales[+d.addpart]; sp.parts = sp.parts || []; var lastP = sp.parts[sp.parts.length - 1]; sp.parts.push({ ym: lastP && lastP.ym ? E.ymAdd(lastP.ym, 1) : (sp.start || sp.month), amount: '' }); render(); persist(); return; }
+  if (d.delpart) { var dp = d.delpart.split(':'); S.sales[+dp[0]].parts.splice(+dp[1], 1); render(); persist(); return; }
+  if (d.delsale != null) {
+    if (t.dataset.armed) { S.sales.splice(+d.delsale, 1); render(); persist(); return; }
+    t.dataset.armed = '1'; t.textContent = 'בטוח? למחוק'; setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'מחיקה'; } }, 3000); return;
+  }
+  if (d.sell) { S.biz.sells = S.biz.sells || {}; S.biz.sells[d.sell] = !S.biz.sells[d.sell]; render(); persist(); return; }
+  if (d.addtype) { S.products.push({ id: uid('p'), type: d.addtype, name: '', lines: [], hours: '', specific: '', marginPct: 30, market: '', chosen: '', size: d.addtype === 'group' ? 10 : '', mix: S.products.length ? '' : 100, plan: months() }); render(); persist(); return; }
+  if (d.dupprod != null) {
+    var src = S.products[+d.dupprod], copy = JSON.parse(JSON.stringify(src));
+    copy.id = uid('p'); copy.name = (src.name || 'מוצר') + ', עותק'; copy.chosen = ''; copy.mix = ''; copy.plan = months();
+    S.products.splice(+d.dupprod + 1, 0, copy); render(); persist();
+    var nameEl = document.querySelector('[data-path="products.' + (+d.dupprod + 1) + '.name"]'); if (nameEl) { nameEl.focus(); nameEl.select(); }
+    return;
+  }
   if (d.opsedit != null) { S.ops.edit = +d.opsedit; render(); persist(); return; }
   if (d.fillmode) { S.ops.fillMode = d.fillmode; render(); persist(); return; }
   if (d.opsyear) { E.switchYear(S, +d.opsyear); S.ops.view = 'year'; render(); persist(); return; }
@@ -1844,6 +2059,18 @@ document.addEventListener('click', function (e) {
   else if (act === 'resetTables') { S.tax.tables = null; render(); persist(); }
   else if (act === 'spread') { spreadPlan(); }
   else if (act === 'copyPrev') { copyPrev(); }
+  else if (act === 'newSale') {
+    var cm = currentYm(), ns = { id: uid('s'), client: '', product: '', month: cm, start: cm, kind: 'once', total: '', n: 6, monthly: '', end: '', cancelled: '', parts: [] };
+    S.sales.push(ns); howOpen['sale' + ns.id] = true; render(); persist();
+    var firstEl = document.querySelector('[data-path="sales.' + (S.sales.length - 1) + '.client"]'); if (firstEl) firstEl.focus();
+  }
+  else if (act === 'addShared') {
+    var spent = E.num($('shSpent').value), cnt = E.num($('shCount').value), nm = $('shName').value.trim();
+    if (!(spent > 0 && cnt > 0)) { $('shOut').innerHTML = '<div class="note soft">צריך גם סכום וגם מספר טיפולים.</div>'; return; }
+    S.materials.push({ id: uid('m'), name: nm || 'חומרים לטיפול', unit: 'טיפול', pack: cnt, cost: spent });
+    howOpen.shared = true; render(); persist();
+    $('shOut').innerHTML = '<div class="note ok">נוסף לרשימה: כ-' + ils(spent / cnt, 2) + ' לטיפול, לפני בלאי. בשלב הבא בוחרים אותו, וכותבים כמות 1.</div>';
+  }
   else if (act === 'closeYear') {
     if (!t.dataset.armed) { t.dataset.armed = '1'; t.textContent = 'בטוח? לסגור את ' + opsYear() + ' ולפתוח שנה חדשה'; setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'לסגור את ' + opsYear() + ' ולפתוח את ' + (opsYear() + 1); } }, 4000); return; }
     S = normalize(E.closeYear(S)); go(11); persist();

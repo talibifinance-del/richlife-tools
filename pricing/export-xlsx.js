@@ -35,6 +35,7 @@
   function numOrNull(E, v) { return v === '' || v == null ? null : E.num(v); }
 
   function build(state, E, ExcelJS) {
+    state = E.expandState(state);
     var R = E.compute(state), wb = new ExcelJS.Workbook();
     wb.creator = 'RichLife'; wb.calcProperties.fullCalcOnLoad = true;
     var S = state, L = R.labor, set = R.settings;

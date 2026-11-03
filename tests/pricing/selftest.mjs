@@ -603,6 +603,131 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   for (const n of [1, 3, 6, 7, 9]) { await go(ph.p, n); await clean(ph.p, 'T phone ' + n); await ph.p.screenshot({ path: OUT + '/t-phone-' + n + '.png', fullPage: true }); }
   await axe(ph.p, 'T phone'); await ph.ctx.close();
 }
+/* ---- U. what the business sells ---- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  await axe(p, 'U welcome');
+  await p.click('[data-sell="group"]'); await p.click('[data-sell="service"]');
+  ok('U choices stay marked', await p.locator('[data-sell="group"][aria-pressed="true"]').count() === 1);
+  await go(p, 1); await p.click('details[data-how="shared"] summary');
+  await p.fill('#shName', 'חומרים ללק'); await p.fill('#shSpent', '600'); await p.fill('#shCount', '100'); await p.click('[data-act="addShared"]');
+  ok('U shared material says the price', (await p.locator('#shOut').innerText()).includes('6'));
+  ok('U shared material joins the list', (await p.evaluate(() => window.__pricing.S.materials[0].pack)) === 100);
+  await p.click('[data-add="material"]'); await type(p, 'materials.1.name', 'מחברת'); await type(p, 'materials.1.pack', '1'); await type(p, 'materials.1.cost', '37');
+  await p.fill('[data-path="biz.wastePct"]', '0');
+  await go(p, 2);
+  ok('U only chosen types can be added', await p.locator('[data-addtype="group"]').count() === 1 && await p.locator('[data-add="product"]').count() === 0 && await p.locator('[data-addtype="digital"]').count() === 0);
+  await p.click('[data-addtype="group"]');
+  ok('U a group starts with a size', (await p.inputValue('[data-path="products.0.size"]')) === '10');
+  await type(p, 'products.0.name', 'סדנת ילדים');
+  await p.click('[data-addline="0"]');
+  await p.selectOption('[data-path="products.0.lines.0.mat"]', { label: 'מחברת' }); await type(p, 'products.0.lines.0.qty', '1');
+  ok('U materials count per person', (await p.locator('[data-live="prodDirect"]').first().innerText()).includes('למשתתף'));
+  // the rates of the approved picture
+  await p.evaluate(() => { const S = window.__pricing.S; S.labor = { net: 11000, pension: 800, fund: 400, hours: 150, monthly: [], hourly: [{ name: 'x', role: '', rate: 45, hours: 30, factor: 1.35 }] }; S.tax.points = 2.75; S.tax.saving = 1000; S.overhead.marketing[2].m = S.overhead.marketing[2].m.map(() => 1200); S.overhead.marketing[1].m = S.overhead.marketing[1].m.map(() => 500); S.overhead.admin[0].m = S.overhead.admin[0].m.map(() => 1800); S.overhead.admin[3].m = S.overhead.admin[3].m.map(() => 120); S.overhead.admin[5].m = S.overhead.admin[5].m.map(() => 350); S.overhead.admin[9].m = S.overhead.admin[9].m.map(() => 400); });
+  await go(p, 6);
+  await type(p, 'products.0.hours', '5'); await p.fill('[data-path="products.0.marginPct"]', '40'); await type(p, 'products.0.specific', '300'); await type(p, 'products.0.chosen', '150');
+  await p.waitForTimeout(100);
+  const hero = await p.locator('[data-live="prodGroupHero"]').innerText();
+  ok('U the screen says how many are needed', hero.includes('12 משתתפים') && hero.includes('150'), hero);
+  const kids = await p.locator('[data-live="prodGroup"]').innerText();
+  ok('U each size shows what is left', kids.includes('הפסד 518') && kids.includes('נשאר 725'), kids);
+  ok('U recommended price per person', kids.includes('311') && kids.includes('202'), kids);
+  ok('U the head of the card is per person', (await p.locator('[data-live="prodHead"]').first().innerText()).includes('למשתתף'));
+  await clean(p, 'U group'); await axe(p, 'U group'); await p.screenshot({ path: OUT + '/u-group.png', fullPage: true });
+  // duplicate, and the original stays
+  await go(p, 2); const before = await p.evaluate(() => JSON.stringify(window.__pricing.S.products[0]));
+  await p.click('[data-dupprod="0"]');
+  near('U duplicate adds one', await p.evaluate(() => window.__pricing.S.products.length), 2);
+  ok('U the original did not move', before === await p.evaluate(() => JSON.stringify(window.__pricing.S.products[0])));
+  await p.locator('[data-path="products.1.lines.0.qty"]').fill('3');
+  ok('U the copy is separate', (await p.evaluate(() => window.__pricing.S.products[0].lines[0].qty)) === '1' || (await p.evaluate(() => window.__pricing.S.products[0].lines[0].qty)) === 1);
+  ok('U a copy has its own id', await p.evaluate(() => window.__pricing.S.products[0].id !== window.__pricing.S.products[1].id));
+  // changing the type asks the right questions
+  await p.selectOption('[data-path="products.1.type"]', 'digital');
+  ok('U digital has no materials', await p.locator('[data-path="products.1.lines.0.qty"]').count() === 0);
+  await go(p, 6);
+  ok('U digital asks about making it', await p.locator('[data-path="products.1.devHours"]').count() === 1 && await p.locator('[data-path="products.1.expected"]').count() === 1);
+  await p.locator('[data-path="products.1.devHours"]').pressSequentially('40'); await p.locator('[data-path="products.1.expected"]').pressSequentially('100'); await p.locator('[data-path="products.1.devCost"]').pressSequentially('2000');
+  near('U digital spreads the cost', await p.evaluate(() => window.__pricing.R.products[1].calc.specific), 20);
+  await clean(p, 'U digital');
+  // Excel keeps working with a group
+  await go(p, 10);
+  const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#xlsxBtn')]);
+  ok('U Excel downloads with a group', !!(await dl.path()));
+  ok('U no page errors', p.errs.length === 0, p.errs);
+  await ctx.close();
+  const ph = await newPage({ width: 400, height: 800 }); await open(ph.p);
+  await clean(ph.p, 'U phone welcome'); await ph.p.screenshot({ path: OUT + '/u-phone-0.png', fullPage: true });
+  await ph.p.click('[data-act="demo"]'); await go(ph.p, 6); await clean(ph.p, 'U phone group'); await axe(ph.p, 'U phone group');
+  await ph.p.screenshot({ path: OUT + '/u-phone-6.png', fullPage: true }); await ph.ctx.close();
+}
+/* ---- V. sales and how they get paid ---- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  await p.click('[data-act="demo"]');
+  const ymNow = await p.evaluate(() => { const m = +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', month: 'numeric' }).format(new Date()), y = +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', year: 'numeric' }).format(new Date()); return y + '-' + (m < 10 ? '0' : '') + m; });
+  await go(p, 14); await clean(p, 'V demo'); await axe(p, 'V demo');
+  ok('V the demo shows a forecast', (await p.locator('[data-live="salesForecast"]').innerText()).includes('צפוי'));
+  await p.click('[data-act="newSale"]');
+  ok('V a new sale opens for typing', await p.evaluate(() => document.activeElement.getAttribute('data-path') === 'sales.3.client'));
+  await type(p, 'sales.3.client', 'נועה');
+  await p.selectOption('[data-path="sales.3.product"]', 'p1');
+  const price = await p.evaluate(() => Math.round(window.__pricing.R.products[0].customer));
+  near('V the price comes from the price list', +(await p.evaluate(() => window.__pricing.S.sales[3].total)), price);
+  // the payment types
+  await p.click('[data-salekind="3:equal"]');
+  await p.locator('[data-path="sales.3.total"]').fill('6600'); await p.locator('[data-path="sales.3.n"]').fill('6');
+  await p.waitForTimeout(60);
+  ok('V equal payments are spelled out', (await p.locator('[data-live="salePlan"][data-arg="3"]').innerText()).includes('1,100'));
+  await p.locator('[data-check="sales.3.lump"]').check();
+  ok('V paid at once', (await p.locator('[data-live="salePlan"][data-arg="3"]').innerText()).includes('6,600'));
+  await p.locator('[data-check="sales.3.lump"]').uncheck();
+  await p.click('[data-salekind="3:custom"]');
+  await p.locator('[data-path="sales.3.parts.0.amount"]').pressSequentially('1000');
+  await p.click('[data-addpart="3"]');
+  await p.locator('[data-path="sales.3.parts.1.amount"]').pressSequentially('1120');
+  await p.waitForTimeout(60);
+  const plan2 = await p.locator('[data-live="salePlan"][data-arg="3"]').innerText();
+  ok('V varied payments listed', plan2.includes('1,000') && plan2.includes('1,120'), plan2);
+  ok('V says when the parts do not add up', plan2.includes('מסתכמים'), plan2);
+  await axe(p, 'V custom');
+  await p.click('[data-salekind="3:sub"]');
+  await p.locator('[data-path="sales.3.monthly"]').pressSequentially('1500');
+  await p.waitForTimeout(60);
+  ok('V retainer in the summary', (await p.locator('[data-live="saleLine"][data-arg="3"]').innerText()).includes('מנוי'));
+  // the forecast adds this sale
+  const fcBefore = await p.evaluate(ym => window.PricingEngine.salesForecast(window.__pricing.S, ym, 1).total, ymNow);
+  await p.selectOption('[data-path="sales.3.cancelled"]', ymNow);
+  await p.waitForTimeout(60);
+  const fcAfter = await p.evaluate(ym => window.PricingEngine.salesForecast(window.__pricing.S, ym, 1).total, ymNow);
+  near('V a cancelled sale leaves the forecast', fcBefore - fcAfter, 1500);
+  await p.locator('[data-live="salesForecast"] .f-col').first().hover();
+  ok('V hovering a month lists it', (await p.locator('#hTip').innerText()).includes('צפוי להיכנס'));
+  ok('V monthly counts table', (await p.locator('[data-live="salesCounts"]').innerText()).includes('נמכרו'));
+  // the home screen and the monthly fill see it
+  await go(p, 12); ok('V the home screen shows it', (await p.locator('[data-live="homeForecast"]').innerText()).includes('צפוי להיכנס'));
+  await axe(p, 'V home');
+  await go(p, 11);
+  await p.evaluate(ym => { window.__pricing.S.ops.edit = +ym.slice(5, 7) - 1; }, ymNow); await go(p, 11);
+  const yearOk = await p.evaluate(ym => window.__pricing.S.ops.year === +ym.slice(0, 4), ymNow);
+  if (yearOk) ok('V the monthly fill shows what is expected', (await p.locator('[data-live="opsExpected"]').innerText()).includes('צפויים'));
+  // delete asks first, and it survives a reload
+  await go(p, 14);
+  await p.locator('details.sale[open] [data-delsale="3"]').click();
+  ok('V delete asks first', await p.evaluate(() => window.__pricing.S.sales.length) === 4);
+  await p.locator('details.sale[open] [data-delsale="3"]').click();
+  ok('V delete removes', await p.evaluate(() => window.__pricing.S.sales.length) === 3);
+  await p.waitForTimeout(450); await p.reload(); await p.waitForFunction(() => window.__pricing); await p.waitForTimeout(150); await p.click('[data-act="resume"]');
+  ok('V sales survive a reload', await p.evaluate(() => window.__pricing.S.sales.length) === 3);
+  ok('V no page errors', p.errs.length === 0, p.errs);
+  await ctx.close();
+  const ph = await newPage({ width: 400, height: 800 }); await open(ph.p); await ph.p.click('[data-act="demo"]'); await go(ph.p, 14);
+  await clean(ph.p, 'V phone'); await axe(ph.p, 'V phone'); await ph.p.screenshot({ path: OUT + '/v-phone.png', fullPage: true }); await ph.ctx.close();
+  const d = await newPage(); await open(d.p); await d.p.click('[data-act="demo"]'); await go(d.p, 14);
+  await d.p.locator('details.sale > summary').first().click(); await d.p.waitForTimeout(80);
+  await d.p.screenshot({ path: OUT + '/v-desk.png', fullPage: true }); await d.ctx.close();
+}
 /* ---- S. the home screen says the right thing, and years work ---- */
 {
   const { ctx, p } = await newPage(); await open(p);

@@ -161,6 +161,104 @@
   /* The price the client pays, walked back through card fee and VAT, so it compares directly with preVat. */
   function chosenNet(chosen, vatPct, feePct) { return pos(chosen) / (1 + pos(feePct) / 100) / (1 + pos(vatPct) / 100); }
 
+  /* ---------- product types ----------
+     A group is priced as one whole event, a digital product spreads what it took to make over the expected sales.
+     After this step everything downstream is the ordinary product model. A product without a type passes through untouched. */
+  function expandProduct(p) {
+    if (!p || (p.type !== 'group' && p.type !== 'digital')) return p;
+    var q = {}; for (var k in p) q[k] = p[k];
+    if (p.type === 'group') {
+      var size = pos(p.size) || 1;
+      q.lines = (p.lines || []).map(function (l) { return { mat: l.mat, qty: pos(l.qty) * size }; });
+      q.chosen = pos(p.chosen) > 0 ? pos(p.chosen) * size : '';
+      q.market = pos(p.market) > 0 ? pos(p.market) * size : '';
+    } else {
+      var expected = pos(p.expected);
+      q.lines = [];
+      q.hours = expected > 0 ? pos(p.devHours) / expected : 0;
+      q.specific = expected > 0 ? pos(p.devCost) / expected : 0;
+    }
+    q.type = 'product';
+    return q;
+  }
+  function expandState(state) {
+    var q = {}; for (var k in state) q[k] = state[k];
+    q.products = (state.products || []).map(expandProduct);
+    return q;
+  }
+  /* What a group looks like at different sizes: the price per person, and how many people cover the costs. */
+  function groupView(R, state, raw) {
+    var set = R.settings, perHead = productDirect(raw, state.materials, set.wastePct), size = pos(raw.size) || 1;
+    var calc = function (n) {
+      return priceProduct({
+        direct: perHead * n, hours: raw.hours, specific: raw.specific, marginPct: raw.marginPct,
+        overheadPerHour: R.overhead.perHour, laborPerHour: R.labor.costPerHour, netPerHour: R.labor.netPerHour,
+        contingencyPct: set.contingencyPct, socialRate: R.tax.socialRate, incomeRate: R.tax.incomeRate, vatPct: set.vatPct, feePct: set.feePct
+      });
+    };
+    var recHere = calc(size).recommended / size, hasChosen = pos(raw.chosen) > 0, price = hasChosen ? pos(raw.chosen) : recHere;
+    var netHead = chosenNet(price, set.vatPct, set.feePct);
+    var sizes = [5, 10, 15, 20]; if (sizes.indexOf(size) < 0) sizes.push(size);
+    sizes.sort(function (a, b) { return a - b; });
+    var rows = sizes.map(function (n) {
+      var c = calc(n);
+      return { n: n, recPerHead: c.recommended / n, recTotal: c.recommended, min: c.minPrice, net: netHead * n, left: netHead * n - c.minPrice };
+    });
+    var minHeads = null;
+    for (var n = 1; n <= 1000; n++) if (netHead * n >= calc(n).minPrice) { minHeads = n; break; }
+    return { size: size, perHead: perHead, price: price, hasChosen: hasChosen, recHere: recHere, minHeads: minHeads, rows: rows };
+  }
+
+  /* ---------- sales and how they get paid ----------
+     Months are 'YYYY-MM' strings, so they sort and compare as text. Amounts are what the client pays, as in the bank. */
+  function ymAdd(ym, n) {
+    var y = +ym.slice(0, 4), m = +ym.slice(5, 7) - 1 + n;
+    y += Math.floor(m / 12); m = ((m % 12) + 12) % 12;
+    return y + '-' + (m < 9 ? '0' : '') + (m + 1);
+  }
+  function salePayments(sale, horizon) {
+    var out = [], kind = sale.kind || 'once', start = sale.start || sale.month, i;
+    if (!start && kind !== 'custom') return out;
+    if (kind === 'once') { if (pos(sale.total) > 0) out.push({ ym: start, amount: pos(sale.total) }); }
+    else if (kind === 'equal') {
+      var n = Math.max(1, Math.floor(pos(sale.n)) || 1);
+      if (sale.lump) out.push({ ym: start, amount: pos(sale.total) });
+      else for (i = 0; i < n; i++) out.push({ ym: ymAdd(start, i), amount: pos(sale.total) / n });
+    } else if (kind === 'custom') {
+      (sale.parts || []).forEach(function (p) { if (p.ym && pos(p.amount) > 0) out.push({ ym: p.ym, amount: pos(p.amount) }); });
+    } else if (kind === 'sub') {
+      /* No end date: counted up to the horizon, and marked as an assumption. */
+      var end = sale.end || horizon, open = !sale.end, ym = start, guard = 0;
+      while (ym <= end && guard++ < 600) { out.push({ ym: ym, amount: pos(sale.monthly), assumed: open }); ym = ymAdd(ym, 1); }
+    }
+    if (sale.cancelled) out = out.filter(function (p) { return p.ym < sale.cancelled; });
+    return out;
+  }
+  function saleTotal(sale, horizon) { return sum(salePayments(sale, horizon), function (p) { return p.amount; }); }
+  function salesForecast(state, startYm, count) {
+    var last = ymAdd(startYm, count - 1), months = [], i, map = {};
+    for (i = 0; i < count; i++) { var ym = ymAdd(startYm, i); map[ym] = { ym: ym, total: 0, sure: 0, assumed: 0, items: [] }; months.push(map[ym]); }
+    ((state && state.sales) || []).forEach(function (s) {
+      salePayments(s, last).forEach(function (p) {
+        var m = map[p.ym]; if (!m) return;
+        m.total += p.amount; if (p.assumed) m.assumed += p.amount; else m.sure += p.amount;
+        m.items.push({ name: s.client || s.label || '', amount: p.amount, assumed: !!p.assumed });
+      });
+    });
+    return { months: months, total: sum(months, function (m) { return m.total; }), assumed: sum(months, function (m) { return m.assumed; }) };
+  }
+  /* How many of each product were sold in each month of a year. A group sold is one whole event. */
+  function salesCounts(state, year) {
+    var rows = {}, y = String(year);
+    ((state && state.sales) || []).forEach(function (s) {
+      if (!s.month || s.month.slice(0, 4) !== y || s.cancelled === s.month) return;
+      var key = s.product || '_other';
+      rows[key] = rows[key] || { key: key, m: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], total: 0 };
+      rows[key].m[+s.month.slice(5, 7) - 1]++; rows[key].total++;
+    });
+    return rows;
+  }
+
   /* ---------- whole model ---------- */
   function compute(state) {
     var s = state || {}, biz = s.biz || {}, t = (s.tax && s.tax.tables) || TABLES_2026;
@@ -178,7 +276,7 @@
     var preTax = solvePreTax(targetNet, points, t);
     var taxRes = tax(preTax, points, t);
 
-    var products = (s.products || []).map(function (p) {
+    var products = (s.products || []).map(expandProduct).map(function (p) {
       var direct = productDirect(p, s.materials, wastePct);
       var pr = priceProduct({
         direct: direct, hours: p.hours, specific: p.specific, marginPct: p.marginPct,
@@ -515,6 +613,8 @@
     TABLES_2026: TABLES_2026, PATUR_CEILING_2026: PATUR_CEILING_2026, MAX_MARGIN: MAX_MARGIN, OPS_2026: OPS_2026,
     num: num, materialUnitPrice: materialUnitPrice, lineCost: lineCost, productDirect: productDirect,
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
+    expandProduct: expandProduct, expandState: expandState, groupView: groupView,
+    ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, salesForecast: salesForecast, salesCounts: salesCounts,
     mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, hasTables: hasTables, tablesFor: tablesFor,
     yearList: yearList, yearOps: yearOps, switchYear: switchYear, closeYear: closeYear, agePick: agePick, compareYears: compareYears, productRank: productRank, whatIf: whatIf
   };

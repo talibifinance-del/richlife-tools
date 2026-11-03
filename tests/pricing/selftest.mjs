@@ -399,7 +399,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await type(p, 'ops.rows.income.0.m.0', '47200');
   await type(p, 'ops.rows.direct.1.m.0', '4720');
   await type(p, 'ops.rows.marketing.1.m.0', '5900');
-  ok('O flags appear with an amount', await p.locator('[data-check="ops.rows.marketing.1.oneOff"]').first().isVisible());
+  ok('O every expense row offers VAT and one-off', await p.locator('[data-check="ops.rows.marketing.3.oneOff"]').first().isVisible() && await p.locator('[data-check="ops.rows.finance.0.vat"]').first().isVisible());
   ok('O Facebook starts without VAT', (await p.evaluate(() => window.__pricing.S.ops.rows.marketing[0].vat)) === false);
   await type(p, 'ops.rows.admin.5.m.0', '7080');
   await type(p, 'ops.rows.finance.1.m.0', '500');
@@ -521,6 +521,18 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await go(p, 11); await p.click('details[data-how="opsGridEdit"] summary'); await p.waitForSelector('details[data-how="opsGridEdit"] table'); await clean(p, 'Q11 grid'); await p.click('details[data-how="opsGridEdit"] summary'); await p.waitForFunction(() => !document.querySelector('details[data-how="opsGridEdit"] table'));
   for (const n of [7, 11, 12, 13]) { await go(p, n); await clean(p, 'Q' + n + ' phone'); await p.screenshot({ path: OUT + '/q' + n + '-phone.png', fullPage: true }); }
   await go(p, 12);
+  await p.click('[data-opsview="q0"]');
+  const avgQ = await p.locator('[data-live="opsAvg"]').innerText();
+  ok('Q average for a quarter', avgQ.includes('40,000') && avgQ.includes('רבעון 1'), avgQ);
+  ok('Q quarter ladder', (await p.locator('[data-live="opsLadder"]').innerText()).includes('120,000'));
+  await p.click('[data-opsview="q1"]');
+  ok('Q empty quarter says so', (await p.locator('[data-live="opsAvg"]').innerText()).includes('אין נתונים'));
+  await p.click('[data-opsview="year"]');
+  await p.click('[data-tableby="quarters"]');
+  const qt = await p.locator('[data-live="opsTable"]').innerText();
+  ok('Q table by quarters', qt.includes('רבעון 4') && !qt.includes('אוגוסט') && qt.includes('ממוצע בחודש'), qt.slice(0, 200));
+  await axe(p, 'Q12 quarters'); await clean(p, 'Q12 quarters');
+  await p.click('[data-tableby="months"]');
   const l = await p.locator('[data-live="opsLadder"]').innerText();
   ok('Q demo ladder, three months', l.includes('120,000') && l.includes('108,000') && l.includes('75,000'), l);
   await axe(p, 'Q12 phone');

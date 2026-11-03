@@ -506,7 +506,7 @@ function opsRowNew(name, opts) { return Object.assign({ name: name, m: months() 
 function opsDefaults() {
   var nv = { vat: false };
   return {
-    edit: 0, view: 'year', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '', otherIncome: '', otherWithheld: '',
+    edit: 0, view: 'year', tableBy: 'months', upto: '', home: false, car: false, seeded: false, depreciation: '', donations: '', otherIncome: '', otherWithheld: '',
     rows: {
       income: ['סליקה', 'ביט', 'פייבוקס', 'העברה בנקאית', 'אחר'].map(function (n) { return opsRowNew(n); }).concat([opsRowNew('החזרים ללקוחות, יורד מההכנסות', { refund: true })]),
       direct: ['קבלני משנה', 'חומרי גלם', 'חומרי אריזה', 'שילוח, מכס ויבוא', 'אחר'].map(function (n) { return opsRowNew(n); }),
@@ -977,6 +977,7 @@ function flagList() {
 
 /* ---------- ongoing management ---------- */
 var INFO = {
+  preTax: 'מה שהעסק הרוויח לפני מס, פנסיה, קרן ומשכורת. זה הכי קרוב למספר שרואה החשבון מדבר עליו, אבל הוא מחשב לפי חשבוניות והוצאות מוכרות, וכאן זה לפי מה שמולא.',
   gross: 'המכירות פחות מה שעולה לספק את המוצר או השירות עצמו. מכאן משלמים את כל השאר. אם המספר הזה נמוך, הבעיה במחיר או בעלות המוצר.',
   operating: 'הרווח הגולמי פחות שיווק והוצאות שוטפות. כך רואים אם הפעילות עצמה מרוויחה, לפני ריבית ומס.',
   tax: 'הערכה של מס הכנסה, ביטוח לאומי ובריאות לפי כל מה שמילאת, גם אם המקדמות ששילמת בפועל שונות. הפירוט בשלב הערכת המס.',
@@ -1016,13 +1017,12 @@ function pickChange(t) {
 }
 function opsTabs(active, attr, withYear) {
   var filled = O ? O.k : 0;
-  return '<div class="month-tabs" role="group" aria-label="בחירת חודש">' + (withYear ? '<button type="button" ' + attr + '="year" aria-pressed="' + (active === 'year') + '">מתחילת השנה</button>' : '') +
+  return '<div class="month-tabs" role="group" aria-label="בחירת חודש">' + (withYear ? '<button type="button" ' + attr + '="year" aria-pressed="' + (active === 'year') + '">מתחילת השנה</button>' + [0, 1, 2, 3].map(function (q) { return '<button type="button" ' + attr + '="q' + q + '" aria-pressed="' + (active === 'q' + q) + '">רבעון ' + (q + 1) + '</button>'; }).join('') : '') +
     MONTHS.map(function (m, i) { return '<button type="button" ' + attr + '="' + i + '" aria-pressed="' + (String(active) === String(i)) + '"' + (i < filled ? ' class="has"' : '') + '>' + m + '</button>'; }).join('') + '</div>';
 }
 function opsRow(listPath, r, i, e) {
   var base = listPath + '.' + i, nm = esc(r.name || 'שורה'), isIncome = listPath === 'ops.rows.income';
-  var has = (r.m || []).some(function (v) { return E.num(v) > 0; });
-  var flags = isIncome ? '' : '<div class="row-flags"' + (has ? '' : ' hidden') + '>' + (S.biz.type === 'patur' ? '' : '<label><input type="checkbox" aria-label="' + nm + ' כולל מע&quot;מ" data-check="' + base + '.vat"' + (r.vat === false ? '' : ' checked') + '> כולל מע"מ</label>') + '<label><input type="checkbox" aria-label="' + nm + ' הוצאה חד-פעמית" data-check="' + base + '.oneOff"' + (r.oneOff ? ' checked' : '') + '> חד-פעמית, לא חוזרת כל חודש</label></div>';
+  var flags = isIncome ? '' : '<div class="row-flags">' + (S.biz.type === 'patur' ? '' : '<label><input type="checkbox" aria-label="' + nm + ' כולל מע&quot;מ" data-check="' + base + '.vat"' + (r.vat === false ? '' : ' checked') + '> כולל מע"מ</label>') + '<label><input type="checkbox" aria-label="' + nm + ' הוצאה חד-פעמית" data-check="' + base + '.oneOff"' + (r.oneOff ? ' checked' : '') + '> חד-פעמית, לא חוזרת כל חודש</label></div>';
   return '<div class="ops-rowwrap"><div class="row cols-ops">' + cellText('שם השורה', base + '.name') + cellNum(nm + ' ב' + MONTHS[e], base + '.m.' + e, '₪') +
     '<button type="button" class="icon-btn" data-del="' + listPath + '" data-i="' + i + '" aria-label="מחיקת ' + nm + '">×</button></div>' + flags + '</div>';
 }
@@ -1119,7 +1119,7 @@ VIEWS[11] = function () {
     '<div class="card"><span class="sec-lbl">בדיקה מול הבנק</span><div class="fields">' + signedInput('bankOpen', 'ops.bank.opening', 'יתרה ב-1 בינואר') + signedInput('bankEnd', 'ops.bank.end.' + e, 'יתרה בסוף ' + MONTHS[e]) + '</div>' + live('opsBank') + '</div>' + stepNav();
 };
 VIEWS[12] = function () {
-  return head() + live('opsEmpty') + '<div class="card"><span class="sec-lbl">איזו תקופה לראות?</span>' + opsTabs(S.ops.view, 'data-opsview', true) + '</div><div class="ops-grid"><div class="card"><span class="sec-lbl">העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">נשאר לי כסף?</span>' + live('opsDrawn') + '</div>' +
+  return head() + live('opsEmpty') + '<div class="card"><span class="sec-lbl">איזו תקופה לראות?</span>' + opsTabs(S.ops.view, 'data-opsview', true) + '<div class="field" style="margin-top:12px;max-width:260px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto"><option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('') + '</select></div></div></div><div class="card" style="margin-top:14px">' + live('opsAvg') + '</div><div class="ops-grid"><div class="card"><span class="sec-lbl">העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">נשאר לי כסף?</span>' + live('opsDrawn') + '</div>' +
     '<div class="ops-side">' + live('opsSide') + '</div></div><div class="card"><span class="sec-lbl">כל השנה</span>' + live('opsTable') + '<details class="how" data-how="opsGridRO"' + (howOpen.opsGridRO ? ' open' : '') + '><summary>לפתוח את כל ההכנסות וההוצאות, שורה שורה, כמו באקסל</summary><div class="how-b"><p class="explain">הסכומים כמו שמולאו, כלומר כמו בבנק' + (S.biz.type === 'patur' ? '' : ' וכולל מע"מ. הטבלה שלמעלה כבר בלי מע"מ') + '. לעריכה: ' + gotoBtn(11, 'מילוי החודש') + '.</p>' + live('opsGridRO') + '</div></details>' + live('opsPlan') + '</div>' + stepNav();
 };
 VIEWS[13] = function () {
@@ -1128,7 +1128,7 @@ VIEWS[13] = function () {
     '<div class="field"><label for="opsUpto">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto" data-text data-path="ops.upto">' + opts + '</select></div></div>' +
     numField('פחת בשנה', 'ops.depreciation', { unit: '₪', hint: 'רואה החשבון יודע. אפשר להשאיר ריק.' }) + numField('תרומות בשנה', 'ops.donations', { unit: '₪', hint: 'למוסד מוכר. מזכה ב-35%.' }) +
     numField('דמי לידה, ברוטו בשנה', 'ops.otherIncome', { unit: '₪', hint: 'נחשב הכנסה ומשפיע על מס ההכנסה, אבל לא נכנס לרווח של העסק. גם תגמולי מילואים מביטוח לאומי נכנסים לכאן.' }) +
-    numField('מס הכנסה שנוכה מהם', 'ops.otherWithheld', { unit: '₪', hint: 'כתוב באישור של ביטוח לאומי.' }) + '</div>' + pointsPicker() + '</div>' +
+    numField('מס הכנסה שנוכה מהם', 'ops.otherWithheld', { unit: '₪', hint: 'רק מס הכנסה. ביטוח לאומי ובריאות שנוכו מדמי הלידה לא נכנסים לכאן.' }) + '</div>' + pointsPicker() + '</div>' +
     live('opsTaxOut') + '<div class="note soft">החישוב הוא הערכה בלבד ואינו ייעוץ מס. הוא מניח שהעסק הוא מקור ההכנסה היחיד. לחישוב מדויק כדאי לשבת עם רואה חשבון.</div>' + stepNav();
 };
 
@@ -1149,11 +1149,16 @@ var LIVE_OPS = {
     return '<div class="note soft">בבנק יש ' + ils(b.actual, 0) + ', ולפי מה שמולא היו צריכים להיות ' + ils(b.expected, 0) + '. <b>פער של ' + ils(Math.abs(b.gap), 0) + '.</b> בדרך כלל זו הכנסה או הוצאה שלא נרשמה, או שהיתרה ב-1 בינואר חסרה.</div>';
   },
   opsEmpty: function () { return O.k ? '' : '<div class="note soft" style="margin:0 0 12px">עוד לא מולאו הכנסות או הוצאות. ' + gotoBtn(11, 'למילוי החודש') + '</div>'; },
+  opsAvg: function () {
+    var x = opsPeriod(), n = x.n;
+    if (!n) return '<span class="sec-lbl" style="margin:0">ממוצע בחודש</span><p class="explain" style="margin:8px 0 0">אין נתונים בתקופה הזו.</p>';
+    return '<span class="sec-lbl">ממוצע בחודש, ' + periodName() + '</span><div class="tiles">' + tile('הכנסות', ils(x.revenue / n, 0), S.biz.type === 'patur' ? '' : 'בלי מע"מ') + tile('רווח לפני מס', ils(x.preTax / n, 0), 'זה המספר להשוות לרואה החשבון', 'main') + tile('רווח נקי', ils(x.net / n, 0), 'אחרי מס, הערכה') + tile('נשאר בעסק', ils(x.left / n, 0), 'אחרי מה שלקחת') + '</div>';
+  },
   opsLadder: function () {
     var x = opsPeriod(), row = function (l, v) { return lg(l, ils(v, 0)); };
     var res = function (l, v, key, title, sub) { return '<div class="lg sum"><span>' + l + info(key, title) + (sub ? '<small>' + sub + '</small>' : '') + '</span><b>' + ils(v, 0) + '</b></div>'; };
     return '<div class="ledger">' + row('הכנסות' + (S.biz.type === 'patur' ? '' : ', בלי מע"מ'), x.revenue) + row('פחות עלויות ישירות', x.direct) + res('רווח גולמי', x.gross, 'gross', 'רווח גולמי', 'כמה נשאר מהמכירה עצמה') +
-      row('פחות שיווק ומכירה', x.marketing) + row('פחות הנהלה וכלליות', x.admin) + res('רווח תפעולי', x.operating, 'operating', 'רווח תפעולי', 'כמה מרוויחה הפעילות') + row('פחות עמלות וריבית', x.finance) +
+      row('פחות שיווק ומכירה', x.marketing) + row('פחות הנהלה וכלליות', x.admin) + res('רווח תפעולי', x.operating, 'operating', 'רווח תפעולי', 'כמה מרוויחה הפעילות') + row('פחות עמלות וריבית', x.finance) + res('רווח לפני מס', x.preTax, 'preTax', 'רווח לפני מס', 'לפני פנסיה, קרן ומשכורת') +
       '<div class="lg tax-row"><span>פחות מס הכנסה, ביטוח לאומי ובריאות' + info('tax', 'המס הזה') + '<small>הערכה</small></span><b>' + ils(x.tax, 0) + '</b></div>' + res('רווח נקי', x.net, 'net', 'רווח נקי', 'כמה באמת הרווחת אחרי הכול') + '</div>';
   },
   opsDrawn: function () {
@@ -1170,9 +1175,13 @@ var LIVE_OPS = {
     return c;
   },
   opsTable: function () {
-    var cols = [['הכנסות', 'revenue'], ['רווח גולמי', 'gross'], ['רווח תפעולי', 'operating'], ['מס, הערכה', 'tax'], ['רווח נקי', 'net'], ['לקחת מהרווח', 'drawn'], ['נשאר בעסק', 'left']];
-    return '<div class="tbl-wrap" tabindex="0" role="region" aria-label="רווח והפסד לפי חודשים"><table class="ptable"><thead><tr><th>שורה</th>' + MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('') + '<th>סך הכל</th></tr></thead><tbody>' + cols.map(function (c) {
-      return '<tr><td class="nm">' + c[0] + '</td>' + O.months.map(function (m) { return '<td>' + (m.filled ? money(m[c[1]]) : '') + '</td>'; }).join('') + '<td><b>' + (O.k ? money(O.total[c[1]]) : '') + '</b></td></tr>';
+    var cols = [['הכנסות', 'revenue'], ['רווח גולמי', 'gross'], ['רווח תפעולי', 'operating'], ['רווח לפני מס', 'preTax'], ['מס, הערכה', 'tax'], ['רווח נקי', 'net'], ['לקחת מהרווח', 'drawn'], ['נשאר בעסק', 'left']];
+    var byQ = S.ops.tableBy === 'quarters', qs = [0, 1, 2, 3].map(quarterOf);
+    var heads = byQ ? qs.map(function (q, i) { return '<th>רבעון ' + (i + 1) + '</th>'; }).join('') : MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('');
+    return '<div class="seg" role="group" aria-label="איך להציג את הטבלה" style="margin-bottom:10px;max-width:280px"><button type="button" data-tableby="months" aria-pressed="' + !byQ + '">לפי חודשים</button><button type="button" data-tableby="quarters" aria-pressed="' + byQ + '">לפי רבעונים</button></div>' +
+      '<div class="tbl-wrap" tabindex="0" role="region" aria-label="רווח והפסד לאורך השנה"><table class="ptable"><thead><tr><th>שורה</th>' + heads + '<th>סך הכל</th><th>ממוצע בחודש</th></tr></thead><tbody>' + cols.map(function (c) {
+      var cells = byQ ? qs.map(function (q) { return '<td>' + (q.n ? money(q[c[1]]) : '') + '</td>'; }).join('') : O.months.map(function (m) { return '<td>' + (m.filled ? money(m[c[1]]) : '') + '</td>'; }).join('');
+      return '<tr><td class="nm">' + c[0] + '</td>' + cells + '<td><b>' + (O.k ? money(O.total[c[1]]) : '') + '</b></td><td><b>' + (O.k ? money(O.total[c[1]] / O.k) : '') + '</b></td></tr>';
     }).join('') + '</tbody></table></div>';
   },
   opsPlan: function () {
@@ -1226,10 +1235,23 @@ var LIVE_OPS = {
   }
 };
 Object.keys(LIVE_OPS).forEach(function (k) { LIVE[k] = LIVE_OPS[k]; });
+var PERIOD_KEYS = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'drawn', 'left'];
+function quarterOf(q) {
+  var out = { n: 0 }; PERIOD_KEYS.forEach(function (k) { out[k] = 0; });
+  O.months.slice(q * 3, q * 3 + 3).forEach(function (m) { if (!m.filled) return; out.n++; PERIOD_KEYS.forEach(function (k) { out[k] += m[k]; }); });
+  return out;
+}
 function opsPeriod() {
-  var v = S.ops.view;
-  if (v === 'year' || v === '' || v == null) return O.total;
-  return O.months[+v];
+  var v = String(S.ops.view);
+  if (v === 'year' || v === '' || v === 'null') return Object.assign({ n: O.k }, O.total);
+  if (v.charAt(0) === 'q') return quarterOf(+v.slice(1));
+  return Object.assign({ n: O.months[+v].filled ? 1 : 0 }, O.months[+v]);
+}
+function periodName() {
+  var v = String(S.ops.view);
+  if (v === 'year' || v === '' || v === 'null') return O.k ? 'ינואר עד ' + MONTHS[O.k - 1] : 'השנה';
+  if (v.charAt(0) === 'q') return 'רבעון ' + (+v.slice(1) + 1);
+  return MONTHS[+v];
 }
 function copyPrev() {
   var e = S.ops.edit; if (!e) return;
@@ -1433,7 +1455,6 @@ document.addEventListener('input', function (e) {
     var path = t.getAttribute('data-path');
     setPath(path, t.hasAttribute('data-num') ? t.value.replace(/,/g, '') : t.value);
     document.querySelectorAll('[data-path="' + path + '"]').forEach(function (x) { if (x !== t) x.value = t.value; });
-    if (/^ops\..*\.m\.\d+$/.test(path)) { var wrap = t.closest('.ops-rowwrap'), fl = wrap && wrap.querySelector('.row-flags'); if (fl) fl.hidden = false; }
     if (t.hasAttribute('data-month')) { var b = path.replace(/\.m\.\d+$/, ''), q = document.querySelector('[data-quick="' + b + '"]'), a = getPath(b + '.m'), same = a.every(function (x) { return String(x) === String(a[0]); }); if (q) { q.value = same ? grp(a[0]) : ''; q.placeholder = same ? '' : 'משתנה'; } }
     changed();
   }
@@ -1461,6 +1482,7 @@ document.addEventListener('click', function (e) {
   if (d.type) { S.biz.type = d.type; render(); persist(); return; }
   if (d.add) { addRow(d.add); return; }
   if (d.opsedit != null) { S.ops.edit = +d.opsedit; render(); persist(); return; }
+  if (d.tableby) { S.ops.tableBy = d.tableby; render(); persist(); return; }
   if (d.opsview != null) { S.ops.view = d.opsview; render(); persist(); return; }
   if (d.addops) { var fresh = opsRowNew(''); if (d.addops === 'private') { fresh.group = 'general'; fresh.rec = 100; fresh.vat = false; S.ops.private.push(fresh); } else S.ops.rows[d.addops].push(fresh); render(); persist(); return; }
   if (d.del) { var arr = getPath(d.del); arr.splice(+d.i, 1); render(); persist(); return; }

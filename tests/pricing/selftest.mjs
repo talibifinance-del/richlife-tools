@@ -593,6 +593,18 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.evaluate(() => { const S = window.__pricing.S; S.ops.rows.admin[0].m = S.ops.rows.admin[0].m.map(v => v === '' ? '' : 5000); S.ops.draw.salary = S.ops.draw.salary.map(v => v === '' ? '' : 12000); S.ops.notes[1] = 'חופשת לידה'; });
   await go12(p);
   ok('S the month note reaches the chart', (await p.locator('[data-live="homeBars"]').innerHTML()).includes('חופשת לידה'));
+  // hover and tap give the numbers
+  await p.locator('[data-live="homeBars"] .h-hit').first().hover();
+  const tip1 = await p.locator('#hTip').innerText();
+  ok('S hovering a month shows its numbers', tip1.includes('ינואר') && tip1.includes('הכנסות') && tip1.includes('רווח לפני מס'), tip1);
+  await p.locator('[data-live="homeBalance"] .h-hit').first().hover();
+  ok('S hovering the balance shows it', (await p.locator('#hTip').innerText()).includes('יתרה בסוף החודש'));
+  await p.locator('[data-live="homeShare"] .h-bar .b').hover();
+  ok('S hovering the share bar shows shekels', (await p.locator('#hTip').innerText()).includes('בסך הכל'));
+  await p.locator('h1').first().hover();
+  ok('S the tip goes away', await p.locator('#hTip').isHidden());
+  const eq = await p.locator('[data-live="homeShare"]').innerText();
+  ok('S the sum is written out', eq.includes('נכנסו') && eq.includes('לקחת לעצמך') && eq.includes('כלומר'), eq);
   // a month view
   await p.click('[data-opsperiod="m"]'); await p.click('[data-opsview="0"]');
   ok('S a month speaks about that month', (await hero()).includes('בינואר'), await hero());

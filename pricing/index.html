@@ -304,14 +304,8 @@ a{color:var(--pine-deep)}
 .h-bar .c{color:#2b1c03}
 .h-legend i.d{background:#c7d6ca}
 .h-legend i.f{background:repeating-linear-gradient(45deg,#5f7d6a 0 3px,#dfe8e1 3px 7px)}
-.h-legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin:10px 0 22px;font-size:14.5px;font-weight:600;color:var(--ink-soft)}
+.h-legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin:10px 0 0;font-size:14.5px;font-weight:600;color:var(--ink-soft)}
 .h-legend i{display:inline-block;width:13px;height:13px;border-radius:4px;margin-inline-end:7px;vertical-align:-1px}
-.h-take{position:relative;margin-top:30px}
-.h-track{position:relative;height:42px}
-.h-fill{height:100%;border-radius:11px;background:repeating-linear-gradient(135deg,#d9a24a 0 9px,#e5b76a 9px 18px);display:flex;align-items:center;justify-content:center;color:#3a2706;font-weight:900;font-size:16px;white-space:nowrap}
-.h-fill.ok{background:rgba(var(--pine-rgb),.28);color:var(--pine-darker)}
-.h-mark{position:absolute;top:-8px;bottom:-8px;width:3px;background:var(--pine-darker)}
-.h-marklbl{position:absolute;top:-30px;transform:translateX(50%);font-size:13.5px;font-weight:800;color:var(--pine-darker);white-space:nowrap}
 .h-two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;margin-top:14px;align-items:stretch}
 .h-two>.card+.card{margin-top:0}
 .h-svg{display:block;width:100%;height:auto}
@@ -333,6 +327,21 @@ a{color:var(--pine-deep)}
 .explain{font-size:14.5px}
 .ti-b{font-size:14px}
 @media (max-width:820px){.h-tiles{grid-template-columns:minmax(0,1fr)}.h-two{grid-template-columns:minmax(0,1fr)}.h-cmp{grid-template-columns:minmax(0,1fr)}}
+#hTip{position:fixed;z-index:2147481000;background:var(--pine-darker);color:#fff;border-radius:11px;padding:9px 13px;font-size:14.5px;line-height:1.5;font-weight:500;pointer-events:none;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.25);font-variant-numeric:tabular-nums}
+#hTip b{display:block;font-weight:800;margin-bottom:1px}
+[data-tip]{cursor:default}
+.h-hit{fill:transparent;cursor:pointer}
+.h-hit:hover{fill:rgba(95,125,106,.12)}
+.h-eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.h-chip{background:var(--sage-tint);border-radius:13px;padding:9px 16px;min-width:92px;text-align:center}
+.h-chip b{display:block;font-size:clamp(20px,2.2vw,25px);font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums;line-height:1.2}
+.h-chip span{font-size:14px;font-weight:600;color:var(--ink-soft)}
+.h-chip.strong{background:rgba(var(--pine-rgb),.2)}
+.h-chip.warn{background:rgba(183,121,31,.16)}
+.h-chip.warn b{color:var(--amber-deep)}
+.h-chip.good{background:rgba(var(--pine-rgb),.2)}
+.h-op{font-size:24px;font-weight:800;color:var(--ink-soft);padding-inline:2px}
+.h-say{margin-top:14px;font-size:16.5px;line-height:1.55;font-weight:700;color:var(--pine-darker)}
 .month-tabs{display:flex;flex-wrap:wrap;gap:6px}
 .month-tabs button{font-family:var(--font);border:1.5px solid var(--line);background:#fff;color:var(--pine-deep);font-weight:800;font-size:13px;border-radius:100px;padding:6px 12px;cursor:pointer;min-height:32px}
 .month-tabs button.has{background:var(--sage-tint)}
@@ -1239,18 +1248,19 @@ function barsSvg() {
   var max = Math.max(1000, Math.max.apply(null, ms.map(function (m) { return Math.max(m.revenue, m.revenue - m.preTax); })));
   var y = function (v) { return H - b - (H - b - t) * Math.max(0, v) / max; }, step = max > 40000 ? 20000 : (max > 15000 ? 10000 : 5000), out = '', v;
   for (v = step; v <= max; v += step) out += '<line x1="0" x2="' + W + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#e6ece7"/><text x="' + (W - 2) + '" y="' + (y(v) - 5) + '" text-anchor="start" font-size="13" font-weight="600" fill="#6b7a71">' + (v / 1000) + ' אלף</text>';
-  var fut = futureFrom(), desc = [];
+  var fut = futureFrom(), desc = [], hits = '';
   ms.forEach(function (m, i) {
     var cx = W - pad - gw * (i + 0.5), cost = m.revenue - m.preTax, on = m.i < O.auto || m.revenue > 0 || cost > 0;
     if (on) {
       out += '<rect x="' + cx + '" y="' + y(m.revenue) + '" width="' + bw + '" height="' + Math.max(0, y(0) - y(m.revenue)) + '" rx="4" fill="' + (i >= fut ? 'url(#hatch)' : '#5f7d6a') + '"/>';
       out += '<rect x="' + (cx - bw - 1) + '" y="' + y(cost) + '" width="' + bw + '" height="' + Math.max(0, y(0) - y(cost)) + '" rx="4" fill="#c7d6ca"/>';
       desc.push(MONTHS[i] + ': הכנסות ' + money(m.revenue) + ', הוצאות ' + money(cost));
+      hits += '<rect class="h-hit" x="' + (cx - bw - 5) + '" y="' + t + '" width="' + (bw * 2 + 10) + '" height="' + (H - b - t) + '" rx="6" data-tip="' + esc(MONTHS[i] + (noteOf(i) ? ', ' + noteOf(i) : '') + (i >= fut ? ', עוד לא הסתיים' : '') + '|הכנסות: ' + ils(m.revenue, 0) + '|הוצאות העסק: ' + ils(cost, 0) + '|רווח לפני מס: ' + ils(m.preTax, 0)) + '"></rect>';
     }
     out += '<text x="' + cx + '" y="' + (H - 10) + '" text-anchor="middle" font-size="14" font-weight="600" fill="#51625a">' + MONTHS[i].slice(0, 3) + '</text>';
     if (noteOf(i)) out += '<text x="' + cx + '" y="' + (y(Math.max(m.revenue, cost)) - 22) + '" text-anchor="middle" font-size="13.5" font-weight="800" fill="#7d5310">' + esc(noteOf(i)) + '</text><line x1="' + cx + '" x2="' + cx + '" y1="' + (y(Math.max(m.revenue, cost)) - 18) + '" y2="' + (y(Math.max(m.revenue, cost)) - 4) + '" stroke="#b7791f" stroke-width="1.5"/>';
   });
-  return '<svg class="h-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(desc.join('. ')) + '"><defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#dfe8e1"/><rect width="3" height="7" fill="#5f7d6a"/></pattern></defs>' + out + '</svg>';
+  return '<svg class="h-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(desc.join('. ')) + '"><defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#dfe8e1"/><rect width="3" height="7" fill="#5f7d6a"/></pattern></defs>' + out + hits + '</svg>';
 }
 function lineSvg() {
   var W = 490, H = 320, b = 46, t = 30, last = O.k, vals = [], i;
@@ -1271,6 +1281,11 @@ function lineSvg() {
   out += lab(maxI, -12);
   if (minI !== maxI) out += lab(minI, vals[minI] < 0 ? 20 : -12);
   var lastI = vals.length - 1; if (lastI !== maxI && lastI !== minI) out += lab(lastI, vals[lastI] < 0 ? 22 : -12);
+  var gap = (W - 70) / 11;
+  vals.forEach(function (v, n) {
+    var m = O.months[n];
+    out += '<rect class="h-hit" x="' + (x(n) - gap / 2) + '" y="' + t + '" width="' + gap + '" height="' + (H - b - t) + '" rx="6" data-tip="' + esc(MONTHS[n] + (noteOf(n) ? ', ' + noteOf(n) : '') + '|יתרה בסוף החודש: ' + ils(v, 0) + '|' + (m.cashNet >= 0 ? 'החשבון גדל ב-' + ils(m.cashNet, 0) : 'החשבון ירד ב-' + ils(-m.cashNet, 0))) + '"></rect>';
+  });
   return '<svg class="h-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc('היתרה בסוף כל חודש: ' + vals.map(function (v, n) { return MONTHS[n] + ' ' + money(v); }).join(', ')) + '">' + out + '</svg>';
 }
 var LIVE_OPS = {
@@ -1308,17 +1323,21 @@ var LIVE_OPS = {
     if (!x.n || x.revenue <= 0) return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">עוד אין הכנסות בתקופה הזו.</p>';
     var costs = x.revenue - x.preTax, c = Math.round(costs / x.revenue * 100), t = Math.round(x.tax / x.revenue * 100), n = 100 - c - t, took = Math.round(x.drawn / x.revenue * 100);
     if (n <= 0) return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">ההוצאות והמס גדולים מההכנסות בתקופה הזו: על כל 100 ₪ שנכנסו, יצאו ' + (c + t) + ' ₪.</p>';
-    var scale = Math.max(100, took), w = function (v) { return (v / scale * 100).toFixed(1) + '%'; };
-    var seg = function (v, cls, txt) { return '<div class="' + cls + '" style="width:' + w(v) + '">' + (v >= 9 ? txt : '') + '</div>'; };
-    return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">כך נראית התקופה הזו' + (O.patur ? '' : ', בלי מע"מ') + '.</p>' +
-      '<div class="h-bar" role="img" aria-label="מכל 100 שקלים: ' + n + ' נשארו, ' + c + ' הוצאות, ' + t + ' מס">' + seg(n, 'a', n + ' ₪ נשארו') + seg(c, 'b', c + ' ₪ הוצאות') + seg(t, 'c', t + ' ₪ מס') + '</div>' +
-      '<div class="h-legend"><span><i class="a"></i>נשאר לך, ' + n + ' ₪</span><span><i class="b"></i>הוצאות העסק, ' + c + ' ₪</span><span><i class="c"></i>מס, ' + t + ' ₪</span></div>' +
-      '<div class="h-take"><div class="h-track"><div class="h-fill' + (took > n ? '' : ' ok') + '" style="width:' + w(took) + '" role="img" aria-label="לקחת ' + took + ' שקלים מתוך 100">' + (took >= 12 ? 'לקחת ' + took + ' ₪' : '') + '</div><div class="h-mark" style="inset-inline-start:' + w(n) + '"></div></div><div class="h-marklbl" style="inset-inline-start:' + w(n) + '">נשארו ' + n + ' ₪</div></div>' +
-      '<p class="h-sub" style="margin:12px 0 0">' + (took > n ? 'הפס עובר את הקו: לקחת יותר ממה שהעסק הרוויח, וההפרש יורד מהחשבון.' : 'הפס לפני הקו: מה שלקחת מכוסה ברווח.') + '</p>';
+    var seg = function (v, cls, txt, tip) { return '<div class="' + cls + '" style="width:' + v + '%" data-tip="' + esc(tip) + '">' + (v >= 9 ? txt : '') + '</div>'; };
+    var chip = function (v, l, cls, tip) { return '<div class="h-chip ' + (cls || '') + '" data-tip="' + esc(tip) + '"><b>' + v + ' ₪</b><span>' + l + '</span></div>'; };
+    var op = function (o) { return '<span class="h-op" aria-hidden="true">' + o + '</span>'; };
+    var diff = n - took, more = diff < 0;
+    var left = more ? chip(-diff, 'מעבר למה שנשאר', 'warn', 'יורד מהחשבון|בסך הכל ' + ils(-x.left, 0)) : chip(diff, 'נשארו בעסק', 'good', 'נשארו מהרווח|בסך הכל ' + ils(x.left, 0));
+    var keptChip = chip(n, 'נשארו לך', 'strong', 'הרווח אחרי מס|בסך הכל ' + ils(x.net, 0)), tookChip = chip(took, 'לקחת לעצמך', '', 'משכורת, פנסיה, קרן, הלוואה ותשלומים ישנים|בסך הכל ' + ils(x.drawn, 0));
+    return '<h3 class="h-t">מכל 100 ₪ שהעסק הכניס</h3><p class="h-sub">תרגיל פשוט: מה קרה לכל 100 ₪' + (O.patur ? '' : ' בלי מע"מ') + '. ' + (x.n > 1 ? 'מעבר עכבר מראה את הסכום האמיתי.' : '') + '</p>' +
+      '<div class="h-bar" role="img" aria-label="מכל 100 שקלים: ' + n + ' נשארו, ' + c + ' הוצאות, ' + t + ' מס">' + seg(n, 'a', n + ' ₪ נשארו', 'נשארו אחרי הוצאות ומס|' + n + ' ₪ מכל 100|בסך הכל ' + ils(x.net, 0)) + seg(c, 'b', c + ' ₪ הוצאות', 'הוצאות העסק|' + c + ' ₪ מכל 100|בסך הכל ' + ils(costs, 0)) + seg(t, 'c', t + ' ₪ מס', 'מס, הערכה|' + t + ' ₪ מכל 100|בסך הכל ' + ils(x.tax, 0)) + '</div>' +
+      '<div class="h-eq">' + chip(100, 'נכנסו', '', 'הכנסות|בסך הכל ' + ils(x.revenue, 0)) + op('−') + chip(c, 'הוצאות', '', 'הוצאות העסק|בסך הכל ' + ils(costs, 0)) + op('−') + chip(t, 'מס', '', 'מס, הערכה|בסך הכל ' + ils(x.tax, 0)) + op('=') + chip(n, 'נשארו לך', 'strong', 'הרווח אחרי מס|בסך הכל ' + ils(x.net, 0)) + '</div>' +
+      '<div class="h-eq">' + (more ? tookChip + op('−') + keptChip : keptChip + op('−') + tookChip) + op('=') + left + '</div>' +
+      '<p class="h-say">' + (more ? 'כלומר: על כל 100 ₪ שנכנסו נשארו לך ' + n + ' ₪, אבל לקחת ' + took + ' ₪. ' + (-diff) + ' ₪ מכל 100 יורדים מהחשבון.' : 'כלומר: על כל 100 ₪ שנכנסו נשארו לך ' + n + ' ₪, ולקחת ' + took + ' ₪. ' + diff + ' ₪ מכל 100 נשארים בעסק.') + '</p>';
   },
   homeBars: function () {
     if (!O.k) return '';
-    return '<h3 class="h-t">חודש מול חודש, ' + opsYear() + '</h3><p class="h-sub">עמודה כהה גבוהה מהבהירה? באותו חודש נכנס יותר ממה שיצא על הוצאות העסק.</p>' + barsSvg() + '<div class="h-legend" style="margin-bottom:0"><span><i class="a"></i>הכנסות</span><span><i class="d"></i>הוצאות העסק</span>' + (futureFrom() < 12 ? '<span><i class="f"></i>חודש שעוד לא הסתיים</span>' : '') + '</div>';
+    return '<h3 class="h-t">חודש מול חודש, ' + opsYear() + '</h3><p class="h-sub">עמודה כהה גבוהה מהבהירה? באותו חודש נכנס יותר ממה שיצא על הוצאות העסק. מעבר עכבר או לחיצה על חודש מראים את הסכומים.</p>' + barsSvg() + '<div class="h-legend" style="margin-bottom:0"><span><i class="a"></i>הכנסות</span><span><i class="d"></i>הוצאות העסק</span>' + (futureFrom() < 12 ? '<span><i class="f"></i>חודש שעוד לא הסתיים</span>' : '') + '</div>';
   },
   homeBalance: function () {
     if (!O.k) return '';
@@ -1674,6 +1693,23 @@ function buildPrint() {
   }
   $('printRoot').innerHTML = p1 + p2 + p3 + p4;
 }
+
+/* ---------- data on hover and on tap ---------- */
+var tipEl = null;
+function hideTip() { if (tipEl) tipEl.hidden = true; }
+function showTip(el, e) {
+  if (!tipEl) { tipEl = document.createElement('div'); tipEl.id = 'hTip'; tipEl.setAttribute('aria-hidden', 'true'); document.body.appendChild(tipEl); }
+  var lines = el.getAttribute('data-tip').split('|');
+  tipEl.innerHTML = lines.map(function (l, i) { return i ? '<div>' + esc(l) + '</div>' : '<b>' + esc(l) + '</b>'; }).join('');
+  tipEl.hidden = false;
+  var r = tipEl.getBoundingClientRect(), px = e.clientX, py = e.clientY;
+  var left = Math.max(8, Math.min(innerWidth - r.width - 8, px - r.width / 2)), top = py - r.height - 14;
+  if (top < 8) top = py + 18;
+  tipEl.style.left = left + 'px'; tipEl.style.top = top + 'px';
+}
+document.addEventListener('mousemove', function (e) { var t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t, e); else hideTip(); });
+document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('[data-tip]'); if (t) showTip(t, e); else if (!e.target.closest('button,a,input,select,summary')) hideTip(); });
+window.addEventListener('scroll', hideTip, { passive: true });
 
 /* ---------- events ---------- */
 document.addEventListener('input', function (e) {

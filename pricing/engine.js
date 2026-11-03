@@ -384,9 +384,10 @@
       x.tax = x.preTax * taxRate;
       x.net = x.preTax - x.tax;
       x.left = x.net - x.drawn;
+      x.cashNet = x.cashIn - x.cashOut;
       x.filled = x.i < k;
     });
-    var keys = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'prior', 'drawn', 'left', 'vatOut', 'vatIn', 'paidIncome', 'paidNi', 'paidVat', 'cashIn', 'cashOut'];
+    var keys = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'prior', 'drawn', 'left', 'vatOut', 'vatIn', 'paidIncome', 'paidNi', 'paidVat', 'cashIn', 'cashOut', 'cashNet'];
     var total = {}; keys.forEach(function (key) { total[key] = sumTo(key); });
 
     var shareOfYear = k / 12;

@@ -534,6 +534,9 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   const qt = await p.locator('[data-live="opsTable"]').innerText();
   ok('Q table by quarters', qt.includes('רבעון 4') && !qt.includes('אוגוסט') && qt.includes('ממוצע בחודש'), qt.slice(0, 200));
   await axe(p, 'Q12 quarters'); await clean(p, 'Q12 quarters');
+  const cash = await p.locator('[data-live="opsCash"]').innerText();
+  ok('Q cash section', cash.includes('נכנס לחשבון') && cash.includes('יצא מהחשבון') && cash.includes('תזרים'), cash);
+  ok('Q table has the cash rows', qt.includes('נכנס לחשבון') && qt.includes('תזרים'));
   await p.click('[data-tableby="months"]');
   const l = await p.locator('[data-live="opsLadder"]').innerText();
   ok('Q demo ladder, three months', l.includes('120,000') && l.includes('108,000') && l.includes('75,000'), l);

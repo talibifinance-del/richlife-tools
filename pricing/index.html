@@ -470,7 +470,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=4"></script>
+<script src="engine.js?v=5"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -494,7 +494,7 @@ var STEPS = [
   { t: 'יעדים ותוכנית שנתית', why: 'המחזור מתורגם לכמה מכירות צריך מכל מוצר, ואז פורסים אותן על השנה לפי מועדים, השקות ומבצעים.' },
   { t: 'התמונה המלאה' },
   { t: 'מילוי החודש', why: 'פעם בחודש ממלאים מה נכנס ומה יצא, כמו שזה מופיע בבנק. כל השאר מחושב מזה. הנתונים נשמרים, וכל חודש ממשיכים מאיפה שעצרת.' },
-  { t: 'רווח ותזרים', why: 'קוראים מלמעלה למטה: האם העסק מרוויח, ואם נשאר בו כסף אחרי מה שלקחת לעצמך.' },
+  { t: 'רווח ותזרים', why: 'שתי שאלות שונות על אותם נתונים: כמה העסק הרוויח, וכמה כסף באמת נכנס ויצא מהחשבון.' },
   { t: 'הערכת מס', why: 'כמה מס צפוי לכל השנה לפי מה שמילאת, וכמה היה צריך לשלם עד עכשיו.' }
 ];
 
@@ -982,7 +982,7 @@ var INFO = {
   operating: 'הרווח הגולמי פחות שיווק והוצאות שוטפות. כך רואים אם הפעילות עצמה מרוויחה, לפני ריבית ומס.',
   tax: 'הערכה של מס הכנסה, ביטוח לאומי ובריאות לפי כל מה שמילאת, גם אם המקדמות ששילמת בפועל שונות. הפירוט בשלב הערכת המס.',
   net: 'מה שנשאר אחרי כל ההוצאות והמסים. בעוסק פטור או מורשה המשכורת שלך יוצאת מכאן, והיא לא הוצאה של העסק.',
-  left: 'הרווח הנקי פחות מה שלקחת ממנו: משכורת, פנסיה וקרן, חיסכון והחזר הלוואה. במינוס? לקחת יותר ממה שהעסק הרוויח.'
+  left: 'הרווח הנקי פחות מה שלקחת ממנו: משכורת, פנסיה וקרן, חיסכון, החזר הלוואה ותשלומים על חשבונית ישנה. במינוס? לקחת יותר ממה שהעסק הרוויח. זו לא היתרה בבנק: אותה רואים בתזרים.'
 };
 function info(key, title) { return ' <details class="ti" data-how="i_' + key + '"' + (howOpen['i_' + key] ? ' open' : '') + '><summary aria-label="מה זה ' + title + '?">i</summary><div class="ti-b">' + INFO[key] + '</div></details>'; }
 function opsYear() { return (S.tax.tables || E.TABLES_2026).year; }
@@ -1116,13 +1116,13 @@ VIEWS[11] = function () {
     opsSection('עמלות וריבית', 'finance', 'בהלוואה נכנסת לכאן רק הריבית. החזר הקרן נמצא למטה.', 'הוספת שורה')) +
     '<div class="card">' + settingsTable() + '</div>' +
     (year ? '' : '<div class="card" style="border:2px dashed var(--pine)"><span class="sec-lbl">הוצאות פרטיות שמוכרות במס</span><p class="explain">הכסף יצא מהחשבון הפרטי ולא מהעסק, ולכן זה לא נכנס לרווח והפסד. זה רק מוריד את המס. האחוזים הם ברירת מחדל, ומה שרואה החשבון מכיר קובע.</p>' + '<div class="rows">' + privRows + '</div><button type="button" class="add-btn" data-addops="private">+ הוספת הוצאה פרטית</button></div>' +
-    '<div class="card"><span class="sec-lbl">מה לקחת מהרווח</span><p class="explain">לא הוצאות של העסק. זה מה שעשית עם הרווח הנקי.</p><div class="fields">' + drawRow('משכורת לעצמי', 'salary') + drawRow('פנסיה', 'pension') + drawRow('קרן השתלמות', 'fund') + drawRow('חיסכון והשקעות', 'savings') + drawRow('החזר הלוואה, בלי הריבית', 'loan') + drawRow('תשלומים על חשבונית משנה קודמת', 'prior', 'קנית ב-' + (opsYear() - 1) + ' וקיבלת חשבונית על הכל, ועכשיו יורד באשראי בתשלומים? רושמים כאן. הכסף יוצא השנה, אבל ההוצאה והמע"מ שייכים לשנה של החשבונית.') + '</div></div>' +
+    '<div class="card"><span class="sec-lbl">מה לקחת מהרווח</span><p class="explain">לא הוצאות של העסק. זה מה שעשית עם הרווח הנקי.</p><div class="fields">' + drawRow('משכורת לעצמי', 'salary') + drawRow('פנסיה', 'pension') + drawRow('קרן השתלמות', 'fund') + drawRow('חיסכון והשקעות', 'savings') + drawRow('החזר הלוואה, בלי הריבית', 'loan') + drawRow('תשלומים על חשבונית משנה קודמת', 'prior', 'קנית ב-' + (opsYear() - 1) + ' וקיבלת חשבונית על הכל, ועכשיו יורד באשראי בתשלומים? רושמים כאן. הכסף נספר בתזרים, אבל לא ברווח והפסד של השנה.') + '</div></div>' +
     '<div class="card"><span class="sec-lbl">מה שולם לרשויות</span><p class="explain">התשלומים בפועל. בעזרתם הכלי משווה להערכת המס ובודק מול הבנק.</p><div class="fields">' + paidRow('מקדמות מס הכנסה', 'income') + paidRow('ביטוח לאומי ובריאות', 'ni') + (patur ? '' : paidRow('תשלום מע"מ', 'vat')) + '</div></div>') +
     '<div class="card"><span class="sec-lbl">בדיקה מול הבנק</span><div class="fields">' + signedInput('bankOpen', 'ops.bank.opening', 'יתרה ב-1 בינואר') + (year ? (O.k ? signedInput('bankEnd', 'ops.bank.end.' + (O.k - 1), 'יתרה בסוף ' + MONTHS[O.k - 1]) : '') : signedInput('bankEnd', 'ops.bank.end.' + e, 'יתרה בסוף ' + MONTHS[e])) + '</div>' + live('opsBank') + '</div>' + stepNav();
 };
 VIEWS[12] = function () {
-  return head() + live('opsEmpty') + '<div class="card"><span class="sec-lbl">איזו תקופה לראות?</span>' + opsTabs(S.ops.view, 'data-opsview', true) + '<div class="field" style="margin-top:12px;max-width:260px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto"><option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('') + '</select></div></div></div><div class="card" style="margin-top:14px">' + live('opsAvg') + '</div><div class="ops-grid"><div class="card"><span class="sec-lbl">העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">נשאר לי כסף?</span>' + live('opsDrawn') + '</div>' +
-    '<div class="ops-side">' + live('opsSide') + '</div></div><div class="card"><span class="sec-lbl">כל השנה</span>' + live('opsTable') + '<details class="how" data-how="opsGridRO"' + (howOpen.opsGridRO ? ' open' : '') + '><summary>לפתוח את כל ההכנסות וההוצאות, שורה שורה, כמו באקסל</summary><div class="how-b"><p class="explain">הסכומים כמו שמולאו, כלומר כמו בבנק' + (S.biz.type === 'patur' ? '' : ' וכולל מע"מ. הטבלה שלמעלה כבר בלי מע"מ') + '. לעריכה: ' + gotoBtn(11, 'מילוי החודש') + '.</p>' + live('opsGridRO') + '</div></details>' + live('opsPlan') + '</div>' + stepNav();
+  return head() + live('opsEmpty') + '<div class="card"><span class="sec-lbl">איזו תקופה לראות?</span>' + opsTabs(S.ops.view, 'data-opsview', true) + '<div class="field" style="margin-top:12px;max-width:260px"><label for="opsUpto2">מחשבים עד חודש</label><div class="input-shell"><select id="opsUpto2" data-text data-path="ops.upto"><option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('') + '</select></div></div></div><div class="card" style="margin-top:14px">' + live('opsAvg') + '</div><div class="ops-grid"><div class="card"><span class="sec-lbl">רווח והפסד: העסק מרוויח?</span>' + live('opsLadder') + '<span class="sec-lbl" style="margin-top:16px">מה לקחת מהרווח</span>' + live('opsDrawn') + '</div>' +
+    '<div class="ops-side">' + live('opsSide') + '</div></div><div class="card"><span class="sec-lbl">תזרים: מה באמת קרה בחשבון</span><p class="explain">כאן נספר כל שקל שנכנס או יצא: מע"מ, משכורת, תשלומים על חשבונית ישנה, הכול. רווח והפסד עונה "כמה הרווחתי". תזרים עונה "כמה כסף נכנס ויצא".</p>' + live('opsCash') + '</div><div class="card"><span class="sec-lbl">כל השנה</span>' + live('opsTable') + '<details class="how" data-how="opsGridRO"' + (howOpen.opsGridRO ? ' open' : '') + '><summary>לפתוח את כל ההכנסות וההוצאות, שורה שורה, כמו באקסל</summary><div class="how-b"><p class="explain">הסכומים כמו שמולאו, כלומר כמו בבנק' + (S.biz.type === 'patur' ? '' : ' וכולל מע"מ. הטבלה שלמעלה כבר בלי מע"מ') + '. לעריכה: ' + gotoBtn(11, 'מילוי החודש') + '.</p>' + live('opsGridRO') + '</div></details>' + live('opsPlan') + '</div>' + stepNav();
 };
 VIEWS[13] = function () {
   var opts = '<option value="">החודש האחרון שמולא</option>' + MONTHS.map(function (m, i) { return '<option value="' + (i + 1) + '"' + (String(S.ops.upto) === String(i + 1) ? ' selected' : '') + '>' + m + '</option>'; }).join('');
@@ -1151,10 +1151,17 @@ var LIVE_OPS = {
     return '<div class="note soft">בבנק יש ' + ils(b.actual, 0) + ', ולפי מה שמולא היו צריכים להיות ' + ils(b.expected, 0) + '. <b>פער של ' + ils(Math.abs(b.gap), 0) + '.</b> בדרך כלל זו הכנסה או הוצאה שלא נרשמה, או שהיתרה ב-1 בינואר חסרה.</div>';
   },
   opsEmpty: function () { return O.k ? '' : '<div class="note soft" style="margin:0 0 12px">עוד לא מולאו הכנסות או הוצאות. ' + gotoBtn(11, 'למילוי החודש') + '</div>'; },
+  opsCash: function () {
+    var x = opsPeriod(), v = String(S.ops.view), last = v === 'year' || v === '' || v === 'null' ? O.k : (v.charAt(0) === 'q' ? Math.min(O.k, (+v.slice(1) + 1) * 3) : +v + 1);
+    var end = O.bank.opening; for (var i = 0; i < last; i++) end += O.months[i].cashNet;
+    if (!x.n) return '<p class="explain" style="margin:0">אין נתונים בתקופה הזו.</p>';
+    var neg = x.cashNet < 0;
+    return '<div class="tiles">' + tile('נכנס לחשבון', ils(x.cashIn, 0), periodName()) + tile('יצא מהחשבון', ils(x.cashOut, 0), periodName()) + tile('תזרים', ils(x.cashNet, 0), neg ? 'יצא יותר ממה שנכנס' : 'נכנס יותר ממה שיצא', 'main') + tile('יתרה בסוף ' + MONTHS[last - 1], ils(end, 0), 'לפי מה שמולא') + '</div>';
+  },
   opsAvg: function () {
     var x = opsPeriod(), n = x.n;
     if (!n) return '<span class="sec-lbl" style="margin:0">ממוצע בחודש</span><p class="explain" style="margin:8px 0 0">אין נתונים בתקופה הזו.</p>';
-    return '<span class="sec-lbl">ממוצע בחודש, ' + periodName() + '</span><div class="tiles">' + tile('הכנסות', ils(x.revenue / n, 0), S.biz.type === 'patur' ? '' : 'בלי מע"מ') + tile('רווח לפני מס', ils(x.preTax / n, 0), 'זה המספר להשוות לרואה החשבון', 'main') + tile('רווח נקי', ils(x.net / n, 0), 'אחרי מס, הערכה') + tile('נשאר בעסק', ils(x.left / n, 0), 'אחרי מה שלקחת') + '</div>';
+    return '<span class="sec-lbl">ממוצע בחודש, ' + periodName() + '</span><div class="tiles">' + tile('הכנסות', ils(x.revenue / n, 0), S.biz.type === 'patur' ? '' : 'בלי מע"מ') + tile('רווח לפני מס', ils(x.preTax / n, 0), 'זה המספר להשוות לרואה החשבון', 'main') + tile('רווח נקי', ils(x.net / n, 0), 'אחרי מס, הערכה') + tile('נשאר מהרווח', ils(x.left / n, 0), 'אחרי מה שלקחת') + '</div>';
   },
   opsLadder: function () {
     var x = opsPeriod(), row = function (l, v) { return lg(l, ils(v, 0)); };
@@ -1166,7 +1173,7 @@ var LIVE_OPS = {
   opsDrawn: function () {
     var x = opsPeriod(), row = function (l, v) { return lg(l, ils(v, 0)); }, neg = x.left < 0;
     return '<div class="ledger">' + row('משכורת לעצמי', x.salary) + row('פנסיה וקרן השתלמות', x.pension + x.fund) + row('חיסכון והשקעות', x.savings) + row('החזר הלוואה, בלי הריבית', x.loan) + (x.prior ? row('תשלומים על חשבונית משנה קודמת', x.prior) : '') +
-      '<div class="lg big' + (neg ? ' neg' : '') + '"><span>נשאר בעסק' + info('left', 'נשאר בעסק') + '<small>' + (neg ? 'לקחת יותר ממה שהעסק הרוויח' : 'אחרי כל מה שלקחת מהרווח') + '</small></span><b>' + ils(x.left, 0) + '</b></div></div>';
+      '<div class="lg big' + (neg ? ' neg' : '') + '"><span>נשאר מהרווח' + info('left', 'נשאר מהרווח') + '<small>' + (neg ? 'לקחת יותר ממה שהעסק הרוויח' : 'אחרי כל מה שלקחת מהרווח') + '</small></span><b>' + ils(x.left, 0) + '</b></div></div>';
   },
   opsSide: function () {
     var a = O.annual, b = O.bank, c = '';
@@ -1177,7 +1184,7 @@ var LIVE_OPS = {
     return c;
   },
   opsTable: function () {
-    var cols = [['הכנסות', 'revenue'], ['רווח גולמי', 'gross'], ['רווח תפעולי', 'operating'], ['רווח לפני מס', 'preTax'], ['מס, הערכה', 'tax'], ['רווח נקי', 'net'], ['לקחת מהרווח', 'drawn'], ['נשאר בעסק', 'left']];
+    var cols = [['הכנסות', 'revenue'], ['רווח גולמי', 'gross'], ['רווח תפעולי', 'operating'], ['רווח לפני מס', 'preTax'], ['מס, הערכה', 'tax'], ['רווח נקי', 'net'], ['לקחת מהרווח', 'drawn'], ['נשאר מהרווח', 'left'], ['נכנס לחשבון', 'cashIn'], ['יצא מהחשבון', 'cashOut'], ['תזרים', 'cashNet']];
     var byQ = S.ops.tableBy === 'quarters', qs = [0, 1, 2, 3].map(quarterOf);
     var heads = byQ ? qs.map(function (q, i) { return '<th>רבעון ' + (i + 1) + '</th>'; }).join('') : MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('');
     return '<div class="seg" role="group" aria-label="איך להציג את הטבלה" style="margin-bottom:10px;max-width:280px"><button type="button" data-tableby="months" aria-pressed="' + !byQ + '">לפי חודשים</button><button type="button" data-tableby="quarters" aria-pressed="' + byQ + '">לפי רבעונים</button></div>' +
@@ -1237,7 +1244,7 @@ var LIVE_OPS = {
   }
 };
 Object.keys(LIVE_OPS).forEach(function (k) { LIVE[k] = LIVE_OPS[k]; });
-var PERIOD_KEYS = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'prior', 'drawn', 'left'];
+var PERIOD_KEYS = ['revenue', 'direct', 'gross', 'marketing', 'admin', 'operating', 'finance', 'preTax', 'tax', 'net', 'salary', 'pension', 'fund', 'savings', 'loan', 'prior', 'drawn', 'left', 'cashIn', 'cashOut', 'cashNet'];
 function quarterOf(q) {
   var out = { n: 0 }; PERIOD_KEYS.forEach(function (k) { out[k] = 0; });
   O.months.slice(q * 3, q * 3 + 3).forEach(function (m) { if (!m.filled) return; out.n++; PERIOD_KEYS.forEach(function (k) { out[k] += m[k]; }); });
@@ -1429,7 +1436,7 @@ function buildPrint() {
   var p4 = '';
   if (O && O.k) {
     var T = O.total, A = O.annual;
-    p4 = '<section class="pr-page">' + header('ניהול שוטף, עד סוף ' + MONTHS[O.k - 1]) + '<div class="ledger">' + lg('הכנסות', ils(T.revenue, 0)) + lg('רווח גולמי', ils(T.gross, 0), null, 'sum') + lg('רווח תפעולי', ils(T.operating, 0), null, 'sum') + lg('מס, הערכה', ils(T.tax, 0)) + lg('רווח נקי', ils(T.net, 0), null, 'sum') + lg('לקחת מהרווח', ils(T.drawn, 0)) + lg('נשאר בעסק', ils(T.left, 0), null, 'big') + '</div><h2>הערכת מס לשנה</h2><div class="ledger">' + lg('ביטוח לאומי ובריאות', ils(A.social, 0)) + lg('מס הכנסה', ils(A.incomeTax, 0)) + lg('סך הכל', ils(A.total, 0), null, 'sum') + '</div>' + foot + '</section>';
+    p4 = '<section class="pr-page">' + header('ניהול שוטף, עד סוף ' + MONTHS[O.k - 1]) + '<div class="ledger">' + lg('הכנסות', ils(T.revenue, 0)) + lg('רווח גולמי', ils(T.gross, 0), null, 'sum') + lg('רווח תפעולי', ils(T.operating, 0), null, 'sum') + lg('מס, הערכה', ils(T.tax, 0)) + lg('רווח נקי', ils(T.net, 0), null, 'sum') + lg('לקחת מהרווח', ils(T.drawn, 0)) + lg('נשאר מהרווח', ils(T.left, 0), null, 'sum') + lg('תזרים: נכנס פחות יצא', ils(T.cashNet, 0), null, 'big') + '</div><h2>הערכת מס לשנה</h2><div class="ledger">' + lg('ביטוח לאומי ובריאות', ils(A.social, 0)) + lg('מס הכנסה', ils(A.incomeTax, 0)) + lg('סך הכל', ils(A.total, 0), null, 'sum') + '</div>' + foot + '</section>';
   }
   $('printRoot').innerHTML = p1 + p2 + p3 + p4;
 }

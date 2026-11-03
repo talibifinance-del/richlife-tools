@@ -249,6 +249,10 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('prior-year instalment lowers what is left', prr.months[0].left, base0.months[0].left - 1836);
   near('prior-year instalment leaves the account', prr.bank.expected, base0.bank.expected - 3 * 1836);
 
+  near('cash net is in less out', prr.months[0].cashNet, prr.months[0].cashIn - prr.months[0].cashOut);
+  near('cash net sums to the bank movement', prr.total.cashNet, prr.bank.expected - prr.bank.opening);
+  near('prior-year instalment counts in cash', prr.months[0].cashOut - base0.months[0].cashOut, 1836);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

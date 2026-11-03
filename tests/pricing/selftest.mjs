@@ -524,11 +524,11 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   for (const n of [7, 11, 12, 13]) { await go(p, n); await clean(p, 'Q' + n + ' phone'); await p.screenshot({ path: OUT + '/q' + n + '-phone.png', fullPage: true }); }
   await go(p, 12);
   await p.click('[data-opsview="q0"]');
-  const avgQ = await p.locator('[data-live="opsAvg"]').innerText();
-  ok('Q average for a quarter', avgQ.includes('40,000') && avgQ.includes('רבעון 1'), avgQ);
+  const avgQ = await p.locator('[data-live="opsPlain"]').innerText();
+  ok('Q average for a quarter', avgQ.includes('24,500') && avgQ.includes('רבעון 1'), avgQ);
   ok('Q quarter ladder', (await p.locator('[data-live="opsLadder"]').innerText()).includes('120,000'));
   await p.click('[data-opsview="q1"]');
-  ok('Q empty quarter says so', (await p.locator('[data-live="opsAvg"]').innerText()).includes('אין נתונים'));
+  ok('Q empty quarter says so', (await p.locator('[data-live="opsPlain"]').innerText()).includes('אין נתונים'));
   await p.click('[data-opsview="year"]');
   await p.click('[data-tableby="quarters"]');
   const qt = await p.locator('[data-live="opsTable"]').innerText();
@@ -537,7 +537,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   const plain = await p.locator('[data-live="opsPlain"]').innerText();
   ok('Q plain words', plain.includes('העסק הרוויח') && plain.includes('חשבון הבנק'), plain);
   await p.click('details[data-how="t_cashNet"] summary');
-  ok('Q table row explains itself', (await p.locator('details[data-how="t_cashNet"] .ti-b').innerText()).includes('החשבון'));
+  ok('Q table row explains itself', (await p.locator('details[data-how="t_cashNet"] .ti-b').innerText()).includes('בחשבון'));
   await axe(p, 'Q12 row explanation'); await clean(p, 'Q12 row explanation');
   await p.click('details[data-how="t_cashNet"] summary');
   await p.selectOption('#opsUpto2', '2');
@@ -545,9 +545,10 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('Q says when months are left out', lim.includes('לא נספר') && lim.includes('רק עד פברואר'), lim);
   ok('Q total header names the month', (await p.locator('[data-live="opsTable"]').innerText()).includes('סך הכל עד פברואר'));
   await p.selectOption('#opsUpto2', '');
-  const cash = await p.locator('[data-live="opsCash"]').innerText();
-  ok('Q cash section', cash.includes('נכנס לחשבון') && cash.includes('יצא מהחשבון') && cash.includes('תזרים'), cash);
-  ok('Q table has the cash rows', qt.includes('נכנס לחשבון') && qt.includes('תזרים'));
+  const bank = await p.locator('[data-live="opsBankTable"]').innerText();
+  ok('Q bank table', bank.includes('כסף שנכנס') && bank.includes('כסף שיצא') && bank.includes('יתרה בחשבון'), bank.slice(0, 200));
+  ok('Q bank table explains the VAT gap', bank.includes('למה'));
+  ok('Q profit table is short', !qt.includes('רווח גולמי') && qt.includes('הוצאות העסק'));
   await p.click('[data-tableby="months"]');
   const l = await p.locator('[data-live="opsLadder"]').innerText();
   ok('Q demo ladder, three months', l.includes('120,000') && l.includes('108,000') && l.includes('75,000'), l);

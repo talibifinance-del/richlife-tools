@@ -116,6 +116,7 @@ const axe = async (p, label) => {
   r = await R(p);
   const c0 = r.products[0].calc;
   ok('A breakdown shows the recommended price', (await p.locator('[data-live="prodLedger"][data-arg="0"]').textContent()).includes(c0.recommended.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })));
+  await p.locator('[data-how="ledger0"] > summary').click();
   await p.locator('[data-how="price0"] > summary').click();
   ok('A how box opens', await p.locator('[data-how="price0"] .how-b').isVisible());
   await type(p, 'products.0.hours', '2.5');
@@ -574,6 +575,34 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await ctx.close();
 }
 
+/* ---- T. every working step says what to do ---- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  await p.click('[data-act="demo"]');
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13]) {
+    await go(p, n);
+    const g = p.locator('details.guide');
+    ok('T step ' + n + ' has a guide', await g.count() === 1);
+    const items = await g.locator('.g-list li').count();
+    ok('T step ' + n + ' lists what to do', items >= 3, items);
+    await clean(p, 'T step ' + n); 
+  }
+  await go(p, 6);
+  const top = await p.locator('[data-live="prodPriceTop"]').first().innerText();
+  const rec = await p.evaluate(() => Math.round(window.__pricing.R.products[0].calc.recommended).toLocaleString('he-IL'));
+  ok('T the recommended price is on top', top.includes(rec), [top, rec]);
+  await axe(p, 'T step 6'); await p.screenshot({ path: OUT + '/t6.png', fullPage: true });
+  await go(p, 3); await p.locator('details.guide > summary').click();
+  ok('T a guide can be closed', !(await p.locator('details.guide').evaluate(d => d.open)));
+  await p.waitForTimeout(80); await go(p, 4); await p.waitForTimeout(80); await go(p, 3);
+  ok('T it stays closed when coming back', !(await p.locator('details.guide').evaluate(d => d.open)));
+  await axe(p, 'T closed guide');
+  ok('T no page errors', p.errs.length === 0, p.errs);
+  await ctx.close();
+  const ph = await newPage({ width: 400, height: 800 }); await open(ph.p); await ph.p.click('[data-act="demo"]');
+  for (const n of [1, 3, 6, 7, 9]) { await go(ph.p, n); await clean(ph.p, 'T phone ' + n); await ph.p.screenshot({ path: OUT + '/t-phone-' + n + '.png', fullPage: true }); }
+  await axe(ph.p, 'T phone'); await ph.ctx.close();
+}
 /* ---- S. the home screen says the right thing, and years work ---- */
 {
   const { ctx, p } = await newPage(); await open(p);

@@ -900,7 +900,7 @@ function renderFunds(){
     if(w==="us")h+='<div class="insight warn">⚠️ מס עיזבון אמריקאי: למי שאינו אזרח או תושב ארה"ב ומחזיק בנכסים אמריקאיים (כולל קרנות אמריקאיות) מעל 60 אלף דולר, היורשים עלולים לשלם מס עיזבון בארה"ב, בשיעור שמגיע עד 40%. בקרן אירית או ישראלית זה לא חל.</div>';
     if(w==="il"||w==="mf")h+='<div class="insight soft">💡 קרן עם דמי ניהול 0% נשמעת מושלמת, אבל מנהל הקרן יכול להעלות אותם בהמשך, וזה כבר קרה בעבר. אחרי כמה שנים קשה לעבור לקרן אחרת, כי מכירה עם רווח פירושה 25% מס רווח הון.</div>';
     if(list.some(function(f){return f.synthetic}))h+='<div class="insight">קרן סינתטית מקבלת את התשואה של המדד דרך הסכם עם בנק (swap), בלי להחזיק בעצמה את המניות. לא מצאנו מקור רשמי לשיעור המס על הדיבידנדים בדרך הזו.</div>';
-    h+='<p class="upd">כל קרן נבדקה בשני מקורות לפחות, בדיקה אחרונה: '+hdate(list[0].verified_at)+'. לכל קרן יש קישור לדף שלה, כדי לבדוק בעצמך לפני קנייה.</p>';
+    h+='<p class="upd">דמי הניהול של כל קרן נבדקו בשני מקורות לפחות, בדיקה אחרונה: '+hdate(list[0].verified_at)+'. לכל קרן יש קישור לדף שלה, כדי לבדוק בעצמך לפני קנייה.</p>';
     var nxt=st.sel[pos+1];if(nxt)h+='<div class="next-row"><button type="button" class="btn ghost" data-jump="'+nxt+'">למדד הבא: '+esc(idx(nxt).name)+' ↓</button></div>';
     return h+'</div>';
     return h;
@@ -958,7 +958,7 @@ $$("[data-go]").forEach(function(b){b.onclick=function(){go(+b.dataset.go)}});
 $$("[data-legal]").forEach(function(a){a.onclick=function(e){e.preventDefault();$("#legalFull").scrollIntoView({behavior:"smooth",block:"center"})}});
 fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
   if(!d||!d.indices||!d.funds)throw new Error("bad data");D=d;
-  $("#dateFoot").innerHTML="הנתונים מעודכנים ל-"+hdate(D.updated)+" · תשואות נכונות לסוף "+hdate(D.metrics_as_of)+" · מתעדכנים אוטומטית כל רבעון, ורק אחרי בדיקה בשני מקורות";
+  $("#dateFoot").innerHTML="הנתונים מעודכנים ל-"+hdate(D.updated)+" · תשואות נכונות לסוף "+hdate(D.metrics_as_of)+"";
   restore();renderCats();renderIdx();
   var step=allPicked()?4:(st.sel.length&&total()===100&&Object.keys(st.pick).length)?3:st.sel.length&&Object.keys(st.alloc).length?2:1;
   if(step>1)go(step);else updSteps();

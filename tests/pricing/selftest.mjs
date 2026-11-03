@@ -755,6 +755,16 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await d.p.locator('details.sale > summary').first().click(); await d.p.waitForTimeout(80);
   await d.p.screenshot({ path: OUT + '/v-desk.png', fullPage: true }); await d.ctx.close();
 }
+/* ---- X. saving to move the business forward ---- */
+{
+  const { ctx, p } = await newPage(); await open(p); await p.click('[data-act="demo"]');
+  const before = await p.evaluate(() => ({ t: window.__pricing.R.targetNet, r: window.__pricing.R.annual.revenue }));
+  await go(p, 3); await type(p, 'labor.growth', '2000'); await p.waitForTimeout(60);
+  const after = await p.evaluate(() => ({ t: window.__pricing.R.targetNet, r: window.__pricing.R.annual.revenue }));
+  near('X the target grows', after.t - before.t, 2000); ok('X so does the sales target', after.r > before.r);
+  await go(p, 5); ok('X the tax step says so', (await p.locator('[data-live="taxNeed"]').innerText()).includes('לקידום העסק'));
+  await clean(p, 'X'); await axe(p, 'X'); await ctx.close();
+}
 /* ---- W. a group saved with the old single field keeps its money ---- */
 {
   const { ctx, p } = await newPage(); await open(p);

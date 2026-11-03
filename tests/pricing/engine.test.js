@@ -361,6 +361,14 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('mid year: by the plan', pmc.unitsLeft, 30); ok('mid year: says it used the plan', pmc.usePlan === true);
   near('mid year: December only', E.midYearCase(E.compute(planned), 0, 10, 11).unitsLeft, 5);
 
+  // saving to move the business forward counts like any money wanted after tax
+  const gr = example(); gr.labor.growth = 2000; const gsv = example(); gsv.tax.saving = 2000;
+  near('growth raises the target', E.compute(gr).targetNet, 14000);
+  near('growth needs the same profit as a saving', E.compute(gr).preTax, E.compute(gsv).preTax);
+  ok('growth raises the sales target', E.compute(gr).annual.revenue > E.compute(example()).annual.revenue);
+  const both = example(); both.labor.growth = 1000; both.tax.saving = 500;
+  near('growth and a saving add up', E.compute(both).targetNet, 13500);
+
   let badOps = 0;
   for (let n = 0; n < 1000; n++) {
     const r = () => Math.random() < 0.3 ? '' : Math.round(Math.random() * 50000);

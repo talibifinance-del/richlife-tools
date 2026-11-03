@@ -636,7 +636,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=10"></script>
+<script src="engine.js?v=11"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -734,7 +734,7 @@ function emptyState() {
     biz: { name: '', client: '', sells: null, type: 'murshe', noMaterials: false, wastePct: 10, contingencyPct: 15, vatPct: 18, feePct: 1.35 },
     materials: [],
     products: [],
-    labor: { net: '', pension: '', fund: '', hours: '', monthly: [], hourly: [] },
+    labor: { net: '', pension: '', fund: '', growth: '', hours: '', monthly: [], hourly: [] },
     overhead: {
       marketing: ['ריטיינר לחברת שיווק', 'ניהול תוכן שוטף', 'פרסום'].map(ohRow),
       admin: ['שכר דירה', 'ארנונה', 'חשמל', 'טלפון', 'אינטרנט', 'מערכות מידע ותוכנות', 'הוצאות משרד', 'ביטוח עסק', 'דלק ואחזקת רכב', 'רואה חשבון', 'הוצאות משפטיות', 'השתלמויות וקורסים', 'ייעוץ עסקי'].map(ohRow)
@@ -955,7 +955,7 @@ function empTable(kind) {
 VIEWS[3] = function () {
   var m = empTable('monthly'), h = empTable('hourly');
   return head() + '<div class="card"><span class="sec-lbl">השכר שלך</span><p class="explain">שעות העבודה כוללות <b>הכל</b>: ייצור, עבודה מקצועית, שיווק, פיתוח העסק וניירת. כדאי למדוד שבועיים ולא לנחש.</p><div class="fields">' +
-    numField('נטו לבנק בחודש', 'labor.net', { unit: '₪' }) + numField('פנסיה בחודש', 'labor.pension', { unit: '₪' }) + numField('קרן השתלמות בחודש', 'labor.fund', { unit: '₪' }) + numField('שעות עבודה בחודש', 'labor.hours', { ph: '160' }) + '</div></div>' +
+    numField('נטו לבנק בחודש', 'labor.net', { unit: '₪' }) + numField('פנסיה בחודש', 'labor.pension', { unit: '₪' }) + numField('קרן השתלמות בחודש', 'labor.fund', { unit: '₪' }) + numField('חיסכון לקידום העסק בחודש', 'labor.growth', { unit: '₪', hint: 'כסף שנשאר בעסק כדי להתקדם: ציוד, קורס, השקה. מעבר לנטו.' }) + numField('שעות עבודה בחודש', 'labor.hours', { ph: '160' }) + '</div></div>' +
     '<div class="card"><span class="sec-lbl">עובדים בשכר חודשי</span><p class="explain">מקדם 1.35 מוסיף לברוטו את העלויות הנלוות של המעסיק. אפשר לשנות אותו.</p>' + (m ? '<div class="row-head cols-emp" aria-hidden="true"><span>שם</span><span>תפקיד</span><span>ברוטו</span><span>מקדם</span><span>שעות בחודש</span><span>עלות מעסיק</span><span></span></div>' : '') + '<div class="rows">' + m + '</div><button type="button" class="add-btn" data-add="monthly">+ הוספת עובד חודשי</button></div>' +
     '<div class="card"><span class="sec-lbl">עובדים בשכר שעתי</span>' + (h ? '<div class="row-head cols-hourly" aria-hidden="true"><span>שם</span><span>תפקיד</span><span>שכר לשעה</span><span>שעות בחודש</span><span>מקדם</span><span>עלות מעסיק</span><span></span></div>' : '') + '<div class="rows">' + h + '</div><button type="button" class="add-btn" data-add="hourly">+ הוספת עובד שעתי</button></div>' +
     '<div class="card"><span class="sec-lbl">מה יצא</span>' + live('laborOut') + live('pensionAlert') + '</div>' + stepNav();
@@ -986,7 +986,7 @@ VIEWS[5] = function () {
   var tf = function (l, k, u) { return '<div class="field"><label for="tt' + k + '">' + l + '</label><div class="input-shell">' + (u ? '<span class="unit" aria-hidden="true">' + u + '</span>' : '') + '<input id="tt' + k + '" type="text" inputmode="decimal" data-table="' + k + '" value="' + t[k] + '"></div></div>'; };
   return head() + '<div class="card"><span class="sec-lbl">מה ממלאים</span><div class="fields">' +
     numField('נקודות זיכוי לשנת מס ' + t.year, 'tax.points', { hint: 'אפשר להקליד, או לבחור מהרשימה למטה' }) +
-    numField('חיסכון רצוי בחודש', 'tax.saving', { unit: '₪', hint: 'מעבר לנטו שרשמת בשלב 3. אם אין, אפשר להשאיר ריק.' }) + '</div>' + pointsPicker() + live('taxNeed') + '</div>' +
+    numField('חיסכון אישי רצוי בחודש', 'tax.saving', { unit: '₪', hint: 'מעבר לנטו ולחיסכון לקידום העסק משלב 3. אם אין, אפשר להשאיר ריק.' }) + '</div>' + pointsPicker() + live('taxNeed') + '</div>' +
     '<div class="card"><span class="sec-lbl">מה יצא</span>' + live('taxOut') + live('fundCap') + '</div>' +
     '<div class="note soft">החישוב הוא הערכה בלבד ואינו ייעוץ מס. לחישוב מדויק כדאי לשבת עם רואה חשבון. הפנסיה וקרן ההשתלמות נספרות לפני המס, כך שההטבה עליהן כבר בפנים. הטבלאות של ' + t.year + ' נבדקו מול ביטוח לאומי ורשות המסים ב-2.11.2026.</div>' +
     '<details class="how" data-how="taxTables"' + (howOpen.taxTables ? ' open' : '') + '><summary>טבלאות המס של ' + t.year + ' (אפשר לעדכן)</summary><div class="how-b"><div class="grid2"><div><div class="tbl-wrap" tabindex="0" role="region" aria-label="מדרגות מס"><table class="ptable"><thead><tr><th>הכנסה חייבת בחודש</th><th>שיעור %</th></tr></thead><tbody>' + br + '</tbody></table></div></div><div class="fields">' +
@@ -1097,7 +1097,7 @@ var LIVE = {
       (R.labor.totalHours ? how('oh', 'ממוצע חודשי <b>' + ils(o.monthly, 0) + '</b> חלקי <b>' + money(R.labor.totalHours) + '</b> שעות עבודה = <b>' + ils(o.perHour, 2) + '</b> לשעה.') : '');
   },
   taxNeed: function () {
-    return E.num(S.labor.net) > 0 ? '<div class="note">המטרה: <b>' + ils(R.targetNet, 0) + '</b> ביד בכל חודש (' + ils(R.labor.net, 0) + ' נטו' + (R.saving ? ' + ' + ils(R.saving, 0) + ' חיסכון' : '') + ').</div>' : '<div class="note soft">קודם צריך נטו רצוי. ' + gotoBtn(3, 'לשלב 3') + '</div>';
+    return E.num(S.labor.net) > 0 ? '<div class="note">המטרה: <b>' + ils(R.targetNet, 0) + '</b> ביד בכל חודש (' + ils(R.labor.net, 0) + ' נטו' + (R.growth ? ' + ' + ils(R.growth, 0) + ' לקידום העסק' : '') + (R.saving ? ' + ' + ils(R.saving, 0) + ' חיסכון' : '') + ').</div>' : '<div class="note soft">קודם צריך נטו רצוי. ' + gotoBtn(3, 'לשלב 3') + '</div>';
   },
   taxOut: function () {
     var t = R.tax;

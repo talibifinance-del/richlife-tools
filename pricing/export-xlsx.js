@@ -152,7 +152,7 @@
     put(t, 'A3', 'רווח לפני מס בחודש', { bold: true }); put(t, 'B3', R.preTax, { input: true, fmt: NUM2 });
     put(t, 'C3', 'אם משנים נתונים, לשנות את התא הזה עד שהפער למטה מתקרב ל-0', {});
     put(t, 'A4', 'נקודות זיכוי', {}); put(t, 'B4', numOrNull(E, S.tax.points), { input: true, fmt: NUM2 });
-    put(t, 'A5', 'חיסכון רצוי בחודש', {}); put(t, 'B5', numOrNull(E, S.tax.saving), { input: true, fmt: NUM2 });
+    put(t, 'A5', 'חיסכון רצוי בחודש, כולל קידום העסק', {}); put(t, 'B5', (R.saving + R.growth) || null, { input: true, fmt: NUM2 });
     put(t, 'A6', 'נטו רצוי בחודש', {}); fx(t, 'B6', q(SH.labor) + 'B3', L.net, { fmt: NUM2 });
     var params = [['ביטוח לאומי מופחת', tb.niReduced / 100, PCT], ['ביטוח לאומי רגיל', tb.niFull / 100, PCT], ['בריאות מופחת', tb.healthReduced / 100, PCT], ['בריאות רגיל', tb.healthFull / 100, PCT], ['סף שיעור מופחת', tb.reducedThreshold, NUM0], ['תקרת הכנסה', tb.ceiling, NUM0], ['חלק מוכר מהביטוח הלאומי', tb.niDeductible / 100, PCT], ['ערך נקודת זיכוי בחודש', tb.pointValue, NUM0]];
     params.forEach(function (p, i) { put(t, 'A' + (8 + i), p[0], {}); put(t, 'B' + (8 + i), p[1], { input: true, fmt: p[2] === PCT ? '0.00%' : p[2] }); });

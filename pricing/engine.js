@@ -274,8 +274,8 @@
     var lab = labor(s.labor);
     var oh = overhead(s.overhead, lab.totalHours);
 
-    var points = (s.tax && s.tax.points), saving = pos(s.tax && s.tax.saving);
-    var targetNet = lab.net + saving;
+    var points = (s.tax && s.tax.points), saving = pos(s.tax && s.tax.saving), growth = pos(s.labor && s.labor.growth);
+    var targetNet = lab.net + saving + growth;
     var preTax = solvePreTax(targetNet, points, t);
     var taxRes = tax(preTax, points, t);
 
@@ -349,7 +349,7 @@
 
     return {
       settings: { patur: patur, vatPct: vatPct, feePct: feePct, wastePct: wastePct, contingencyPct: contingencyPct, tables: t },
-      labor: lab, overhead: oh, targetNet: targetNet, saving: saving, preTax: preTax, tax: taxRes,
+      labor: lab, overhead: oh, targetNet: targetNet, saving: saving, growth: growth, preTax: preTax, tax: taxRes,
       products: products, grossMargin: grossMargin, usingMix: usingMix, mixSum: allMixSum,
       annual: annual, fixedAnnual: fixedAnnual, breakEven: breakEven,
       goals: goals, hoursNeededMonth: hoursNeededMonth, hoursAvailableMonth: lab.totalHours,

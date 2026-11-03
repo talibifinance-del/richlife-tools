@@ -26,6 +26,7 @@ const base = (over = {}) => Object.assign({
 }, over);
 const cases = {
   full: base(),
+  growth: (() => { const s = base(); s.labor.growth = 1500; return s; })(),
   types: base({ products: [
     { id: 'g', type: 'group', size: 12, name: 'סדנה', lines: [{ mat: 'm2', qty: 2 }], hours: 5, specific: 50, eventCosts: [{ name: 'חדר', price: 100, qty: 3 }, { name: 'כיבוד', price: 80, qty: '' }], marginPct: 40, market: 200, chosen: 180, mix: 50, plan: months(2) },
     { id: 'd', type: 'digital', name: 'קורס', devHours: 40, devCost: 2000, expected: 100, marginPct: 60, market: '', chosen: '', mix: 25, plan: months(8) },

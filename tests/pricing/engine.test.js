@@ -535,6 +535,7 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   ok('received: cancelled is gone', got([Object.assign({}, sub, { cancelled: '2026-11' })], '2026-11') === 0);
   ok('received: agorot are kept and rounded', got([{ kind: 'equal', total: 1000, n: 3, start: '2026-11', marks: { '2026-11': { paid: true } } }], '2026-11') === 333.33);
   ok('received: a past month, seen later', got([sub], '2026-09', '2027-02') === 500);
+  ok('received: a subscription paid ahead counts when it came', got([{ kind: 'sub', monthly: 500, start: '2026-09', marks: { '2026-11': { paid: true, in: { '2026-10': 500 } } } }], '2026-10') === 500);
   ok('received: empty state', E.salesReceived({}, '2026-11', '2026-11') === 0 && E.salesReceived(null, '2026-11', '2026-11') === 0);
   const frozen = st([late, sub]), was = JSON.stringify(frozen);
   E.salesReceived(frozen, '2026-11', '2026-11'); E.paymentsWaiting(frozen, '2026-11', '2026-11');

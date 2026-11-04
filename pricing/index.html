@@ -372,7 +372,9 @@ a{color:var(--pine-deep)}
 .f-m{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:5px}
 .f-m.now{font-weight:900;color:var(--pine-darker)}
 .f-stack .f-s{border-radius:0}
-.f-m small{display:block;font-size:10.5px;font-weight:700;line-height:1.1}
+.f-stack + .f-m{position:relative}
+.f-m small{position:absolute;top:100%;inset-inline:0;text-align:center;font-size:10.5px;font-weight:700;line-height:1.1}
+.f-scroll{padding-bottom:14px}
 @media (max-width:640px){.f-scroll{overflow-x:auto}.f-scroll .f-bars{min-width:620px}}
 .f-stack>:first-child{border-radius:6px 6px 0 0}
 .f-l{background:repeating-linear-gradient(45deg,#c98a3a 0 4px,#ecd2ad 4px 8px)}

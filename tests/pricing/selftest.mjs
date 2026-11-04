@@ -805,6 +805,8 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await clean(p, 'Z list'); await axe(p, 'Z list');
   ok('Z the chart shows twelve months ahead', await p.locator('[data-live="salesForecast"] .f-col').count() === 15);
   const bump = () => p.evaluate(() => { const v = [...document.querySelectorAll('[data-live="salesForecast"] .f-val')].filter(e => e.textContent).map(e => { const r = document.createRange(); r.selectNodeContents(e); return r.getBoundingClientRect(); }); return v.slice(1).filter((r, i) => r.right > v[i].left + 0.5 && r.left < v[i].right - 0.5).length; });
+  const floors = await p.evaluate(() => [...new Set([...document.querySelectorAll('[data-live="salesForecast"] .f-track')].map(e => Math.round(e.getBoundingClientRect().bottom)))]);
+  ok('Z all the bars stand on one line', floors.length === 1, floors);
   ok('Z the numbers over the bars do not touch', await bump() === 0, await bump());
   // a part
   await p.locator('[data-live="payList"] .pay.late [data-pay$="|part"]').click();

@@ -741,7 +741,7 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await go(p, 11);
   await p.evaluate(ym => { window.__pricing.S.ops.edit = +ym.slice(5, 7) - 1; }, ymNow); await go(p, 11);
   const yearOk = await p.evaluate(ym => window.__pricing.S.ops.year === +ym.slice(0, 4), ymNow);
-  if (yearOk) ok('V the monthly fill shows what is expected', (await p.locator('[data-live="opsExpected"]').innerText()).includes('צפויים'));
+  if (yearOk) ok('V the monthly fill shows what is expected', (await p.locator('[data-live="opsRoutine"]').innerText()).includes('צפויים'));
   // delete asks first, and it survives a reload
   await go(p, 14);
   await p.locator('details.sale[open] [data-delsale="3"]').click();
@@ -1172,6 +1172,141 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('AB 1100: a month picker shows its whole month', await mid.p.evaluate(() => [...document.querySelectorAll('.bk-item select')].every(i => i.getBoundingClientRect().width >= 110)));
   ok('AB 1100: the page itself does not scroll', await mid.p.evaluate(() => document.documentElement.scrollHeight <= innerHeight));
   await mid.ctx.close();
+}
+
+// what to do every month, and income that comes from the sales
+{
+  const { ctx, p } = await newPage(); await open(p);
+  const NOW = await p.evaluate(() => { const d = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jerusalem', year: 'numeric', month: '2-digit' }).format(new Date()); return d.slice(0, 7); });
+  const E_ = +NOW.slice(5, 7) - 1, prevYm = await p.evaluate(n => window.PricingEngine.ymAdd(n, -1), NOW);
+  const routine = () => p.locator('[data-live="opsRoutine"]').innerText();
+  const incomeRows = () => p.evaluate(() => window.__pricing.S.ops.rows.income.map(r => r.name));
+  const fromSales = e => p.evaluate(x => { const r = window.__pricing.S.ops.rows.income.filter(q => q.fromSales)[0]; return r ? r.m[x] : null; }, e);
+  await p.evaluate(({ e }) => { const P = window.__pricing; P.S.ops.edit = e; P.go(11); }, { e: E_ });
+
+  ok('AC the list is there, in six steps', await p.locator('.rt-step').count() === 6);
+  ok('AC it names the month', (await routine()).includes(await p.evaluate(e => ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'][e], E_)));
+  ok('AC no sales: says there is nothing to mark', (await routine()).includes('אין מכירות רשומות'));
+  ok('AC no sales: no fill button', await p.locator('[data-act="fillIncome"]').count() === 0);
+  ok('AC nothing is ticked on an empty month', await p.locator('.rt-step.done').count() === 0);
+  await axe(p, 'AC empty');
+
+  // a sale nobody marked yet
+  await p.evaluate(({ now }) => { const P = window.__pricing; P.S.sales.push({ id: 's1', client: 'א', kind: 'once', total: 1760, month: now, start: now }); P.go(11); }, { now: NOW });
+  ok('AC a waiting payment is counted', (await routine()).includes('תשלום אחד מחכה'));
+  ok('AC expected is shown', (await routine()).includes('צפויים'));
+  ok('AC not marked, nothing to fill', await p.locator('[data-act="fillIncome"]').count() === 0);
+
+  // marked through the real button
+  await go(p, 14); await p.click(`[data-pay="0|${NOW}|paid"]`);
+  ok('AC the mark names the month the money came', await p.evaluate(n => window.__pricing.S.sales[0].marks[n].in[n] === 1760, NOW));
+  await go(p, 11);
+  ok('AC marked: the list is ticked', (await routine()).includes('מסומנים') && await p.locator('.rt-step.done').count() === 1);
+  ok('AC the button names the sum', (await p.locator('[data-act="fillIncome"]').innerText()).includes('1,760'));
+  ok('AC nothing written before the click', await fromSales(E_) === null);
+  await p.click('[data-act="fillIncome"]');
+  ok('AC written to a row of its own', await fromSales(E_) === 1760);
+  const names = await incomeRows();
+  ok('AC the row sits before the refunds', names.indexOf('מכירות שנרשמו בכלי') === names.length - 2, names);
+  ok('AC the field shows it', (await p.inputValue(`[data-path="ops.rows.income.${names.length - 2}.m.${E_}"]`)) === '1,760');
+  ok('AC it says what it did', (await p.locator('[data-live="opsFillStatus"]').innerText()).includes('נכתבו'));
+  ok('AC focus lands on the undo', await p.evaluate(() => document.activeElement.getAttribute('data-act') === 'undoFill'));
+  ok('AC income counts in the profit', await p.evaluate(e => { const P = window.__pricing; return Math.abs(window.PricingEngine.ops(P.S).months[e].cashIn - 1760) < 0.01; }, E_));
+  ok('AC a second look: already in', (await routine()).includes('כבר בפנים') && await p.locator('[data-act="fillIncome"]').count() === 0);
+  await axe(p, 'AC filled');
+
+  // undo takes it all back
+  await p.click('[data-act="undoFill"]');
+  ok('AC undo removes the new row', (await incomeRows()).length === names.length - 1);
+  ok('AC undo says so', (await p.locator('[data-live="opsFillStatus"]').innerText()).includes('בוטל'));
+  ok('AC focus returns to the button', await p.evaluate(() => document.activeElement.getAttribute('data-act') === 'fillIncome'));
+  await p.click('[data-act="fillIncome"]');
+
+  // another payment comes in
+  await p.evaluate(({ now }) => { const P = window.__pricing; P.S.sales.push({ id: 's2', client: 'ב', kind: 'once', total: 1000, month: now, start: now, marks: { [now]: { paid: true } } }); P.go(11); }, { now: NOW });
+  ok('AC a new payment offers an update', (await p.locator('[data-act="fillIncome"]').innerText()).includes('2,760'));
+  ok('AC an update states both numbers', (await routine()).includes('1,760'));
+  ok('AC not updated before the click', await fromSales(E_) === 1760);
+  await p.click('[data-act="fillIncome"]');
+  ok('AC updated', await fromSales(E_) === 2760);
+  await p.click('[data-act="undoFill"]');
+  ok('AC undo of an update restores the number', await fromSales(E_) === 1760);
+  await p.click('[data-act="fillIncome"]');
+
+  // a sale marked off lowers it; nothing marked empties it
+  await p.evaluate(n => { const P = window.__pricing; delete P.S.sales[1].marks[n]; delete P.S.sales[0].marks[n]; P.go(11); }, NOW);
+  ok('AC nothing marked offers to clear', (await p.locator('[data-act="fillIncome"]').count()) === 1);
+  await p.click('[data-act="fillIncome"]');
+  ok('AC cleared to empty, not zero', await fromSales(E_) === '');
+
+  // typed by hand first: never counted twice
+  await p.evaluate(({ now }) => { const P = window.__pricing; P.S.ops.rows.income = P.S.ops.rows.income.filter(r => !r.fromSales); P.S.sales[0].marks = { [now]: { paid: true } }; P.S.ops.rows.income[0].m[P.S.ops.edit] = 5000; P.go(11); }, { now: NOW });
+  ok('AC typed income: no button', await p.locator('[data-act="fillIncome"]').count() === 0);
+  ok('AC typed income: both numbers are shown', (await routine()).includes('כבר כתובים') && (await routine()).includes('5,000') && (await routine()).includes('1,760'));
+  ok('AC typed income: nothing was added', await fromSales(E_) === null);
+  ok('AC typed income: the income step is ticked', await p.locator('.rt-step:nth-child(2).done').count() === 1);
+  ok('AC an unmarked payment keeps its step open', await p.locator('.rt-step:nth-child(1).done').count() === 0);
+  await p.evaluate(() => { const P = window.__pricing; P.S.ops.rows.income[0].m[P.S.ops.edit] = ''; P.go(11); });
+
+  // the late payment lands in the month it came, through the real button
+  if (E_ > 0) {
+    await p.evaluate(({ prev }) => { const P = window.__pricing; P.S.sales.push({ id: 's3', client: 'ג', kind: 'once', total: 900, month: prev, start: prev }); P.go(14); }, { prev: prevYm });
+    await p.click(`[data-pay="2|${prevYm}|paid"]`);
+    ok('AC late: counted in the month it came', await p.evaluate(n => window.PricingEngine.salesReceived(window.__pricing.S, n, n), NOW) === 2660);
+    ok('AC late: not in the month it was due', await p.evaluate(({ a, n }) => window.PricingEngine.salesReceived(window.__pricing.S, a, n), { a: prevYm, n: NOW }) === 0);
+    await go(p, 11);
+    await p.click('[data-opsedit="' + (E_ - 1) + '"]');
+    ok('AC late: the month it was due offers nothing', await p.locator('[data-act="fillIncome"]').count() === 0);
+    await p.click('[data-opsedit="' + E_ + '"]');
+  }
+
+  // links in the list really lead somewhere
+  await p.click(`[data-jump="ops.bank.end.${E_}"]`);
+  ok('AC a link jumps to the balance', await p.evaluate(e => document.activeElement.getAttribute('data-path') === 'ops.bank.end.' + e, E_));
+  const before = await p.locator('.rt-step.done').count();
+  await p.locator('#bankEnd').fill('1000');
+  await p.waitForTimeout(100);
+  ok('AC writing the balance ticks it', await p.locator('.rt-step.done').count() === before + 1);
+  await p.click(`[data-jump="ops.paid.income.${E_}"]`);
+  ok('AC a link jumps to the authorities', await p.evaluate(e => document.activeElement.getAttribute('data-path') === 'ops.paid.income.' + e, E_));
+  await p.evaluate(() => document.querySelector('.rt-step:nth-child(6) [data-goto="15"]').click());
+  ok('AC the last step leads to the bank', await p.evaluate(() => document.querySelector('#stepTitle').textContent === 'מה יהיה בבנק'));
+  await go(p, 11);
+  // January has nothing to copy from
+  await p.click('[data-opsedit="0"]');
+  ok('AC January has no copy button', await p.locator('[data-act="copyPrev"]').count() === 0 && (await routine()).includes('אין ממה להעתיק'));
+  await p.click('[data-opsedit="' + E_ + '"]');
+
+  // only in the month view; closing the list stays closed
+  await p.click('[data-fillmode="year"]');
+  ok('AC the yearly table has no list', await p.locator('.rt-step').count() === 0);
+  await p.click('[data-fillmode="month"]');
+  await p.evaluate(() => { document.querySelector('details.rt').open = false; });
+  await p.locator('#opsNote').fill('x'); await p.waitForTimeout(100);
+  ok('AC a closed list stays closed', await p.evaluate(() => !document.querySelector('details.rt').open));
+  await p.evaluate(() => { document.querySelector('details.rt').open = true; });
+  await p.locator('#opsNote').fill('');
+
+  // the row and the dates survive saving and closing a year
+  const back = await p.evaluate(() => { const P = window.__pricing; P.S.ops.rows.income.splice(1, 0, { name: 'x', fromSales: true, m: Array(12).fill(7) }); const o = P.normalize(JSON.parse(JSON.stringify(P.S))); const c = window.PricingEngine.closeYear(o); return { kept: o.ops.rows.income.filter(r => r.fromSales).length, dates: !!o.sales[0].marks, next: c.ops.rows.income.filter(r => r.fromSales)[0], old: c.years[o.ops.year].ops ? 0 : c.years[o.ops.year].rows.income.filter(r => r.fromSales)[0].m[0] }; });
+  ok('AC saved and read back', back.kept === 1 && back.dates, back);
+  ok('AC a new year keeps the row, empty', back.next && back.next.m.every(v => v === ''), back);
+  ok('AC the old year keeps its numbers', back.old === 7, back);
+  // an old link opens untouched
+  const old = await p.evaluate(() => { const P = window.__pricing, o = JSON.parse(JSON.stringify(P.S)); o.ops.rows.income = o.ops.rows.income.filter(r => !r.fromSales); o.sales.forEach(s => Object.values(s.marks || {}).forEach(m => delete m.in)); const was = JSON.stringify(o.ops.rows.income); const n = P.normalize(JSON.parse(JSON.stringify(o))); return JSON.stringify(n.ops.rows.income) === was; });
+  ok('AC an old link is not changed by opening it', old);
+  ok('AC no page errors', p.errs.length === 0, p.errs);
+  await ctx.close();
+
+  // demo, phone, 1100
+  for (const vp of [{ width: 400, height: 800 }, { width: 1100, height: 800 }]) {
+    const d = await newPage(vp); await open(d.p); await d.p.click('[data-act="demo"]'); await go(d.p, 11);
+    ok('AC ' + vp.width + ': the list shows', await d.p.locator('.rt-step').count() === 6);
+    ok('AC ' + vp.width + ': no sideways scroll', await d.p.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    ok('AC ' + vp.width + ': no step overflows', await d.p.evaluate(() => [...document.querySelectorAll('.rt-step')].every(s => s.scrollWidth <= s.clientWidth + 1)));
+    await axe(d.p, 'AC ' + vp.width);
+    await d.ctx.close();
+  }
 }
 
 await browser.close();

@@ -266,6 +266,26 @@
     });
     return { months: months, total: sum(months, function (m) { return m.total; }), left: sum(months, function (m) { return m.left; }), assumed: sum(months, function (m) { return m.assumed; }) };
   }
+  /* What actually came in during one month. A mark can name the month the money arrived; without one, it counts in the month it was due. */
+  function salesReceived(state, ym, nowYm) {
+    var total = 0, last = nowYm > ym ? nowYm : ym;
+    ((state && state.sales) || []).forEach(function (s) {
+      paymentStates(s, nowYm, last).forEach(function (p) {
+        var dated = ((s.marks || {})[p.key] || {}).in || {}, named = sum(Object.keys(dated), function (k) { return pos(dated[k]); });
+        total += pos(dated[ym]);
+        if (p.due === ym) total += Math.max(0, p.got - named);
+      });
+    });
+    return Math.round(total * 100) / 100;
+  }
+  /* Payments due by that month that nobody has marked as in yet. */
+  function paymentsWaiting(state, ym, nowYm) {
+    var n = 0;
+    ((state && state.sales) || []).forEach(function (s) {
+      paymentStates(s, nowYm, ym).forEach(function (p) { if (p.due <= ym && p.left > 0.005) n++; });
+    });
+    return n;
+  }
   /* The money still owed: what is late, what this month holds, and two months back to twelve ahead for the chart. */
   function receivables(state, nowYm) {
     var to = ymAdd(nowYm, 12), map = {}, names = [], seen = {}, i;
@@ -783,7 +803,7 @@
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
     expandProduct: expandProduct, expandState: expandState, groupView: groupView, eventCost: eventCost,
     launchCase: launchCase, raiseCase: raiseCase, midYearCase: midYearCase,
-    ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, paymentStates: paymentStates, receivables: receivables, salesForecast: salesForecast, bankForecast: bankForecast, salesCounts: salesCounts,
+    ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, paymentStates: paymentStates, receivables: receivables, salesReceived: salesReceived, paymentsWaiting: paymentsWaiting, salesForecast: salesForecast, bankForecast: bankForecast, salesCounts: salesCounts,
     mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, hasTables: hasTables, tablesFor: tablesFor,
     yearList: yearList, yearOps: yearOps, switchYear: switchYear, closeYear: closeYear, agePick: agePick, compareYears: compareYears, productRank: productRank, whatIf: whatIf
   };

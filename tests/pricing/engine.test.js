@@ -509,5 +509,53 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   ok('forecast: fuzz clean', bad === 0, bad);
 }
 
+// what actually came in, month by month
+{
+  const st = sales => ({ sales });
+  const eq3 = (marks, extra) => Object.assign({ kind: 'equal', total: 3000, n: 3, start: '2026-10', marks }, extra || {});
+  const got = (sales, ym, now) => E.salesReceived(st(sales), ym, now || '2026-11');
+  ok('received: nothing marked, nothing in', got([eq3({})], '2026-10') === 0);
+  ok('received: a mark without a month counts when due', got([eq3({ '2026-10': { paid: true } })], '2026-10') === 1000);
+  ok('received: and not in the month after', got([eq3({ '2026-10': { paid: true } })], '2026-11') === 0);
+  const late = eq3({ '2026-10': { paid: true, in: { '2026-11': 1000 } } });
+  ok('received: paid late counts when it arrived', got([late], '2026-11') === 1000);
+  ok('received: not in the month it was due', got([late], '2026-10') === 0);
+  const split = eq3({ '2026-10': { paid: true, in: { '2026-10': 300, '2026-11': 700 } } });
+  ok('received: a split payment, first month', got([split], '2026-10') === 300);
+  ok('received: a split payment, second month', got([split], '2026-11') === 700);
+  const oldPart = eq3({ '2026-10': { paid: true, in: { '2026-11': 700 } } });
+  ok('received: an old undated part stays in its due month', got([oldPart], '2026-10') === 300 && got([oldPart], '2026-11') === 700);
+  ok('received: a partial mark', got([eq3({ '2026-11': { got: 400, in: { '2026-11': 400 } } })], '2026-11') === 400);
+  const sub = { kind: 'sub', monthly: 500, start: '2026-09', auto: true };
+  ok('received: on its own counts once the month arrives', got([sub], '2026-10') === 500 && got([sub], '2026-11') === 500);
+  ok('received: on its own, not in the future', got([sub], '2026-12') === 0);
+  ok('received: a failed charge is not in', got([Object.assign({}, sub, { marks: { '2026-11': { failed: true } } })], '2026-11') === 0);
+  ok('received: a moved payment waits', got([eq3({ '2026-11': { to: '2026-12' } })], '2026-11') === 0);
+  ok('received: a moved and paid one counts in its new month', got([eq3({ '2026-11': { to: '2026-12', paid: true } })], '2026-12') === 1000);
+  ok('received: cancelled is gone', got([Object.assign({}, sub, { cancelled: '2026-11' })], '2026-11') === 0);
+  ok('received: agorot are kept and rounded', got([{ kind: 'equal', total: 1000, n: 3, start: '2026-11', marks: { '2026-11': { paid: true } } }], '2026-11') === 333.33);
+  ok('received: a past month, seen later', got([sub], '2026-09', '2027-02') === 500);
+  ok('received: empty state', E.salesReceived({}, '2026-11', '2026-11') === 0 && E.salesReceived(null, '2026-11', '2026-11') === 0);
+  const frozen = st([late, sub]), was = JSON.stringify(frozen);
+  E.salesReceived(frozen, '2026-11', '2026-11'); E.paymentsWaiting(frozen, '2026-11', '2026-11');
+  ok('received: reads only', JSON.stringify(frozen) === was);
+  ok('received: a date on the mark does not move the forecast', E.salesForecast(st([late]), '2026-10', 3, '2026-11').left === E.salesForecast(st([eq3({ '2026-10': { paid: true } })]), '2026-10', 3, '2026-11').left);
+  // every shekel marked lands in exactly one month
+  let lost = 0;
+  for (let n = 0; n < 300; n++) {
+    const a = Math.round(Math.random() * 1000), sale = eq3({ '2026-10': { paid: true, in: { '2026-11': a } }, '2026-11': { got: 200 } });
+    const all = ['2026-09', '2026-10', '2026-11', '2026-12'].reduce((t, ym) => t + got([sale], ym), 0);
+    if (Math.abs(all - 1200) > 0.01) lost++;
+  }
+  ok('received: nothing lost or counted twice', lost === 0, lost);
+
+  ok('waiting: a hand payment waits', E.paymentsWaiting(st([eq3({})]), '2026-10', '2026-11') === 1);
+  ok('waiting: counts up to the month', E.paymentsWaiting(st([eq3({})]), '2026-11', '2026-11') === 2);
+  ok('waiting: a marked one does not', E.paymentsWaiting(st([eq3({ '2026-10': { paid: true } })]), '2026-11', '2026-11') === 1);
+  ok('waiting: on its own does not', E.paymentsWaiting(st([sub]), '2026-11', '2026-11') === 0);
+  ok('waiting: a failed charge does', E.paymentsWaiting(st([Object.assign({}, sub, { marks: { '2026-10': { failed: true } } })]), '2026-11', '2026-11') === 1);
+  ok('waiting: a moved one waits for its new month', E.paymentsWaiting(st([eq3({ '2026-11': { to: '2026-12' } })]), '2026-11', '2026-11') === 1);
+}
+
 console.log(`${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

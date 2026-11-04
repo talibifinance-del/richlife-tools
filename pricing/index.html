@@ -1830,6 +1830,7 @@ var LIVE_OPS = {
   },
   bankNotes: function () {
     var f = bankFc(), out = [], b = f.base, rows = S.forecast.items.some(function (x) { return x.kind !== 'once'; });
+    if (b && b.source === 'calc') out.push('היתרה כאן מחושבת ממילוי החודש, ולא נלקחה מהבנק. כדי שהתחזית תהיה נכונה, כדאי לכתוב למטה כמה יש היום.');
     if (b && b.stale) out.push('היתרה עודכנה לפני יותר מחודש, והתחזית מתחילה ממנה. כדאי לכתוב למטה כמה יש היום.');
     if (b && b.gap) out.push('מילוי החודש מעודכן רק עד ' + ymLabel(b.ym) + ', אז מה שקרה מאז לא נספר. כדאי לכתוב למטה כמה יש היום.');
     if (f.late > 0) out.push(ils(f.late, 0) + ' של תשלומים באיחור לא נספרו כאן. אם ייכנסו, המצב יהיה טוב יותר.');

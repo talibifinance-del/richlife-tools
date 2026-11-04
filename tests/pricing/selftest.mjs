@@ -1147,6 +1147,11 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('AB an old link opens on the step', (await text('.hero h2')).includes('כותבים כמה יש'));
   ok('AB no page errors', p.errs.length === 0, p.errs);
 
+  await p.evaluate(() => { const P = window.__pricing; P.S.forecast.today = ''; P.S.ops.bank.opening = '3000'; P.go(15); });
+  ok('AB a calculated balance says so', (await text('[data-live="bankNotes"]')).includes('מחושבת'));
+  await p.evaluate(() => { const P = window.__pricing; P.S.forecast.today = '5000'; P.S.forecast.todayAt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jerusalem' }).format(new Date()); P.go(15); });
+  ok('AB a typed balance drops the note', !(await text('[data-live="bankNotes"]').catch(() => '')).includes('מחושבת'));
+
   // the demo tells a real story
   await ctx.close();
   const d = await newPage(); await open(d.p); await d.p.click('[data-act="demo"]'); await go(d.p, 15);

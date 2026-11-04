@@ -557,6 +557,105 @@
     };
   }
 
+  /* ---------- what will be in the bank, month by month ---------- */
+  function latestYear(state) {
+    var y = (state.ops && state.ops.year) || 2026;
+    Object.keys(state.years || {}).forEach(function (k) { if (+k > y) y = +k; });
+    return y;
+  }
+  function daysIn(ym) { return new Date(+ym.slice(0, 4), +ym.slice(5, 7), 0).getDate(); }
+  /* The last filled months, newest first, reaching into the year before when this one is young. */
+  function recentMonths(state, want) {
+    var out = [], y = latestYear(state), hasYear = function (yy) { return yy === ((state.ops && state.ops.year) || 2026) || (state.years && state.years[yy]); };
+    while (out.length < want && hasYear(y)) {
+      var res = yearOps(state, y), raw = y === ((state.ops && state.ops.year) || 2026) ? state.ops : state.years[y];
+      for (var i = res.k - 1; i >= 0 && out.length < want; i--) out.push({ m: res.months[i], i: i, raw: raw });
+      y--;
+    }
+    return out;
+  }
+  function recurringCosts(raw, i) {
+    return sum(['direct', 'marketing', 'admin', 'finance'], function (k) {
+      return sum((raw.rows && raw.rows[k]) || [], function (r) { return r.oneOff || r.rule === 'gift' ? 0 : pos((r.m || [])[i]); });
+    });
+  }
+  /* Where the balance stands: the last balance written in the monthly fill, carried forward by what was filled after it. */
+  function fillBalance(state) {
+    var y = latestYear(state), res = yearOps(state, y), raw = y === ((state.ops && state.ops.year) || 2026) ? state.ops : state.years[y], bank = raw.bank || {}, k = res.k, j;
+    for (j = k - 1; j >= 0; j--) {
+      var v = (bank.end || [])[j];
+      if (v !== '' && v != null) {
+        var amount = num(v); for (var n = j + 1; n < k; n++) amount += res.months[n].cashNet;
+        return { amount: amount, ym: y + '-' + (k < 10 ? '0' : '') + k, source: 'end' };
+      }
+    }
+    if (bank.opening !== '' && bank.opening != null) return { amount: res.bank.expected, ym: k ? y + '-' + (k < 10 ? '0' : '') + k : (y - 1) + '-12', source: 'calc' };
+    return null;
+  }
+  function bankForecast(state, nowYm, count, computed) {
+    var s = state || {}, f = s.forecast || {}, biz = s.biz || {}, n = count || 13;
+    var rate = biz.type === 'patur' ? 0 : (biz.vatPct == null ? 18 : pos(biz.vatPct)) / 100;
+    var recent = recentMonths(s, 3), c = recent.length, cp = computed || (c ? null : compute(s));
+    var avg = function (fn) { return c ? sum(recent, fn) / c : 0; };
+    var d = { fixedFrom: c ? 'avg' : 'plan', months: c, vatIn: avg(function (x) { return x.m.vatIn; }), prior: avg(function (x) { return x.m.prior; }) };
+    d.fixed = c ? avg(function (x) { return recurringCosts(x.raw, x.i); }) : (cp.overhead.monthly + cp.labor.employeesCost);
+    d.draw = c ? avg(function (x) { return x.m.drawn - x.m.prior; }) : (pos(s.labor && s.labor.net) + pos(s.labor && s.labor.pension) + pos(s.labor && s.labor.fund));
+    var taxOf = null, y = latestYear(s);
+    if (c) { taxOf = yearOps(s, y); if (!taxOf.k && (s.years && s.years[y - 1] || (s.ops && s.ops.year === y - 1))) taxOf = yearOps(s, y - 1); }
+    d.tax = taxOf && taxOf.k ? (taxOf.annual.incomeTaxLeft + taxOf.annual.social) / 12 : 0;
+    var val = function (key, dflt) { return f[key] === '' || f[key] == null ? dflt : pos(f[key]); };
+    var fixed = val('fixed', d.fixed), draw = val('draw', d.draw), tax = val('tax', d.tax), newSales = pos(f.newSales);
+
+    /* A balance typed this month is today's: only what is left of the month still moves it. */
+    var typed = f.today !== '' && f.today != null, at = f.todayAt || '', fromFill = fillBalance(s), base = null, frac = 1, day = 1;
+    if (typed && (!fromFill || !at || at.slice(0, 7) > fromFill.ym)) {
+      if (at.slice(0, 7) === nowYm) { day = +at.slice(8, 10) || 1; frac = (daysIn(nowYm) - day + 1) / daysIn(nowYm); base = { amount: num(f.today), ym: ymAdd(nowYm, -1), source: 'today', at: at, partial: true }; }
+      else base = { amount: num(f.today), ym: ymAdd(nowYm, -1), source: 'today', at: at, stale: true };
+    } else if (fromFill) { base = fromFill; if (base.ym < ymAdd(nowYm, -1)) base.gap = true; }
+
+    var sales = salesForecast(s, nowYm, n, nowYm), history = {};
+    var pastVat = function (ym) {
+      var yy = +ym.slice(0, 4), cur = (s.ops && s.ops.year) || 2026;
+      if (yy !== cur && !(s.years && s.years[yy])) return 0;
+      if (!history[yy]) history[yy] = yearOps(s, yy);
+      var m = history[yy].months[+ym.slice(5, 7) - 1];
+      return m && m.filled ? m.vatOut - m.vatIn : 0;
+    };
+    function run(extra) {
+      var months = [], balance = base ? base.amount : 0, vatMap = {};
+      sales.months.forEach(function (sm, i) {
+        var ym = sm.ym, moved = !base || ym > base.ym, part = i === 0 && base && base.partial, share = part ? frac : 1;
+        var sold = i === 0 && !part ? sm.total : sm.left, fresh = i > 0 ? extra : 0, inTotal = sold + fresh;
+        vatMap[ym] = rate ? (i === 0 ? sm.total : inTotal) * rate / (1 + rate) - d.vatIn : 0;
+        var until = [], once = [], saved = [];
+        (f.items || []).forEach(function (it) {
+          var amt = pos(it.amount); if (!amt) return;
+          if (it.kind === 'once') { if (it.ym === ym) once.push({ name: it.name || '', amount: amt }); return; }
+          var active = !it.end || ym <= it.end;
+          if (it.inFixed) { if (!active) saved.push({ name: it.name || '', amount: amt }); }
+          else if (active) until.push({ name: it.name || '', amount: amt * share, end: it.end || '' });
+        });
+        /* VAT goes out every second month, for the two months before it. */
+        var vat = 0;
+        if (rate && +ym.slice(5, 7) % 2 === 1 && !(part && day > 15)) {
+          var a = ymAdd(ym, -2), b = ymAdd(ym, -1);
+          vat = Math.max(0, (a < nowYm ? pastVat(a) : (vatMap[a] || 0)) + (b < nowYm ? pastVat(b) : (vatMap[b] || 0)));
+        }
+        var cut = sum(saved, function (x) { return x.amount; });
+        var row = { ym: ym, moved: moved, partial: !!part, sold: sold, fresh: fresh, inTotal: inTotal, fixed: Math.max(0, fixed - cut) * share, draw: draw * share, tax: tax * share, vat: vat, until: until, once: once, saved: saved };
+        row.outTotal = row.fixed + row.draw + row.tax + row.vat + sum(until, function (x) { return x.amount; }) + sum(once, function (x) { return x.amount; });
+        if (moved) balance += row.inTotal - row.outTotal;
+        row.balance = balance;
+        months.push(row);
+      });
+      return months;
+    }
+    var months = run(newSales), bare = newSales ? run(0) : months;
+    var low = months[0]; months.forEach(function (m) { if (m.balance < low.balance) low = m; });
+    var neg = function (list) { var h = list.filter(function (m) { return m.balance < 0; })[0]; return h ? h.ym : null; };
+    return { has: !!base, base: base, months: months, low: low, end: months[months.length - 1].balance, firstNeg: neg(months), bareNeg: neg(bare), newSales: newSales, defaults: d, fixed: fixed, draw: draw, tax: tax, late: receivables(s, nowYm).lateTotal };
+  }
+
   /* ---------- several years: state.ops is always the year in use, the others wait in state.years ---------- */
   function clone(x) { return JSON.parse(JSON.stringify(x)); }
   function emptyMonths() { var a = []; for (var i = 0; i < 12; i++) a.push(''); return a; }
@@ -684,7 +783,7 @@
     labor: labor, overhead: overhead, tax: tax, solvePreTax: solvePreTax, priceProduct: priceProduct, chosenNet: chosenNet, compute: compute,
     expandProduct: expandProduct, expandState: expandState, groupView: groupView, eventCost: eventCost,
     launchCase: launchCase, raiseCase: raiseCase, midYearCase: midYearCase,
-    ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, paymentStates: paymentStates, receivables: receivables, salesForecast: salesForecast, salesCounts: salesCounts,
+    ymAdd: ymAdd, salePayments: salePayments, saleTotal: saleTotal, paymentStates: paymentStates, receivables: receivables, salesForecast: salesForecast, bankForecast: bankForecast, salesCounts: salesCounts,
     mandatoryPension: mandatoryPension, depositTax: depositTax, creditPoints: creditPoints, ops: ops, hasTables: hasTables, tablesFor: tablesFor,
     yearList: yearList, yearOps: yearOps, switchYear: switchYear, closeYear: closeYear, agePick: agePick, compareYears: compareYears, productRank: productRank, whatIf: whatIf
   };

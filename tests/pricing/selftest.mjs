@@ -1049,6 +1049,126 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await ctx.close();
 }
 
+/* ---------- AB: what will be in the bank ---------- */
+{
+  const { ctx, p } = await newPage(); await open(p);
+  const text = sel => p.locator(sel).first().innerText();
+  await go(p, 15);
+  ok('AB is the last step and sits in the rail', (await p.locator('.step-btn[data-goto="15"]').count()) === 1);
+  ok('AB empty: asks for the balance', (await text('.hero h2')).includes('כותבים כמה יש'));
+  ok('AB empty: no tiles and no chart yet', await p.locator('.h-tiles').count() === 0 && await p.locator('.bk-col').count() === 0);
+  ok('AB empty: does not call a month negative', !(await text('.hero')).includes('מינוס'));
+
+  await type(p, 'forecast.today', '20000');
+  await type(p, 'forecast.fixed', '4000');
+  await type(p, 'forecast.draw', '8000');
+  await type(p, 'forecast.tax', '1000');
+  ok('AB typing keeps the field in focus', await p.evaluate(() => document.activeElement.getAttribute('data-path') === 'forecast.tax'));
+  ok('AB 13 months', await p.locator('.bk-col').count() === 13);
+  let st = await St(p);
+  ok('AB the date of the balance is kept', /^\d{4}-\d{2}-\d{2}$/.test(st.forecast.todayAt), st.forecast.todayAt);
+  ok('AB without new sales it says so', (await text('.hero h2')).startsWith('בלי מכירות חדשות'));
+  await type(p, 'forecast.newSales', '30000');
+  ok('AB with enough sales it stays in the black', (await text('.hero h2')).includes('נשאר בפלוס'), await text('.hero h2'));
+  await type(p, 'forecast.newSales', '10000');
+  ok('AB too few sales names the month', /החשבון צפוי לרדת למינוס של/.test(await text('.hero h2')), await text('.hero h2'));
+  const tiles = await p.locator('.h-tiles .h-v').allInnerTexts();
+  ok('AB three tiles, the lowest one negative', tiles.length === 3 && tiles[1].includes('-'), tiles);
+  const fc = await p.evaluate(() => { const b = [...document.querySelectorAll('.bk-col')].map(c => c.getAttribute('aria-label')); return b; });
+  ok('AB every month has a spoken label', fc.every(x => /בסוף החודש/.test(x)), fc[0]);
+
+  // a click on a month opens that month
+  await p.locator('.bk-col').nth(3).click();
+  ok('AB the clicked month is marked', await p.locator('.bk-col').nth(3).getAttribute('aria-pressed') === 'true');
+  ok('AB only one month is marked', await p.locator('.bk-col[aria-pressed="true"]').count() === 1);
+  const lab = (await p.locator('.bk-col').nth(3).getAttribute('aria-label')).split(':')[0];
+  ok('AB the detail shows that month', (await text('[data-live="bankMonth"] h3')) === lab, lab);
+  ok('AB the click keeps focus', await p.evaluate(() => document.activeElement.classList.contains('bk-col')));
+  const num = t => Number(t.replace(/[^\d.-]/g, ''));
+  const ln = async c => (await p.locator(`[data-live="bankMonth"] .bk-ln.${c} b`).allInnerTexts()).map(num);
+  const tots = await ln('tot');
+  ok('AB in and out add up on screen', tots.length === 2 && tots[0] === 10000 && tots[1] >= 13000, tots);
+
+  // payments with an end, one-offs, and removing them
+  await p.click('[data-bankadd="until"]');
+  ok('AB adding focuses the name', await p.evaluate(() => document.activeElement.getAttribute('data-path') === 'forecast.items.0.name'));
+  await p.keyboard.type('מחשב');
+  await type(p, 'forecast.items.0.amount', '420');
+  const nowYm = await p.evaluate(() => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jerusalem' }).format(new Date()).slice(0, 7));
+  const endYm = Engine.ymAdd(nowYm, 2);
+  await p.selectOption('[data-path="forecast.items.0.end"]', endYm);
+  await p.locator('.bk-col').nth(1).click();
+  ok('AB the payment shows while it runs', (await text('[data-live="bankMonth"]')).includes('מחשב'));
+  await p.locator('.bk-col').nth(4).click();
+  ok('AB and stops after its end', !(await text('[data-live="bankMonth"]')).includes('מחשב'));
+  await p.click('[data-bankadd="once"]');
+  await p.keyboard.type('מס שנתי');
+  await type(p, 'forecast.items.1.amount', '20000');
+  await p.selectOption('[data-path="forecast.items.1.ym"]', Engine.ymAdd(nowYm, 4));
+  await p.locator('.bk-col').nth(4).click();
+  ok('AB the one-off lands in its month', (await text('[data-live="bankMonth"]')).includes('מס שנתי'));
+  await p.locator('.bk-col').nth(5).click();
+  ok('AB and only there', !(await text('[data-live="bankMonth"]')).includes('מס שנתי'));
+  await p.check('[data-check="forecast.items.0.inFixed"]');
+  st = await St(p);
+  ok('AB the mark is saved', st.forecast.items[0].inFixed === true);
+  await p.locator('.bk-item .icon-btn').nth(1).click();
+  st = await St(p);
+  ok('AB a row can be removed', st.forecast.items.length === 1 && st.forecast.items[0].name === 'מחשב');
+
+  // a negative balance
+  await type(p, 'forecast.today', '-5000');
+  st = await St(p);
+  ok('AB an overdraft is kept with its sign', Number(st.forecast.today) === -5000, st.forecast.today);
+  ok('AB and shown with it', (await p.locator('.h-tiles .h-v').first().innerText()).includes('-'));
+
+  // the shape of the chart
+  const shape = await p.evaluate(() => {
+    const cols = [...document.querySelectorAll('.bk-col')], box = e => e.getBoundingClientRect();
+    const tops = cols.map(c => Math.round(box(c).top)), vals = cols.map(c => box(c.querySelector('.bk-v')));
+    let touch = 0; vals.forEach((a, i) => { if (i && Math.abs(a.top - vals[i - 1].top) < a.height) { const r1 = cols[i].querySelector('.bk-v'), r2 = cols[i - 1].querySelector('.bk-v'); const w = n => { const g = document.createRange(); g.selectNodeContents(n); return g.getBoundingClientRect(); }; const x = w(r1), y = w(r2); if (x.right > y.left && y.right > x.left) touch++; } });
+    const out = cols.filter(c => { const b = box(c.querySelector('i')), v = box(c); return b.top < v.top - 1 || b.bottom > v.bottom + 1; }).length;
+    return { sameLine: new Set(tops).size === 1, touch, out };
+  });
+  ok('AB all months on one line', shape.sameLine);
+  ok('AB the numbers do not touch', shape.touch === 0, shape.touch);
+  ok('AB the bars stay inside their month', shape.out === 0, shape.out);
+  await p.evaluate(() => { const b = document.querySelector('.step-nav'); if (b) b.style.position = 'static'; });
+  await p.screenshot({ path: OUT + '/ab-bank.png' });
+  await axe(p, 'AB bank');
+
+  // the numbers are not lost between visits, and an old link gets the new step without losing anything
+  const keep = await p.evaluate(() => { const P = window.__pricing, out = P.normalize(JSON.parse(JSON.stringify(P.S))); return out.forecast; });
+  ok('AB saved and read back', keep.today === '-5000' && keep.items.length === 1, keep);
+  const old = await p.evaluate(() => { const P = window.__pricing, o = JSON.parse(JSON.stringify(P.S)); delete o.forecast; const before = JSON.stringify(o.sales) + JSON.stringify(o.ops) + JSON.stringify(o.products); const n = P.normalize(o); return { same: before === JSON.stringify(n.sales) + JSON.stringify(n.ops) + JSON.stringify(n.products), f: n.forecast }; });
+  ok('AB an old link keeps its data', old.same);
+  ok('AB and starts the forecast empty', old.f.today === '' && Array.isArray(old.f.items) && old.f.items.length === 0);
+  await p.evaluate(() => { const P = window.__pricing; const o = JSON.parse(JSON.stringify(P.S)); delete o.forecast; P.S.forecast = P.normalize(o).forecast; P.go(15); });
+  ok('AB an old link opens on the step', (await text('.hero h2')).includes('כותבים כמה יש'));
+  ok('AB no page errors', p.errs.length === 0, p.errs);
+
+  // the demo tells a real story
+  await ctx.close();
+  const d = await newPage(); await open(d.p); await d.p.click('[data-act="demo"]'); await go(d.p, 15);
+  const hero = await d.p.locator('.hero h2').innerText();
+  ok('AB the demo opens with the chart', await d.p.locator('.bk-col').count() === 13, hero);
+  const low = await d.p.evaluate(() => [...document.querySelectorAll('.bk-col')].map(c => c.getAttribute('aria-label')).join('|'));
+  ok('AB the demo is not an absurd minus', !/מינוס \d{3},\d{3}/.test(low), low);
+  await d.ctx.close();
+
+  // phone
+  const ph = await newPage({ width: 400, height: 800 }); await open(ph.p); await ph.p.click('[data-act="demo"]'); await go(ph.p, 15);
+  const over = await ph.p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+  ok('AB phone: the page does not scroll sideways', over <= 0, over);
+  ok('AB phone: the chart scrolls by itself', await ph.p.evaluate(() => { const s = document.querySelector('.bk-scroll'); return s.scrollWidth > s.clientWidth; }));
+  ok('AB phone: the fields are wide enough', await ph.p.evaluate(() => [...document.querySelectorAll('.bk-item input:not([type=checkbox]), .bk-item select, .bk-row input')].every(i => i.getBoundingClientRect().width >= 60)));
+  await axe(ph.p, 'AB phone'); await ph.ctx.close();
+  const mid = await newPage({ width: 1100, height: 800 }); await open(mid.p); await mid.p.click('[data-act="demo"]'); await go(mid.p, 15);
+  ok('AB 1100: a month picker shows its whole month', await mid.p.evaluate(() => [...document.querySelectorAll('.bk-item select')].every(i => i.getBoundingClientRect().width >= 110)));
+  ok('AB 1100: the page itself does not scroll', await mid.p.evaluate(() => document.documentElement.scrollHeight <= innerHeight));
+  await mid.ctx.close();
+}
+
 await browser.close();
 console.log(`\n${pass} passed, ${fail} failed`);
 if (failures.length) console.log('FAILURES:\n' + failures.join('\n'));

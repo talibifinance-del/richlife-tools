@@ -409,5 +409,105 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   ok('ops fuzz clean', badOps === 0, badOps);
 }
 
+/* what will be in the bank */
+{
+  const blank = extra => Object.assign({ biz: { type: 'murshe', vatPct: 18 }, labor: {}, overhead: { marketing: [], admin: [] }, tax: { points: 0 }, materials: [], products: [], sales: [], forecast: { today: 10000, todayAt: '2026-11-01', newSales: '', fixed: 4000, draw: 8000, tax: 1000, items: [] } }, extra || {});
+  // the same shape the tool saves
+  const mk = (extra, fc) => { const s = blank(extra); Object.assign(s.forecast, fc || {}); s.ops = s.ops || { year: 2026, rows: {}, draw: {}, paid: {}, bank: { opening: '', end: [] } }; s.years = s.years || {}; return s; };
+  const b = (extra, fc) => E.bankForecast(mk(extra, fc), '2026-11');
+
+  // no money in, three fixed amounts out; typed on the 1st, so the whole month still moves it
+  let f = b();
+  ok('forecast: 13 months', f.months.length === 13);
+  ok('forecast: starts this month', f.months[0].ym === '2026-11' && f.months[12].ym === '2027-11');
+  near('forecast: first month', f.months[0].balance, 10000 - 13000);
+  near('forecast: second month', f.months[1].balance, 10000 - 26000);
+  ok('forecast: the first minus is found', f.firstNeg === '2026-11');
+  ok('forecast: lowest is the last', f.low.ym === '2027-11');
+  near('forecast: a year on', f.end, 10000 - 13 * 13000);
+
+  // typed mid month: only the part of the month that is left moves it
+  f = E.bankForecast(mk({}, { todayAt: '2026-11-16' }), '2026-11');
+  near('forecast: half a month left', f.months[0].outTotal, 13000 * 15 / 30);
+  near('forecast: the next month is whole', f.months[1].outTotal, 13000);
+
+  // a sale: what has come in is already in the balance
+  const sale = { client: 'א', kind: 'equal', total: 3000, n: 3, start: '2026-11', month: '2026-11', marks: { '2026-11': { paid: true } } };
+  f = b({ biz: { type: 'patur' }, sales: [sale] });
+  ok('forecast: a marked payment is not counted twice', f.months[0].sold === 0);
+  near('forecast: next payments count', f.months[1].sold, 1000);
+  near('forecast: and the last', f.months[2].sold, 1000);
+  ok('forecast: nothing after the sale ends', f.months[3].sold === 0);
+
+  // a balance from the end of last month: this month's money is not in it yet
+  const fill = { year: 2026, rows: { income: [{ m: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0] }] }, draw: {}, paid: {}, bank: { opening: '', end: ['', '', '', '', '', '', '', '', '', 7000, '', ''] } };
+  f = E.bankForecast(mk({ biz: { type: 'patur' }, sales: [sale], ops: fill }, { today: '' }), '2026-11');
+  ok('forecast: balance comes from the fill', f.has && f.base.source === 'end' && f.base.amount === 7000 && f.base.ym === '2026-10', f.base);
+  near('forecast: a paid payment of this month still counts', f.months[0].sold, 1000);
+
+  // a payment that is late is not assumed to arrive
+  const lateSale = { client: 'ב', kind: 'once', total: 900, start: '2026-08', month: '2026-08' };
+  f = b({ biz: { type: 'patur' }, sales: [lateSale] });
+  ok('forecast: late money stays out', f.months.every(m => m.sold === 0));
+  near('forecast: and is reported', f.late, 900);
+
+  // new sales start next month, and the warning without them stays
+  f = b({ biz: { type: 'patur' } }, { newSales: 20000 });
+  ok('forecast: new sales not this month', f.months[0].fresh === 0);
+  near('forecast: new sales from next month', f.months[1].fresh, 20000);
+  ok('forecast: without new sales the money runs out', f.bareNeg === '2026-11');
+  near('forecast: with them it grows', f.months[1].balance, 10000 - 13000 + 20000 - 13000);
+
+  // a payment with an end, a one-off, and a payment already inside the fixed costs
+  const items = [{ kind: 'until', name: 'מחשב', amount: 420, end: '2026-12' }, { kind: 'once', name: 'ביטוח', amount: 2400, ym: '2027-01' }, { kind: 'until', name: 'ייעוץ', amount: 800, end: '2026-12', inFixed: true }];
+  f = b({ biz: { type: 'patur' } }, { items });
+  near('forecast: payment while it runs', f.months[1].outTotal, 13420);
+  near('forecast: inside fixed costs it adds nothing', f.months[1].fixed, 4000);
+  near('forecast: after the end the fixed costs drop', f.months[2].fixed, 3200);
+  near('forecast: and the payment stops, the one-off lands', f.months[2].outTotal, 3200 + 8000 + 1000 + 2400);
+  near('forecast: one-off is once', f.months[3].outTotal, 12200);
+
+  // VAT: out in odd months for the two before, on money in less money out
+  const vatSale = { client: 'ג', kind: 'sub', monthly: 11800, start: '2026-11', end: '2027-02', month: '2026-11', auto: true };
+  f = b({ sales: [vatSale] });
+  ok('forecast: no VAT in an even month', f.months[1].vat === 0);
+  near('forecast: January pays for Nov and Dec', f.months[2].vat, 3600);
+  near('forecast: March pays for Jan and Feb', f.months[4].vat, 3600);
+  near('forecast: May has nothing to pay', f.months[6].vat, 0);
+  f = b({ biz: { type: 'patur' }, sales: [vatSale] });
+  ok('forecast: exempt pays no VAT', f.months.every(m => m.vat === 0));
+
+  // typed balance that went stale, and no balance at all
+  f = E.bankForecast(mk({}, { todayAt: '2026-09-20' }), '2026-11');
+  ok('forecast: an old balance is flagged', f.base.stale === true);
+  f = E.bankForecast(mk({}, { today: '' }), '2026-11');
+  ok('forecast: no balance says so', f.has === false && f.base === null);
+  ok('forecast: a balance of zero counts', E.bankForecast(mk({}, { today: 0 }), '2026-11').has === true);
+
+  // defaults come from the last three filled months, without one-offs and without prior-year invoices
+  const m3 = (a, b_, c_) => [0, 0, 0, 0, 0, 0, 0, a, b_, c_, 0, 0];
+  const ops3 = { year: 2026, rows: { income: [{ m: m3(5000, 5000, 5000) }], admin: [{ m: m3(1000, 2000, 3000), vat: false }, { m: m3(0, 9000, 0), oneOff: true, vat: false }] }, draw: { salary: m3(6000, 6000, 9000), prior: m3(500, 500, 500) }, paid: {}, bank: { opening: 1000, end: [] } };
+  f = E.bankForecast(mk({ biz: { type: 'patur' }, ops: ops3 }, { today: '', fixed: '', draw: '', tax: '' }), '2026-11');
+  near('forecast: fixed is the three month average', f.fixed, 2000);
+  near('forecast: draw leaves out prior-year invoices', f.draw, 7000);
+  near('forecast: prior-year invoices are reported', f.defaults.prior, 500);
+  ok('forecast: a typed number wins', E.bankForecast(mk({ biz: { type: 'patur' }, ops: ops3 }, { fixed: 1500 }), '2026-11').fixed === 1500);
+  ok('forecast: a typed zero wins', E.bankForecast(mk({ biz: { type: 'patur' }, ops: ops3 }, { fixed: 0 }), '2026-11').fixed === 0);
+
+  // the forecast never writes to what it reads
+  const st = mk({ sales: [sale] }), before = JSON.stringify(st);
+  E.bankForecast(st, '2026-11');
+  ok('forecast: reads only', JSON.stringify(st) === before);
+
+  // never NaN on a half empty state
+  let bad = 0;
+  for (let n = 0; n < 500; n++) {
+    const rnd = () => Math.random() < 0.4 ? '' : Math.round(Math.random() * 30000);
+    const x = E.bankForecast(mk({ sales: Math.random() < 0.5 ? [sale, lateSale] : [] }, { today: rnd(), todayAt: Math.random() < 0.5 ? '2026-11-20' : '', newSales: rnd(), fixed: rnd(), draw: rnd(), tax: rnd(), items: Math.random() < 0.5 ? items : [] }), '2026-11');
+    if (!x.months.every(m => isFinite(m.balance) && isFinite(m.outTotal) && m.outTotal >= 0)) bad++;
+  }
+  ok('forecast: fuzz clean', bad === 0, bad);
+}
+
 console.log(`${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

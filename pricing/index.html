@@ -561,6 +561,45 @@ a{color:var(--pine-deep)}
   .pay-main .h-sub,.pay-chart .h-sub{font-size:14.5px;line-height:1.4;margin:1px 0 8px}
   .pay-chart .f-bars{height:170px}
 }
+.hero.bad h2{color:var(--red-deep)}
+.h-st.bad{background:rgba(var(--red-rgb),.12);color:var(--red-deep)}
+.h-v.b{color:var(--red-deep)}
+.bk-chart{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:4px;margin-top:6px;direction:rtl}
+.bk-col{font:inherit;color:inherit;background:none;border:0;border-radius:12px;padding:0 1px 6px;cursor:pointer;min-width:0;display:block;width:100%}
+.bk-col:hover{background:rgba(var(--pine-rgb),.07)}
+.bk-col[aria-pressed="true"]{background:rgba(var(--pine-rgb),.12);outline:2px solid var(--pine);outline-offset:-2px}
+.bk-col:focus-visible{outline:3px solid var(--pine-deep);outline-offset:-3px}
+.bk-plot{display:block;position:relative}
+.bk-plot i{position:absolute;inset-inline:14%;display:block}
+.bk-plot i.p{background:var(--pine-deep);border-radius:6px 6px 0 0}
+.bk-plot i.n{background:var(--red);border-radius:0 0 6px 6px}
+.bk-v{position:absolute;inset-inline:0;text-align:center;font-size:12.5px;font-weight:800;color:var(--ink-soft);font-variant-numeric:tabular-nums;line-height:17px;white-space:nowrap}
+.bk-v.n{color:var(--red-deep)}
+.bk-m{display:block;text-align:center;font-size:13.5px;font-weight:700;color:var(--ink-soft)}
+.bk-m small{display:block;font-size:11px;font-weight:700;line-height:1.1}
+.bk-scroll{min-width:0}
+.bk-main{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.bk-main .card{margin-bottom:14px}
+.bk-sec{font-size:15px;font-weight:900;color:var(--pine-darker);margin:12px 0 6px}
+.bk-row{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:12px;align-items:center;padding:8px 12px;background:rgba(var(--pine-rgb),.07);border-radius:12px;margin-bottom:6px}
+.bk-row label,.bk-name{display:block;font-size:15px;font-weight:700;color:var(--pine-darker)}
+.bk-row small{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);line-height:1.35}
+.bk-auto{text-align:center;font-size:14px;font-weight:800;color:var(--pine-deep)}
+.bk-item{display:grid;grid-template-columns:minmax(0,1.4fr) 110px minmax(0,1fr) 30px;gap:8px;align-items:end;padding:10px 12px;background:rgba(var(--pine-rgb),.07);border-radius:12px;margin-bottom:6px}
+.bk-item label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:3px}
+.bk-item .icon-btn{margin-bottom:6px}
+.bk-item label.bk-check{grid-column:1/-1;display:flex;align-items:center;gap:7px;font-size:13.5px;margin:2px 0 0;cursor:pointer}
+.bk-adds{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.bk-ln{display:flex;justify-content:space-between;gap:14px;font-size:15px;font-weight:600;color:var(--ink-soft);padding:5px 0}
+.bk-ln b{font-weight:800;color:var(--pine-darker);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bk-ln.tot{border-top:1px solid rgba(var(--pine-rgb),.2);margin-bottom:10px;padding-top:7px;color:var(--pine-darker);font-weight:900}
+.bk-ln.tot b{font-weight:900}
+.bk-ln.end{background:rgba(var(--pine-rgb),.1);border-radius:12px;padding:10px 14px;font-size:16.5px;font-weight:900;color:var(--pine-darker)}
+.bk-ln.end b{font-size:18px;font-weight:900}
+.bk-ln.end.neg{background:rgba(var(--red-rgb),.12);color:var(--red-deep)}
+.bk-ln.end.neg b{color:var(--red-deep)}
+@media (max-width:1300px){.bk-main{grid-template-columns:minmax(0,1fr)}.bk-detail{order:-1}}
+@media (max-width:640px){.bk-scroll{overflow-x:auto}.bk-chart{min-width:720px}.bk-item{grid-template-columns:minmax(0,1fr) 30px}.bk-item>div{grid-column:1/-1}.bk-item .icon-btn{grid-column:2;grid-row:1}.bk-item>div:first-child{grid-column:1;grid-row:1}}
 @media screen and (min-width:1400px){.app{zoom:1.14}.pay-main{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
 @media screen and (min-width:1650px){.app{zoom:1.2}}
 @media screen and (min-width:2000px){.app{zoom:1.36}}
@@ -743,7 +782,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=13"></script>
+<script src="engine.js?v=14"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -776,7 +815,8 @@ var STEPS = [
   { t: 'מילוי החודש', why: 'פעם בחודש ממלאים מה נכנס ומה יצא, כמו שזה מופיע בבנק. כל השאר מחושב מזה. הנתונים נשמרים, וכל חודש ממשיכים מאיפה שעצרת.' },
   { t: 'איך העסק שלי?' },
   { t: 'הערכת מס', why: 'כמה מס צפוי לכל השנה לפי מה שמילאת, וכמה היה צריך לשלם עד עכשיו.' },
-  { t: 'מכירות ותשלומים', why: 'רושמים כל מכירה ואיך משלמים עליה, ורואים כמה צפוי להיכנס בחודשים הבאים.' }
+  { t: 'מכירות ותשלומים', why: 'רושמים כל מכירה ואיך משלמים עליה, ורואים כמה צפוי להיכנס בחודשים הבאים.' },
+  { t: 'מה יהיה בבנק', why: 'כמה צפוי להישאר בחשבון בסוף כל חודש, בשנה הקרובה. רואים מראש איזה חודש יהיה צפוף, כשעוד אפשר לעשות משהו.' }
 ];
 
 /* What to do in each step, in plain words. The examples follow the demo business, so they match what the demo button fills in. */
@@ -792,6 +832,7 @@ var GUIDE = {
   9: { ic: '🗓️', todo: ['רואים כמה צריך למכור מכל מוצר בשנה.', 'מפזרים על החודשים בלחיצה, או לבד לפי העונות של העסק.', 'מוסיפים השקות, מבצעים ומועדים.'], have: 'לוח השנה של העסק', get: 'תוכנית: כמה למכור בכל חודש' },
   11: { ic: '✏️', todo: ['בוחרים חודש אחד, או את כל השנה בטבלה.', 'רושמים מה נכנס ומה יצא, כמו שרואים בבנק ובאשראי. שורה בלי סכום נשארת ריקה.', 'בסוף כותבים כמה יש בבנק, והכלי בודק שזה מסתדר.'], have: 'עו"ש ופירוט אשראי של החודש', get: 'כמה העסק הרוויח וכמה נשאר בחשבון' },
   14: { ic: '🤝', todo: ['לוחצים על "מכירה חדשה" ובוחרים מה נמכר.', 'בוחרים איך משלמים: תשלום אחד, תשלומים, מקדמה ופגישות, או מנוי.', 'כשכסף נכנס לוחצים "נכנס", ורואים מה באיחור ומה עוד צפוי.'], have: 'רשימת המכירות וההסכמים האחרונים', get: 'כמה כסף צפוי להיכנס, וכמה כבר מובטח', ex: 'ליווי ב-6,600 ₪: מקדמה של 1,000 ₪, ועוד 5 פגישות של 1,120 ₪ בחודשים הבאים.' },
+  15: { ic: '🏦', todo: ['כותבים כמה יש היום בבנק.', 'כותבים כמה מכירות חדשות צפויות בחודש. הכלי מוסיף לבד את מה שכבר נמכר.', 'מוסיפים תשלומים שנגמרים בקרוב והוצאות גדולות שצפויות, כמו מס או ביטוח.'], have: 'יתרת הבנק של היום', get: 'באיזה חודש החשבון עלול לרדת למינוס, וכמה', ex: 'מחשב ב-420 ₪ בחודש עד מאי? מוסיפים תשלום עם סוף, והכלי מפסיק לספור אותו ביוני.' },
   13: { ic: '🧮', todo: ['בוחרים נקודות זיכוי מהרשימה.', 'מוסיפים דמי לידה, פחת או תרומות, אם יש.', 'קוראים כמה מס צפוי לשנה, ומשווים למה ששולם.'], have: 'אישור דמי לידה, אם היו', get: 'הערכת מס לשנה, ואחוז מקדמות שמתאים לה' }
 };
 /* Which guides were already shown is a matter of this device, not of the saved business. */
@@ -856,6 +897,7 @@ function emptyState() {
     },
     tax: { points: '', saving: '', tables: null, pick: null },
     plan: { dates: DEFAULT_DATES.slice(), launches: months(), promos: months(), focus: months() },
+    forecast: { today: '', todayAt: '', newSales: '', fixed: '', draw: '', tax: '', items: [] },
     whatIf: { i: '0', mode: 'launch', launchPct: '-20', launchUnits: '', baseUnits: '', raisePct: '10', midPct: '10', midFrom: String(israelMonth()) },
     years: {},
     sales: [],
@@ -894,8 +936,10 @@ function demoState() {
     { id: 's2', client: 'מיכל', product: 'p1', month: thisM, kind: 'equal', total: 3000, n: 6, start: thisM },
     { id: 's3', client: 'חנות השכונה', label: 'ריטיינר', product: '', month: thisM, kind: 'sub', monthly: 1200, start: thisM, end: '', auto: true }
   ];
+  s.forecast = { today: 42000, todayAt: todayIso(), newSales: 46000, fixed: '', draw: '', tax: '', items: [{ kind: 'until', name: 'מחשב', amount: 420, end: E.ymAdd(thisM, 5) }, { kind: 'once', name: 'ביטוח עסק', amount: 2400, ym: E.ymAdd(thisM, 2) }] };
   return s;
 }
+function todayIso() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jerusalem' }).format(new Date()); }
 function israelYear() { return +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', year: 'numeric' }).format(new Date()); }
 function israelMonth() { return +new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', month: 'numeric' }).format(new Date()) - 1; }
 function currentYm() { var m = israelMonth() + 1; return israelYear() + '-' + (m < 10 ? '0' : '') + m; }
@@ -967,6 +1011,7 @@ function stepState(n) {
     case 11: return R && O && O.k ? 'done' : 'empty';
     case 12: return R && O && O.k ? 'done' : 'empty';
     case 13: return R && O && O.k && S.tax.points !== '' ? 'done' : 'empty';
+    case 15: return S.forecast.today !== '' ? 'done' : 'empty';
     default: return S.biz.name ? 'done' : 'empty';
   }
 }
@@ -1659,6 +1704,38 @@ VIEWS[14] = function () {
     '<div class="card"><span class="sec-lbl">המכירות שלך</span><button type="button" class="btn" data-act="newSale">+ מכירה חדשה</button><div class="sale-list">' + list + '</div></div>' +
     '<div class="card"><span class="sec-lbl">כמה מכרתי בכל חודש, ' + opsYear() + '</span>' + live('salesCounts') + '</div>' + stepNav();
 };
+/* What will be in the bank. Empty fields follow the tool's own figure, shown as the placeholder. */
+var bankSel = null;
+function bankFc() { return E.bankForecast(S, currentYm(), 13, R); }
+function bankMoney(v) { return (v < 0 ? '\u200e-' : '') + ils(Math.abs(v), 0); }
+function bankRow(label, sub, path, dflt, signed) {
+  var id = 'f' + (++fid), v = getPath(path), neg = signed && E.num(v) < 0;
+  return '<div class="bk-row"><div><label for="' + id + '">' + label + '</label>' + (sub ? '<small>' + sub + '</small>' : '') + '</div><div class="input-shell"><span class="unit" aria-hidden="true">₪</span><input id="' + id + '" type="text" inputmode="' + (signed ? 'text' : 'decimal') + '" autocomplete="off" data-num' + (signed ? ' data-signed' : '') + ' data-path="' + path + '" value="' + (neg ? '-' : '') + esc(grp(v)) + '" placeholder="' + esc(dflt ? money(dflt) : '') + '"></div></div>';
+}
+function bankAvgLabel(d) { return d.months >= 3 ? 'ממוצע 3 החודשים האחרונים' : (d.months === 2 ? 'ממוצע החודשיים האחרונים' : (d.months === 1 ? 'לפי החודש האחרון שמולא' : '')); }
+function bankItem(x, i) {
+  var b = 'forecast.items.' + i + '.', once = x.kind === 'once', a = 'f' + (++fid), c = 'f' + (++fid), e = 'f' + (++fid), k = 'f' + (++fid);
+  return '<div class="bk-item' + (once ? ' once' : '') + '"><div><label for="' + a + '">מה</label><div class="input-shell"><input id="' + a + '" type="text" autocomplete="off" data-text data-path="' + b + 'name" value="' + esc(x.name) + '" placeholder="' + (once ? 'למשל: מס על השנה הקודמת' : 'למשל: מחשב') + '"></div></div>' +
+    '<div><label for="' + c + '">' + (once ? 'כמה' : 'כמה בחודש') + '</label><div class="input-shell"><span class="unit" aria-hidden="true">₪</span><input id="' + c + '" type="text" inputmode="decimal" autocomplete="off" data-num data-path="' + b + 'amount" value="' + esc(grp(x.amount)) + '"></div></div>' +
+    '<div><label for="' + e + '">' + (once ? 'מתי' : 'תשלום אחרון') + '</label><div class="input-shell"><select id="' + e + '" data-text data-path="' + b + (once ? 'ym' : 'end') + '">' + ymOptions(once ? x.ym : x.end) + '</select></div></div>' +
+    '<button type="button" class="icon-btn" data-del="forecast.items" data-i="' + i + '" aria-label="מחיקת ' + esc(x.name || 'שורה') + '">×</button>' +
+    (once ? '' : '<label class="bk-check" for="' + k + '"><input id="' + k + '" type="checkbox" data-check="' + b + 'inFixed"' + (x.inFixed ? ' checked' : '') + '> כבר נכלל בהוצאות הקבועות</label>') + '</div>';
+}
+VIEWS[15] = function () {
+  var f = bankFc(), d = f.defaults, avg = bankAvgLabel(d), patur = S.biz.type === 'patur', t = targetMonth();
+  var fixedSub = d.fixedFrom === 'avg' ? avg + ' ממילוי החודש' : 'לפי השכר והעלויות העקיפות, עד שיהיה מילוי חודש', drawSub = d.fixedFrom === 'avg' ? avg : 'לפי מה שרוצים ביד, בשלב שכר ושעות';
+  var items = S.forecast.items.map(bankItem).join('');
+  return head() + live('bankHero') + live('bankTiles') + live('bankNotes') + '<div class="card" style="margin-bottom:14px">' + live('bankChart') + '</div>' +
+    '<div class="bk-main"><div class="card"><h3 class="h-t">מה הכלי מניח</h3><p class="h-sub">הכלי ממלא לבד מה שהוא יכול. כל מספר אפשר לשנות, ושדה ריק חוזר להצעה של הכלי.</p>' +
+    '<div class="bk-sec">מה יש עכשיו</div>' + bankRow('כמה יש היום בבנק', 'אפשר גם במינוס, עם מקף לפני המספר', 'forecast.today', f.base && f.base.source !== 'today' ? f.base.amount : 0, true) +
+    '<div class="bk-sec">מה ייכנס</div><div class="bk-row"><div><span class="bk-name">מכירות שכבר נרשמו</span><small>מגיע לבד ממכירות ותשלומים</small></div><div class="bk-auto">אוטומטי</div></div>' +
+    bankRow('מכירות חדשות בכל חודש, הערכה', 'כולל מע"מ, מהחודש הבא' + (t ? '. בתוכנית השנתית: ' + ils(t, 0) + ' בחודש' : ''), 'forecast.newSales') +
+    '<div class="bk-sec">מה ייצא בכל חודש</div>' + bankRow('הוצאות קבועות של העסק', fixedSub, 'forecast.fixed', d.fixed) + bankRow('משיכה לעצמי', drawSub, 'forecast.draw', d.draw) + bankRow('מקדמות מס וביטוח לאומי', d.tax ? 'לפי הערכת המס. יש סכום מדויק מרואה החשבון? אפשר לכתוב אותו' : 'אחרי מילוי החודש הכלי יעריך לבד, או שכותבים כאן', 'forecast.tax', d.tax) +
+    (patur ? '' : '<div class="bk-row"><div><span class="bk-name">מע"מ, כל חודשיים</span><small>מחושב מהכניסות והיציאות</small></div><div class="bk-auto">אוטומטי</div></div>') +
+    '<div class="bk-sec">תשלומים עם סוף, והוצאות חד-פעמיות</div><p class="explain" style="margin:0 0 8px">תשלום שכבר נכנס למילוי החודש מסמנים "כבר נכלל בהוצאות הקבועות", כדי שלא ייספר פעמיים. כשהוא נגמר, ההוצאות יורדות בהתאם.</p>' + items +
+    '<div class="bk-adds"><button type="button" class="btn small ghost" data-bankadd="until">+ תשלום עם סוף</button><button type="button" class="btn small ghost" data-bankadd="once">+ הוצאה חד-פעמית</button></div></div>' +
+    '<div class="card bk-detail">' + live('bankMonth') + '</div></div>' + stepNav();
+};
 /* Marking payments: one open small form at a time, and the last action can be taken back. */
 var payEdit = null, lastPay = null;
 function recv() { return E.receivables(S, currentYm()); }
@@ -1735,6 +1812,48 @@ function forecastBars(fc) {
 }
 function targetMonth() { return R.annual.revenue != null ? R.annual.revenue / 12 * (1 + R.settings.vatPct / 100) : null; }
 var LIVE_OPS = {
+  bankHero: function () {
+    var f = bankFc(), title, sub, bad = false;
+    if (!f.has) { title = 'כדי לראות מה יהיה בבנק, כותבים כמה יש בו היום.'; sub = 'זה המספר שממנו הכול מתחיל. השדה נמצא למטה, תחת "מה יש עכשיו".'; }
+    else if (!f.newSales && f.firstNeg) { bad = true; title = 'בלי מכירות חדשות, הכסף נגמר ב' + ymLabel(f.firstNeg) + '.'; sub = 'זה מה שיקרה רק עם מה שכבר נמכר. כותבים למטה כמה מכירות חדשות צפויות בכל חודש, והתמונה תתעדכן.'; }
+    else if (f.low.balance < 0) { bad = true; title = 'ב' + ymLabel(f.low.ym) + ' החשבון צפוי לרדת למינוס של ' + ils(Math.abs(f.low.balance), 0) + '.'; sub = 'אפשר לראות את זה עכשיו, כשעוד יש זמן לגבות מוקדם יותר, לדחות הוצאה או למכור יותר.'; }
+    else { title = 'החשבון נשאר בפלוס בכל 12 החודשים.'; sub = 'החודש הכי נמוך הוא ' + ymLabel(f.low.ym) + ', עם ' + ils(f.low.balance, 0) + '.'; }
+    return '<div class="hero' + (bad ? ' bad' : '') + '"><h2>' + esc(title) + '</h2><p>' + esc(sub) + '</p></div>';
+  },
+  bankTiles: function () {
+    var f = bankFc(); if (!f.has) return '';
+    var b = f.base, typedNow = b.source === 'today', at = b.at ? b.at.slice(8, 10).replace(/^0/, '') + '.' + b.at.slice(5, 7).replace(/^0/, '') + '.' + b.at.slice(0, 4) : '';
+    var first = '<div class="h-tile"><span class="h-st good">' + (typedNow ? 'היום בבנק' : 'בבנק בסוף ' + MONTHS[+b.ym.slice(5, 7) - 1]) + '</span><div class="h-v' + (b.amount < 0 ? ' b' : '') + '">' + bankMoney(b.amount) + '</div><p>' + (typedNow ? (at ? 'עודכן ב-' + at : 'אפשר לעדכן למטה') : 'לפי מילוי החודש, אפשר לעדכן למטה') + '</p></div>';
+    var neg = f.low.balance < 0, low = '<div class="h-tile"><span class="h-st ' + (neg ? 'bad' : 'good') + '">' + (neg ? '<span aria-hidden="true">!</span> ' : '') + 'החודש הכי נמוך</span><div class="h-v' + (neg ? ' b' : '') + '">' + bankMoney(f.low.balance) + '</div><p>' + ymLabel(f.low.ym) + '</p></div>';
+    var last = f.months[f.months.length - 1], end = '<div class="h-tile"><span class="h-st good">בעוד שנה</span><div class="h-v' + (f.end < 0 ? ' b' : '') + '">' + bankMoney(f.end) + '</div><p>' + (f.newSales ? (f.bareNeg ? 'בלי מכירות חדשות, הכסף נגמר ב' + ymLabel(f.bareNeg) : 'לפי ההנחות למטה') : 'בלי מכירות חדשות') + '</p></div>';
+    return '<div class="h-tiles">' + first + low + end + '</div>';
+  },
+  bankNotes: function () {
+    var f = bankFc(), out = [], b = f.base, rows = S.forecast.items.some(function (x) { return x.kind !== 'once'; });
+    if (b && b.stale) out.push('היתרה עודכנה לפני יותר מחודש, והתחזית מתחילה ממנה. כדאי לכתוב למטה כמה יש היום.');
+    if (b && b.gap) out.push('מילוי החודש מעודכן רק עד ' + ymLabel(b.ym) + ', אז מה שקרה מאז לא נספר. כדאי לכתוב למטה כמה יש היום.');
+    if (f.late > 0) out.push(ils(f.late, 0) + ' של תשלומים באיחור לא נספרו כאן. אם ייכנסו, המצב יהיה טוב יותר.');
+    if (f.defaults.prior > 0 && !rows) out.push('בחודשים האחרונים יצאו בממוצע ' + ils(f.defaults.prior, 0) + ' בחודש על חשבוניות משנה קודמת. אם זה נמשך, כדאי להוסיף את זה למטה כתשלום עם סוף.');
+    return out.map(function (t) { return '<div class="note warn" style="margin:0 0 10px">' + esc(t) + '</div>'; }).join('');
+  },
+  bankChart: function () {
+    var f = bankFc(); if (!f.has) return '<h3 class="h-t">כמה יישאר בסוף כל חודש</h3><p class="explain" style="margin:0">אחרי שכותבים כמה יש היום בבנק, יופיע כאן גרף של 12 החודשים הבאים.</p>';
+    var vals = f.months.map(function (m) { return m.balance; }), max = Math.max.apply(null, vals.concat([0])), min = Math.min.apply(null, vals.concat([0])), H = 150, span = Math.max(max - min, 1), scale = H / span, top = 22, zero = top + max * scale, sel = bankSel || f.low.ym;
+    return '<h3 class="h-t">כמה יישאר בסוף כל חודש</h3><p class="h-sub">לחיצה על חודש מראה מה נכנס ומה יוצא בו. זו הערכה לפי ההנחות למטה, ולא הבטחה.</p><div class="bk-scroll" tabindex="0" role="region" aria-label="גרף החודשים, אפשר לגלול הצידה"><div class="bk-chart" role="group" aria-label="היתרה בסוף כל חודש">' + f.months.map(function (m) {
+      var neg = m.balance < 0, h = Math.max(3, Math.abs(m.balance) * scale), y = neg ? zero : zero - h, ly = neg ? zero + h + 2 : zero - h - 19, yr = m.ym.slice(5, 7) === '01' || m === f.months[0];
+      return '<button type="button" class="bk-col" data-bankm="' + m.ym + '" aria-pressed="' + (m.ym === sel) + '" aria-label="' + esc(ymLabel(m.ym) + ': ' + (neg ? 'מינוס ' : '') + ils(Math.abs(m.balance), 0) + ' בסוף החודש') + '"><span class="bk-plot" style="height:' + (H + top + 22) + 'px"><span class="bk-v' + (neg ? ' n' : '') + '" style="top:' + ly.toFixed(1) + 'px">' + (neg ? '\u200e-' : '') + money(Math.abs(m.balance)) + '</span><i class="' + (neg ? 'n' : 'p') + '" style="top:' + y.toFixed(1) + 'px;height:' + h.toFixed(1) + 'px"></i></span><span class="bk-m">' + MONTHS[+m.ym.slice(5, 7) - 1].slice(0, 3) + (yr ? '<small>' + m.ym.slice(0, 4) + '</small>' : '') + '</span></button>';
+    }).join('') + '</div></div>';
+  },
+  bankMonth: function () {
+    var f = bankFc(), ym = bankSel || f.low.ym, m = f.months.filter(function (x) { return x.ym === ym; })[0] || f.months[0];
+    var ln = function (n, v, c) { return '<div class="bk-ln ' + (c || '') + '"><span>' + esc(n) + '</span><b>' + v + '</b></div>'; };
+    var when = function (e) { return e ? ', תשלום אחרון ב' + payWhen(e) : ''; };
+    var sub = !m.moved ? 'החודש הזה כבר מולא, אז היתרה כבר כוללת אותו.' : (m.partial ? 'החודש כבר התחיל, אז נספר רק מה שנשאר ממנו.' : 'מה נכנס ומה יוצא בחודש הזה.');
+    return '<h3 class="h-t">' + ymLabel(m.ym) + '</h3><p class="h-sub">' + sub + '</p>' +
+      ln('כבר נמכר', ils(m.sold, 0)) + (m.fresh ? ln('מכירות חדשות, הערכה', ils(m.fresh, 0)) : '') + ln('נכנס', ils(m.inTotal, 0), 'tot') +
+      ln('הוצאות קבועות', ils(m.fixed, 0)) + ln('משיכה לעצמי', ils(m.draw, 0)) + m.until.map(function (x) { return ln((x.name || 'תשלום') + when(x.end), ils(x.amount, 0)); }).join('') + ln('מקדמות מס וביטוח לאומי', ils(m.tax, 0)) + (m.vat ? ln('מע"מ, כל חודשיים', ils(m.vat, 0)) : '') + m.once.map(function (x) { return ln((x.name || 'הוצאה') + ', פעם אחת', ils(x.amount, 0)); }).join('') + ln('יוצא', ils(m.outTotal, 0), 'tot') +
+      (f.has ? ln('בבנק בסוף החודש', bankMoney(m.balance), 'end' + (m.balance < 0 ? ' neg' : '')) : '');
+  },
   saleLine: function (i) {
     var x = S.sales[i]; if (!x) return '';
     var total = E.saleTotal(x, E.ymAdd(currentYm(), 11)), kind = x.kind || 'once';
@@ -2072,7 +2191,7 @@ function render(focus) {
   refreshLive();
   if (focus) { var t = $('stepTitle'); if (t) { t.focus({ preventScroll: true }); } window.scrollTo({ top: 0, behavior: 'auto' }); var col = $('contentCol'); if (col) col.scrollTop = 0; }
 }
-function go(n) { guideVisit = null; payEdit = null; lastPay = null; step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
+function go(n) { guideVisit = null; payEdit = null; lastPay = null; bankSel = null; step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
 function changed() { refreshLive(); persist(); }
 function hasContent(s) { return !!(s && (s.biz.name || (s.materials && s.materials.length) || (s.products && s.products.length) || E.num(s.labor && s.labor.net) || (s.ops && E.ops(s).k))); }
 
@@ -2099,6 +2218,7 @@ function normalize(s) {
     if (p.type === 'group' && E.num(p.specific) > 0 && !(p.eventCosts && p.eventCosts.length)) { p.eventCosts = [{ name: 'עלות לכל הסדנה', price: p.specific, qty: '' }]; p.specific = ''; }
   });
   s.whatIf = Object.assign({}, base.whatIf, s.whatIf || {});
+  s.forecast = Object.assign({}, base.forecast, s.forecast || {});
   s.years = s.years || {};
   s.sales = s.sales || [];
   /* a link saved before years existed holds 2026 */
@@ -2275,6 +2395,7 @@ document.addEventListener('input', function (e) {
   if (t.hasAttribute('data-path') && t.tagName !== 'SELECT') {
     var path = t.getAttribute('data-path');
     setPath(path, t.hasAttribute('data-num') ? t.value.replace(/,/g, '') : t.value);
+    if (path === 'forecast.today') S.forecast.todayAt = todayIso();
     document.querySelectorAll('[data-path="' + path + '"]').forEach(function (x) { if (x !== t) x.value = t.value; });
     if (t.hasAttribute('data-month')) { var b = path.replace(/\.m\.\d+$/, ''), q = document.querySelector('[data-quick="' + b + '"]'), a = getPath(b + '.m'), same = a.every(function (x) { return String(x) === String(a[0]); }); if (q) { q.value = same ? grp(a[0]) : ''; q.placeholder = same ? '' : 'משתנה'; } }
     changed();
@@ -2322,6 +2443,12 @@ document.addEventListener('click', function (e) {
   if (d.delpart) { var dp = d.delpart.split(':'); S.sales[+dp[0]].parts.splice(+dp[1], 1); render(); persist(); return; }
   if (d.saleauto) { var au = d.saleauto.split(':'); S.sales[+au[0]].auto = au[1] === '1'; lastPay = null; render(); persist(); return; }
   if (d.pay) { payAct(t, d.pay); return; }
+  if (d.bankm) { bankSel = d.bankm; refreshLive(); var bm = document.querySelector('[data-bankm="' + d.bankm + '"]'); if (bm) bm.focus(); return; }
+  if (d.bankadd) {
+    var bn = d.bankadd === 'once' ? { kind: 'once', name: '', amount: '', ym: E.ymAdd(currentYm(), 1) } : { kind: 'until', name: '', amount: '', end: E.ymAdd(currentYm(), 5), inFixed: false };
+    S.forecast.items.push(bn); render(); persist();
+    var bi = document.querySelector('[data-path="forecast.items.' + (S.forecast.items.length - 1) + '.name"]'); if (bi) bi.focus(); return;
+  }
   if (d.payundo != null) {
     if (lastPay && lastPay.undo) lastPay.undo.forEach(function (u) { var xu = S.sales[u.i]; if (!xu) return; xu.marks = xu.marks || {}; if (u.prev) xu.marks[u.key] = u.prev; else delete xu.marks[u.key]; });
     lastPay = { txt: 'הסימון בוטל.' }; refreshLive(); persist(); var firstPay = document.querySelector('[data-live="payList"] [data-pay]'); if (firstPay) firstPay.focus(); return;

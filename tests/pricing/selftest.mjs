@@ -768,6 +768,29 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await go(p, 5); ok('X the tax step says so', (await p.locator('[data-live="taxNeed"]').innerText()).includes('לקידום העסק'));
   await clean(p, 'X'); await axe(p, 'X'); await ctx.close();
 }
+/* ---- AA. a link saved before a feature existed keeps every value ---- */
+{
+  const { ctx, p } = await newPage({ width: 1440, height: 800 }); await open(p);
+  await p.click('[data-act="demo"]'); await p.waitForTimeout(60);
+  const res = await p.evaluate(() => {
+    const raw = JSON.parse(JSON.stringify(window.__pricing.S));
+    (raw.sales || []).forEach(x => { delete x.marks; delete x.auto; });
+    delete raw.whatIf; delete raw.years;
+    const blank = JSON.parse(JSON.stringify(raw));
+    localStorage.setItem('rl_aa', JSON.stringify(blank));
+    return { sales: raw.sales.length, products: raw.products.length };
+  });
+  ok('AA the old state is there to load', res.sales > 0 && res.products > 0, res);
+  const lost = await p.evaluate(() => {
+    const raw = JSON.parse(localStorage.getItem('rl_aa'));
+    const S = window.__pricing.normalize(JSON.parse(JSON.stringify(raw)));
+    const out = []; let n = 0;
+    (function w(a, b, at) { if (a === null || typeof a !== 'object') { n++; if (a !== '' && a !== null && (b === undefined || String(b) !== String(a))) out.push(at); return; } Object.keys(a).forEach(k => w(a[k], b ? b[k] : undefined, at + '.' + k)); })(raw, S, '');
+    return { n, out };
+  });
+  ok('AA loading it keeps every value', lost.n > 100 && lost.out.length === 0, lost);
+  await ctx.close();
+}
 /* ---- Z. what came in and what is late ---- */
 {
   const { ctx, p } = await newPage({ width: 1440, height: 800 }); await open(p);
@@ -780,6 +803,9 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('Z the late card warns', (await p.locator('[data-live="salesTiles"]').innerText()).includes('באיחור'));
   ok('Z retainer counts by itself', (await p.locator('[data-live="payList"]').innerText()).includes('נכנס לבד'));
   await clean(p, 'Z list'); await axe(p, 'Z list');
+  ok('Z the chart shows twelve months ahead', await p.locator('[data-live="salesForecast"] .f-col').count() === 15);
+  const bump = () => p.evaluate(() => { const v = [...document.querySelectorAll('[data-live="salesForecast"] .f-val')].filter(e => e.textContent).map(e => { const r = document.createRange(); r.selectNodeContents(e); return r.getBoundingClientRect(); }); return v.slice(1).filter((r, i) => r.right > v[i].left + 0.5 && r.left < v[i].right - 0.5).length; });
+  ok('Z the numbers over the bars do not touch', await bump() === 0, await bump());
   // a part
   await p.locator('[data-live="payList"] .pay.late [data-pay$="|part"]').click();
   ok('Z part opens a field in focus', await p.evaluate(() => document.activeElement.id === 'payIn'));

@@ -345,8 +345,8 @@ near('pack + wastage', E.lineCost({ mat: 'm', qty: 3 }, [{ id: 'm', pack: 12, co
   near('late total', rcv.lateTotal, 600 + 1000); ok('late counted by person', rcv.lateCount === 2 && rcv.lateClients === 2, rcv.lateNames);
   near('this month due', rcv.monthDue, 1000 + 1000 + 500); near('this month in', rcv.monthGot, 500); near('this month left', rcv.monthLeft, 2000);
   near('due, in and left agree', rcv.monthDue - rcv.monthGot - rcv.monthLeft, 0);
-  near('coming months', rcv.nextLeft, 3000 + 1000 + 2500); near('assumed part', rcv.nextAssumed, 2500);
-  ok('the chart runs from two months back to five ahead', rcv.months.length === 8 && rcv.months[0].ym === '2026-09' && rcv.months[7].ym === '2027-04');
+  near('coming months', rcv.nextLeft, 3000 + 1000 + 6000); near('assumed part', rcv.nextAssumed, 6000);
+  ok('the chart runs from two months back to twelve ahead', rcv.months.length === 15 && rcv.months[0].ym === '2026-09' && rcv.months[14].ym === '2027-11');
   near('chart adds up, late', rcv.months.reduce((a, m) => a + m.late, 0), rcv.lateTotal);
   ok('a cancelled sale is never late after it stopped', !rcv.late.some(p => rs.sales[p.sale].client === 'בוטל' && p.due >= '2026-10'));
   const f2 = E.salesForecast(rs, '2026-12', 1, '2026-11');

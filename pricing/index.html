@@ -372,6 +372,8 @@ a{color:var(--pine-deep)}
 .f-m{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:5px}
 .f-m.now{font-weight:900;color:var(--pine-darker)}
 .f-stack .f-s{border-radius:0}
+.f-m small{display:block;font-size:10.5px;font-weight:700;line-height:1.1}
+@media (max-width:640px){.f-scroll{overflow-x:auto}.f-scroll .f-bars{min-width:620px}}
 .f-stack>:first-child{border-radius:6px 6px 0 0}
 .f-l{background:repeating-linear-gradient(45deg,#c98a3a 0 4px,#ecd2ad 4px 8px)}
 .f-w{background:#c7d6ca}
@@ -552,12 +554,12 @@ a{color:var(--pine-deep)}
   .h-svg{max-height:250px}
   .h-tips{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
   #view:has([data-live="salesHero"]) .step-why{display:none}
-  .pay-main .card{padding:14px 18px}
-  .pay-main .h-t{font-size:20px}
-  .pay-main .h-sub{font-size:14.5px;line-height:1.4;margin:1px 0 8px}
-  .pay-main .f-bars{height:170px}
+  .pay-main .card,.pay-chart{padding:14px 18px}
+  .pay-main .h-t,.pay-chart .h-t{font-size:20px}
+  .pay-main .h-sub,.pay-chart .h-sub{font-size:14.5px;line-height:1.4;margin:1px 0 8px}
+  .pay-chart .f-bars{height:170px}
 }
-@media screen and (min-width:1400px){.app{zoom:1.14}.pay-main{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}}
+@media screen and (min-width:1400px){.app{zoom:1.14}.pay-main{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
 @media screen and (min-width:1650px){.app{zoom:1.2}}
 @media screen and (min-width:2000px){.app{zoom:1.36}}
 @media print{html,body{height:auto;overflow:visible;display:block}.app{zoom:1}}
@@ -739,7 +741,7 @@ a{color:var(--pine-deep)}
   </section>
 </div>
 <div id="printRoot"></div>
-<script src="engine.js?v=12"></script>
+<script src="engine.js?v=13"></script>
 <script>
 /* RichLife pricing tool UI. All math lives in engine.js. */
 (function () {
@@ -1650,7 +1652,7 @@ function saleEditor(x, i) {
 }
 VIEWS[14] = function () {
   var list = S.sales.map(function (x, i) { return { x: x, i: i }; }).reverse().map(function (o) { return saleEditor(o.x, o.i); }).join('');
-  var board = S.sales.length ? live('salesHero') + live('salesTiles') + '<div class="pay-main"><div class="card">' + live('payList') + '<div class="pay-status" role="status" data-live="payStatus"></div></div><div class="pay-side"><div class="card">' + live('salesForecast') + '</div><div class="card"><h3 class="h-t">איך הכסף מגיע?</h3><p class="h-sub" style="margin-bottom:6px">בוחרים בכל מכירה, בתוך העריכה שלה.</p><p class="explain" style="margin:0"><b>נכנס לבד:</b> אשראי או הוראת קבע. לא צריך לסמן כל חודש.<br><b>אני גובה בעצמי:</b> העברה, ביט או מזומן. התשלום נשאר ברשימה עד הלחיצה על "נכנס".</p></div></div></div>' : '<div class="card">' + live('salesForecast') + '</div>';
+  var board = S.sales.length ? live('salesHero') + live('salesTiles') + '<div class="pay-main"><div class="card">' + live('payList') + '<div class="pay-status" role="status" data-live="payStatus"></div></div><div class="card"><h3 class="h-t">איך הכסף מגיע?</h3><p class="h-sub" style="margin-bottom:6px">בוחרים בכל מכירה, בתוך העריכה שלה.</p><p class="explain" style="margin:0"><b>נכנס לבד:</b> אשראי או הוראת קבע. לא צריך לסמן כל חודש.<br><b>אני גובה בעצמי:</b> העברה, ביט או מזומן. התשלום נשאר ברשימה עד הלחיצה על "נכנס".</p></div></div><div class="card pay-chart" style="margin-bottom:14px">' + live('salesForecast') + '</div>' : '<div class="card">' + live('salesForecast') + '</div>';
   return head() + board +
     '<div class="card"><span class="sec-lbl">המכירות שלך</span><button type="button" class="btn" data-act="newSale">+ מכירה חדשה</button><div class="sale-list">' + list + '</div></div>' +
     '<div class="card"><span class="sec-lbl">כמה מכרתי בכל חודש, ' + opsYear() + '</span>' + live('salesCounts') + '</div>' + stepNav();
@@ -1715,11 +1717,12 @@ function payAct(t, code) {
 }
 function moneyBars(r) {
   var now = currentYm(), tot = function (m) { return m.got + m.late + m.wait; }, max = Math.max.apply(null, r.months.map(tot).concat([1])), h = function (v) { return (v / max * 100).toFixed(1) + '%'; };
-  return '<div class="f-bars" role="img" aria-label="' + esc(r.months.map(function (m) { return ymLabel(m.ym) + ': נכנס ' + money(m.got) + (m.late ? ', באיחור ' + money(m.late) : '') + (m.wait ? ', צפוי ' + money(m.wait) : ''); }).join('. ')) + '">' + r.months.map(function (m) {
+  var big = Math.max.apply(null, r.months.map(tot)) >= 10000, short_ = function (v) { return big ? (v / 1000).toFixed(1) : money(v); };
+  return (big ? '<p class="h-sub" style="margin:0 0 4px">המספרים בגרף באלפי ₪.</p>' : '') + '<div class="f-scroll" tabindex="0" role="region" aria-label="גרף החודשים, אפשר לגלול הצידה"><div class="f-bars" role="img" aria-label="' + esc(r.months.map(function (m) { return ymLabel(m.ym) + ': נכנס ' + money(m.got) + (m.late ? ', באיחור ' + money(m.late) : '') + (m.wait ? ', צפוי ' + money(m.wait) : ''); }).join('. ')) + '">' + r.months.map(function (m) {
     var tip = ymLabel(m.ym) + (m.got ? '|נכנס: ' + ils(m.got, 0) : '') + (m.late ? '|באיחור: ' + ils(m.late, 0) : '') + (m.wait ? '|צפוי להיכנס: ' + ils(m.wait, 0) : '') + (m.assumed ? '|מתוכו מנוי בלי תאריך סיום: ' + ils(m.assumed, 0) : '') + (m.items.length ? '|' + m.items.slice(0, 4).map(function (it) { return (it.name || 'מכירה') + ': ' + ils(it.amount, 0); }).join('|') : '');
     var stack = (m.wait - m.assumed > 0 ? '<div class="f-w" style="height:' + h(m.wait - m.assumed) + '"></div>' : '') + (m.assumed ? '<div class="f-a" style="height:' + h(m.assumed) + '"></div>' : '') + (m.late ? '<div class="f-l" style="height:' + h(m.late) + '"></div>' : '') + (m.got ? '<div class="f-s" style="height:' + h(m.got) + '"></div>' : '');
-    return '<div class="f-col" data-tip="' + esc(tip) + '"><span class="f-val">' + (tot(m) ? money(tot(m)) : '') + '</span><div class="f-track f-stack">' + stack + '</div><span class="f-m' + (m.ym === now ? ' now' : '') + '">' + MONTHS[+m.ym.slice(5, 7) - 1].slice(0, 3) + '</span></div>';
-  }).join('') + '</div>';
+    return '<div class="f-col" data-tip="' + esc(tip) + '"><span class="f-val">' + (tot(m) ? short_(tot(m)) : '') + '</span><div class="f-track f-stack">' + stack + '</div><span class="f-m' + (m.ym === now ? ' now' : '') + '">' + MONTHS[+m.ym.slice(5, 7) - 1].slice(0, 3) + (m.ym.slice(5, 7) === '01' ? '<small>' + m.ym.slice(0, 4) + '</small>' : '') + '</span></div>';
+  }).join('') + '</div></div>';
 }
 function forecastBars(fc) {
   var max = Math.max.apply(null, fc.months.map(function (m) { return m.left; }).concat([1])), now = currentYm();
@@ -2435,7 +2438,7 @@ bootFromHash().then(function (loaded) {
   if (loaded) { showSync(netFail ? 'אין חיבור, מוצגת השמירה האחרונה במכשיר' : 'הקישור החי מעודכן', netFail); }
   if (bootError) { var d = document.createElement('div'); d.className = 'note warn'; d.style.marginBottom = '12px'; d.textContent = bootError; $('view').prepend(d); }
 });
-window.__pricing = { get S() { return S; }, get R() { return R; }, get O() { return O; }, go: go };
+window.__pricing = { get S() { return S; }, get R() { return R; }, get O() { return O; }, go: go, normalize: normalize };
 })();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון תמחור',content_category:'RichLife כלים'});}catch(e){}});});});</script>

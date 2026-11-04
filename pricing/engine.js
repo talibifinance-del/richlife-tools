@@ -266,11 +266,11 @@
     });
     return { months: months, total: sum(months, function (m) { return m.total; }), left: sum(months, function (m) { return m.left; }), assumed: sum(months, function (m) { return m.assumed; }) };
   }
-  /* The money still owed: what is late, what this month holds, and two months back to five ahead for the chart. */
+  /* The money still owed: what is late, what this month holds, and two months back to twelve ahead for the chart. */
   function receivables(state, nowYm) {
-    var to = ymAdd(nowYm, 5), map = {}, names = [], seen = {}, i;
+    var to = ymAdd(nowYm, 12), map = {}, names = [], seen = {}, i;
     var out = { late: [], month: [], lateTotal: 0, lateCount: 0, lateClients: 0, lateNames: names, monthDue: 0, monthGot: 0, monthLeft: 0, nextLeft: 0, nextAssumed: 0, nextFrom: ymAdd(nowYm, 1), nextTo: to, months: [] };
-    for (i = -2; i <= 5; i++) { var ym = ymAdd(nowYm, i); map[ym] = { ym: ym, got: 0, late: 0, wait: 0, assumed: 0, items: [] }; out.months.push(map[ym]); }
+    for (i = -2; i <= 12; i++) { var ym = ymAdd(nowYm, i); map[ym] = { ym: ym, got: 0, late: 0, wait: 0, assumed: 0, items: [] }; out.months.push(map[ym]); }
     ((state && state.sales) || []).forEach(function (s, n) {
       paymentStates(s, nowYm, ymAdd(nowYm, 12)).forEach(function (p) {
         p.sale = n;

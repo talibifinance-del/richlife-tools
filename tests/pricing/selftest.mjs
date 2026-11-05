@@ -460,11 +460,41 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await p.click('[data-fillmode="year"]');
   ok('O yearly mode hides the month rows', await p.locator('.ops-rowwrap').count() === 0);
   ok('O yearly mode hides the month tabs', await p.locator('[data-opsedit]').count() === 0);
-  ok('O grid shows empty rows too', (await p.locator('#view .grid-tbl').innerText()).includes('ריטיינר'));
+  ok('O grid shows empty rows too', await p.evaluate(() => [...document.querySelectorAll('#view .grid-tbl textarea[data-name]')].some(t => t.value.includes('ריטיינר'))));
   ok('O a cell exists once', await p.locator('[data-path="ops.rows.admin.11.m.0"]').count() === 1);
   await p.locator('[data-path="ops.rows.admin.11.m.0"]').pressSequentially('590');
   ok('O grid totals update', (await p.locator('[data-live="gridRow"][data-arg="ops.rows.admin.11.m"]').innerText()) === '590');
   await axe(p, 'O11 yearly mode');
+  // rows can be renamed, added and removed from the table itself
+  await p.locator('[data-path="ops.rows.admin.11.name"]').fill('שם חדש\nבשתי שורות');
+  ok('O rename saves, without a line break', await p.evaluate(() => window.__pricing.S.ops.rows.admin[11].name === 'שם חדש בשתי שורות'));
+  ok('O rename keeps the numbers', await p.evaluate(() => window.__pricing.S.ops.rows.admin[11].m[0] === '590'));
+  ok('O rename reaches the settings below', (await p.locator('[data-nameof="ops.rows.admin.11.name"]').textContent()) === 'שם חדש בשתי שורות');
+  ok('O rename reaches the cell labels', (await p.getAttribute('[data-path="ops.rows.admin.11.m.0"]', 'aria-label')).startsWith('שם חדש בשתי שורות'));
+  const fin0 = await p.evaluate(() => window.__pricing.S.ops.rows.finance.length);
+  await p.click('.grid-add [data-addops="finance"]');
+  ok('O add from the table', await p.evaluate(() => window.__pricing.S.ops.rows.finance.length) === fin0 + 1);
+  ok('O add puts the cursor on the new name', await p.evaluate(n => document.activeElement.getAttribute('data-path') === 'ops.rows.finance.' + n + '.name', fin0));
+  await p.keyboard.type('שורה בדיקה'); await p.keyboard.press('Enter');
+  ok('O enter finishes the name', await p.evaluate(n => window.__pricing.S.ops.rows.finance[n].name === 'שורה בדיקה' && document.activeElement.tagName !== 'TEXTAREA', fin0));
+  await p.click('[data-del="ops.rows.finance"][data-i="' + fin0 + '"]');
+  ok('O an empty row goes in one click', await p.evaluate(() => window.__pricing.S.ops.rows.finance.length) === fin0);
+  const adm0 = await p.evaluate(() => window.__pricing.S.ops.rows.admin.length);
+  const withNums = p.locator('[data-del="ops.rows.admin"][data-i="11"]');
+  await withNums.click();
+  ok('O a row with numbers asks first', await p.evaluate(() => window.__pricing.S.ops.rows.admin.length) === adm0);
+  ok('O the question names the sum', (await withNums.innerText()).includes('590'));
+  await axe(p, 'O11 delete asks');
+  await p.waitForTimeout(5100);
+  ok('O the question goes away by itself', (await withNums.innerText()) === '×');
+  await withNums.click(); await withNums.click();
+  ok('O the second click deletes that row only', await p.evaluate(a => { const r = window.__pricing.S.ops.rows.admin; return r.length === a - 1 && !r.some(x => x.name === 'שם חדש בשתי שורות'); }, adm0));
+  ok('O the salary line cannot be renamed', await p.locator('[data-path="ops.draw.salary.name"]').count() === 0);
+  await p.click('.grid-add [data-addops="admin"]');
+  await p.locator('[data-path="ops.rows.admin.11.name"]').fill('ריטיינר');
+  await p.click('[data-fillmode="month"]');
+  await p.locator('[data-path="ops.rows.admin.11.m.0"]').fill('590');
+  await p.click('[data-fillmode="year"]');
   await p.click('[data-fillmode="month"]');
   ok('O the month view shows what the table got', (await p.inputValue('[data-path="ops.rows.admin.11.m.0"]')) === '590');
   await p.locator('[data-path="ops.rows.admin.11.m.0"]').fill('');
@@ -1277,13 +1307,35 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   ok('AC January has no copy button', await p.locator('[data-act="copyPrev"]').count() === 0 && (await routine()).includes('אין ממה להעתיק'));
   await p.click('[data-opsedit="' + E_ + '"]');
 
+  // deleting a row with numbers asks first in the month view too
+  const mDel = await p.evaluate(e => { const P = window.__pricing, r = P.S.ops.rows.admin; r.push({ name: 'בדיקת מחיקה', m: Array(12).fill(''), }); r[r.length - 1].m[e] = 77; return r.length - 1; }, E_);
+  await p.click('[data-opsedit="' + E_ + '"]');
+  await p.evaluate(() => document.querySelectorAll('details.ops-sec').forEach(x => { x.open = true; }));
+  await p.click('[data-del="ops.rows.admin"][data-i="' + mDel + '"]');
+  ok('AC month view: a row with numbers asks first', await p.evaluate(n => window.__pricing.S.ops.rows.admin.length === n + 1, mDel));
+  await p.click('[data-del="ops.rows.admin"][data-i="' + mDel + '"]');
+  ok('AC month view: the second click deletes', await p.evaluate(n => window.__pricing.S.ops.rows.admin.length === n, mDel));
   // only in the month view; closing the list stays closed
   await p.click('[data-fillmode="year"]');
   ok('AC the yearly table has no list', await p.locator('.rt-step').count() === 0);
-  await p.click('[data-fillmode="month"]');
+  // but it points at the list, in the month that is next to fill
+  const hasBefore = await p.evaluate(() => JSON.stringify([window.__pricing.S.ops.rows, window.__pricing.S.ops.draw, window.__pricing.S.ops.paid, window.__pricing.S.ops.bank, window.__pricing.S.sales]));
+  ok('AC the table points to the list', (await p.locator('[data-toroutine]').innerText()).includes('הרשימה של'));
+  await axe(p, 'AC table pointer');
+  const toLabel = await p.locator('[data-toroutine]').innerText();
+  await p.click('[data-toroutine]');
+  ok('AC the pointer opens the list', await p.locator('.rt-step').count() === 6 && await p.evaluate(() => window.__pricing.S.ops.fillMode === 'month'));
+  ok('AC the pointer opens the month it named', toLabel.includes((await routine()).match(/מה עושים כל חודש, (\S+)/)[1]));
+  ok('AC the list is on screen', await p.evaluate(() => { const r = document.querySelector('.rt-card').getBoundingClientRect(); return r.top >= -1 && r.top < innerHeight / 2; }));
+  ok('AC focus moves to the list', await p.evaluate(() => document.activeElement && document.activeElement.tagName === 'SUMMARY'));
+  ok('AC the pointer changes no numbers', hasBefore === await p.evaluate(() => JSON.stringify([window.__pricing.S.ops.rows, window.__pricing.S.ops.draw, window.__pricing.S.ops.paid, window.__pricing.S.ops.bank, window.__pricing.S.sales])));
+  await p.click('[data-opsedit="' + E_ + '"]');
   await p.evaluate(() => { document.querySelector('details.rt').open = false; });
   await p.locator('#opsNote').fill('x'); await p.waitForTimeout(100);
   ok('AC a closed list stays closed', await p.evaluate(() => !document.querySelector('details.rt').open));
+  await p.click('[data-fillmode="year"]'); await p.click('[data-toroutine]');
+  ok('AC the pointer opens a closed list', await p.evaluate(() => document.querySelector('details.rt').open));
+  await p.click('[data-opsedit="' + E_ + '"]');
   await p.evaluate(() => { document.querySelector('details.rt').open = true; });
   await p.locator('#opsNote').fill('');
 
@@ -1302,6 +1354,13 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   for (const vp of [{ width: 400, height: 800 }, { width: 1100, height: 800 }]) {
     const d = await newPage(vp); await open(d.p); await d.p.click('[data-act="demo"]'); await go(d.p, 11);
     ok('AC ' + vp.width + ': the list shows', await d.p.locator('.rt-step').count() === 6);
+    // the month the pointer picks: next to fill, never past today
+    const nextFill = await d.p.evaluate(() => { const has = document.querySelectorAll('.month-tabs button.has').length, now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Jerusalem' })).getMonth(); return Math.min(has, now); });
+    await d.p.click('[data-fillmode="year"]');
+    ok('AC ' + vp.width + ': the pointer picks the next month', await d.p.locator('[data-toroutine="' + nextFill + '"]').count() === 1);
+    ok('AC ' + vp.width + ': no sideways scroll in the table view', await d.p.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await d.p.screenshot({ path: OUT + '/ac-pointer-' + vp.width + '.png' });
+    await d.p.click('[data-fillmode="month"]');
     ok('AC ' + vp.width + ': no sideways scroll', await d.p.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     ok('AC ' + vp.width + ': no step overflows', await d.p.evaluate(() => [...document.querySelectorAll('.rt-step')].every(s => s.scrollWidth <= s.clientWidth + 1)));
     await axe(d.p, 'AC ' + vp.width);

@@ -273,6 +273,13 @@ a{color:var(--pine-deep)}
 .grid-tbl th,.grid-tbl td{padding:8px 5px;vertical-align:middle}
 .grid-tbl td.nm{min-width:120px;max-width:150px}
 .grid-tbl input{min-width:62px}
+.grid-tbl td.nm:has(.nm-ed),.grid-tbl .grid-add td.nm{min-width:150px;max-width:170px}
+.nm-ed{display:flex;flex-wrap:wrap;align-items:flex-start;gap:2px}
+.nm-ed textarea{flex:1 1 0;min-width:0;font-size:13px;font-weight:800;color:var(--pine-darker);overflow:hidden}
+.nm-ed .icon-btn{flex:none;width:26px;height:30px}
+.nm-ed .icon-btn.armed{flex:1 0 100%;width:auto;height:auto;padding:5px;font-size:12.5px;color:var(--red-deep);background:rgba(var(--red-rgb),.1)}
+.grid-add td{padding-block:4px}
+.grid-add .add-btn{margin:0;padding:6px;font-size:13px}
 .grid-sum td{background:var(--sage-tint);font-weight:900}
 .grid-sum td.nm{background:var(--sage-tint)}
 .tbl-group td{background:var(--sage-tint);font-weight:900;color:var(--pine-darker);font-size:12.5px;white-space:normal}
@@ -1504,14 +1511,14 @@ function opsSection(title, key, explain, addLabel) {
   return '<details class="card ops-sec" data-how="' + how_ + '"' + (open ? ' open' : '') + '><summary><span class="sec-lbl" style="margin:0">' + title + '</span>' + liveSpan('opsSumShort', key).replace('<span', '<span class="ops-short"') + '</summary><div style="margin-top:10px">' + (explain ? '<p class="explain">' + explain + '</p>' : '') + '<div class="rows">' + S.ops.rows[key].map(function (r, i) { return opsRow('ops.rows.' + key, r, i, e); }).join('') + '</div><button type="button" class="add-btn" data-addops="' + key + '">+ ' + addLabel + '</button></div></details>';
 }
 function gridGroups() {
-  var o = S.ops, list = function (key, title) { return { key: key, t: title, rows: o.rows[key].map(function (r, i) { return { name: r.name, m: r.m, refund: r.refund, path: 'ops.rows.' + key + '.' + i + '.m' }; }) }; };
+  var o = S.ops, list = function (key, title) { return { key: key, t: title, add: true, rows: o.rows[key].map(function (r, i) { return { name: r.name, m: r.m, refund: r.refund, path: 'ops.rows.' + key + '.' + i + '.m', list: 'ops.rows.' + key, i: i }; }) }; };
   var named = function (key, title, obj, base, names) { return { key: key, t: title, rows: names.map(function (n) { return { name: n[1], m: obj[n[0]], path: base + '.' + n[0] }; }) }; };
   var priv = [];
-  o.private.forEach(function (r, i) { if (privateVisible(r)) priv.push({ name: r.name, m: r.m, path: 'ops.private.' + i + '.m' }); });
+  o.private.forEach(function (r, i) { if (privateVisible(r)) priv.push({ name: r.name, m: r.m, path: 'ops.private.' + i + '.m', list: 'ops.private', i: i }); });
   var paid = [['income', 'מקדמות מס הכנסה'], ['ni', 'ביטוח לאומי ובריאות']];
   if (S.biz.type !== 'patur') paid.push(['vat', 'תשלום מע"מ']);
   return [list('income', 'מה נכנס לעסק'), list('direct', 'עלויות ישירות'), list('marketing', 'שיווק ומכירה'), list('admin', 'הנהלה וכלליות'), list('finance', 'עמלות וריבית'),
-    { key: 'private', t: 'הוצאות פרטיות שמוכרות במס', rows: priv },
+    { key: 'private', t: 'הוצאות פרטיות שמוכרות במס', add: true, rows: priv },
     named('draw', 'מה לקחת מהרווח', o.draw, 'ops.draw', [['salary', 'משכורת לעצמי'], ['pension', 'פנסיה'], ['fund', 'קרן השתלמות'], ['savings', 'חיסכון והשקעות'], ['loan', 'החזר הלוואה, בלי הריבית'], ['prior', 'תשלומים על חשבונית משנה קודמת']]),
     named('paid', 'מה שולם לרשויות', o.paid, 'ops.paid', paid)];
 }
@@ -1522,15 +1529,16 @@ function opsGridHtml(editable) {
   var head_ = '<thead><tr><th>שורה</th>' + MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('') + '<th>סך הכל</th></tr></thead>';
   var body = gridGroups().map(function (g) {
     var rows = editable ? g.rows : g.rows.filter(function (r) { return gridRowTotal(r) !== 0; });
-    if (!rows.length) return '';
+    if (!rows.length && !(editable && g.add)) return '';
     var lines = rows.map(function (r) {
       var nm = esc(r.name || 'שורה');
       var cells = MONTHS.map(function (m, k) {
         var v = (r.m || [])[k];
         return editable ? '<td><input aria-label="' + nm + ' ב' + m + '" type="text" inputmode="decimal" autocomplete="off" data-num data-path="' + r.path + '.' + k + '" value="' + esc(grp(v)) + '"></td>' : '<td>' + (E.num(v) ? money(v) : '') + '</td>';
       }).join('');
-      return '<tr><td class="nm">' + nm + '</td>' + cells + '<td class="cal-sum">' + (editable ? liveSpan('gridRow', r.path) : money(gridRowTotal(r))) + '</td></tr>';
-    }).join('');
+      var label = editable && r.list ? '<div class="nm-ed"><textarea rows="1" data-name aria-label="שם השורה, ' + g.t + '" placeholder="שם השורה" autocomplete="off" data-text data-path="' + r.list + '.' + r.i + '.name">' + esc(r.name) + '</textarea><button type="button" class="icon-btn" data-del="' + r.list + '" data-i="' + r.i + '" aria-label="מחיקת ' + nm + '">×</button></div>' : nm;
+      return '<tr><td class="nm">' + label + '</td>' + cells + '<td class="cal-sum">' + (editable ? liveSpan('gridRow', r.path) : money(gridRowTotal(r))) + '</td></tr>';
+    }).join('') + (editable && g.add ? '<tr class="grid-add"><td class="nm"><button type="button" class="add-btn" data-addops="' + g.key + '" aria-label="הוספת שורה ל' + g.t + '">+ הוספת שורה</button></td><td colspan="13"></td></tr>' : '');
     var sums = MONTHS.map(function (m, k) { return '<td class="cal-sum">' + (editable ? liveSpan('gridGroup', g.key + ':' + k) : money(gridGroupMonth(g, k))) + '</td>'; }).join('');
     return '<tr class="cal-group"><td colspan="14">' + g.t + '</td></tr>' + lines + '<tr class="grid-sum"><td class="nm">סך הכל</td>' + sums + '<td class="cal-sum">' + (editable ? liveSpan('gridGroup', g.key + ':all') : money(gridGroupTotal(g))) + '</td></tr>';
   }).join('');
@@ -1548,7 +1556,7 @@ function settingsTable() {
       if (path === 'ops.private' && !privateVisible(r)) return '';
       var b = path + '.' + i, nm = esc(r.name || 'שורה');
       var rec = r.rule === 'phone' ? '<span class="val">לפי הכלל</span>' : (r.rule === 'gift' ? '<div class="mini"><div class="input-shell"><input aria-label="כמה אנשים קיבלו מתנה" placeholder="אנשים" type="text" inputmode="decimal" data-num data-path="' + b + '.people" value="' + esc(grp(r.people)) + '"></div></div>' : '<div class="mini"><div class="input-shell"><input aria-label="אחוז מוכר במס של ' + nm + '" type="text" inputmode="decimal" data-num data-path="' + b + '.rec" value="' + esc(grp(r.rec == null ? 100 : r.rec)) + '"></div></div>');
-      return '<tr><td class="nm">' + nm + '</td>' + (patur ? '' : '<td><input type="checkbox" aria-label="' + nm + ' כולל מע&quot;מ" data-check="' + b + '.vat"' + (r.vat === false ? '' : ' checked') + '></td>') + '<td>' + rec + '</td><td><input type="checkbox" aria-label="' + nm + ' חד-פעמית" data-check="' + b + '.oneOff"' + (r.oneOff ? ' checked' : '') + '></td></tr>';
+      return '<tr><td class="nm" data-nameof="' + b + '.name">' + nm + '</td>' + (patur ? '' : '<td><input type="checkbox" aria-label="' + nm + ' כולל מע&quot;מ" data-check="' + b + '.vat"' + (r.vat === false ? '' : ' checked') + '></td>') + '<td>' + rec + '</td><td><input type="checkbox" aria-label="' + nm + ' חד-פעמית" data-check="' + b + '.oneOff"' + (r.oneOff ? ' checked' : '') + '></td></tr>';
     }).join('');
   };
   var body = ['direct', 'marketing', 'admin', 'finance'].map(function (k) { return line(S.ops.rows[k], 'ops.rows.' + k); }).join('') + line(S.ops.private, 'ops.private');
@@ -1563,6 +1571,10 @@ function seedOps() {
     if (fund && S.ops.draw.fund[i] === '') S.ops.draw.fund[i] = fund;
   }
   S.ops.seeded = true;
+}
+function routineMonth() {
+  var cy = currentYm();
+  return Math.min(O ? O.k : 0, +opsYear() === +cy.slice(0, 4) ? +cy.slice(5) - 1 : 11);
 }
 VIEWS[11] = function () {
   seedOps();
@@ -1579,8 +1591,8 @@ VIEWS[11] = function () {
     '<label class="check-line" style="margin-top:12px"><input type="checkbox" data-check="ops.home" data-rerender' + (S.ops.home ? ' checked' : '') + '> העסק עובד מהבית</label><label class="check-line" style="margin-top:6px"><input type="checkbox" data-check="ops.car" data-rerender' + (S.ops.car ? ' checked' : '') + '> הרכב הפרטי משמש גם לעסק</label></div>' +
     '<div class="card"><span class="sec-lbl">איך נוח למלא?</span><div class="seg" role="group" aria-label="איך למלא"><button type="button" data-fillmode="month" aria-pressed="' + !year + '">חודש אחד</button><button type="button" data-fillmode="year" aria-pressed="' + year + '">כל השנה בטבלה</button></div><div class="hint">אלה אותם נתונים בשתי תצוגות, אז ממלאים רק באחת. אפשר לעבור ביניהן מתי שרוצים.</div>' +
     (year ? '' : '<div style="margin-top:14px"><span class="sec-lbl">איזה חודש ממלאים?</span>' + opsTabs(e, 'data-opsedit') + '<div class="fields" style="margin-top:12px"><div class="field"><label for="opsNote">הערה ל' + MONTHS[e] + ', לא חובה</label><div class="input-shell"><input id="opsNote" type="text" autocomplete="off" data-text data-path="ops.notes.' + e + '" value="' + esc((S.ops.notes || [])[e]) + '" placeholder="למשל: חופשת לידה, השקה, מילואים"></div><div class="hint">מופיעה בגרפים ובהשוואה לשנה הבאה.</div></div></div></div>') + '</div>' +
-    (year ? '' : '<div class="card rt-card">' + live('opsRoutine') + '<div class="pay-status" role="status" data-live="opsFillStatus"></div></div>') +
-    (year ? '<div class="card"><span class="sec-lbl">כל השנה, כמו בבנק</span><p class="explain">כל שינוי נשמר לבד. מע"מ, חד-פעמית ואחוז שמוכר במס נמצאים בהגדרות למטה. להוספת שורה חדשה עוברים ל"חודש אחד".</p>' + opsGridHtml(true) + '</div>' :
+    (year ? '<div class="card"><h2 class="h-t">מה עושים כל חודש</h2><p class="h-sub">הרשימה של הצעדים, עם הכפתורים שממלאים לבד, נמצאת בתצוגת "חודש אחד". אלה אותם נתונים, ואפשר לחזור לטבלה מתי שרוצים.</p><button type="button" class="btn small" data-toroutine="' + routineMonth() + '">לפתוח את הרשימה של ' + MONTHS[routineMonth()] + '</button></div>' : '<div class="card rt-card">' + live('opsRoutine') + '<div class="pay-status" role="status" data-live="opsFillStatus"></div></div>') +
+    (year ? '<div class="card"><span class="sec-lbl">כל השנה, כמו בבנק</span><p class="explain">כל שינוי נשמר לבד. כדי לשנות שם לוחצים עליו, × מוחק שורה, ובסוף כל קבוצה אפשר להוסיף שורה. המשכורת, ההפקדות והתשלומים לרשויות הם שורות קבועות, כי החישוב נשען עליהן. מע"מ, חד-פעמית ואחוז שמוכר במס נמצאים בהגדרות למטה.</p>' + opsGridHtml(true) + '</div>' :
     opsSection('מה נכנס לעסק', 'income', 'הכנסות מסליקה רושמים לפני העמלה, ואת העמלה בשורה שלה למטה. החזר ללקוחה נרשם בשורה שלו, והוא מוריד את ההכנסות.', 'הוספת מקור הכנסה') +
     opsSection('עלויות ישירות', 'direct', 'מה שעולה לספק את המוצר או השירות עצמו.', 'הוספת עלות') +
     opsSection('שיווק ומכירה', 'marketing', '', 'הוספת הוצאת שיווק') +
@@ -2257,10 +2269,20 @@ function refreshLive() {
   var who = [S.biz.client, S.biz.name].filter(function (x) { return x; }).join(', ');
   $('bizLabel').textContent = who ? '· ' + who : '';
 }
+function fitName(t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; }
+function renameRow(t, path) {
+  var base = path.replace(/\.name$/, ''), nm = t.value || 'שורה', del = t.parentNode.querySelector('.icon-btn');
+  if (del && !del.dataset.armed) del.setAttribute('aria-label', 'מחיקת ' + nm);
+  MONTHS.forEach(function (m, k) { var c = document.querySelector('[data-path="' + base + '.m.' + k + '"]'); if (c) c.setAttribute('aria-label', nm + ' ב' + m); });
+  document.querySelectorAll('[data-nameof="' + path + '"]').forEach(function (x) { x.textContent = nm; });
+}
 function render(focus) {
   R = E.compute(S); O = E.ops(S, R); fid = 0;
+  var gt = document.querySelector('#view .grid-tbl'), gw = gt && gt.parentNode, gl = gw ? gw.scrollLeft : 0, gs = gw ? gw.scrollTop : 0;
   $('view').innerHTML = VIEWS[step]();
   refreshLive();
+  document.querySelectorAll('#view textarea[data-name]').forEach(fitName);
+  gt = !focus && document.querySelector('#view .grid-tbl'); if (gt && gw) { gt.parentNode.scrollLeft = gl; gt.parentNode.scrollTop = gs; }
   if (focus) { var t = $('stepTitle'); if (t) { t.focus({ preventScroll: true }); } window.scrollTo({ top: 0, behavior: 'auto' }); var col = $('contentCol'); if (col) col.scrollTop = 0; }
 }
 function go(n) { guideVisit = null; payEdit = null; lastPay = null; bankSel = null; step = Math.max(0, Math.min(STEPS.length - 1, n)); render(true); }
@@ -2464,6 +2486,7 @@ document.addEventListener('input', function (e) {
     for (var k = 0; k < ks.length - 1; k++) o = o[ks[k]];
     o[ks[ks.length - 1]] = E.num(t.value); changed(); return;
   }
+  if (t.hasAttribute('data-name')) { if (/\n/.test(t.value)) t.value = t.value.replace(/\s*\n\s*/g, ' '); fitName(t); renameRow(t, t.getAttribute('data-path')); }
   if (t.hasAttribute('data-path') && t.tagName !== 'SELECT') {
     var path = t.getAttribute('data-path');
     setPath(path, t.hasAttribute('data-num') ? t.value.replace(/,/g, '') : t.value);
@@ -2473,6 +2496,7 @@ document.addEventListener('input', function (e) {
     changed();
   }
 });
+document.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.hasAttribute && e.target.hasAttribute('data-name')) { e.preventDefault(); e.target.blur(); } });
 document.addEventListener('change', function (e) {
   var t = e.target;
   if (t.tagName === 'SELECT' && t.hasAttribute('data-path')) {
@@ -2548,6 +2572,12 @@ document.addEventListener('click', function (e) {
   }
   if (d.opsedit != null) { S.ops.edit = +d.opsedit; render(); persist(); return; }
   if (d.fillmode) { S.ops.fillMode = d.fillmode; render(); persist(); return; }
+  if (d.toroutine != null) {
+    S.ops.fillMode = 'month'; S.ops.edit = +d.toroutine; howOpen.opsRoutine = true; render(); persist();
+    var rtCard = document.querySelector('.rt-card'), rtHead = rtCard && rtCard.querySelector('summary');
+    if (rtCard) { rtCard.scrollIntoView({ block: 'start' }); rtHead.focus({ preventScroll: true }); }
+    return;
+  }
   if (d.opsyear) { E.switchYear(S, +d.opsyear); S.ops.view = 'year'; render(); persist(); return; }
   if (d.opsperiod) {
     S.ops.view = d.opsperiod === 'year' ? 'year' : (d.opsperiod === 'q' ? 'q' + Math.floor(Math.max(0, (O.k || 1) - 1) / 3) : String(Math.max(0, (O.k || 1) - 1)));
@@ -2555,8 +2585,17 @@ document.addEventListener('click', function (e) {
   }
   if (d.tableby) { S.ops.tableBy = d.tableby; render(); persist(); return; }
   if (d.opsview != null) { S.ops.view = d.opsview; render(); persist(); return; }
-  if (d.addops) { var fresh = opsRowNew(''); if (d.addops === 'private') { fresh.group = 'general'; fresh.rec = 100; fresh.vat = false; S.ops.private.push(fresh); } else S.ops.rows[d.addops].push(fresh); render(); persist(); return; }
-  if (d.del) { var arr = getPath(d.del); arr.splice(+d.i, 1); render(); persist(); return; }
+  if (d.addops) { var fresh = opsRowNew(''); if (d.addops === 'private') { fresh.group = 'general'; fresh.rec = 100; fresh.vat = false; S.ops.private.push(fresh); } else S.ops.rows[d.addops].push(fresh); render(); persist(); var newName = document.querySelector('textarea[data-path="' + (d.addops === 'private' ? 'ops.private.' + (S.ops.private.length - 1) : 'ops.rows.' + d.addops + '.' + (S.ops.rows[d.addops].length - 1)) + '.name"]'); if (newName) newName.focus(); return; }
+  if (d.del) {
+    var arr = getPath(d.del), gone = arr[+d.i], inRow = /^ops\./.test(d.del) && gone && gone.m ? gridRowTotal(gone) : 0, hadNums = /^ops\./.test(d.del) && gone && gone.m && gone.m.some(function (v) { return E.num(v); });
+    if (hadNums && !t.dataset.armed) {
+      var xLabel = t.getAttribute('aria-label');
+      t.dataset.armed = '1'; t.textContent = 'למחוק גם ' + ils(inRow, 0) + '?'; t.classList.add('armed'); t.removeAttribute('aria-label');
+      setTimeout(function () { if (t.isConnected) { delete t.dataset.armed; t.textContent = '×'; t.classList.remove('armed'); t.setAttribute('aria-label', xLabel); } }, 5000);
+      return;
+    }
+    arr.splice(+d.i, 1); render(); persist(); return;
+  }
   if (d.delline) { var q = d.delline.split(':'); S.products[+q[0]].lines.splice(+q[1], 1); render(); persist(); return; }
   if (d.addline != null) { S.products[+d.addline].lines.push({ mat: '', qty: '' }); render(); persist(); return; }
   if (d.delprod != null) {

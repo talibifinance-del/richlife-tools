@@ -159,8 +159,9 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .pr-seg button.on[data-pr="hi"]{background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(var(--red-rgb),.28)}
 .pr-seg button.on[data-pr="mid"]{background:var(--pine);color:#fff;box-shadow:0 2px 6px rgba(var(--pine-rgb),.28)}
 .pr-seg button.on[data-pr="lo"]{background:#fff;color:var(--ink-soft);box-shadow:0 2px 6px rgba(var(--pine-rgb),.16)}
-.item-amounts{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-top:8px}
-@media(max-width:480px){.item-amounts{grid-template-columns:1fr 1fr;}.item-amounts .chip{grid-column:1/-1;justify-self:start}}
+.item-amounts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center;margin-top:8px}
+.item-amounts>*{min-width:0} /* בלי זה שדות הסכום דוחפים את הדף לגלילה לצד בטלפון */
+@media(max-width:480px){.item-amounts{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}.item-amounts .chip{grid-column:1/-1;justify-self:start}}
 .mini-field .m-lbl{font-size:10.5px;font-weight:800;color:var(--ink-soft);margin-bottom:3px}
 .mini-shell{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px}
 .mini-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.14)}
@@ -209,6 +210,22 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
 .gn-tab:hover{border-color:var(--pine)}
 .gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+/* ── cheap-flight finder ── */
+.fl-intro{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.6;margin-bottom:14px}
+.fl-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+@media(max-width:440px){.fl-row{grid-template-columns:1fr}}
+.input-shell select{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:16px;color:var(--ink);padding:12px 13px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.fl-route{background:var(--sage-tint);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:800;color:var(--pine-darker);line-height:1.5;min-height:44px;display:flex;align-items:center}
+.fl-route.miss{background:rgba(183,121,31,.10);color:var(--amber)}
+.fl-btn{display:block;width:100%;margin-top:14px;text-align:center;text-decoration:none;font-family:var(--font);font-weight:900;font-size:15.5px;color:#fff;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 80%);border-radius:100px;padding:14px 20px;box-shadow:0 10px 24px rgba(var(--pine-rgb),.28);transition:transform .15s}
+.fl-btn:hover{transform:translateY(-1px)}
+.fl-btn[aria-disabled="true"]{opacity:.45;pointer-events:none;box-shadow:none}
+.fl-steps{list-style:none;margin-top:16px;counter-reset:fl}
+.fl-steps li{counter-increment:fl;position:relative;padding:3px 38px 9px 0;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.55}
+.fl-steps li::before{content:counter(fl);position:absolute;right:0;top:2px;width:26px;height:26px;border-radius:50%;background:var(--pine);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+.fl-steps b{color:var(--pine-darker)}
+.fl-tips{margin-top:6px;background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:12.5px;font-weight:700;color:var(--pine-darker);line-height:1.6}
+.fl-tips p+p{margin-top:5px}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -384,6 +401,28 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
         <label for="days">כמה ימים?</label>
         <div class="input-shell"><input id="days" type="text" inputmode="numeric" placeholder="0" aria-label="מספר ימי החופשה"><span class="unit unit-suf">ימים</span></div>
       </div>
+    </div>
+  </div>
+
+  <div class="card" id="flCard">
+    <span class="sec-lbl">✈️ איך מוצאים את הטיסה הזולה</span>
+    <p class="fl-intro">אותה טיסה בדיוק יכולה לעלות פי שניים בשבוע אחר. חברות התעופה מתמחרות לפי ביקוש, ולכן היום הכי זול מסתתר בדרך כלל חודשים קדימה, במקום שאף אחד לא גולל אליו. ככה בודקים את זה ב-2 דקות:</p>
+    <div class="fl-row">
+      <div class="field">
+        <label for="flMonth">בערך מתי?</label>
+        <div class="input-shell"><select id="flMonth"></select></div>
+      </div>
+      <div class="fl-route" id="flRoute" aria-live="polite"></div>
+    </div>
+    <a class="fl-btn" id="flBtn" href="#" target="_blank" rel="noopener" aria-disabled="true">🔎 לחיפוש הטיסה בגוגל טיסות</a>
+    <ol class="fl-steps">
+      <li>בדף שנפתח לוחצים על <b>תאריך היציאה</b>. נפתח לוח שנה, ומתחת לכל יום כתוב המחיר.</li>
+      <li>מדפדפים כמה חודשים קדימה. <b>המחירים הזולים מסומנים בירוק</b>, ושם מחפשים.</li>
+      <li>בוחרים יום זול ובודקים מה כלול. בחברות הזולות <b>מזוודה ומושב עולים בנפרד</b>, אז סופרים אותם במחיר.</li>
+    </ol>
+    <div class="fl-tips">
+      <p>💡 גמישים ביום-יומיים? בדקו גם לילה אחד יותר או פחות. לפעמים דווקא הוא זול יותר.</p>
+      <p>💡 המחיר בלוח משתנה כל יום. לפני שמזמינים, מסתכלים על המחיר הסופי, ואותו רושמים למטה בשורה "כרטיסי טיסה".</p>
     </div>
   </div>
 
@@ -894,6 +933,108 @@ document.getElementById('resetBtn').onclick=()=>{
 })();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון תקציב חופשה',content_category:'RichLife כלים'});}catch(e){}});});});</script>
+
+<script>
+/* ── מציאת טיסה זולה: בונה קישור ל-Google Flights עם המסלול, התאריכים ומספר הנוסעים ──
+   היעד, מספר הנוסעים והימים נקראים מהשדות של "פרטי החופשה". יעד שלא ברשימה = חיפוש חופשי לפי השם. */
+(function(){
+  // [קוד שדה תעופה, שם לתצוגה, מילים שמזהות אותו]
+  const PLACES=[
+    ['ATH','אתונה',['אתונה','יוון','athens','greece']],['SKG','סלוניקי',['סלוניקי','תסלוניקי']],
+    ['RHO','רודוס',['רודוס']],['HER','כרתים',['כרתים','הרקליון','חאניה']],['JTR','סנטוריני',['סנטוריני']],
+    ['CFU','קורפו',['קורפו']],['KGS','קוס',['קוס']],
+    ['LCA','לרנקה',['לרנקה','קפריסין','איה נאפה','cyprus']],['PFO','פאפוס',['פאפוס']],
+    ['FCO','רומא',['רומא','איטליה','rome','italy']],['MXP','מילאנו',['מילאנו','milan']],['VCE','ונציה',['ונציה','venice']],
+    ['NAP','נאפולי',['נאפולי','אמלפי']],['CTA','קטניה',['קטניה','סיציליה']],['PMO','פלרמו',['פלרמו']],['PSA','פיזה',['פיזה','טוסקנה','פירנצה']],
+    ['BUD','בודפשט',['בודפשט','הונגריה','budapest']],['PRG','פראג',['פראג','צכיה','prague']],['VIE','וינה',['וינה','אוסטריה','vienna']],
+    ['SZG','זלצבורג',['זלצבורג']],['BER','ברלין',['ברלין','גרמניה','berlin']],['MUC','מינכן',['מינכן','בוואריה','munich']],['FRA','פרנקפורט',['פרנקפורט']],
+    ['BCN','ברצלונה',['ברצלונה','barcelona']],['MAD','מדריד',['מדריד','ספרד','madrid','spain']],['PMI','מיורקה',['מיורקה','מאיורקה']],
+    ['TFS','טנריף',['טנריף','האיים הקנריים']],['AGP','מלגה',['מלגה','אנדלוסיה']],
+    ['LIS','ליסבון',['ליסבון','פורטוגל','lisbon']],['OPO','פורטו',['פורטו','porto']],
+    ['CDG','פריז',['פריז','צרפת','paris','france']],['NCE','ניס',['ניס','הריביירה','nice']],
+    ['LHR','לונדון',['לונדון','אנגליה','בריטניה','london']],['EDI','אדינבורו',['אדינבורו','סקוטלנד']],['DUB','דבלין',['דבלין','אירלנד']],
+    ['AMS','אמסטרדם',['אמסטרדם','הולנד','amsterdam']],['BRU','בריסל',['בריסל','בלגיה']],
+    ['ZRH','ציריך',['ציריך','שווייץ','שוויץ','zurich']],['GVA','ז׳נבה',['זנבה','geneva']],
+    ['CPH','קופנהגן',['קופנהגן','דנמרק']],['ARN','שטוקהולם',['שטוקהולם','שבדיה']],['OSL','אוסלו',['אוסלו','נורווגיה']],['KEF','רייקיאוויק',['רייקיאוויק','איסלנד']],
+    ['OTP','בוקרשט',['בוקרשט','רומניה']],['SOF','סופיה',['סופיה','בולגריה']],['BEG','בלגרד',['בלגרד','סרביה']],
+    ['ZAG','זאגרב',['זאגרב','קרואטיה']],['SPU','ספליט',['ספליט']],['DBV','דוברובניק',['דוברובניק']],['LJU','ליובליאנה',['ליובליאנה','סלובניה']],
+    ['TIA','טירנה',['טירנה','אלבניה']],['TGD','פודגוריצה',['פודגוריצה','מונטנגרו']],
+    ['KRK','קרקוב',['קרקוב']],['WAW','ורשה',['ורשה','פולין']],['RIX','ריגה',['ריגה','לטביה']],['VNO','וילנה',['וילנה','וילנוס','ליטא']],
+    ['MLA','מלטה',['מלטה','malta']],['TBS','טביליסי',['טביליסי','גאורגיה','גיאורגיה','גרוזיה']],['BUS','בטומי',['בטומי']],['GYD','באקו',['באקו','אזרבייגן']],
+    ['DXB','דובאי',['דובאי','dubai']],['AUH','אבו דאבי',['אבו דאבי','אבו-דאבי']],['RAK','מרקש',['מרקש','מרוקו']],
+    ['BKK','בנגקוק',['בנגקוק','תאילנד','bangkok','thailand']],['HKT','פוקט',['פוקט','קוסמוי','קו סמוי']],
+    ['NRT','טוקיו',['טוקיו','יפן','tokyo','japan']],['SIN','סינגפור',['סינגפור']],['BOM','מומבאי',['מומבאי']],['DEL','דלהי',['דלהי','הודו','india']],
+    ['SEZ','סיישל',['סיישל','איי סיישל']],['MRU','מאוריציוס',['מאוריציוס']],
+    ['JFK','ניו יורק',['ניו יורק','ניויורק','new york','nyc','ארהב','ארצות הברית']],['MIA','מיאמי',['מיאמי','פלורידה']],['LAX','לוס אנג׳לס',['לוס אנגלס','לוס אנג׳לס','קליפורניה']]
+  ];
+  const norm=s=>String(s||'').toLowerCase().replace(/["'׳״`]/g,'').replace(/\s+/g,' ').trim();
+  const ALIASES=[];PLACES.forEach(p=>p[2].forEach(a=>ALIASES.push([norm(a),p])));
+  ALIASES.sort((x,y)=>y[0].length-x[0].length); // הכי ספציפי קודם ("בטומי" לפני "גאורגיה")
+  function findPlace(txt){
+    const t=norm(txt);if(!t)return null;
+    const words=t.split(' ').map(w=>w.replace(/^[לבו]/,''));
+    for(const [a,p] of ALIASES){
+      if(a.length<=3){if(t.split(' ').includes(a)||words.includes(a))return p;} // שם קצר ("ניס") רק כמילה שלמה, לא בתוך "טוניסיה"
+      else if(t.includes(a))return p;
+    }
+    return null;
+  }
+
+  // הפרמטר tfs: אותו מבנה שהאתר של גוגל עצמו שם בכתובת כשמחפשים טיסה
+  function vint(n){const o=[];do{const b=n&0x7f;n=Math.floor(n/128);o.push(n?b|0x80:b);}while(n);return o;}
+  function pb(f,p){return typeof p==='number'?vint(f<<3).concat(vint(p)):vint((f<<3)|2).concat(vint(p.length),p);}
+  const bytes=s=>Array.from(new TextEncoder().encode(s));
+  const leg=(a,b,d)=>pb(2,bytes(d)).concat(pb(13,pb(2,bytes(a))),pb(14,pb(2,bytes(b))));
+  function flightUrl(o,d,out,back,adults){
+    const m=pb(3,leg(o,d,out)).concat(pb(3,leg(d,o,back)),pb(8,Array(Math.max(1,Math.min(9,adults))).fill(1)),pb(9,1),pb(19,1));
+    const b64=btoa(String.fromCharCode.apply(null,m)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    return 'https://www.google.com/travel/flights/search?tfs='+b64+'&hl=he&curr=ILS';
+  }
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const heDate=d=>d.getDate()+'.'+(d.getMonth()+1);
+  const toNum=v=>{const n=parseInt(String(v||'').replace(/[^\d]/g,''),10);return isNaN(n)?0:n;};
+
+  const sel=document.getElementById('flMonth'),route=document.getElementById('flRoute'),btn=document.getElementById('flBtn');
+  if(!sel||!route||!btn)return;
+  const today=new Date();today.setHours(0,0,0,0);
+  sel.add(new Option('עוד לא יודעים','flex'));
+  const mFmt=new Intl.DateTimeFormat('he-IL',{month:'long',year:'numeric'});
+  for(let i=0;i<11;i++){const d=new Date(today.getFullYear(),today.getMonth()+i,1);sel.add(new Option(mFmt.format(d),d.getFullYear()+'-'+d.getMonth()));}
+
+  function outDate(){
+    const v=sel.value,soon=new Date(today);soon.setDate(soon.getDate()+7);
+    if(v==='flex'){const d=new Date(today);d.setDate(d.getDate()+30);return d;}
+    const [y,m]=v.split('-').map(Number),d=new Date(y,m,15);
+    return d<soon?soon:d;
+  }
+  function update(){
+    const destTxt=(document.getElementById('dest')||{}).value||'';
+    const days=toNum((document.getElementById('days')||{}).value);
+    const trav=toNum((document.getElementById('trav')||{}).value)||1;
+    const nights=days>=2?days-1:4;
+    const nightsTxt=nights+' לילות'+(days>=2?'':' (אפשר לשנות בשדה הימים)');
+    if(!destTxt.trim()){
+      route.className='fl-route';route.textContent='כותבים למעלה לאן טסים, והחיפוש מוכן.';
+      btn.setAttribute('aria-disabled','true');btn.removeAttribute('href');return;
+    }
+    const p=findPlace(destTxt),out=outDate(),back=new Date(out);back.setDate(back.getDate()+nights);
+    if(p){
+      route.className='fl-route';
+      route.textContent='תל אביב ← '+p[1]+' · '+nightsTxt+' · '+(trav===1?'נפש אחת':trav+' נפשות')+' · מתחילים מ-'+heDate(out);
+      btn.href=flightUrl('TLV',p[0],iso(out),iso(back),trav);
+    }else{
+      route.className='fl-route miss';
+      route.textContent='נחפש "'+destTxt.trim()+'" לפי השם. בדף של גוגל בוחרים את התאריכים ואת מספר הנוסעים.';
+      btn.href='https://www.google.com/travel/flights?q='+encodeURIComponent('טיסות מתל אביב ל'+destTxt.trim())+'&hl=he&curr=ILS';
+    }
+    btn.setAttribute('aria-disabled','false');
+  }
+  ['dest','days','trav'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',update);el.addEventListener('change',update);}});
+  sel.addEventListener('change',update);
+  const rb=document.getElementById('resetBtn');if(rb)rb.addEventListener('click',()=>setTimeout(update,50));
+  update();setTimeout(update,400);
+})();
+</script>
 
 <style id="rl-consent-css">
 /* ===== באנר הסכמת עוגיות - RichLife ===== */

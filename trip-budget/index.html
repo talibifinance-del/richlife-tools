@@ -70,7 +70,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .insight{margin-top:13px;background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.55}
 .insight.warn{background:rgba(var(--red-rgb),.09);color:var(--red)}
 .insight.soft{background:rgba(183,121,31,.10);color:var(--amber)}
-.reserve-note{margin-top:13px;display:flex;align-items:center;gap:9px;background:rgba(183,121,31,.09);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:700;color:var(--amber);line-height:1.5}
+.reserve-note{margin-top:13px;display:block;background:rgba(183,121,31,.09);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:700;color:var(--amber);line-height:1.5}
 .reserve-note b{font-variant-numeric:tabular-nums}
 .ess-line{margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--sage-tint);border-radius:12px;padding:10px 14px}
 .ess-line .el-txt{font-size:13px;font-weight:800;color:var(--pine-darker)}
@@ -227,6 +227,41 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .fl-tips{margin-top:6px;background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:12.5px;font-weight:700;color:var(--pine-darker);line-height:1.6}
 .fl-tips p+p{margin-top:5px}
 
+
+/* ===== הערכה לפי יעד · מטבע מקומי · כיווץ הכל · לינה (14.11.26) ===== */
+.fx-line{margin-top:12px;font-size:12.5px;font-weight:800;color:var(--pine-deep);background:var(--sage-tint);border-radius:10px;padding:8px 12px}
+.est-box{margin-top:14px;border:1.5px dashed rgba(var(--pine-rgb),.28);border-radius:16px;padding:14px 14px 12px;background:linear-gradient(160deg,rgba(var(--sage-rgb),.16),rgba(255,255,255,0))}
+.est-head{font-weight:900;font-size:15px;color:var(--pine-darker)}
+.est-sub{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin:3px 0 10px;line-height:1.55}
+.est-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.est-seg button{font-size:12.5px;padding:7px 12px}
+.est-btn{border:0;cursor:pointer;font-family:var(--font);font-weight:900;font-size:13.5px;color:#fff;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 80%);border-radius:100px;padding:9px 18px;box-shadow:0 6px 16px rgba(var(--pine-rgb),.24);transition:transform .15s}
+.est-btn:hover{transform:translateY(-1px)}
+.est-note{margin-top:10px;font-size:12.5px;font-weight:700;color:var(--pine-darker);line-height:1.6;background:#fff;border-radius:10px;padding:9px 12px;border:1px solid rgba(var(--pine-rgb),.12)}
+.est-note.warn{color:var(--amber);background:rgba(183,121,31,.08)}
+.est-note b{font-weight:900}
+.ht-btn{margin-top:10px;background:#fff;color:var(--pine-deep);border:1.5px solid rgba(var(--pine-rgb),.35);box-shadow:none}
+.mini-shell .unit-btn{flex:none;border:0;background:rgba(var(--pine-rgb),.09);color:var(--pine-deep);font-family:var(--font);font-weight:900;font-size:12px;border-radius:8px;margin-inline-start:5px;padding:4px 7px;cursor:pointer;line-height:1.1}
+.mini-shell .unit-btn:hover{background:rgba(var(--pine-rgb),.18)}
+.mini-shell .unit-btn.fx{background:var(--pine);color:#fff}
+.fx-hint{font-size:11px;font-weight:800;color:var(--pine-deep);margin-top:3px;min-height:0}
+.fx-hint:empty{display:none}
+.fold-btn{margin-inline-start:auto}
+.room.est-new{animation:estPulse 1.2s ease-out 1}
+@keyframes estPulse{0%{box-shadow:0 0 0 0 rgba(var(--pine-rgb),.35)}100%{box-shadow:0 0 0 14px rgba(var(--pine-rgb),0)}}
+@media (prefers-reduced-motion:reduce){.room.est-new{animation:none}}
+
+/* ===== ליטוש עיצוב (14.11.26) ===== */
+.item-hdr{display:none}
+.room-head .r-emoji{width:42px;height:42px;border-radius:13px;background:linear-gradient(150deg,var(--sage-tint),rgba(var(--sage-rgb),.55));display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:inset 0 0 0 1px rgba(var(--pine-rgb),.08)}
+.room{transition:box-shadow .2s ease,transform .2s ease}
+@media (hover:hover){.room:hover{box-shadow:0 14px 34px rgba(var(--pine-rgb),.13)}}
+.bar{height:12px;box-shadow:inset 0 1px 2px rgba(var(--pine-rgb),.12)}
+.tile{transition:transform .15s}
+.tile .t-val{letter-spacing:-.3px}
+.item{transition:background .15s}
+@media (hover:hover){.item:hover{background:rgba(var(--sage-rgb),.10)}}
+.card .sec-lbl{letter-spacing:.1px}
 .dk-main{margin-top:16px}
 /* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
 @media screen and (min-width:1100px){
@@ -243,6 +278,19 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
   .dk-side .sum-grid{grid-template-columns:repeat(2,1fr)}
   .dk-body .filter-bar{margin-top:2px}
   #rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:0 18px;align-items:start}
+  /* שורת סעיף אחת לרוחב: שם · רלוונטי · עדיפות · תכננו · יצא · סטטוס */
+  #rooms{grid-template-columns:minmax(0,1fr)!important}
+  .item{display:grid;grid-template-columns:minmax(0,1.2fr) auto minmax(0,1.75fr);column-gap:18px;align-items:center;padding:8px 10px;margin:0 -10px;border-radius:12px}
+  .item-pr{margin-top:0}
+  .item-pr .pr-lbl{display:none}
+  .item-amounts{margin-top:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 150px}
+  .item-amounts .chip{justify-self:start;text-align:center}
+  .mini-field .m-lbl{display:none}
+  .have-note{grid-column:2 / -1;margin-top:0}
+  .item-hdr{display:grid;grid-template-columns:minmax(0,1.2fr) auto minmax(0,1.75fr);column-gap:18px;font-size:11px;font-weight:800;color:var(--ink-soft);padding:0 0 5px}
+  .item-hdr .h-amt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 150px;gap:8px}
+  .item-hdr .h-pr{width:182px}
+
   .cta-card,.actions,footer{max-width:900px;margin-inline:auto}
 }
 @media screen and (min-width:1100px) and (max-width:1300px){
@@ -425,6 +473,18 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
         <div class="input-shell"><input id="days" type="text" inputmode="numeric" placeholder="0" aria-label="מספר ימי החופשה"><span class="unit unit-suf">ימים</span></div>
       </div>
     </div>
+    <div class="fx-line" id="fxLine" hidden></div>
+    <div class="est-box" id="estBox">
+      <div class="est-head">🧭 הערכה לפי יעד</div>
+      <p class="est-sub">כמה עולים אוכל ותחבורה ביעד ליום, לפי מחירים אמיתיים שם. בוחרים סגנון והכלי ממלא את השורות למטה. אפשר לשנות כל מספר.</p>
+      <div class="est-row">
+        <div class="seg est-seg" role="group" aria-label="סגנון החופשה">
+          <button type="button" data-st="lo">💸 חסכוני</button><button type="button" data-st="mid" class="on">🙂 בינוני</button><button type="button" data-st="hi">✨ מפנק</button>
+        </div>
+        <button class="est-btn" id="estBtn" type="button">למלא הערכה ←</button>
+      </div>
+      <div class="est-note" id="estNote" aria-live="polite" hidden></div>
+    </div>
   </div>
 
   <div class="card" id="flCard">
@@ -438,6 +498,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
       <div class="fl-route" id="flRoute" aria-live="polite"></div>
     </div>
     <a class="fl-btn" id="flBtn" href="#" target="_blank" rel="noopener" aria-disabled="true">🔎 לחיפוש הטיסה בגוגל טיסות</a>
+    <a class="fl-btn ht-btn" id="htBtn" href="#" target="_blank" rel="noopener" aria-disabled="true">🏨 לחיפוש לינה בתאריכים האלה</a>
     <ol class="fl-steps">
       <li>בדף שנפתח לוחצים על <b>תאריך היציאה</b>. נפתח לוח שנה, ומתחת לכל יום כתוב המחיר.</li>
       <li>מדפדפים כמה חודשים קדימה. <b>המחירים הזולים מסומנים בירוק</b>, ושם מחפשים.</li>
@@ -460,10 +521,10 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
       <div class="input-shell"><span class="unit">₪</span><input id="budget" type="text" inputmode="numeric" placeholder="0" aria-label="תקציב כולל בשקלים"></div>
     </div>
     <div class="sum-grid">
-      <div class="tile main"><span class="t-lbl">התקציב</span><div class="t-val tabular" data-sum="budget">0 ₪</div></div>
-      <div class="tile" data-sum="tilePlan"><span class="t-lbl">תכננו להוציא</span><div class="t-val tabular" data-sum="plan">0 ₪</div></div>
-      <div class="tile"><span class="t-lbl">יצא בפועל</span><div class="t-val tabular" data-sum="paid">0 ₪</div></div>
-      <div class="tile" data-sum="tileLeft"><span class="t-lbl">נשאר מהתקציב</span><div class="t-val tabular" data-sum="left">0 ₪</div></div>
+      <div class="tile main"><span class="t-lbl">🎯 התקציב</span><div class="t-val tabular" data-sum="budget">0 ₪</div></div>
+      <div class="tile" data-sum="tilePlan"><span class="t-lbl">📝 תכננו להוציא</span><div class="t-val tabular" data-sum="plan">0 ₪</div></div>
+      <div class="tile"><span class="t-lbl">💳 יצא בפועל</span><div class="t-val tabular" data-sum="paid">0 ₪</div></div>
+      <div class="tile" data-sum="tileLeft"><span class="t-lbl">🪙 נשאר מהתקציב</span><div class="t-val tabular" data-sum="left">0 ₪</div></div>
     </div>
     <div class="bar" aria-hidden="true"><i data-sum="barFill" style="width:0%"></i></div>
     <div class="bar-note"><span data-sum="barPct">0% מהתקציב נוצל</span><span data-sum="barBought">שולם על 0 מתוך 0 סעיפים</span></div>
@@ -481,6 +542,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <button class="filter-btn on" data-filter="all">הכל</button>
     <button class="filter-btn" data-filter="himid">הכרחי + כדאי</button>
     <button class="filter-btn" data-filter="hi">🎯 רק הכרחי</button>
+    <button class="filter-btn fold-btn" id="foldAll" type="button" aria-label="לכווץ או לפתוח את כל הקטגוריות">⊟ לכווץ הכל</button>
   </div>
 
   <div id="rooms"></div>
@@ -530,6 +592,8 @@ const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
 const money=v=>fmt.format(Math.round(+v||0));
 const num=v=>{const n=parseFloat(String(v).replace(/[^\d.]/g,''));return isNaN(n)?0:n;};
 const KEY='rl_trip_budget_v1';
+/* מחירי יעד ליום (₪) מ-Numbeo · f=[מסעדה זולה, ארוחה לשניים בינונית, מזון מהיר, קפוצ'ינו, מים 0.33, נסיעה, מונית-התנעה, מונית לק"מ] · עדכון רבעוני */
+const DEST=/*DEST*/{"ATH":{"en":"Athens","cur":"EUR","f":[53.19,230.49,35.46,13.18,1.77,4.26,12.41,3.19],"upd":"13.11.2026"},"SKG":{"en":"Thessaloniki","cur":"EUR","f":[53.19,212.76,35.46,13.26,2.26,2.13,13.3,3.55],"upd":"13.11.2026"},"RHO":{"en":"Rhodes","cur":"EUR","f":[58.51,212.76,30.14,13.83,2.84,7.98,10.64,4.61],"upd":"27.10.2026"},"HER":{"en":"Heraklion","cur":"EUR","f":[40.78,177.3,31.91,12.19,2.44,4.61,14.18,3.19],"upd":"10.11.2026"},"JTR":{"en":"Santorini","cur":"EUR","f":[53.19,177.3,35.46,12.36,1.94,4.26,14.18,3.19],"upd":"14.11.2026","src":"k","country":"יוון"},"CFU":{"en":"Corfu","cur":"EUR","f":[35.46,186.16,28.37,13.47,1.86,6.38,12.77,3.19],"upd":"10.11.2026"},"KGS":{"en":"Kos","cur":"EUR","f":[53.19,177.3,35.46,12.36,1.94,4.26,14.18,3.19],"upd":"14.11.2026","src":"k","country":"יוון"},"LCA":{"en":"Larnaca","cur":"EUR","f":[46.1,168.43,28.37,12.23,3.47,8.86,17.38,7.09],"upd":"13.11.2026"},"PFO":{"en":"Paphos","cur":"EUR","f":[53.19,177.3,28.37,11.7,4.11,7.09,35.46,6.03],"upd":"13.11.2026"},"FCO":{"en":"Rome","cur":"EUR","f":[63.83,221.62,42.55,6.59,4.62,5.32,17.73,4.96],"upd":"13.11.2026"},"MXP":{"en":"Milan","cur":"EUR","f":[70.92,283.68,42.55,6.62,5.94,7.8,24.82,7.09],"upd":"13.11.2026"},"VCE":{"en":"Venice","cur":"EUR","f":[70.92,310.27,39.01,6.97,6.21,5.32,11.35,6.03],"upd":"10.11.2026"},"NAP":{"en":"Naples","cur":"EUR","f":[53.19,239.35,35.46,7.25,4.18,5.32,14.18,4.22],"upd":"12.11.2026"},"CTA":{"en":"Catania","cur":"EUR","f":[53.19,177.3,35.46,6.74,6.58,4.96,14.18,5.67],"upd":"10.11.2026"},"PMO":{"en":"Palermo","cur":"EUR","f":[47.87,177.3,35.46,7.24,3.84,4.96,10.64,3.55],"upd":"10.11.2026"},"PSA":{"en":"Pisa","cur":"EUR","f":[63.83,255.31,36.17,6.38,4.45,6.21,17.73,7.09],"upd":"11.11.2026"},"BUD":{"en":"Budapest","cur":"HUF","f":[43.73,194.36,31.34,10.62,5.72,4.86,10.69,4.28],"upd":"13.11.2026"},"PRG":{"en":"Prague","cur":"CZK","f":[36.32,145.3,31.97,11.7,5.0,5.67,10.17,5.27],"upd":"14.11.2026"},"VIE":{"en":"Vienna","cur":"EUR","f":[63.83,283.68,42.55,16.61,9.92,11.35,17.02,6.74],"upd":"13.11.2026"},"SZG":{"en":"Salzburg","cur":"EUR","f":[56.74,248.22,42.55,16.78,13.19,8.86,17.38,9.65],"upd":"10.11.2026"},"BER":{"en":"Berlin","cur":"EUR","f":[53.19,248.22,45.19,13.61,9.93,14.18,15.25,9.93],"upd":"14.11.2026"},"MUC":{"en":"Munich","cur":"EUR","f":[60.28,265.95,42.55,13.78,10.94,14.89,20.92,9.57],"upd":"13.11.2026"},"FRA":{"en":"Frankfurt","cur":"EUR","f":[53.19,283.68,42.55,14.37,11.02,13.47,14.18,8.51],"upd":"10.11.2026"},"BCN":{"en":"Barcelona","cur":"EUR","f":[53.19,212.76,42.55,10.14,6.08,10.28,9.93,4.79],"upd":"14.11.2026"},"MAD":{"en":"Madrid","cur":"EUR","f":[56.74,216.31,39.01,10.25,7.4,5.32,10.46,4.96],"upd":"13.11.2026"},"PMI":{"en":"Palma de Mallorca","cur":"EUR","f":[53.19,177.3,35.46,7.63,5.81,5.32,12.41,4.26],"upd":"14.11.2026","src":"k","country":"ספרד"},"TFS":{"en":"Santa Cruz de Tenerife","cur":"EUR","f":[53.19,177.3,35.46,7.63,5.81,5.32,12.41,4.26],"upd":"14.11.2026","src":"k","country":"ספרד"},"AGP":{"en":"Malaga","cur":"EUR","f":[53.19,203.89,35.46,7.94,6.35,4.96,6.67,3.79],"upd":"13.11.2026"},"LIS":{"en":"Lisbon","cur":"EUR","f":[53.19,195.03,35.46,9.64,5.37,7.45,12.41,2.13],"upd":"14.11.2026"},"OPO":{"en":"Porto","cur":"EUR","f":[49.64,177.3,35.46,8.74,4.24,4.96,12.41,2.66],"upd":"12.11.2026"},"CDG":{"en":"Paris","cur":"EUR","f":[60.28,248.22,42.55,16.38,8.44,9.04,20.39,4.61],"upd":"12.11.2026"},"NCE":{"en":"Nice","cur":"EUR","f":[56.74,292.54,42.55,11.64,7.54,6.03,14.18,4.61],"upd":"10.11.2026"},"LHR":{"en":"London","cur":"GBP","f":[85.01,340.02,38.25,17.99,7.48,12.75,18.7,10.92],"upd":"14.11.2026"},"EDI":{"en":"Edinburgh","cur":"GBP","f":[76.51,340.02,33.34,16.49,6.66,10.2,17.0,7.92],"upd":"14.11.2026"},"DUB":{"en":"Dublin","cur":"EUR","f":[70.92,319.14,42.55,15.8,7.27,7.09,15.6,4.68],"upd":"13.11.2026"},"AMS":{"en":"Amsterdam","cur":"EUR","f":[70.92,283.68,46.1,14.4,9.25,12.06,15.28,10.82],"upd":"13.11.2026"},"BRU":{"en":"Brussels","cur":"EUR","f":[70.92,283.68,49.64,14.17,9.53,8.86,9.22,8.16],"upd":"13.11.2026"},"ZRH":{"en":"Zurich","cur":"CHF","f":[115.05,460.2,57.52,21.79,16.75,17.64,25.89,14.57],"upd":"13.11.2026"},"GVA":{"en":"Geneva","cur":"CHF","f":[95.87,421.85,59.44,19.47,12.91,11.5,23.99,12.27],"upd":"12.11.2026"},"CPH":{"en":"Copenhagen","cur":"DKK","f":[65.21,379.43,42.69,21.95,12.33,11.38,22.53,6.73],"upd":"10.11.2026"},"ARN":{"en":"Stockholm","cur":"SEK","f":[55.87,319.28,37.99,15.89,10.01,13.73,18.84,4.77],"upd":"14.11.2026"},"OSL":{"en":"Oslo","cur":"NOK","f":[70.57,403.25,50.41,18.71,11.12,15.46,38.31,5.88],"upd":"13.11.2026"},"KEF":{"en":"Reykjavik","cur":"ISK","f":[98.63,355.14,84.36,20.76,9.87,17.91,22.06,11.42],"upd":"13.11.2026"},"OTP":{"en":"Bucharest","cur":"RON","f":[46.41,198.9,23.2,12.04,7.43,2.65,1.99,1.99],"upd":"13.11.2026"},"SOF":{"en":"Sofia","cur":"EUR","f":[53.19,212.76,39.01,11.37,5.45,2.84,5.32,2.66],"upd":"13.11.2026"},"BEG":{"en":"Belgrade","cur":"RSD"},"ZAG":{"en":"Zagreb","cur":"EUR"},"SPU":{"en":"Split","cur":"EUR"},"DBV":{"en":"Dubrovnik","cur":"EUR"},"LJU":{"en":"Ljubljana","cur":"EUR"},"TIA":{"en":"Tirana","cur":"ALL"},"TGD":{"en":"Podgorica","cur":"EUR"},"KRK":{"en":"Krakow","cur":"PLN"},"WAW":{"en":"Warsaw","cur":"PLN"},"RIX":{"en":"Riga","cur":"EUR"},"VNO":{"en":"Vilnius","cur":"EUR"},"MLA":{"en":"Valletta","cur":"EUR"},"TBS":{"en":"Tbilisi","cur":"GEL"},"BUS":{"en":"Batumi","cur":"GEL"},"GYD":{"en":"Baku","cur":"AZN"},"DXB":{"en":"Dubai","cur":"AED"},"AUH":{"en":"Abu Dhabi","cur":"AED"},"RAK":{"en":"Marrakech","cur":"MAD"},"BKK":{"en":"Bangkok","cur":"THB"},"HKT":{"en":"Phuket","cur":"THB"},"NRT":{"en":"Tokyo","cur":"JPY"},"SIN":{"en":"Singapore","cur":"SGD"},"BOM":{"en":"Mumbai","cur":"INR"},"DEL":{"en":"Delhi","cur":"INR"},"SEZ":{"en":"Seychelles","cur":"SCR"},"MRU":{"en":"Mauritius","cur":"MUR"},"JFK":{"en":"New York","cur":"USD"},"MIA":{"en":"Miami","cur":"USD"},"LAX":{"en":"Los Angeles","cur":"USD"}};
 let uid=0;
 const nid=()=>'i'+(++uid);
 
@@ -759,12 +823,15 @@ function render(){
     const sub=document.createElement('div');sub.className='r-sub';sub.innerHTML='<span class="r-count"></span><span class="r-sums"></span>';
     head.appendChild(sub);
     const chev=document.createElement('span');chev.className='chev';chev.textContent='‹';head.appendChild(chev);
-    head.onclick=()=>{r.closed=!r.closed;card.classList.toggle('closed',r.closed);save();};
+    head.onclick=()=>{r.closed=!r.closed;card.classList.toggle('closed',r.closed);save();updateFold();};
     card.appendChild(head);
     const rbar=document.createElement('div');rbar.className='r-bar';rbar.innerHTML='<i></i>';card.appendChild(rbar);
 
     const itemsEl=document.createElement('div');itemsEl.className='items';
     const visItems=filterPr==='all'?r.items:r.items.filter(inView);
+    const hdr=document.createElement('div');hdr.className='item-hdr';hdr.setAttribute('aria-hidden','true');
+    hdr.innerHTML='<span>סעיף</span><span class="h-pr">עדיפות</span><span class="h-amt"><span>תכננו</span><span>יצא בפועל</span><span></span></span>';
+    if(visItems.length)itemsEl.appendChild(hdr);
     visItems.forEach(it=>itemsEl.appendChild(itemRow(card,r,it)));
     if(filterPr!=='all'&&visItems.length===0)card.classList.add('pr-empty');
     card.appendChild(itemsEl);
@@ -778,6 +845,7 @@ function render(){
     refreshRoom(card,r);
   });
   refreshSummary();
+  updateFold();
 }
 
 function itemRow(card,r,it){
@@ -822,11 +890,40 @@ function itemRow(card,r,it){
     const w=document.createElement('div');w.className='mini-field';
     w.innerHTML='<div class="m-lbl">'+lbl+'</div>';
     const shell=document.createElement('div');shell.className='mini-shell '+cls;
-    shell.innerHTML='<span class="unit">₪</span>';
-    const inp=document.createElement('input');inp.type='text';inp.inputMode='numeric';inp.placeholder='0';inp.value=it[key]?fmt.format(num(it[key])):'';inp.setAttribute('aria-label',lbl);
-    inp.oninput=()=>{liveFormat(inp);it[key]=num(inp.value);save();chipRefresh();refreshAll(card,r);};
-    inp.onblur=()=>fmtField(inp);
-    shell.appendChild(inp);w.appendChild(shell);
+    // מטבע: ₪ או המטבע של היעד. הסכום נשמר תמיד בשקלים (it[key]); במטבע זר נשמר גם הסכום המקורי
+    const ub=document.createElement('button');ub.type='button';ub.className='unit-btn';
+    const hint=document.createElement('div');hint.className='fx-hint';
+    const inp=document.createElement('input');inp.type='text';inp.inputMode='decimal';inp.placeholder='0';inp.setAttribute('aria-label',lbl);
+    const cur=()=>it[key+'C']||'';
+    const paint=()=>{
+      const c=cur();
+      ub.textContent=c?curSym(c):'₪';ub.classList.toggle('fx',!!c);
+      const tc=tripCur();
+      ub.title=c?'מוזן ב'+curName(c)+' · לחיצה מחזירה לשקלים':(tc&&tc!=='ILS'?'לחיצה להזנה ב'+curName(tc):'שקלים');
+      ub.setAttribute('aria-label',ub.title);
+      inp.value=c?(it[key+'F']?fmtF(it[key+'F']):''):(it[key]?fmt.format(num(it[key])):'');
+      hint.textContent=c&&num(it[key])>0?'≈ '+money(it[key])+' ₪':'';
+    };
+    ub.onclick=()=>{
+      const c=cur();
+      if(c){delete it[key+'C'];delete it[key+'F'];}
+      else{
+        const tc=tripCur();
+        if(!tc||tc==='ILS'){showEst('כדי להזין במטבע של היעד, כותבים למעלה לאן טסים.',true);return;}
+        if(!fxRate(tc)){showEst('שער המטבע עוד נטען, נסו שוב בעוד רגע.',true);loadFx();return;}
+        it[key+'C']=tc;it[key+'F']=num(it[key])>0?Math.round(num(it[key])/fxRate(tc)*100)/100:'';
+      }
+      save();paint();inp.focus();
+    };
+    inp.oninput=()=>{
+      const c=cur();
+      if(c){const v=parseFloat(String(inp.value).replace(/[^\d.]/g,''));it[key+'F']=isNaN(v)?'':v;const rt=fxRate(c);if(rt)it[key]=isNaN(v)?'':Math.round(v*rt);hint.textContent=num(it[key])>0?'≈ '+money(it[key])+' ₪':'';}
+      else{liveFormat(inp);it[key]=num(inp.value);}
+      save();chipRefresh();refreshAll(card,r);
+    };
+    inp.onblur=()=>{if(!cur())fmtField(inp);};
+    shell.append(ub,inp);w.appendChild(shell);w.appendChild(hint);
+    paint();
     return w;
   };
   body.appendChild(mkField('תכננו','p',''));
@@ -862,11 +959,84 @@ budgetInp.addEventListener('input',()=>{liveFormat(budgetInp);S.b=num(budgetInp.
 budgetInp.addEventListener('blur',()=>fmtField(budgetInp));
 
 const destInp=document.getElementById('dest');
-destInp.addEventListener('input',()=>{S.dest=destInp.value;save();});
+let destT=0;
+destInp.addEventListener('input',()=>{S.dest=destInp.value;save();clearTimeout(destT);destT=setTimeout(()=>{paintFx();render();},450);});
 const travInp=document.getElementById('trav');
 travInp.addEventListener('input',()=>{S.trav=travInp.value.replace(/[^\d]/g,'');travInp.value=S.trav;save();refreshSummary();});
 const daysInp=document.getElementById('days');
 daysInp.addEventListener('input',()=>{S.days=daysInp.value.replace(/[^\d]/g,'');daysInp.value=S.days;save();refreshSummary();});
+
+/* ---------- כיווץ / פתיחה של כל הקטגוריות ---------- */
+function updateFold(){const b=document.getElementById('foldAll');if(!b)return;const anyOpen=S.rooms.some(r=>!r.closed);b.textContent=anyOpen?'⊟ לכווץ הכל':'⊞ לפתוח הכל';}
+document.getElementById('foldAll').addEventListener('click',e=>{
+  e.stopPropagation();
+  const anyOpen=S.rooms.some(r=>!r.closed);
+  S.rooms.forEach(r=>r.closed=anyOpen);save();render();
+});
+
+/* ---------- מטבע מקומי: שער יומי (open.er-api, גיבוי frankfurter) ---------- */
+const CUR_OF={GR:'EUR',CY:'EUR',IT:'EUR',AT:'EUR',DE:'EUR',ES:'EUR',PT:'EUR',FR:'EUR',IE:'EUR',NL:'EUR',BE:'EUR',HR:'EUR',SI:'EUR',LV:'EUR',LT:'EUR',MT:'EUR',ME:'EUR',BG:'EUR',
+  HU:'HUF',CZ:'CZK',GB:'GBP',CH:'CHF',DK:'DKK',SE:'SEK',NO:'NOK',IS:'ISK',RO:'RON',RS:'RSD',AL:'ALL',PL:'PLN',GE:'GEL',AZ:'AZN',AE:'AED',MA:'MAD',TH:'THB',JP:'JPY',SG:'SGD',IN:'INR',SC:'SCR',MU:'MUR',US:'USD'};
+const CUR_NAME={EUR:'אירו',USD:'דולר',GBP:'לירה שטרלינג',THB:'באט',JPY:'ין',CHF:'פרנק',HUF:'פורינט',CZK:'קורונה צ׳כית',PLN:'זלוטי',RON:'ליי',DKK:'כתר דני',SEK:'כתר שוודי',NOK:'כתר נורווגי',ISK:'כתר איסלנדי',RSD:'דינר',ALL:'לק',GEL:'לארי',AZN:'מנאט',AED:'דירהם',MAD:'דירהם מרוקאי',SGD:'דולר סינגפורי',INR:'רופי',SCR:'רופי סיישלי',MUR:'רופי מאוריציאני'};
+const CUR_SYM={EUR:'€',USD:'$',GBP:'£',THB:'฿',JPY:'¥',INR:'₹'};
+const curName=c=>CUR_NAME[c]||c, curSym=c=>CUR_SYM[c]||c;
+const fmtF=v=>new Intl.NumberFormat('he-IL',{maximumFractionDigits:2}).format(+v||0);
+let FX=null;
+try{const c=JSON.parse(localStorage.getItem('rl_fx_v1'));if(c&&c.r)FX=c;}catch(e){}
+function fxRate(c){if(!c||c==='ILS')return 1;return FX&&FX.r[c]?1/FX.r[c]:0;}   // כמה שקלים שווה יחידה אחת
+function loadFx(){
+  const today=new Date().toISOString().slice(0,10);
+  if(FX&&FX.d===today)return Promise.resolve();
+  return fetch('https://open.er-api.com/v6/latest/ILS').then(r=>r.json()).then(j=>{if(!j||!j.rates)throw 0;FX={d:today,r:j.rates,src:'open.er-api'};})
+    .catch(()=>fetch('https://api.frankfurter.dev/v1/latest?base=ILS').then(r=>r.json()).then(j=>{FX={d:today,r:j.rates,src:'frankfurter'};}))
+    .then(()=>{try{localStorage.setItem('rl_fx_v1',JSON.stringify(FX));}catch(e){}if(S){paintFx();render();}}).catch(()=>{});
+}
+function tripPlace(){return window.RL_findPlace?window.RL_findPlace(S.dest||''):null;}
+function tripCur(){const p=tripPlace();if(!p)return '';const d=DEST[p[0]];return d?d.cur:'';}
+function paintFx(){
+  if(!S)return;
+  const el=document.getElementById('fxLine'),c=tripCur(),rt=fxRate(c);
+  if(!c||c==='ILS'||!rt){el.hidden=true;return;}
+  el.hidden=false;
+  el.textContent='💱 המטבע ב'+tripPlace()[1]+': '+curName(c)+' · 1 '+curSym(c)+' = '+(rt>=0.1?rt.toFixed(2):rt.toFixed(4))+' ₪ (שער היום). בכל שורה למטה אפשר ללחוץ על ₪ ולהזין ב'+curName(c)+'.';
+}
+
+/* ---------- הערכה לפי יעד (מחירי Numbeo, עדכון רבעוני) ---------- */
+let estStyle='mid';
+document.querySelectorAll('.est-seg button').forEach(b=>b.addEventListener('click',()=>{estStyle=b.dataset.st;document.querySelectorAll('.est-seg button').forEach(x=>x.classList.toggle('on',x===b));}));
+function showEst(html,warn){const n=document.getElementById('estNote');n.hidden=false;n.classList.toggle('warn',!!warn);n.innerHTML=html;}
+const r10=v=>Math.round(v/10)*10;
+function findItem(name){for(const r of S.rooms)for(const it of r.items)if((it.n||'').trim()===name)return [r,it];return null;}
+document.getElementById('estBtn').addEventListener('click',()=>{
+  const p=tripPlace();
+  if(!(S.dest||'').trim()){showEst('קודם כותבים למעלה <b>לאן טסים</b>.',true);return;}
+  if(!p||!DEST[p[0]]||!DEST[p[0]].f){showEst('אין לי עדיין נתוני מחירים ל"'+S.dest.trim()+'". אפשר למלא את השורות ידנית.',true);return;}
+  const days=num(S.days);if(!days){showEst('כמה ימים? ממלאים למעלה את <b>מספר הימים</b>, ואז ההערכה.',true);return;}
+  const trav=num(S.trav)||1, d=DEST[p[0]], f=d.f;     // f = [מסעדה זולה, ארוחה לשניים בינונית, מזון מהיר, קפוצ׳ינו, מים, נסיעה, מונית-התנעה, מונית-ק"מ]
+  const [cheap,mid2,fast,capp,water,ticket,taxi0,taxikm]=f;
+  const S_={lo:{rest:cheap,daily:fast+capp+2*water,pub:3*ticket,rides:0,km:0},
+            mid:{rest:cheap+mid2/2,daily:2*capp+2*water+fast/2,pub:2*ticket,rides:1,km:6},
+            hi:{rest:mid2*1.4,daily:3*capp+3*water,pub:0,rides:2,km:8}}[estStyle];
+  const taxis=Math.ceil(trav/4);
+  const plan=[['ארוחות במסעדות',r10(S_.rest*days*trav)],['אוכל וקפה ליומיום',r10(S_.daily*days*trav)],
+              ['תחבורה ציבורית',r10(S_.pub*days*trav)],['מוניות ומוניות אפליקציה',r10(S_.rides*(taxi0+S_.km*taxikm)*days*taxis)]];
+  const found=plan.map(([n,v])=>[n,v,findItem(n)]).filter(x=>x[2]);
+  if(!found.length){showEst('לא מצאתי את שורות האוכל והתחבורה (אולי שונו להן השמות). אפשר למלא ידנית.',true);return;}
+  const filled=found.filter(x=>num(x[2][1].p)>0&&num(x[2][1].p)!==x[1]);
+  const overwrite=!filled.length||confirm('בחלק מהשורות כבר יש סכום. לעדכן גם אותן לפי ההערכה?');
+  const done=[];
+  found.forEach(([n,v,[r,it]])=>{
+    if(num(it.p)>0&&!overwrite)return;
+    if(v<=0&&num(it.p)<=0)return;
+    it.p=v;delete it.pC;delete it.pF;if(it.h&&v>0)it.h=false;r.closed=false;done.push([n,v]);
+  });
+  save();render();
+  const where=d.src==='k'?'ממוצע ארצי ב'+d.country+' (אין מספיק נתונים לעיר עצמה)':'מחירים ממוצעים ב'+p[1];
+  const lbl={lo:'חסכוני',mid:'בינוני',hi:'מפנק'}[estStyle];
+  showEst(done.length?('✓ מילאתי לסגנון <b>'+lbl+'</b>, '+days+' ימים, '+trav+(trav===1?' נוסע/ת':' נוסעים')+': '+done.map(x=>x[0]+' <b>'+money(x[1])+' ₪</b>').join(' · ')+
+    '<br><span style="opacity:.8">לפי '+where+' (Numbeo, עודכן '+d.upd+'). לינה לא נכנסת להערכה, כי היא משתנה פי 2-3 לפי עונה: לוחצים על "חיפוש לינה" ורואים מחיר אמיתי לתאריכים שלכם.</span>')
+    :'לא שיניתי כלום. השורות שכבר מילאתם נשארו כמו שהן.');
+});
 
 function syncFilterButtons(){document.querySelectorAll('#filterBar .filter-btn').forEach(b=>b.classList.toggle('on',b.dataset.filter===filterPr));}
 document.getElementById('filterBar').addEventListener('click',e=>{
@@ -932,6 +1102,8 @@ document.getElementById('resetBtn').onclick=()=>{
   document.getElementById('actLink').hidden=true;
   render();refreshShareUI();
 };
+
+window.addEventListener('load',()=>{if(S){paintFx();render();}loadFx();});
 
 /* ── boot ── */
 (function boot(){
@@ -1016,6 +1188,7 @@ document.getElementById('resetBtn').onclick=()=>{
   function pb(f,p){return typeof p==='number'?vint(f<<3).concat(vint(p)):vint((f<<3)|2).concat(vint(p.length),p);}
   const bytes=s=>Array.from(new TextEncoder().encode(s));
   const leg=(a,b,d)=>pb(2,bytes(d)).concat(pb(13,pb(2,bytes(a))),pb(14,pb(2,bytes(b))));
+  window.RL_findPlace=findPlace;
   function flightUrl(o,d,out,back,adults){
     const m=pb(3,leg(o,d,out)).concat(pb(3,leg(d,o,back)),pb(8,Array(Math.max(1,Math.min(9,adults))).fill(1)),pb(9,1),pb(19,1));
     const b64=btoa(String.fromCharCode.apply(null,m)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
@@ -1025,7 +1198,13 @@ document.getElementById('resetBtn').onclick=()=>{
   const heDate=d=>d.getDate()+'.'+(d.getMonth()+1);
   const toNum=v=>{const n=parseInt(String(v||'').replace(/[^\d]/g,''),10);return isNaN(n)?0:n;};
 
-  const sel=document.getElementById('flMonth'),route=document.getElementById('flRoute'),btn=document.getElementById('flBtn');
+  const sel=document.getElementById('flMonth'),route=document.getElementById('flRoute'),btn=document.getElementById('flBtn'),hbtn=document.getElementById('htBtn');
+  const EN_M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const enD=d=>EN_M[d.getMonth()]+' '+d.getDate()+' '+d.getFullYear();
+  function hotelUrl(city,out,back,adults){   // גוגל מלונות: היעד, התאריכים ומספר האורחים כבר מסומנים (נבדק בדפדפן 14.11.26)
+    return 'https://www.google.com/travel/search?q='+encodeURIComponent('hotels in '+city+' from '+enD(out)+' to '+enD(back))+
+      '&hl=he&curr=ILS&gl=il&adults='+Math.max(1,Math.min(9,adults));
+  }
   if(!sel||!route||!btn)return;
   const today=new Date();today.setHours(0,0,0,0);
   sel.add(new Option('עוד לא יודעים','flex'));
@@ -1046,17 +1225,20 @@ document.getElementById('resetBtn').onclick=()=>{
     const nightsTxt=nights+' לילות'+(days>=2?'':' (אפשר לשנות בשדה הימים)');
     if(!destTxt.trim()){
       route.className='fl-route';route.textContent='כותבים למעלה לאן טסים, והחיפוש מוכן.';
-      btn.setAttribute('aria-disabled','true');btn.removeAttribute('href');return;
+      btn.setAttribute('aria-disabled','true');btn.removeAttribute('href');
+      if(hbtn){hbtn.setAttribute('aria-disabled','true');hbtn.removeAttribute('href');}return;
     }
     const p=findPlace(destTxt),out=outDate(),back=new Date(out);back.setDate(back.getDate()+nights);
     if(p){
       route.className='fl-route';
-      route.textContent='תל אביב ← '+p[1]+' · '+nightsTxt+' · '+(trav===1?'נפש אחת':trav+' נפשות')+' · מתחילים מ-'+heDate(out);
+      route.textContent='הלוך ושוב: תל אביב ← '+p[1]+' · '+nightsTxt+' · '+(trav===1?'נפש אחת':trav+' נפשות')+' · מתחילים מ-'+heDate(out);
       btn.href=flightUrl('TLV',p[0],iso(out),iso(back),trav);
+      if(hbtn){const dd=(typeof DEST!=='undefined'&&DEST[p[0]])||{};hbtn.href=hotelUrl(dd.en||p[1],out,back,trav);hbtn.setAttribute('aria-disabled','false');}
     }else{
       route.className='fl-route miss';
       route.textContent='נחפש "'+destTxt.trim()+'" לפי השם. בדף של גוגל בוחרים את התאריכים ואת מספר הנוסעים.';
       btn.href='https://www.google.com/travel/flights?q='+encodeURIComponent('טיסות מתל אביב ל'+destTxt.trim())+'&hl=he&curr=ILS';
+      if(hbtn){hbtn.href=hotelUrl(destTxt.trim(),out,back,trav);hbtn.setAttribute('aria-disabled','false');}
     }
     btn.setAttribute('aria-disabled','false');
   }

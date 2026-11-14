@@ -226,6 +226,28 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .fl-steps b{color:var(--pine-darker)}
 .fl-tips{margin-top:6px;background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:12.5px;font-weight:700;color:var(--pine-darker);line-height:1.6}
 .fl-tips p+p{margin-top:5px}
+
+.dk-main{margin-top:16px}
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+@media screen and (min-width:1100px){
+  .wrap{max-width:1480px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:880px}
+  .top-cta{justify-content:flex-start}
+  .dk-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:20px;align-items:stretch}
+  .dk-top>.card{margin:0!important}
+  .dk-main{display:grid;grid-template-columns:minmax(380px,430px) minmax(0,1fr);gap:24px;align-items:start;margin-top:20px}
+  .dk-side{position:sticky;top:16px}
+  .dk-side>.card{margin:0!important}
+  .dk-side .sum-grid{grid-template-columns:repeat(2,1fr)}
+  .dk-body .filter-bar{margin-top:2px}
+  #rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:0 18px;align-items:start}
+  .cta-card,.actions,footer{max-width:900px;margin-inline:auto}
+}
+@media screen and (min-width:1100px) and (max-width:1300px){
+  #rooms{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -386,6 +408,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <span class="tc-link">לתהליכי הליווי שלי ←</span>
   </a>
 
+  <div class="dk-top">
   <div class="card">
     <span class="sec-lbl">🧳 פרטי החופשה</span>
     <div class="trip-fields">
@@ -426,6 +449,10 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     </div>
   </div>
 
+  </div>
+
+  <div class="dk-main">
+  <aside class="dk-side">
   <div class="card">
     <span class="sec-lbl">💰 תקציב החופשה</span>
     <div class="field">
@@ -447,6 +474,8 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div class="insight" data-sum="insight"></div>
   </div>
 
+  </aside>
+  <div class="dk-body">
   <div class="filter-bar" id="filterBar">
     <span class="filter-lbl">תצוגה:</span>
     <button class="filter-btn on" data-filter="all">הכל</button>
@@ -462,6 +491,8 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <span class="sec-lbl">📊 סיכום מפורט - כמה יצא בכל קטגוריה</span>
     <div id="breakdown"></div>
     <div class="bd-total" id="bdTotal" hidden></div>
+  </div>
+  </div>
   </div>
 
   <div class="cta-card">

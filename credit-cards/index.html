@@ -198,6 +198,20 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
 .gn-tab:hover{border-color:var(--pine)}
 .gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+@media screen and (min-width:1100px){
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+  .wrap{max-width:1440px}
+  main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+  main>*{grid-column:1/-1}
+  main>.card{grid-column:auto;margin:0!important}
+  .gloss,.hint,.tie-box,.updated{max-width:900px}
+}
 </style>
 <style>
 .pintro{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.55;margin-bottom:12px}

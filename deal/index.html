@@ -405,6 +405,24 @@ table.grid td.name{text-align:start}
 #ttBubble b{color:#bfe6c6;font-weight:900}
 #ttBubble::after{content:'';position:absolute;top:100%;left:var(--ax,50%);margin-left:-6px;border:6px solid transparent;border-top-color:rgba(30,43,37,.97)}
 #ttBubble.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:rgba(30,43,37,.97)}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -427,7 +445,9 @@ table.grid td.name{text-align:start}
     <button type="button" class="dt" data-t="us"><div class="t-name">🌎 עסקה בחו"ל</div><div class="t-sub">תזרים · ריפייננס · מט"ח</div></button>
   </div>
 
-  <div class="card il-land">
+  <div class="dk-main il-land">
+<div class="dk-in">
+<div class="card il-land">
     <div class="sec-lbl">🏠 נתוני העסקה</div>
     <div class="field full">
       <label for="dname">שם העסקה (לא חובה)</label>
@@ -529,8 +549,10 @@ table.grid td.name{text-align:start}
       <div class="tot" id="tFlowBox"><div class="k" id="tFlowK">תזרים חודשי (שכירות פחות החזר)</div><div class="v" id="tFlow">0 ₪</div><div class="s" id="tFlowS"></div></div>
     </div>
   </div>
+</div>
 
-  <div class="card il-land">
+  <aside class="dk-side">
+<div class="card il-land">
     <div class="sec-lbl">📊 מה יוצא מזה</div>
 
     <div class="result">
@@ -553,8 +575,11 @@ table.grid td.name{text-align:start}
       <table class="grid" id="breakdown" style="min-width:0"></table>
     </div>
   </div>
+</aside>
+</div>
 
-  <div class="card il-land" id="earlyCard">
+  <div class="dk-grid il-land">
+<div class="card il-land" id="earlyCard">
     <div class="sec-lbl">🏁 סגירה מוקדמת של ההלוואה</div>
     <div class="gmode" id="cmode" role="group" aria-label="מתי סוגרים את ההלוואה" style="margin:0 0 10px">
       <button type="button" class="gm-chip on" data-c="sale">נסגרת במכירה</button>
@@ -583,6 +608,7 @@ table.grid td.name{text-align:start}
     <div class="vs" id="vsBox"></div>
     <div class="insight" id="insVs" style="margin-top:14px"></div>
   </div>
+</div>
 
   <div class="chart-card il-land">
     <div class="chart-head">📈 ההון שלכם בנכס, שנה אחרי שנה</div>
@@ -635,7 +661,9 @@ table.grid td.name{text-align:start}
     <details><summary>המספרים כאן מדויקים?<span class="chev">▾</span></summary><div class="a">זו הדמיה לפי ההנחות שהזנתם, בהנחת עליית ערך קבועה, ריבית קבועה והלוואת שפיצר. אין כאן מס רכישה, עלויות תחזוקה, תקופות ללא שוכר, קנס פירעון מוקדם או שינויי מיסוי. אין כאן ייעוץ השקעות, וכל הנחה שתשנו משנה את התוצאה.</div></details>
   </div>
 
-  <div class="card us-only">
+  <div class="dk-main us-only">
+<div class="dk-in">
+<div class="card us-only">
     <div class="sec-lbl">🌎 נתוני העסקה</div>
     <div class="sec-note">עסקת תשואה בחו"ל: משקיעים סכום, מקבלים אחוז שנתי שמשולם רבעונית, אופציה ל<span class="tt" data-g="refi">ריפייננס</span> שמחזיר את הקרן באמצע הדרך, ובסוף תקבול מכירה. מזינים במטבע של העסקה ומקבלים גם את התמונה בשקלים.</div>
     <div class="unit-row" style="margin:0 0 14px"><span class="ur-lbl">מטבע העסקה</span>
@@ -707,8 +735,10 @@ table.grid td.name{text-align:start}
       </div>
     </div>
   </div>
+</div>
 
-  <div class="card us-only">
+  <aside class="dk-side">
+<div class="card us-only">
     <div class="sec-lbl">📊 מה יוצא מזה</div>
     <div class="result">
       <div class="r-lbl">התשואה האמיתית לפי עיתוי הכסף (<span class="tt" data-g="irr">IRR</span>), <b>בשנה, <span class="tt" data-g="comp">דריבית</span></b></div>
@@ -725,6 +755,8 @@ table.grid td.name{text-align:start}
     <div class="tbl-wrap"><table class="grid" id="usFlowTable"></table></div>
     <div class="insight soft" id="usFxIns" style="margin-top:14px" hidden></div>
   </div>
+</aside>
+</div>
 
   <div class="card us-only">
     <div class="sec-lbl">⚖️ העסקה מול פשוט להשקיע במדד</div>

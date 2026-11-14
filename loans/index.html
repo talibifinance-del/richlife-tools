@@ -232,6 +232,20 @@ svg.chart{display:block;width:100%;height:auto}
 .seg-list li{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.5}
 .seg-list li b{color:var(--pine-deep);font-weight:900}
 .seg-catch{margin-top:11px;background:rgba(183,121,31,.10);border-radius:11px;padding:10px 13px;font-size:12px;font-weight:700;color:#8a5a12;line-height:1.55}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+@media screen and (min-width:1100px){
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+  .wrap{max-width:1440px}
+  #panelCost{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+  #panelCost>*{margin:0!important}
+  #panelCap>.card{max-width:1000px;margin-inline:auto}
+  .cmp-loans{max-width:1000px;margin-inline:auto}
+}
 </style>
 </head>
 <body>

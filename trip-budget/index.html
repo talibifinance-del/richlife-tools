@@ -1024,9 +1024,9 @@ document.getElementById('estBtn').addEventListener('click',()=>{
   if(!found.length){showEst('לא מצאתי את שורות האוכל והתחבורה (אולי שונו להן השמות). אפשר למלא ידנית.',true);return;}
   const filled=found.filter(x=>num(x[2][1].p)>0&&num(x[2][1].p)!==x[1]);
   const overwrite=!filled.length||confirm('בחלק מהשורות כבר יש סכום. לעדכן גם אותן לפי ההערכה?');
-  const done=[];
+  const done=[],kept=[];
   found.forEach(([n,v,[r,it]])=>{
-    if(num(it.p)>0&&!overwrite)return;
+    if(num(it.p)>0&&!overwrite){if(num(it.p)!==v)kept.push(n);return;}
     if(v<=0&&num(it.p)<=0)return;
     it.p=v;delete it.pC;delete it.pF;if(it.h&&v>0)it.h=false;r.closed=false;done.push([n,v]);
   });
@@ -1034,8 +1034,9 @@ document.getElementById('estBtn').addEventListener('click',()=>{
   const where=d.src==='k'?'ממוצע ארצי ב'+d.country+' (אין מספיק נתונים לעיר עצמה)':'מחירים ממוצעים ב'+p[1];
   const lbl={lo:'חסכוני',mid:'בינוני',hi:'מפנק'}[estStyle];
   showEst(done.length?('✓ מילאתי לסגנון <b>'+lbl+'</b>, '+days+' ימים, '+trav+(trav===1?' נוסע/ת':' נוסעים')+': '+done.map(x=>x[0]+' <b>'+money(x[1])+' ₪</b>').join(' · ')+
+    (kept.length?'<br>השארתי כמו שהם, כי ביקשתם: '+kept.join(', ')+'.':'')+
     '<br><span style="opacity:.8">לפי '+where+' (Numbeo, עודכן '+d.upd+'). לינה לא נכנסת להערכה, כי היא משתנה פי 2-3 לפי עונה: לוחצים על "חיפוש לינה" ורואים מחיר אמיתי לתאריכים שלכם.</span>')
-    :'לא שיניתי כלום. השורות שכבר מילאתם נשארו כמו שהן.');
+    :'לא שיניתי כלום. השורות שכבר מילאתם נשארו כמו שהן'+(kept.length?': '+kept.join(', '):'')+'.');
 });
 
 function syncFilterButtons(){document.querySelectorAll('#filterBar .filter-btn').forEach(b=>b.classList.toggle('on',b.dataset.filter===filterPr));}
@@ -1099,6 +1100,7 @@ document.getElementById('resetBtn').onclick=()=>{
   S=seedState();docId=null;
   try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}   // detach: strip #p
   budgetInp.value='';destInp.value='';travInp.value='';daysInp.value='';
+  paintFx();const en=document.getElementById('estNote');en.hidden=true;en.textContent='';
   document.getElementById('actLink').hidden=true;
   render();refreshShareUI();
 };
@@ -1221,8 +1223,8 @@ window.addEventListener('load',()=>{if(S){paintFx();render();}loadFx();});
     const destTxt=(document.getElementById('dest')||{}).value||'';
     const days=toNum((document.getElementById('days')||{}).value);
     const trav=toNum((document.getElementById('trav')||{}).value)||1;
-    const nights=days>=2?days-1:4;
-    const nightsTxt=nights+' לילות'+(days>=2?'':' (אפשר לשנות בשדה הימים)');
+    const nights=days>=2?days-1:(days===1?1:4);
+    const nightsTxt=(nights===1?'לילה אחד':nights+' לילות')+(days>=1?'':' (אפשר לשנות בשדה הימים)');
     if(!destTxt.trim()){
       route.className='fl-route';route.textContent='כותבים למעלה לאן טסים, והחיפוש מוכן.';
       btn.setAttribute('aria-disabled','true');btn.removeAttribute('href');
@@ -1231,7 +1233,7 @@ window.addEventListener('load',()=>{if(S){paintFx();render();}loadFx();});
     const p=findPlace(destTxt),out=outDate(),back=new Date(out);back.setDate(back.getDate()+nights);
     if(p){
       route.className='fl-route';
-      route.textContent='הלוך ושוב: תל אביב ← '+p[1]+' · '+nightsTxt+' · '+(trav===1?'נפש אחת':trav+' נפשות')+' · מתחילים מ-'+heDate(out);
+      route.textContent='הלוך ושוב: תל אביב ← '+p[1]+' · '+nightsTxt+' · '+(trav===1?'נפש אחת':trav+' נפשות')+' · מתחילים מ-'+heDate(out)+(trav>9?' (בגוגל אפשר לחפש עד 9 נוסעים בבת אחת, אז מחפשים בשתי קבוצות)':'');
       btn.href=flightUrl('TLV',p[0],iso(out),iso(back),trav);
       if(hbtn){const dd=(typeof DEST!=='undefined'&&DEST[p[0]])||{};hbtn.href=hotelUrl(dd.en||p[1],out,back,trav);hbtn.setAttribute('aria-disabled','false');}
     }else{

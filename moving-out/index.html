@@ -144,6 +144,24 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
 .gn-tab:hover{border-color:var(--pine)}
 .gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -167,15 +185,19 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <p>לפני שיוצאים - כמה מותר להוציא על מגורים, ואיך נכון לחלק את המשכורת כדי גם ליהנות וגם לחסוך.</p>
   </div>
 
-  <div class="card">
+  <div class="dk-main">
+<div class="dk-in">
+<div class="card">
     <span class="sec-lbl">💵 ההכנסה שלך</span>
     <div class="field">
       <label>כמה נכנס לך לבנק כל חודש (נטו)?</label>
       <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="9,000" placeholder="0"></div>
     </div>
   </div>
+</div>
 
-  <div class="card">
+  <aside class="dk-side">
+<div class="card">
     <span class="sec-lbl">🏠 כמה לשלם על מגורים?</span>
     <div class="rec" style="margin:0 0 13px">ההמלצה: עד <b>35% מהנטו</b> על כל המגורים, מחולק כך:</div>
     <div class="two-rec">
@@ -196,8 +218,11 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
       <span class="rt-num" id="recTotal">0 ₪</span>
     </div>
   </div>
+</aside>
+</div>
 
-  <div class="card savecheck">
+  <div class="dk-grid dk-3">
+<div class="card savecheck">
     <span class="sec-lbl">🎯 מבחן המוכנות ליציאה</span>
     <div class="sv-body" id="svBody"></div>
     <a class="sv-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצים עזרה להגיע לשם? לתהליכי הליווי שלי ←</a>
@@ -253,6 +278,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <div class="insight" id="insight"></div>
     <div class="note-tip">💡 <b>מחייה</b> = הכל: שכ"ד וחשבונות, אוכל, דלק ורכב, ביטוחים, קופת חולים, טלפון ואינטרנט. כלל אצבע: שהמחייה הכוללת לא תעלה על <b>50% מהמשכורת</b>, כדי שיישאר גם ליהנות וגם לחסוך.</div>
   </div>
+</div>
 
   <div class="cta-card">
     <div class="cta-emoji">🕊️</div>

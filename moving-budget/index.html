@@ -149,6 +149,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .pr-seg button.on[data-pr="mid"]{background:var(--pine);color:#fff;box-shadow:0 2px 6px rgba(var(--pine-rgb),.28)}
 .pr-seg button.on[data-pr="lo"]{background:#fff;color:var(--ink-soft);box-shadow:0 2px 6px rgba(var(--pine-rgb),.16)}
 .item-amounts{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-top:8px}
+.item-amounts>*{min-width:0} /* בלי זה שדות הסכום דוחפים את הדף לגלילה לצד בטלפון */
 @media(max-width:480px){.item-amounts{grid-template-columns:1fr 1fr;}.item-amounts .chip{grid-column:1/-1;justify-self:start}}
 .mini-field .m-lbl{font-size:10.5px;font-weight:800;color:var(--ink-soft);margin-bottom:3px}
 .mini-shell{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px}
@@ -198,6 +199,28 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
 .gn-tab:hover{border-color:var(--pine)}
 .gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .dk-main.dk-sidefirst{grid-template-columns:minmax(380px,430px) minmax(0,1fr)}
+  .dk-sidefirst .sum-grid{grid-template-columns:repeat(2,1fr)}
+  #rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:0 18px;align-items:start}
+  .dk-in .filter-bar{margin-top:2px}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -366,7 +389,9 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <span class="tc-link">לתהליכי הליווי שלי ←</span>
   </a>
 
-  <div class="card">
+  <div class="dk-main dk-sidefirst">
+<aside class="dk-side">
+<div class="card">
     <span class="sec-lbl">💰 התקציב שלנו</span>
     <div class="field">
       <label>כמה שמנו בצד להצטיידות ולמעבר?</label>
@@ -385,8 +410,10 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div class="filter-note" id="filterNote" hidden></div>
     <div class="insight" data-sum="insight"></div>
   </div>
+</aside>
 
-  <div class="filter-bar" id="filterBar">
+  <div class="dk-in">
+<div class="filter-bar" id="filterBar">
     <span class="filter-lbl">תצוגה:</span>
     <button class="filter-btn on" data-filter="all">הכל</button>
     <button class="filter-btn" data-filter="himid">הכרחי + כדאי</button>
@@ -402,6 +429,8 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div id="breakdown"></div>
     <div class="bd-total" id="bdTotal" hidden></div>
   </div>
+</div>
+</div>
 
   <div class="cta-card">
     <div class="cta-emoji">🗝️</div>

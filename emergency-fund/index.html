@@ -195,6 +195,24 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .path.inv .p-sub{color:rgba(255,255,255,.82)}
 .save-badge{margin-top:11px;text-align:center;background:rgba(var(--pine-rgb),.12);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:900;color:var(--pine-deep);line-height:1.5}
 .res-note{margin-top:12px;background:rgba(183,121,31,.10);border-radius:12px;padding:11px 14px;font-size:12px;font-weight:700;color:var(--amber);line-height:1.55}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -215,7 +233,8 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <span class="tc-link">לתהליכי הליווי שלי ←</span>
   </a>
 
-  <div class="card">
+  <div class="dk-grid dk-3">
+<div class="card">
     <span class="sec-lbl">🎯 כמה הקרן צריכה להכיל</span>
     <div class="field">
       <label for="exp">כמה עולה לכם חודש חיוני?</label>
@@ -275,6 +294,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <div class="res-note" id="liqNote" hidden></div>
     <div class="insight" id="insight"></div>
   </div>
+</div>
 
   <div class="cta-card">
     <div class="cta-emoji">🛟</div>

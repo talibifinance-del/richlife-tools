@@ -152,6 +152,24 @@ svg.chart{display:block;width:100%;height:auto}
 .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:12.5px;font-weight:600;color:var(--pine-deep);line-height:1.6;max-width:520px;margin-inline:auto;text-align:center}
 .disc{margin-top:12px;font-size:11.5px;font-weight:600;color:var(--ink-soft);text-align:center;max-width:520px;margin-inline:auto;line-height:1.5}
 .input-shell input:focus,.input-shell input:focus-visible,.act-link input:focus,.act-link input:focus-visible{outline:none !important}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -167,7 +185,8 @@ svg.chart{display:block;width:100%;height:auto}
     <p>כמה הון צריך לצבור כדי לחיות מהכסף ולצאת לחופש כלכלי - ואיך מגיעים לשם.</p>
   </div>
 
-  <div class="card">
+  <div class="dk-grid">
+<div class="card">
     <span class="sec-lbl">🎯 שלב 1 · כמה הון צריך</span>
     <div class="fields">
       <div class="field full">
@@ -216,6 +235,7 @@ svg.chart{display:block;width:100%;height:auto}
     </div>
     <div class="insight" id="insight"></div>
   </div>
+</div>
 
   <details class="card fin" style="margin-top:16px">
     <summary><span class="sec-lbl" style="margin:0">💳 ומה אם לוקחים מימון כדי להאיץ? (מתקדם)</span><span class="fin-chev">▾</span></summary>

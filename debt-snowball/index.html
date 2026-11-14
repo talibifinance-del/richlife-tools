@@ -309,6 +309,24 @@ svg.chart{display:block;width:100%;height:auto}
 #rTime{font-size:clamp(20px,5.2vw,31px);line-height:1.2}
 #rTime small{font-size:.52em;font-weight:800;opacity:.85}
 .result .r-lbl #rMethLbl{opacity:.85}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -325,7 +343,9 @@ svg.chart{display:block;width:100%;height:auto}
     <p>כשיש כמה חובות במקביל, הסדר שבו סוגרים אותם משנה כמה זמן וכמה כסף זה ייקח. הזינו את החובות ואת התוספת שאפשר להקצות כל חודש, ותקבלו תוכנית יציאה מחוב.</p>
   </div>
 
-  <div class="card">
+  <div class="dk-main">
+<div class="dk-in">
+<div class="card">
     <div class="sec-lbl">🧾 החובות שלך</div>
     <div class="sec-note">שורה לכל חוב: יתרה, ריבית שנתית והתשלום החודשי. לא יודעים את הריבית? אפשר להזין כמה תשלומים נשארו במקומה. כרטיס אשראי שממשיכים להעמיס עליו הוא לא הלוואה, ולכן יש לו מצב משלו בכל שורה.</div>
 
@@ -367,13 +387,17 @@ svg.chart{display:block;width:100%;height:auto}
     <div class="insight" id="insStall" hidden></div>
     <div class="insight" id="insExtra" hidden></div>
   </div>
+</div>
 
-  <div class="card" style="margin-top:16px">
+  <aside class="dk-side">
+<div class="card" style="margin-top:16px">
     <div class="sec-lbl">⚖️ שלוש דרכים, שלוש תוצאות</div>
     <div class="sec-note">אותם חובות בדיוק - רק הסדר והתוספת משתנים. ככה נראה ההבדל בכסף ובזמן.</div>
     <div class="cmp-strip" id="cmpStrip"></div>
     <div class="insight" id="cmpVerdict" style="margin-top:14px"></div>
   </div>
+</aside>
+</div>
 
   <div class="chart-card">
     <div class="chart-head">📉 החוב נמס, שכבה אחרי שכבה</div>
@@ -385,7 +409,8 @@ svg.chart{display:block;width:100%;height:auto}
     <div class="chart-legend" id="chartLegend"></div>
   </div>
 
-  <div class="card" style="margin-top:16px">
+  <div class="dk-grid">
+<div class="card" style="margin-top:16px">
     <div class="sec-lbl">🗓️ סדר הסגירה <span id="tlMeth" style="font-size:12px;font-weight:800;color:var(--pine);background:var(--sage-tint);padding:3px 10px;border-radius:100px">כדור שלג</span></div>
     <div class="sec-note">זו התוכנית: כל חוב שנסגר משחרר את התשלום שלו, והוא מתגלגל לחוב הבא. לכן הקצב מואץ מחוב לחוב.</div>
     <div class="tl" id="timeline"></div>
@@ -400,6 +425,7 @@ svg.chart{display:block;width:100%;height:auto}
       <p>השיטה הנכונה היא <b>זו שתתמידו בה</b>. אם הפער בכסף קטן, קחו את כדור השלג. אם הפער גדול, שווה להילחם על המשמעת ולבחור במפולת.</p>
     </div>
   </div>
+</div>
 
   <div class="card faq" style="margin-top:16px">
     <div class="sec-lbl">❓ שאלות נפוצות</div>

@@ -311,6 +311,24 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tbl tr.total td:first-child{color:var(--pine-darker)}
 .tbl td.best{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep);font-weight:900;box-shadow:inset 0 0 0 1.5px var(--pine)}
 .tbl .na{color:#9aa8a1;font-weight:700}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -331,7 +349,9 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     <span class="tc-link">לתהליכי הליווי שלי ←</span>
   </a>
 
-  <div class="card">
+  <div class="dk-main">
+<div class="dk-in">
+<div class="card">
     <span class="sec-lbl">שלב 1 · 💵 שני מספרים עלייך</span>
     <div class="rec" style="margin:0 0 13px">לפני שמדברים על רכב, ריבית או פריסה - שתי שאלות בלבד. מהן נגזרת כל ההמלצה.</div>
     <div class="seg" role="radiogroup" aria-label="רכב ראשון או החלפה">
@@ -441,8 +461,10 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     </div>
     <div class="note-tip" id="breakdown"></div>
   </div>
+</div>
 
-  <div class="card">
+  <aside class="dk-side">
+<div class="card">
     <span class="sec-lbl">שלב 4 · ⚖️ האם זה מסתדר עם ההמלצה</span>
     <div class="vs">
       <div class="vs-side rec-side"><div class="vs-h" id="vsRecH">המומלץ (10%)</div><div class="vs-n" id="vsRecCar">0</div><div class="vs-s" id="vsRecMo"></div></div>
@@ -458,8 +480,11 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     </div>
     <div class="plan" id="planBox" hidden></div>
   </div>
+</aside>
+</div>
 
-  <details class="card foldcard">
+  <div class="dk-grid">
+<details class="card foldcard">
     <summary><span class="sec-lbl">📉 ירידת הערך - מה הרכב באמת עולה</span></summary>
     <div class="fold-body">
     <div class="rec" style="margin:0 0 13px">רכב הוא לא נכס. הוא ההוצאה היחידה שקונים ביוקר ומוכרים בזול. <span class="mini-inline">ירידת ערך שנתית <span class="mini-shell"><input id="depr" type="text" inputmode="decimal" value="12" aria-label="אחוז ירידת ערך שנתית">%</span></span></div>
@@ -503,6 +528,7 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
     </div>
     </div>
   </details>
+</div>
 
 
   <div class="cta-card">

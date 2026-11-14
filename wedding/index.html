@@ -259,6 +259,24 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 .rp-verdict.bad{background:rgba(var(--red-rgb),.10);color:var(--red)}
 .rp-foot{margin-top:8px;font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:left}
 #commitNote{display:block}#commitNote[hidden]{display:none}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -419,7 +437,9 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <span class="tc-link">לתהליכי הליווי שלי ←</span>
   </a>
 
-  <div class="card">
+  <div class="dk-main">
+<div class="dk-in">
+<div class="card">
     <span class="sec-lbl">1 · 💌 האורחים והמתנות</span>
     <div class="trip-fields">
       <div class="field">
@@ -484,8 +504,10 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
     <div class="insight soft" id="dupNote" hidden></div>
     <div class="real-plate" id="realPlate" hidden></div>
   </div>
+</div>
 
-  <div class="card">
+  <aside class="dk-side">
+<div class="card">
     <span class="sec-lbl">📊 השורה התחתונה</span>
     <div class="sum-grid">
       <div class="tile main" data-sum="tileResult"><span class="t-lbl" data-sum="resultLbl">יוצאים ב...</span><div class="t-val tabular" data-sum="result">0 ₪</div></div>
@@ -503,8 +525,11 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
       <div class="per-line" id="scenLine"></div>
     </div>
   </div>
+</aside>
+</div>
 
-  <div class="card" style="margin-top:18px">
+  <div class="dk-grid">
+<div class="card" style="margin-top:18px">
     <span class="sec-lbl">🧾 פירוט כל ההוצאות</span>
     <div id="breakdown"></div>
     <div class="bd-total" id="bdTotal" hidden></div>
@@ -549,6 +574,7 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
       <div class="insight" id="aInsight"></div>
     </div>
   </div>
+</div>
 
   <div class="cta-card">
     <div class="cta-emoji">💍</div>

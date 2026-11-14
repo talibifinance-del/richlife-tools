@@ -178,8 +178,8 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .tt-cell .u.suf{padding-inline-start:0;padding-inline-end:9px}
 .tt-cell input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14px;color:var(--ink);padding:8px 8px;outline:none;text-align:center;font-variant-numeric:tabular-nums}
 .tt-cell .rowlbl{flex:1;font-size:11.5px;font-weight:700;color:var(--ink-soft);padding-inline-start:10px}
-.tt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tt-field{display:flex;flex-direction:column;gap:4px}
+.tt-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.tt-field{display:flex;flex-direction:column;gap:4px;min-width:0}
 .tt-field label{font-size:11.5px;font-weight:700;color:var(--ink-soft)}
 .tt-reset{margin-top:16px;border:1.5px dashed rgba(var(--pine-rgb),.4);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:9px 18px;cursor:pointer}
 .tt-reset:hover{background:var(--sage-tint)}
@@ -333,6 +333,21 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
 .gap-row.hero{background:linear-gradient(135deg,var(--pine),var(--pine-deep))}
 .gap-row.hero .gr-l,.gap-row.hero .gr-v{color:#fff}
 .gap-row.hero .gr-l small{color:rgba(255,255,255,.82)}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>.card,.dk-side>div:first-child{margin-top:0}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid>.card{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -348,7 +363,9 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
     <p>מעלים את הדוח הרבעוני, והמחשבון אומר אם דמי הניהול גבוהים, כמה הון וכמה קצבה חודשית מחכים בפרישה, מה מגיע באובדן כושר עבודה, וכמה צריך לחסוך בצד כדי להגיע לקצבה שרוצים.</p>
   </div>
 
-  <div class="card">
+  <div class="dk-main">
+<div class="dk-in">
+<div class="card">
     <span class="sec-lbl">📄 הדוח הרבעוני</span>
     <div class="upl" id="dropZone">
       <div class="up-ic">📤</div>
@@ -491,8 +508,10 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
       <div class="hint">במונחים של היום. כלומר: איזה סכום חודשי היה מאפשר לך לחיות טוב אם היית פורשת מחר.</div>
     </div>
   </div>
+</div>
 
-  <div class="card">
+  <aside class="dk-side">
+<div class="card">
     <span class="sec-lbl">🧾 השורה התחתונה</span>
     <div class="net-hero">
       <div class="nh-lbl">💰 הקצבה החודשית הצפויה מהפנסיה</div>
@@ -507,8 +526,11 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
     <div class="insight" id="mainInsight"></div>
     <div class="insight" id="realityGate" hidden></div>
   </div>
+</aside>
+</div>
 
-  <div class="card">
+  <div class="dk-grid">
+<div class="card">
     <span class="sec-lbl">🧨 למה בפועל אומרים שההכנסה בפנסיה יורדת</span>
     <div class="cp-note" style="margin-top:0;margin-bottom:13px">מסמנים מה רלוונטי ללקוחה, וכל סימון מראה כמה הוא לבדו עולה לה.</div>
     <div class="wfall" id="wfall"></div>
@@ -589,6 +611,7 @@ details.why .why-b b{color:var(--pine-deep);font-weight:900}
     <div class="cp-note">שתי השורות מגיעות לאותו יעד. ההפרש ביניהן הוא האינפלציה: הוראת קבע שלא מתעדכנת שוחקת את עצמה, ולכן היא צריכה להתחיל גבוה יותר.</div>
     <div class="cp-note">איזה מכשיר נכון לך זו החלטה לפי התמונה המלאה, לא לפי התשואה לבדה.</div>
   </div>
+</div>
 
 
   <div class="card">

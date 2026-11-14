@@ -229,6 +229,21 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
 .cp-total .ct-v{font-size:19px;font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums}
 .cp-note{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:9px;line-height:1.5}
 .ded-row[hidden]{display:none}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>.card,.dk-side>div:first-child{margin-top:0}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid>.card{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 </head>
 <body>
@@ -244,7 +259,9 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <p>מזינים ברוטו ובונים את נקודות הזיכוי, ורואים כמה נשאר ביד נטו - כמה יורד למס, לביטוח לאומי, לפנסיה ולקרן השתלמות. כל הטבלאות ניתנות לעדכון.</p>
   </div>
 
-  <div class="card">
+  <div class="dk-main">
+<div class="dk-in">
+<div class="card">
     <span class="sec-lbl">💵 הנתונים שלך</span>
     <div class="mode-tg" role="tablist">
       <button type="button" class="mode-btn active" id="modeEmployee" role="tab">👔 שכיר/ה</button>
@@ -297,8 +314,10 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <div class="cp-note">⚠️ שווי נקודות ותנאי הזכאות משתנים ותלויים במצב אישי - לאמת מול רשות המסים. חלק מהזיכויים מוגבלים בזמן (חייל משוחרר, תואר, עולה).</div>
     <div class="cp-note">👶 נקודות הילדים כאן הן להורה שמקבל/ת קצבת ילדים (בדרך כלל האם). נקודות הילד עד גיל 5 זהות לשני ההורים; בגילאי 6-17 ההורה השני מקבל 1 (במקום 2) ובגיל 18 - 0. אפשר לדחות נקודה משנת הלידה לשנה שאחריה (2.5→1.5, והשנה הבאה 4.5→5.5) - כדאי רק אם המס בשנת הלידה נמוך מדי כדי לנצל אותן.</div>
   </div>
+</div>
 
-  <div class="card">
+  <aside class="dk-side">
+<div class="card">
     <span class="sec-lbl">🧾 השורה התחתונה</span>
     <div class="net-hero">
       <div class="nh-lbl">💰 נטו לתשלום (מוערך)</div>
@@ -323,6 +342,8 @@ details.tt-wrap[open] .chev{transform:rotate(180deg)}
     <div class="emp-note" id="empNote"></div>
     <div class="disclaimer"><span>💡</span><span id="discTxt">הערכה חודשית יציבה להמחשה, לא תחשיב שכר רשמי. <b>כוללת את זיכוי המס על הפרשות הפנסיה</b> (סעיף 45א, עד ~238 ש"ח בחודש) <b>שווי רכב צמוד</b> כהכנסה זקופה חייבת, <b>ומס יסף</b> על שכר גבוה. התלוש בפועל מחושב בשיטה <b>מצטברת</b> לאורך השנה, אז בחודש בודד (למשל בתחילת עבודה) הוא יכול להיראות שונה מההערכה כאן - זה מתאזן על פני שנה. לא כלולים: הטבות מס מיוחדות (עמית מוטב / ניכוי סעיף 47 על שכר לא מבוטח), שווי זקוף שאינו רכב (למשל ארוחות), ומרכיבים אישיים (תושב פריפריה). קרן ההשתלמות מחושבת עד תקרת השכר הפטורה (₪15,712). הסכומים לפי טבלאות 2026 שבתחתית - עדכני אותן לפי הרשות.</span></div>
   </div>
+</aside>
+</div>
 
   <details class="card tt-wrap">
     <summary><span class="sec-lbl" style="margin:0">📊 טבלאות מס וקרן 2026 (ניתן לעדכן)</span><span class="chev">▾</span></summary>

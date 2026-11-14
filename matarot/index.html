@@ -368,6 +368,13 @@ body{
   #printview{display:block}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .goals{display:grid;grid-template-columns:repeat(auto-fit,minmax(560px,1fr));gap:16px;align-items:start}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף

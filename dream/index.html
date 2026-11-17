@@ -220,14 +220,20 @@ svg.chart{display:block;width:100%;height:auto}
         <label>בעוד כמה שנים תרצו חופש?</label>
         <div class="input-shell"><input id="yrs" type="number" inputmode="numeric" value="25" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">שנים</span></div>
       </div>
-      <div class="field full">
-        <label>תשואה שנתית משוערת בזמן הצבירה</label>
+      <div class="field">
+        <label for="grow">תשואה שנתית משוערת (לפני אינפלציה)</label>
         <div class="input-shell"><input id="grow" type="text" inputmode="decimal" value="6" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
       </div>
+      <div class="field">
+        <label for="inf">אינפלציה שנתית</label>
+        <div class="input-shell"><input id="inf" type="text" inputmode="decimal" value="2.5" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
+      </div>
+      <div class="hint" id="yldConv"></div>
     </div>
     <div class="result">
       <div class="r-lbl">💪 כדי להגיע לחופש בעוד <span id="rYrs">25</span> שנים, להפריש כל חודש</div>
       <div class="r-num" id="rMonthly">0<small> ₪</small></div>
+      <div class="hint" id="rMonthlySub" style="text-align:center;margin:2px 0 10px"></div>
       <div class="r-cells">
         <div class="r-cell"><div class="k">סה"כ תפקידו מהכיס</div><div class="v" id="rOut">0 ₪</div></div>
         <div class="r-cell gain"><div class="k">הריבית תוסיף</div><div class="v" id="rMktGain">0 ₪</div></div>
@@ -257,7 +263,7 @@ svg.chart{display:block;width:100%;height:auto}
 
   <div class="chart-card">
     <div class="chart-head">📈 המסע אל החופש</div>
-    <div class="chart-sub">ההון שלכם צומח לאורך השנים. הקו המקווקו האדום הוא היעד - איפה שהם נפגשים, אתם חופשיים.</div>
+    <div class="chart-sub">ההון שלכם צומח לאורך השנים, בכוח הקנייה של היום. הקו המקווקו האדום הוא היעד - איפה שהם נפגשים, אתם חופשיים.</div>
     <div class="chart-wrap"><svg class="chart" id="chart" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="גרף צמיחת ההון עד ליעד החופש הכלכלי"></svg></div>
     <div class="chart-tip" id="chartTip"></div>
     <div class="chart-sub" style="text-align:center;margin:8px 0 0;font-size:11.5px">👆 העבירו את העכבר (או אצבע) על הגרף כדי לראות את ההון בכל שנה</div>
@@ -441,39 +447,45 @@ function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});
 });
-['wrate','yrs','grow','loanRate'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+['wrate','yrs','grow','inf','loanRate'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
 
-// capital growth (annual, annuity-due) given annual deposit A → array year0..n
-function capSeries(P0,A,i,n){const s=[P0];let bal=P0+A;for(let y=1;y<=n;y++){bal*=(1+i);s.push(bal);if(y<n)bal+=A;}return s;}
+/* היעד נמדד בכוח הקנייה של היום (15,000 בחודש = 15,000 של היום), אבל התשואה שמזינים היא לפני אינפלציה.
+   לכן: ההון גדל לפי התשואה הנומינלית, ההפקדה החודשית עולה כל שנה לפי המדד, והיעד בשקלים של אז = היעד × המחירים שעלו.
+   כל חודש בנפרד (לא הפקדה שנתית אחת בתחילת השנה, שמנפחת את התוצאה). */
+function capSeries(P0,D,i,inf,n){const rm=Math.pow(1+i,1/12)-1,s=[P0];let bal=P0,dep=D;for(let y=0;y<n;y++){for(let m=0;m<12;m++)bal=bal*(1+rm)+dep;s.push(bal);dep*=(1+inf);}return s;}
+function depTotal(D,inf,n){let t=0,dep=D;for(let y=0;y<n;y++){t+=dep*12;dep*=(1+inf);}return t;}
+/* ההפקדה החודשית בשנה הראשונה שמביאה את P0 ליעד (בשקלים של אז) */
+function needMonthly(targetNom,P0,i,inf,n){const fromP0=capSeries(P0,0,i,inf,n)[n],unit=capSeries(0,1,i,inf,n)[n];return unit>0?(targetNom-fromP0)/unit:0;}
 
 function calc(){syncLive();
-  const income=num('income'), wrate=Math.max(0.1,num('wrate')), P0=num('have'), n=Math.max(1,Math.round(num('yrs'))), grow=Math.max(0,num('grow'));
+  const income=num('income'), wrate=Math.max(0.1,num('wrate')), P0=num('have'), n=Math.max(1,Math.round(num('yrs'))), grow=Math.max(0,num('grow')), infP=Math.min(Math.max(num('inf'),0),20);
   const target=income*12/(wrate/100);
-  const i=grow/100, g=Math.pow(1+i,n);
-  let A; if(i===0) A=(target-P0)/n; else A=(target-P0*g)/((1+i)*(g-1)/i);
-  const covered=A<=0, PMT=covered?0:A/12, annual=covered?0:A;
-  const deposited=P0+annual*n, mktGain=Math.max(0,target-deposited);
+  const i=grow/100, inf=infP/100, priceF=Math.pow(1+inf,n), targetNom=target*priceF;
+  const realP=((1+i)/(1+inf)-1)*100;
+  const D=needMonthly(targetNom,P0,i,inf,n);
+  const covered=D<=0, PMT=covered?0:D, lastPMT=covered?0:D*Math.pow(1+inf,n-1);
+  const deposited=P0+(covered?0:depTotal(D,inf,n)), mktGain=Math.max(0,targetNom-deposited);
 
+  document.getElementById('yldConv').innerHTML='הכסף גדל ב-<b>'+grow+'%</b> בשנה, המחירים עולים ב-'+infP+'%, ולכן מה שנשאר בכוח קנייה הוא <b>'+realP.toFixed(1)+'%</b>. היעד נשאר בשקלים של היום, והחישוב יודע שבעוד '+n+' שנים הכל יעלה פי '+priceF.toFixed(1)+'.';
   document.getElementById('rCapital').innerHTML=fmt.format(Math.round(target))+'<small> ₪</small>';
   document.getElementById('rInc').textContent=fmt.format(Math.round(income))+' ₪';
   document.getElementById('rIncY').textContent=fmt.format(Math.round(income*12))+' ₪';
   document.getElementById('rYrs').textContent=n;
   document.getElementById('rMonthly').innerHTML=fmt.format(Math.round(PMT))+'<small> ₪</small>';
+  document.getElementById('rMonthlySub').innerHTML=covered?'':'בשנה הראשונה, ומעלים כל שנה לפי המדד'+(n>1&&inf>0?' (בשנה ה-'+n+' זה כבר '+fmt.format(Math.round(lastPMT))+' ₪, ששווים בדיוק אותו דבר)':'')+'.<br>בשקלים של אז ההון יהיה '+fmt.format(Math.round(targetNom))+' ₪, ששווים '+fmt.format(Math.round(target))+' ₪ של היום.';
   document.getElementById('rOut').textContent=fmt.format(Math.round(deposited))+' ₪';
   document.getElementById('rMktGain').textContent=fmt.format(Math.round(mktGain))+' ₪';
 
   const ins=document.getElementById('insight');
   if(P0>=target){ins.innerHTML='🎉 יש לכם כבר את ההון הדרוש - אתם בחופש כלכלי כאן ועכשיו. עכשיו זה עניין של לתכנן איך למשוך אותו נכון.';}
   else if(covered){ins.innerHTML=`🎉 מדהים - עם ההון שכבר יש לכם, הריבית לבדה מביאה אתכם ליעד בעוד ${n} שנים. <b>לא צריך להפריש אף שקל נוסף.</b>`;}
-  else{ins.innerHTML=`רק <b>${fmt.format(Math.round(PMT))} ₪</b> בחודש, והריבית מוסיפה עוד <b>${fmt.format(Math.round(mktGain))} ₪</b> - וכך מגיעים ל-<b>${fmt.format(Math.round(target))} ₪</b> שמשחררים אתכם לחופש.`;}
+  else{ins.innerHTML=`<b>${fmt.format(Math.round(PMT))} ₪</b> בחודש, שעולים כל שנה עם המדד, והריבית מוסיפה עוד <b>${fmt.format(Math.round(mktGain))} ₪</b> - וכך מגיעים להון ששווה <b>${fmt.format(Math.round(target))} ₪</b> של היום ומשחרר אתכם לחופש.`;}
   ins.style.display='block';
 
   // ---- financing (teaching module) ----
   const loan=num('loan'), loanRate=num('loanRate'), finOut=document.getElementById('finOut');
   if(loan>0){
-    const P0b=P0+loan, gb=Math.pow(1+i,n);
-    let A2; if(i===0) A2=(target-P0b)/n; else A2=(target-P0b*gb)/((1+i)*(gb-1)/i);
-    const PMT2=Math.max(0,A2/12);                    // investment deposit needed WITH the loan invested
+    const PMT2=Math.max(0,needMonthly(targetNom,P0+loan,i,inf,n)); // investment deposit needed WITH the loan invested
     const rm=loanRate/100/12, N=n*12;
     const R = rm===0 ? loan/N : loan*rm/(1-Math.pow(1+rm,-N)); // monthly loan repayment (amortized over n years)
     const totalWith=PMT2+R, cheaper=totalWith<PMT, diff=Math.abs(totalWith-PMT), worthwhile=i>loanRate/100;
@@ -486,7 +498,8 @@ function calc(){syncLive();
       `<div class="fin-bad"><b>הלקח:</b> המימון "חוסך" בחודש רק אם התשואה בפועל גבוהה מריבית ההלוואה (${loanRate}%). ${worthwhile?`מזינה ${grow}% - מעל הרף, אבל תשואה אף פעם לא מובטחת.`:`<b>מזינה ${grow}% - מתחת לריבית, אז המימון עולה יותר ממה שהוא מרוויח.</b>`} ומעל הכל: את חייבת להחזיר את ההלוואה לבנק <b>גם אם השוק יורד</b> - זה הסיכון.</div>`;
   } else finOut.innerHTML='';
 
-  drawChart(capSeries(P0,annual,i,n),target,n);
+  // the chart speaks today's money, so the goal line stays put and the two lines meet at the real finish
+  drawChart(capSeries(P0,covered?0:D,i,inf,n).map((v,y)=>v/Math.pow(1+inf,y)),target,n);
 }
 
 function drawChart(cap,target,n){
@@ -535,8 +548,8 @@ let CH=null;
 function short(v){v=Math.round(v);if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+'M';if(v>=1e3)return Math.round(v/1e3)+'K';return v;}
 
 const SKEY='richlife-dream-v1';
-function enc(){return JSON.stringify([document.getElementById('income').value,document.getElementById('wrate').value,document.getElementById('have').value,document.getElementById('yrs').value,document.getElementById('grow').value,document.getElementById('loan').value,document.getElementById('loanRate').value]);}
-function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('income').value=grp(a[0]);document.getElementById('wrate').value=a[1]??'4';document.getElementById('have').value=grp(a[2]);document.getElementById('yrs').value=a[3]??'';document.getElementById('grow').value=a[4]??'6';document.getElementById('loan').value=grp(a[5]??'0');document.getElementById('loanRate').value=a[6]??'7';return true;}catch(e){return false;}}
+function enc(){return JSON.stringify([document.getElementById('income').value,document.getElementById('wrate').value,document.getElementById('have').value,document.getElementById('yrs').value,document.getElementById('grow').value,document.getElementById('loan').value,document.getElementById('loanRate').value,document.getElementById('inf').value]);}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('income').value=grp(a[0]);document.getElementById('wrate').value=a[1]??'4';document.getElementById('have').value=grp(a[2]);document.getElementById('yrs').value=a[3]??'';document.getElementById('grow').value=a[4]??'6';document.getElementById('loan').value=grp(a[5]??'0');document.getElementById('loanRate').value=a[6]??'7';document.getElementById('inf').value=a[7]??'2.5';return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#d='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}

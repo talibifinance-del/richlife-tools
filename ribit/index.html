@@ -193,11 +193,16 @@ svg.chart{display:block;width:100%;height:auto}
         <label>דמי ניהול מהצבירה (שנתי)</label>
         <div class="input-shell"><input id="feeAcc" type="text" inputmode="decimal" value="0" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
       </div>
+      <div class="field full">
+        <label for="inf">אינפלציה שנתית (כדי לדעת כמה זה שווה בכסף של היום)</label>
+        <div class="input-shell"><input id="inf" type="text" inputmode="decimal" value="2.5" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
+      </div>
     </div>
 
     <div class="result">
       <div class="r-lbl">💰 כמה יהיה לך בעוד <span id="rYears">20</span> שנים</div>
       <div class="r-num" id="rFinal">0<small> ₪</small></div>
+      <div id="rReal" style="font-size:13px;font-weight:700;opacity:.9;margin:2px 0 10px;line-height:1.5"></div>
       <div class="r-cells">
         <div class="r-cell"><div class="k">כמה הפקדת</div><div class="v" id="rDeposit">0 ₪</div></div>
         <div class="r-cell gain"><div class="k">הרווח מהשוק</div><div class="v" id="rGain">0 ₪</div></div>
@@ -407,24 +412,28 @@ function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{const p=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;el.setSelectionRange(p+d,p+d);calc();});
 });
-['ret','years','feeDep','feeAcc'].forEach(id=>document.getElementById(id).addEventListener('input',()=>calc()));
+['ret','years','feeDep','feeAcc','inf'].forEach(id=>document.getElementById(id).addEventListener('input',()=>calc()));
 
-// closed-form FV — annual compounding, annual deposits at start of year (annuity-due), no fees
-function fv(P0,PMT,annualPct,years){const i=annualPct/100,n=Math.round(years),A=12*PMT;if(n<=0)return P0;if(i===0)return P0+A*n;const g=Math.pow(1+i,n);return P0*g+A*(1+i)*(g-1)/i;}
-
-// year-by-year simulation with deposit-fee (off each deposit) + accumulation-fee (annual % of balance)
+/* month-by-month, the way money really goes in: each deposit lands at the end of its month and
+   only grows from then on. (The old model dropped the whole year's deposits in on 1 January,
+   which added ~2-4% that nobody would ever actually get.)
+   deposit fee comes off each deposit; the accumulation fee is an annual % taken monthly. */
 function sim(P0,PMT,annualPct,years,fDep,fAcc){
-  const n=Math.round(years), i=annualPct/100, d=fDep/100, af=fAcc/100, A=12*PMT;
-  let bal=P0*(1-d)+A*(1-d), depFees=(P0+A)*d, accFees=0;
+  const n=Math.round(years), d=fDep/100;
+  const rm=Math.pow(1+annualPct/100,1/12)-1, am=1-Math.pow(1-Math.min(fAcc,99)/100,1/12);
+  let bal=P0*(1-d), depFees=P0*d, accFees=0;
   const series=[bal];
   for(let y=1;y<=n;y++){
-    bal*=(1+i);                           // grow through the year
-    const f=bal*af; accFees+=f; bal-=f;   // accumulation fee on the balance
+    for(let m=0;m<12;m++){
+      bal*=(1+rm);                          // grow through the month
+      const f=bal*am; accFees+=f; bal-=f;   // accumulation fee on the balance
+      bal+=PMT*(1-d); depFees+=PMT*d;       // this month's deposit
+    }
     series.push(bal);
-    if(y<n){ bal+=A*(1-d); depFees+=A*d; } // next year's deposit (start of year)
   }
   return {final:bal,depFees,accFees,series};
 }
+function fv(P0,PMT,annualPct,years){return sim(P0,PMT,annualPct,years,0,0).final;}
 
 function calc(){syncLive();
   const P0=num('initial'),PMT=num('monthly'),ret=Math.max(0,num('ret')),years=Math.max(0,num('years')),fDep=Math.max(0,num('feeDep')),fAcc=Math.max(0,num('feeAcc'));
@@ -438,6 +447,10 @@ function calc(){syncLive();
 
   document.getElementById('rYears').textContent=years||0;
   document.getElementById('rFinal').innerHTML=fmt.format(Math.round(withF.final))+'<small> ₪</small>';
+  const infP=Math.min(Math.max(num('inf'),0),20), priceF=Math.pow(1+infP/100,years);
+  document.getElementById('rReal').innerHTML=(years>0&&infP>0)
+    ?'בכסף של היום זה שווה כ-<b>'+fmt.format(Math.round(withF.final/priceF))+' ₪</b>, כי בעוד '+(years||0)+' שנים המחירים יעלו פי '+priceF.toFixed(1)+' (אינפלציה של '+infP+'%).'
+    :'';
   document.getElementById('rDeposit').textContent=fmt.format(Math.round(deposited))+' ₪';
   document.getElementById('rGain').textContent=fmt.format(Math.round(gain))+' ₪';
   const feeCell=document.getElementById('feeCell'), legFee=document.getElementById('legFee');
@@ -466,7 +479,8 @@ function drawChart({P0,PMT,ret,years,withSeries,hasFee}){
   const W=720,H=360,padL=64,padR=18,padT=18,padB=34;
   const yrs=Math.max(1,Math.round(years));
   const sav=[],nofee=[];
-  for(let y=0;y<=yrs;y++){sav.push(P0+PMT*12*y);nofee.push(fv(P0,PMT,ret,y));}
+  const nf=sim(P0,PMT,ret,yrs,0,0).series;
+  for(let y=0;y<=yrs;y++){sav.push(P0+PMT*12*y);nofee.push(nf[y]);}
   const inv=withSeries.slice(0,yrs+1);
   while(inv.length<yrs+1) inv.push(inv[inv.length-1]);
   const maxV=Math.max(...inv,...sav,...(hasFee?nofee:[0]),1);
@@ -522,8 +536,8 @@ function short(v){v=Math.round(v);if(v>=1e6)return (v/1e6).toFixed(v>=1e7?0:1)+'
 
 // ---------- save / share ----------
 const SKEY='richlife-ribit-v1';
-function enc(){return JSON.stringify([document.getElementById('initial').value,document.getElementById('monthly').value,document.getElementById('ret').value,document.getElementById('years').value,document.getElementById('feeDep').value,document.getElementById('feeAcc').value]);}
-function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('initial').value=grp(a[0]);document.getElementById('monthly').value=grp(a[1]);document.getElementById('ret').value=a[2]??'5';document.getElementById('years').value=a[3]??'';document.getElementById('feeDep').value=a[4]??'0';document.getElementById('feeAcc').value=a[5]??'0';return true;}catch(e){return false;}}
+function enc(){return JSON.stringify([document.getElementById('initial').value,document.getElementById('monthly').value,document.getElementById('ret').value,document.getElementById('years').value,document.getElementById('feeDep').value,document.getElementById('feeAcc').value,document.getElementById('inf').value]);}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;document.getElementById('initial').value=grp(a[0]);document.getElementById('monthly').value=grp(a[1]);document.getElementById('ret').value=a[2]??'5';document.getElementById('years').value=a[3]??'';document.getElementById('feeDep').value=a[4]??'0';document.getElementById('feeAcc').value=a[5]??'0';document.getElementById('inf').value=a[6]??'2.5';return true;}catch(e){return false;}}
 const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
 function makeLink(){return location.origin+location.pathname+location.search+'#c='+encodeURIComponent(enc());}
 async function shortLink(){try{const r=await fetch(SHARE_API,{method:'POST',body:enc()});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.id)throw 0;return location.origin+location.pathname+location.search+'#p='+j.id;}catch(e){return makeLink();}}

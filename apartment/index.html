@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- End Meta Pixel Code -->
+<title>איזו דירה אפשר לקנות · RichLife</title>
+<meta name="description" content="כמה דירה אפשר לקנות היום עם ההון וההכנסה שלכם, מה באמת עוצר אתכם, ההון או ההחזר החודשי, וכמה שווה כל שקל שתזיזו. דירה ראשונה, מס רכישה 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#5f7d6a; --pine-rgb:95,125,106; --pine-deep:#3e5448; --pine-darker:#2f4036;
+  --sage:#bcd3bf; --sage-rgb:188,211,191; --paper:#e9f1f2; --sage-tint:#eef4ef;
+  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f;
+  --font:'Heebo',system-ui,Arial,sans-serif;
+  --card:#fff; --shadow:0 10px 30px rgba(var(--pine-rgb),.10); --shadow-hi:0 18px 44px rgba(var(--pine-rgb),.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%, rgba(var(--sage-rgb),.55), transparent 60%),radial-gradient(900px 520px at -5% 8%, rgba(var(--pine-rgb),.16), transparent 55%),var(--paper);color:var(--ink);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;padding:clamp(14px,3vw,40px) clamp(12px,3vw,28px) 60px}
+.wrap{max-width:720px;margin:0 auto}
+.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:20px}
+.brand .avatar{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid #fff;box-shadow:0 6px 18px rgba(var(--pine-rgb),.28),0 0 0 1.5px rgba(var(--pine-rgb),.25)}
+.brand .by-lead{font-weight:900;font-size:16px;color:var(--pine-darker)}
+.brand .by-sub{font-weight:700;font-size:12px;color:var(--pine)}
+.brand .by-sub b{color:var(--pine-deep)}
+.hero-title{text-align:center;margin-bottom:22px}
+.hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
+.hero-title h1 .em{color:var(--pine)}
+.hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:520px;margin-inline:auto}
+.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(var(--pine-rgb),.15),rgba(var(--sage-rgb),.34));border:1.5px solid rgba(var(--pine-rgb),.38);border-radius:14px;padding:12px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s,box-shadow .15s}
+.top-cta:hover{border-color:var(--pine);transform:translateY(-1px);box-shadow:0 8px 20px rgba(var(--pine-rgb),.16)}
+.top-cta .tc-txt{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center}
+.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-darker);white-space:nowrap}
+.savecheck{border:1.5px solid rgba(var(--pine-rgb),.28);background:linear-gradient(180deg,#fff, rgba(var(--sage-rgb),.14))}
+/* hero number badge */
+.sv-badge{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);border-radius:16px;padding:15px 18px;color:#fff;box-shadow:0 10px 26px rgba(var(--pine-rgb),.22)}
+.sv-badge .sv-lbl{font-size:12.5px;font-weight:700;opacity:.92}
+.sv-badge .sv-big{font-size:clamp(26px,7vw,34px);font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.sv-badge .sv-big small{font-size:15px;font-weight:800;opacity:.85}
+/* the test step */
+.sv-test{display:flex;gap:10px;align-items:flex-start;margin-top:13px;background:var(--sage-tint);border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.55}
+.sv-test .sv-ic{font-size:19px;flex:none;line-height:1.3}
+.sv-test b{color:var(--pine-darker);font-weight:900}
+/* two outcomes, each its own tinted row */
+.sv-outcomes{display:grid;gap:9px;margin-top:11px}
+.sv-out{display:flex;gap:10px;align-items:flex-start;border-radius:13px;padding:12px 14px;font-size:13.5px;font-weight:600;line-height:1.55}
+.sv-out .sv-ic{font-size:18px;flex:none;line-height:1.35}
+.sv-out.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-darker);border:1px solid rgba(var(--pine-rgb),.22)}
+.sv-out.ok b{color:var(--pine-deep);font-weight:900}
+.sv-out.warn{background:rgba(var(--red-rgb),.08);color:var(--red);border:1px solid rgba(var(--red-rgb),.22)}
+.sv-out.warn b{color:var(--red);font-weight:900}
+.sv-empty{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.6}
+/* coaching button (explicit colours so it never falls back to the browser's purple link) */
+.savecheck .sv-cta,.savecheck .sv-cta:link,.savecheck .sv-cta:visited{display:inline-block;margin-top:14px;font-family:var(--font);font-weight:900;font-size:14px;color:var(--pine-deep);text-decoration:none;background:var(--sage-tint);padding:11px 20px;border-radius:100px;transition:background .15s,transform .15s}
+.savecheck .sv-cta:hover{background:rgba(var(--pine-rgb),.14);transform:translateY(-1px)}
+.card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
+.card+.card{margin-top:16px}
+.sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
+.input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
+.input-shell .unit{padding-inline-start:13px;color:var(--ink-soft);font-weight:700;font-size:15px;flex:none}
+.input-shell input{font-family:var(--font);width:100%;border:none;background:transparent;outline:none;font-size:16px;font-weight:700;color:var(--ink);padding:12px 13px;min-width:0}
+.input-shell input:focus,.input-shell input:focus-visible{outline:none !important}
+.house{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.house .h-item label{font-size:12.5px}
+.house .full{grid-column:1/-1}
+.check{margin-top:14px;border-radius:14px;padding:15px 16px;text-align:center}
+.check.ok{background:rgba(var(--pine-rgb),.10);border:1.5px solid rgba(var(--pine-rgb),.3)}
+.check.over{background:rgba(var(--red-rgb),.08);border:1.5px solid rgba(var(--red-rgb),.3)}
+.check .c-top{font-size:13px;font-weight:700;color:var(--ink-soft)}
+.check .c-num{font-size:clamp(22px,5vw,28px);font-weight:900;margin:3px 0 2px}
+.check.ok .c-num{color:var(--pine-deep)} .check.over .c-num{color:#8f3a29}
+.check .c-msg{font-size:13px;font-weight:800;margin-top:4px}
+.check.ok .c-msg{color:var(--pine-deep)} .check.over .c-msg{color:#8f3a29}
+.rec{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin-top:10px}
+.rec b{color:var(--pine-deep)}
+.rec-house{text-align:center;background:var(--sage-tint);border-radius:14px;padding:15px 16px;margin-bottom:14px;font-size:14.5px;font-weight:700;color:var(--pine-darker);line-height:1.5}
+.rec-house b{color:var(--pine)}
+.rec-house .rh-num{display:block;font-size:clamp(26px,7vw,34px);font-weight:900;color:var(--pine-deep);margin-top:5px}
+.rec-house .rh-sub{font-size:12.5px;font-weight:700;color:var(--ink-soft);display:block;margin-top:3px}
+.incl-tg{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--pine-deep);background:var(--sage-tint);border-radius:12px;padding:12px 14px;margin-bottom:12px;line-height:1.4}
+.incl-tg input{width:19px;height:19px;accent-color:var(--pine);flex:none;cursor:pointer}
+.bills-lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:9px}
+.rec-total{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding:13px 18px;background:linear-gradient(135deg,var(--pine),var(--pine-deep));border-radius:14px;box-shadow:0 8px 22px rgba(var(--pine-rgb),.22)}
+.rec-total .rt-lbl{font-size:14px;font-weight:900;color:#fff;line-height:1.3}
+.rec-total .rt-pc{display:block;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.82);margin-top:2px}
+.rec-total .rt-num{font-size:clamp(20px,4.6vw,26px);font-weight:900;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+#billsBox.hidden{display:none}
+.two-rec{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tr{border-radius:16px;padding:16px 13px;text-align:center;border:1.5px solid rgba(var(--pine-rgb),.22)}
+.tr.rent{background:linear-gradient(180deg,rgba(var(--sage-rgb),.32),rgba(var(--sage-rgb),.1))}
+.tr.bills{background:#fff}
+.tr-h{font-size:14.5px;font-weight:900;color:var(--pine-darker)}
+.tr-pc{font-size:11.5px;font-weight:800;color:var(--pine);margin-top:2px}
+.tr-num{font-size:clamp(23px,6.2vw,32px);font-weight:900;color:var(--pine-deep);margin-top:8px}
+.tr-eg{font-size:10.5px;font-weight:600;color:var(--ink-soft);margin-top:7px;line-height:1.45}
+.cmp{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.cmp-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:12.5px;font-weight:700;border-radius:11px;padding:10px 13px;line-height:1.4}
+.cmp-row.ok{background:rgba(var(--pine-rgb),.10);color:var(--pine-deep)}
+.cmp-row.over{background:rgba(var(--red-rgb),.08);color:#8f3a29}
+.cmp-row .cr-name{font-weight:900}
+.cmp-row .cr-verdict{margin-inline-start:auto;font-weight:900;white-space:nowrap}
+.scen{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.sc{border-radius:16px;padding:15px 14px;border:1.5px solid rgba(var(--pine-rgb),.2)}
+.sc.home{background:linear-gradient(180deg,rgba(var(--sage-rgb),.28),rgba(var(--sage-rgb),.08))}
+.sc.out{background:#fff}
+.sc-h{font-size:14.5px;font-weight:900;color:var(--pine-darker);text-align:center;margin-bottom:3px}
+.sc-sub{font-size:11px;font-weight:700;color:var(--ink-soft);text-align:center;margin-bottom:11px}
+.sc-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:700;color:var(--ink);padding:6px 0;border-top:1px solid rgba(var(--pine-rgb),.12)}
+.sc-row:first-of-type{border-top:none}
+.sc-row .pc{font-size:11px;font-weight:800;color:var(--ink-soft)}
+.sc-row b{white-space:nowrap}
+.sc-row.invest{background:rgba(var(--pine-rgb),.10);margin:6px -8px 0;padding:8px;border-radius:10px;border-top:none}
+.sc-row.invest b,.sc-row.invest span{color:var(--pine-deep);font-weight:900}
+.insight{margin-top:16px;font-size:clamp(15px,3.4vw,18px);font-weight:800;color:var(--pine-darker);background:var(--sage-tint);border-radius:14px;padding:16px 18px;text-align:center;line-height:1.55}
+.insight b{color:var(--pine);font-size:1.1em;font-weight:900}
+.note-tip{margin-top:12px;font-size:12px;font-weight:600;color:var(--ink-soft);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.15);border-radius:12px;padding:11px 13px;line-height:1.55}
+.cta-card{margin-top:18px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,4vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi)}
+.cta-card .cta-emoji{font-size:30px}
+.cta-card h3{font-size:clamp(17px,3.6vw,20px);font-weight:900;margin:6px 0 8px}
+.cta-card p{font-size:14px;font-weight:600;opacity:.94;max-width:460px;margin:0 auto 16px;line-height:1.55}
+.cta-btn{display:inline-block;font-family:var(--font);font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:15px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22);transition:transform .18s}
+.cta-btn:hover{transform:translateY(-2px)}
+.actions{margin-top:18px;text-align:center}
+.act-btn{font-family:var(--font);cursor:pointer;border:none;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;font-size:15.5px;font-weight:800;padding:15px 22px;border-radius:15px;box-shadow:0 12px 30px rgba(var(--pine-rgb),.30);transition:filter .15s;max-width:480px;width:100%}
+.act-btn:hover{filter:brightness(1.06)}
+.act-note{max-width:480px;margin:10px auto 0;font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.5}
+.act-link{max-width:480px;margin:12px auto 0;display:flex;gap:8px}
+.act-link input{flex:1;min-width:0;font-family:var(--font);font-size:13px;font-weight:600;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:11px;padding:11px 13px;direction:ltr;text-align:left}
+.act-link input:focus{outline:none !important}
+.act-link button{flex:none;font-family:var(--font);cursor:pointer;border:none;background:var(--pine-deep);color:#fff;font-size:14px;font-weight:800;padding:0 16px;border-radius:11px}
+.socials{display:flex;gap:12px;justify-content:center;margin-top:22px}
+.socials a{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.2);color:var(--pine-deep);box-shadow:var(--shadow);transition:all .18s}
+.socials a:hover{border-color:var(--pine);transform:translateY(-2px)}
+.socials svg{width:20px;height:20px}
+.copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:14px;font-weight:800;color:var(--pine-darker);line-height:1.6;max-width:520px;margin-inline:auto;text-align:center}
+.guide-nav{margin-bottom:18px;text-align:center}
+.gn-title{display:inline-block;font-family:var(--font);font-weight:900;font-size:12px;color:var(--pine);text-decoration:none;margin-bottom:9px}
+.gn-title.gn-static{color:var(--ink-soft);cursor:default}
+.gn-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
+.gn-tab:hover{border-color:var(--pine)}
+.gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+
+/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
+.dk-main,.dk-grid,.dk-side{margin-top:16px}
+@media screen and (min-width:1100px){
+  .wrap{max-width:1440px}
+  .brand{justify-content:flex-start;margin-bottom:10px}
+  .hero-title{text-align:right;margin-bottom:14px}
+  .hero-title p{margin-inline:0;max-width:900px}
+  .top-cta{justify-content:flex-start}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,.85fr);gap:22px;align-items:start}
+  .dk-side{position:sticky;top:16px;margin-top:0;max-height:calc(100vh - 32px);overflow:auto;border-radius:20px}
+  .dk-side>*:first-child{margin-top:0!important}
+  .dk-in>*:first-child{margin-top:0!important}
+  .dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .dk-grid.dk-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dk-grid>*{margin:0!important}
+  .cta-card,.actions{max-width:900px;margin-inline:auto}
+}
+/* ===== איזו דירה אפשר לקנות ===== */
+.f-hint{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+.house .f-hint.full{margin-top:-2px}
+.pti-lbl{font-size:13px;font-weight:700;color:var(--ink-soft);margin:16px 0 8px}
+.chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.chip{font-family:var(--font);cursor:pointer;background:var(--sage-tint);border:1.5px solid transparent;border-radius:13px;padding:10px 6px;font-size:16px;font-weight:900;color:var(--pine-darker);display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2;transition:all .15s}
+.chip small{font-size:10.5px;font-weight:700;color:var(--ink-soft);text-align:center}
+.chip:hover{border-color:var(--pine)}
+.chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:#fff}
+.chip[aria-pressed="true"] small{color:rgba(255,255,255,.88)}
+details.costs summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
+details.costs summary::-webkit-details-marker{display:none}
+details.costs .chev{font-size:16px;color:var(--pine);transition:transform .2s}
+details.costs[open] .chev{transform:rotate(180deg)}
+.gates{display:grid;gap:8px;margin-top:14px}
+.gate{position:relative;display:flex;align-items:center;gap:10px;border-radius:13px;padding:12px 13px;background:var(--sage-tint);border:1.5px solid transparent}
+.gate.blocks{background:rgba(var(--red-rgb),.07);border-color:rgba(var(--red-rgb),.35)}
+.gate .g-ico{font-size:19px;flex:none}
+.gate .g-lbl{flex:1;min-width:0;font-size:13.5px;font-weight:900;color:var(--pine-darker);line-height:1.3}
+.gate .g-lbl small{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+.gate .g-val{flex:none;font-size:clamp(15px,3.8vw,18px);font-weight:900;color:var(--pine-deep);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gate.blocks .g-val{color:#8f3a29}
+.gate .g-na{font-size:12px;font-weight:700;color:var(--ink-soft)}
+.gate .g-tag{position:absolute;top:-9px;inset-inline-start:12px;background:var(--red);color:#fff;font-size:10.5px;font-weight:800;border-radius:100px;padding:2px 9px}
+.gate-msg{margin-top:12px;font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.6}
+.gate-msg b{color:var(--pine-darker);font-weight:900}
+.lever{margin-top:14px;border-top:1.5px dashed rgba(var(--pine-rgb),.25);padding-top:12px}
+.lever:empty{display:none}
+.lv-h{font-size:12.5px;font-weight:900;color:var(--pine);margin-bottom:6px}
+.lv-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;font-weight:700;color:var(--ink);padding:6px 0}
+.lv-row b{color:var(--pine-deep);font-weight:900;white-space:nowrap}
+.lv-row.dim{opacity:.75}
+.act-link[hidden]{display:none}
+.lv-note{font-size:12px;font-weight:600;color:var(--ink-soft);line-height:1.55;margin-top:6px;background:var(--sage-tint);border-radius:11px;padding:9px 11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <img class="avatar" src="data:image/jpeg;base64,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" alt="טלי בנימינוב שרעבי">
+    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · איזו דירה אפשר לקנות</div></div>
+  </div>
+
+  <div class="hero-title">
+    <h1>איזו דירה אפשר <span class="em">לקנות היום</span>?</h1>
+    <p>שני דברים קובעים את זה: כמה הון עצמי יש לכם, וכמה החזר חודשי הבנק יאשר. כמעט תמיד רק אחד מהם באמת עוצר אתכם. כאן רואים איזה, וכמה שווה כל שקל שתזיזו.</p>
+  </div>
+
+  <div class="dk-main">
+<div class="dk-in">
+  <div class="card">
+    <span class="sec-lbl">💰 מה יש לכם</span>
+    <div class="house">
+      <div class="h-item full">
+        <label for="equity">כמה כסף יש לכם לדירה?</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="equity" type="text" inputmode="numeric" value="500,000" placeholder="0"></div>
+        <div class="f-hint">כל הסכום, כולל מה שילך למס רכישה, לעורך דין ולתיווך. את ההוצאות האלה המחשבון מוריד לבד.</div>
+      </div>
+      <div class="h-item">
+        <label for="income">כמה נכנס לבנק כל חודש? (נטו, יחד)</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="income" type="text" inputmode="numeric" value="18,000" placeholder="0"></div>
+      </div>
+      <div class="h-item">
+        <label for="loans">החזרים חודשיים על הלוואות קיימות</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="loans" type="text" inputmode="numeric" value="0" placeholder="0"></div>
+      </div>
+      <div class="f-hint full">הלוואת רכב, הלוואה אישית, מינוס שנפרס. הבנק סופר את כולן יחד עם המשכנתא.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="sec-lbl">🏦 המשכנתא</span>
+    <div class="house">
+      <div class="h-item">
+        <label for="rate">ריבית משוערת (שנתית)</label>
+        <div class="input-shell"><input id="rate" type="text" inputmode="decimal" value="4.8" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
+      </div>
+      <div class="h-item">
+        <label for="years">לכמה שנים</label>
+        <div class="input-shell"><input id="years" type="text" inputmode="numeric" value="30" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">שנים</span></div>
+      </div>
+    </div>
+    <div class="pti-lbl" id="ptiLbl">כמה מההכנסה מוכנים שילך להחזרים?</div>
+    <div class="chips" role="group" aria-labelledby="ptiLbl">
+      <button type="button" class="chip" data-p="30" aria-pressed="false">30%<small>נשאר אוויר</small></button>
+      <button type="button" class="chip" data-p="35" aria-pressed="false">35%<small>באמצע</small></button>
+      <button type="button" class="chip" data-p="40" aria-pressed="true">40%<small>מה שבנקים מאשרים בדרך כלל</small></button>
+    </div>
+    <div class="f-hint">כולל ההלוואות הקיימות. בנק ישראל לא מאפשר יותר מ-50%, ורוב הבנקים עוצרים סביב 40%.</div>
+  </div>
+
+  <details class="card costs">
+    <summary><span class="sec-lbl" style="margin:0">🧾 ההוצאות שמסביב לקנייה (אפשר לשנות)</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="house" style="margin-top:14px">
+      <div class="h-item">
+        <label for="lawyerPct">עורך דין (לפני מע"מ)</label>
+        <div class="input-shell"><input id="lawyerPct" type="text" inputmode="decimal" value="0.5" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
+      </div>
+      <div class="h-item">
+        <label for="brokerPct">תיווך (לפני מע"מ)</label>
+        <div class="input-shell"><input id="brokerPct" type="text" inputmode="decimal" value="2" placeholder="0"><span class="unit" style="padding-inline-start:8px;padding-inline-end:15px">%</span></div>
+      </div>
+      <div class="h-item">
+        <label for="appraiser">שמאי</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="appraiser" type="text" inputmode="numeric" value="2,500" placeholder="0"></div>
+      </div>
+      <div class="h-item">
+        <label for="advisor">יועץ משכנתאות</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="advisor" type="text" inputmode="numeric" value="0" placeholder="0"></div>
+      </div>
+      <div class="h-item full">
+        <label for="reno">שיפוץ והצטיידות מההון הזה</label>
+        <div class="input-shell"><span class="unit">₪</span><input id="reno" type="text" inputmode="numeric" value="0" placeholder="0"></div>
+      </div>
+    </div>
+    <div class="f-hint">מס רכישה מחושב לבד, לפי המדרגות של 2026 לדירה יחידה. דירה מקבלן בלי תיווך? שמים 0.</div>
+  </details>
+</div>
+
+  <aside class="dk-side">
+  <div class="card savecheck">
+    <div class="sv-badge" id="maxBadge"><span class="sv-lbl">🏷️ עם הנתונים האלה אפשר לקנות דירה עד</span><span class="sv-big" id="maxNum">0 ₪</span><span class="sv-lbl" id="maxSub"></span></div>
+    <div class="gates" id="gates"></div>
+    <div class="gate-msg" id="gateMsg"></div>
+    <div class="lever" id="lever"></div>
+  </div>
+  </aside>
+  </div>
+
+  <div class="dk-grid">
+  <div class="card">
+    <span class="sec-lbl">📋 ככה נראית העסקה במחיר הזה</span>
+    <div id="deal"></div>
+  </div>
+  <div class="card">
+    <span class="sec-lbl">🗓️ ככה נראה החודש</span>
+    <div id="month"></div>
+    <div class="insight" id="comfort" hidden></div>
+  </div>
+  </div>
+
+  <div class="note-tip">💡 זו הערכה, לא אישור עקרוני. המשכנתא כאן היא בריבית אחת במקום תמהיל, והבנק יבדוק גם יציבות הכנסה, היסטוריית אשראי ושמאות. מספיק כדי לדעת על איזה טווח מחירים לחפש.</div>
+
+
+  <div class="cta-card">
+    <div class="cta-emoji">🏡</div>
+    <h3>לפני שמחפשים דירה, שווה לדעת מאיפה כל שקל מגיע</h3>
+    <p>בליווי בונים יחד את התמונה המלאה: כמה הון אפשר לצבור ועד מתי, איזה החזר באמת נוח לחיות איתו, ואיך הדירה נכנסת לתוך שאר היעדים שלכם.</p>
+    <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצים לתכנן את זה נכון? בואו נבנה את זה יחד ←</a>
+  </div>
+
+  <div class="actions">
+    <button class="act-btn" id="shareBtn">🔗 שמירה ושליחת החישוב</button>
+    <div class="act-note">✓ הקישור מכיל את כל החישוב שלך. שומרים אותו או שולחים בוואטסאפ. הכתובת הרגילה תמיד מתחילה נקי.</div>
+    <div class="act-link" id="actLink" hidden>
+      <input id="linkField" readonly aria-label="קישור החישוב">
+      <button id="copyBtn">העתקה</button>
+    </div>
+  </div>
+
+  <div class="socials">
+    <a href="https://www.instagram.com/tali_finance" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+    <a href="https://www.tiktok.com/@tali_beniaminov" target="_blank" rel="noopener" aria-label="טיקטוק"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M16.5 3c.3 2 1.6 3.6 3.5 3.9v2.4c-1.3.1-2.5-.3-3.6-1v6.1c0 3.2-2.6 5.6-5.7 5.4-2.7-.2-4.8-2.4-4.8-5.1 0-3 2.6-5.4 5.6-5.1v2.5c-.4-.1-.9-.2-1.3-.1-1.3.2-2.2 1.3-2 2.6.1 1.2 1.2 2.1 2.4 2 1.3-.1 2.2-1.2 2.2-2.5V3h3.3z"/></svg></a>
+  </div>
+
+  <div class="copyright">© 2026 כל הזכויות שמורות ל-RichLife ולטלי בנימינוב שרעבי. אין לשכפל, להפיץ או לעשות שימוש בתוכן זה ללא אישור מראש ובכתב.</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
+     מדביקים פעם אחת בתוך <head> של כל דף באתר.
+     אחרי הרצת setup.py השתמשו בקובץ output/a11y-snippet-ready.html
+
+     Zero-impact by default (Eden's directive, page-standard.md):
+     - Regular visitors see ONLY a small round a11y button (bottom-left).
+     - Focus outline appears via :focus-visible - keyboard users only.
+     - Skip-link hidden until keyboard-focused.
+     - All visual adjustments (text size / contrast / links / motion /
+       readable font) apply ONLY when chosen; saved in localStorage.
+     - The menu links to the accessibility statement (legal requirement).
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+  /* Keyboard-only focus - mouse users never see this */
+  :focus-visible { outline: 3px solid #4F46E5 !important; outline-offset: 2px !important; border-radius: 4px; }
+  /* Skip link - visible only on keyboard focus */
+  .brain-skip { position: fixed; top: -60px; right: 12px; z-index: 100000; background: #1E1B4B; color: #fff;
+    padding: 10px 18px; border-radius: 10px; font-size: 15px; text-decoration: none; transition: top .15s; }
+  .brain-skip:focus { top: 12px; }
+  /* Opt-in modes */
+  html.a11y-fs1 body { zoom: 1.12; } html.a11y-fs2 body { zoom: 1.25; }
+  html.a11y-contrast { filter: contrast(1.25); }
+  html.a11y-links a { text-decoration: underline !important; font-weight: 700 !important; }
+  html.a11y-nomotion *, html.a11y-nomotion *::before, html.a11y-nomotion *::after {
+    animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  html.a11y-font body, html.a11y-font body * { font-family: Arial, Helvetica, sans-serif !important; }
+  /* The button + menu */
+  #brain-a11y-btn { position: fixed; bottom: 18px; left: 18px; z-index: 99999; width: 44px; height: 44px;
+    border-radius: 50%; border: none; cursor: pointer; background: #1E1B4B; color: #fff;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(30,27,75,.35); padding: 0; }
+  #brain-a11y-btn:hover { background: #4F46E5; }
+  #brain-a11y-menu { position: fixed; bottom: 72px; left: 18px; z-index: 99999; background: #fff; color: #1E1B4B;
+    border-radius: 14px; box-shadow: 0 6px 30px rgba(30,27,75,.25); padding: 14px; width: 230px; display: none;
+    direction: rtl; text-align: right; font-family: Arial, sans-serif; font-size: 14px; }
+  #brain-a11y-menu.open { display: block; }
+  #brain-a11y-menu h2 { font-size: 15px; margin: 0 0 10px; }
+  #brain-a11y-menu button { display: block; width: 100%; margin: 4px 0; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid #E0E7FF; background: #F8FAFC; cursor: pointer; font-size: 13px; text-align: right; color: #1E1B4B; }
+  #brain-a11y-menu button[aria-pressed="true"] { background: #4F46E5; color: #fff; border-color: #4F46E5; }
+  #brain-a11y-menu a { display: block; margin-top: 10px; font-size: 12px; color: #4F46E5; }
+  /* polish: text fields show their OWN green focus ring (keeps ₪ / שנים visible), not the indigo box */
+  .input-shell input:focus, .input-shell input:focus-visible,
+  .goal-name:focus, .goal-name:focus-visible,
+  .act-link input:focus, .act-link input:focus-visible,
+  #linkField:focus, #linkField:focus-visible { outline: none !important; }
+</style>
+<script>
+(function () {
+  var MODES = [
+    ["fs", "הגדלת טקסט", 2],            // cycles: off → fs1 → fs2
+    ["contrast", "ניגודיות מוגברת", 1],
+    ["links", "הדגשת קישורים", 1],
+    ["nomotion", "עצירת אנימציות", 1],
+    ["font", "גופן קריא", 1]
+  ];
+  var KEY = "brain_a11y";
+
+  function state() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+  function apply(s) {
+    var h = document.documentElement;
+    h.classList.toggle("a11y-fs1", s.fs === 1); h.classList.toggle("a11y-fs2", s.fs === 2);
+    ["contrast", "links", "nomotion", "font"].forEach(function (m) { h.classList.toggle("a11y-" + m, !!s[m]); });
+  }
+
+  function build() {
+    if (document.getElementById("brain-a11y-btn")) return; // pasted twice - once is enough
+    // Skip link (target: <main> or first <h1>'s section)
+    if (!document.getElementById("brain-main")) {
+      var m = document.querySelector("main") || document.querySelector("h1");
+      if (m) m.id = m.id || "brain-main";
+    }
+    var skip = document.createElement("a");
+    skip.className = "brain-skip"; skip.href = "#" + ((document.querySelector("main,h1") || {}).id || "brain-main");
+    skip.textContent = "דילוג לתוכן"; document.body.prepend(skip);
+
+    var btn = document.createElement("button");
+    btn.id = "brain-a11y-btn"; btn.setAttribute("aria-label", "פתיחת תפריט נגישות");
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "brain-a11y-menu");
+    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="4.5" r="2.2" fill="currentColor"/><path d="M12 8c-3 0-5.5-.6-7-1l.5 2c1.5.5 3.5.8 5 .9v3.1l-2.3 6.2 1.9.8 2-5.5h-.2 2.2l2 5.5 1.9-.8L15.5 13V9.9c1.5-.1 3.5-.4 5-.9l.5-2c-1.5.4-4 1-7 1h-2z" fill="currentColor"/></svg>';
+
+    var menu = document.createElement("div");
+    menu.id = "brain-a11y-menu"; menu.setAttribute("role", "dialog"); menu.setAttribute("aria-label", "אפשרויות נגישות");
+    menu.innerHTML = "<h2>נגישות</h2>";
+    MODES.forEach(function (mode) {
+      var b = document.createElement("button");
+      b.textContent = mode[1]; b.dataset.mode = mode[0]; b.setAttribute("aria-pressed", "false");
+      b.onclick = function () {
+        var s = state();
+        if (mode[0] === "fs") { s.fs = ((s.fs || 0) + 1) % 3; b.setAttribute("aria-pressed", s.fs ? "true" : "false"); }
+        else { s[mode[0]] = !s[mode[0]]; b.setAttribute("aria-pressed", s[mode[0]] ? "true" : "false"); }
+        localStorage.setItem(KEY, JSON.stringify(s)); apply(s);
+      };
+      menu.appendChild(b);
+    });
+    var reset = document.createElement("button");
+    reset.textContent = "איפוס"; reset.onclick = function () { localStorage.removeItem(KEY); apply({});
+      menu.querySelectorAll("[aria-pressed]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); };
+    menu.appendChild(reset);
+    var link = document.createElement("a");
+    link.href = "https://lida.richlife.co.il/lida/negishut.html"; link.textContent = "הצהרת נגישות";
+    menu.appendChild(link);
+
+    // Permanent text link in the page footer (legal best practice: the statement
+    // must be reachable even if this widget fails to load elsewhere). Inherits
+    // the footer's own styling - visually just one more footer word.
+    var foot = document.querySelector("footer");
+    if (foot && !foot.querySelector('a[href*="negishut"]')) {
+      var fl = document.createElement("a");
+      fl.href = "https://lida.richlife.co.il/lida/negishut.html"; fl.textContent = "הצהרת נגישות";
+      fl.style.color = "inherit"; fl.style.marginRight = "6px";
+      foot.appendChild(document.createTextNode(" · "));
+      foot.appendChild(fl);
+    }
+
+    btn.onclick = function () {
+      var open = menu.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("open")) { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.focus(); }
+    });
+    document.body.appendChild(btn); document.body.appendChild(menu);
+
+    // Restore saved prefs + reflect on buttons
+    var s = state(); apply(s);
+    menu.querySelectorAll("[data-mode]").forEach(function (b) {
+      var m = b.dataset.mode;
+      b.setAttribute("aria-pressed", (m === "fs" ? !!s.fs : !!s[m]) ? "true" : "false");
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build);
+  else build();
+})();
+</script>
+
+<script>
+const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
+const ils=v=>fmt.format(Math.round(v))+' ₪';
+function grp(v){v=(''+v).replace(/[^\d]/g,'');return v===''?'':(+v).toLocaleString('en-US');}
+function num(id){return +(''+document.getElementById(id).value).replace(/[^\d.]/g,'')||0;}
+const MONEY=['equity','income','loans','appraiser','advisor','reno'];
+const PCT=['rate','years','lawyerPct','brokerPct'];
+let PTI=40;
+
+/* ── אותו מנוע כמו ב"שכירות או קנייה" (/rent-vs-buy/), כדי ששני הכלים תמיד יחזירו אותו מספר ──
+   מס רכישה לדירה יחידה, מדרגות 2026 (זהה לכלי השכירות). מימון עד 75% לדירה ראשונה = מקדמה של 25% לפחות. */
+const BR_SINGLE=[[1978745,0],[2347040,3.5],[6055070,5],[20183565,8],[Infinity,10]];
+const VAT=0.18, MIN_DOWN=0.25;
+function purchaseTax(price){let t=0,prev=0;for(const [to,r] of BR_SINGLE){if(price>prev)t+=(Math.min(price,to)-prev)*r/100;prev=to;if(price<=to)break;}return t;}
+function costsAt(p,price){const tax=purchaseTax(price),lawyer=price*p.lawyerPct/100*(1+VAT),broker=price*p.brokerPct/100*(1+VAT);return{tax,lawyer,broker,other:p.appraiser+p.advisor+p.reno,all:tax+lawyer+broker+p.appraiser+p.advisor+p.reno};}
+function pmtFor(loan,p){const n=p.years*12,r=p.rate/100/12;return loan<=0?0:(r===0?loan/n:loan*r/(1-Math.pow(1+r,-n)));}
+function loanAt(p,x){return Math.max(0,x-(p.equity-costsAt(p,x).all));}
+/* המחיר הכי גבוה ש(א) ההון מכסה את ההוצאות + 25% מקדמה, (ב) המשכנתא + ההלוואות הקיימות עד X% מההכנסה */
+function maxPrice(p){
+  const okEq=x=>p.equity-costsAt(p,x).all>=MIN_DOWN*x;
+  const okInc=x=>!(p.income>0)||pmtFor(loanAt(p,x),p)+p.loans<=p.pti/100*p.income;
+  const find=ok=>{let lo=0,hi=60e6;if(!ok(1))return 0;for(let i=0;i<60;i++){const m=(lo+hi)/2;if(ok(m))lo=m;else hi=m;}return lo;};
+  const byEq=find(okEq),byInc=p.income>0?find(okInc):Infinity;
+  return{byEq,byInc,max:Math.min(byEq,byInc),limit:byInc<byEq?'income':'equity'};
+}
+function inputs(){const p={pti:PTI};MONEY.forEach(id=>p[id]=num(id));PCT.forEach(id=>p[id]=num(id));p.years=Math.min(40,Math.max(1,Math.round(p.years)||30));return p;}
+const r10=v=>Math.floor(v/10000)*10000;
+
+function calc(){
+  syncLive();
+  const p=inputs(), mp=maxPrice(p), M=r10(mp.max);
+  document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.p===PTI?'true':'false'));
+  const $=id=>document.getElementById(id);
+
+  if(M<10000){
+    $('maxNum').textContent='-';
+    $('maxSub').textContent='';
+    $('gates').innerHTML='';
+    $('gateMsg').innerHTML=p.equity>0
+      ?'ההון שהוזן לא מכסה את ההוצאות שמסביב ועוד 25% מקדמה. שווה לבדוק סכום גבוה יותר, או להוריד הוצאות כמו תיווך ושיפוץ.'
+      :'מתחילים מלמעלה: כמה כסף יש לכם לדירה, וכמה נכנס כל חודש.';
+    $('lever').innerHTML='';$('deal').innerHTML='';$('month').innerHTML='';$('comfort').hidden=true;
+    return;
+  }
+
+  $('maxNum').textContent=ils(M);
+  $('maxSub').textContent='דירה ראשונה, עם '+PTI+'% מההכנסה להחזרים';
+
+  // the two gates, side by side; the lower one is the one that stops you
+  const eqR=r10(mp.byEq), incR=isFinite(mp.byInc)?r10(mp.byInc):null;
+  const eqBlocks=mp.limit==='equity', near=incR!=null&&Math.abs(eqR-incR)<=Math.max(eqR,incR)*0.03;
+  const gate=(ico,lbl,val,blocks,sub)=>`<div class="gate${blocks?' blocks':''}"><span class="g-ico">${ico}</span><span class="g-lbl">${lbl}<small>${sub}</small></span><span class="g-val">${val}</span>${blocks?'<span class="g-tag">זה מה שעוצר</span>':''}</div>`;
+  $('gates').innerHTML=
+    gate('💰','לפי ההון',ils(eqR),eqBlocks&&!near,'אחרי ההוצאות, נשארת מקדמה של 25%')+
+    gate('🗓️','לפי ההחזר החודשי',incR==null?'<small class="g-na">חסרה הכנסה</small>':ils(incR),!eqBlocks&&!near,'עד '+PTI+'% מ-'+ils(p.income));
+  $('gateMsg').innerHTML=incR==null
+    ?'מוסיפים את ההכנסה נטו למעלה, ונבדוק גם כמה החזר חודשי אפשר לשאת.'
+    :near?'שני הדברים נוחתים כמעט על אותו מחיר: גם ההון וגם ההחזר מנוצלים עד הסוף.'
+    :eqBlocks?'<b>ההון הוא מה שעוצר, לא ההחזר.</b> הבנק היה מאשר החזר על דירה של עד '+ils(incR)+', אבל אין מספיק הון למקדמה ולהוצאות.'
+    :'<b>ההחזר החודשי הוא מה שעוצר, לא ההון.</b> ההון היה מספיק לדירה של עד '+ils(eqR)+', אבל ההחזר עליה עובר את '+PTI+'% מההכנסה.';
+
+  // what moves the number
+  // measured on the unrounded prices, so a 10,000 nudge is not swallowed by rounding to 10,000
+  const more=(patch)=>Math.max(0,Math.round((maxPrice(Object.assign({},p,patch)).max-mp.max)/1000)*1000);
+  let lv='';
+  if(incR!=null&&!eqBlocks){
+    const plusInc=more({income:p.income+1000});
+    lv+=`<div class="lv-row"><span>➕ עוד 1,000 ₪ נטו בחודש</span><b>+${ils(plusInc)}</b></div>`;
+    if(p.loans>0){const off=Math.min(p.loans,500);lv+=`<div class="lv-row"><span>✂️ לסגור ${ils(off)} מההחזרים הקיימים</span><b>+${ils(more({loans:p.loans-off}))}</b></div>`;}
+    lv+=`<div class="lv-row dim"><span>💰 עוד 50,000 ₪ הון</span><b>+${ils(more({equity:p.equity+50000}))}</b></div>`;
+  }else{
+    lv+=`<div class="lv-row"><span>💰 עוד 10,000 ₪ הון</span><b>+${ils(more({equity:p.equity+10000}))}</b></div>`;
+    lv+=`<div class="lv-row"><span>💰 עוד 50,000 ₪ הון</span><b>+${ils(more({equity:p.equity+50000}))}</b></div>`;
+    if(incR!=null)lv+=`<div class="lv-note">לסגור הלוואה או להעלות הכנסה לא יזיז את המחיר כרגע, כי ההון הוא שעוצר. זה כן ישפר את החודש שלכם, אז שווה לעשות, רק לא בשביל הדירה.</div>`;
+  }
+  $('lever').innerHTML='<div class="lv-h">מה מזיז את המספר</div>'+lv;
+
+  // the deal at that price
+  const c=costsAt(p,M), down=Math.min(Math.max(p.equity-c.all,0),M), loan=Math.max(M-down,0), pay=pmtFor(loan,p);
+  const row=(l,v,cls)=>`<div class="sc-row${cls?' '+cls:''}"><span>${l}</span><b>${v}</b></div>`;
+  $('deal').innerHTML=
+    row('מחיר הדירה',ils(M))+
+    row('מס רכישה',c.tax>0?ils(c.tax):'0 ₪ <span class="pc">(מתחת למדרגה)</span>')+
+    row('עורך דין ותיווך, כולל מע"מ',ils(c.lawyer+c.broker))+
+    (c.other>0?row('שמאי, יועץ ושיפוץ',ils(c.other)):'')+
+    row('מקדמה מההון שלכם',ils(down)+' <span class="pc">('+Math.round(down/M*100)+'%)</span>')+
+    row('משכנתא',ils(loan)+' <span class="pc">('+Math.round(loan/M*100)+'% מימון)</span>','invest');
+
+  // the month
+  const tot=pay+p.loans, ptiNow=p.income>0?tot/p.income*100:0, left=p.income-tot;
+  $('month').innerHTML=
+    row('החזר משכנתא חודשי',ils(pay)+' <span class="pc">('+p.years+' שנה, '+p.rate+'%)</span>')+
+    (p.loans>0?row('החזרים קיימים',ils(p.loans)):'')+
+    (p.income>0?row('סה"כ החזרים',ils(tot)+' <span class="pc">('+Math.round(ptiNow)+'% מההכנסה)</span>'):'')+
+    (p.income>0?row('נשאר לכל השאר',ils(left),'invest'):'');
+
+  // the comfortable version, only when the chosen ratio is above it
+  const cf=$('comfort');
+  if(p.income>0&&PTI>30){
+    const M30=r10(maxPrice(Object.assign({},p,{pti:30})).max);
+    if(M30<M){cf.hidden=false;cf.innerHTML='ואם רוצים שההחזרים יהיו עד 30% מההכנסה, כדי שיישאר אוויר: דירה עד <b>'+ils(M30)+'</b>';}
+    else{cf.hidden=false;cf.innerHTML='גם ב-30% מההכנסה זה אותו מחיר, כי ההון הוא שעוצר. <b>ההחזר כאן נוח.</b>';}
+  }else cf.hidden=true;
+}
+
+MONEY.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',()=>{const s=el.selectionStart,old=el.value;el.value=grp(el.value);const d=el.value.length-old.length;try{el.setSelectionRange(s+d,s+d);}catch(e){}calc();});});
+PCT.forEach(id=>document.getElementById(id).addEventListener('input',calc));
+document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{PTI=+b.dataset.p;calc();}));
+
+// save / share
+const SKEY='richlife-apartment-v1';
+function enc(){return JSON.stringify(MONEY.concat(PCT).map(id=>document.getElementById(id).value).concat([PTI]));}
+function dec(str){try{const a=JSON.parse(str);if(!Array.isArray(a))return false;MONEY.concat(PCT).forEach((id,k)=>{if(a[k]!=null)document.getElementById(id).value=MONEY.indexOf(id)>-1?grp(a[k]):a[k];});const pt=+a[MONEY.length+PCT.length];if([30,35,40].indexOf(pt)>-1)PTI=pt;return true;}catch(e){return false;}}
+
+const SHARE_API='https://richlife-share.tali-bi-finance.workers.dev';
+function makeLink(){return location.origin+location.pathname+location.search+'#m='+encodeURIComponent(enc());}
+// short link via the share store; falls back to the long self-contained link if the store is down
+async function shortLink(){
+  try{
+    const r=await fetch(SHARE_API,{method:'POST',body:enc()});
+    if(!r.ok)throw 0;
+    const j=await r.json();
+    if(!j||!j.id)throw 0;
+    return location.origin+location.pathname+location.search+'#p='+j.id;
+  }catch(e){return makeLink();}
+}
+/* live link: attachment follows the URL (open a #p link or create one -> auto-syncs to it) */
+let docId=null,pushT=null;
+function linkFor(id){return location.origin+location.pathname+location.search+'#p='+id;}
+function setHash(id){try{history.replaceState(null,'',location.pathname+location.search+'#p='+id);}catch(e){}}
+function syncLive(){if(!docId)return;clearTimeout(pushT);pushT=setTimeout(function(){fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()}).then(function(r){if(r.status===404){docId=null;refreshShareUI();}}).catch(function(){});},1200);}
+function refreshShareUI(){var btn=document.getElementById('shareBtn');if(!btn)return;var badge=document.getElementById('liveBadge');if(!badge){badge=document.createElement('div');badge.id='liveBadge';badge.hidden=true;badge.style.cssText='background:rgba(47,145,105,.12);border:1.5px solid rgba(47,145,105,.42);color:#2f9169;font-weight:800;font-size:12.5px;border-radius:12px;padding:10px 14px;margin:0 auto 12px;max-width:480px;line-height:1.5;text-align:center';(btn.parentNode||document.body).insertBefore(badge,btn);}var box=document.getElementById('actLink'),field=document.getElementById('linkField');if(docId){btn.textContent='🔗 הצגת הקישור לשליחה';badge.hidden=false;badge.textContent='🟢 קישור חי - כל שינוי שנעשה כאן נשמר אליו אוטומטית. שולחים פעם אחת, והוא תמיד מעודכן.';if(field&&box){field.value=linkFor(docId);box.hidden=false;}}else{btn.textContent='🔗 יצירת קישור לשליחה';badge.hidden=true;}}
+(function(){const btn=document.getElementById('shareBtn'),wrap=document.getElementById('actLink'),field=document.getElementById('linkField'),copy=document.getElementById('copyBtn');
+  btn.onclick=async()=>{wrap.hidden=false;field.value=docId?'מעדכן...':'יוצר קישור...';btn.disabled=true;try{if(docId){try{const _r=await fetch(SHARE_API+'/?id='+encodeURIComponent(docId),{method:'POST',body:enc()});if(_r.status===404)docId=null;}catch(_e){}}if(!docId){try{const _r=await fetch(SHARE_API,{method:'POST',body:enc()});const _j=_r.ok?await _r.json():null;if(_j&&_j.id){docId=_j.id;setHash(_j.id);}}catch(_e){}}const link=docId?linkFor(docId):makeLink();refreshShareUI();field.value=link;field.focus();field.select();try{navigator.clipboard.writeText(link).then(()=>flash(btn,'✓ הקישור הועתק'),()=>{});}catch(e){}}finally{btn.disabled=false;}};
+  copy.onclick=()=>{field.select();try{document.execCommand('copy');}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(field.value);}catch(e){}flash(copy,'✓ הועתק');};})();
+function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>el.textContent=o,1800);}
+
+(function boot(){
+  try{localStorage.removeItem(SKEY);}catch(e){}
+  const hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);
+  const hm=(location.hash||'').match(/m=([^&]+)/);
+  if(hp){
+    docId=hp[1];
+    fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(r=>r.ok?r.text():Promise.reject()).then(t=>{dec(t);calc();refreshShareUI();}).catch(()=>{if(hm)dec(decodeURIComponent(hm[1]));calc();refreshShareUI();});
+  } else {
+    if(hm)dec(decodeURIComponent(hm[1]));
+    calc();
+  }
+  refreshShareUI();
+})();
+</script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'איזו דירה אפשר לקנות',content_category:'RichLife כלים'});}catch(e){}});});});</script>
+<footer class="rl-legal-footer" style="max-width:900px;margin:34px auto 0;padding:16px 18px 26px;text-align:center;font-size:12.5px;line-height:1.75;opacity:.72"><div class="footer-legal" style="font-size:12.5px;line-height:1.75;opacity:.78">טלי בנימינוב שרעבי · עוסק מורשה 207381062<br>שדרות נים 2, ראשון לציון · <a href="mailto:tali.bi.finance@gmail.com">tali.bi.finance@gmail.com</a><br><button type="button" class="rl-consent-reopen" hidden>הגדרות עוגיות</button></div></footer>
+
+<style id="rl-consent-css">
+/* ===== באנר הסכמת עוגיות - RichLife ===== */
+#rl-consent{position:fixed;inset-inline:0;bottom:0;z-index:2147482000;
+  background:#2f4036;color:#eef4ef;font-family:inherit;direction:rtl;
+  box-shadow:0 -6px 28px rgba(0,0,0,.28);padding:18px 20px calc(18px + env(safe-area-inset-bottom));
+  display:none}
+#rl-consent[data-open="1"]{display:block}
+#rl-consent .rl-in{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;
+  gap:14px 22px;align-items:center;justify-content:space-between}
+#rl-consent p{margin:0;font-size:15px;line-height:1.65;flex:1 1 420px;min-width:0}
+#rl-consent a{color:#cfe3d5;text-decoration:underline;text-underline-offset:2px}
+#rl-consent a:hover{color:#fff}
+#rl-consent .rl-btns{display:flex;gap:10px;flex-wrap:wrap}
+#rl-consent button{font:inherit;font-size:15px;font-weight:700;cursor:pointer;
+  border-radius:10px;padding:11px 22px;border:1.5px solid #eef4ef;
+  min-height:44px;transition:background .15s,color .15s}
+/* אישור וסירוב באותו משקל חזותי: הסכמה חייבת להיות חופשית */
+#rl-consent .rl-yes{background:#eef4ef;color:#1e2b25}
+#rl-consent .rl-no{background:transparent;color:#eef4ef}
+#rl-consent .rl-yes:hover{background:#fff}
+#rl-consent .rl-no:hover{background:rgba(238,244,239,.14)}
+#rl-consent button:focus-visible,#rl-consent a:focus-visible{
+  outline:3px solid #ffd479;outline-offset:2px}
+@media (max-width:560px){
+  #rl-consent .rl-in{flex-direction:column;align-items:stretch}
+  #rl-consent{padding:7px 12px calc(7px + env(safe-area-inset-bottom))}
+  #rl-consent .rl-in{gap:6px}
+  #rl-consent p{flex:0 0 auto;font-size:12px;line-height:1.4}  /* בעמודה, בסיס 420px הפך לגובה 420px */
+  #rl-consent button{font-size:13px;padding:4px 12px;min-height:32px}  /* 32px: עדיין מעל מינימום WCAG 2.2 (24px) */
+  #rl-consent .rl-btns{justify-content:stretch}
+  #rl-consent .rl-btns button{flex:1;white-space:nowrap}  /* בלי זה הגובה חושב לפי 2 שורות */
+}
+@media (prefers-reduced-motion:reduce){#rl-consent *{transition:none!important}}
+.rl-consent-reopen{background:none;border:0;padding:0;font:inherit;
+  color:inherit;text-decoration:underline;cursor:pointer}
+</style>
+
+<div id="rl-consent" role="dialog" aria-modal="false"
+     aria-labelledby="rl-consent-t" aria-describedby="rl-consent-d">
+  <div class="rl-in">
+    <p id="rl-consent-d"><strong id="rl-consent-t">רגע לפני שנמשיך.</strong>
+      אנחנו רוצים להשתמש בעוגיות של גוגל ומטא כדי להבין איך הגעתם לכאן ומה עניין אתכם.
+      זה לא הכרחי כדי לגלוש, אז זו בחירה שלכם.
+      אפשר לקרוא ב<a href="https://first-invest.richlife.co.il/privacy/">מדיניות הפרטיות</a> מה בדיוק נאסף.</p>
+    <div class="rl-btns">
+      <button type="button" class="rl-yes" data-rl="grant">אישור</button>
+      <button type="button" class="rl-no" data-rl="deny">בלי עוגיות מעקב</button>
+    </div>
+  </div>
+</div>
+
+<script id="rl-consent-js">
+/* ===== הסכמת עוגיות - RichLife =====
+   חוסם את GA4 ואת פיקסל מטא עד לאישור מפורש.
+   תיקון 13 לחוק הגנת הפרטיות: הסכמה מדעת לפני איסוף, לא אחריו. */
+(function () {
+  var KEY = 'rl-consent-v1';
+  var GA = '', PX = '208911198828875';
+  var loaded = false, replay = [];
+
+  function read() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function write(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+
+  /* בולם: קריאות מעקב שקיימות כבר בדף לא יזרקו שגיאה לפני ההסכמה,
+     ואם תינתן הסכמה בהמשך הן יישלחו. */
+  window.dataLayer = window.dataLayer || [];
+  if (!window.gtag) window.gtag = function () { window.dataLayer.push(arguments); };
+  if (!window.fbq) {
+    window.fbq = function () { replay.push(Array.prototype.slice.call(arguments)); };
+    window.fbq.queue = [];
+  }
+
+  function loadTrackers() {
+    if (loaded) return;
+    loaded = true;
+    if (GA) {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA;
+      document.head.appendChild(s);
+      window.gtag('js', new Date());
+      window.gtag('config', GA);
+    }
+    if (PX) {
+      var pending = replay.slice();
+      window.fbq = null;
+      !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+        n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+        s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+      }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', PX);
+      window.fbq('track', 'PageView');
+      pending.forEach(function (a) { try { window.fbq.apply(null, a); } catch (e) {} });
+    }
+  }
+
+  function box() { return document.getElementById('rl-consent'); }
+  function open() { var b = box(); if (b) { b.setAttribute('data-open', '1');
+    var y = b.querySelector('.rl-yes'); if (y) y.focus(); } }
+  function close() { var b = box(); if (b) b.removeAttribute('data-open'); }
+
+  function decide(v) { write(v); close(); if (v === 'grant') loadTrackers(); }
+
+  function start() {
+    var b = box();
+    if (b) b.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-rl]');
+      if (t) decide(t.getAttribute('data-rl'));
+    });
+    /* קישור קבוע לשינוי הבחירה - הזכות לחזור בה חייבת להיות מעשית */
+    document.querySelectorAll('.rl-consent-reopen').forEach(function (el) {
+      el.hidden = false;          /* מוצג רק בדף שבאמת יש בו מה לפתוח */
+      el.addEventListener('click', function (e) { e.preventDefault(); open(); });
+    });
+    var v = read();
+    if (v === 'grant') loadTrackers();
+    else if (v !== 'deny') open();
+  }
+
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
+
+</body>
+</html>

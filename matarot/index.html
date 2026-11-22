@@ -155,6 +155,87 @@ body{
 .track .t-pct{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:2px}
 .track.on .t-name,.track.on .t-pct{color:#fff}
 
+/* upgrade 11.26: horizon, warnings, no-return comparison, options */
+.t-rec{font-size:10.5px;font-weight:800;color:var(--pine);min-height:13px;margin-top:2px}
+.track.on .t-rec{color:#e6f0e9}
+.tw{display:none;margin-top:9px;font-size:13px;font-weight:600;line-height:1.55;color:#7a4f12;background:#fbf1de;border-radius:11px;padding:9px 12px}
+.tw.show{display:block}
+.yr-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:-6px 0 14px}
+.yr-tg{font-family:var(--font);font-size:13px;font-weight:700;border:1.5px solid rgba(var(--pine-rgb),.25);background:#fff;color:var(--pine-deep);border-radius:100px;padding:6px 13px;cursor:pointer}
+.yr-tg[aria-pressed="true"]{background:var(--pine);border-color:var(--pine-deep);color:#fff}
+.hz-tag{font-size:11.5px;font-weight:800;border-radius:100px;padding:3px 10px;background:var(--sage-tint);color:var(--pine-deep)}
+.hz-tag:empty{display:none}
+.hz-tag.fund{background:#e3f0f6;color:#1f4f66}.hz-tag.near{background:#fbf1de;color:#7a4f12}.hz-tag.far{background:rgba(var(--pine-rgb),.14)}.hz-tag.yr{background:#eee7f6;color:#4f3a73}
+.chip.yrc{background:#f6f2fb;border-color:#d9cdea}.chip.kid{background:#fbf1de;border-color:#ecd8b0}
+.vs0,.infl-note{display:none;margin-top:12px;font-size:13.5px;line-height:1.6;background:rgba(var(--pine-rgb),.07);border-radius:12px;padding:10px 13px;color:var(--ink)}
+.vs0.show,.infl-note.show{display:block}
+.vs0 .sv{color:var(--pine)}
+.sum-save{margin:12px 0 0;font-size:14px;line-height:1.6;background:rgba(255,255,255,.12);border-radius:12px;padding:10px 13px}
+.opts{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.opt{flex:1 1 220px;text-align:right;font-family:var(--font);font-size:14px;font-weight:800;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.22);border-radius:14px;padding:11px 14px;cursor:pointer;box-shadow:var(--shadow)}
+.opt span{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-top:2px}
+.opt[aria-pressed="true"]{background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;border-color:var(--pine-deep)}
+.opt[aria-pressed="true"] span{color:#e6f0e9}
+.yr-first{margin-top:8px!important;font-weight:700}
+@media (max-width:420px){.tracks{flex-wrap:wrap}.track{flex:1 1 calc(50% - 8px)}}
+
+/* return slider, need, fold, spread, step-up */
+.ret{display:flex;align-items:center;gap:12px;background:var(--sage-tint);border-radius:13px;padding:10px 14px}
+.ret input[type=range]{flex:1;min-width:0;accent-color:var(--pine);height:28px;cursor:pointer}
+.ret-out{flex:none;text-align:center;min-width:74px}
+.ret-out .rp{display:block;font-size:20px;font-weight:900;color:var(--pine-darker)}
+.ret-out .rn{font-size:12px;font-weight:700;color:var(--ink-soft)}
+.ret-scale{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--ink-soft);margin:5px 4px 0}
+.ret-rec{margin-top:8px;font-size:13px;font-weight:600;color:var(--pine-deep)}
+.ret-rec:empty{display:none}
+.ret-use{font-family:var(--font);font-size:12.5px;font-weight:800;border:0;background:var(--pine);color:#fff;border-radius:100px;padding:4px 11px;margin-inline-start:4px;cursor:pointer}
+.need{display:inline-flex;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:100px;overflow:hidden}
+.need button{font-family:var(--font);font-size:13px;font-weight:700;border:0;background:#fff;color:var(--pine-deep);padding:6px 13px;cursor:pointer}
+.need button[aria-pressed="true"]{background:var(--pine);color:#fff}
+.need button[data-nd="want"][aria-pressed="true"]{background:#b07a2a}
+.nd-b{display:inline-block;font-size:11px;font-weight:800;border-radius:100px;padding:2px 8px;background:var(--pine);color:#fff;vertical-align:middle}
+.nd-b.w{background:#b07a2a}
+.fold{flex:none;height:30px;padding:0 9px;font-family:var(--font);font-weight:700;font-size:12.5px;border-radius:9px;border:1.5px solid rgba(var(--pine-rgb),.25);background:#fff;color:var(--pine-deep);font-size:15px;cursor:pointer}
+.fold-sum{display:none;cursor:pointer;margin-top:10px;font-size:14px;color:var(--ink-soft)}
+.fold-sum b{color:var(--pine-darker);font-size:16px}
+.fold-sum .nd-b{margin-inline-end:6px}
+.goal.folded .chips,.goal.folded .yr-row,.goal.folded .fields,.goal.folded .results{display:none}
+.goal.folded .fold-sum{display:block}
+.fold-all{display:flex;justify-content:flex-end;margin:0 0 8px}
+.fold-all button{font-family:var(--font);font-size:13px;font-weight:700;border:0;background:none;color:var(--pine-deep);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px}
+.spread{background:#fff;border-radius:20px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);padding:clamp(16px,4vw,24px);margin:16px 0}
+.spread h3{font-size:18px;font-weight:900;color:var(--pine-darker);margin-bottom:6px}
+.spread>p{font-size:14px;line-height:1.6;color:var(--ink-soft);margin-bottom:8px}
+.sp-hint,.sp-warn{font-size:13.5px!important;border-radius:11px;padding:9px 12px}
+.sp-hint{background:var(--sage-tint);color:var(--pine-deep)!important}.sp-warn{background:#fbf1de;color:#7a4f12!important}
+.sp-list{display:grid;gap:8px;margin-top:10px}
+.sp-row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;background:var(--sage-tint);border-radius:12px;padding:10px 13px}
+.sp-n{font-weight:800;color:var(--ink);font-size:14.5px}
+.sp-a{font-weight:900;color:var(--pine-darker);font-size:15px;text-align:left}
+.sp-a small{font-weight:600;color:var(--ink-soft);font-size:11.5px}
+.sp-r{grid-column:1/-1;font-size:13px;color:var(--ink-soft)}
+.step{margin-top:12px;font-size:13.5px;line-height:1.6;background:#f3f7f4;border:1px dashed rgba(var(--pine-rgb),.35);border-radius:12px;padding:11px 13px}
+.step-btn{display:block;margin-top:8px;font-family:var(--font);font-size:13.5px;font-weight:800;border:0;background:var(--pine);color:#fff;border-radius:10px;padding:8px 13px;cursor:pointer}
+
+.ideas{background:#fff;border-radius:20px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);padding:clamp(16px,4vw,22px);margin:0 0 16px}
+.ideas h2{font-size:17px;font-weight:900;color:var(--pine-darker);margin-bottom:10px}
+.ideas h2 span{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-top:3px}
+.id-g{margin-top:10px}
+.id-t{font-size:12.5px;font-weight:800;color:var(--pine);margin-bottom:6px}
+.id-list{display:flex;flex-wrap:wrap;gap:7px}
+.idea{font-family:var(--font);font-size:13.5px;font-weight:700;border:1px solid rgba(var(--pine-rgb),.25);background:var(--sage-tint);color:var(--pine-deep);border-radius:100px;padding:7px 12px;cursor:pointer}
+.idea:hover{border-color:var(--pine);background:#fff}
+.idea.must{background:rgba(var(--pine-rgb),.14)}
+.id-kids{font-family:var(--font);font-size:13.5px;font-weight:700;border:1.5px dashed #ecd8b0;background:#fbf1de;color:#7a4f12;border-radius:100px;padding:7px 13px;cursor:pointer}
+
+.howto{background:#fff;border-radius:18px;box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10);padding:4px 18px;margin:0 0 16px}
+.howto summary{cursor:pointer;font-size:16px;font-weight:900;color:var(--pine-darker);padding:12px 0;list-style-position:inside}
+.howto summary span{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-inline-start:6px}
+.howto ol{margin:0 0 12px;padding-inline-start:22px;display:grid;gap:8px;font-size:14px;line-height:1.6;color:var(--ink)}
+.howto b{color:var(--pine-darker)}
+.howto-rule{background:var(--sage-tint);border-radius:12px;padding:11px 13px;font-size:14px;line-height:1.65;margin-bottom:10px}
+.howto-more{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin:0 0 14px}
+
 /* results */
 .results{margin-top:18px;border-top:1px dashed rgba(var(--pine-rgb),.20);padding-top:16px}
 .res-main{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;
@@ -375,6 +456,47 @@ body{
   .goals{display:grid;grid-template-columns:repeat(auto-fit,minmax(560px,1fr));gap:16px;align-items:start}
   .cta-card,.actions{max-width:900px;margin-inline:auto}
 }
+
+/* patch8: simpler to the eye */
+.disclaimer.small{background:transparent;border:0;box-shadow:none;font-size:12px;color:var(--ink-soft);justify-content:center;margin:18px 0 0;padding:6px 4px}
+.disclaimer.small .i{font-size:13px}
+.opts{gap:8px;margin:12px 0 18px;justify-content:center}
+.opt{flex:0 1 auto;font-size:13px;padding:7px 13px;border-radius:100px;box-shadow:none;text-align:center}
+.id-more{font-family:var(--font);font-size:13px;font-weight:800;border:0;background:transparent;color:var(--pine);padding:7px 6px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.ideas h2{margin-bottom:8px}
+.goal-head{gap:8px}
+.goal-head .prio{flex:none}
+.fold,.goal .del{width:30px;padding:0;display:grid;place-items:center}
+.yr-row{justify-content:flex-start;margin:-4px 0 12px}
+.need-q{font-size:12.5px;color:var(--ink-soft);font-weight:600}
+.input-shell.when input[hidden]{display:none}
+.input-shell.when input{min-width:0;width:100%}
+.input-shell.when .uni-wrap{gap:4px;padding-inline-start:4px;padding-inline-end:4px}
+.input-shell.when .uni{font-size:12px;padding-inline:8px}
+.track-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:2px 0 10px;font-size:13px}
+.track-line .tk{font-weight:800;border-radius:100px;padding:3px 10px;background:var(--sage-tint);color:var(--pine-deep)}
+.track-line .tk.fund{background:#e3f0f6;color:#1f4f66}.track-line .tk.near{background:#fbf1de;color:#7a4f12}.track-line .tk.yr{background:#eee7f6;color:#4f3a73}.track-line .tk.far{background:rgba(var(--pine-rgb),.14)}
+.track-line .tk-why{color:var(--ink-soft);font-weight:600}
+.track-line .tk-why.off{color:#7a4f12}
+.more{margin:0 0 12px;border-top:1px dashed rgba(var(--pine-rgb),.18);padding-top:8px}
+.more summary{cursor:pointer;font-size:13.5px;font-weight:800;color:var(--pine);padding:4px 0;list-style-position:inside}
+.more summary span{font-weight:600;color:var(--ink-soft);font-size:12px;margin-inline-start:4px}
+.more[open] summary{margin-bottom:10px}
+.res-line{margin-top:8px;font-size:13.5px;line-height:1.6;color:var(--ink-soft)}
+.res-line:empty{display:none}
+.res-line b{color:var(--pine-darker)}.res-line b.gn{color:var(--pine)}
+.goal.folded .track-line,.goal.folded .tw,.goal.folded .more{display:none}
+.goal.folded .goal-head{margin-bottom:0}
+.goal.folded{padding-block:14px}
+.fold-sum{margin-top:6px;padding-inline-start:4px}
+.tl-when{display:grid;gap:8px;padding:4px clamp(14px,4vw,20px) 14px}
+.wh{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:11px 13px;font-size:14px;box-shadow:0 1px 0 rgba(var(--pine-rgb),.08)}
+.wh span{font-weight:700;color:var(--ink);min-width:0}
+.wh b{flex:none;color:var(--pine-darker);font-size:13.5px}
+.wh.late b{color:#9a4a1c}.wh.yr b{color:#4f3a73;font-weight:700;font-size:12.5px}
+.tl-more{margin-top:12px}
+.tl-more summary{cursor:pointer;font-size:13.5px;font-weight:800;color:var(--pine);padding:8px 0;list-style-position:inside}
+.recap details summary{cursor:pointer;font-size:15px;font-weight:900;color:var(--pine-darker);padding:14px 18px;list-style-position:inside}
 </style>
 <!-- ═══════════════════════════════════════════════════════════════════
      ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
@@ -543,35 +665,60 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     </div>
   </div>
 
-  <div class="disclaimer">
-    <span class="i">⚠️</span>
-    <span>אין כאן המלצה להשקעה או התחייבות לתשואה. תשואות העבר אינן מבטיחות תשואות עתידיות. הכלי להמחשה בלבד.</span>
-  </div>
 
-  <section class="summary">
+  <details class="howto">
+    <summary>📖 איך משתמשים במחשבון? <span>דקה קריאה</span></summary>
+    <ol>
+      <li><b>מוסיפות יעד.</b> לוחצות על אחד מ"רעיונות למטרות", או על "הוסף מטרה" וכותבות לבד.</li>
+      <li><b>ממלאות כמה ומתי.</b> ליעד שחוזר כל שנה, כמו טסט, חגים או חופשה, בוחרות "כל שנה" ולא צריך תאריך.</li>
+      <li><b>מסמנות "הכרחי" או "רוצה".</b> הכרחי הוא מה שאי אפשר בלעדיו, כמו קרן ביטחון או טסט לרכב.</li>
+      <li><b>התשואה נבחרת לבד לפי הטווח.</b> עד 3 שנים: סולידי. 3 עד 6 שנים: כללי. מעל 6 שנים: מנייתי. יעד שנתי וקרן ביטחון: תמיד קרן כספית, כי הכסף צריך להיות זמין. רוצה לשנות? ב"עוד הגדרות".</li>
+      <li><b>ממלאות כמה אפשר להפריש בחודש.</b> לא חובה, אבל ככה רואים תוכנית אמיתית.</li>
+      <li><b>רואות מתי כל יעד מושג.</b> ובלחיצה, כמה הולך לכל יעד בכל חודש.</li>
+    </ol>
+    <div class="howto-rule"><b>איך הכסף מתחלק בין היעדים?</b> קודם מנסים שכל יעד יגיע בזמן, ולכן היעד שהתאריך שלו הכי קרוב מקבל קודם. יש 1,000 ₪ בחודש, קורס בעוד חצי שנה וחופשה בעוד שנה? הקורס מקבל את כל ה-1,000 ₪ עד שהוא מושג, ואחריו החופשה, ושניהם מגיעים בזמן. שניהם בעוד שנה? כל אחד מקבל 500 ₪. ואם אין מספיק כדי שכולם יגיעו בזמן, מה שסימנת "הכרחי" מקבל קודם.</div>
+    <p class="howto-more">עוד שני כפתורים: <b>"יש לי ילדים"</b> מוסיף רעיונות ליעדים לילדים, ו<b>"לחשב במחירים של היום"</b> מגדיל את היעד לפי עליית המחירים. מטרה שכבר מילאת אפשר לקפל לשורה אחת, ו"שמירה ושליחת התוכנית" שומר קישור אישי לחזור אליו.</p>
+  </details>
+
+
+
+  <section class="ideas" id="ideas"></section>
+
+  <div class="fold-all"><button type="button" id="foldAll">לקפל את כל המטרות</button></div>
+  <div class="goals" id="goals"></div>
+
+  <button class="add" id="addBtn">＋ הוסף מטרה</button>
+  <section class="opts" aria-label="הגדרות">
+    <button type="button" class="opt" id="kidsTg" aria-pressed="false">👧 יש לי ילדים</button>
+    <button type="button" class="opt" id="inflTg" aria-pressed="false">📈 במחירים של היום</button>
+  </section>
+
+  <section class="cap">
+    <div class="cap-txt">
+      <div class="h">💪 כמה אני באמת יכולה להפריש בחודש?</div>
+      <div class="s">לא חובה. אם תמלאו, ציר הזמן יראה מתי כל מטרה מושגת.</div>
+    </div>
+    <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" id="capInput" placeholder="לדוגמה 3,000" aria-label="הפרשה חודשית אפשרית"></div>
+  </section>
+
+  <section class="summary" id="sumBox">
     <h2>🎯 התמונה המלאה</h2>
     <div class="sum-grid">
       <div class="sum-cell month"><div class="lbl">סך הפרשה חודשית</div><div class="val" id="sumMonthly">0<small>₪</small></div></div>
       <div class="sum-cell"><div class="lbl">סך היעדים</div><div class="val" id="sumTarget">0<small>₪</small></div></div>
       <div class="sum-cell gain"><div class="lbl">מתוכם הרווח שלכם</div><div class="val" id="sumGain">0<small>₪</small></div></div>
     </div>
-  </section>
-
-  <div class="goals" id="goals"></div>
-
-  <button class="add" id="addBtn">＋ הוסף מטרה</button>
-
-  <section class="cap">
-    <div class="cap-txt">
-      <div class="h">💪 כמה אני באמת יכולה להפריש בחודש?</div>
-      <div class="s">לא חייב למלא. אם תמלאו, ציר הזמן יסדר את המטרות בתור לפי סדר החשיבות שקבעתם - ויראה מתי כל אחת נכנסת.</div>
-    </div>
-    <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" id="capInput" placeholder="לדוגמה 3,000" aria-label="הפרשה חודשית אפשרית"></div>
+    <p class="sum-save" id="sumSave" hidden></p>
   </section>
 
   <section class="tl empty" id="timeline"></section>
 
   <section class="recap" id="recap"></section>
+
+  <div class="disclaimer small">
+    <span class="i">⚠️</span>
+    <span>אין כאן המלצה להשקעה או התחייבות לתשואה. תשואות העבר אינן מבטיחות תשואות עתידיות. הכלי להמחשה בלבד.</span>
+  </div>
 
   <div class="cta-card">
     <div class="cta-emoji">🌱</div>
@@ -618,21 +765,124 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 <script>
 const TRACKS=[
+  {key:'none', name:'בלי השקעה', full:'בצד, בלי השקעה', pct:0},
   {key:'solid', name:'סולידי', full:'סולידי / קרן כספית', pct:2.5},
   {key:'general', name:'כללי', full:'כללי (טווח בינוני)', pct:5},
-  {key:'stock', name:'מנייתי', full:'מנייתי / S&P 500', pct:10},
+  {key:'stock', name:'מנייתי', full:'מנייתי / S&P 500', pct:9},
 ];
+const IDEAS=[
+  {k:'must',t:'קודם כל: מה שאי אפשר בלעדיו',items:[
+    {e:'🛟',n:'קרן ביטחון',nd:'must',dur:1,pct:2.5,ph:'לדוגמה 3 חודשי מחיה'},
+    {e:'🔧',n:'טסט וטיפולים לרכב',nd:'must',yr:1,ph:'לדוגמה 4,000'},
+    {e:'🧾',n:'ביטוחים ואגרות שנתיים',nd:'must',yr:1,ph:'לדוגמה 3,000'}]},
+  {k:'yr',t:'כל שנה מחדש',items:[
+    {e:'🍷',n:'החגים',nd:'must',yr:1,ph:'לדוגמה 3,000'},
+    {e:'💒',n:'חתונות ואירועים',nd:'must',yr:1,ph:'לדוגמה 3,000'},
+    {e:'🏖️',n:'חופשה שנתית',nd:'want',yr:1,ph:'לדוגמה 10,000'},
+    {e:'🎁',n:'ימי הולדת ומתנות',nd:'want',yr:1,ph:'לדוגמה 2,000'}]},
+  {k:'big',t:'מטרות גדולות',items:[
+    {e:'🏠',n:'רכישת נכס',nd:'want',dur:5,ph:'לדוגמה 150,000'},
+    {e:'🚗',n:'שדרוג רכב',nd:'want',dur:3,ph:'לדוגמה 40,000'},
+    {e:'📚',n:'קורס או לימודים',nd:'want',dur:1,ph:'לדוגמה 8,000'},
+    {e:'✈️',n:'חופשה גדולה',nd:'want',dur:2,ph:'לדוגמה 25,000'},
+    {e:'📈',n:'השקעה לטווח ארוך',nd:'want',dur:15,ph:'לדוגמה 200,000'},
+    {e:'🌴',n:'פנסיה מוקדמת',nd:'want',dur:20,ph:'לדוגמה 500,000'}]},
+  {k:'kid',t:'לילדים',items:[
+    {e:'👶',n:'תוספת לחיסכון לכל ילד',nd:'want',dur:18,ph:'לדוגמה 50,000'},
+    {e:'🎉',n:'בר / בת מצווה',nd:'want',dur:10,ph:'לדוגמה 40,000'},
+    {e:'🎓',n:'לימודים לילדים',nd:'want',dur:18,ph:'לדוגמה 60,000'},
+    {e:'🏡',n:'עזרה לילדים בדירה',nd:'want',dur:20,ph:'לדוגמה 150,000'},
+    {e:'💍',n:'עזרה בחתונה של הילדים',nd:'want',dur:20,ph:'לדוגמה 50,000'}]}
+];
+let ideasOpen=false;
+function renderIdeas(){
+  const box=document.getElementById('ideas');if(!box)return;
+  const chip=(it,gi,ii)=>`<button type="button" class="idea ${it.nd==='must'?'must':''}" data-ig="${gi}" data-ii="${ii}">${it.e} ${it.n}</button>`;
+  if(!ideasOpen){
+    const first=IDEAS[0].items.map((it,ii)=>chip(it,0,ii)).join('');
+    box.innerHTML=`<h2>💡 רעיונות למטרות <span>לוחצים, והמטרה נוספת. את הסכום ממלאות לבד.</span></h2><div class="id-list">${first}<button type="button" class="id-more" id="ideasMore">עוד רעיונות ▾</button></div>`;
+    return;
+  }
+  box.innerHTML='<h2>💡 רעיונות למטרות <span>לוחצים, והמטרה נוספת. את הסכום ממלאות לבד.</span></h2>'+IDEAS.map((gr,gi)=>{
+    if(gr.k==='kid'&&!hasKids)return`<div class="id-g"><button type="button" class="id-kids" id="ideasKids">👧 יש לי ילדים: להראות רעיונות לילדים</button></div>`;
+    return`<div class="id-g"><div class="id-t">${gr.t}</div><div class="id-list">${gr.items.map((it,ii)=>chip(it,gi,ii)).join('')}</div></div>`;
+  }).join('')+'<button type="button" class="id-more" id="ideasLess">פחות רעיונות ▴</button>';
+}
+function addIdea(it){
+  const seed={emoji:it.e,name:it.n,need:it.nd,ph:it.ph,yr:!!it.yr};
+  if(it.yr){seed.pct=2.5;}else{seed.dur=it.dur;seed.unit='y';seed.pct=it.pct!=null?it.pct:recPct(it.dur*12);}
+  goals.forEach(g=>{if((+g.target||0)>0)g.fold=true;});
+  ideasOpen=false;renderIdeas();
+  addGoal(seed);
+  const cards=document.querySelectorAll('.goal'),last=cards[cards.length-1];
+  if(last){last.scrollIntoView({behavior:'smooth',block:'start'});const t=last.querySelector('[data-f="target"]');if(t)setTimeout(()=>{try{t.focus({preventScroll:true});}catch(e){}},350);}
+}
+const INFL=0.025;                                   // אינפלציה משוערת, כשבוחרים 'במחירים של היום'
+// המסלול שמתאים לטווח: קצר = סולידי, בינוני = כללי, ארוך = מנייתי
+function recPct(n){return n<36?2.5:(n<=72?5:9);}
+function isFund(g){return /קרן ביטחון|כרית ביטחון/.test(g.name||'');}
+function retName(p){p=+p||0;return p===0?'בלי השקעה':p<=3?'סולידי':p<=6?'כללי':'מנייתי';}
+function recLine(g){
+  if(isFund(g))return +g.pct===2.5?'✓ קרן ביטחון תמיד בקרן כספית: הכסף זמין תוך יום-יומיים, ובלי סיכון':'קרן ביטחון תמיד בקרן כספית, בערך 2.5%. <button type="button" class="ret-use" data-rp="2.5">להשתמש בזה</button>';
+  if(g.yr)return +g.pct===2.5?'✓ ליעד שנתי מתאימה קרן כספית: הכסף זמין, ומקבל ריבית עד שצריך אותו':'ליעד שנתי מתאימה קרן כספית, בערך 2.5%. <button type="button" class="ret-use" data-rp="2.5">להשתמש בזה</button>';
+  const n=months(g);if(!n)return'';const r=recPct(n);if(+g.pct===r)return'✓ מתאים לטווח של המטרה הזאת';return`לטווח של ${durUnitLabel(g)} מתאים בערך ${r}% (${retName(r)}). <button type="button" class="ret-use" data-rp="${r}">להשתמש בזה</button>`;}
+function resLine(c){
+  if(!c.target)return'';
+  if(c.covered)return'✨ מה שיש לך כבר יגדל עד היעד, בלי הפקדה חודשית.';
+  if(c.gain>0)return`השוק מוסיף <b class="gn">${fmt.format(c.gain)} ₪</b>, ולכן את מפרישה <b>${fmt.format(c.saveM)} ₪</b> פחות בחודש`;
+  return'';
+}
+function trackLine(g){
+  const p=+g.pct||0, hz=hzOf(g);
+  let rec=null;
+  if(isFund(g)||g.yr)rec=2.5;else{const n=months(g);if(n)rec=recPct(n);}
+  const fit=rec===null||p===rec;
+  const why=isFund(g)?'קרן ביטחון תמיד נזילה':g.yr?'יעד שנתי':hz?hz.t.split(' · ')[1]:'';
+  return `<span class="tk ${hz?hz.k:''}">${isFund(g)?'💧 ':''}${retName(p)} ${p}%</span>`+
+    (fit?(why?`<span class="tk-why">✓ מתאים: ${why}</span>`:''):`<span class="tk-why off">לטווח הזה מתאים יותר ${retName(rec)} ${rec}% <button type="button" class="ret-use" data-rp="${rec}">להחליף</button></span>`);
+}
+function isProp(g){return !g.yr&&/נכס|דירה/.test(g.name||'');}
+function nperFor(T,init,a,pct){const r=pct/100/12;let b=init;if(b>=T)return 0;for(let k=1;k<=720;k++){b=b*(1+r)+a;if(b>=T-1)return k;}return null;}
+function hzOf(g){if(isFund(g))return{k:'fund',t:'💧 נזיל תמיד · קרן כספית'};if(g.yr)return{k:'yr',t:'שנתי חוזר'};const n=months(g);if(!n)return null;return n<36?{k:'near',t:'יעד קרוב · עד 3 שנים'}:(n<=72?{k:'mid',t:'יעד בינוני · 3 עד 6 שנים'}:{k:'far',t:'יעד רחוק · מעל 6 שנים'});}
+function trackWarn(g){
+  const p=+g.pct||0;
+  if(isFund(g))return p>3?'⚠️ קרן ביטחון צריכה להיות נזילה ובלי סיכון, גם אם התאריך רחוק: היא שם בשביל יום שקורה משהו, לא בשביל תשואה. המקום שלה בקרן כספית.':'';
+  const n=months(g);if(!n)return'';
+  if(p>=7&&n<60)return'⚠️ מסלול מנייתי ליעד של פחות מ-5 שנים: שנה רעה בשוק יכולה לפגוש אותך בדיוק כשצריך את הכסף. ליעד קרוב מתאים יותר סולידי או כללי.';
+  if(p>=4&&n<24)return'⚠️ ליעד של פחות משנתיים, כסף שצריך בטוח עדיף במסלול סולידי או בקרן כספית.';
+  if(p===0&&n>=60)return'💡 ליעד של יותר מ-5 שנים, כסף שלא מושקע מאבד מערכו מול האינפלציה. שווה לבדוק מסלול כללי או מנייתי.';
+  return'';
+}
+// היעד בפועל: פחות מה שמגיע ממקור אחר, ובמחירי העתיד אם ביקשו לחשב אינפלציה
+function effT(g){
+  const base=Math.max(0,(+g.target||0)-(+g.others||0));
+  return inflOn&&!g.yr?Math.round(base*Math.pow(1+INFL,months(g)/12)):base;
+}
 const PRESETS=[
-  {e:'🏠', n:'רכישת נכס'},
-  {e:'🚗', n:'שדרוג רכב'},
-  {e:'🎓', n:'עזרה לילדים בעתיד'},
-  {e:'✈️', n:'חופשה משפחתית גדולה'},
-  {e:'🌴', n:'פנסיה מוקדמת'},
-  {e:'💍', n:'עזרה בחתונה'},
-  {e:'📈', n:'השקעה גדולה'},
+  {e:'🛟', n:'כרית ביטחון', nd:'must'},
+  {e:'🏠', n:'רכישת נכס', nd:'want'},
+  {e:'🚗', n:'שדרוג רכב', nd:'want'},
+  {e:'📚', n:'קורס או לימודים', nd:'want'},
+  {e:'✈️', n:'חופשה גדולה', nd:'want'},
+  {e:'🌴', n:'פנסיה מוקדמת', nd:'want'},
+  {e:'📈', n:'השקעה גדולה', nd:'want'},
+];
+const YR_PRESETS=[
+  {e:'🔧', n:'טסט וטיפולים לרכב', nd:'must'},
+  {e:'🧾', n:'ביטוחים ואגרות שנתיים', nd:'must'},
+  {e:'🍷', n:'החגים', nd:'must'},
+  {e:'🏖️', n:'חופשה שנתית', nd:'want'},
+  {e:'🎁', n:'ימי הולדת ומתנות', nd:'want'},
+];
+const KID_PRESETS=[
+  {e:'👶', n:'תוספת לחיסכון לכל ילד', nd:'want'},
+  {e:'🎉', n:'בר / בת מצווה', nd:'want'},
+  {e:'🎓', n:'לימודים לילדים', nd:'want'},
+  {e:'🏡', n:'עזרה לילדים בדירה', nd:'want'},
+  {e:'💍', n:'עזרה בחתונה', nd:'want'},
 ];
 const fmt=new Intl.NumberFormat('he-IL',{maximumFractionDigits:0});
-let goals=[]; let uid=0; let capacity='';   // capacity = כמה אפשר להפריש בחודש (לא חובה)
+let goals=[]; let uid=0; let capacity=''; let inflOn=false; let hasKids=false;   // capacity = כמה אפשר להפריש בחודש (לא חובה)
 
 function move(i,d){
   const j=i+d;
@@ -641,8 +891,12 @@ function move(i,d){
   render();
 }
 
+function monthlyAt(target,initial,n,pct){
+  if(n<=0)return 0;const r=pct/100/12,growth=Math.pow(1+r,n),fvInit=initial*growth,af=r>0?(growth-1)/r:n;
+  return fvInit>=target?0:Math.round(Math.max(0,(target-fvInit)/af));
+}
 function calc(g){
-  const target=+g.target||0, initial=+g.initial||0, pct=+g.pct||0;
+  const target=effT(g), initial=+g.initial||0, pct=+g.pct||0;
   const n=months(g), r=pct/100/12;
   let monthly=0, reached=true;
   if(n>0){
@@ -655,10 +909,13 @@ function calc(g){
   monthly=Math.round(monthly);              // match the sheet: round then derive
   const oop=Math.min(target, initial+monthly*n); // out of pocket, capped at target
   const gain=Math.max(0, target-oop);
-  return {monthly,oop,gain,target,initial,n,covered:monthly===0&&initial>0&&n>0&&target>0};
+  const m0=monthlyAt(target,initial,n,0);
+  if(!pct)return {monthly,oop:target,gain:0,target,initial,n,m0,saveM:0,covered:false};                 // אותו יעד, בלי שהכסף עובד
+  return {monthly,oop,gain,target,initial,n,m0,saveM:Math.max(0,m0-monthly),covered:monthly===0&&initial>0&&n>0&&target>0};
 }
 
 function render(){
+  const fa=document.getElementById('foldAll');if(fa){fa.parentNode.hidden=goals.length<2;fa.textContent=goals.some(g=>!g.fold)?'לקפל את כל המטרות':'לפתוח את כל המטרות';}
   const box=document.getElementById('goals');
   box.innerHTML='';
   goals.forEach((g,i)=>box.appendChild(card(g,i+1)));
@@ -667,13 +924,13 @@ function render(){
 
 const grp=v=>(v===''||v===null||v===undefined)?'':fmt.format(+v);
 // יחידת הזמן של המטרה: 'y' שנים (ברירת מחדל) או 'm' חודשים -> תמיד מחזיר חודשים
-const months=g=>Math.round(Math.max(0,(+g.dur||0))*(g.unit==='m'?1:12));
-const durUnitLabel=g=>{const v=+g.dur||0; return g.unit==='m'?(v===1?'חודש':v+' חודשים'):(v===1?'שנה':v===2?'שנתיים':v+' שנים');};
+const months=g=>g.yr?12:Math.round(Math.max(0,(+g.dur||0))*(g.unit==='m'?1:12));
+const durUnitLabel=g=>{if(g.yr)return'כל שנה';const v=+g.dur||0; return g.unit==='m'?(v===1?'חודש':v+' חודשים'):(v===1?'שנה':v===2?'שנתיים':v+' שנים');};
 
 function card(g,num){
   const c=calc(g);
   const el=document.createElement('div');
-  el.className='goal';
+  el.className='goal'+(g.fold?' folded':'');
   const oopPct=c.target>0?Math.round(c.oop/c.target*100):100;
   const gnPct=100-oopPct;
   el.innerHTML=`
@@ -685,51 +942,59 @@ function card(g,num){
       <span class="goal-num" title="סדר החשיבות">${num}</span>
       <span class="goal-emoji">${g.emoji}</span>
       <input class="goal-name" value="${esc(g.name)}" placeholder="שם המטרה" data-f="name">
+      <button class="fold" aria-expanded="${g.fold?'false':'true'}" aria-label="${g.fold?'לפתוח את המטרה':'לקפל את המטרה'}">${g.fold?'▾':'▴'}</button>
       <button class="del" title="מחק מטרה">✕</button>
     </div>
-    <div class="chips">${PRESETS.map(p=>`<button class="chip" data-e="${p.e}" data-n="${p.n}">${p.e} ${p.n}</button>`).join('')}</div>
+    <div class="fold-sum"><b>${fmt.format(c.monthly)} ₪</b> בחודש · ${fmt.format(c.target)} ₪ · ${g.yr?'כל שנה':(months(g)?'עד '+whenLabel(months(g)-1):'בלי תאריך')}${g.need==='must'?' <span class="nd-b">הכרחי</span>':''}</div>
+    <div class="yr-row"><span class="need" role="group" aria-label="כמה זה חשוב"><button type="button" data-nd="must" aria-pressed="${g.need==='must'}">הכרחי</button><button type="button" data-nd="want" aria-pressed="${g.need==='want'}">רוצה</button></span><span class="need-q">כמה זה חשוב?</span></div>
     <div class="fields">
-      <div class="field">
-        <label>היעד הכספי</label>
-        <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="target" data-money="1" value="${grp(g.target)}" placeholder="0"></div>
-      </div>
-      <div class="field">
-        <label>סכום התחלתי (יש לי כבר)</label>
-        <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="initial" data-money="1" value="${grp(g.initial)}" placeholder="0"></div>
+      <div class="field full">
+        <label>כמה צריך?</label>
+        <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="target" data-money="1" value="${grp(g.target)}" placeholder="${g.ph||'0'}"></div>
       </div>
       <div class="field full">
-        <label>בעוד כמה זמן?</label>
-        <div class="input-shell"><input type="number" inputmode="numeric" data-f="dur" value="${g.dur}" placeholder="0">
+        <label>מתי?</label>
+        <div class="input-shell when"><input type="number" inputmode="numeric" data-f="dur" value="${g.dur}" placeholder="0" ${g.yr?'hidden':''} aria-label="בעוד כמה זמן">
           <span class="uni-wrap">
-            <button type="button" class="uni ${g.unit==='m'?'':'on'}" data-u="y">שנים</button>
-            <button type="button" class="uni ${g.unit==='m'?'on':''}" data-u="m">חודשים</button>
+            <button type="button" class="uni ${!g.yr&&g.unit!=='m'?'on':''}" data-u="y">שנים</button>
+            <button type="button" class="uni ${!g.yr&&g.unit==='m'?'on':''}" data-u="m">חודשים</button>
+            <button type="button" class="uni ${g.yr?'on':''}" data-u="r">🔁 כל שנה</button>
           </span>
         </div>
       </div>
-      <div class="field full">
-        <label>איך משקיעים? (משנה את התשואה המשוערת)</label>
-        <div class="tracks">
-          ${TRACKS.map(t=>`<div class="track ${g.pct===t.pct?'on':''}" data-pct="${t.pct}"><div class="t-name">${t.name}</div><div class="t-pct">${t.pct}% בשנה</div></div>`).join('')}
+    </div>
+    <div class="track-line">${trackLine(g)}</div>
+    <div class="tw ${trackWarn(g)?'show':''}">${trackWarn(g)}</div>
+    <details class="more" ${g.more?'open':''}>
+      <summary>עוד הגדרות <span>יש לי כבר · עזרה ממקור אחר · לשנות תשואה</span></summary>
+      <div class="fields">
+        <div class="field">
+          <label>יש לי כבר</label>
+          <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="initial" data-money="1" value="${grp(g.initial)}" placeholder="0"></div>
+        </div>
+        <div class="field">
+          <label>יגיע ממקור אחר</label>
+          <div class="input-shell"><span class="unit">₪</span><input type="text" inputmode="numeric" data-f="others" data-money="1" value="${grp(g.others)}" placeholder="0" aria-label="חלק שמגיע ממקור אחר, כמו מענק, בונוס או עזרה מההורים"></div>
+        </div>
+        <div class="field full">
+          <label for="ret-${g.id}">תשואה בשנה</label>
+          <div class="ret">
+            <input type="range" id="ret-${g.id}" min="0" max="10" step="0.5" value="${+g.pct||0}" data-ret="1" aria-valuetext="${+g.pct||0}% בשנה, ${retName(g.pct)}">
+            <div class="ret-out"><b class="rp">${+g.pct||0}%</b><span class="rn">${retName(g.pct)}</span></div>
+          </div>
+          <div class="ret-scale" aria-hidden="true"><span>0 בצד</span><span>2-3 סולידי</span><span>4-6 כללי</span><span>7-10 מנייתי</span></div>
         </div>
       </div>
-    </div>
+    </details>
     <div class="results">
       <div class="res-main">
-        <span class="rl">💰 כמה להפריש כל חודש</span>
+        <span class="rl">💰 להפריש כל חודש</span>
         <span class="rv">${fmt.format(c.monthly)}<small> ₪</small></span>
       </div>
-      <div class="res-sub">
-        <div class="res-box"><div class="l">כסף שיצא לי מהכיס</div><div class="v">${fmt.format(c.oop)} ₪</div></div>
-        <div class="res-box gain"><div class="l">🎊 הרווח מהשוק</div><div class="v">${fmt.format(c.gain)} ₪</div></div>
-      </div>
-      <div class="bar-wrap">
-        <div class="bar"><div class="seg oop" style="width:${oopPct}%"></div><div class="seg gn" style="width:${gnPct}%"></div></div>
-        <div class="bar-key">
-          <span><i class="dot oop"></i> הכסף שלי (${oopPct}%)</span>
-          <span><i class="dot gn"></i> הרווח מהשוק (${gnPct}%)</span>
-        </div>
-      </div>
-      <div class="note ${c.covered?'show':''}">✨ הסכום ההתחלתי לבדו כבר צומח מעבר ליעד בטווח הזה - לא צריך הפקדה חודשית.</div>
+      <div class="res-line">${resLine(c)}</div>
+      <div class="infl-note ${inflOn&&!g.yr&&c.target>0?'show':''}">במחירי העתיד היעד הוא <b>${fmt.format(c.target)} ₪</b>, כי מחירים עולים בכ-2.5% בשנה.</div>
+      ${isProp(g)?`<div class="step"><b>🏠 לא חייבים לחסוך חצי מיליון.</b> אפשר להתחיל במדרגה: דירה קטנה יותר באזור זול, שמשכירים, ומשם מתקדמים. בדירה יחידה הבנק מממן עד 75%, כך ש-150,000 ₪ הון עצמי יכולים להספיק לדירה של עד כ-600,000 ₪, פחות עורך דין, תיווך ושמאי. את המספרים בודקים מול יועץ משכנתאות.
+        ${g.fullT?`<button type="button" class="step-btn" data-step="back">לחזור ליעד המלא (${fmt.format(g.fullT)} ₪)</button>`:((+g.target||0)>150000?`<button type="button" class="step-btn" data-step="go">לחשב מדרגה ראשונה של 150,000 ₪</button>`:'')}</div>`:''}
     </div>`;
 
   // events
@@ -749,14 +1014,27 @@ function card(g,num){
     });
   });
   el.querySelectorAll('.chip').forEach(ch=>{
-    ch.onclick=()=>{g.emoji=ch.dataset.e; g.name=ch.dataset.n; render();};
+    ch.onclick=()=>{g.emoji=ch.dataset.e; g.name=ch.dataset.n; g.need=ch.dataset.nd||g.need; if(/כרית/.test(g.name))g.pct=2.5; if(ch.dataset.yr){g.yr=true;g.pct=2.5;} render();};
   });
+  el.querySelector('.fold').onclick=()=>{g.fold=!g.fold;render();};
+  el.querySelector('.fold-sum').onclick=()=>{g.fold=false;render();};
+  el.querySelectorAll('[data-nd]').forEach(b=>{if(b.classList.contains('chip'))return;b.onclick=()=>{g.need=(g.need===b.dataset.nd?'':b.dataset.nd);render();};});
+  const rg=el.querySelector('[data-ret]');
+  rg.addEventListener('input',()=>{g.pct=+rg.value;el.querySelector('.rp').textContent=g.pct+'%';el.querySelector('.rn').textContent=retName(g.pct);rg.setAttribute('aria-valuetext',g.pct+'% בשנה, '+retName(g.pct));softUpdate(g,el);});
+  el.addEventListener('click',e=>{
+    const u=e.target.closest('.ret-use');if(u){g.pct=+u.dataset.rp;render();return;}
+    const st=e.target.closest('[data-step]');if(st){if(st.dataset.step==='go'){g.fullT=+g.target;g.target=150000;}else{g.target=g.fullT;g.fullT=null;}render();}
+  });
+  const mo=el.querySelector('.more');mo.addEventListener('toggle',()=>{g.more=mo.open;});
   el.querySelectorAll('.track').forEach(t=>{
     t.onclick=()=>{g.pct=+t.dataset.pct; render();};
   });
   el.querySelectorAll('.uni').forEach(u=>{
     u.onclick=()=>{
-      const to=u.dataset.u, from=(g.unit==='m'?'m':'y');
+      const to=u.dataset.u;
+      if(to==='r'){g.yr=true;g.pct=2.5;render();return;}
+      if(g.yr){g.yr=false;g.unit=to;if(isFund(g))g.pct=2.5;else{const n=months(g);if(n)g.pct=recPct(n);}render();return;}
+      const from=(g.unit==='m'?'m':'y');
       if(to!==from){
         const v=+g.dur||0;
         // המספר עצמו מתורגם, כדי שהתאריך של המטרה לא יזוז: 0.5 שנים -> 6 חודשים
@@ -772,23 +1050,19 @@ function card(g,num){
 // update numbers without re-rendering (keeps focus while typing)
 function softUpdate(g,el){
   const c=calc(g);
-  const oopPct=c.target>0?Math.round(c.oop/c.target*100):100, gnPct=100-oopPct;
   el.querySelector('.res-main .rv').innerHTML=`${fmt.format(c.monthly)}<small> ₪</small>`;
-  const boxes=el.querySelectorAll('.res-box .v');
-  boxes[0].textContent=`${fmt.format(c.oop)} ₪`;
-  boxes[1].textContent=`${fmt.format(c.gain)} ₪`;
-  el.querySelector('.seg.oop').style.width=oopPct+'%';
-  el.querySelector('.seg.gn').style.width=gnPct+'%';
-  const key=el.querySelectorAll('.bar-key span');
-  key[0].innerHTML=`<i class="dot oop"></i> הכסף שלי (${oopPct}%)`;
-  key[1].innerHTML=`<i class="dot gn"></i> הרווח מהשוק (${gnPct}%)`;
-  el.querySelector('.note').classList.toggle('show',c.covered);
+  el.querySelector('.res-line').innerHTML=resLine(c);
+  const inn=el.querySelector('.infl-note');inn.classList.toggle('show',inflOn&&!g.yr&&c.target>0);inn.querySelector('b').textContent=fmt.format(c.target)+' ₪';
+  const tw=el.querySelector('.tw'),w=trackWarn(g);tw.textContent=w;tw.classList.toggle('show',!!w);
+  el.querySelector('.track-line').innerHTML=trackLine(g);
+  el.querySelector('.fold-sum b').textContent=fmt.format(c.monthly)+' ₪';
   updateSummary();
 }
 
 function updateSummary(){
-  let m=0,t=0,gn=0;
-  goals.forEach(g=>{const c=calc(g);m+=c.monthly;t+=c.target;gn+=c.gain;});
+  let m=0,t=0,gn=0,sv=0;
+  goals.forEach(g=>{const c=calc(g);m+=c.monthly;t+=c.target;gn+=c.gain;sv+=c.saveM;});
+  const se=document.getElementById('sumSave');if(se){se.hidden=!(sv>0);se.innerHTML=`🌱 בזכות זה שהכסף מושקע, את מפרישה <b>${fmt.format(sv)} ₪ פחות בכל חודש</b> ממה שהיה צריך אם הכל היה יושב בצד.`;}
   setNum('sumMonthly',m); setNum('sumTarget',t); setNum('sumGain',gn);
   renderRecap(m,t,gn);
   queueTimeline(m);
@@ -808,22 +1082,21 @@ function renderRecap(m,t,gn){
     const c=calc(g);
     const nm=(g.name||'מטרה '+(i+1));
     return `<tr>
-      <td class="name-col"><span class="rn">${i+1}</span><span class="g-name">${g.emoji} ${esc(nm)}</span></td>
-      <td class="track-col">${trackName(g.pct)}</td>
+      <td class="name-col"><span class="rn">${i+1}</span><span class="g-name">${g.emoji} ${esc(nm)}${g.need==='must'?' <span class="nd-b">הכרחי</span>':''}</span></td>
+      <td class="track-col">${trackName(g.pct)}${hzOf(g)?`<br><span class="hz-tag ${hzOf(g).k}">${hzOf(g).t}</span>`:''}</td>
       <td>${durUnitLabel(g)}</td>
       <td class="m-col">${fmt.format(c.monthly)} ₪</td>
       <td>${fmt.format(c.target)} ₪</td>
       <td class="gn-col">${fmt.format(c.gain)} ₪</td>
     </tr>`;
   }).join('');
-  box.innerHTML=`
-    <h3>📋 סיכום היעדים <span class="rsub">כמה צריך לכל מטרה בנפרד, אם רצים על כולן במקביל</span></h3>
+  box.innerHTML=`<details><summary>📋 טבלה מלאה של היעדים</summary>
     <div class="recap-scroll"><table class="recap-table">
       <thead><tr><th class="name-col">מטרה</th><th>מסלול השקעה</th><th>זמן למטרה</th><th>חיסכון חודשי</th><th>יעד</th><th>רווח</th></tr></thead>
       <tbody>${rows}
         <tr class="tot"><td class="name-col">סה"כ</td><td></td><td></td><td class="m-col">${fmt.format(m)} ₪</td><td>${fmt.format(t)} ₪</td><td class="gn-col">${fmt.format(gn)} ₪</td></tr>
       </tbody>
-    </table></div>`;
+    </table></div></details>`;
 }
 
 /* ==================================================================
@@ -863,7 +1136,7 @@ function needThisMonth(s,t){
 
 // הרצת המפל: list = מטרות לפי סדר חשיבות, B = הפרשה חודשית כוללת
 function simulate(list,B){
-  const st=list.map(g=>({bal:+g.initial||0,r:(+g.pct||0)/100/12,T:+g.target||0,
+  const st=list.map(g=>({bal:+g.initial||0,r:(+g.pct||0)/100/12,T:effT(g),
                          D:months(g),done:false,end:null}));
   st.forEach(s=>{if(s.bal>=s.T-0.5){s.done=true;s.end=0;}});
   const alloc=[];
@@ -933,15 +1206,25 @@ function neededBudget(list,idx,deadline,curB){
 
 function renderTimeline(totalMonthly){
   const box=document.getElementById('timeline');
-  const list=goals.filter(g=>(+g.target||0)>0);
+  const yrs=goals.filter(g=>g.yr&&effT(g)>0);
+  const yrM=yrs.reduce((a,g)=>a+calc(g).monthly,0);         // יעדים שנתיים לא 'נסגרים': הם לוקחים קודם, כל שנה מחדש
+  let list=goals.filter(g=>!g.yr&&effT(g)>0).map((g,i)=>({g,i})).sort((a,b)=>((b.g.need==='must')-(a.g.need==='must'))||((months(a.g)||9999)-(months(b.g)||9999))||(a.i-b.i)).map(x=>x.g);
   if(list.length<1){box.className='tl empty';box.innerHTML='';return;}
-  const idxOf=list.map(g=>goals.indexOf(g));                       // מיפוי חזרה למספור שעל הכרטיסים
+  let idxOf=list.map(g=>goals.indexOf(g));                       // מיפוי חזרה למספור שעל הכרטיסים
 
-  const cap=+capacity||0;
+  const cap=Math.max(0,(+capacity||0)-(capacity?yrM:0));
+  totalMonthly=Math.max(0,totalMonthly-yrM);
   const B=cap>0?cap:totalMonthly;
   if(B<=0){box.className='tl empty';box.innerHTML='';return;}
 
-  const sim=simulate(list,B), per=buildPeriods(sim);
+  // קודם מנסים שכולן יגיעו בזמן: התאריך הקרוב ראשון. אם זה מפיל מטרה הכרחית, ההכרחיות קודמות
+  const byDate=list.map((g,i)=>({g,i})).sort((a,b)=>((months(a.g)||9999)-(months(b.g)||9999))||(goals.indexOf(a.g)-goals.indexOf(b.g))).map(x=>x.g);
+  const sD=simulate(byDate,B);
+  const mustOk=byDate.every((g,i)=>g.need!=='must'||!months(g)||(sD.st[i].end!==null&&sD.st[i].end<=months(g)+1));
+  let sim;
+  if(mustOk){list=byDate;sim=sD;}else{sim=simulate(list,B);}
+  idxOf=list.map(g=>goals.indexOf(g));
+  const per=buildPeriods(sim);
   const short=cap>0&&totalMonthly>cap;
 
   let html='';
@@ -978,7 +1261,7 @@ function renderTimeline(totalMonthly){
         const who=fin.map(nmOf).join(' ו');
         const to=got.length?got.map(nmOf).join(' ו'):null;
         html+=`<div class="rel"><span class="rel-icon">🔓</span><div class="rel-box">
-          <b>${whenLabel(fm-1)} (חודש ${fm}) · ${who} הושגה!</b> ${fmt.format(fin.reduce((a,i)=>a+(+list[i].target||0),0))} ₪ בחשבון.
+          <b>${whenLabel(fm-1)} (חודש ${fm}) · ${who} הושגה!</b> ${fmt.format(fin.reduce((a,i)=>a+effT(list[i]),0))} ₪ בחשבון.
           ${to?`ההפרשה של ${fmt.format(Math.round(freed))} ₪ שהתפנתה עוברת עכשיו ל${to} - בלי להוסיף שקל מהכיס.`
               :`ההפרשה של ${fmt.format(Math.round(freed))} ₪ מתפנה לכם.`}
         </div></div>`;
@@ -1000,12 +1283,12 @@ function renderTimeline(totalMonthly){
     const s=sim.st[i];
     const nm=`${g.emoji} ${esc(gname(g,idxOf[i]))}`;
     if(s.end===null)                                                // לא נסגרת בכלל באופק הזה
-      return `<div class="gap-row late"><span class="gi">⛔</span><div><b>${nm}</b> - בהפרשה של ${fmt.format(B)} ₪ בחודש המטרה הזאת לא נסגרת בכלל, כי המטרות שמעליה בסדר החשיבות לוקחות את כל הכסף. צריך להעלות אותה בסדר החשיבות, להגדיל את ההפרשה, או להקטין את היעד.</div></div>`;
+      return `<div class="gap-row late"><span class="gi">⛔</span><div><b>${nm}</b> - בהפרשה של ${fmt.format(B)} ₪ בחודש המטרה הזאת לא נסגרת בכלל, כי המטרות שמעליה בסדר החשיבות לוקחות את כל הכסף. אפשר לסמן אותה "הכרחי", להגדיל את ההפרשה, או להקטין את היעד.</div></div>`;
     if(!D)return'';
     const d=s.end-D;
     if(d>1){
       const need=neededBudget(list,i,D,B);
-      const fix=need?` כדי לעמוד בזה צריך להפריש בערך <b>${fmt.format(need)} ₪ בחודש</b> במקום ${fmt.format(B)} ₪ - או להעלות את המטרה בסדר החשיבות.`:' גם הפרשה גבוהה בהרבה לא תספיק כאן - שווה לבדוק מחדש את היעד או את התאריך.';
+      const fix=need?` כדי לעמוד בזה צריך להפריש בערך <b>${fmt.format(need)} ₪ בחודש</b> במקום ${fmt.format(B)} ₪ - או לסמן אותה "הכרחי".`:' גם הפרשה גבוהה בהרבה לא תספיק כאן - שווה לבדוק מחדש את היעד או את התאריך.';
       return `<div class="gap-row late"><span class="gi">⚠️</span><div><b>${nm}</b> - רצית בעוד ${durLabel(D)}, ובתור הזה זה לוקח ${durLabel(s.end)}.${fix}</div></div>`;
     }
     if(d<-1) return `<div class="gap-row early"><span class="gi">🎉</span><div><b>${nm}</b> - מגיעה <b>${durLabel(-d)}</b> מוקדם יותר ממה שתכננת, בזכות סדר החשיבות.</div></div>`;
@@ -1019,22 +1302,35 @@ function renderTimeline(totalMonthly){
         : `לפי ${fmt.format(cap)} ₪ בחודש. כל מטרה מקבלת קודם את מה שהיא צריכה כדי לעמוד בתאריך שלה (סה"כ ${fmt.format(totalMonthly)} ₪), וכל העודף נדחף למטרה הכי חשובה כדי לסגור אותה מוקדם. ברגע שמטרה נסגרת, ההפרשה שלה עוברת הלאה בתור.`)
     : `לפי סך ההפרשה שחישבנו למעלה - ${fmt.format(totalMonthly)} ₪ בחודש. ברגע שמטרה נסגרת, ההפרשה שלה לא נעלמת: היא עוברת אוטומטית למטרה הבאה בסדר החשיבות ומקדימה אותה. רוצים לראות מה קורה בסכום אחר? מלאו אותו למעלה.`;
 
+  // השורה התחתונה: מתי כל מטרה מושגת
+  const order=list.map((g,i)=>i).sort((a,b)=>((sim.st[a].end??1e9)-(sim.st[b].end??1e9)));
+  const when=order.map(i=>{
+    const g=list[i],s=sim.st[i],D=months(g),nm=`${g.emoji} ${esc(gname(g,idxOf[i]))}`;
+    if(s.end===null)return`<div class="wh late"><span>${nm}</span><b>⛔ לא נסגרת</b></div>`;
+    const late=D&&s.end-D>1;
+    return`<div class="wh ${late?'late':''}"><span>${nm}</span><b>${late?'⚠️':'✓'} ${whenLabel(s.end-1)}</b></div>`;
+  }).join('')+yrs.map(g=>`<div class="wh yr"><span>${g.emoji} ${esc(g.name||'יעד שנתי')}</span><b>🔁 ${fmt.format(calc(g).monthly)} ₪ בחודש, כל שנה</b></div>`).join('');
+  const capTxt=cap>0?`לפי ${fmt.format(+capacity)} ₪ בחודש${yrM>0?`, מתוכם ${fmt.format(yrM)} ₪ ליעדים השנתיים`:''}.`:`לפי ${fmt.format(totalMonthly+yrM)} ₪ בחודש, הסכום שחישבנו למעלה.`;
+  const finIdx=html.indexOf('<div class="tl-final">');
+  const steps=finIdx>=0?html.slice(0,finIdx):html, tail=finIdx>=0?html.slice(finIdx):'';
   box.className='tl';
   box.innerHTML=`<div class="tl-head">
-      <h3>🗓️ ציר הזמן - מה קורה בכל חודש</h3>
-      <p>${sub}</p>
-    </div><div class="tl-body">${html}</div>`;
+      <h3>🗓️ מתי כל מטרה מושגת</h3>
+      <p>${capTxt}</p>
+    </div><div class="tl-when">${when}</div><div class="tl-body">${tail}
+    <details class="tl-more"><summary>פירוט חודש אחרי חודש: כמה הולך לכל מטרה</summary>${steps}</details></div>`;
 }
 
 function esc(s){return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
 function addGoal(seed){
   uid++;
-  goals.push(Object.assign({id:uid,emoji:'🎯',name:'',target:'',initial:'',dur:'',unit:'y',pct:5},seed||{}));
+  goals.push(Object.assign({id:uid,emoji:'🎯',name:'',target:'',initial:'',others:'',dur:'',unit:'y',pct:5,yr:false,need:'',fold:false},seed||{}));
   render();
 }
 
-document.getElementById('addBtn').onclick=()=>addGoal();
+document.getElementById('addBtn').onclick=()=>{goals.forEach(g=>{if((+g.target||0)>0)g.fold=true;});addGoal();};
+document.getElementById('foldAll').onclick=()=>{const any=goals.some(g=>!g.fold);goals.forEach(g=>{g.fold=any;});render();};
 
 // ציר הזמן מחושב אחרי שהקלדה נרגעת, כדי שהמחשבון יישאר חלק בנייד
 let tlTimer=null;
@@ -1057,8 +1353,8 @@ function queueTimeline(m){
 (function(){
   const bar=document.getElementById('stickybar');
   function goRecap(){
-    const r=document.getElementById('recap');
-    if(r && !r.classList.contains('empty')) r.scrollIntoView({behavior:'smooth',block:'start'});
+    const r=document.getElementById('sumBox');
+    if(r) r.scrollIntoView({behavior:'smooth',block:'start'});
   }
   bar.addEventListener('click',goRecap);
   bar.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goRecap();}});
@@ -1068,15 +1364,15 @@ function queueTimeline(m){
 const SKEY='richlife-goals-v1';
 // סדר החשיבות נשמר מעצמו (הוא סדר המערך). התקציב החודשי נשמר לצדו.
 function encodeGoals(gs){
-  const rows=gs.map(g=>[g.emoji,g.name,g.target,g.initial,g.dur,g.pct,g.unit==='m'?'m':'y']);
-  return JSON.stringify(capacity?{c:capacity,g:rows}:rows);
+  const rows=gs.map(g=>[g.emoji,g.name,g.target,g.initial,g.dur,g.pct,g.unit==='m'?'m':'y',g.others||'',g.yr?1:0,g.need==='must'?'m':g.need==='want'?'w':'']);
+  return JSON.stringify((capacity||inflOn||hasKids)?{c:capacity,g:rows,i:inflOn?1:0,k:hasKids?1:0}:rows);
 }
 function decodeGoals(str){
   try{
     let a=JSON.parse(str);
-    if(a&&!Array.isArray(a)&&Array.isArray(a.g)){capacity=+a.c||''; a=a.g;}   // פורמט חדש
+    if(a&&!Array.isArray(a)&&Array.isArray(a.g)){capacity=+a.c||''; inflOn=!!a.i; hasKids=!!a.k; a=a.g;}   // פורמט חדש
     if(!Array.isArray(a)) return null;                                        // קישורים ישנים ממשיכים לעבוד
-    return a.map(x=>({id:++uid,emoji:x[0]||'🎯',name:x[1]||'',target:x[2]??'',initial:x[3]??'',dur:x[4]??'',pct:(x[5]??5),unit:(x[6]==='m'?'m':'y')}));
+    return a.map(x=>({id:++uid,emoji:x[0]||'🎯',name:x[1]||'',target:x[2]??'',initial:x[3]??'',dur:x[4]??'',pct:(x[5]===10?9:(x[5]??5)),unit:(x[6]==='m'?'m':'y'),others:x[7]??'',yr:!!x[8],need:x[9]==='m'?'must':x[9]==='w'?'want':''}));
   }catch(e){return null;}
 }
 function saveGoals(){ syncLive(); }  // device memory off; the live link is the saved copy
@@ -1121,7 +1417,7 @@ function refreshShareUI(){var btn=document.getElementById('shareBtn');if(!btn)re
 function flash(el,msg){const o=el.textContent;el.textContent=msg;setTimeout(()=>{el.textContent=o;},1800);}
 
 // ---------- PDF (print) view ----------
-function trackName(pct){const t=TRACKS.find(t=>t.pct===+pct);return t?t.name+' ('+pct+'%)':(pct+'%');}
+function trackName(pct){return retName(pct)+' ('+(+pct||0)+'%)';}
 function buildPrintView(){
   const pv=document.getElementById('printview');
   const avatar=(document.querySelector('.brand .avatar')||{}).src||'';
@@ -1173,19 +1469,33 @@ function buildPrintView(){
 document.querySelectorAll('a.soc[href="#"]').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
 
 // ---------- boot: a personal #g= link restores that plan; the plain URL ALWAYS starts fresh ----------
+(function(){
+  const k=document.getElementById('kidsTg'),i=document.getElementById('inflTg');
+  const sync=()=>{k.setAttribute('aria-pressed',hasKids?'true':'false');i.setAttribute('aria-pressed',inflOn?'true':'false');};
+  k.onclick=()=>{hasKids=!hasKids;sync();renderIdeas();render();};
+  document.getElementById('ideas').addEventListener('click',e=>{
+    if(e.target.closest('#ideasKids')){hasKids=true;sync();renderIdeas();return;}
+    if(e.target.closest('#ideasMore')){ideasOpen=true;renderIdeas();return;}
+    if(e.target.closest('#ideasLess')){ideasOpen=false;renderIdeas();return;}
+    const b=e.target.closest('.idea');if(!b)return;addIdea(IDEAS[+b.dataset.ig].items[+b.dataset.ii]);
+  });
+  renderIdeas();
+  i.onclick=()=>{inflOn=!inflOn;sync();render();};
+  window.__syncOpts=sync;
+})();
 (function boot(){
   try{localStorage.removeItem(SKEY);}catch(e){}                    // no device memory → the plain URL is fresh for everyone (incl. Tali), never shows a previous person's goals
   const h=(location.hash||'').match(/g=([^&]+)/);
   const loaded=h?decodeGoals(decodeURIComponent(h[1])):null;
   if(loaded&&loaded.length){
-    goals=loaded;
+    goals=loaded;if(goals.length>1)goals.forEach(g=>{if((+g.target||0)>0)g.fold=true;});
     if(capacity)document.getElementById('capInput').value=fmt.format(capacity);
-    render();                                     // opened via a personal link → restore exactly that plan (hash stays in the URL, so a refresh keeps it)
+    window.__syncOpts&&window.__syncOpts();renderIdeas();render();                                     // opened via a personal link → restore exactly that plan (hash stays in the URL, so a refresh keeps it)
   }else{
-    addGoal({emoji:'🏠',name:'רכישת נכס (הון ראשוני)',target:280000,initial:110000,dur:5,unit:'y',pct:5}); // plain URL → a clean example to start from
+    addGoal({emoji:'🏠',name:'רכישת נכס (הון ראשוני)',target:280000,initial:110000,dur:5,unit:'y',pct:5,need:'want'}); // plain URL → a clean example to start from
   }
 })();
-(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);refreshShareUI();if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){const loaded=decodeGoals(t);if(loaded&&loaded.length){goals=loaded;docId=hp[1];if(capacity)document.getElementById('capInput').value=fmt.format(capacity);render();refreshShareUI();}}).catch(function(){});})();
+(function(){var hp=(location.hash||'').match(/p=([0-9A-Za-z]{4,16})/);refreshShareUI();if(!hp)return;fetch(SHARE_API+'/?id='+encodeURIComponent(hp[1])).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){const loaded=decodeGoals(t);if(loaded&&loaded.length){goals=loaded;if(goals.length>1)goals.forEach(function(g){if((+g.target||0)>0)g.fold=true;});docId=hp[1];if(capacity)document.getElementById('capInput').value=fmt.format(capacity);render();refreshShareUI();}}).catch(function(){});})();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="service1one1"]').forEach(function(a){a.addEventListener('click',function(){try{fbq('track','Lead',{content_name:'מחשבון יעדים',content_category:'RichLife כלים'});}catch(e){}});});});</script>
 <footer class="rl-legal-footer" style="max-width:900px;margin:34px auto 0;padding:16px 18px 26px;text-align:center;font-size:12.5px;line-height:1.75;opacity:.72"><div class="footer-legal" style="font-size:12.5px;line-height:1.75;opacity:.78">טלי בנימינוב שרעבי · עוסק מורשה 207381062<br>שדרות נים 2, ראשון לציון · <a href="mailto:tali.bi.finance@gmail.com">tali.bi.finance@gmail.com</a><br><button type="button" class="rl-consent-reopen" hidden>הגדרות עוגיות</button></div></footer>

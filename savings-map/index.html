@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>מפת החיסכון · RichLife</title>
+<title>הכסף שמחכה לך · RichLife</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
 :root{
   --pine:#5f7d6a; --pine-rgb:95,125,106; --pine-deep:#3e5448; --pine-darker:#2f4036;
   --sage:#bcd3bf; --sage-rgb:188,211,191; --paper:#e9f1f2; --sage-tint:#eef4ef;
-  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f; --go:#2f9169;
+  --ink:#1e2b25; --ink-soft:#51625a; --red:#c1553f; --red-rgb:193,85,63; --amber:#b7791f;
   --font:'Heebo',system-ui,Arial,sans-serif;
   --card:#fff; --shadow:0 10px 30px rgba(var(--pine-rgb),.10); --shadow-hi:0 18px 44px rgba(var(--pine-rgb),.22);
 }
@@ -29,20 +29,16 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .hero-title h1{font-size:clamp(24px,5.5vw,34px);font-weight:900;color:var(--pine-darker);line-height:1.15}
 .hero-title h1 .em{color:var(--pine)}
 .hero-title p{font-size:clamp(13.5px,2.6vw,15.5px);font-weight:600;color:var(--ink-soft);margin-top:9px;max-width:560px;margin-inline:auto}
-.top-cta{display:flex;align-items:center;justify-content:center;gap:6px 10px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(var(--pine-rgb),.15),rgba(var(--sage-rgb),.34));border:1.5px solid rgba(var(--pine-rgb),.38);border-radius:14px;padding:12px 16px;text-decoration:none;margin-bottom:16px;transition:border-color .15s,transform .15s,box-shadow .15s}
-.top-cta:hover{border-color:var(--pine);transform:translateY(-1px);box-shadow:0 8px 20px rgba(var(--pine-rgb),.16)}
-.top-cta .tc-txt{font-size:13px;font-weight:800;color:var(--pine-deep);text-align:center}
-.top-cta .tc-link{font-size:13px;font-weight:900;color:var(--pine-darker);white-space:nowrap}
 .card{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,24px);box-shadow:var(--shadow);border:1px solid rgba(var(--pine-rgb),.10)}
 .card+.card{margin-top:16px}
 .sec-lbl{font-size:13px;font-weight:900;color:var(--pine);background:var(--sage-tint);display:inline-block;padding:5px 13px;border-radius:100px;margin-bottom:14px}
+.field{margin-top:12px}
+.field:first-child{margin-top:0}
 .field label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
 .input-shell{position:relative;display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;transition:border-color .18s,box-shadow .18s}
 .input-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.16)}
 .input-shell .unit{padding-inline-start:13px;color:var(--ink-soft);font-weight:700;font-size:15px;flex:none}
 .input-shell input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:17px;color:var(--ink);padding:12px 10px 12px 13px;outline:none;text-align:right;font-variant-numeric:tabular-nums}
-
-/* ── summary ── */
 .sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
 @media(max-width:560px){.sum-grid{grid-template-columns:repeat(2,1fr)}}
 .tile{background:var(--sage-tint);border-radius:14px;padding:12px 12px 11px;text-align:center}
@@ -55,121 +51,9 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .bar{height:10px;background:var(--sage-tint);border-radius:100px;overflow:hidden;margin-top:14px}
 .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px;transition:width .35s}
 .bar>i.over{background:linear-gradient(90deg,#d98a75,var(--red))}
-.bar-note{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:6px}
 .insight{margin-top:13px;background:var(--sage-tint);border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.55}
 .insight.warn{background:rgba(var(--red-rgb),.09);color:var(--red)}
 .insight.soft{background:rgba(183,121,31,.10);color:var(--amber)}
-.reserve-note{margin-top:13px;display:flex;align-items:center;gap:9px;background:rgba(183,121,31,.09);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:700;color:var(--amber);line-height:1.5}
-.reserve-note b{font-variant-numeric:tabular-nums}
-.ess-line{margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--sage-tint);border-radius:12px;padding:10px 14px}
-.ess-line .el-txt{font-size:13px;font-weight:800;color:var(--pine-darker)}
-.ess-line .el-txt b{font-variant-numeric:tabular-nums;color:var(--pine-deep)}
-.ess-line .el-cta{border:0;background:var(--pine);color:#fff;font-family:var(--font);font-weight:800;font-size:12px;border-radius:100px;padding:7px 14px;cursor:pointer;white-space:nowrap}
-.ess-line .el-cta.on{background:var(--pine-deep)}
-
-/* ── priority filter bar ── */
-.filter-bar{display:flex;align-items:center;gap:9px;margin:18px 2px 2px;flex-wrap:wrap}
-.filter-bar .filter-lbl{font-size:12px;font-weight:800;color:var(--ink-soft)}
-.filter-btn{border:1.5px solid rgba(var(--pine-rgb),.22);background:#fff;font-family:var(--font);font-weight:800;font-size:12.5px;color:var(--ink-soft);border-radius:100px;padding:7px 15px;cursor:pointer;transition:all .15s}
-.filter-btn.on{background:var(--pine);border-color:var(--pine);color:#fff}
-.room.pr-empty{display:none}
-/* tier composition line (essLine) - how the budget splits by priority */
-.tier-sum{margin-top:13px;display:flex;flex-wrap:wrap;gap:8px}
-.tier-sum .ts-chip{flex:1 1 auto;min-width:118px;background:var(--sage-tint);border:1.5px solid transparent;border-radius:12px;padding:9px 12px;text-align:center;transition:border-color .15s}
-.tier-sum .ts-chip.on{border-color:var(--pine);background:#fff;box-shadow:0 3px 10px rgba(var(--pine-rgb),.12)}
-.tier-sum .ts-lbl{font-size:11px;font-weight:800;color:var(--ink-soft);display:block}
-.tier-sum .ts-val{font-size:15px;font-weight:900;color:var(--pine-darker);font-variant-numeric:tabular-nums;margin-top:1px}
-.filter-note{margin-top:12px;background:rgba(var(--pine-rgb),.08);border-radius:12px;padding:9px 14px;font-size:12.5px;font-weight:800;color:var(--pine-deep);line-height:1.5}
-
-/* ── detailed breakdown ── */
-.bd-room{padding:12px 0;border-top:1px solid rgba(var(--pine-rgb),.10)}
-.bd-room:first-child{border-top:0;padding-top:2px}
-.bd-rhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
-.bd-rname{font-weight:900;font-size:15px;color:var(--pine-darker)}
-/* breakdown colour code (one meaning per colour):
-   .paid = money actually spent  → dark ink, bold
-   .plan / .pend = planned / not-yet-bought → muted grey (calm, not a warning)
-   .left = budget still in your pocket → green ;  .over = over budget → red */
-.bd-rnums{font-size:12.5px;font-weight:700;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
-.bd-rnums .paid{color:var(--red);font-weight:800}
-.bd-rnums .pend{color:var(--ink-soft);font-weight:700}
-.bd-rnums .over{color:var(--red);font-weight:800}
-/* fixed columns so "תוכנן" and "יצא / טרם נקנה" never swap sides: name | תוכנן | סטטוס */
-.bd-item{display:grid;grid-template-columns:minmax(0,1fr) 118px 138px;gap:3px 14px;align-items:baseline;padding:5px 12px;font-size:13px}
-@media(max-width:560px){.bd-item{grid-template-columns:minmax(0,1fr) 92px 104px;gap:2px 8px;font-size:12px}}
-.bd-iname{color:var(--ink);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bd-plan{color:var(--ink-soft);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
-.bd-status{white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
-.bd-status.paid{color:var(--red);font-weight:800}
-.bd-status.paid .ok{color:var(--go);font-weight:900;margin-inline-start:2px}
-.bd-status.pend{color:var(--ink-soft)}
-.bd-empty{font-size:13.5px;color:var(--ink-soft);font-weight:600;padding:6px 2px;line-height:1.55}
-.bd-total{margin-top:14px;padding-top:13px;border-top:2px solid rgba(var(--pine-rgb),.18);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.bd-total .bd-tlbl{font-size:15px;font-weight:900;color:var(--pine-darker)}
-.bd-total .bd-tnums{font-size:13px;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums;text-align:left}
-.bd-total .bd-tnums .paid{color:var(--red);font-weight:900}
-.bd-total .bd-tnums .plan{color:var(--ink-soft);font-weight:600}
-.bd-total .bd-tnums .left{color:var(--go);font-weight:900}
-.bd-total .bd-tnums .over{color:var(--red);font-weight:900}
-
-/* ── rooms ── */
-.room{margin-top:16px}
-.room-head{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
-.room-head .r-emoji{font-size:22px;flex:none}
-.room-head .r-name{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:900;font-size:clamp(15.5px,3.2vw,18px);color:var(--pine-darker);outline:none;padding:2px 0}
-.room-head .r-name:focus{border-bottom:2px solid var(--pine)}
-.room-head .r-sub{flex:none;text-align:left;line-height:1.3}
-.room-head .r-sub .r-count{font-size:11.5px;font-weight:800;color:var(--ink-soft);display:block}
-.room-head .r-sub .r-sums{font-size:12.5px;font-weight:900;color:var(--pine-deep);white-space:nowrap}
-.room-head .chev{flex:none;width:22px;height:22px;border-radius:50%;background:var(--sage-tint);display:flex;align-items:center;justify-content:center;color:var(--pine-deep);font-size:12px;transition:transform .2s}
-.room.closed .chev{transform:rotate(90deg)}
-.room .r-bar{height:6px;background:var(--sage-tint);border-radius:100px;overflow:hidden;margin:9px 0 4px}
-.room .r-bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--pine));border-radius:100px;transition:width .3s}
-.room .r-bar>i.over{background:linear-gradient(90deg,#d98a75,var(--red))}
-.room.closed .items,.room.closed .add-item{display:none}
-
-/* ── item rows ── */
-.items{margin-top:6px}
-.item{border-top:1px solid rgba(var(--pine-rgb),.10);padding:10px 0 11px}
-.item-top{display:flex;align-items:center;gap:8px}
-.item-name{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:700;font-size:14.5px;color:var(--ink);outline:none;padding:3px 0}
-.item-name:focus{border-bottom:1.5px solid var(--pine)}
-.item.have .item-name{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:rgba(var(--pine-rgb),.5)}
-.seg{flex:none;display:flex;background:var(--sage-tint);border-radius:100px;padding:3px;gap:2px}
-.seg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:11.5px;color:var(--ink-soft);padding:5px 10px;border-radius:100px;cursor:pointer;white-space:nowrap}
-.seg button.on{background:#fff;color:var(--pine-deep);box-shadow:0 2px 6px rgba(var(--pine-rgb),.18)}
-.del{flex:none;width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:rgba(var(--pine-rgb),.55);font-size:15px;font-weight:900;cursor:pointer;line-height:1}
-.del:hover{background:rgba(var(--red-rgb),.10);color:var(--red)}
-/* priority selector (per item, only while it's "to buy") */
-.item-pr{display:flex;align-items:center;gap:8px;margin-top:9px}
-.item-pr .pr-lbl{font-size:11px;font-weight:800;color:var(--ink-soft);flex:none}
-.pr-seg{display:flex;background:var(--sage-tint);border-radius:100px;padding:3px;gap:2px}
-.pr-seg button{border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:11.5px;color:var(--ink-soft);padding:5px 11px;border-radius:100px;cursor:pointer;white-space:nowrap}
-.pr-seg button.on[data-pr="hi"]{background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(var(--red-rgb),.28)}
-.pr-seg button.on[data-pr="mid"]{background:var(--pine);color:#fff;box-shadow:0 2px 6px rgba(var(--pine-rgb),.28)}
-.pr-seg button.on[data-pr="lo"]{background:#fff;color:var(--ink-soft);box-shadow:0 2px 6px rgba(var(--pine-rgb),.16)}
-.item-amounts{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-top:8px}
-@media(max-width:480px){.item-amounts{grid-template-columns:1fr 1fr;}.item-amounts .chip{grid-column:1/-1;justify-self:start}}
-.mini-field .m-lbl{font-size:10.5px;font-weight:800;color:var(--ink-soft);margin-bottom:3px}
-.mini-shell{display:flex;align-items:center;background:var(--sage-tint);border:1.5px solid transparent;border-radius:10px}
-.mini-shell:focus-within{border-color:var(--pine);background:#fff;box-shadow:0 0 0 3px rgba(var(--pine-rgb),.14)}
-.mini-shell .unit{padding-inline-start:9px;color:var(--ink-soft);font-weight:700;font-size:12.5px;flex:none}
-.mini-shell input{flex:1;min-width:0;border:0;background:transparent;font-family:var(--font);font-weight:800;font-size:14.5px;color:var(--ink);padding:8px 8px 8px 9px;outline:none;text-align:right;font-variant-numeric:tabular-nums}
-.mini-shell.paid-shell:focus-within{border-color:var(--pine-deep)}
-.chip{font-size:11px;font-weight:900;border-radius:100px;padding:4px 10px;white-space:nowrap}
-.chip.wait{background:var(--sage-tint);color:var(--ink-soft)}
-.chip.done{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep)}
-.chip.save{background:rgba(var(--pine-rgb),.16);color:var(--pine-deep)}
-.chip.over{background:rgba(var(--red-rgb),.12);color:var(--red)}
-.have-note{margin-top:6px;font-size:12px;font-weight:700;color:var(--pine)}
-
-/* ── add buttons ── */
-.add-item{margin-top:10px}
-.add-item button,.add-room{border:1.5px dashed rgba(var(--pine-rgb),.45);background:transparent;color:var(--pine-deep);font-family:var(--font);font-weight:800;font-size:13px;border-radius:100px;padding:8px 16px;cursor:pointer;transition:background .15s}
-.add-item button:hover,.add-room:hover{background:var(--sage-tint)}
-.add-room{display:block;margin:18px auto 0;font-size:14px;padding:11px 22px}
-
-/* ── cta + actions + footer ── */
 .cta-card{margin-top:18px;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 75%);border-radius:20px;padding:clamp(20px,4vw,28px);text-align:center;color:#fff;box-shadow:var(--shadow-hi)}
 .cta-card .cta-emoji{font-size:30px}
 .cta-card h3{font-size:clamp(17px,3.6vw,20px);font-weight:900;margin:6px 0 8px}
@@ -177,11 +61,6 @@ body{font-family:var(--font);background:radial-gradient(1100px 600px at 90% -8%,
 .cta-btn{display:inline-block;font-family:var(--font);font-weight:900;font-size:15px;color:var(--pine-darker);text-decoration:none;background:#fff;padding:15px 24px;border-radius:100px;box-shadow:0 10px 26px rgba(0,0,0,.22);transition:transform .18s}
 .cta-btn:hover{transform:translateY(-2px)}
 .actions{margin-top:18px;text-align:center}
-.act-btn{border:0;background:#fff;color:var(--pine-darker);font-family:var(--font);font-weight:900;font-size:14.5px;border-radius:100px;padding:13px 22px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s}
-.act-btn:hover{transform:translateY(-1px)}
-.act-btn.ghost{background:transparent;box-shadow:none;color:var(--ink-soft);font-weight:800;font-size:13px;margin-inline-start:6px}
-.act-note{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:8px}
-.live-badge{background:rgba(47,145,105,.12);border:1.5px solid rgba(47,145,105,.42);color:var(--go);font-weight:800;font-size:12.5px;border-radius:12px;padding:10px 14px;margin-bottom:13px;line-height:1.5;max-width:460px;margin-inline:auto}
 .act-link{display:flex;gap:8px;max-width:460px;margin:10px auto 0}
 .act-link input{flex:1;min-width:0;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:10px;background:#fff;font-family:var(--font);font-size:12.5px;padding:9px 11px;color:var(--ink-soft);direction:ltr;text-align:left}
 .act-link button{border:0;background:var(--pine);color:#fff;font-family:var(--font);font-weight:800;font-size:13px;border-radius:10px;padding:0 16px;cursor:pointer}
@@ -191,263 +70,372 @@ footer .socials a{color:var(--pine-deep)}
 footer .socials svg{width:20px;height:20px}
 footer .foot-livuy{display:inline-block;color:var(--pine-deep);font-weight:900;text-decoration:none;margin-top:2px}
 footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(var(--pine-rgb),.2);font-size:14px;font-weight:800;color:var(--pine-darker);max-width:520px;margin-inline:auto;line-height:1.6}
-.guide-nav{margin-bottom:18px;text-align:center}
-.gn-title{display:inline-block;font-family:var(--font);font-weight:900;font-size:12px;color:var(--pine);text-decoration:none;margin-bottom:9px}
-.gn-title.gn-static{color:var(--ink-soft);cursor:default}
-.gn-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.gn-tab{font-family:var(--font);font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;background:var(--sage-tint);border:1.5px solid transparent;border-radius:100px;padding:7px 14px;transition:all .15s}
-.gn-tab:hover{border-color:var(--pine)}
-.gn-tab.on{background:var(--pine);color:#fff;border-color:var(--pine)}
-
-/* ===== מחשב: מנצלים את כל המסך (טלי 14.11.26). בטלפון - בדיוק כמו קודם ===== */
-@media screen and (min-width:1100px){
-  .wrap{max-width:1400px}
-  .brand{justify-content:flex-start;margin-bottom:10px}
-  .hero-title{text-align:right;margin-bottom:14px}
-  .hero-title p{margin-inline:0;max-width:900px}
-  .top-cta{justify-content:flex-start}
-  .hint{text-align:right}
-  #areas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start;margin-top:8px}
-  #areas>.card{margin:0!important}
-  .updated{max-width:900px}
-  .cta-card,.actions,footer{max-width:900px;margin-inline:auto}
-}
 </style>
+<!-- ═══ RichLife accessibility widget (brain-a11y) - do NOT alter. Legal requirement (IS 5568). ═══ -->
 <style>
-.pintro{font-size:13.5px;font-weight:600;color:var(--ink-soft);line-height:1.55;margin-bottom:12px}
-.pchips{display:flex;flex-wrap:wrap;gap:9px}
-.pchip{border:1.5px solid rgba(var(--pine-rgb),.28);background:#fff;font-family:var(--font);font-weight:800;font-size:13px;color:var(--ink-soft);border-radius:100px;padding:9px 15px;cursor:pointer;transition:all .15s}
-.pchip:hover{border-color:var(--pine)}
-.pchip.on{background:var(--pine);border-color:var(--pine);color:#fff;box-shadow:0 4px 12px rgba(var(--pine-rgb),.22)}
-.counter{background:linear-gradient(140deg,var(--pine),var(--pine-deep) 82%);text-align:center;border:0}
-.counter .c-lbl{font-size:13.5px;font-weight:800;color:rgba(255,255,255,.9)}
-.counter .c-val{font-size:clamp(32px,8.5vw,48px);font-weight:900;color:#fff;line-height:1.05;margin:6px 0 2px;font-variant-numeric:tabular-nums}
-.counter .c-sub{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.86);max-width:430px;margin:8px auto 0;line-height:1.5}
-.counter .c-pill{display:inline-block;background:rgba(255,255,255,.16);border-radius:100px;padding:5px 13px;font-size:12px;font-weight:800;color:#fff;margin-top:12px}
-.hint{text-align:center;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin:16px 2px 4px}
-.area{padding-top:0;padding-bottom:0}
-.area-head{display:flex;align-items:center;gap:11px;cursor:pointer;user-select:none;padding:clamp(15px,3vw,20px) 2px}
-.area-head .a-emoji{font-size:22px;flex:none}
-.area-head .a-name{flex:1;min-width:0;font-weight:900;font-size:clamp(15.5px,3.2vw,18px);color:var(--pine-darker)}
-.area-head .a-meta{flex:none;text-align:left;line-height:1.2}
-.area-head .a-count{display:block;font-size:11px;font-weight:800;color:var(--ink-soft)}
-.area-head .a-sum{font-size:12.5px;font-weight:900;color:var(--pine-deep);white-space:nowrap;font-variant-numeric:tabular-nums}
-.area-head .chev{flex:none;width:24px;height:24px;border-radius:50%;background:var(--sage-tint);display:flex;align-items:center;justify-content:center;color:var(--pine-deep);font-size:13px;transition:transform .2s}
-.area.closed .chev{transform:rotate(-90deg)}
-.area.closed .area-body{display:none}
-.area-body{padding-bottom:8px}
-.benefit{border-top:1px solid rgba(var(--pine-rgb),.10);padding:13px 0}
-.b-head{display:flex;align-items:flex-start;gap:11px}
-.b-check{flex:none;margin-top:1px;cursor:pointer;position:relative;display:block}
-.b-check input{position:absolute;opacity:0;width:0;height:0}
-.b-box{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:8px;border:2px solid rgba(var(--pine-rgb),.35);background:#fff;color:transparent;font-size:14px;font-weight:900;transition:all .15s}
-.b-check input:checked + .b-box{background:var(--pine);border-color:var(--pine);color:#fff}
-.b-check input:focus-visible + .b-box{outline:3px solid #4F46E5;outline-offset:2px}
-.b-bullet{flex:none;width:24px;text-align:center;color:var(--pine);font-weight:900;font-size:20px;line-height:1;margin-top:1px}
-.b-main{flex:1;min-width:0}
-.b-title{font-weight:800;font-size:15px;color:var(--pine-darker);line-height:1.3}
-.b-save{display:inline-block;background:var(--sage-tint);color:var(--pine-deep);font-weight:900;font-size:12px;border-radius:100px;padding:3px 11px;margin-top:5px;font-variant-numeric:tabular-nums}
-.b-badge{display:inline-block;background:rgba(var(--pine-rgb),.10);color:var(--pine-deep);font-weight:800;font-size:11.5px;border-radius:100px;padding:3px 11px;margin-top:5px}
-.b-how{font-size:13px;font-weight:600;color:var(--ink-soft);line-height:1.6;margin-top:7px}
-.b-link{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:800;color:var(--pine);text-decoration:none}
-.b-link:hover{text-decoration:underline}
-.b-note{margin-top:8px;font-size:12.5px;font-weight:700;border-radius:10px;padding:8px 12px;line-height:1.5}
-.b-note.go{background:rgba(47,145,105,.12);color:var(--go)}
-.b-note.soft{background:rgba(183,121,31,.10);color:var(--amber)}
-.benefit.off{opacity:.5}
-.benefit.off .b-title{text-decoration:line-through;text-decoration-color:rgba(var(--pine-rgb),.4)}
-.updated{max-width:560px;margin:18px auto 0;text-align:center;font-size:12px;font-weight:700;color:var(--ink-soft);background:var(--sage-tint);border-radius:12px;padding:10px 14px;line-height:1.55}
-</style>
-<!-- ═══════════════════════════════════════════════════════════════════
-     ערכת נגישות לדפי נחיתה - קטע הקוד שמדביקים בכל דף
-     מדביקים פעם אחת בתוך <head> של כל דף באתר.
-     אחרי הרצת setup.py השתמשו בקובץ output/a11y-snippet-ready.html
-
-     Zero-impact by default (Eden's directive, page-standard.md):
-     - Regular visitors see ONLY a small round a11y button (bottom-left).
-     - Focus outline appears via :focus-visible - keyboard users only.
-     - Skip-link hidden until keyboard-focused.
-     - All visual adjustments (text size / contrast / links / motion /
-       readable font) apply ONLY when chosen; saved in localStorage.
-     - The menu links to the accessibility statement (legal requirement).
-     ═══════════════════════════════════════════════════════════════════ -->
-<style>
-  /* Keyboard-only focus - mouse users never see this */
-  :focus-visible { outline: 3px solid #4F46E5 !important; outline-offset: 2px !important; border-radius: 4px; }
-  /* Skip link - visible only on keyboard focus */
-  .brain-skip { position: fixed; top: -60px; right: 12px; z-index: 100000; background: #1E1B4B; color: #fff;
-    padding: 10px 18px; border-radius: 10px; font-size: 15px; text-decoration: none; transition: top .15s; }
-  .brain-skip:focus { top: 12px; }
-  /* Opt-in modes */
-  html.a11y-fs1 body { zoom: 1.12; } html.a11y-fs2 body { zoom: 1.25; }
-  html.a11y-contrast { filter: contrast(1.25); }
-  html.a11y-links a { text-decoration: underline !important; font-weight: 700 !important; }
-  html.a11y-nomotion *, html.a11y-nomotion *::before, html.a11y-nomotion *::after {
-    animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  html.a11y-font body, html.a11y-font body * { font-family: Arial, Helvetica, sans-serif !important; }
-  /* The button + menu */
-  #brain-a11y-btn { position: fixed; bottom: 18px; left: 18px; z-index: 99999; width: 44px; height: 44px;
-    border-radius: 50%; border: none; cursor: pointer; background: #1E1B4B; color: #fff;
-    display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(30,27,75,.35); padding: 0; }
-  #brain-a11y-btn:hover { background: #4F46E5; }
-  #brain-a11y-menu { position: fixed; bottom: 72px; left: 18px; z-index: 99999; background: #fff; color: #1E1B4B;
-    border-radius: 14px; box-shadow: 0 6px 30px rgba(30,27,75,.25); padding: 14px; width: 230px; display: none;
-    direction: rtl; text-align: right; font-family: Arial, sans-serif; font-size: 14px; }
-  #brain-a11y-menu.open { display: block; }
-  #brain-a11y-menu h2 { font-size: 15px; margin: 0 0 10px; }
-  #brain-a11y-menu button { display: block; width: 100%; margin: 4px 0; padding: 8px 10px; border-radius: 8px;
-    border: 1px solid #E0E7FF; background: #F8FAFC; cursor: pointer; font-size: 13px; text-align: right; color: #1E1B4B; }
-  #brain-a11y-menu button[aria-pressed="true"] { background: #4F46E5; color: #fff; border-color: #4F46E5; }
-  #brain-a11y-menu a { display: block; margin-top: 10px; font-size: 12px; color: #4F46E5; }
-  /* polish: text fields show their OWN green focus ring (keeps ₪ / שנים visible), not the indigo box */
-  .input-shell input:focus, .input-shell input:focus-visible,
-  .mini-shell input:focus, .mini-shell input:focus-visible,
-  .item-name:focus, .item-name:focus-visible,
-  .r-name:focus, .r-name:focus-visible,
-  .goal-name:focus, .goal-name:focus-visible,
-  .act-link input:focus, .act-link input:focus-visible,
-  #linkField:focus, #linkField:focus-visible { outline: none !important; }
+  :focus-visible{outline:3px solid #4F46E5!important;outline-offset:2px!important;border-radius:4px}
+  .brain-skip{position:fixed;top:-60px;right:12px;z-index:100000;background:#1E1B4B;color:#fff;padding:10px 18px;border-radius:10px;font-size:15px;text-decoration:none;transition:top .15s}
+  .brain-skip:focus{top:12px}
+  html.a11y-fs1 body{zoom:1.12}html.a11y-fs2 body{zoom:1.25}
+  html.a11y-contrast{filter:contrast(1.25)}
+  html.a11y-links a{text-decoration:underline!important;font-weight:700!important}
+  html.a11y-nomotion *,html.a11y-nomotion *::before,html.a11y-nomotion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  html.a11y-font body,html.a11y-font body *{font-family:Arial,Helvetica,sans-serif!important}
+  #brain-a11y-btn{position:fixed;bottom:18px;left:18px;z-index:99999;width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;background:#1E1B4B;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(30,27,75,.35);padding:0}
+  #brain-a11y-btn:hover{background:#4F46E5}
+  #brain-a11y-menu{position:fixed;bottom:72px;left:18px;z-index:99999;background:#fff;color:#1E1B4B;border-radius:14px;box-shadow:0 6px 30px rgba(30,27,75,.25);padding:14px;width:230px;display:none;direction:rtl;text-align:right;font-family:Arial,sans-serif;font-size:14px}
+  #brain-a11y-menu.open{display:block}
+  #brain-a11y-menu h2{font-size:15px;margin:0 0 10px}
+  #brain-a11y-menu button{display:block;width:100%;margin:4px 0;padding:8px 10px;border-radius:8px;border:1px solid #E0E7FF;background:#F8FAFC;cursor:pointer;font-size:13px;text-align:right;color:#1E1B4B}
+  #brain-a11y-menu button[aria-pressed="true"]{background:#4F46E5;color:#fff;border-color:#4F46E5}
+  #brain-a11y-menu a{display:block;margin-top:10px;font-size:12px;color:#4F46E5}
+  /* text inputs keep their OWN green focus ring (unit stays visible), not the indigo box */
+  .input-shell input:focus,.input-shell input:focus-visible,.act-link input:focus,.act-link input:focus-visible{outline:none!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
 </style>
 <script>
-(function () {
-  var MODES = [
-    ["fs", "הגדלת טקסט", 2],            // cycles: off → fs1 → fs2
-    ["contrast", "ניגודיות מוגברת", 1],
-    ["links", "הדגשת קישורים", 1],
-    ["nomotion", "עצירת אנימציות", 1],
-    ["font", "גופן קריא", 1]
-  ];
-  var KEY = "brain_a11y";
-
-  function state() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
-  function apply(s) {
-    var h = document.documentElement;
-    h.classList.toggle("a11y-fs1", s.fs === 1); h.classList.toggle("a11y-fs2", s.fs === 2);
-    ["contrast", "links", "nomotion", "font"].forEach(function (m) { h.classList.toggle("a11y-" + m, !!s[m]); });
+(function(){
+  var MODES=[["fs","הגדלת טקסט",2],["contrast","ניגודיות מוגברת",1],["links","הדגשת קישורים",1],["nomotion","עצירת אנימציות",1],["font","גופן קריא",1]];
+  var KEY="brain_a11y",STMT="https://talibifinance-del.github.io/richlife-lida/negishut.html";
+  function state(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}}}
+  function apply(s){var h=document.documentElement;h.classList.toggle("a11y-fs1",s.fs===1);h.classList.toggle("a11y-fs2",s.fs===2);["contrast","links","nomotion","font"].forEach(function(m){h.classList.toggle("a11y-"+m,!!s[m])})}
+  function build(){
+    if(document.getElementById("brain-a11y-btn"))return;
+    var m=document.querySelector("main")||document.querySelector("h1");if(m)m.id=m.id||"brain-main";
+    var skip=document.createElement("a");skip.className="brain-skip";skip.href="#"+((document.querySelector("main,h1")||{}).id||"brain-main");skip.textContent="דילוג לתוכן";document.body.prepend(skip);
+    var btn=document.createElement("button");btn.id="brain-a11y-btn";btn.setAttribute("aria-label","פתיחת תפריט נגישות");btn.setAttribute("aria-expanded","false");btn.setAttribute("aria-controls","brain-a11y-menu");
+    btn.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="4.5" r="2.2" fill="currentColor"/><path d="M12 8c-3 0-5.5-.6-7-1l.5 2c1.5.5 3.5.8 5 .9v3.1l-2.3 6.2 1.9.8 2-5.5h-.2 2.2l2 5.5 1.9-.8L15.5 13V9.9c1.5-.1 3.5-.4 5-.9l.5-2c-1.5.4-4 1-7 1h-2z" fill="currentColor"/></svg>';
+    var menu=document.createElement("div");menu.id="brain-a11y-menu";menu.setAttribute("role","dialog");menu.setAttribute("aria-label","אפשרויות נגישות");menu.innerHTML="<h2>נגישות</h2>";
+    MODES.forEach(function(mode){var b=document.createElement("button");b.textContent=mode[1];b.dataset.mode=mode[0];b.setAttribute("aria-pressed","false");b.onclick=function(){var s=state();if(mode[0]==="fs"){s.fs=((s.fs||0)+1)%3;b.setAttribute("aria-pressed",s.fs?"true":"false")}else{s[mode[0]]=!s[mode[0]];b.setAttribute("aria-pressed",s[mode[0]]?"true":"false")}localStorage.setItem(KEY,JSON.stringify(s));apply(s)};menu.appendChild(b)});
+    var reset=document.createElement("button");reset.textContent="איפוס";reset.onclick=function(){localStorage.removeItem(KEY);apply({});menu.querySelectorAll("[aria-pressed]").forEach(function(b){b.setAttribute("aria-pressed","false")})};menu.appendChild(reset);
+    var link=document.createElement("a");link.href=STMT;link.textContent="הצהרת נגישות";menu.appendChild(link);
+    var foot=document.querySelector("footer");if(foot&&!foot.querySelector('a[href*="negishut"]')){var fl=document.createElement("a");fl.href=STMT;fl.textContent="הצהרת נגישות";fl.style.color="inherit";fl.style.marginRight="6px";foot.appendChild(document.createTextNode(" · "));foot.appendChild(fl)}
+    btn.onclick=function(){var open=menu.classList.toggle("open");btn.setAttribute("aria-expanded",open?"true":"false")};
+    document.addEventListener("keydown",function(e){if(e.key==="Escape"&&menu.classList.contains("open")){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");btn.focus()}});
+    document.body.appendChild(btn);document.body.appendChild(menu);
+    var s=state();apply(s);menu.querySelectorAll("[data-mode]").forEach(function(b){var mm=b.dataset.mode;b.setAttribute("aria-pressed",(mm==="fs"?!!s.fs:!!s[mm])?"true":"false")});
   }
-
-  function build() {
-    if (document.getElementById("brain-a11y-btn")) return; // pasted twice - once is enough
-    // Skip link (target: <main> or first <h1>'s section)
-    if (!document.getElementById("brain-main")) {
-      var m = document.querySelector("main") || document.querySelector("h1");
-      if (m) m.id = m.id || "brain-main";
-    }
-    var skip = document.createElement("a");
-    skip.className = "brain-skip"; skip.href = "#" + ((document.querySelector("main,h1") || {}).id || "brain-main");
-    skip.textContent = "דילוג לתוכן"; document.body.prepend(skip);
-
-    var btn = document.createElement("button");
-    btn.id = "brain-a11y-btn"; btn.setAttribute("aria-label", "פתיחת תפריט נגישות");
-    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "brain-a11y-menu");
-    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="4.5" r="2.2" fill="currentColor"/><path d="M12 8c-3 0-5.5-.6-7-1l.5 2c1.5.5 3.5.8 5 .9v3.1l-2.3 6.2 1.9.8 2-5.5h-.2 2.2l2 5.5 1.9-.8L15.5 13V9.9c1.5-.1 3.5-.4 5-.9l.5-2c-1.5.4-4 1-7 1h-2z" fill="currentColor"/></svg>';
-
-    var menu = document.createElement("div");
-    menu.id = "brain-a11y-menu"; menu.setAttribute("role", "dialog"); menu.setAttribute("aria-label", "אפשרויות נגישות");
-    menu.innerHTML = "<h2>נגישות</h2>";
-    MODES.forEach(function (mode) {
-      var b = document.createElement("button");
-      b.textContent = mode[1]; b.dataset.mode = mode[0]; b.setAttribute("aria-pressed", "false");
-      b.onclick = function () {
-        var s = state();
-        if (mode[0] === "fs") { s.fs = ((s.fs || 0) + 1) % 3; b.setAttribute("aria-pressed", s.fs ? "true" : "false"); }
-        else { s[mode[0]] = !s[mode[0]]; b.setAttribute("aria-pressed", s[mode[0]] ? "true" : "false"); }
-        localStorage.setItem(KEY, JSON.stringify(s)); apply(s);
-      };
-      menu.appendChild(b);
-    });
-    var reset = document.createElement("button");
-    reset.textContent = "איפוס"; reset.onclick = function () { localStorage.removeItem(KEY); apply({});
-      menu.querySelectorAll("[aria-pressed]").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); };
-    menu.appendChild(reset);
-    var link = document.createElement("a");
-    link.href = "https://lida.richlife.co.il/lida/negishut.html"; link.textContent = "הצהרת נגישות";
-    menu.appendChild(link);
-
-    // Permanent text link in the page footer (legal best practice: the statement
-    // must be reachable even if this widget fails to load elsewhere). Inherits
-    // the footer's own styling - visually just one more footer word.
-    var foot = document.querySelector("footer");
-    if (foot && !foot.querySelector('a[href*="negishut"]')) {
-      var fl = document.createElement("a");
-      fl.href = "https://lida.richlife.co.il/lida/negishut.html"; fl.textContent = "הצהרת נגישות";
-      fl.style.color = "inherit"; fl.style.marginRight = "6px";
-      foot.appendChild(document.createTextNode(" · "));
-      foot.appendChild(fl);
-    }
-
-    btn.onclick = function () {
-      var open = menu.classList.toggle("open");
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-    };
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && menu.classList.contains("open")) { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.focus(); }
-    });
-    document.body.appendChild(btn); document.body.appendChild(menu);
-
-    // Restore saved prefs + reflect on buttons
-    var s = state(); apply(s);
-    menu.querySelectorAll("[data-mode]").forEach(function (b) {
-      var m = b.dataset.mode;
-      b.setAttribute("aria-pressed", (m === "fs" ? !!s.fs : !!s[m]) ? "true" : "false");
-    });
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build);
-  else build();
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",build);else build();
 })();
 </script>
 </head>
 <body>
-<div class="wrap">
-<main>
+<style>
+/* Layout: phone = one column with a sticky counter strip; desktop (>=1100px) = stations column + sticky counter aside */
+.wrap{max-width:760px}
+.counter{position:sticky;top:8px;z-index:20;background:linear-gradient(140deg,var(--pine),var(--pine-deep) 80%);color:#fff;border-radius:18px;padding:12px 16px;box-shadow:var(--shadow-hi);display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.counter .c-lbl{font-size:12px;font-weight:800;opacity:.85}
+.counter .c-val{font-size:clamp(22px,5vw,28px);font-weight:900;line-height:1.1}
+.counter .c-val small{font-size:13px;font-weight:700;opacity:.85}
+.counter .c-side{margin-inline-start:auto;text-align:left;font-size:12px;font-weight:700;opacity:.92;line-height:1.5}
+.lcalc{margin-top:14px;background:var(--sage-tint);border-radius:14px;padding:14px}
+.lcalc .sl{font-size:12px;font-weight:800;color:var(--pine);margin-bottom:8px}
+.lc-kind{display:flex;gap:6px;margin-bottom:6px}
+.lc-kind button{flex:1;font-family:var(--font);font-weight:700;font-size:14px;padding:8px;border-radius:10px;border:1.5px solid rgba(var(--pine-rgb),.25);background:#fff;color:var(--ink);cursor:pointer}
+.lc-kind button[aria-pressed="true"]{background:var(--pine);color:#fff;border-color:var(--pine)}
+.lc-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.lc-grid .field:first-child{margin-top:12px}
+.lc-grid .input-shell{background:#fff}
+.lc-out{margin-top:12px;font-size:14px;line-height:1.6}
+.lc-out p{margin:0 0 6px}
+.lc-warn{font-size:12.5px;color:var(--ink-soft)}
+.lc-use{margin-top:4px;font-family:var(--font);font-weight:800;font-size:14px;padding:9px 14px;border-radius:10px;border:0;background:var(--pine);color:#fff;cursor:pointer}
+@media (max-width:420px){.lc-grid{grid-template-columns:1fr}}
+.future{margin-top:12px;background:var(--sage-soft,#eef4ef);border:1px solid rgba(var(--pine-rgb),.18);border-radius:16px;padding:14px 16px}
+.future .f-h{font-size:12px;font-weight:800;color:var(--pine);margin-bottom:4px}
+.future p{margin:0 0 10px;font-size:14px;line-height:1.6}
+.future .f-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.future .f-row div{background:#fff;border-radius:12px;padding:8px 10px;text-align:center}
+.future .f-row span{display:block;font-size:12px;color:var(--ink-soft);font-weight:700}
+.future .f-row b{display:block;font-size:clamp(15px,4vw,19px);font-weight:900;color:var(--pine-deep)}
+.future .f-note{font-size:12px;color:var(--ink-soft);margin:0}
+.counter .c-bar{height:6px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden;margin-top:6px;min-width:110px}
+.counter .c-bar i{display:block;height:100%;background:#fff;border-radius:99px;transition:width .4s}
+.counter.pop{animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+.school-tag{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:800;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);padding:4px 12px;border-radius:99px;margin-bottom:10px}
+.hero-title{margin-bottom:18px}
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
+@media(max-width:560px){.steps3{grid-template-columns:1fr}}
+.s3{background:var(--sage-tint);border-radius:14px;padding:12px;font-size:13.5px;font-weight:700;color:var(--ink-soft)}
+.s3 b{display:block;color:var(--pine-darker);font-size:14.5px;font-weight:900}
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:620px){.chips{grid-template-columns:repeat(3,1fr)}}
+.chip-btn{display:flex;align-items:center;gap:9px;text-align:right;font-family:var(--font);font-size:13.5px;font-weight:800;color:var(--ink);background:var(--sage-tint);border:1.5px solid transparent;border-radius:14px;padding:11px 12px;cursor:pointer;min-height:52px;transition:background .15s,border-color .15s}
+.chip-btn .ic{font-size:20px;flex:none}
+.chip-btn[aria-pressed="true"]{background:#fff;border-color:var(--pine);box-shadow:0 0 0 3px rgba(var(--pine-rgb),.14)}
+.chip-btn[aria-pressed="true"]::after{content:"✓";margin-inline-start:auto;color:var(--pine);font-weight:900}
+.scan-res{margin-top:14px;text-align:center;background:var(--sage-tint);border-radius:16px;padding:14px}
+.scan-res .big{font-size:clamp(22px,5vw,30px);font-weight:900;color:var(--pine-darker)}
+.scan-res .note{font-size:12px;font-weight:700;color:var(--ink-soft)}
+.btn-main{display:inline-block;margin-top:10px;font-family:var(--font);font-weight:900;font-size:15px;color:#fff;background:var(--pine);border:0;border-radius:99px;padding:12px 22px;cursor:pointer;text-decoration:none}
+.zone{margin-top:22px}
+.zone-h{display:flex;flex-direction:column;gap:2px;margin:0 4px 10px}
+.zone-h b{font-size:17px;font-weight:900;color:var(--pine-darker)}
+.zone-h span{font-size:13px;font-weight:700;color:var(--ink-soft)}
+.map{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(min-width:620px){.map{grid-template-columns:repeat(5,1fr)}}
+.mp{font-family:var(--font);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.15);border-radius:14px;padding:9px 6px;text-align:center;cursor:pointer;color:var(--ink)}
+.mp .e{font-size:20px;display:block}
+.mp .n{font-size:12px;font-weight:900;display:block}
+.mp .s{font-size:10.5px;font-weight:700;color:var(--ink-soft)}
+.mp.done{background:var(--pine);border-color:var(--pine);color:#fff}
+.mp.done .s{color:rgba(255,255,255,.85)}
+.mp.skip{background:transparent;border:1.5px dashed var(--sage);color:var(--ink-soft);opacity:.75}
+.st{margin-top:14px;scroll-margin-top:110px}
+.st-top{display:flex;align-items:flex-start;gap:12px}
+.st-ic{width:48px;height:48px;border-radius:14px;background:var(--sage-tint);display:grid;place-items:center;font-size:24px;flex:none}
+.st-meta{font-size:12px;font-weight:800;color:var(--pine)}
+.st h3{font-size:19px;font-weight:900;color:var(--pine-darker);line-height:1.2}
+.range{display:inline-block;margin-top:4px;font-size:12.5px;font-weight:900;color:var(--pine-deep);background:var(--sage-tint);border-radius:99px;padding:2px 10px}
+.st .why{margin-top:10px;font-size:14.5px;font-weight:600;color:var(--ink)}
+.st ol{margin:10px 0 0;padding-inline-start:22px;font-size:14px;font-weight:600;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px}
+.script{margin-top:12px;background:var(--sage-tint);border-radius:14px;padding:12px 14px;position:relative}
+.script .sl{font-size:12px;font-weight:900;color:var(--pine)}
+.script p{font-size:14.5px;font-weight:700;color:var(--pine-darker);margin-top:4px;white-space:pre-line}
+.copy{margin-top:8px;font-family:var(--font);font-weight:800;font-size:13px;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.3);border-radius:99px;padding:6px 14px;cursor:pointer}
+.partner{margin-top:10px;background:#fff;border:1.5px solid rgba(var(--pine-rgb),.25);border-radius:14px;padding:10px 12px}
+.partner a{font-size:14px;font-weight:900;color:var(--pine-deep);text-decoration:none}
+.partner p{font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+.tip{margin-top:10px;font-size:13.5px;font-weight:700;color:var(--ink-soft);border-inline-start:3px solid var(--sage);padding:2px 10px}
+.tip b{color:var(--pine-darker)}
+.lesson{margin-top:8px;font-size:12.5px;font-weight:800;color:var(--pine)}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.links a{font-size:13px;font-weight:800;color:var(--pine-deep);background:#fff;border:1.5px solid rgba(var(--pine-rgb),.3);border-radius:99px;padding:6px 12px;text-decoration:none}
+.found{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;border-top:1.5px dashed rgba(var(--pine-rgb),.2);padding-top:12px}
+.found .field{flex:1 1 180px;margin:0}
+.found .yr{font-size:12px;font-weight:700;color:var(--ink-soft);flex-basis:100%}
+.b-found{font-family:var(--font);font-weight:900;font-size:14px;color:#fff;background:var(--pine);border:0;border-radius:12px;padding:12px 16px;cursor:pointer}
+.b-skip{font-family:var(--font);font-weight:800;font-size:13px;color:var(--ink-soft);background:transparent;border:1.5px dashed var(--sage);border-radius:12px;padding:11px 12px;cursor:pointer}
+.st.is-done{border-color:var(--pine);box-shadow:0 0 0 2px rgba(var(--pine-rgb),.25),var(--shadow)}
+.st.is-done .done-flag{display:inline-block}
+.done-flag{display:none;font-size:12px;font-weight:900;color:#fff;background:var(--pine);border-radius:99px;padding:2px 10px;margin-inline-start:6px}
+.st.is-skip{opacity:.62;border-style:dashed}
+.st.is-skip .st-body{display:none}
+.skip-note{display:none;margin-top:8px;font-size:13px;font-weight:700;color:var(--ink-soft)}
+.st.is-skip .skip-note{display:block}
+.skip-note button{font-family:var(--font);font-weight:900;color:var(--pine-deep);background:none;border:0;text-decoration:underline;cursor:pointer;font-size:13px}
+.summary .sum-grid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:560px){.summary .sum-grid{grid-template-columns:1fr 1fr}}
+.reset{font-family:var(--font);font-size:12px;font-weight:700;color:var(--ink-soft);background:none;border:0;text-decoration:underline;cursor:pointer;margin-top:10px}
+@media screen and (min-width:1100px){
+  /* מנצלים את כל המסך */
+  .wrap{max-width:1360px}
+  .dk-main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+  .dk-side{position:sticky;top:16px}
+  .counter{position:static;flex-direction:column;align-items:stretch;gap:8px;padding:20px}
+  .counter .c-side{margin:0;text-align:right}
+  .chips{grid-template-columns:repeat(4,1fr)}
+  .map{grid-template-columns:repeat(7,1fr)}
+}
 
+/* ===== merge 22.11.26: the savings-map catalog lives here now ===== */
+.more{margin-top:28px}
+.more-lead{margin-top:6px;font-size:14.5px;font-weight:600;color:var(--ink)}
+.p-lbl{margin-top:14px;font-size:13px;font-weight:900;color:var(--pine-darker)}
+.pchips{margin-top:8px}
+.area{margin-top:12px;padding:0;overflow:hidden}
+.area>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:16px 18px}
+.area>summary::-webkit-details-marker{display:none}
+.area>summary .a-ic{width:44px;height:44px;border-radius:14px;background:var(--sage-tint);display:grid;place-items:center;font-size:22px;flex:none}
+.area>summary .a-t{flex:1;min-width:0}
+.area>summary b{display:block;font-size:17px;font-weight:900;color:var(--pine-darker)}
+.area>summary small{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.area>summary .a-ch{font-size:22px;line-height:1;color:var(--pine);transition:transform .2s}
+.area[open]>summary .a-ch{transform:rotate(180deg)}
+.area-body{padding:0 18px 16px}
+.ci{border-top:1.5px solid rgba(var(--pine-rgb),.1);padding:14px 0 4px}
+.ci h4{font-size:16px;font-weight:900;color:var(--pine-darker);line-height:1.25}
+.ci .range{margin-top:5px}
+.ci .why{margin-top:8px;font-size:14px;font-weight:600;color:var(--ink)}
+.ci .habit{display:inline-block;margin-top:5px;font-size:12px;font-weight:900;color:var(--ink-soft);background:#fff;border:1.5px solid var(--sage);border-radius:99px;padding:2px 10px}
+.ci.is-done h4::after{content:" ✓";color:var(--pine)}
+.ci.is-skip{opacity:.62}
+.ci.is-skip .ci-body{display:none}
+.ci .ci-skip{display:none;font-size:13px;font-weight:700;color:var(--ink-soft);margin-top:4px}
+.ci.is-skip .ci-skip{display:block}
+.ci .ci-skip button{font:inherit;font-weight:900;color:var(--pine-deep);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0}
+.ci .found{margin-top:10px}
+@media(min-width:561px){.steps3{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== UX pass 22.11.26: calmer, roomier, accordions, phone counter bar ===== */
+.hero-title p{font-weight:400;color:var(--ink-soft);font-size:clamp(14.5px,2.7vw,16px);line-height:1.65}
+.stepper{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 16px}
+@media(min-width:620px){.stepper{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stepper li{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.7);border:1px solid rgba(var(--pine-rgb),.12);border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:700;color:var(--pine-darker);line-height:1.3}
+.stepper i{font-style:normal;flex:none;width:26px;height:26px;border-radius:50%;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:900}
+.chip-btn{font-size:14px;line-height:1.3}
+.scan-res{padding:16px}
+.scan-res .note{font-size:13px}
+.btn-main{min-height:48px;padding:13px 26px}
+.zone{margin-top:26px}
+.zone-h{flex-direction:row;flex-wrap:wrap;align-items:baseline;column-gap:10px;margin:0 6px 10px}
+.zone-h span{flex-basis:100%;font-weight:400;font-size:14px}
+.zone-h .z-prog{font-style:normal;flex-basis:auto;margin-inline-start:auto;font-size:12.5px;font-weight:800;color:var(--pine);background:#fff;border-radius:99px;padding:2px 10px}
+/* accordion header (stations + ideas) */
+.chev{flex:none;width:30px;height:30px;border-radius:50%;background:var(--sage-tint);position:relative;transition:transform .2s}
+.chev::before{content:"";position:absolute;inset:0;margin:auto;width:8px;height:8px;border-left:2.5px solid var(--pine-deep);border-bottom:2.5px solid var(--pine-deep);transform:translateY(-2px) rotate(-45deg)}
+.st{margin-top:10px;padding:0;scroll-margin-top:14px}
+.card.st+.card.st{margin-top:10px}
+.st-h{margin:0}
+.st-head{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-radius:20px;min-height:64px}
+.st-head:hover .chev{background:var(--sage)}
+.st.is-open .st-head .chev,.ci.is-open .ci-head .chev,.area[open]>summary .chev{transform:rotate(180deg)}
+.st-ic{width:44px;height:44px;font-size:22px}
+.st-tt{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.st-meta{font-size:12.5px}
+.st-name{font-size:17.5px;font-weight:900;color:var(--pine-darker);line-height:1.25}
+.st .range{font-size:12.5px;margin-top:3px;white-space:nowrap}
+.st-meta .st-badge{margin-inline-start:8px;font-size:11.5px;padding:1px 9px}
+.st-badge{flex:none;font-size:12.5px;font-weight:900;border-radius:99px;padding:3px 10px;color:var(--ink-soft);background:var(--sage-tint)}
+.st-badge.ok{color:#fff;background:var(--pine)}
+.st-panel{padding:0 18px 18px}
+.st.is-open{box-shadow:var(--shadow-hi)}
+.st.is-done{box-shadow:none;border:1.5px solid rgba(var(--pine-rgb),.35)}
+.st.is-skip{opacity:.7}
+.st.is-skip .st-head{min-height:56px}
+.st .why,.ci .why{font-weight:400;font-size:15px;line-height:1.7;color:var(--ink)}
+.st ol,.ci ol{font-weight:400;font-size:14.5px;line-height:1.65;color:var(--ink);gap:6px;margin-top:12px}
+.st ol li::marker,.ci ol li::marker{color:var(--pine);font-weight:900}
+.script{padding:14px 16px;border:1px solid rgba(var(--pine-rgb),.14)}
+.script .sl{font-size:12.5px;font-weight:800}
+.script p{font-weight:400;font-size:15px;line-height:1.75;color:var(--ink)}
+.copy{min-height:40px;padding:8px 18px;font-size:14px}
+.copy.ok{background:var(--pine);color:#fff;border-color:var(--pine)}
+.links a{min-height:40px;display:inline-flex;align-items:center;padding:8px 14px;font-size:13.5px}
+.partner p{font-size:12.5px;font-weight:400;line-height:1.6}
+.tip{font-weight:400;font-size:14px;line-height:1.65;color:var(--ink);background:rgba(var(--sage-rgb),.25);border:0;border-radius:12px;padding:10px 14px;margin-top:12px}
+.lesson{font-size:13px;font-weight:700;margin-top:10px}
+.found{margin-top:16px;border:0;padding:14px;background:var(--sage-tint);border-radius:16px;gap:10px}
+.found .field label{font-size:13.5px;color:var(--pine-darker);font-weight:800}
+.found .input-shell{background:#fff}
+.input-shell input::placeholder{color:rgba(81,98,90,.42);font-weight:600}
+.b-found,.b-skip{min-height:48px;flex:1 1 auto}
+.b-skip{background:#fff;border-style:solid;border-color:rgba(var(--pine-rgb),.2)}
+.skip-note{padding:0 0 4px;font-size:14px}
+.skip-note button{font-size:14px;min-height:40px}
+/* catalog */
+.more{margin-top:34px}
+.more-lead{font-weight:400;color:var(--ink-soft)}
+.p-lbl{margin-top:16px;font-size:14px}
+.p-lbl span{display:block;font-size:12.5px;font-weight:400;color:var(--ink-soft);margin-top:2px}
+.pchips{display:flex;flex-wrap:wrap;gap:8px}
+.pchips .chip-btn{min-height:44px;border-radius:99px;padding:8px 16px;font-size:13.5px;font-weight:700}
+.area{margin-top:10px}
+.area>summary{min-height:68px;padding:12px 16px}
+.area>summary .a-ch{display:none}
+.area-body{padding:0 12px 12px}
+.ci{border-top:1px solid rgba(var(--pine-rgb),.12);padding:0}
+.ci-h{margin:0}
+.ci-head{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:10px;padding:12px 6px;cursor:pointer;min-height:56px;border-radius:12px}
+.ci-tt{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.ci-name{font-size:15.5px;font-weight:800;color:var(--pine-darker);line-height:1.3}
+.ci .range,.ci .habit{margin-top:0;font-size:12.5px}
+.ci-panel{padding:0 6px 14px}
+.ci .why{margin-top:0}
+.ci.is-done h4::after{content:none}
+.ci.is-skip{opacity:.7}
+.summary .tile.main{grid-column:1/-1}
+@media(min-width:561px){.summary .tile.main{grid-column:auto}}
+/* phone + tablet: the counter is a slim bar at the bottom (the a11y button keeps its corner) */
+@media (max-width:1099px){
+  .dk-side{position:fixed;right:10px;left:72px;bottom:10px;z-index:60;transform:translateY(160%);transition:transform .25s ease}
+  body.has-bar .dk-side{transform:none}
+  body.has-bar.sum-in .dk-side{transform:translateY(160%)}
+  .counter{margin:0;padding:9px 14px;gap:10px;border-radius:16px;align-items:center}
+  .counter .c-lbl{font-size:11.5px}
+  .counter .c-val{font-size:21px}
+  #cYear,#cFut,.counter .c-side>br{display:none}
+  .counter .c-val{white-space:nowrap}
+  .counter .c-side{font-size:12px;min-width:0;flex:1;white-space:nowrap}
+  .counter #cDone{display:block;overflow:hidden;text-overflow:ellipsis}
+  .counter .c-bar{min-width:80px}
+  body{padding-bottom:96px}
+}
+</style>
+
+<div class="wrap">
   <div class="brand">
     <img class="avatar" src="data:image/jpeg;base64,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" alt="טלי בנימינוב שרעבי">
-    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · מפת החיסכון</div></div>
+    <div><div class="by-lead">מאת טלי בנימינוב שרעבי</div><div class="by-sub"><b>RichLife</b> · בית הספר</div></div>
   </div>
 
   <div class="hero-title">
-    <h1>מפת <span class="em">החיסכון</span> שלך</h1>
-    <p>עשרות דרכים לשלם פחות על אותם דברים בדיוק, ולפעמים לא לשלם עליהם בכלל, בלי לרדת רמת חיים. מסמנים מה רלוונטי, פותחים כל תחום, ובוחרים מאיפה להתחיל.</p>
+    <span class="school-tag">שלב 1 · התנהלות כלכלית · יחידה 1א</span>
+    <h1>הכסף שמחכה לך <span class="em">בתוך החשבונות שכבר יש לך</span></h1>
+    <p>את הקבועות מוזילים פעם אחת, והחיסכון חוזר כל חודש. מסמנת מה יש לך, מקבלת רשימה אישית עם נוסח מוכן להעתקה, ובסוף מוצאת עוד רעיונות לפי תחום.</p>
   </div>
 
-  <a class="top-cta" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">
-    <span class="tc-txt">רוצים סדר אמיתי בכסף, לא רק לחסוך פה ושם?</span>
-    <span class="tc-link">לתהליכי הליווי שלי ←</span>
-  </a>
+  <div class="dk-main">
+    <main id="main">
+      <ol class="stepper" aria-label="איך זה עובד"><li><i aria-hidden="true">1</i><span>מסמנת מה יש לך</span></li><li><i aria-hidden="true">2</i><span>עוברת תחנה תחנה</span></li><li><i aria-hidden="true">3</i><span>רושמת מה מצאת</span></li><li><i aria-hidden="true">4</i><span>עוד רעיונות לפי תחום</span></li></ol>
 
-  <div class="card">
-    <span class="sec-lbl">🧭 קצת עליכם</span>
-    <p class="pintro">מסמנים מה נכון לגביכם, ומופיעות הטבות שמתאימות בדיוק למצב שלכם. כל השאר כאן מתאים כמעט לכולם.</p>
-    <div class="pchips" id="pchips"></div>
+      <div class="card" id="scan">
+        <span class="sec-lbl">בדיקה של דקה: מה יש לך?</span>
+        <div class="chips" id="chips" role="group" aria-label="מה יש לך"></div>
+        <div class="scan-res" id="scanRes" aria-live="polite"></div>
+      </div>
+
+      <div id="zones"></div>
+
+      <section class="more" id="more" aria-labelledby="moreH">
+        <div class="card more-head">
+          <span class="sec-lbl" id="moreH">עוד דרכים לחסוך, לפי תחום</span>
+          <p class="more-lead">בלי שיחות עם חברות. הרגלים ובדיקות קטנות, לפי תחום. כל מה שעשית נכנס לאותו מונה.</p>
+          <div class="p-lbl">יש עוד משהו שנכון לגבייך? <span>כל סימון פותח עוד רעיונות</span></div>
+          <div class="chips pchips" id="pchips" role="group" aria-label="עוד פרטים עלייך"></div>
+        </div>
+        <div id="areas"></div>
+      </section>
+
+      <div class="card summary" id="summary">
+        <span class="sec-lbl">מה מצאת</span>
+        <div class="sum-grid">
+          <div class="tile main"><div class="t-lbl">בכל חודש</div><div class="t-val tabular" id="sMonth">₪0</div></div>
+          <div class="tile"><div class="t-lbl">בשנה</div><div class="t-val tabular" id="sYear">₪0</div></div>
+          <div class="tile"><div class="t-lbl">בחיסכון לטווח ארוך</div><div class="t-val tabular" id="sLong">₪0</div></div>
+        </div>
+        <div class="insight" id="sInsight">כל תחנה שסוגרים מגדילה את הפער שלך בין הכנסות להוצאות. מה שמצאת כאן חוזר כל חודש, בלי לוותר על כלום.</div>
+        <div class="future" id="sFuture" hidden>
+          <div class="f-h">כמה הפעולות שלך שוות</div>
+          <p id="fLead"></p>
+          <div class="f-row">
+            <div><span>בעוד 10 שנים</span><b class="tabular" id="f10">₪0</b></div>
+            <div><span>בעוד 20 שנה</span><b class="tabular" id="f20">₪0</b></div>
+            <div><span>בעוד 30 שנה</span><b class="tabular" id="f30">₪0</b></div>
+          </div>
+          <p class="f-note" id="fNote"></p>
+        </div>
+        <div class="insight soft">הטווחים בכל תחנה הם הערכה להמחשה, לא הבטחה. המונה סופר רק את מה שאת רושמת.</div>
+        <button class="reset" type="button" id="resetBtn">להתחיל מחדש</button>
+      </div>
+
+      <div class="cta-card">
+        <div class="cta-emoji">🌱</div>
+        <h3>מצאת כסף. עכשיו נותנים לו תפקיד</h3>
+        <p>בתקציב, ביחידה 1ג: משלמים לעצמך קודם. את הסכום שמצאת כאן מעבירים בהוראת קבע לחיסכון, ביום שהמשכורת נכנסת. ומי שרוצה לעשות את כל הדרך ביחד איתי:</p>
+        <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">לתהליכי הליווי ←</a>
+      </div>
+    </main>
+
+    <aside class="dk-side">
+      <div class="counter" id="counter" aria-live="polite">
+        <div>
+          <div class="c-lbl">מצאת עד עכשיו</div>
+          <div class="c-val tabular" id="cMonth">₪0 <small>בחודש</small></div>
+        </div>
+        <div class="c-side">
+          <span id="cYear">₪0 בשנה</span><br>
+          <span id="cFut"></span>
+          <span id="cDone">0 תחנות מתוך 0</span>
+          <div class="c-bar"><i id="cBar" style="width:0%"></i></div>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="hint">לוחצים על כל תחום כדי לפתוח ולראות את ההטבות ↓</div>
-
-  <div id="areas"></div>
-
-  <div class="updated">כל ההטבות מאומתות ומעודכנות לספטמבר 2026. הקישורים לאתרי השוואה חיצוניים, לנוחות בלבד. אחוזים ומחירים משתנים מעת לעת, שווה לאמת מול הספק לפני מעבר.</div>
-
-  <div class="cta-card">
-    <div class="cta-emoji">🧭</div>
-    <h3>לחסוך זה טוב. לבנות עתיד זה משחק אחר.</h3>
-    <p>ההטבות כאן שומרות כמה אלפי שקלים בשנה. השלב הבא הוא להפוך את הכסף הזה לחיסכון והשקעה שעובדים בשבילכם, וזה בדיוק מה שאנחנו בונים יחד בליווי.</p>
-    <a class="cta-btn" href="https://richlife.ravpage.co.il/service1one1" target="_blank" rel="noopener">רוצים להתחיל? בואו נדבר ←</a>
-  </div>
-
-  <div class="actions">
-    <button class="act-btn" id="shareBtn">🔗 יצירת קישור לשליחה</button>
-    <div class="act-note" id="shareNote">הקישור שומר את המפה שסימנתם. שולחים אותו בוואטסאפ, ונכנסים לאותה מפה בדיוק.</div>
-    <div class="act-link" id="actLink" hidden>
-      <input id="linkField" readonly aria-label="קישור המפה">
-      <button id="copyBtn">העתקה</button>
-    </div>
-  </div>
-
-</main>
   <footer>
-    ליווי כלכלי לחיים מאושרים ומעושרים
+    מאת <b>טלי בנימינוב שרעבי</b> · RichLife
     <div class="socials">
       <a href="https://www.instagram.com/tali_finance" target="_blank" rel="noopener" aria-label="אינסטגרם"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
       <a href="https://www.tiktok.com/@tali_beniaminov" target="_blank" rel="noopener" aria-label="טיקטוק"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.6 3.4 3.5 3.6v2.4c-1.2 0-2.4-.4-3.4-1v6.3c0 3-2.2 5.2-5.1 5.2-2.7 0-4.9-2-4.9-4.7 0-2.8 2.3-4.8 5.1-4.6v2.5c-.3-.1-.6-.1-.9-.1-1.2 0-2.1.9-2.1 2.1 0 1.3 1 2.2 2.3 2.2 1.4 0 2.3-1 2.3-2.6V3h3.2z"/></svg></a>
@@ -458,235 +446,322 @@ footer .copyright{margin-top:16px;padding-top:14px;border-top:1.5px solid rgba(v
 </div>
 
 <script>
-const AREAS=[
-  {key:'energy',emoji:'⚡',name:'חשמל ואנרגיה'},
-  {key:'comms', emoji:'📱',name:'תקשורת'},
-  {key:'food',  emoji:'🛒',name:'סופר ומזון'},
-  {key:'second',emoji:'♻️',name:'יד שנייה, השאלה וחינם'},
-  {key:'car',   emoji:'🚗',name:'תחבורה ורכב'},
-  {key:'bank',  emoji:'🏦',name:'בנקאות ואשראי'},
-  {key:'state', emoji:'🏛️',name:'מדינה, מס וזכויות'}
-];
-const PROFILE=[
-  {tag:'home',  label:'בבית רוב היום'},
-  {tag:'night', label:'רכב חשמלי או מכונות שרצות בלילה'},
-  {tag:'exempt',label:'סטודנט, חייל, אזרח ותיק או גיל 18-26'},
-  {tag:'loans', label:'יש הלוואות או אשראי יקר'},
-  {tag:'car',   label:'יש רכב פרטי'},
-  {tag:'kids',  label:'ילדים קטנים או תינוק בדרך'}
-];
-const BENEFITS=[
-  {id:'elec-switch',area:'energy',title:'מעבר לספק חשמל פרטי',save:'₪300-500 בשנה',val:400,
-   how:'החשמל שמגיע מהשקע הוא בדיוק אותו חשמל, לא משנה ממי קונים אותו. אפשר לקנות אותו מספק פרטי (פרטנר, סופר פאוור, פזגז) בכמה אחוזים פחות, ולהמשיך לקבל אותו רגיל לגמרי. נכנסים לאתר של הספק, נרשמים בכמה דקות, בלי טכנאי ובלי החלפת מונה.',
-   link:{url:'https://haboreret.co.il/',label:'להשוואת ספקי חשמל (הבוררת)'}},
-  {id:'elec-night',area:'energy',tag:'night',title:'מסלול חשמל לילה',save:'עד 20% על צריכת הלילה',val:250,
-   how:'אם רוב הצריכה הכבדה בבית קורית בלילה, מכונת כביסה, מייבש, מזגן או הטענת רכב חשמלי, יש מסלול שנותן עד 20% הנחה על החשמל בין 23:00 ל-07:00. כל מה שצריך זה להזיז את ההפעלות לשעות האלה, ולשלם פחות על אותה צריכה בדיוק.',
-   link:{url:'https://haboreret.co.il/',label:'להשוואת מסלולי חשמל (הבוררת)'}},
-  {id:'elec-day',area:'energy',tag:'home',title:'מסלול חשמל יום',save:'עד 15% על צריכת היום',val:200,
-   how:'מתאים למי שנמצא הרבה בבית במהלך היום, למשל עובדים מהבית או בחופשת לידה. מקבלים הנחה על עיקר הצריכה שקורית בשעות 07:00-17:00, במקום לשלם תעריף מלא לאורך כל היום.',
-   link:{url:'https://haboreret.co.il/',label:'להשוואת מסלולי חשמל (הבוררת)'}},
-  {id:'cellular',area:'comms',title:'מעבר חבילת סלולר',save:'~₪200 בשנה למנוי',val:200,
-   how:'רובנו משלמים על חבילת סלולר ישנה שנתקענו בה לפני שנים. חברות וירטואליות כמו 019 וגולן נותנות היום חבילות מ-20 עד 40 ₪ בלי התחייבות, על אותה רשת ועם אותה קליטה. בדיקה קצרה ומעבר יכולים לחסוך מאות שקלים בשנה למנוי.',
-   link:{url:'https://www.kamaze.co.il/',label:'להשוואת חבילות סלולר (כמה זה)'}},
-  {id:'internet',area:'comms',title:'אינטרנט סיבים, בדיקה כל חצי שנה',save:'מאות בשנה',val:300,
-   how:'מחיר האינטרנט הביתי משתנה כל הזמן, ואין קנס יציאה מהחבילה. שווה לבדוק כל חצי שנה מה המחירים היום (בערך 99 עד 129 ₪ לסיבים) ולעבור אם יש זול יותר. הרבה פעמים אפשר להישאר עם אותו קו, רק להוזיל את המחיר.',
-   link:{url:'https://www.kamaze.co.il/',label:'להשוואת אינטרנט (כמה זה)'}},
-  {id:'streaming',area:'comms',title:'איחוד או רוטציה של מנויי סטרימינג',save:'מאות בשנה',val:400,
-   how:'קל מאוד להצטבר עם נטפליקס, דיסני, HBO וכל השאר, וכל מנוי לבד מצטבר לסכום גדול בסוף החודש. אפשר להחזיק מנוי אחד פעיל בכל פעם ולסובב לפי מה שבאמת צופים, או לקחת חבילת טלוויזיה שכבר כוללת חלק מהם בפנים. ככה משלמים רק על מה שרואים.',
-   link:{url:'https://www.kamaze.co.il/',label:'להשוואת חבילות טלוויזיה (כמה זה)'}},
-  {id:'list',area:'food',habit:true,title:'רשימת קניות קונקרטית',
-   how:'מכינים רשימה ומגיעים ממוקדים. הסופר בנוי כדי שתקנו יותר, ורשימה שומרת אתכם על מה שבאמת צריך.'},
-  {id:'budget-cap',area:'food',habit:true,title:'תקרת סכום לקנייה',
-   how:'מחליטים על תקרה חודשית לסופר (למשל 2,000 ₪) ולא עוברים אותה, לא משנה איך מחלקים בין הקניות.'},
-  {id:'chp',area:'food',title:'השוואת מחירי הסל עם CHP',save:'5%-15% על כל קנייה',val:400,
-   how:'סורקים את רשימת הקניות ורואים באיזו רשת הסל הכי זול. אותם מוצרים בדיוק, מחיר שונה.',
-   link:{url:'https://chp.co.il/',label:'לאתר CHP'}},
-  {id:'online',area:'food',habit:true,title:'קנייה אונליין',
-   how:'קונים אונליין ופחות נופלים על קניות דחף, וגם משווים מחירים ותחליפים זולים בקלות. דמי המשלוח מתקזזים מול מה שלא קניתם סתם.',
-   link:{url:'https://www.pricez.co.il/',label:'להשוואת מחירי סופר (פרייסז)'}},
-  {id:'deals',area:'food',habit:true,title:'מודעות למבצעים',
-   how:'מנצלים מבצעים רק על מוצרים יבשים שלא מתקלקלים, ולא נופלים על "2 ב-48" כשאחד עולה 24.20. מבצע לא תמיד באמת משתלם.'},
-  {id:'house-brand',area:'food',title:'מותג הבית ומותגים קטנים',save:'~₪1,800 בשנה',val:1500,
-   how:'אותו מוצר, טעם דומה, מחיר נמוך יותר. 3 ₪ למוצר על חצי מהסל זה בקלות 150 ₪ בחודש, כ-1,800 ₪ בשנה.'},
-  {id:'social-super',area:'food',title:'סופר חברתי / החישוק / מועדון שווה',save:'5%-14% מול הרשתות',val:700,
-   how:'מזמינים דרך הסופר החברתי המקוון, אותם מוצרים במחיר מסובסד.',
-   link:{url:'https://hahishook.com/',label:'לאתר החישוק'}},
-  {id:'market',area:'food',title:'שוק ומשקים ביום שישי',save:'זול יותר מהסופר',val:300,
-   how:'הולכים לשוק בשישי אחר הצהריים כשהמוכרים רוצים להיפטר מהסחורה. סחורה טובה וזולה יותר, ובמשק יש מחירי סיטונאות לפירות וירקות.'},
-  {id:'kiosk',area:'food',habit:true,title:'פחות קיוסק ומאפייה',
-   how:"יורדים לקיוסק רק למה שבאמת חסר עכשיו, ואת השאר קונים בסופר בהרבה פחות. סנדוויצ'ים ובורקסים יומיומיים מהמאפייה מתנקזים לסכום גדול."},
-  {id:'eatout-budget',area:'food',habit:true,title:'תקציב לאוכל בחוץ ומשלוחים',
-   how:'אוכל בחוץ הוא בילוי, לא תחליף לאוכל בית. קובעים לו תקציב (למשל 400 ₪ בחודש) ומכינים אוכל מראש כשיודעים שלא תהיו בבית.'},
-  {id:'deli',area:'food',title:'מעדנייה לגבינות ונקניקים',save:'זול מהאריזות',val:150,
-   how:'גבינות ופסטרמות מהמעדנייה יוצאות זול יותר מהאריזות המוכנות. שווה למי שמכין פשטידות, פסטות ומטעמים חלביים.'},
-  {id:'frozen',area:'food',title:'בשר, עוף ודגים קפואים',save:'עד ₪80 לקנייה',val:300,
-   how:'אם ממילא מקפיאים, קונים כבר קפוא. סלמון קפוא זול ב-30-40 ₪ מטרי, וחזה עוף שחותכים לבד זול משניצל מוכן.'},
-  {id:'spareeat',area:'food',title:'SpareEat, הצלת מזון',save:'עד 50% על אוכל מוכן',val:250,
-   how:'מזמינים "שקית הפתעה" ממסעדות, מאפיות וסופרים בסוף היום בחצי מחיר ומטה.',
-   link:{url:'https://spareeat.com/',label:'לאתר SpareEat'}},
-  {id:'sec-first',area:'second',habit:true,title:'לפני כל קנייה, חמש דקות של חיפוש יד שנייה',
-   how:'זה ההרגל שמזיז הכי הרבה כסף בתחום הזה. לפני שקונים משהו חדש, מקדישים חמש דקות לחיפוש ביד2 ובמרקטפלייס. חצי מהפעמים תמצאו את אותו דבר בדיוק, לפעמים אפילו באריזה, בשליש מהמחיר. ואם לא מצאתם, קניתם חדש בלב שלם.',
-   link:{url:'https://www.yad2.co.il/',label:'לאתר יד2'}},
-  {id:'sec-free',area:'second',title:'קבוצות חינם ושיתוף בפייסבוק',save:'מאות עד אלפים בשנה',val:900,
-   how:'יש עולם שלם של קבוצות שבהן אנשים פשוט נותנים דברים בחינם, כי חבל להם לזרוק. אמהות לא אוגרות, נותנים ומקבלים בעיר שלכם, קבוצות שכונתיות. מחפשים בפייסבוק את שם העיר יחד עם המילה חינם או מוסרים, מצטרפים לשתיים-שלוש, ומגיבים מהר כשעולה משהו שצריך. לא צריך לחכות למזל, אפשר גם לפרסם מה מחפשים.',
-   link:{url:'https://www.facebook.com/marketplace/',label:'למרקטפלייס של פייסבוק'}},
-  {id:'sec-baby',area:'second',tag:'kids',title:'ציוד לתינוק ולידה מיד שנייה',save:'אלפי שקלים',val:3500,
-   how:'זה התחום שבו יד שנייה משתלמת הכי הרבה, כי הציוד בשימוש חודשים ספורים ואז יושב במחסן. עגלה, לול, אמבטיה, מוניטור, כיסא אוכל, מנשא, משאבה. אפשר לקנות כמעט הכל במצב מצוין במחצית המחיר ומטה, או לקבל בהשאלה ממשפחה וחברות. שני דברים כן קונים חדשים: מזרן ומושב בטיחות לרכב, כי לא יודעים מה עבר עליהם.',
-   note:{type:'soft',text:'מושב בטיחות לרכב ומזרן לתינוק קונים חדשים תמיד, בלי קשר למחיר.'}},
-  {id:'sec-kids',area:'second',tag:'kids',title:'בגדי ילדים, צעצועים וספרים',save:'עד ₪2,000 בשנה',val:1800,
-   how:'ילדים גדלים מהר יותר ממה שהבגד מספיק להתבלות. יש קבוצות החלפה שכונתיות, חנויות יד שנייה לילדים, וספריות צעצועים עירוניות שמשאילות משחקים כמו שספרייה משאילה ספרים. הילד לא זוכר מאיפה הגיע הבובה, אבל אתם תזכרו את ההפרש בחשבון.'},
-  {id:'sec-home',area:'second',title:'ריהוט ומוצרי חשמל יד שנייה או תצוגה',save:'מאות עד אלפים',val:1500,
-   how:'ספה, שולחן, ארון, מקרר, מכונת כביסה. הרבה מזה מגיע ממעברי דירה, כמעט חדש, במחיר שאין לו שום קשר למחיר בחנות. בנוסף, ברשתות הגדולות יש פינת עודפים ותצוגה עם אותה אחריות יצרן והנחה משמעותית, פשוט צריך לשאול את המוכר איפה היא.',
-   link:{url:'https://www.yad2.co.il/',label:'לריהוט ומוצרי חשמל ביד2'}},
-  {id:'sec-borrow',area:'second',title:'להשאיל במקום לקנות',save:'מאות בשנה',val:600,
-   how:'מקדחה, ציוד קמפינג, מזוודה גדולה, שמלת אירוע, מכשירים שמשתמשים בהם פעמיים בשנה. לפני שקונים, שואלים בקבוצת השכונה או במשפחה. יש גם ספריות כלים עירוניות וחברות השכרה לשמלות אירוע, שמוציאות אתכם ממאה שקלים במקום מאות.'},
-  {id:'sec-sell',area:'second',habit:true,title:'למכור את מה שלא בשימוש',
-   how:'זה לא בדיוק חיסכון, זה כסף שכבר שילמתם עליו ושוכב אצלכם במחסן. עוברים על הארונות, המחסן והמרפסת, ומוציאים את מה שלא נגעתם בו שנה. מצלמים בתאורת יום, כותבים מחיר הגיוני, ומעלים. הכסף הזה הוא התחלה מצוינת לקרן חירום.',
-   note:{type:'go',text:'הכסף מהמכירה הולך ישר לחיסכון, לא להוצאה שוטפת. אחרת רק החלפתם דברים בדברים.'}},
-  {id:'car-insurance',area:'car',tag:'car',title:'השוואת ביטוח רכב וחובה, כל שנה מחדש',save:'₪800-2,000 בשנה',val:1200,
-   how:'חידוש אוטומטי של ביטוח הרכב הוא אחד הדברים היקרים שאנשים עושים בלי לשים לב. המחיר עולה בשקט משנה לשנה, וחברת הביטוח לא מתקשרת להגיד לכם שיש זול יותר. חודש לפני החידוש מקדישים חצי שעה, מקבלים שלוש הצעות, ואז מתקשרים לחברה הקיימת ומבקשים להשוות. הרבה פעמים היא פשוט תיישר קו.',
-   note:{type:'soft',text:'משווים ביטוח מול ביטוח באותם כיסויים בדיוק, אחרת השוואת המחיר לא אומרת כלום.'}},
-  {id:'car-kvish6',area:'car',tag:'car',title:'מנוי חינם לכביש 6',save:'עד 40% על כל נסיעה',val:500,
-   how:'מי שנוסע בכביש 6 בלי מנוי משלם את התעריף המלא, ומעליו גם דמי זיהוי. ההצטרפות למנוי היא בחינם, בלי התחייבות ובלי תשלום חודשי, ונותנת עד 40 אחוז הנחה על כל נסיעה. גם מי שנוסע פעם בחודש מרוויח מזה.',
-   link:{url:'https://www.kvish6.co.il/ContentPage.aspx?Id=32',label:'להצטרפות למנוי כביש 6'}},
-  {id:'car-fuel',area:'car',tag:'car',title:'הנחת דלק קבועה',save:'₪400-900 בשנה',val:600,
-   how:'תדלוק במחיר המלא בשירות מלא הוא הדרך היקרה ביותר לקנות דלק. יש שלוש שכבות הנחה שאפשר לצבור יחד: תדלוק עצמי, אפליקציית התדלוק של חברת הדלק, והנחה דרך מועדון צרכנות או כרטיס אשראי. בחודש זה כמה עשרות שקלים, בשנה זה כבר סכום.'},
-  {id:'car-service',area:'car',tag:'car',title:'טיפולים וטסט מחוץ למוסך המורשה',save:'מאות לטיפול',val:800,
-   how:'אחרי תום תקופת האחריות של היצרן, אין שום חובה להישאר במוסך המורשה. מוסך פרטי אמין עושה את אותו טיפול בפער מחיר משמעותי. גם לטסט שווה לבדוק מחיר, יש הפרשים אמיתיים בין מכוני הרישוי באותו אזור. מבקשים הצעת מחיר מראש בכתב, לא אחרי.',
-   note:{type:'soft',text:'בתקופת האחריות נשארים במורשה, יציאה ממנו עלולה לבטל לכם את האחריות.'}},
-  {id:'car-second',area:'car',tag:'car',title:'לבדוק אם הרכב השני באמת מצדיק את עצמו',save:'אלפים בשנה',val:2000,
-   how:'רכב שני עולה כסף גם כשהוא חונה: ביטוח, טסט, טיפולים, ירידת ערך וחניה. שווה לחשב כמה הוא באמת בשימוש בחודש, ולהשוות מול עלות של מוניות ורכב שיתופי לאותם נסיעות. לפעמים המספר מפתיע, ולפעמים הרכב מצדיק את עצמו בגדול. העיקר שזו תהיה החלטה ולא הרגל.',
-   note:{type:'soft',text:'זו החלטה אישית ותלויה בחיים שלכם, לא כלל גורף. בדיוק סוג החישוב שעושים יחד בליווי.'}},
-  {id:'car-pt',area:'car',title:'מנוי חופשי חודשי בתחבורה ציבורית',save:'עשרות אחוזים',val:700,
-   how:'מי שנוסע בקביעות ומשלם נסיעה-נסיעה משלם הרבה יותר מדי. מנוי חופשי חודשי מוגבל בתקרה, וממספר נסיעות מסוים והלאה הוא כבר משתלם. שווה לבדוק כמה נסיעות באמת יוצאות בחודש ולעבור למנוי אם עברתם את הנקודה.',
-   link:{url:'https://bus.gov.il/discounts',label:'לכרטיסים והנחות (הרשות הארצית לתחבורה ציבורית)'}},
-  {id:'car-young',area:'car',tag:'exempt',title:'הנחה בתחבורה ציבורית שמגיעה לכם',save:'33% על המנוי החודשי',val:500,
-   how:'לגילאי 18 עד 26 מגיעה הנחה של 33 אחוז על מנוי חודשי בתחבורה ציבורית, ויש הנחות נוספות לסטודנטים, לחיילים ולאזרחים ותיקים. ההנחה לא נדלקת לבד, צריך לעדכן את הפרופיל ברב קו או באפליקציית התשלום. אי אפשר לצבור שתי הנחות יחד, בוחרים את הגבוהה.',
-   link:{url:'https://bus.gov.il/discounts',label:'לעדכון הפרופיל וההנחות'},
-   note:{type:'go',text:'זכות שמגיעה לכם, רק צריך לעדכן פרופיל פעם אחת.'}},
-  {id:'car-park',area:'car',tag:'car',title:'חנה וסע במקום חניון בעיר',save:'מאות בשנה',val:400,
-   how:'חניון במרכז עיר עולה עשרות שקלים ליום, וזה מצטבר. חניוני חנה וסע בפאתי הערים זולים משמעותית ולפעמים בחינם, עם תחבורה ציבורית או שאטל שממשיכים איתו פנימה. התנאים משתנים בין עיר לעיר, שווה לבדוק פעם אחת מה יש באזור שלכם ולקבע את זה כהרגל.'},
-  {id:'fees',area:'bank',title:'פטור מעמלות עו"ש',save:'₪120-360 בשנה',val:240,
-   how:'היום כמעט אף אחד לא צריך לשלם עמלות על חשבון העו"ש. רוב הבנקים נותנים מסלול פטור מלא, או מסלול קבוע וזול, אבל רק אם מבקשים, אחרת ממשיכים לחייב אתכם על כל פעולה קטנה. מתקשרים לבנק או נכנסים לאפליקציה ומבקשים "מסלול פטור מעמלות" או "המסלול המיטבי" (הבנק מחשב לבד כל חודש את החיוב הזול ביותר). זו שיחה של חמש דקות ששווה מאות שקלים בשנה.'},
-  {id:'fees-exempt',area:'bank',tag:'exempt',title:'פטור מלא אוטומטי',save:'₪240-600 בשנה',val:300,
-   how:'אם אתם סטודנטים, חיילים או אזרחים ותיקים, מגיע לכם פטור מלא מעמלות עו"ש באופן אוטומטי, בלי לבקש בכלל. אבל לפעמים הפטור לא נדלק לבד, אז שווה להיכנס לחשבון ולוודא שהוא באמת מופעל ושלא ממשיכים לגבות מכם.',
-   note:{type:'go',text:'זכות שמגיעה לכם אוטומטית, רק צריך לוודא שהיא פעילה בחשבון.'}},
-  {id:'digital-bank',area:'bank',title:'בנק דיגיטלי',save:'דמי ניהול ₪0',val:200,
-   how:'בנק דיגיטלי הוא בנק בלי סניפים פיזיים, שמנהלים לגמרי מהאפליקציה בנייד, כמו וואן זירו או פפר. בדרך כלל אין בו דמי ניהול חשבון, אין עמלת מט"ח על קניות בחו"ל, ולפעמים יש גם ריבית על הכסף שיושב בחשבון. מתאים למי שממילא מנהל הכל מהטלפון ורוצה פשוט להפסיק לשלם על הבנק.',
-   link:{url:'https://boi.org.il/information/fees/',label:'להשוואת עלויות בבנקים (בנק ישראל)'}},
-  {id:'cashback',area:'bank',title:'כרטיס אשראי עם קאשבק',save:'מאות בשנה',val:350,
-   how:'יש כרטיסי אשראי שמחזירים לכם אחוז קטן מכל קנייה שאתם ממילא עושים (בערך 1% עד 1.6%). כדאי לבחור כרטיס בלי דמי כרטיס, ואם יש דמי כרטיס, פשוט מתקשרים ומבקשים לבטל אותם, כמעט תמיד מסכימים. שימו לב שיש תקרת החזר חודשית, אז זה לא אינסופי, אבל זה כסף שחוזר על התנהגות שגם ככה קיימת.',
-   link:{url:'https://tools.richlife.co.il/credit-cards/',label:'להשוואת כרטיסי האשראי שלי'}},
-  {id:'loans',area:'bank',tag:'loans',title:'מיחזור או איחוד הלוואות יקרות',save:'אלפי שקלים',val:2000,
-   how:'אם אתם גוררים אשראי יקר או כמה הלוואות עם ריבית גבוהה, אפשר לאחד את הכל להלוואה אחת בריבית נמוכה יותר ולשלם פחות כל חודש. זה לא מתאים לכל אחד, ולא כל איחוד באמת משתלם, אז חשוב לבדוק את המספרים לפני שעושים מהלך כזה.',
-   note:{type:'soft',text:'שווה בדיקה אישית לפני מהלך כזה, לא כל איחוד משתלם. בדיוק סוג ההחלטה שעושים יחד בליווי.'}},
-  {id:'st-refund',area:'state',title:'בדיקת החזר מס, שש שנים אחורה',save:'₪2,000-8,000 בממוצע',val:2500,
-   how:'זה לא טריק ולא פינה, זה כסף שלכם שנוכה מהמשכורת ביתר. מס הכנסה מחושב על השנה כולה, אבל מנוכה כל חודש לפי הנחה שתרוויחו אותו דבר תמיד. כל שינוי במהלך השנה, חופשת לידה, מעבר עבודה, חודשים בלי עבודה, בונוס, הפקדה לפנסיה או קרן השתלמות, יוצר פער. אפשר לבקש החזר עד שש שנים אחורה, כלומר היום עוד אפשר על 2020. יש סימולטור חינם של רשות המסים שאומר לכם תוך כמה דקות אם מגיע לכם, לפני שמשלמים למישהו שיבדוק.',
-   link:{url:'https://www.gov.il/he/service/simulator-employee',label:'לסימולטור החזר המס (רשות המסים)'},
-   note:{type:'go',text:'בודקים לבד בחינם קודם. רק אם יוצא סכום גדול ומסובך שווה לשקול איש מקצוע, והוא לוקח אחוזים.'}},
-  {id:'st-points',area:'state',title:'נקודות זיכוי שלא ניצלתם',save:'₪2,904 לנקודה בשנה',val:1500,
-   how:'נקודת זיכוי היא הנחה ישירה במס, שווה 242 ₪ בחודש. יש נקודות שמגיעות ולא תמיד נלקחות: תואר אקדמי בשנים שאחרי סיום הלימודים, סיום שירות צבאי או לאומי, עלייה חדשה, מילואים, מגורים ביישוב מזכה. אם לא סימנתם אותן בטופס 101 בעבודה, אתם משלמים מס מיותר בלי לדעת. רוב האנשים ממלאים את הטופס הזה בשלוש דקות בלי להסתכל.',
-   note:{type:'soft',text:'שווה לפתוח את טופס ה-101 של השנה ולעבור עליו שורה-שורה. זו הפעולה הכי רווחית לדקה שהיא לוקחת.'}},
-  {id:'st-kids-points',area:'state',tag:'kids',title:'נקודות זיכוי על ילדים',save:'אלפי שקלים בשנה',val:2900,
-   how:'על כל ילד מגיעות נקודות זיכוי לשני ההורים, והן משתנות לפי גיל הילד. לאמא מגיע הכי הרבה בשנתיים הראשונות. הנקודות לא תמיד נכנסות אוטומטית למשכורת, ולידה היא בדיוק הרגע שבו שוכחים לעדכן את טופס ה-101. אם פספסתם, זה נכנס להחזר המס.',
-   note:{type:'go',text:'מעדכנים טופס 101 מיד אחרי לידה, ולא מחכים לסוף השנה.'}},
-  {id:'st-hakesef',area:'state',habit:true,title:'הר הכסף, לחפש כספים אבודים על השם שלכם',
-   how:'שירות חינם של משרד האוצר שמראה חשבונות בנק רדומים, קרנות פנסיה ישנות, קופות גמל, קרנות השתלמות ופוליסות ביטוח חיים שנשכחו. מקום עבודה ישן, חשבון שנסגר, קרן שהפסיקו להפקיד אליה. הכסף ממשיך לשבת שם ולפעמים נאכל בדמי ניהול. לוקח כמה דקות ולפעמים מגלים אלפי שקלים. שימו לב, יש הרבה אתרים פרטיים שגובים על זה כסף, האתר הרשמי בחינם.',
-   link:{url:'https://itur.mof.gov.il/',label:'להר הכסף (אתר משרד האוצר, בחינם)'}},
-  {id:'st-grant',area:'state',habit:true,title:'מענק עבודה, לבדוק אם מגיע',
-   how:'מענק שנתי מרשות המסים למי שעובד ומשתכר בטווח מסוים, לרוב הורים ועובדים בשכר נמוך עד בינוני. המענק יכול להגיע לכמה אלפי שקלים בשנה, והוא נכנס ישר לחשבון. הרבה אנשים זכאים ולא יודעים, כי צריך להגיש תביעה ואף אחד לא מודיע לכם. חשוב: אפשר להגיש רק עד שנתיים אחורה, אז זה לא מחכה לכם.',
-   link:{url:'https://www.gov.il/he/departments/topics/work_grant',label:'לבדיקת זכאות למענק עבודה (גוב)'}},
-  {id:'st-btl',area:'state',habit:true,title:'זכויות בביטוח לאומי שלא מימשתם',
-   how:'דמי לידה, מענק לידה, דמי פגיעה, מענק לימודים, קצבאות ילדים, זכויות להורה יחידה. חלק נכנס אוטומטית וחלק דורש הגשה. שווה פעם בשנה להיכנס לאזור האישי ולראות מה רשום עליכם ומה לא. גם חוב פתוח בביטוח לאומי מתגלה שם לפני שהוא גדל.',
-   link:{url:'https://www.btl.gov.il/',label:'לאזור האישי בביטוח לאומי'}},
-  {id:'st-arnona',area:'state',habit:true,title:'הנחה בארנונה, לבדוק מול העירייה',
-   how:'לכל עירייה יש טבלת הנחות בארנונה, ולרוב היא מגיעה להנחה משמעותית ולפעמים כמעט מלאה. הנחות קיימות לאזרח ותיק, להורה יחיד, לנכה, לחייל בשירות, לסטודנט בחלק מהרשויות, ולפי מבחן הכנסה. ההנחה לא ניתנת לבד, מגישים בקשה, ולרוב יש תאריך אחרון בתחילת השנה. שיחה אחת למוקד העירוני אומרת לכם אם אתם בתמונה.'},
-];
+(function(){
+  var KEY="rl_school_1b_found_v1";
+  /* zones follow Tali's three kinds: fixed costs you lower once / money waiting for you / money that should work for you */
+  var ZONES=[
+    {k:"fixed",t:"קבועות שמוזילים פעם אחת",s:"שיחה או הודעה אחת, והחיסכון חוזר כל חודש"},
+    {k:"wait",t:"כסף שמחכה לך",s:"כסף שכבר שלך, ורק צריך לבקש אותו"},
+    {k:"work",t:"כסף שצריך לעבוד בשבילך",s:"לא חוזר לעו\"ש החודש, אבל משנה את התמונה לשנים"}
+  ];
+  var CHIPS=[
+    {id:"apps",ic:"📲",t:"אפליקציות ומנויים בטלפון"},
+    {id:"bank",ic:"🏦",t:"חשבון בנק"},
+    {id:"card",ic:"💳",t:"כרטיס אשראי, אחד או יותר"},
+    {id:"cell",ic:"📱",t:"קו סלולרי"},
+    {id:"net",ic:"🌐",t:"אינטרנט או טלוויזיה"},
+    {id:"elec",ic:"⚡",t:"חשבון חשמל על שמי"},
+    {id:"gym",ic:"🏋️",t:"חדר כושר, חוג או חניה"},
+    {id:"carins",ic:"🚗",t:"ביטוח רכב או דירה"},
+    {id:"health",ic:"🛡️",t:"ביטוח בריאות או חיים פרטי"},
+    {id:"loan",ic:"📉",t:"מינוס או הלוואה"},
+    {id:"salary",ic:"💼",t:"עבדתי כשכירה ב-6 השנים האחרונות"},
+    {id:"jobs",ic:"🔁",t:"החלפתי מקום עבודה לפחות פעם אחת"},
+    {id:"pension",ic:"🧾",t:"פנסיה או קרן השתלמות"},
+    {id:"cash",ic:"🛋️",t:"כסף שיושב בעו\"ש"}
+  ];
+  /* lo/hi = rough monthly range for the estimate. per: "m" monthly input, "y" yearly input (divided by 12), "once" one-time find, "long" stays in long-term savings */
+  var ST=[
+    {id:"apps",z:"fixed",ic:"📲",time:"5 דקות מהטלפון",t:"המנויים ששכחת",lo:20,hi:120,per:"m",
+     why:"ניסיון חינם שהפך לחיוב, אפליקציה של הילדים, שירות ענן שכבר לא צריך. כל אחד קטן, וביחד זה יורד כל חודש בלי שמרגישים.",
+     steps:["באייפון: הגדרות, השם שלך למעלה, מינויים.","באנדרואיד: Google Play, תמונת הפרופיל, תשלומים ומינויים, מינויים.","פותחת את פירוט האשראי של 3 החודשים האחרונים ומחפשת חיובים קטנים שחוזרים. שם שלא מזהה? בודקת לפני שמבטלת."],
+     tip:"<b>מנוי שרוצים לשמור?</b> בודקים מסלול שנתי, או מסלול משפחתי אחד במקום כמה נפרדים.",lesson:"1א · לאן הכסף הולך"},
+    {id:"bank",z:"fixed",ic:"🏦",time:"הודעה אחת בצ'אט של הבנק",t:"עמלות הבנק",lo:15,hi:40,per:"m",
+     why:"בבנקים יש \"מסלול בסיסי\" עם מחיר חודשי קבוע ונמוך, במקום עמלה על כל פעולה. הבנק לא יציע לך אותו, צריך לבקש.",
+     script:"שלום, אני מבקשת לבדוק את העמלות בחשבון שלי.\nאשמח לדעת כמה עמלות שילמתי בשנה האחרונה, ולעבור למסלול העמלות הבסיסי אם הוא זול יותר בשבילי.\nבנוסף, אשמח לשמוע אם אפשר להוריד את הריבית על המסגרת שלי.\nאני משווה בימים אלה הצעות מבנקים אחרים, ואשמח להישאר אצלכם בתנאים טובים.",
+     tip:"<b>יש מינוס קבוע?</b> הורדת הריבית עליו שווה לפעמים יותר מכל העמלות יחד. זה בתחנה של ההלוואות.",lesson:"1ד · הכסף שיוצא בשקט: עמלות ומסגרת"},
+    {id:"card",z:"fixed",ic:"💳",time:"5 דקות לכל כרטיס",t:"דמי כרטיס האשראי",lo:10,hi:30,per:"m",
+     why:"דמי כרטיס הם מהעמלות שהכי קל לקבל עליהן פטור. מספיק לבקש, ולהזכיר שיש לך גם כרטיס אחר.",
+     script:"שלום, אני מחזיקה את הכרטיס שלכם ומשלמת עליו דמי כרטיס כל חודש.\nאני מבקשת פטור קבוע מדמי הכרטיס.\nאם זה לא אפשרי, אני שוקלת לבטל את הכרטיס ולהשתמש בכרטיס אחר שיש לי.\nמה אפשר לעשות?",
+     tip:"<b>המספר מודפס על גב הכרטיס.</b> כבר בשיחה? שואלים גם על עמלות נוספות שמופיעות בפירוט.",lesson:"1א · הכסף שמחכה לך"},
+    {id:"cell",z:"fixed",ic:"📱",time:"שיחה של 5 דקות",t:"הסלולר",lo:20,hi:60,per:"m",
+     why:"לקוחות ותיקות משלמות לא פעם הרבה יותר מלקוחות חדשות על אותו שירות. שיחה למחלקת שימור מסדרת את זה.",
+     script:"שלום, אני לקוחה שלכם כבר תקופה ומשלמת היום [הסכום שלך] ₪ בחודש.\nראיתי שיש היום מסלולים דומים בפחות.\nאני רוצה לעבור למסלול משתלם יותר אצלכם, או לשמוע הצעה שתגרום לי להישאר.",
+     tip:"<b>המשפט שפותח את הדלת:</b> \"אני שוקלת לעבור לחברה אחרת\". הוא מעביר לנציגי השימור, ושם ההצעות הטובות.",lesson:"1א · הכסף שמחכה לך"},
+    {id:"net",z:"fixed",ic:"🌐",time:"שיחה של 10 דקות",t:"אינטרנט וטלוויזיה",lo:30,hi:100,per:"m",
+     why:"גם כאן המחיר הטוב שמור למי שמתקשרת ומבקשת. ובחשבונית מסתתרים לפעמים ערוצים וממירים שאף אחד לא משתמש בהם.",
+     script:"שלום, אני משלמת היום [הסכום שלך] ₪ בחודש על החבילה.\nבדקתי מחירים אצל חברות אחרות, וההצעות שם נמוכות יותר.\nאני מעדיפה להישאר אצלכם, אז אשמח שתתאימו לי את המחיר או תציעו חבילה משתלמת יותר.",
+     tip:"<b>עוברות על החשבונית שורה שורה.</b> ממיר שני? חבילת ספורט? כל אחד כזה שווה כמה עשרות שקלים בחודש.",lesson:"1א · הכסף שמחכה לך"},
+    {id:"elec",z:"fixed",ic:"⚡",time:"15 דקות השוואה",t:"ספק החשמל",lo:15,hi:60,per:"m",
+     why:"היום אפשר לקנות חשמל מספק פרטי בהנחה על התעריף, בלי לשנות שום דבר בבית. המעבר נעשה מול הספק החדש.",
+     steps:["מוצאת בחשבון החשמל כמה שילמת בחודשיים האחרונים.","משווה את ההנחות של הספקים, וקוראת את התנאים: הנחה קבועה או הנחה לפי שעות.","מי שלא בטוחה מתי היא צורכת הכי הרבה, מסלול הנחה קבועה הוא הפשוט."],
+     tip:"<b>שימי לב לתקופת ההנחה.</b> יש מבצעים לשנה הראשונה בלבד. מסמנים ביומן לבדוק שוב.",lesson:"1א · הכסף שמחכה לך"},
+    {id:"gym",z:"fixed",ic:"🏋️",time:"רגע של כנות",t:"חדר כושר, חוג וחניה",lo:0,hi:250,per:"m",
+     why:"מנוי שמשלמים עליו ולא משתמשים בו הוא הוצאה שקטה. השאלה היא לא אם זה טוב לך, אלא כמה זה עולה לך בכל פעם שאת באמת הולכת.",
+     steps:["סופרת כמה פעמים השתמשת בחודש האחרון.","מחלקת את המחיר החודשי במספר הפעמים. זה המחיר האמיתי לכניסה.","מחליטה: להשאיר, לעבור לכרטיסייה, להקפיא, או לבטל."],
+     tip:"<b>לא מבטלות מתוך אשמה.</b> אם זה חשוב לך, הוא נשאר, ונכנס לשורת הכיף בתקציב.",lesson:"1ג · תקציב שלא מרגיש כמו דיאטה"},
+    {id:"carins",z:"fixed",ic:"🚗",time:"פעם בשנה, לפני החידוש",t:"ביטוח רכב ודירה",lo:15,hi:70,per:"y",
+     why:"הביטוחים האלה מתחדשים לבד, ולא פעם במחיר גבוה יותר. מי שמבקשת הצעה אחרת לפני החידוש, משלמת פחות.",
+     steps:["מוצאת את תאריך החידוש בפוליסה, ושמה תזכורת חודש לפני.","מבקשת הצעה משתי חברות נוספות, על אותו כיסוי בדיוק.","חוזרת לחברה שלך עם המספר."],
+     script:"שלום, הפוליסה שלי מתחדשת בקרוב, ואני משלמת היום [הסכום שלך] ₪ בשנה.\nקיבלתי הצעה לאותו כיסוי בדיוק ב-[הסכום בהצעה] ₪.\nאני מעדיפה להישאר אצלכם. אפשר להתאים לי את המחיר?",
+     tip:"<b>משווים תפוחים לתפוחים:</b> אותה השתתפות עצמית, אותם כיסויים.",lesson:"2ב · ביטוח לבית ולרכב"},
+    {id:"health",z:"wait",ic:"🛡️",time:"10 דקות באתר הר הביטוח",t:"כפל ביטוחי",lo:20,hi:120,per:"m",
+     why:"באתר הממשלתי הר הביטוח רואים בחינם את כל הביטוחים על שמך. הרבה מגלות שם שני ביטוחים שמכסים את אותו דבר.",
+     steps:["נכנסת עם תעודת זהות ומקבלת קוד לנייד.","מחפשת שני ביטוחים מאותו סוג, למשל שני ביטוחי בריאות.","שולחת לסוכן או לחברת הביטוח את הנוסח."],
+     script:"שלום, בדקתי בהר הביטוח ויש לי [שם הביטוח] וגם [שם הביטוח השני].\nאשמח להבין מה כל אחד מהם מכסה בפועל, והאם יש ביניהם כפל.\nאם יש כפל, אני מבקשת לבטל את המיותר ולקבל אישור ביטול במייל.",
+     tip:"<b>לא מבטלות לפני שמבינות מה הביטוח מכסה.</b> קודם שואלים, ורק אז מחליטים. רוצה שמישהי תעבור על זה איתך? אלינור פרטוש בודקת כיסויים ביטוחיים.",lesson:"2ב · מה כבר יש לך, ומה כפול",
+     partner:["אלינור פרטוש, סוכנת ביטוח ופיננסים","https://wa.me/972502530585?text=%D7%94%D7%99%D7%99%2C%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%98%D7%9C%D7%99%20%D7%91%D7%A0%D7%99%D7%9E%D7%99%D7%A0%D7%95%D7%91%20%D7%A9%D7%A8%D7%A2%D7%91%D7%99%20%D7%9E-RichLife"],
+     links:[["הר הביטוח, אתר משרד האוצר","https://harb.cma.gov.il/"]]},
+    {id:"salary",z:"wait",ic:"💸",time:"10 דקות בדיקה",t:"החזר מס",lo:30,hi:300,per:"y",
+     why:"אפשר לבקש החזר מס עד 6 שנים אחורה, והרבה שכירות משלמות יותר מדי בלי לדעת. שנה עם אחד מהדברים האלה היא שנה שכדאי לבדוק:",
+     steps:["החלפת עבודה, או שני מעסיקים באותה שנה.","חופשת לידה, שמירת הריון, מילואים או אבטלה.","סיום תואר או לימודי מקצוע.","תרומות עם קבלות, או ביטוח חיים ששילמת בעצמך.","מגורים ביישוב עם הטבת מס."],
+     tip:"<b>אפשר לבד, באזור האישי באתר רשות המסים.</b> ומי שרוצה שמישהו יבדוק את כל 6 השנים ויגיש בשבילה, אילן גרמן עושה את זה. קיבלת החזר? רושמות את הסכום, והמונה מחלק אותו ל-12.",lesson:"2ג · החזר מס",
+     partner:["אילן גרמן, מנהל חשבונות ויועץ מס מוסמך","https://wa.me/972557053188?text=%D7%94%D7%99%D7%99%2C%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%98%D7%9C%D7%99%20%D7%91%D7%A0%D7%99%D7%9E%D7%99%D7%A0%D7%95%D7%91%20%D7%A9%D7%A8%D7%A2%D7%91%D7%99%20%D7%9E-RichLife"]},
+    {id:"jobs",z:"wait",ic:"🔁",time:"5 דקות באתר הר הכסף",t:"קופות ששכחת",lo:0,hi:0,per:"once",
+     why:"כל מעבר עבודה יכול להשאיר מאחור קופה קטנה, שממשיכה לגבות דמי ניהול. באתר הממשלתי הר הכסף רואים את כולן במקום אחד.",
+     steps:["נכנסת לאתר הר הכסף עם תעודת זהות.","רושמת כל קופה שלא הכרת, ואת הסכום שבה.","מאחדת לקופה הפעילה שלך, בבקשה אחת לחברה שבה את נמצאת היום."],
+     tip:"<b>זה כסף חד-פעמי,</b> ולכן הוא נספר בנפרד, בחיסכון לטווח ארוך.",lesson:"3 · כסף ששכחת, ודמי ניהול",
+     links:[["הר הכסף, אתר משרד האוצר","https://itur.mof.gov.il/"]]},
+    {id:"loan",z:"work",ic:"📉",time:"שיחה אחת לבנק",t:"ריבית על מינוס והלוואות",lo:30,hi:300,per:"m",
+     why:"ריבית על מינוס או על הלוואה יכולה להיות הדליפה הכי גדולה בכל הרשימה. היא פתוחה למשא ומתן, אבל רק למי שמבקשת.",
+     script:"שלום, אני רוצה לבדוק את ההלוואות והמסגרת שלי.\nאשמח לדעת מה הריבית שאני משלמת היום על כל אחת, ומה אפשר לעשות כדי להוריד אותה.\nאני בודקת גם הצעות במקומות אחרים, ואשמח להישאר אצלכם בתנאים טובים.",
+     tip:"<b>יש כמה הלוואות?</b> שואלים גם על איחוד, ובודקים את העלות הכוללת, לא רק את הריבית.",lesson:"1ב · מדברים עם הבנק על המינוס",calc:1},
+    {id:"pension",z:"work",ic:"🧾",time:"שיחה אחת לקרן",t:"דמי ניהול בפנסיה ובהשתלמות",lo:0,hi:0,per:"long",
+     why:"דמי הניהול יורדים מהכסף שלך כל חודש, במשך עשרות שנים. בקשה אחת יכולה להוריד אותם.",
+     steps:["פותחת את הדוח השנתי, או את האזור האישי באתר של הקרן.","מוצאת שני מספרים: דמי ניהול מההפקדה, ודמי ניהול מהצבירה.","שולחת לקרן את הנוסח."],
+     script:"שלום, אני עמיתה אצלכם ורוצה לבדוק את דמי הניהול שלי.\nאשמח לדעת כמה אני משלמת היום מההפקדה ומהצבירה.\nאני מבקשת הצעה להורדת דמי הניהול. אני בודקת גם קרנות אחרות, ואשמח להישאר אצלכם בתנאים טובים.",
+     tip:"<b>התחנה הזו לא מחזירה כסף לעו\"ש החודש.</b> היא משאירה יותר כסף בחיסכון שלך, עד הפרישה. לכן היא נספרת בנפרד.",lesson:"3 · כסף ששכחת, ודמי ניהול"},
+    {id:"cash",z:"work",ic:"🛋️",time:"10 דקות",t:"הכסף שיושב בעו\"ש",lo:10,hi:80,per:"m",
+     why:"כסף שיושב בעו\"ש לא מרוויח כלום, וגם מאבד ערך מול האינפלציה. את מה שלא צריך לחודש הקרוב אפשר להעביר לקרן כספית: זמינה תוך יום-יומיים, ומקבלת ריבית.",
+     steps:["משאירה בעו\"ש את מה שצריך לחודש הקרוב.","את השאר מעבירה לקרן כספית בחשבון המסחר בבנק או בבית השקעות.","מחשבת: הריבית השנתית של הקרן, כפול הסכום, חלקי 12. זה מה שמצאת בחודש."],
+     tip:"<b>זו גם קרן הביטחון שלך.</b> כמה בדיוק צריך בצד, לומדים בשלב 2.",lesson:"2א · איפה שמים את כרית הביטחון"}
+  ];
+  /* links that used to live in the savings-map items a station now covers */
+  var MORE_LINKS={elec:[["להשוואת ספקי חשמל (הבוררת)","https://haboreret.co.il/"]],cell:[["להשוואת חבילות סלולר (כמה זה)","https://www.kamaze.co.il/"]],net:[["להשוואת אינטרנט וטלוויזיה (כמה זה)","https://www.kamaze.co.il/"]],apps:[["להשוואת חבילות טלוויזיה וסטרימינג (כמה זה)","https://www.kamaze.co.il/"]],salary:[["סימולטור החזר המס, רשות המסים (בחינם)","https://www.gov.il/he/service/simulator-employee"]]};
+  ST.forEach(function(s){if(MORE_LINKS[s.id])s.links=(s.links||[]).concat(MORE_LINKS[s.id]);});
+  var DISCLOSE="אלה אנשי מקצוע שאני עובדת איתם ובוטחת בהם. חשוב לי שתדעו: בחלק מהמקרים אני מקבלת תמורה על ההפניה. זה לא משנה את מי אני ממליצה, אבל מגיע לכם לדעת את זה מראש. ההתקשרות איתם היא ישירה מולם, והבחירה כמובן שלכם.";
+  var ils=function(n){return "₪"+Math.round(n||0).toLocaleString("he-IL");};
+  var $=function(id){return document.getElementById(id);};
+  var S={have:{},st:{}};
+  var OPEN=null,CIO={};
+  try{var raw=localStorage.getItem(KEY);if(raw)S=JSON.parse(raw)||S;}catch(e){}
+  S.have=S.have||{};S.st=S.st||{};S.cat=S.cat||{};S.prof=S.prof||{};
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+  function esc(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML;}
+  function relevant(s){return !!S.have[s.id];}
+  function monthlyOf(s){var r=S.st[s.id];if(!r||r.state!=="done")return 0;var v=+r.v||0;if(s.per==="y")return v/12;if(s.per==="m")return v;return 0;}
 
-const $=s=>document.querySelector(s);
-const money=n=>new Intl.NumberFormat('he-IL',{maximumFractionDigits:0}).format(Math.round(n||0));
-const state={profile:new Set(),off:new Set(),open:new Set()};
-
-function visible(){return BENEFITS.filter(b=>!b.tag||state.profile.has(b.tag));}
-function counted(){return visible().filter(b=>!b.habit&&!state.off.has(b.id));}
-function total(){return counted().reduce((s,b)=>s+b.val,0);}
-
-function renderProfile(){
-  const w=$('#pchips'); w.innerHTML='';
-  PROFILE.forEach(p=>{
-    const on=state.profile.has(p.tag);
-    const b=document.createElement('button');
-    b.type='button'; b.className='pchip'+(on?' on':''); b.textContent=p.label;
-    b.setAttribute('aria-pressed',on?'true':'false');
-    b.onclick=()=>{ on?state.profile.delete(p.tag):state.profile.add(p.tag); renderAll(); };
-    w.appendChild(b);
+  /* chips */
+  var ch=$("chips");
+  CHIPS.forEach(function(c){
+    var b=document.createElement("button");b.type="button";b.className="chip-btn";b.setAttribute("aria-pressed",S.have[c.id]?"true":"false");
+    b.innerHTML='<span class="ic" aria-hidden="true">'+c.ic+'</span><span>'+esc(c.t)+'</span>';
+    b.onclick=function(){S.have[c.id]=!S.have[c.id];b.setAttribute("aria-pressed",S.have[c.id]?"true":"false");save();render();};
+    ch.appendChild(b);
   });
-}
 
-function renderAreas(){
-  const host=$('#areas'); host.innerHTML='';
-  AREAS.forEach(a=>{
-    const list=visible().filter(b=>b.area===a.key);
-    if(!list.length) return;
-    const openA=state.open.has(a.key);
-    const cnt=list.filter(b=>!b.habit);
-    const sum=cnt.filter(b=>!state.off.has(b.id)).reduce((s,b)=>s+b.val,0);
-    const card=document.createElement('div'); card.className='card area'+(openA?'':' closed');
-
-    const head=document.createElement('div'); head.className='area-head';
-    head.setAttribute('role','button'); head.setAttribute('tabindex','0');
-    head.setAttribute('aria-expanded',openA?'true':'false');
-    head.innerHTML='<span class="a-emoji">'+a.emoji+'</span>'+
-      '<span class="a-name">'+a.name+'</span>'+
-      '<span class="a-meta"><span class="a-count">'+(cnt.length===1?'הטבה אחת':cnt.length+' הטבות')+'</span><span class="a-sum">עד '+money(sum)+' ₪</span></span>'+
-      '<span class="chev">⌄</span>';
-    const toggle=()=>{ state.open.has(a.key)?state.open.delete(a.key):state.open.add(a.key); renderAll(); };
-    head.onclick=toggle;
-    head.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } };
-    card.appendChild(head);
-
-    const body=document.createElement('div'); body.className='area-body';
-    list.forEach(b=>{
-      const habit=!!b.habit, off=state.off.has(b.id);
-      const rowEl=document.createElement('div'); rowEl.className='benefit'+(!habit&&off?' off':'');
-      const link=b.link?'<a class="b-link" href="'+b.link.url+'" target="_blank" rel="noopener">'+b.link.label+' ←</a>':'';
-      const note=b.note?'<div class="b-note '+b.note.type+'">'+b.note.text+'</div>':'';
-      const badge=habit?'<span class="b-badge">🔁 הרגל חכם</span>':'<span class="b-save">'+b.save+'</span>';
-      const lead=habit?'<span class="b-bullet">•</span>':'<label class="b-check"><input type="checkbox" '+(off?'':'checked')+' aria-label="לספור את '+b.title+'"><span class="b-box">✓</span></label>';
-      rowEl.innerHTML='<div class="b-head">'+lead+'<div class="b-main"><div class="b-title">'+b.title+'</div>'+badge+'<div class="b-how">'+b.how+'</div>'+link+note+'</div></div>';
-      if(!habit){ rowEl.querySelector('input').onchange=e=>{ e.target.checked?state.off.delete(b.id):state.off.add(b.id); renderAll(); }; }
-      body.appendChild(rowEl);
+  function stationHTML(s,i){
+    var r=S.st[s.id]||{};
+    var st=r.state||"",open=OPEN===s.id;
+    var unit=s.per==="y"?"כמה חסכת בשנה? (המונה מחלק ל-12)":s.per==="once"?"כמה מצאת? (סכום חד-פעמי)":s.per==="long"?"בכמה ירדו דמי הניהול? (באחוזים, לא חובה)":"כמה הורדת בחודש?";
+    var unitSym=s.per==="long"?"%":"₪";
+    var range=s.per==="once"?"סכום חד-פעמי":s.per==="long"?"נשאר בחיסכון, כל שנה":(s.per==="y"?"בערך "+s.lo+"-"+s.hi+" ₪ בחודש, אחרי חלוקה ל-12":"בערך "+s.lo+"-"+s.hi+" ₪ בחודש");
+    var badge=st==="done"?'<span class="st-badge ok">נסגרה ✓</span>':st==="skip"?'<span class="st-badge">דילגת</span>':'';
+    var h='<article class="card st'+(st==="done"?" is-done":"")+(st==="skip"?" is-skip":"")+(open?" is-open":"")+'" id="st-'+s.id+'">';
+    h+='<h3 class="st-h"><button type="button" class="st-head" data-tog="'+s.id+'" aria-expanded="'+open+'" aria-controls="sp-'+s.id+'"><span class="st-ic" aria-hidden="true">'+s.ic+'</span><span class="st-tt"><span class="st-meta">תחנה '+(i+1)+' · '+esc(s.time)+badge+'</span><span class="st-name">'+esc(s.t)+'</span><span class="range">'+esc(range)+'</span></span><span class="chev" aria-hidden="true"></span></button></h3>';
+    h+='<div class="st-panel" id="sp-'+s.id+'"'+(open?'':' hidden')+'>';
+    h+='<div class="skip-note">דילגת על התחנה הזו. <button type="button" data-unskip="'+s.id+'">לחזור אליה</button></div>';
+    h+='<div class="st-body"><p class="why">'+esc(s.why)+'</p>';
+    if(s.steps){h+='<ol>';s.steps.forEach(function(x){h+='<li>'+esc(x)+'</li>';});h+='</ol>';}
+    if(s.script){h+='<div class="script"><div class="sl">הנוסח שלך · להעתיק, לשלוח או לקרוא</div><p>'+esc(s.script)+'</p><button type="button" class="copy" data-copy="'+s.id+'">להעתיק את הנוסח</button></div>';}
+    if(s.links){h+='<div class="links">';s.links.forEach(function(l){h+='<a href="'+l[1]+'" target="_blank" rel="noopener">'+esc(l[0])+' ←</a>';});h+='</div>';}
+    if(s.partner){h+='<div class="partner"><a href="'+s.partner[1]+'" target="_blank" rel="noopener">💬 לשיחה עם '+esc(s.partner[0])+'</a><p>'+esc(DISCLOSE)+'</p></div>';}
+    if(s.calc)h+=lcHTML();
+    h+='<p class="tip">'+s.tip+'</p><p class="lesson"><span aria-hidden="true">🎓 </span>בשיעור: '+esc(s.lesson)+'</p>';
+    h+='<div class="found"><div class="field"><label for="v-'+s.id+'">'+esc(unit)+'</label><div class="input-shell"><span class="unit">'+unitSym+'</span><input id="v-'+s.id+'" type="number" inputmode="decimal" min="0" placeholder="0" value="'+(r.v||"")+'"></div></div>';
+    h+='<button type="button" class="b-found" data-found="'+s.id+'">'+(st==="done"?"עדכון ✓":"מצאתי 🎉")+'</button><button type="button" class="b-skip" data-skip="'+s.id+'">לא רלוונטי לי</button></div>';
+    h+='</div></div></article>';
+    return h;
+  }
+  function orderList(){var rel=ST.filter(relevant),o=[];ZONES.forEach(function(z){rel.forEach(function(s){if(s.z===z.k)o.push(s);});});return o;}
+  function nextPending(after){
+    var o=orderList(),i=-1,k;o.forEach(function(s,n){if(s.id===after)i=n;});
+    for(k=i+1;k<o.length;k++)if(!(S.st[o[k].id]||{}).state)return o[k].id;
+    for(k=0;k<o.length;k++)if(!(S.st[o[k].id]||{}).state)return o[k].id;
+    return "";
+  }
+  function setOpen(id){
+    OPEN=id;
+    document.querySelectorAll("#zones .st").forEach(function(el){
+      var on=el.id==="st-"+id;el.classList.toggle("is-open",on);
+      el.querySelector(".st-head").setAttribute("aria-expanded",on?"true":"false");
+      el.querySelector(".st-panel").hidden=!on;
     });
-    card.appendChild(body);
-    host.appendChild(card);
+  }
+  function goTo(id,focus){
+    var el=$("st-"+id);if(!el)return;
+    el.scrollIntoView({behavior:"smooth",block:"start"});
+    if(focus){var b=el.querySelector(".st-head");if(b)b.focus({preventScroll:true});}
+  }
+
+
+  function lcHTML(){
+    var c=S.lc||{};
+    var f=function(id,lab,u,ph){return '<div class="field"><label for="lc-'+id+'">'+lab+'</label><div class="input-shell"><span class="unit">'+u+'</span><input id="lc-'+id+'" data-lc="'+id+'" type="number" inputmode="decimal" min="0" placeholder="'+ph+'" value="'+(c[id]||"")+'"></div></div>';};
+    var h='<div class="lcalc"><div class="sl">מחשבון קטן: כמה שווה לי הריבית החדשה?</div>';
+    h+='<div class="lc-kind" role="group" aria-label="סוג החוב"><button type="button" data-lck="loan" aria-pressed="'+(c.kind!=="od")+'">הלוואה</button><button type="button" data-lck="od" aria-pressed="'+(c.kind==="od")+'">מינוס</button></div>';
+    h+='<div class="lc-grid">'+f("bal",c.kind==="od"?"כמה את במינוס בממוצע":"כמה נשאר להחזיר היום","₪","80000");
+    if(c.kind!=="od")h+=f("mon","כמה חודשים נשארו","ח׳","48");
+    h+=f("old","הריבית היום","%","9")+f("nw","הריבית החדשה שהציעו","%","6")+'</div>';
+    h+='<div class="lc-out" id="lcOut" aria-live="polite"></div></div>';
+    return h;
+  }
+  function lcCalc(){
+    var c=S.lc||{},o=$("lcOut");if(!o)return;
+    var P=+c.bal||0,a=(+c.old||0)/1200,b=(+c.nw||0)/1200,n=Math.round(+c.mon||0),od=c.kind==="od";
+    if(!P||!c.old||!c.nw||(!od&&!n)){o.innerHTML='<p>ממלאות את המספרים מהאפליקציה של הבנק, והחישוב מופיע כאן.</p>';o.dataset.v="";return;}
+    var pm=function(r){return r?P*r/(1-Math.pow(1+r,-n)):P/n;};
+    var d,tot,txt;
+    if(od){d=P*(a-b);tot=d*12;txt='<p>על מינוס של '+ils(P)+', הריבית החדשה חוסכת <b>'+ils(d)+' בחודש</b>, כלומר '+ils(tot)+' בשנה.</p>';}
+    else{var x=pm(a),y=pm(b);d=x-y;tot=d*n;txt='<p>ההחזר החודשי יורד מ-'+ils(x)+' ל-'+ils(y)+'. זה <b>'+ils(d)+' פחות בחודש</b>, ו-'+ils(tot)+' ריבית פחות עד סוף ההלוואה.</p>';}
+    if(d<=0){o.innerHTML='<p>הריבית החדשה לא נמוכה מהקיימת, אז אין כאן חיסכון. שווה לבקש הצעה נוספת.</p>';o.dataset.v="";return;}
+    if(!od)txt+='<p class="lc-warn">בודקות שמספר החודשים לא התארך. הלוואה שנפרסת על יותר זמן מורידה את ההחזר החודשי, אבל בסוף עולה יותר.</p>';
+    txt+='<button type="button" class="lc-use" data-lcuse="1">להכניס '+ils(d)+' למונה</button>';
+    o.innerHTML=txt;o.dataset.v=Math.round(d);
+  }
+  function render(){
+    var rel=ST.filter(relevant);
+    /* scan result */
+    var lo=0,hi=0;rel.forEach(function(s){if(s.per==="m"||s.per==="y"){lo+=s.lo;hi+=s.hi;}});
+    if(!rel.length)OPEN=null;else if(OPEN===null||(OPEN&&!rel.some(function(s){return s.id===OPEN;})))OPEN=nextPending("");
+    var first=nextPending("")||(rel[0]&&rel[0].id)||"";
+    $("scanRes").innerHTML=rel.length?'<div class="note">יש לך '+rel.length+' תחנות</div><div class="big tabular">בערך '+lo+'-'+hi+' ₪ בחודש</div><div class="note">הערכה גסה להמחשה, לא הבטחה</div><button type="button" class="btn-main" data-go="'+first+'">יאללה, לתחנה הראשונה</button>':'<div class="note">מסמנות כל מה שנכון לגבייך, והרשימה האישית נבנית כאן.</div>';
+    /* zones + map + stations */
+    var z=$("zones"),out="",n=0;
+    ZONES.forEach(function(zz){
+      var list=rel.filter(function(s){return s.z===zz.k;});if(!list.length)return;
+      var zd=list.filter(function(s){return (S.st[s.id]||{}).state==="done";}).length;
+      out+='<section class="zone"><div class="zone-h"><b>'+esc(zz.t)+'</b><em class="z-prog">'+zd+' מתוך '+list.length+'</em><span>'+esc(zz.s)+'</span></div>';
+      list.forEach(function(s){out+=stationHTML(s,n++);});
+      out+='</section>';
+    });
+    z.innerHTML=out;
+    lcCalc();
+    paint();
+  }
+
+  function paint(){
+    var rel=ST.filter(relevant);
+    var m=0,once=0,done=0,skip=0;
+    rel.forEach(function(s){var r=S.st[s.id]||{};if(r.state==="done"){done++;m+=monthlyOf(s);if(s.per==="once")once+=+r.v||0;}if(r.state==="skip")skip++;});
+    var cs=catSum();m+=cs.m;
+    var tot=rel.length-skip;
+    $("cMonth").innerHTML=ils(m)+' <small>בחודש</small>';
+    $("cYear").textContent=ils(m*12)+" בשנה";
+    $("cDone").textContent=done+" מתוך "+tot+" תחנות"+(cs.n?" · ועוד "+cs.n+(cs.n===1?" רעיון":" רעיונות"):"");
+    document.body.classList.toggle("has-bar",rel.length>0||cs.n>0);
+    $("cBar").style.width=(tot?Math.round(done/tot*100):0)+"%";
+    $("sMonth").textContent=ils(m);$("sYear").textContent=ils(m*12);$("sLong").textContent=ils(once);
+    var R=0.09,mr=Math.pow(1+R,1/12)-1;
+    function fv(y){return m*(Math.pow(1+mr,12*y)-1)/mr+once*Math.pow(1+R,y);}
+    var fut=$("sFuture");
+    if(m>0||once>0){
+      fut.hidden=false;
+      $("fLead").textContent="אם הכסף שמצאת לא נבלע בהוצאות, אלא נכנס כל חודש להשקעה לטווח ארוך, זה מה שהוא יכול להיות:";
+      function k(x){return ils(Math.round(x/1000)*1000);}
+      $("f10").textContent="כ-"+k(fv(10));$("f20").textContent="כ-"+k(fv(20));$("f30").textContent="כ-"+k(fv(30));
+      $("fNote").textContent="מתוך כ-"+k(fv(20))+" בעוד 20 שנה, רק "+ils(m*240+once)+" זה כסף שהפקדת. כל השאר הוא מה שהזמן עשה. החישוב מניח תשואה של 9% בשנה, הממוצע ההיסטורי של מסלול מנייתי לטווח ארוך, לפני מס, דמי ניהול ואינפלציה. להמחשה בלבד ולא הבטחה.";
+      $("cFut").innerHTML="שווה כ-"+k(fv(20))+" בעוד 20 שנה<br>";
+    } else { fut.hidden=true; $("cFut").textContent=""; }
+    var ins=$("sInsight");
+    if(m>0){ins.textContent="מצאת "+ils(m)+" בחודש. זה "+ils(m*12)+" בשנה שנכנסים לפער בין ההכנסות להוצאות, בלי לוותר על כלום. הצעד הבא: הוראת קבע בגובה הזה לחיסכון.";}
+    else{ins.textContent="כל תחנה שסוגרים מגדילה את הפער שלך בין הכנסות להוצאות. מה שמצאת כאן חוזר כל חודש, בלי לוותר על כלום.";}
+  }
+
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("[data-found],[data-skip],[data-unskip],[data-copy],[data-go],[data-tog]");if(!t)return;
+    if(t.dataset.tog){var on=OPEN!==t.dataset.tog;setOpen(on?t.dataset.tog:"");if(on)goTo(t.dataset.tog,false);return;}
+    if(t.dataset.go!==undefined){if(!t.dataset.go)return;setOpen(t.dataset.go);goTo(t.dataset.go,true);return;}
+    if(t.dataset.copy){var s=ST.filter(function(x){return x.id===t.dataset.copy;})[0];
+      var done=function(){t.textContent="הועתק ✓";t.classList.add("ok");setTimeout(function(){t.textContent="להעתיק את הנוסח";t.classList.remove("ok");},2200);};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s.script).then(done,function(){});}else{var ta=document.createElement("textarea");ta.value=s.script;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(_){}ta.remove();}
+      return;}
+    var id=t.dataset.found||t.dataset.skip||t.dataset.unskip;
+    if(t.dataset.found){var v=$("v-"+id).value;S.st[id]={state:"done",v:v};var c=$("counter");c.classList.remove("pop");void c.offsetWidth;c.classList.add("pop");}
+    if(t.dataset.skip){S.st[id]={state:"skip"};}
+    if(t.dataset.unskip){S.st[id]={};}
+    OPEN=t.dataset.unskip?id:nextPending(id);
+    save();render();
+    if(OPEN){goTo(OPEN,true);}else{var m=$("more");if(m)m.scrollIntoView({behavior:"smooth",block:"start"});}
   });
-}
 
-function renderCounter(){ const el=$('#cval'); if(el) el.textContent='עד '+money(total())+' ₪'; }
+  document.addEventListener("input",function(e){var k=e.target.dataset&&e.target.dataset.lc;if(!k)return;S.lc=S.lc||{};S.lc[k]=e.target.value;save();lcCalc();});
+  document.addEventListener("click",function(e){
+    var k=e.target.closest("[data-lck]");if(k){S.lc=S.lc||{};S.lc.kind=k.dataset.lck;save();render();var el=$("st-loan");if(el)el.scrollIntoView({block:"nearest"});return;}
+    var u=e.target.closest("[data-lcuse]");if(u){var v=$("lcOut").dataset.v;if(v){$("v-loan").value=v;$("v-loan").focus();}}
+  });
+  $("resetBtn").onclick=function(){if(!confirm("למחוק את כל הסימונים ולהתחיל מחדש?"))return;S={have:{},st:{},lc:{},cat:{},prof:{}};OPEN=null;CIO={};save();document.querySelectorAll("#pchips .chip-btn").forEach(function(b){b.setAttribute("aria-pressed","false");});renderCat();document.querySelectorAll("#chips .chip-btn").forEach(function(b){b.setAttribute("aria-pressed","false");});render();};
 
-function writeHash(){
-  const p=[...state.profile], x=[...state.off], o=[...state.open], parts=[];
-  if(p.length) parts.push('p='+p.join(','));
-  if(x.length) parts.push('x='+x.join(','));
-  if(o.length) parts.push('o='+o.join(','));
-  history.replaceState(null,'', parts.length?'#'+parts.join('&'):location.pathname+location.search);
-}
-function readHash(){
-  const q=new URLSearchParams(location.hash.slice(1));
-  (q.get('p')||'').split(',').filter(Boolean).forEach(t=>state.profile.add(t));
-  (q.get('x')||'').split(',').filter(Boolean).forEach(id=>state.off.add(id));
-  (q.get('o')||'').split(',').filter(Boolean).forEach(k=>state.open.add(k));
-}
-function renderAll(){ renderProfile(); renderAreas(); renderCounter(); writeHash(); }
-
-$('#shareBtn').onclick=()=>{ writeHash(); const f=$('#linkField'); $('#actLink').hidden=false; f.value=location.href; f.focus(); f.select(); };
-$('#copyBtn').onclick=()=>{ const f=$('#linkField'); f.select();
-  if(navigator.clipboard) navigator.clipboard.writeText(f.value); else document.execCommand('copy');
-  const c=$('#copyBtn'); c.textContent='הועתק!'; setTimeout(()=>c.textContent='העתקה',1500); };
-
-readHash();
-renderAll();
+  /* ===== the catalog (was "מפת החיסכון") ===== */
+  var AREAS=[{"key": "energy", "emoji": "⚡", "name": "חשמל ואנרגיה"}, {"key": "food", "emoji": "🛒", "name": "סופר ומזון"}, {"key": "second", "emoji": "♻️", "name": "יד שנייה, השאלה וחינם"}, {"key": "car", "emoji": "🚗", "name": "תחבורה ורכב"}, {"key": "bank", "emoji": "🏦", "name": "בנקאות ואשראי"}, {"key": "state", "emoji": "🏛️", "name": "מדינה, מס וזכויות"}];
+  var PROF=[{"tag": "home", "label": "בבית רוב היום"}, {"tag": "night", "label": "רכב חשמלי או מכונות שרצות בלילה"}, {"tag": "exempt", "label": "סטודנט, חייל, אזרח ותיק או גיל 18-26"}, {"tag": "car", "label": "יש רכב פרטי"}, {"tag": "kids", "label": "ילדים קטנים או תינוק בדרך"}];
+  var CAT=[{"id": "elec-night", "area": "energy", "tag": "night", "title": "מסלול חשמל לילה", "save": "עד 20% על צריכת הלילה", "val": 250, "how": "אם רוב הצריכה הכבדה בבית קורית בלילה, מכונת כביסה, מייבש, מזגן או הטענת רכב חשמלי, יש מסלול שנותן עד 20% הנחה על החשמל בין 23:00 ל-07:00. כל מה שצריך זה להזיז את ההפעלות לשעות האלה, ולשלם פחות על אותה צריכה בדיוק.", "link": {"url": "https://haboreret.co.il/", "label": "להשוואת מסלולי חשמל (הבוררת)"}}, {"id": "elec-day", "area": "energy", "tag": "home", "title": "מסלול חשמל יום", "save": "עד 15% על צריכת היום", "val": 200, "how": "מתאים למי שנמצא הרבה בבית במהלך היום, למשל עובדים מהבית או בחופשת לידה. מקבלים הנחה על עיקר הצריכה שקורית בשעות 07:00-17:00, במקום לשלם תעריף מלא לאורך כל היום.", "link": {"url": "https://haboreret.co.il/", "label": "להשוואת מסלולי חשמל (הבוררת)"}}, {"id": "list", "area": "food", "habit": true, "title": "רשימת קניות קונקרטית", "how": "מכינים רשימה ומגיעים ממוקדים. הסופר בנוי כדי שתקנו יותר, ורשימה שומרת אתכם על מה שבאמת צריך."}, {"id": "budget-cap", "area": "food", "habit": true, "title": "תקרת סכום לקנייה", "how": "מחליטים על תקרה חודשית לסופר (למשל 2,000 ₪) ולא עוברים אותה, לא משנה איך מחלקים בין הקניות."}, {"id": "chp", "area": "food", "title": "משווים את הסל שלך, לפי הקבלה", "save": "5%-15% על כל קנייה", "val": 400, "how": "אותו סל בדיוק יכול לעלות סכום אחר בכל סניף, גם בתוך אותה רשת. בודקים את זה פעם אחת, על הקנייה האמיתית שלך ולא על סל מומצא.", "link": {"url": "https://chp.co.il/", "label": "להשוואת הסל ב-CHP"}, "steps": ["לוקחים את הקבלה מהקנייה הגדולה האחרונה.", "מקלידים ב-CHP את 10 המוצרים שחוזרים בכל קנייה.", "משווים את הסל בשניים-שלושה סניפים קרובים, וגם בסניף אחר של הרשת שבה קונים היום.", "חוזרים על זה עם עוד קבלה אחת לפני שמחליטים. קבלה אחת יכולה לצאת זולה בגלל מבצע של אותו שבוע."], "note": "איך מחליטים: פער של פחות מ-3%? נשארים איפה שנוח. פער גדול והסניף קרוב? מעבירים לשם את הקנייה הגדולה של החודש. פער גדול והסניף רחוק? מחשבים נסיעה, דלק וחניה, ורק אז מחליטים."}, {"id": "online", "area": "food", "habit": true, "title": "קנייה אונליין", "how": "קונים אונליין ופחות נופלים על קניות דחף, וגם משווים מחירים ותחליפים זולים בקלות. דמי המשלוח מתקזזים מול מה שלא קניתם סתם.", "link": {"url": "https://www.pricez.co.il/", "label": "להשוואת מחירי סופר (פרייסז)"}}, {"id": "deals", "area": "food", "habit": true, "title": "מודעות למבצעים", "how": "מנצלים מבצעים רק על מוצרים יבשים שלא מתקלקלים, ולא נופלים על \"2 ב-48\" כשאחד עולה 24.20. מבצע לא תמיד באמת משתלם."}, {"id": "house-brand", "area": "food", "title": "מותג הבית ומותגים קטנים", "save": "~₪1,800 בשנה", "val": 1500, "how": "אותו מוצר, טעם דומה, מחיר נמוך יותר. 3 ₪ למוצר על חצי מהסל זה בקלות 150 ₪ בחודש, כ-1,800 ₪ בשנה."}, {"id": "social-super", "area": "food", "title": "סופר חברתי / החישוק / מועדון שווה", "save": "5%-14% מול הרשתות", "val": 700, "how": "מזמינים דרך הסופר החברתי המקוון, אותם מוצרים במחיר מסובסד.", "link": {"url": "https://hahishook.com/", "label": "לאתר החישוק"}}, {"id": "market", "area": "food", "title": "שוק ומשקים ביום שישי", "save": "זול יותר מהסופר", "val": 300, "how": "הולכים לשוק בשישי אחר הצהריים כשהמוכרים רוצים להיפטר מהסחורה. סחורה טובה וזולה יותר, ובמשק יש מחירי סיטונאות לפירות וירקות."}, {"id": "kiosk", "area": "food", "habit": true, "title": "פחות קיוסק ומאפייה", "how": "יורדים לקיוסק רק למה שבאמת חסר עכשיו, ואת השאר קונים בסופר בהרבה פחות. סנדוויצ'ים ובורקסים יומיומיים מהמאפייה מתנקזים לסכום גדול."}, {"id": "eatout-budget", "area": "food", "habit": true, "title": "תקציב לאוכל בחוץ ומשלוחים", "how": "אוכל בחוץ הוא בילוי, לא תחליף לאוכל בית. קובעים לו תקציב (למשל 400 ₪ בחודש) ומכינים אוכל מראש כשיודעים שלא תהיו בבית."}, {"id": "deli", "area": "food", "title": "מעדנייה לגבינות ונקניקים", "save": "זול מהאריזות", "val": 150, "how": "גבינות ופסטרמות מהמעדנייה יוצאות זול יותר מהאריזות המוכנות. שווה למי שמכין פשטידות, פסטות ומטעמים חלביים."}, {"id": "frozen", "area": "food", "title": "בשר, עוף ודגים קפואים", "save": "עד ₪80 לקנייה", "val": 300, "how": "אם ממילא מקפיאים, קונים כבר קפוא. סלמון קפוא זול ב-30-40 ₪ מטרי, וחזה עוף שחותכים לבד זול משניצל מוכן."}, {"id": "spareeat", "area": "food", "title": "SpareEat, הצלת מזון", "save": "עד 50% על אוכל מוכן", "val": 250, "how": "מזמינים \"שקית הפתעה\" ממסעדות, מאפיות וסופרים בסוף היום בחצי מחיר ומטה.", "link": {"url": "https://spareeat.com/", "label": "לאתר SpareEat"}}, {"id": "sec-first", "area": "second", "habit": true, "title": "לפני כל קנייה, חמש דקות של חיפוש יד שנייה", "how": "זה ההרגל שמזיז הכי הרבה כסף בתחום הזה. לפני שקונים משהו חדש, מקדישים חמש דקות לחיפוש ביד2 ובמרקטפלייס. חצי מהפעמים תמצאו את אותו דבר בדיוק, לפעמים אפילו באריזה, בשליש מהמחיר. ואם לא מצאתם, קניתם חדש בלב שלם.", "link": {"url": "https://www.yad2.co.il/", "label": "לאתר יד2"}}, {"id": "sec-free", "area": "second", "title": "קבוצות חינם ושיתוף בפייסבוק", "save": "מאות עד אלפים בשנה", "val": 900, "how": "יש עולם שלם של קבוצות שבהן אנשים פשוט נותנים דברים בחינם, כי חבל להם לזרוק. אמהות לא אוגרות, נותנים ומקבלים בעיר שלכם, קבוצות שכונתיות. מחפשים בפייסבוק את שם העיר יחד עם המילה חינם או מוסרים, מצטרפים לשתיים-שלוש, ומגיבים מהר כשעולה משהו שצריך. לא צריך לחכות למזל, אפשר גם לפרסם מה מחפשים.", "link": {"url": "https://www.facebook.com/marketplace/", "label": "למרקטפלייס של פייסבוק"}}, {"id": "sec-baby", "area": "second", "tag": "kids", "title": "ציוד לתינוק ולידה מיד שנייה", "save": "אלפי שקלים", "val": 3500, "how": "זה התחום שבו יד שנייה משתלמת הכי הרבה, כי הציוד בשימוש חודשים ספורים ואז יושב במחסן. עגלה, לול, אמבטיה, מוניטור, כיסא אוכל, מנשא, משאבה. אפשר לקנות כמעט הכל במצב מצוין במחצית המחיר ומטה, או לקבל בהשאלה ממשפחה וחברות. שני דברים כן קונים חדשים: מזרן ומושב בטיחות לרכב, כי לא יודעים מה עבר עליהם.", "note": "מושב בטיחות לרכב ומזרן לתינוק קונים חדשים תמיד, בלי קשר למחיר."}, {"id": "sec-kids", "area": "second", "tag": "kids", "title": "בגדי ילדים, צעצועים וספרים", "save": "עד ₪2,000 בשנה", "val": 1800, "how": "ילדים גדלים מהר יותר ממה שהבגד מספיק להתבלות. יש קבוצות החלפה שכונתיות, חנויות יד שנייה לילדים, וספריות צעצועים עירוניות שמשאילות משחקים כמו שספרייה משאילה ספרים. הילד לא זוכר מאיפה הגיע הבובה, אבל אתם תזכרו את ההפרש בחשבון."}, {"id": "sec-home", "area": "second", "title": "ריהוט ומוצרי חשמל יד שנייה או תצוגה", "save": "מאות עד אלפים", "val": 1500, "how": "ספה, שולחן, ארון, מקרר, מכונת כביסה. הרבה מזה מגיע ממעברי דירה, כמעט חדש, במחיר שאין לו שום קשר למחיר בחנות. בנוסף, ברשתות הגדולות יש פינת עודפים ותצוגה עם אותה אחריות יצרן והנחה משמעותית, פשוט צריך לשאול את המוכר איפה היא.", "link": {"url": "https://www.yad2.co.il/", "label": "לריהוט ומוצרי חשמל ביד2"}}, {"id": "sec-borrow", "area": "second", "title": "להשאיל במקום לקנות", "save": "מאות בשנה", "val": 600, "how": "מקדחה, ציוד קמפינג, מזוודה גדולה, שמלת אירוע, מכשירים שמשתמשים בהם פעמיים בשנה. לפני שקונים, שואלים בקבוצת השכונה או במשפחה. יש גם ספריות כלים עירוניות וחברות השכרה לשמלות אירוע, שמוציאות אתכם ממאה שקלים במקום מאות."}, {"id": "sec-sell", "area": "second", "habit": true, "title": "למכור את מה שלא בשימוש", "how": "זה לא בדיוק חיסכון, זה כסף שכבר שילמתם עליו ושוכב אצלכם במחסן. עוברים על הארונות, המחסן והמרפסת, ומוציאים את מה שלא נגעתם בו שנה. מצלמים בתאורת יום, כותבים מחיר הגיוני, ומעלים. הכסף הזה הוא התחלה מצוינת לקרן חירום.", "note": "הכסף מהמכירה הולך ישר לחיסכון, לא להוצאה שוטפת. אחרת רק החלפתם דברים בדברים."}, {"id": "car-kvish6", "area": "car", "tag": "car", "title": "מנוי חינם לכביש 6", "save": "עד 40% על כל נסיעה", "val": 500, "how": "מי שנוסע בכביש 6 בלי מנוי משלם את התעריף המלא, ומעליו גם דמי זיהוי. ההצטרפות למנוי היא בחינם, בלי התחייבות ובלי תשלום חודשי, ונותנת עד 40 אחוז הנחה על כל נסיעה. גם מי שנוסע פעם בחודש מרוויח מזה.", "link": {"url": "https://www.kvish6.co.il/ContentPage.aspx?Id=32", "label": "להצטרפות למנוי כביש 6"}}, {"id": "car-fuel", "area": "car", "tag": "car", "title": "הנחת דלק קבועה", "save": "₪400-900 בשנה", "val": 600, "how": "תדלוק במחיר המלא בשירות מלא הוא הדרך היקרה ביותר לקנות דלק. יש שלוש שכבות הנחה שאפשר לצבור יחד: תדלוק עצמי, אפליקציית התדלוק של חברת הדלק, והנחה דרך מועדון צרכנות או כרטיס אשראי. בחודש זה כמה עשרות שקלים, בשנה זה כבר סכום."}, {"id": "car-service", "area": "car", "tag": "car", "title": "טיפולים וטסט מחוץ למוסך המורשה", "save": "מאות לטיפול", "val": 800, "how": "אחרי תום תקופת האחריות של היצרן, אין שום חובה להישאר במוסך המורשה. מוסך פרטי אמין עושה את אותו טיפול בפער מחיר משמעותי. גם לטסט שווה לבדוק מחיר, יש הפרשים אמיתיים בין מכוני הרישוי באותו אזור. מבקשים הצעת מחיר מראש בכתב, לא אחרי.", "note": "בתקופת האחריות נשארים במורשה, יציאה ממנו עלולה לבטל לכם את האחריות."}, {"id": "car-second", "area": "car", "tag": "car", "title": "לבדוק אם הרכב השני באמת מצדיק את עצמו", "save": "אלפים בשנה", "val": 2000, "how": "רכב שני עולה כסף גם כשהוא חונה: ביטוח, טסט, טיפולים, ירידת ערך וחניה. שווה לחשב כמה הוא באמת בשימוש בחודש, ולהשוות מול עלות של מוניות ורכב שיתופי לאותם נסיעות. לפעמים המספר מפתיע, ולפעמים הרכב מצדיק את עצמו בגדול. העיקר שזו תהיה החלטה ולא הרגל.", "note": "זו החלטה אישית ותלויה בחיים שלכם, לא כלל גורף. בדיוק סוג החישוב שעושים יחד בליווי."}, {"id": "car-pt", "area": "car", "title": "מנוי חופשי חודשי בתחבורה ציבורית", "save": "עשרות אחוזים", "val": 700, "how": "מי שנוסע בקביעות ומשלם נסיעה-נסיעה משלם הרבה יותר מדי. מנוי חופשי חודשי מוגבל בתקרה, וממספר נסיעות מסוים והלאה הוא כבר משתלם. שווה לבדוק כמה נסיעות באמת יוצאות בחודש ולעבור למנוי אם עברתם את הנקודה.", "link": {"url": "https://bus.gov.il/discounts", "label": "לכרטיסים והנחות (הרשות הארצית לתחבורה ציבורית)"}}, {"id": "car-young", "area": "car", "tag": "exempt", "title": "הנחה בתחבורה ציבורית שמגיעה לכם", "save": "33% על המנוי החודשי", "val": 500, "how": "לגילאי 18 עד 26 מגיעה הנחה של 33 אחוז על מנוי חודשי בתחבורה ציבורית, ויש הנחות נוספות לסטודנטים, לחיילים ולאזרחים ותיקים. ההנחה לא נדלקת לבד, צריך לעדכן את הפרופיל ברב קו או באפליקציית התשלום. אי אפשר לצבור שתי הנחות יחד, בוחרים את הגבוהה.", "link": {"url": "https://bus.gov.il/discounts", "label": "לעדכון הפרופיל וההנחות"}, "note": "זכות שמגיעה לכם, רק צריך לעדכן פרופיל פעם אחת."}, {"id": "car-park", "area": "car", "tag": "car", "title": "חנה וסע במקום חניון בעיר", "save": "מאות בשנה", "val": 400, "how": "חניון במרכז עיר עולה עשרות שקלים ליום, וזה מצטבר. חניוני חנה וסע בפאתי הערים זולים משמעותית ולפעמים בחינם, עם תחבורה ציבורית או שאטל שממשיכים איתו פנימה. התנאים משתנים בין עיר לעיר, שווה לבדוק פעם אחת מה יש באזור שלכם ולקבע את זה כהרגל."}, {"id": "fees-exempt", "area": "bank", "tag": "exempt", "title": "פטור מלא אוטומטי", "save": "₪240-600 בשנה", "val": 300, "how": "אם אתם סטודנטים, חיילים או אזרחים ותיקים, מגיע לכם פטור מלא מעמלות עו\"ש באופן אוטומטי, בלי לבקש בכלל. אבל לפעמים הפטור לא נדלק לבד, אז שווה להיכנס לחשבון ולוודא שהוא באמת מופעל ושלא ממשיכים לגבות מכם.", "note": "זכות שמגיעה לכם אוטומטית, רק צריך לוודא שהיא פעילה בחשבון."}, {"id": "digital-bank", "area": "bank", "title": "בנק דיגיטלי", "save": "דמי ניהול ₪0", "val": 200, "how": "בנק דיגיטלי הוא בנק בלי סניפים פיזיים, שמנהלים לגמרי מהאפליקציה בנייד, כמו וואן זירו או פפר. בדרך כלל אין בו דמי ניהול חשבון, אין עמלת מט\"ח על קניות בחו\"ל, ולפעמים יש גם ריבית על הכסף שיושב בחשבון. מתאים למי שממילא מנהל הכל מהטלפון ורוצה פשוט להפסיק לשלם על הבנק.", "link": {"url": "https://boi.org.il/information/fees/", "label": "להשוואת עלויות בבנקים (בנק ישראל)"}}, {"id": "cashback", "area": "bank", "title": "כרטיס אשראי עם קאשבק", "save": "מאות בשנה", "val": 350, "how": "יש כרטיסי אשראי שמחזירים לכם אחוז קטן מכל קנייה שאתם ממילא עושים (בערך 1% עד 1.6%). כדאי לבחור כרטיס בלי דמי כרטיס, ואם יש דמי כרטיס, פשוט מתקשרים ומבקשים לבטל אותם, כמעט תמיד מסכימים. שימו לב שיש תקרת החזר חודשית, אז זה לא אינסופי, אבל זה כסף שחוזר על התנהגות שגם ככה קיימת.", "link": {"url": "https://tools.richlife.co.il/credit-cards/", "label": "להשוואת כרטיסי האשראי שלי"}}, {"id": "st-points", "area": "state", "title": "נקודות זיכוי שלא ניצלתם", "save": "₪2,904 לנקודה בשנה", "val": 1500, "how": "נקודת זיכוי היא הנחה ישירה במס, שווה 242 ₪ בחודש. יש נקודות שמגיעות ולא תמיד נלקחות: תואר אקדמי בשנים שאחרי סיום הלימודים, סיום שירות צבאי או לאומי, עלייה חדשה, מילואים, מגורים ביישוב מזכה. אם לא סימנתם אותן בטופס 101 בעבודה, אתם משלמים מס מיותר בלי לדעת. רוב האנשים ממלאים את הטופס הזה בשלוש דקות בלי להסתכל.", "note": "שווה לפתוח את טופס ה-101 של השנה ולעבור עליו שורה-שורה. זו הפעולה הכי רווחית לדקה שהיא לוקחת."}, {"id": "st-kids-points", "area": "state", "tag": "kids", "title": "נקודות זיכוי על ילדים", "save": "אלפי שקלים בשנה", "val": 2900, "how": "על כל ילד מגיעות נקודות זיכוי לשני ההורים, והן משתנות לפי גיל הילד. לאמא מגיע הכי הרבה בשנתיים הראשונות. הנקודות לא תמיד נכנסות אוטומטית למשכורת, ולידה היא בדיוק הרגע שבו שוכחים לעדכן את טופס ה-101. אם פספסתם, זה נכנס להחזר המס.", "note": "מעדכנים טופס 101 מיד אחרי לידה, ולא מחכים לסוף השנה."}, {"id": "st-grant", "area": "state", "habit": true, "title": "מענק עבודה, לבדוק אם מגיע", "how": "מענק שנתי מרשות המסים למי שעובד ומשתכר בטווח מסוים, לרוב הורים ועובדים בשכר נמוך עד בינוני. המענק יכול להגיע לכמה אלפי שקלים בשנה, והוא נכנס ישר לחשבון. הרבה אנשים זכאים ולא יודעים, כי צריך להגיש תביעה ואף אחד לא מודיע לכם. חשוב: אפשר להגיש רק עד שנתיים אחורה, אז זה לא מחכה לכם.", "link": {"url": "https://www.gov.il/he/departments/topics/work_grant", "label": "לבדיקת זכאות למענק עבודה (גוב)"}}, {"id": "st-btl", "area": "state", "habit": true, "title": "זכויות בביטוח לאומי שלא מימשתם", "how": "דמי לידה, מענק לידה, דמי פגיעה, מענק לימודים, קצבאות ילדים, זכויות להורה יחידה. חלק נכנס אוטומטית וחלק דורש הגשה. שווה פעם בשנה להיכנס לאזור האישי ולראות מה רשום עליכם ומה לא. גם חוב פתוח בביטוח לאומי מתגלה שם לפני שהוא גדל.", "link": {"url": "https://www.btl.gov.il/", "label": "לאזור האישי בביטוח לאומי"}}, {"id": "st-arnona", "area": "state", "habit": true, "title": "הנחה בארנונה, לבדוק מול העירייה", "how": "לכל עירייה יש טבלת הנחות בארנונה, ולרוב היא מגיעה להנחה משמעותית ולפעמים כמעט מלאה. הנחות קיימות לאזרח ותיק, להורה יחיד, לנכה, לחייל בשירות, לסטודנט בחלק מהרשויות, ולפי מבחן הכנסה. ההנחה לא ניתנת לבד, מגישים בקשה, ולרוב יש תאריך אחרון בתחילת השנה. שיחה אחת למוקד העירוני אומרת לכם אם אתם בתמונה."}];
+  function catVisible(b){return !b.tag||!!S.prof[b.tag];}
+  function catSum(){var m=0,n=0;CAT.forEach(function(b){var r=S.cat[b.id];if(!r||r.state!=="done"||!catVisible(b))return;n++;m+=(+r.v||0)/12;});return {m:m,n:n};}
+  var pc=$("pchips");
+  PROF.forEach(function(p){
+    var b=document.createElement("button");b.type="button";b.className="chip-btn";b.setAttribute("aria-pressed",S.prof[p.tag]?"true":"false");
+    b.innerHTML='<span>'+esc(p.label)+'</span>';
+    b.onclick=function(){S.prof[p.tag]=!S.prof[p.tag];b.setAttribute("aria-pressed",S.prof[p.tag]?"true":"false");save();renderCat();paint();};
+    pc.appendChild(b);
+  });
+  var openA={};
+  function ciHTML(b){
+    var r=S.cat[b.id]||{},st=r.state||"",open=!!CIO[b.id];
+    var badge=st==="done"?'<span class="st-badge ok">'+(b.habit?"עושה ✓":"עשיתי ✓")+'</span>':st==="skip"?'<span class="st-badge">דילגת</span>':'';
+    var h='<div class="ci'+(st==="done"?" is-done":"")+(st==="skip"?" is-skip":"")+(open?" is-open":"")+'" id="ci-'+b.id+'">';
+    h+='<h4 class="ci-h"><button type="button" class="ci-head" data-ctog="'+b.id+'" aria-expanded="'+open+'" aria-controls="cp-'+b.id+'"><span class="ci-tt"><span class="ci-name">'+esc(b.title)+'</span>'+(b.habit?'<span class="habit">הרגל, בלי מספר קבוע</span>':'<span class="range">'+esc(b.save)+'</span>')+'</span>'+badge+'<span class="chev" aria-hidden="true"></span></button></h4>';
+    h+='<div class="ci-panel" id="cp-'+b.id+'"'+(open?'':' hidden')+'>';
+    h+='<div class="ci-skip">דילגת על הרעיון הזה. <button type="button" data-cunskip="'+b.id+'">לחזור אליו</button></div>';
+    h+='<div class="ci-body"><p class="why">'+esc(b.how)+'</p>';
+    if(b.steps){h+='<ol>';b.steps.forEach(function(x){h+='<li>'+esc(x)+'</li>';});h+='</ol>';}
+    if(b.link)h+='<div class="links"><a href="'+b.link.url+'" target="_blank" rel="noopener">'+esc(b.link.label)+' ←</a></div>';
+    if(b.note)h+='<p class="tip">'+esc(b.note)+'</p>';
+    h+='<div class="found">';
+    if(!b.habit)h+='<div class="field"><label for="cv-'+b.id+'">כמה חסכת בשנה? (המונה מחלק ל-12)</label><div class="input-shell"><span class="unit">₪</span><input id="cv-'+b.id+'" type="number" inputmode="decimal" min="0" placeholder="'+(b.val||0)+'" value="'+(r.v||"")+'"></div></div>';
+    h+='<button type="button" class="b-found" data-cfound="'+b.id+'">'+(st==="done"?(b.habit?"עשיתי ✓":"עדכון ✓"):(b.habit?"אני עושה את זה ✓":"עשיתי 🎉"))+'</button>';
+    h+='<button type="button" class="b-skip" data-cskip="'+b.id+'">לא רלוונטי לי</button></div>';
+    h+='</div></div></div>';
+    return h;
+  }
+  function renderCat(){
+    var out="";
+    AREAS.forEach(function(a){
+      var list=CAT.filter(function(b){return b.area===a.key&&catVisible(b);});if(!list.length)return;
+      var d=list.filter(function(b){return (S.cat[b.id]||{}).state==="done";}).length;
+      out+='<details class="card area" data-area="'+a.key+'"'+(openA[a.key]?" open":"")+'><summary><span class="a-ic" aria-hidden="true">'+a.emoji+'</span><span class="a-t"><b>'+esc(a.name)+'</b><small>'+(list.length===1?"רעיון אחד":list.length+" רעיונות")+(d?" · עשית "+d:"")+'</small></span><span class="chev" aria-hidden="true"></span></summary><div class="area-body">';
+      list.forEach(function(b){out+=ciHTML(b);});
+      out+='</div></details>';
+    });
+    $("areas").innerHTML=out;
+  }
+  document.addEventListener("toggle",function(e){var t=e.target;if(t.classList&&t.classList.contains("area"))openA[t.dataset.area]=t.open;},true);
+  document.addEventListener("click",function(e){
+    var g=e.target.closest("[data-ctog]");
+    if(g){var gid=g.dataset.ctog,el0=$("ci-"+gid),on=!CIO[gid];CIO[gid]=on;el0.classList.toggle("is-open",on);g.setAttribute("aria-expanded",on?"true":"false");$("cp-"+gid).hidden=!on;return;}
+    var t=e.target.closest("[data-cfound],[data-cskip],[data-cunskip]");if(!t)return;
+    var id=t.dataset.cfound||t.dataset.cskip||t.dataset.cunskip;
+    CIO[id]=!!t.dataset.cunskip;
+    if(t.dataset.cfound){var inp=$("cv-"+id);S.cat[id]={state:"done",v:inp?inp.value:""};var c=$("counter");c.classList.remove("pop");void c.offsetWidth;c.classList.add("pop");}
+    if(t.dataset.cskip)S.cat[id]={state:"skip"};
+    if(t.dataset.cunskip)S.cat[id]={};
+    save();renderCat();paint();
+    var el=$("ci-"+id);if(el){el.scrollIntoView({block:"nearest"});var hb=el.querySelector(".ci-head");if(hb)hb.focus({preventScroll:true});}
+  });
+  renderCat();
+  render();
+  if("IntersectionObserver" in window){new IntersectionObserver(function(en){document.body.classList.toggle("sum-in",en[0].isIntersecting);}).observe($("summary"));}
+})();
 </script>
-
 </body>
 </html>
